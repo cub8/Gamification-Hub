@@ -38,7 +38,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'better_errors', '~> 1.1' # Better error console
+  gem 'better_errors', '~> 2.10' # Better error console
   gem 'binding_of_caller', '~> 2.0' # For interactive console
   gem 'web-console', '~> 4.3' # Use console on exceptions pages [https://github.com/rails/web-console]
 end
