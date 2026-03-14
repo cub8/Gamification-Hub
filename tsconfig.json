@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "app/assets/builds",
+    "module": "ESNext",
+    "noEmit": true,
+    "allowJs": true,
+    "noImplicitAny": true,
+    "pretty": true,
+    "target": "ES2022",
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@controllers/*": [
+        "app/javascript/controllers/*"
+      ]
+    }
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
+}

@@ -1,0 +1,5 @@
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-espago: rubocop.yml }
+
+Style/Documentation:
+  Enabled: false
