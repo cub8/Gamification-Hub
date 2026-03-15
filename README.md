@@ -63,6 +63,16 @@ Skrypt ten:
 4. Wyczyści logi
 5. Uruchomi aplikację o ile nie podaliśmy flagi `--skip-server`
 
+Tyle jeżeli chodzi o setup.
+
+Żeby uruchomić aplikację użyj:
+
+```sh
+$ overmind start
+```
+
+overmind skorzysta ze zmiennych środowiskowych z pliku `.overmind.env` i uruchomi procesy z `Procfile.dev`
+
 ### Konfiguracja credentiali
 
 Credentiale służą do tego, aby w bezpieczny sposób przechowywać ukryte dane w formacie **YAML** w plikach konfiguracyjnych. Wszystkie wrażliwe dane, klucze itd. zarówno testowe jak i produkcyjne powinny właśnie tam być umieszczane.
