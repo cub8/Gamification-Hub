@@ -28,6 +28,9 @@ gem 'solid_queue', '~> 1.3' # Adapter ActiveJob (queues)
 gem 'bootsnap', '~> 1.23', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'haml-rails', '~> 3.0' # For easier writing HTML with embedded Ruby
 gem 'image_processing', '~> 1.2' # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+gem 'omniauth', '~> 2.1' # OAuth framework
+gem 'omniauth-oauth', '~> 1.2' # OAuth 1.0
+gem 'omniauth-rails_csrf_protection', '~> 2.0' # OAuth CSRF compatibility
 gem 'tzinfo-data', '~> 1', platforms: %i[windows jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'view_component', '~> 4.5' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
 

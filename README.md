@@ -100,6 +100,19 @@ lub
 $ EDITOR="nvim" bin/rails credentials:edit --environment test
 ```
 
+#### Credentiale do Usosa
+
+Świeżo po postawieniu aplikacji nie będzie mogli skorzystać z logowania przez usos. Musicie do credentiali dopisać:
+```yml
+usos_uam:
+  consumer_key: ...
+  consumer_secret: ...
+  base_url: https://usosapps.amu.edu.pl
+  callback_url: http://localhost:3000/auth/uam_usos/callback
+```
+
+Ponieważ kluczy i secretsów nie trzymamy w repo to piszcie do Jeremiego, aby Wam wysłał :)
+
 ### Testy
 
 #### Unit i Integration testy
