@@ -62,6 +62,9 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
 
     steps:
       - name: Install packages
@@ -75,9 +78,8 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: prepare database
+        run: bin/rails db:prepare
+
       - name: Run tests
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432
-        # run: bin/rails db:test:prepare test
         run: bin/rails test
