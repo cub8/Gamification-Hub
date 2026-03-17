@@ -2,7 +2,18 @@
 
 module SessionsHelper
   def development_login_buttons
+    return if Rails.env.production?
 
+    content_tag(:div) do
+      base_development_login_button('Login as STUDENT', example_student_params) +
+        base_development_login_button('Login as UNIVERSITY TEACHER', example_university_teacher_params) +
+        base_development_login_button('Login as UNIVERSITY ADMIN', example_university_admin_params) +
+        base_development_login_button('Login as GLOBAL ADMIN', example_global_admin_params)
+    end
+  end
+
+  def base_development_login_button(text, params)
+    button_to text, development_auth_callback_path, method: :get, params: params, data: { turbo: false }
   end
 
   def development_auth_callback_path
@@ -23,7 +34,7 @@ module SessionsHelper
     {
       full_name:         'Teacher User',
       email:             'teacher@example.com',
-      role:              'university_teacher',
+      role:              'teacher',
       university_name:   'Example University',
       university_number: '987654',
     }
