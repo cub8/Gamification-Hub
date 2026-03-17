@@ -1,2 +1,22 @@
 %h1 Home#index
-%p Find me in app/views/home/index.html.haml
+%p Your data:
+
+%p
+  %b Imię i nazwisko:
+  = @current_user.full_name
+
+%p
+  %b Email:
+  = @current_user.email
+
+%p
+  %b Indeks:
+  = @current_user.university_number
+
+%p
+  %b Nazwa uczelni wyższej:
+  = @current_user.university_name
+
+%p
+  %b USOS ID:
+  = @current_user.usos_id

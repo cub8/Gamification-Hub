@@ -2,3 +2,7 @@
 %h2 Select login method
 
 = button_to 'USOS', '/auth/uam_usos', method: :post, data: { turbo: false }
+= button_to 'Login as STUDENT', development_auth_callback_path, method: :get, data: { turbo: false }, params: example_student_params
+= button_to 'Login as UNIVERSITY TEACHER', development_auth_callback_path, method: :get, data: { turbo: false }, params: example_university_teacher_params
+= button_to 'Login as UNIVERSITY ADMIN', development_auth_callback_path, method: :get, data: { turbo: false }, params: example_university_admin_params
+= button_to 'Login as GLOBAL ADMIN', development_auth_callback_path, method: :get, data: { turbo: false }, params: example_global_admin_params

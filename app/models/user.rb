@@ -10,10 +10,9 @@ class User < ApplicationRecord
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
-  validates :email, uniqueness: true
-  validates :usos_id, uniqueness: { scope: :university_name }
+  validates :email, length: { maximum: 255 }, uniqueness: true, allow_nil: true
+  validates :usos_id, uniqueness: { scope: :university_name }, allow_nil: true
   validates :university_number, length: { maximum: 20 }
-  validates :email, length: { maximum: 255 }
   validates :full_name, length: { maximum: 80 }
   validates :university_name, length: { maximum: 100 }
 end

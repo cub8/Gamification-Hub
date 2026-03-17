@@ -9,7 +9,7 @@ class CreateUsers < ActiveRecord::Migration[8.1]
       t.string :university_number
       t.string :university_name
       t.integer :role, default: 1
-      t.boolean :first_login, default: false
+      t.boolean :first_login, default: true
 
       t.timestamps
     end
