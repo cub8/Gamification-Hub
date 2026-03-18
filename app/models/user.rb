@@ -3,8 +3,8 @@
 class User < ApplicationRecord
   enum :role, {
     student:            1,
-    university_teacher: 2,
-    university_admin:   3,
+    teacher:            2,
+    organization_admin: 3,
     global_admin:       4,
   }
 

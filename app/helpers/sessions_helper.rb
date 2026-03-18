@@ -6,8 +6,8 @@ module SessionsHelper
 
     content_tag(:div) do
       base_development_login_button('Login as STUDENT', example_student_params) +
-        base_development_login_button('Login as UNIVERSITY TEACHER', example_university_teacher_params) +
-        base_development_login_button('Login as UNIVERSITY ADMIN', example_university_admin_params) +
+        base_development_login_button('Login as TEACHER', example_teacher_params) +
+        base_development_login_button('Login as ORGANIZATION ADMIN', example_organization_admin_params) +
         base_development_login_button('Login as GLOBAL ADMIN', example_global_admin_params)
     end
   end
@@ -30,7 +30,7 @@ module SessionsHelper
     }
   end
 
-  def example_university_teacher_params
+  def example_teacher_params
     {
       full_name:         'Teacher User',
       email:             'teacher@example.com',
@@ -40,11 +40,11 @@ module SessionsHelper
     }
   end
 
-  def example_university_admin_params
+  def example_organization_admin_params
     {
       full_name:         'University Admin',
       email:             'uniadmin@example.com',
-      role:              'university_admin',
+      role:              'organization_admin',
       university_name:   'Example University',
       university_number: '888111',
     }

@@ -2,6 +2,7 @@
 
 class UserBuilder
   class InvalidAuthError < StandardError; end
+  class InvalidParamsError < StandardError; end
 
   USOS_SEARCHED_FIELDS = %w[
     id
@@ -46,10 +47,10 @@ class UserBuilder
 
     @usos_id = user_data['id']
     @university_number = user_data['student_number']
-    @full_name =        "#{first_name} #{last_name}"
-    @email =            user_data['email']
-    @university_name =  'Uniwersytet im. Adama Mickiewicza'
-    @role =             nil
+    @full_name = "#{first_name} #{last_name}"
+    @email = user_data['email']
+    @university_name = 'Uniwersytet im. Adama Mickiewicza'
+    @role = nil
   end
 
   def build_user_params_for_development
@@ -59,6 +60,8 @@ class UserBuilder
     @university_name = @auth[:university_name]
     @university_number = @auth[:university_number]
     @usos_id = nil
+
+    raise InvalidParamsError if @full_name.nil? || @email.nil?
   end
 
   def extract_user_data_from_usos

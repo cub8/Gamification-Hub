@@ -12,6 +12,7 @@ class SessionsController < ApplicationController
   def create
     builder = UserBuilder.new(retrieve_auth, @provider)
     user = builder.build
+
     session[:user_id] = user.id
 
     redirect_to home_path
