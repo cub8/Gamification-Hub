@@ -1,0 +1,13 @@
+%p{style: "color: green"}= notice
+
+- content_for :title, "Story groups"
+
+%h1 Story groups
+
+%div{id: "story_groups"}
+  - @story_groups.each do |story_group|
+    = render story_group
+    %p
+      = link_to "Show this story group", story_group
+
+= link_to "New story group", new_story_group_path

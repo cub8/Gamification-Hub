@@ -34,7 +34,7 @@ module SessionsHelper
     {
       full_name:         'Teacher User',
       email:             'teacher@example.com',
-      role:              'teacher',
+      role:              'university_teacher',
       university_name:   'Example University',
       university_number: '987654',
     }
