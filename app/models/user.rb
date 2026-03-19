@@ -15,4 +15,6 @@ class User < ApplicationRecord
   validates :university_number, length: { maximum: 20 }
   validates :full_name, length: { maximum: 80 }
   validates :university_name, length: { maximum: 100 }
+
+  has_many :story_groups, foreign_key: 'owner_id'
 end

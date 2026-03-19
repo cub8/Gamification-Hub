@@ -8,10 +8,6 @@
           %li= error.full_message
 
   %div
-    = form.label :owner_id, style: "display: block"
-    = form.number_field :owner_id
-
-  %div
     = form.label :name, style: "display: block"
     = form.text_field :name
 
@@ -21,7 +17,7 @@
 
   %div
     = form.label :icon, style: "display: block"
-    = form.file_field :icon
+    = form.file_field :icon, accept: "image/*"
 
   %div
     = form.label :currency_name, style: "display: block"
@@ -29,7 +25,7 @@
 
   %div
     = form.label :currency_icon, style: "display: block"
-    = form.file_field :currency_icon
+    = form.file_field :currency_icon, accept: "image/*"
 
   %div
     = form.submit

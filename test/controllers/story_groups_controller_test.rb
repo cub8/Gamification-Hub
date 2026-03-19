@@ -1,45 +1,63 @@
-require "test_helper"
+# frozen_string_literal: true
+
+require 'test_helper'
 
 class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @story_group = story_groups(:one)
   end
 
-  test "should get index" do
+  test 'should get index' do
     get story_groups_url
     assert_response :success
   end
 
-  test "should get new" do
+  test 'should get new' do
     get new_story_group_url
     assert_response :success
   end
 
-  test "should create story_group" do
-    assert_difference("StoryGroup.count") do
-      post story_groups_url, params: { story_group: { currency_name: @story_group.currency_name, description: @story_group.description, name: @story_group.name, owner_id: @story_group.owner_id } }
+  test 'should create story_group' do
+    assert_difference('StoryGroup.count') do
+      post story_groups_url,
+           params: {
+             story_group: {
+               currency_name: @story_group.currency_name,
+               description:   @story_group.description,
+               name:          @story_group.name,
+               owner_id:      @story_group.owner_id,
+             },
+           }
     end
 
     assert_redirected_to story_group_url(StoryGroup.last)
   end
 
-  test "should show story_group" do
+  test 'should show story_group' do
     get story_group_url(@story_group)
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get edit_story_group_url(@story_group)
     assert_response :success
   end
 
-  test "should update story_group" do
-    patch story_group_url(@story_group), params: { story_group: { currency_name: @story_group.currency_name, description: @story_group.description, name: @story_group.name, owner_id: @story_group.owner_id } }
+  test 'should update story_group' do
+    patch story_group_url(@story_group),
+          params: {
+            story_group: {
+              currency_name: @story_group.currency_name,
+              description:   @story_group.description,
+              name:          @story_group.name,
+              owner_id:      @story_group.owner_id,
+            },
+          }
     assert_redirected_to story_group_url(@story_group)
   end
 
-  test "should destroy story_group" do
-    assert_difference("StoryGroup.count", -1) do
+  test 'should destroy story_group' do
+    assert_difference('StoryGroup.count', -1) do
       delete story_group_url(@story_group)
     end
 

@@ -20,3 +20,7 @@
 %p
   %b USOS ID:
   = @current_user.usos_id
+
+- if @current_user&.university_teacher? || @current_user&.university_admin? || @current_user&.global_admin?
+  %p
+    = link_to "Your Story Groups", story_groups_path
