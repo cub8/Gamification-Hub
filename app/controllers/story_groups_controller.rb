@@ -6,9 +6,9 @@ class StoryGroupsController < ApplicationController
 
   # GET /story_groups
   def index
-    if @current_user&.university_teacher?
+    if @current_user&.teacher?
       @story_groups = @current_user.story_groups
-    elsif @current_user&.university_admin? || @current_user&.global_admin?
+    elsif @current_user&.organization_admin? || @current_user&.global_admin?
       @story_groups = StoryGroup.all
       # Na razie nie ma różnicy między global a university adminem,
       # to gdy będziemy już mieć tabelkę z uniwersytetami
@@ -20,7 +20,7 @@ class StoryGroupsController < ApplicationController
 
   # GET /story_groups/new
   def new
-    unless @current_user&.university_teacher? || @current_user&.university_admin? || @current_user&.global_admin?
+    unless @current_user&.teacher? || @current_user&.organization_admin? || @current_user&.global_admin?
       redirect_to story_groups_path, alert: 'Creating story groups is only possible for teachers'
     end
 
@@ -32,7 +32,7 @@ class StoryGroupsController < ApplicationController
 
   # POST /story_groups
   def create
-    return unless @current_user&.university_teacher?
+    return unless @current_user&.teacher?
 
     @story_group = StoryGroup.new(story_group_params)
     @story_group.owner_id = @current_user.id
@@ -63,9 +63,9 @@ class StoryGroupsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_story_group
-    if @current_user&.university_teacher?
+    if @current_user&.teacher?
       @story_group = @current_user.story_groups.find(params.expect(:id))
-    elsif @current_user&.university_admin? || @current_user&.global_admin?
+    elsif @current_user&.organization_admin? || @current_user&.global_admin?
       @story_group = StoryGroup.find(params.expect(:id))
     end
   end
@@ -76,8 +76,8 @@ class StoryGroupsController < ApplicationController
   end
 
   def authorize
-    return if @current_user&.university_teacher?
-    return if @current_user&.university_admin?
+    return if @current_user&.teacher?
+    return if @current_user&.organization_admin?
     return if @current_user&.global_admin?
 
     redirect_to root_path, alert: 'You must be a teacher or admin to access story groups'

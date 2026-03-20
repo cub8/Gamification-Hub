@@ -4,7 +4,7 @@ require 'test_helper'
 
 class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @current_user = FactoryBot.create(:user, role: :university_teacher)
+    @current_user = FactoryBot.create(:user, role: :teacher)
     @story_group = FactoryBot.create(:story_group, owner: @current_user)
   end
 
