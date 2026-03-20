@@ -20,7 +20,7 @@ class StoryGroupsController < ApplicationController
 
   # GET /story_groups/new
   def new
-    unless @current_user&.university_teacher?
+    unless @current_user&.university_teacher? || @current_user&.university_admin? || @current_user&.global_admin?
       redirect_to story_groups_path, alert: 'Creating story groups is only possible for teachers'
     end
 

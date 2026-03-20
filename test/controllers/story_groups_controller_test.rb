@@ -4,7 +4,8 @@ require 'test_helper'
 
 class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @story_group = story_groups(:one)
+    @current_user = FactoryBot.create(:user, role: :university_teacher)
+    @story_group = FactoryBot.create(:story_group, owner: @current_user)
   end
 
   test 'should get index' do

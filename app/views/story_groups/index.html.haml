@@ -9,7 +9,7 @@
     = render story_group
     %p
       = link_to "Show this story group", story_group
-- if @current_user&.university_teacher?
+- if @current_user&.university_teacher? || @current_user&.university_admin? || @current_user&.global_admin?
   %p
     = link_to "New story group", new_story_group_path
 
