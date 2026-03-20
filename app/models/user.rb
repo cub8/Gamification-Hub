@@ -15,4 +15,6 @@ class User < ApplicationRecord
   validates :university_number, length: { maximum: 20 }
   validates :full_name, length: { maximum: 80 }
   validates :university_name, length: { maximum: 100 }
+
+  validates_presence_of :email, :full_name, on: :account_setup
 end
