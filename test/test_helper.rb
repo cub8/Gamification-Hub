@@ -12,3 +12,17 @@ module ActiveSupport
     parallelize(workers: :number_of_processors)
   end
 end
+
+module ActionDispatch
+  class IntegrationTest
+    def sign_in(user)
+      get auth_callback_path('development'), params: {
+        email: user.email,
+      }
+    end
+
+    def sign_out
+      delete logout_path
+    end
+  end
+end
