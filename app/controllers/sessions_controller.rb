@@ -1,20 +1,25 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  BASE_ALLOWED_PROVIDERS = %w[uam_usos].freeze
+  class InvalidProviderError < StandardError; end
 
   skip_before_action :authenticate!, only: %i[new create]
-  before_action :validate_provider!, only: :create
+  before_action :redirect_logged_user, only: %i[new create]
 
   def new; end
 
   def create
-    auth = request.env['omniauth.auth']
-    builder = SessionBuilder.new(auth, @provider)
-    session_data = builder.build
-    session[:user] = session_data
+    provider = find_provider
+    builder = SessionUserBuilder.new(provider)
+    user = builder.build
+
+    session[:user_id] = user.id
 
     redirect_to home_path
+  rescue InvalidProviderError
+    redirect_to root_path, alert: 'Invalid provider.'
+  rescue Providers::InvalidAuthError
+    redirect_to root_path, alert: 'Invalid authorization attempt.'
   end
 
   def destroy
@@ -24,11 +29,23 @@ class SessionsController < ApplicationController
 
   private
 
-  def validate_provider!
-    allowed_providers = BASE_ALLOWED_PROVIDERS.dup
-    allowed_providers << 'development' unless Rails.env.production?
+  def redirect_logged_user
+    redirect_to root_path, alert: 'Already logged in' if @current_user
+  end
 
-    @provider = params['provider']
-    redirect_to root_path, alert: 'Invalid provider' unless allowed_providers.include?(@provider)
+  def find_provider
+    case params['provider']
+    when 'uam_usos'
+      auth = request.env['omniauth.auth']
+      Providers::UsosAdapter.new(auth)
+    when 'development'
+      permitted = %i[email full_name university_name university_number]
+      permitted << :role unless Rails.env.production?
+      auth = params.permit(permitted)
+
+      Providers::DevelopmentAdapter.new(auth)
+    else
+      raise InvalidProviderError
+    end
   end
 end

@@ -50,4 +50,8 @@ group :development do
   gem 'web-console', '~> 4.3' # Use console on exceptions pages [https://github.com/rails/web-console]
 end
 
+group :test do
+  gem 'mocha', '~> 3.1' # For mocking method responses
+end
+
 # rubocop:enable Layout/LineLength
