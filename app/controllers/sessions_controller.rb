@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
     redirect_to home_path
   rescue InvalidProviderError
     redirect_to root_path, alert: 'Invalid provider.'
-  rescue Providers::BaseAdapter::InvalidAuthError
+  rescue Providers::InvalidAuthError
     redirect_to root_path, alert: 'Invalid authorization attempt.'
   end
 

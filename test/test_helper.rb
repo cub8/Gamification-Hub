@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/OneClassPerFile
+
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
@@ -26,3 +28,5 @@ module ActionDispatch
     end
   end
 end
+
+# rubocop:enable Style/OneClassPerFile
