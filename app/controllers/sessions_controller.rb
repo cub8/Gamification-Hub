@@ -39,7 +39,10 @@ class SessionsController < ApplicationController
       auth = request.env['omniauth.auth']
       Providers::UsosAdapter.new(auth)
     when 'development'
-      auth = params.permit(:email, :full_name, :role, :university_name, :university_number)
+      permitted = %i[email full_name university_name university_number]
+      permitted << :role if Rails.env.development
+      auth = params.permit(permitted)
+
       Providers::DevelopmentAdapter.new(auth)
     else
       raise InvalidProviderError
