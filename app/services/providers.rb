@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-module Providers; end
+module Providers
+  class InvalidAuthError < StandardError; end
+end

@@ -6,8 +6,6 @@ module Providers
   # If that's needed, you can also override constructor
   #   and params building method.
   class BaseAdapter
-    class InvalidAuthError < StandardError; end
-
     attr_reader :auth, :usos_id, :university_number,
                 :full_name, :university_name, :email, :role
 
