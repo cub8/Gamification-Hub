@@ -13,13 +13,5 @@
     = f.label :didactic_description, "Didactic description"
     = f.text_area :didactic_description
 
-  %div
-    = f.label :min_rank_for_discount_id, "Minimal rank for discount"
-    = f.number_field :min_rank_for_discount_id
-
-  %div
-    = f.label :unlock_rank_id, "Requested rank"
-    = f.number_field :unlock_rank_id
-
   %br
   = f.submit "Add"

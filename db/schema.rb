@@ -45,11 +45,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_23_141807) do
   create_table "items", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "didactic_description"
-    t.integer "min_rank_for_discount_id"
     t.string "name"
     t.text "story_description"
     t.bigint "story_group_id", null: false
-    t.integer "unlock_rank_id"
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_items_on_story_group_id"
   end

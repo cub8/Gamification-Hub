@@ -30,8 +30,6 @@ class ItemsController < ApplicationController
       :name,
       :story_description,
       :didactic_description,
-      :min_rank_for_discount_id,
-      :unlock_rank_id
     )
   end
 end
