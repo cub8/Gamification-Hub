@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_19_132013) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_23_141807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_132013) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "didactic_description"
+    t.integer "min_rank_for_discount_id"
+    t.string "name"
+    t.text "story_description"
+    t.bigint "story_group_id", null: false
+    t.integer "unlock_rank_id"
+    t.datetime "updated_at", null: false
+    t.index ["story_group_id"], name: "index_items_on_story_group_id"
+  end
+
   create_table "story_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency_name"
@@ -67,4 +79,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_132013) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "items", "story_groups"
 end

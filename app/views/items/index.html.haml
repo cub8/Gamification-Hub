@@ -1,0 +1,8 @@
+
+= link_to "Add item", new_story_group_item_path(@story_group)
+%h1 Store
+
+- @items.each do |item|
+    %h3= item.name
+    %p= item.story_description
+    %p= item.didactic_description

@@ -1,0 +1,25 @@
+%h1 Nowy przedmiot
+
+= form_with model: [@story_group, @item] do |f|
+  %div
+    = f.label :name, "Name"
+    = f.text_field :name
+
+  %div
+    = f.label :story_description, "Story description"
+    = f.text_area :story_description
+
+  %div
+    = f.label :didactic_description, "Didactic description"
+    = f.text_area :didactic_description
+
+  %div
+    = f.label :min_rank_for_discount_id, "Minimal rank for discount"
+    = f.number_field :min_rank_for_discount_id
+
+  %div
+    = f.label :unlock_rank_id, "Requested rank"
+    = f.number_field :unlock_rank_id
+
+  %br
+  = f.submit "Dodaj"
