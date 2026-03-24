@@ -18,7 +18,7 @@ module Providers
       @role = @auth[:role]
       @university_name = @auth[:university_name]
       @university_number = @auth[:university_number]
-      @usos_id = nil
+      @usos_id = @auth[:usos_id]
     end
   end
 end

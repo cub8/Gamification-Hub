@@ -8,14 +8,13 @@ class SessionUserBuilder
   end
 
   def build
-    user_params = @provider.user_params.merge(first_login: false)
+    user_params = @provider.user_params
     user = find_or_initialize_user
 
-    if user.new_record?
+    if user.new_record? || user.first_login?
       user.assign_attributes(user_params)
+      user.first_login = false
       user.save!(context: :account_setup)
-    elsif user.first_login?
-      user.update!(user_params, context: :account_setup)
     end
 
     user
@@ -32,7 +31,7 @@ class SessionUserBuilder
     elsif @provider.email
       User.find_or_initialize_by(email: @provider.email)
     else
-      raise Providers::BaseAdapter::InvalidAuthError
+      raise Providers::InvalidAuthError
     end
   end
 end

@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
     redirect_to home_path
   rescue InvalidProviderError
     redirect_to root_path, alert: 'Invalid provider.'
-  rescue Providers::BaseAdapter::InvalidAuthError
+  rescue Providers::InvalidAuthError
     redirect_to root_path, alert: 'Invalid authorization attempt.'
   end
 
@@ -39,7 +39,10 @@ class SessionsController < ApplicationController
       auth = request.env['omniauth.auth']
       Providers::UsosAdapter.new(auth)
     when 'development'
-      auth = params.permit(:email, :full_name, :role, :university_name, :university_number)
+      permitted = %i[email full_name university_name university_number]
+      permitted << :role unless Rails.env.production?
+      auth = params.permit(permitted)
+
       Providers::DevelopmentAdapter.new(auth)
     else
       raise InvalidProviderError
