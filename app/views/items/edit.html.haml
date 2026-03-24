@@ -20,4 +20,12 @@
     = f.number_field :price
 
   %div
+    = f.label :image
+    = f.file_field :image
+
+  %div
+    = f.label :can_buy_at_0_lives
+    = f.check_box :can_buy_at_0_lives
+
+  %div
     = f.submit "Save"

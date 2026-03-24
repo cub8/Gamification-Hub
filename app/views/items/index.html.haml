@@ -1,16 +1,24 @@
-
-= link_to "Back to Story group", story_group_path(@story_group)
-= link_to "Add item", new_story_group_item_path(@story_group)
+= link_to 'Back to Story group', story_group_path(@story_group)
+= link_to 'Add item', new_story_group_item_path(@story_group)
 %h1 Store
 
 - @items.each do |item|
+  %div
     %h3= item.name
+
     %p= item.story_description
     %p= item.didactic_description
     %p= item.price
 
-    = link_to "Edit", edit_story_group_item_path(@story_group, item)
+    - if item.image.attached?
+      = image_tag item.image, width: 100
 
-    = button_to "Delete",
-    story_group_item_path(@story_group, item),
-    method: :delete
+    %p
+      Available at 0 lives:
+      = item.can_buy_at_0_lives ? 'YES' : 'NO'
+
+    = link_to 'Edit', edit_story_group_item_path(@story_group, item)
+
+    = button_to 'Delete',
+      story_group_item_path(@story_group, item),
+      method: :delete

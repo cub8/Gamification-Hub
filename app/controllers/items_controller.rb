@@ -15,7 +15,7 @@ class ItemsController < ApplicationController
     @item = @story_group.items.build(item_params)
 
     if @item.save
-      redirect_to story_group_items_path(@story_group), notice: 'Item added successfully.'
+      redirect_to story_group_items_path(@story_group)
     else
       render :new
     end
@@ -25,7 +25,7 @@ class ItemsController < ApplicationController
     @item = @story_group.items.find(params[:id])
     @item.destroy
 
-    redirect_to story_group_items_path(@story_group), notice: 'Item deleted successfully.'
+    redirect_to story_group_items_path(@story_group)
   end
 
   def edit
@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
     @item = @story_group.items.find(params[:id])
 
     if @item.update(item_params)
-      redirect_to story_group_items_path(@story_group), notice: 'Item edited successfully.'
+      redirect_to story_group_items_path(@story_group)
     else
       render :edit
     end
@@ -54,6 +54,8 @@ class ItemsController < ApplicationController
       :story_description,
       :didactic_description,
       :price,
+      :image,
+      :can_buy_at_0_lives,
     )
   end
 end

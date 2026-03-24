@@ -19,5 +19,13 @@
     = f.label :price, "Price"
     = f.number_field :price
 
+  %div
+    = f.label :image, "Image"
+    = f.file_field :image
+
+  %div
+    = f.label :can_buy_at_0_lives, "Can buy at 0 lives?"
+    = f.check_box :can_buy_at_0_lives
+
   %br
   = f.submit "Add"
