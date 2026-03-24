@@ -1,23 +1,23 @@
 = link_to "Back to shop", story_group_items_path(@story_group)
 
-%h1 New item
+%h1 Edit item
 
 = form_with model: [@story_group, @item] do |f|
   %div
-    = f.label :name, "Name"
+    = f.label :name
     = f.text_field :name
 
   %div
-    = f.label :story_description, "Story description"
+    = f.label :story_description
     = f.text_area :story_description
 
   %div
-    = f.label :didactic_description, "Didactic description"
+    = f.label :didactic_description
     = f.text_area :didactic_description
 
   %div
-    = f.label :price, "Price"
+    = f.label :price
     = f.number_field :price
 
-  %br
-  = f.submit "Add"
+  %div
+    = f.submit "Save"

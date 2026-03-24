@@ -1,4 +1,5 @@
 
+= link_to "Back to Story group", story_group_path(@story_group)
 = link_to "Add item", new_story_group_item_path(@story_group)
 %h1 Store
 
@@ -6,3 +7,10 @@
     %h3= item.name
     %p= item.story_description
     %p= item.didactic_description
+    %p= item.price
+
+    = link_to "Edit", edit_story_group_item_path(@story_group, item)
+
+    = button_to "Delete",
+    story_group_item_path(@story_group, item),
+    method: :delete

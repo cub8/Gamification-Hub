@@ -19,6 +19,27 @@ class ItemsController < ApplicationController
     end
   end
 
+  def destroy
+    @item = @story_group.items.find(params[:id])
+    @item.destroy
+
+    redirect_to story_group_items_path(@story_group), notice: "Item deleted successfully."
+  end
+
+  def edit
+  @item = @story_group.items.find(params[:id])
+  end
+
+  def update
+    @item = @story_group.items.find(params[:id])
+
+    if @item.update(item_params)
+      redirect_to story_group_items_path(@story_group), notice: "Item edited successfully."
+    else
+      render :edit
+    end
+  end
+
   private
 
   def set_story_group
@@ -30,6 +51,7 @@ class ItemsController < ApplicationController
       :name,
       :story_description,
       :didactic_description,
+      :price
     )
   end
 end

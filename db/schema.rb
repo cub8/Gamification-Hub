@@ -46,6 +46,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_23_141807) do
     t.datetime "created_at", null: false
     t.text "didactic_description"
     t.string "name"
+    t.integer "price"
     t.text "story_description"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
