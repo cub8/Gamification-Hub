@@ -5,6 +5,10 @@ require 'test_helper'
 class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @current_user = FactoryBot.create(:user, role: :teacher)
+    get auth_callback_path(provider: 'development'), params: {
+      email:     @current_user.email,
+      full_name: @current_user.full_name,
+    }
     @story_group = FactoryBot.create(:story_group, owner: @current_user)
   end
 
@@ -26,7 +30,6 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
                currency_name: @story_group.currency_name,
                description:   @story_group.description,
                name:          @story_group.name,
-               owner_id:      @story_group.owner_id,
              },
            }
     end
@@ -51,7 +54,6 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
               currency_name: @story_group.currency_name,
               description:   @story_group.description,
               name:          @story_group.name,
-              owner_id:      @story_group.owner_id,
             },
           }
     assert_redirected_to story_group_url(@story_group)
