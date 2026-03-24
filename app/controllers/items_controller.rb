@@ -11,6 +11,10 @@ class ItemsController < ApplicationController
     @item = @story_group.items.build
   end
 
+  def edit
+    @item = @story_group.items.find(params[:id])
+  end
+
   def create
     @item = @story_group.items.build(item_params)
 
@@ -18,6 +22,16 @@ class ItemsController < ApplicationController
       redirect_to story_group_items_path(@story_group)
     else
       render :new
+    end
+  end
+  
+  def update
+    @item = @story_group.items.find(params[:id])
+
+    if @item.update(item_params)
+      redirect_to story_group_items_path(@story_group)
+    else
+      render :edit
     end
   end
 
@@ -28,19 +42,6 @@ class ItemsController < ApplicationController
     redirect_to story_group_items_path(@story_group)
   end
 
-  def edit
-    @item = @story_group.items.find(params[:id])
-  end
-
-  def update
-    @item = @story_group.items.find(params[:id])
-
-    if @item.update(item_params)
-      redirect_to story_group_items_path(@story_group)
-    else
-      render :edit
-    end
-  end
 
   private
 

@@ -1,31 +1,5 @@
-= link_to "Back to shop", story_group_items_path(@story_group)
+= link_to 'Back to shop', story_group_items_path(@story_group)
 
 %h1 Edit item
 
-= form_with model: [@story_group, @item] do |f|
-  %div
-    = f.label :name
-    = f.text_field :name
-
-  %div
-    = f.label :story_description
-    = f.text_area :story_description
-
-  %div
-    = f.label :didactic_description
-    = f.text_area :didactic_description
-
-  %div
-    = f.label :price
-    = f.number_field :price
-
-  %div
-    = f.label :image
-    = f.file_field :image
-
-  %div
-    = f.label :can_buy_at_0_lives
-    = f.check_box :can_buy_at_0_lives
-
-  %div
-    = f.submit "Save"
+= render 'form'
