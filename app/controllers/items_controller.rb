@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ItemsController < ApplicationController
   before_action :set_story_group
 
@@ -13,7 +15,7 @@ class ItemsController < ApplicationController
     @item = @story_group.items.build(item_params)
 
     if @item.save
-      redirect_to story_group_items_path(@story_group), notice: "Item added successfully."
+      redirect_to story_group_items_path(@story_group), notice: 'Item added successfully.'
     else
       render :new
     end
@@ -23,18 +25,18 @@ class ItemsController < ApplicationController
     @item = @story_group.items.find(params[:id])
     @item.destroy
 
-    redirect_to story_group_items_path(@story_group), notice: "Item deleted successfully."
+    redirect_to story_group_items_path(@story_group), notice: 'Item deleted successfully.'
   end
 
   def edit
-  @item = @story_group.items.find(params[:id])
+    @item = @story_group.items.find(params[:id])
   end
 
   def update
     @item = @story_group.items.find(params[:id])
 
     if @item.update(item_params)
-      redirect_to story_group_items_path(@story_group), notice: "Item edited successfully."
+      redirect_to story_group_items_path(@story_group), notice: 'Item edited successfully.'
     else
       render :edit
     end
@@ -51,7 +53,7 @@ class ItemsController < ApplicationController
       :name,
       :story_description,
       :didactic_description,
-      :price
+      :price,
     )
   end
 end
