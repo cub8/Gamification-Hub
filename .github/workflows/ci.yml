@@ -78,6 +78,9 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Credentials
+        run: cp config/credentials/test.yml.enc.example config/credentials/test.yml.enc
+
       - name: prepare database
         run: bin/rails db:prepare
 

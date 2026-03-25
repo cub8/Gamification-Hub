@@ -17,4 +17,8 @@ class User < ApplicationRecord
   validates :university_name, length: { maximum: 100 }
 
   validates_presence_of :email, :full_name, on: :account_setup
+
+  encrypts :email, deterministic: true
+  encrypts :university_number, deterministic: true
+  encrypts :full_name, deterministic: true
 end
