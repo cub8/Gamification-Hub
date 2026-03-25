@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
       render :new
     end
   end
-  
+
   def update
     @item = @story_group.items.find(params[:id])
 
