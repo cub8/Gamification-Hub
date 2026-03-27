@@ -13,7 +13,8 @@
 
   %p
     %strong Icon:
-    = link_to story_group.icon.filename, story_group.icon if story_group.icon.attached?
+    - if story_group.icon.attached?
+      = image_tag story_group.icon, width: 100
 
   %p
     %strong Currency name:
@@ -21,5 +22,6 @@
 
   %p
     %strong Currency icon:
-    = link_to story_group.currency_icon.filename, story_group.currency_icon if story_group.currency_icon.attached?
+    - if story_group.currency_icon.attached?
+      =image_tag story_group.currency_icon, width:100
 
