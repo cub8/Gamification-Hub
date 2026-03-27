@@ -9,7 +9,7 @@
     = render story_group
     %p
       = link_to "Show this story group", story_group
-- if @current_user&.teacher? || @current_user&.organization_admin? || @current_user&.global_admin?
+- if has_access_to_story_groups(@current_user) 
   %p
     = link_to "New story group", new_story_group_path
 

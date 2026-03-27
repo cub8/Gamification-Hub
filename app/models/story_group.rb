@@ -9,6 +9,7 @@ class StoryGroup < ApplicationRecord
   validates :name, :currency_name, length: { maximum: 40 }
   validates :description, length: { maximum: 255 }
   validate :acceptable_icon
+  validate :acceptable_currency_icon
 
   # Te akceptowalne pliki obrazów raczej do zmiany, na razie tak przykładowo
   def acceptable_icon
@@ -19,8 +20,6 @@ class StoryGroup < ApplicationRecord
 
     errors.add(:icon, 'must be a GIF, JPG or PNG image')
   end
-
-  validate :acceptable_currency_icon
 
   def acceptable_currency_icon
     return unless currency_icon.attached?

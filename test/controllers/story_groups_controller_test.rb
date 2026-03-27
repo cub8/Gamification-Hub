@@ -5,10 +5,6 @@ require 'test_helper'
 class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @current_user = FactoryBot.create(:user, role: :teacher)
-    # get auth_callback_path(provider: 'development'), params: {
-    #  email:     @current_user.email,
-    #  full_name: @current_user.full_name,
-    # }
     sign_in @current_user
     @story_group = FactoryBot.create(:story_group, owner: @current_user)
   end

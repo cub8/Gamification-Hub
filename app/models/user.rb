@@ -18,4 +18,9 @@ class User < ApplicationRecord
 
   has_many :story_groups, foreign_key: 'owner_id'
   validates_presence_of :email, :full_name, on: :account_setup
+
+  def has_access_to_story_group?(story_group)
+    story_group.owner == self || story_group.teachers.include?(self) || organization_admin? # tutaj z
+    # uwzględnieniem nauczycieli - bo w przyszłości mamy dopuszczać nauczycieli w ramach grup fabularnych
+  end
 end
