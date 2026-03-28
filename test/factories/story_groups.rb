@@ -2,7 +2,10 @@
 
 FactoryBot.define do
   factory :story_group do
-    owner_id { 1 }
+<<<<<<< HEAD
+=======
+    association :owner, factory: :user
+>>>>>>> origin/main
     name { 'MyString' }
     description { 'MyText' }
     icon { nil }
