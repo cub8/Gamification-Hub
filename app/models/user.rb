@@ -20,7 +20,7 @@ class User < ApplicationRecord
   validates_presence_of :email, :full_name, on: :account_setup
 
   def has_access_to_story_group?(story_group)
-    story_group.owner == self || story_group.teachers.include?(self) || organization_admin? # tutaj z
+    story_group.owner == self || organization_admin? # || story_group.teachers.include?(self) # tutaj z
     # uwzględnieniem nauczycieli - bo w przyszłości mamy dopuszczać nauczycieli w ramach grup fabularnych
   end
 end

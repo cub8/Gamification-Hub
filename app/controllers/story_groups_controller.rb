@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
+  # set_story_groups weryfikuje przynależność story_group do nauczyciela
   before_action :set_story_group, only: %i[show edit update destroy]
   before_action :authorize, only: %i[new create edit update destroy]
 
@@ -16,7 +17,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # GET /story_groups/1
-  def show; end # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def show; end
 
   # GET /story_groups/new
   def new
@@ -24,7 +25,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # GET /story_groups/1/edit
-  def edit; end # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def edit; end
 
   # POST /story_groups
   def create
@@ -39,7 +40,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # PATCH/PUT /story_groups/1
-  def update # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def update
     if @story_group.update(story_group_params)
       redirect_to @story_group, notice: 'Story group was successfully updated.', status: :see_other
     else
@@ -48,7 +49,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # DELETE /story_groups/1
-  def destroy # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def destroy
     @story_group.destroy!
     redirect_to story_groups_path, notice: 'Story group was successfully destroyed.', status: :see_other
   end
