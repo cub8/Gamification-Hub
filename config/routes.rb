@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :story_groups
+  resources :story_groups do
+    resources :items, except: :show
+  end
   get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout

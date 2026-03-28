@@ -3,6 +3,7 @@
 class StoryGroup < ApplicationRecord
   has_one_attached :icon
   has_one_attached :currency_icon
+  has_many :items, dependent: :destroy
 
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
 
