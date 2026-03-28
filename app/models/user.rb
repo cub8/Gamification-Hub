@@ -16,7 +16,13 @@ class User < ApplicationRecord
   validates :full_name, length: { maximum: 80 }
   validates :university_name, length: { maximum: 100 }
 
+  has_many :story_groups, foreign_key: 'owner_id'
   validates_presence_of :email, :full_name, on: :account_setup
+
+  def has_access_to_story_group?(story_group)
+    story_group.owner == self || organization_admin? # || story_group.teachers.include?(self) # tutaj z
+    # uwzględnieniem nauczycieli - bo w przyszłości mamy dopuszczać nauczycieli w ramach grup fabularnych
+  end
 
   encrypts :email, deterministic: true
   encrypts :university_number, deterministic: true

@@ -1,0 +1,12 @@
+- content_for :title, "Editing story group"
+
+%h1 Editing story group
+
+= render "form", story_group: @story_group
+
+%br
+
+%div
+  = link_to "Show this story group", @story_group
+  |
+  = link_to "Back to story groups", story_groups_path

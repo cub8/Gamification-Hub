@@ -1,0 +1,27 @@
+%div{id: dom_id(story_group)}
+  %p
+    %strong Owner:
+    = story_group.owner.full_name
+
+  %p
+    %strong Name:
+    = story_group.name
+
+  %p
+    %strong Description:
+    = story_group.description
+
+  %p
+    %strong Icon:
+    - if story_group.icon.attached?
+      = image_tag story_group.icon, width: 100
+
+  %p
+    %strong Currency name:
+    = story_group.currency_name
+
+  %p
+    %strong Currency icon:
+    - if story_group.currency_icon.attached?
+      = image_tag story_group.currency_icon, width:100
+
