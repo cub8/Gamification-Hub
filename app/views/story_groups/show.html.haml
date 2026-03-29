@@ -2,7 +2,43 @@
 
 = render @story_group
 
-%div
+%section
+  %h2 Ranks
+  - if @story_group.ranks.any?
+    %ul
+      - @story_group.ranks.each do |rank|
+        %li
+          = rank.name
+          - if rank.icon.attached?
+            = image_tag rank.icon, width: 50
+          = button_to "Delete", story_group_rank_path(@story_group, rank), method: :delete, form: { style: "display: inline;" }
+  - else
+    %p No ranks yet
+
+  %div{style: "margin-top: 20px; border: 1px solid #ccc; padding: 20px;"}
+    %h3 Add a new rank
+    - @rank = Rank.new
+    = render "ranks/form", story_group: @story_group, rank: @rank
+
+%section{style: "margin-top: 30px;"}
+  %h2 Badges
+  - if @story_group.badges.any?
+    %ul
+      - @story_group.badges.each do |badge|
+        %li
+          = badge.name
+          - if badge.icon.attached?
+            = image_tag badge.icon, width: 50
+          = button_to "Delete", story_group_badge_path(@story_group, badge), method: :delete, form: { style: "display: inline;" }
+  - else
+    %p No badges yet
+
+  %div{style: "margin-top: 20px; border: 1px solid #ccc; padding: 20px;"}
+    %h3 Add a new badge
+    - @badge = Badge.new
+    = render "badges/form", story_group: @story_group, badge: @badge
+
+%div{style: "margin-top: 30px;"}
   = link_to "Edit this story group", edit_story_group_path(@story_group)
   |
   = link_to "Back to story groups", story_groups_path
