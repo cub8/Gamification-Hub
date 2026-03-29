@@ -24,12 +24,20 @@ class SessionUserBuilder
 
   def find_or_initialize_user
     if @provider.usos_id
+      user = User.find_by(
+        usos_id:         @provider.usos_id,
+        university_name: @provider.university_name,
+      )
+      return user if user
+    end
+
+    if @provider.email
+      User.find_or_initialize_by(email: @provider.email)
+    elsif @provider.usos_id
       User.find_or_initialize_by(
         usos_id:         @provider.usos_id,
         university_name: @provider.university_name,
       )
-    elsif @provider.email
-      User.find_or_initialize_by(email: @provider.email)
     else
       raise Providers::InvalidAuthError
     end

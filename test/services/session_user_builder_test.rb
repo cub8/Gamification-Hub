@@ -34,7 +34,7 @@ class SessionUserBuilderTest < ActiveSupport::TestCase
   end
 
   test 'update user if user exists, but first_login is true' do
-    user = FactoryBot.create(:user, first_login: true, email: nil)
+    user = FactoryBot.create(:user, first_login: true, email: nil, usos_id: '123456', university_name: 'Example university')
     SessionUserBuilder.new(@provider).build
 
     assert_equal 'jan.nowak@gmail.com', user.reload.email
