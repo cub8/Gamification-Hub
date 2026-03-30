@@ -2,8 +2,8 @@
 
 Rails.application.routes.draw do
   resources :story_groups do
-    resources :ranks, only: %i[create destroy]
-    resources :badges, only: %i[create destroy]
+    resources :ranks,
+    resources :badges,
   end
   get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
   get '/login', to: 'sessions#new', as: :login

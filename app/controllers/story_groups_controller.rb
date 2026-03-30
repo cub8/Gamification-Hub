@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
+  # set_story_groups weryfikuje przynależność story_group do nauczyciela
   before_action :set_story_group, only: %i[show edit update destroy]
   before_action :authorize, only: %i[new create edit update destroy]
 
@@ -16,7 +17,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # GET /story_groups/1
-  def show; end # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def show; end
 
   # GET /story_groups/new
   def new
@@ -24,7 +25,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # GET /story_groups/1/edit
-  def edit; end # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def edit; end
 
   # POST /story_groups
   def create
@@ -39,7 +40,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # PATCH/PUT /story_groups/1
-  def update # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def update
     if @story_group.update(story_group_params)
       redirect_to @story_group, notice: 'Story group was successfully updated.', status: :see_other
     else
@@ -48,7 +49,7 @@ class StoryGroupsController < ApplicationController
   end
 
   # DELETE /story_groups/1
-  def destroy # set_story_groups weryfikuje przynależność story_group do nauczyciela
+  def destroy
     @story_group.destroy!
     redirect_to story_groups_path, notice: 'Story group was successfully destroyed.', status: :see_other
   end
@@ -57,11 +58,16 @@ class StoryGroupsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_story_group
+    story_group_id = params.expect(:id)
+
     if @current_user&.teacher?
-      @story_group = @current_user.story_groups.find(params.expect(:id))
+      @story_group = @current_user.story_groups.find(story_group_id)
     elsif @current_user&.organization_admin? || @current_user&.global_admin?
-      @story_group = StoryGroup.find(params.expect(:id))
+      @story_group = StoryGroup.find(story_group_id)
+    else
+      redirect_to root_path, alert: 'Not found!'
     end
+
   end
 
   # Only allow a list of trusted parameters through.
@@ -73,7 +79,6 @@ class StoryGroupsController < ApplicationController
     return if @story_group.nil? && (@current_user.teacher? || @current_user.organization_admin?)
     return if @story_group && @current_user.has_access_to_story_group?(@story_group)
 
-    redirect_to root_path, 'Not found'
+    redirect_to root_path, alert: 'Not found'
   end
-
 end

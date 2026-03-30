@@ -1,5 +1,3 @@
-%p{style: "color: green"}= notice
-
 = render @story_group
 
 %section
@@ -44,3 +42,9 @@
   = link_to "Back to story groups", story_groups_path
 
   = button_to "Destroy this story group", @story_group, method: :delete
+
+
+%hr
+%h2 Shop
+
+= link_to "Go to shop", story_group_items_path(@story_group)

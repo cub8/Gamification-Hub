@@ -8,7 +8,7 @@ source 'https://rubygems.org'
 gem 'kamal', '~> 2.10', require: false # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem 'pg', '~> 1.6' # Use postgresql as the database for Active Record
 gem 'puma', '~> 7.2' # Use the Puma web server [https://github.com/puma/puma]
-gem 'rails', '~> 8.1.2' # Base framework
+gem 'rails', '~> 8.1.2.1' # Base framework
 gem 'thruster', '~> 0.1', require: false # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 
 # CSS and JS related

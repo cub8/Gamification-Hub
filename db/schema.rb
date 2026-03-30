@@ -58,6 +58,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_223122) do
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_ranks_on_story_group_id"
+  create_table "items", force: :cascade do |t|
+    t.boolean "can_buy_at_0_lives"
+    t.datetime "created_at", null: false
+    t.text "didactic_description"
+    t.string "name"
+    t.integer "price"
+    t.text "story_description"
+    t.bigint "story_group_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["story_group_id"], name: "index_items_on_story_group_id"
   end
 
   create_table "story_groups", force: :cascade do |t|
@@ -87,4 +97,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_223122) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "badges", "story_groups"
   add_foreign_key "ranks", "story_groups"
+  add_foreign_key "items", "story_groups"
 end

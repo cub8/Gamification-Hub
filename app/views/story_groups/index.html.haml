@@ -1,10 +1,8 @@
-%p{style: "color: green"}= notice
-
 - content_for :title, "Story groups"
 
 %h1 Story groups
 
-%div{id: "story_groups"}
+#story_groups
   - @story_groups.each do |story_group|
     = render story_group
     %p
