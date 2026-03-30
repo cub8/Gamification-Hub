@@ -2,6 +2,7 @@
 
 class ItemsController < ApplicationController
   before_action :set_story_group
+  before_action :authorize, only: %i[new edit create update destroy]
 
   def index
     @items = @story_group.items
@@ -42,11 +43,16 @@ class ItemsController < ApplicationController
     redirect_to story_group_items_path(@story_group)
   end
 
-
   private
 
   def set_story_group
     @story_group = StoryGroup.find(params[:story_group_id])
+  end
+
+  def authorize
+    return if @current_user.has_access_to_story_group?(@story_group)
+
+    redirect_to root_path, alert: 'Not found'
   end
 
   def item_params
