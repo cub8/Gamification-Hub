@@ -58,11 +58,16 @@ class StoryGroupsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_story_group
+    story_group_id = params.expect(:id)
+
     if @current_user&.teacher?
-      @story_group = @current_user.story_groups.find(params.expect(:id))
+      @story_group = @current_user.story_groups.find(story_group_id)
     elsif @current_user&.organization_admin? || @current_user&.global_admin?
-      @story_group = StoryGroup.find(params.expect(:id))
+      @story_group = StoryGroup.find(story_group_id)
+    else
+      redirect_to root_path, alert: 'Not found!'
     end
+
   end
 
   # Only allow a list of trusted parameters through.
@@ -74,7 +79,6 @@ class StoryGroupsController < ApplicationController
     return if @story_group.nil? && (@current_user.teacher? || @current_user.organization_admin?)
     return if @story_group && @current_user.has_access_to_story_group?(@story_group)
 
-    redirect_to root_path, 'Not found'
+    redirect_to root_path, alert: 'Not found'
   end
-
 end

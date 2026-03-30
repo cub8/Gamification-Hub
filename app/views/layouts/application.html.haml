@@ -18,4 +18,8 @@
   %body
     - if @current_user
       = button_to 'Logout', logout_path, method: :delete
+    - if notice
+      %p{style: "color: green"}= notice
+    - if alert
+      %p{style: "color: red"}= alert
     = yield
