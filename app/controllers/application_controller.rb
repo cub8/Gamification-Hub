@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
+
   attr_reader :current_user
 
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
@@ -10,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate!
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
 
   protected
 
@@ -22,6 +25,10 @@ class ApplicationController < ActionController::Base
   end
 
   def record_not_found
+    redirect_to root_path, alert: 'Not found'
+  end
+
+  def not_authorized
     redirect_to root_path, alert: 'Not found'
   end
 end
