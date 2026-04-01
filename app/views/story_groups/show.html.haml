@@ -1,14 +1,16 @@
 = render @story_group
 
 %div
-  = link_to "Edit this story group", edit_story_group_path(@story_group)
-  |
+  - if policy(@story_group).update?
+    = link_to "Edit this story group", edit_story_group_path(@story_group)
+    |
   = link_to "Back to story groups", story_groups_path
 
-  = button_to "Destroy this story group", @story_group, method: :delete
-
+  - if policy(@story_group).destroy?
+    = button_to "Destroy this story group", @story_group, method: :delete
 
 %hr
-%h2 Shop
 
-= link_to "Go to shop", story_group_items_path(@story_group)
+%h2 Items
+
+= link_to "Go to items", story_group_items_path(@story_group)

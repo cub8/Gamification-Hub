@@ -3,14 +3,12 @@
 class StoryGroupPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      return scope.none unless user
-
       if user.organization_admin? || user.global_admin?
         scope.all
       elsif user.teacher?
         scope.where(owner_id: user.id) # and also those to which they belong as teacher and student
-      else # rubocop:disable Style/EmptyElse
-        # for students in the future
+      else
+        scope.none
       end
     end
   end
