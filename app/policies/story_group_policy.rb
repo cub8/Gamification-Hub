@@ -14,9 +14,7 @@ class StoryGroupPolicy < ApplicationPolicy
   end
 
   def show?
-    return true if admin? || owner?
-
-    member?
+    admin? || owner? || member?
   end
 
   def create?
