@@ -5,7 +5,7 @@ FactoryBot.define do
     sequence(:usos_id) { |n| "usos_#{n}" }
     sequence(:email) { |n| "user#{n}@st.amu.edu.pl" }
     full_name { 'Jan Nowak' }
-    sequence(:university_number) { |n| "#{123456 + n}" }
+    sequence(:university_number) { |n| (n + 123456).to_s }
     university_name { 'Example university' }
     first_login { false }
   end

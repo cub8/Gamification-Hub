@@ -9,9 +9,9 @@ class RankTest < ActiveSupport::TestCase
 
   test 'rank name validation' do
     rank = Rank.new(
-      name: 'A' * 50,
-      discount: 10,
-      required_currency_value: 100
+      name:                    'A' * 50,
+      discount:                10,
+      required_currency_value: 100,
     )
     assert_equal true, rank.invalid?
     assert_equal true, rank.errors[:name].any?
@@ -19,9 +19,9 @@ class RankTest < ActiveSupport::TestCase
 
   test 'rank discount validation' do
     rank = Rank.new(
-      name: 'Valid',
-      discount: -5,
-      required_currency_value: 100
+      name:                    'Valid',
+      discount:                -5,
+      required_currency_value: 100,
     )
     assert_equal true, rank.invalid?
     assert_equal true, rank.errors[:discount].any?
@@ -29,9 +29,9 @@ class RankTest < ActiveSupport::TestCase
 
   test 'rank required currency value validation' do
     rank = Rank.new(
-      name: 'Valid',
-      discount: 10,
-      required_currency_value: -100
+      name:                    'Valid',
+      discount:                10,
+      required_currency_value: -100,
     )
     assert_equal true, rank.invalid?
     assert_equal true, rank.errors[:required_currency_value].any?
@@ -39,10 +39,10 @@ class RankTest < ActiveSupport::TestCase
 
   test 'rank saves with valid attributes' do
     rank = Rank.new(
-      story_group: @story_group,
-      name: 'Silver',
-      discount: 10,
-      required_currency_value: 100
+      story_group:             @story_group,
+      name:                    'Silver',
+      discount:                10,
+      required_currency_value: 100,
     )
     assert_equal true, rank.valid?
     assert_equal true, rank.save

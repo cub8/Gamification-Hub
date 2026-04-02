@@ -3,7 +3,7 @@
 class RanksController < ApplicationController
   before_action :set_story_group
   before_action :authorize
-  before_action :set_rank, only: %i[ show edit update destroy ]
+  before_action :set_rank, only: %i[show edit update destroy]
 
   # GET /story_groups/:story_group_id/ranks
   def index
@@ -11,8 +11,7 @@ class RanksController < ApplicationController
   end
 
   # GET /story_groups/:story_group_id/ranks/:id
-  def show
-  end
+  def show; end
 
   # GET /story_groups/:story_group_id/ranks/new
   def new
@@ -20,8 +19,7 @@ class RanksController < ApplicationController
   end
 
   # GET /story_groups/:story_group_id/ranks/:id/edit
-  def edit
-  end
+  def edit; end
 
   # POST /story_groups/:story_group_id/ranks
   def create
@@ -69,6 +67,7 @@ class RanksController < ApplicationController
 
   def authorize
     return if @current_user&.organization_admin? || @current_user&.global_admin? || @story_group
+
     redirect_to root_path, alert: 'Not found.'
   end
 end

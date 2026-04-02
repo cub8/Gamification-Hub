@@ -14,9 +14,9 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
       post story_group_ranks_url(@story_group),
            params: {
              rank: {
-               name: 'Gold',
-               discount: 20,
-               required_currency_value: 500
+               name:                    'Gold',
+               discount:                20,
+               required_currency_value: 500,
              },
            }
     end
@@ -31,9 +31,9 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
     post story_group_ranks_url(other_story_group),
          params: {
            rank: {
-             name: 'Gold',
-             discount: 20,
-             required_currency_value: 500
+             name:                    'Gold',
+             discount:                20,
+             required_currency_value: 500,
            },
          }
 
@@ -56,9 +56,9 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
       post story_group_ranks_url(@story_group),
            params: {
              rank: {
-               name: 'Gold',
-               discount: 20,
-               required_currency_value: 500
+               name:                    'Gold',
+               discount:                20,
+               required_currency_value: 500,
              },
            }
     end
