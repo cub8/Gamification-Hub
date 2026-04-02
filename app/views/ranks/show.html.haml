@@ -1,0 +1,8 @@
+%h1= @rank.name
+%p= @rank.description
+
+- if @rank.icon.attached?
+  = image_tag @rank.icon, width: 100
+
+= link_to "Edit", edit_story_group_rank_path(@story_group, @rank)
+= link_to "Back", story_group_ranks_path(@story_group)

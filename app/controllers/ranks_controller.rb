@@ -3,31 +3,58 @@
 class RanksController < ApplicationController
   before_action :set_story_group
   before_action :authorize
-  before_action :set_rank, only: %i[destroy]
+  before_action :set_rank, only: %i[ show edit update destroy ]
+
+  # GET /story_groups/:story_group_id/ranks
+  def index
+    @ranks = @story_group.ranks
+  end
+
+  # GET /story_groups/:story_group_id/ranks/:id
+  def show
+  end
+
+  # GET /story_groups/:story_group_id/ranks/new
+  def new
+    @rank = @story_group.ranks.new
+  end
+
+  # GET /story_groups/:story_group_id/ranks/:id/edit
+  def edit
+  end
 
   # POST /story_groups/:story_group_id/ranks
   def create
     @rank = @story_group.ranks.build(rank_params)
 
     if @rank.save
-      redirect_to @story_group, notice: 'Rank was successfully created.'
+      redirect_to story_group_rank_path(@story_group, @rank), notice: 'Rank was successfully created.'
     else
-      redirect_to @story_group, alert: 'Error creating rank.'
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /story_groups/:story_group_id/ranks/:id
+  def update
+    if @rank.update(rank_params)
+      redirect_to story_group_rank_path(@story_group, @rank), notice: 'Rank was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
   # DELETE /story_groups/:story_group_id/ranks/:id
   def destroy
-    @rank.destroy!
-    redirect_to @story_group, notice: 'Rank was successfully destroyed.', status: :see_other
+    @rank.destroy
+    redirect_to story_group_ranks_path(@story_group), notice: 'Rank was successfully destroyed.'
   end
 
   private
 
   def set_story_group
-    if @current_user&.teacher?
+    if @current_user.teacher?
       @story_group = @current_user.story_groups.find_by(id: params.expect(:story_group_id))
-    elsif @current_user&.organization_admin? || @current_user&.global_admin?
+    elsif @current_user.organization_admin? || @current_user.global_admin?
       @story_group = StoryGroup.find(params.expect(:story_group_id))
     end
   end
@@ -37,14 +64,11 @@ class RanksController < ApplicationController
   end
 
   def rank_params
-    params.expect(rank: %i[name description icon])
+    params.expect(rank: %i[name discount required_currency_value icon])
   end
 
   def authorize
-    unless @current_user&.teacher? || @current_user&.organization_admin? || @current_user&.global_admin?
-      return redirect_to root_path, alert: 'Not found.'
-    end
-
-    redirect_to root_path, alert: 'Not found.' unless @story_group
+    return if @current_user&.organization_admin? || @current_user&.global_admin? || @story_group
+    redirect_to root_path, alert: 'Not found.'
   end
 end

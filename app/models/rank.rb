@@ -6,7 +6,11 @@ class Rank < ApplicationRecord
   belongs_to :story_group
 
   validates :name, length: { maximum: 40 }
-  validates :description, length: { maximum: 255 }
+  
+  validates :discount, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+
+  validates :required_currency_value, numericality: { greater_than_or_equal_to: 0 }
+
   validate :acceptable_icon
   
   def acceptable_icon

@@ -1,7 +1,7 @@
-= form_with(model: [@story_group, rank], local: true) do |form|
+= form_with(model: [@story_group, rank]) do |form|
   - if rank.errors.any?
     %div{style: "color: red"}
-      %h4= "#{pluralize(rank.errors.count, "error")} prohibited this rank from being saved:"
+      %h2= "#{pluralize(rank.errors.count, "error")} prohibited this rank from being saved:"
       %ul
         - rank.errors.each do |error|
           %li= error.full_message
@@ -11,12 +11,16 @@
     = form.text_field :name
 
   %div
-    = form.label :description, style: "display: block"
-    = form.textarea :description
+    = form.label :discount, style: "display: block"
+    = form.number_field :discount, in: 0..100, step: 1
+
+  %div
+    = form.label :required_currency_value, "Required Currency Value", style: "display: block"
+    = form.number_field :required_currency_value, min: 0, step: 1
 
   %div
     = form.label :icon, style: "display: block"
     = form.file_field :icon, accept: "image/*"
 
   %div
-    = form.submit "Add Rank"
+    = form.submit

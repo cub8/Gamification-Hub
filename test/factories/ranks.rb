@@ -4,7 +4,8 @@ FactoryBot.define do
   factory :rank do
     association :story_group
     name { 'Gold' }
-    description { 'A gold rank' }
+    discount { 10 }
+    required_currency_value { 100 }
     icon { nil }
   end
 end

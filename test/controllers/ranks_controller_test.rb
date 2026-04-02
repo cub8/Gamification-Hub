@@ -15,12 +15,13 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
            params: {
              rank: {
                name: 'Gold',
-               description: 'A gold rank',
+               discount: 20,
+               required_currency_value: 500
              },
            }
     end
 
-    assert_redirected_to story_group_url(@story_group)
+    assert_redirected_to story_group_rank_url(@story_group, Rank.last)
   end
 
   test 'should not create rank for story group not owned by teacher' do
@@ -31,7 +32,8 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
          params: {
            rank: {
              name: 'Gold',
-             description: 'A gold rank',
+             discount: 20,
+             required_currency_value: 500
            },
          }
 
@@ -45,7 +47,7 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
       delete story_group_rank_url(@story_group, rank)
     end
 
-    assert_redirected_to story_group_url(@story_group)
+    assert_redirected_to story_group_ranks_url(@story_group)
   end
 
   test 'should not create rank without authentication' do
@@ -55,7 +57,8 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
            params: {
              rank: {
                name: 'Gold',
-               description: 'A gold rank',
+               discount: 20,
+               required_currency_value: 500
              },
            }
     end

@@ -16,11 +16,13 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
              badge: {
                name: 'Achievement',
                description: 'An achievement badge',
+               discount: 10,
+               required_currency_value: 100
              },
            }
     end
 
-    assert_redirected_to story_group_url(@story_group)
+    assert_redirected_to story_group_badge_url(@story_group, Badge.last)
   end
 
   test 'should not create badge for story group not owned by teacher' do
@@ -32,6 +34,8 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
            badge: {
              name: 'Achievement',
              description: 'An achievement badge',
+             discount: 10,
+             required_currency_value: 100
            },
          }
 
@@ -45,7 +49,7 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
       delete story_group_badge_url(@story_group, badge)
     end
 
-    assert_redirected_to story_group_url(@story_group)
+    assert_redirected_to story_group_badges_url(@story_group)
   end
 
   test 'should not create badge without authentication' do
@@ -56,6 +60,8 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
              badge: {
                name: 'Achievement',
                description: 'An achievement badge',
+               discount: 10,
+               required_currency_value: 100
              },
            }
     end
