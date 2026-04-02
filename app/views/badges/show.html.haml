@@ -1,5 +1,15 @@
 %h1= @badge.name
-%p= @badge.description
+%p
+  %strong Description:
+  = @badge.description
+
+%p
+  %strong Discount:
+  = "#{@badge.discount}%"
+
+%p
+  %strong Required Currency Value:
+  = @badge.required_currency_value
 
 - if @badge.icon.attached?
   = image_tag @badge.icon, width: 100

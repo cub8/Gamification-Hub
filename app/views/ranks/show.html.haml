@@ -1,5 +1,11 @@
 %h1= @rank.name
-%p= @rank.description
+%p
+  %strong Discount:
+  = "#{@rank.discount}%"
+
+%p
+  %strong Required Currency Value:
+  = @rank.required_currency_value
 
 - if @rank.icon.attached?
   = image_tag @rank.icon, width: 100
