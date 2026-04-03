@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :ranks
     resources :badges
   end
+
   get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout

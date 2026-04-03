@@ -1,14 +1,23 @@
 %h1 Ranks
 
-%ul
-  - @ranks.each do |rank|
-    %li
-      = rank.name
-      = link_to "Show", story_group_rank_path(@story_group, rank)
-      = link_to "Edit", edit_story_group_rank_path(@story_group, rank)
-      = button_to "Delete", story_group_rank_path(@story_group, rank), method: :delete
+#ranks
+  %table.table
+    %tr
+      %th Name
+      %th Discount
+      %th Required currency value
+      %th
+    - @ranks.each do |rank|
+      %tr
+        %td= rank.name
+        %td= "#{rank.discount}%"
+        %td= rank.required_currency_value
+        %td
+          = link_to 'Show', story_group_rank_path(@story_group, rank)
+          - if policy(@story_group).update?
+            = link_to 'Edit', edit_story_group_rank_path(@story_group, rank)
+            = link_to 'Delete', story_group_rank_path(@story_group, rank), data: { turbo_method: :delete }
 
-= link_to "New Rank", new_story_group_rank_path(@story_group)
-%p
-  = link_to "Home", root_path
-  
+= link_to 'New Rank', new_story_group_rank_path(@story_group)
+|
+= link_to 'Back', story_group_path(@story_group)

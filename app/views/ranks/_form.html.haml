@@ -11,7 +11,7 @@
     = form.text_field :name
 
   %div
-    = form.label :discount, style: "display: block"
+    = form.label 'Discount (%)', style: "display: block"
     = form.number_field :discount, in: 0..100, step: 1
 
   %div
@@ -24,4 +24,3 @@
 
   %div
     = form.submit
-    

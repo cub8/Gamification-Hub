@@ -1,15 +1,23 @@
 %h1= @story_group.name
+
+= link_to "Ranks", story_group_ranks_path(@story_group)
+|
+= link_to "Badges", story_group_badges_path(@story_group)
+
+- if policy(@story_group).update?
+  |
+  = link_to "Items", story_group_items_path(@story_group)
+
+%hr
+
 = render @story_group
 
 %div
-  = link_to "Edit this story group", edit_story_group_path(@story_group)
-  |
+  - if policy(@story_group).update?
+    = link_to "Edit this story group", edit_story_group_path(@story_group)
+    |
   = link_to "Back to story groups", story_groups_path
-  = button_to "Destroy this story group", @story_group, method: :delete
 
-%hr
-%h2 Shop
-
-= link_to "Go to shop", story_group_items_path(@story_group)
-= link_to "View ranks", story_group_ranks_path(@story_group)
-= link_to "View badges", story_group_badges_path(@story_group)
+  - if policy(@story_group).destroy?
+    |
+    = link_to "Destroy this story group", @story_group, data: { turbo_method: :delete }

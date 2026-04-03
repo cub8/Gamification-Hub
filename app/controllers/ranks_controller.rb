@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 class RanksController < ApplicationController
+  include StoryGroupAuthorization
+
   before_action :set_story_group
-  before_action :authorize
+  before_action :authorize_story_group_read!, only: %i[index show]
+  before_action :authorize_story_group_manage!, except: %i[index show]
   before_action :set_rank, only: %i[show edit update destroy]
 
   # GET /story_groups/:story_group_id/ranks
   def index
-    @ranks = @story_group.ranks
+    @ranks = policy_scope(@story_group.ranks).order(:required_currency_value)
   end
 
   # GET /story_groups/:story_group_id/ranks/:id
@@ -15,7 +18,7 @@ class RanksController < ApplicationController
 
   # GET /story_groups/:story_group_id/ranks/new
   def new
-    @rank = @story_group.ranks.new
+    @rank = @story_group.ranks.build
   end
 
   # GET /story_groups/:story_group_id/ranks/:id/edit
@@ -50,11 +53,7 @@ class RanksController < ApplicationController
   private
 
   def set_story_group
-    if @current_user.teacher?
-      @story_group = @current_user.story_groups.find_by(id: params.expect(:story_group_id))
-    elsif @current_user.organization_admin? || @current_user.global_admin?
-      @story_group = StoryGroup.find(params.expect(:story_group_id))
-    end
+    @story_group = StoryGroup.find(params.expect(:story_group_id))
   end
 
   def set_rank
@@ -62,12 +61,13 @@ class RanksController < ApplicationController
   end
 
   def rank_params
-    params.expect(rank: %i[name discount required_currency_value icon])
-  end
-
-  def authorize
-    return if @current_user&.organization_admin? || @current_user&.global_admin? || @story_group
-
-    redirect_to root_path, alert: 'Not found.'
+    params.expect(
+      rank: %i[
+        name
+        discount
+        required_currency_value
+        icon
+      ],
+    )
   end
 end
