@@ -10,7 +10,7 @@ class RanksController < ApplicationController
 
   # GET /story_groups/:story_group_id/ranks
   def index
-    @ranks = @story_group.ranks.order(:required_currency_value)
+    @ranks = policy_scope(@story_group.ranks).order(:required_currency_value)
   end
 
   # GET /story_groups/:story_group_id/ranks/:id

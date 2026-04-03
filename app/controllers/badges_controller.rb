@@ -10,7 +10,7 @@ class BadgesController < ApplicationController
 
   # GET /story_groups/:story_group_id/badges
   def index
-    @badges = @story_group.badges
+    @badges = policy_scope(@story_group.badges)
   end
 
   # GET /story_groups/:story_group_id/badges/:id

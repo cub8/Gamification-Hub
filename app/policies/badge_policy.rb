@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ItemPolicy < ApplicationPolicy
+class BadgePolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     include StoryGroupManageable
 
