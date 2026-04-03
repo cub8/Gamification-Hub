@@ -8,6 +8,8 @@ class User < ApplicationRecord
     global_admin:       4,
   }
 
+  has_many :story_groups, foreign_key: 'owner_id'
+
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, length: { maximum: 255 }, uniqueness: true, allow_nil: true
@@ -15,14 +17,7 @@ class User < ApplicationRecord
   validates :university_number, length: { maximum: 20 }
   validates :full_name, length: { maximum: 80 }
   validates :university_name, length: { maximum: 100 }
-
-  has_many :story_groups, foreign_key: 'owner_id'
   validates_presence_of :email, :full_name, on: :account_setup
-
-  def has_access_to_story_group?(story_group)
-    story_group.owner == self || organization_admin? # || story_group.teachers.include?(self) # tutaj z
-    # uwzględnieniem nauczycieli - bo w przyszłości mamy dopuszczać nauczycieli w ramach grup fabularnych
-  end
 
   encrypts :email, deterministic: true
   encrypts :university_number, deterministic: true

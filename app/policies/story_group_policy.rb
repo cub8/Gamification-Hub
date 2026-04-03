@@ -4,9 +4,9 @@ class StoryGroupPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
       if user.organization_admin? || user.global_admin?
-        scope.all
+        scope.all.includes(:owner)
       elsif user.teacher?
-        scope.where(owner_id: user.id) # and also those to which they belong as teacher and student
+        scope.where(owner_id: user.id).includes(:owner) # and also those to which they belong as teacher and student
       else
         scope.none
       end

@@ -17,7 +17,9 @@
     = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
   %body
     - if @current_user
-      = button_to 'Logout', logout_path, method: :delete
+      = link_to 'Logout', logout_path, data: { turbo_method: :delete }, class: 'text-danger'
+      |
+      = link_to 'Home', root_path, class: 'text-danger'
     - if notice
       %p{style: "color: green"}= notice
     - if alert
