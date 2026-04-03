@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
   resources :story_groups do
+    resources :items, except: :show
     resources :ranks
     resources :badges
   end

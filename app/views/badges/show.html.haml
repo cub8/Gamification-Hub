@@ -7,10 +7,6 @@
   %strong Discount:
   = "#{@badge.discount}%"
 
-%p
-  %strong Required Currency Value:
-  = @badge.required_currency_value
-
 - if @badge.icon.attached?
   = image_tag @badge.icon, width: 100
 

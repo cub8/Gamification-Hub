@@ -14,10 +14,9 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
       post story_group_badges_url(@story_group),
            params: {
              badge: {
-               name:                    'Achievement',
-               description:             'An achievement badge',
-               discount:                10,
-               required_currency_value: 100,
+               name:        'Achievement',
+               description: 'An achievement badge',
+               discount:    10,
              },
            }
     end
@@ -32,10 +31,9 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
     post story_group_badges_url(other_story_group),
          params: {
            badge: {
-             name:                    'Achievement',
-             description:             'An achievement badge',
-             discount:                10,
-             required_currency_value: 100,
+             name:        'Achievement',
+             description: 'An achievement badge',
+             discount:    10,
            },
          }
 
@@ -58,10 +56,9 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
       post story_group_badges_url(@story_group),
            params: {
              badge: {
-               name:                    'Achievement',
-               description:             'An achievement badge',
-               discount:                10,
-               required_currency_value: 100,
+               name:        'Achievement',
+               description: 'An achievement badge',
+               discount:    10,
              },
            }
     end

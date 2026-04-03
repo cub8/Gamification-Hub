@@ -62,7 +62,7 @@ class BadgesController < ApplicationController
   end
 
   def badge_params
-    params.expect(badge: %i[name description discount required_currency_value icon])
+    params.expect(badge: %i[name description discount icon])
   end
 
   def authorize

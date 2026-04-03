@@ -19,12 +19,9 @@
     = form.number_field :discount, in: 0..100, step: 1
 
   %div
-    = form.label :required_currency_value, "Required Currency Value", style: "display: block"
-    = form.number_field :required_currency_value, min: 0, step: 1
-
-  %div
     = form.label :icon, style: "display: block"
     = form.file_field :icon, accept: "image/*"
 
   %div
     = form.submit
+    

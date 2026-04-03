@@ -6,7 +6,6 @@ FactoryBot.define do
     name { 'Achievement' }
     description { 'An achievement badge' }
     discount { 10 }
-    required_currency_value { 100 }
     icon { nil }
   end
 end

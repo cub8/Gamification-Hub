@@ -45,9 +45,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
   create_table "badges", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.integer "discount"
+    t.integer "discount", default: 0
     t.string "name"
-    t.integer "required_currency_value"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_badges_on_story_group_id"
