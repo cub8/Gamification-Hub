@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :user do
-    usos_id { '123456' }
-    email { 'jan.nowak@st.amu.edu.pl' }
+    sequence(:usos_id) { |n| "usos_#{n}" }
+    sequence(:email) { |n| "user#{n}@st.amu.edu.pl" }
     full_name { 'Jan Nowak' }
-    university_number { '123456' }
+    sequence(:university_number) { |n| (n + 123456).to_s }
     university_name { 'Example university' }
     first_login { false }
   end

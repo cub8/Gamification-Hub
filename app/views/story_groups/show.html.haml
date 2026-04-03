@@ -1,3 +1,4 @@
+%h1= @story_group.name
 = render @story_group
 
 %div
@@ -12,5 +13,10 @@
 %hr
 
 %h2 Items
-
 = link_to "Go to items", story_group_items_path(@story_group)
+
+%h2 Ranks
+= link_to "View ranks", story_group_ranks_path(@story_group)
+
+%h2 Badges
+= link_to "View badges", story_group_badges_path(@story_group)

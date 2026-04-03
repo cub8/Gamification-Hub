@@ -1,0 +1,14 @@
+%h1 Ranks
+
+%ul
+  - @ranks.each do |rank|
+    %li
+      = rank.name
+      = link_to "Show", story_group_rank_path(@story_group, rank)
+      = link_to "Edit", edit_story_group_rank_path(@story_group, rank)
+      = button_to "Delete", story_group_rank_path(@story_group, rank), method: :delete
+
+= link_to "New Rank", new_story_group_rank_path(@story_group)
+%p
+  = link_to "Home", root_path
+  

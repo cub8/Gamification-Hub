@@ -1,0 +1,14 @@
+%h1 Badges
+
+%ul
+  - @badges.each do |badge|
+    %li
+      = badge.name
+      = link_to "Show", story_group_badge_path(@story_group, badge)
+      = link_to "Edit", edit_story_group_badge_path(@story_group, badge)
+      = button_to "Delete", story_group_badge_path(@story_group, badge), method: :delete
+
+= link_to "New badge", new_story_group_badge_path(@story_group)
+%p
+  = link_to "Home", root_path
+  
