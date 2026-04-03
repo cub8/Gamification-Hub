@@ -1,25 +1,30 @@
-= link_to 'Back to Story group', story_group_path(@story_group)
-= link_to 'Add item', new_story_group_item_path(@story_group)
-
 %h1 Items
 
-- @items.each do |item|
-  %div
-    %h3= item.name
+#items
+  %table.table
+    %tr
+      %th Name
+      %th Story Description
+      %th Didactic Description
+      %th Price
+      %th Image
+      %th Available at 0 lives?
+      %th
+    - @items.each do |item|
+      %tr
+        %td= item.name
+        %td= item.story_description
+        %td= item.didactic_description
+        %td= item.price
+        %td
+          - if item.image.attached?
+            = image_tag item.image, width: 100
+        %td= item.can_buy_at_0_lives ? 'YES' : 'NO'
+        %td
+          = link_to 'Edit', edit_story_group_item_path(@story_group, item)
+          = link_to 'Delete', story_group_item_path(@story_group, item), data: { turbo_method: :delete }
 
-    %p= item.story_description
-    %p= item.didactic_description
-    %p= item.price
+= link_to 'Add item', new_story_group_item_path(@story_group)
+|
+= link_to 'Back to Story group', story_group_path(@story_group)
 
-    - if item.image.attached?
-      = image_tag item.image, width: 100
-
-    %p
-      Available at 0 lives:
-      = item.can_buy_at_0_lives ? 'YES' : 'NO'
-
-    = link_to 'Edit', edit_story_group_item_path(@story_group, item)
-
-    = button_to 'Delete',
-      story_group_item_path(@story_group, item),
-      method: :delete

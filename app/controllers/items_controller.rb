@@ -51,10 +51,6 @@ class ItemsController < ApplicationController
     @item = @story_group.items.find(params[:id])
   end
 
-  def authorize_story_group!
-    authorize @story_group, :update?
-  end
-
   def item_params
     params.expect(
       item: %i[
