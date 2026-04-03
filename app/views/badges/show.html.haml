@@ -1,0 +1,14 @@
+%h1= @badge.name
+%p
+  %strong Description:
+  = @badge.description
+
+%p
+  %strong Discount:
+  = "#{@badge.discount}%"
+
+- if @badge.icon.attached?
+  = image_tag @badge.icon, width: 100
+
+= link_to "Edit", edit_story_group_badge_path(@story_group, @badge)
+= link_to "Back", story_group_badges_path(@story_group)
