@@ -1,0 +1,46 @@
+= form_with model: [@story_group, @activity_group] do |f|
+  - if @activity_group.errors.any?
+    %div
+      %ul
+        - @activity_group.errors.full_messages.each do |msg|
+          %li= msg
+
+  %div
+    = f.label :name, 'Name'
+    = f.text_field :name
+
+  %h3 Categories
+
+  %div{ data: {
+    controller: 'sortable-form',
+    sortable_form_handle_value: '.drag-handle',
+    sortable_form_templates_url_value: story_group_activity_group_templates_path(@story_group),
+    sortable_form_model_name_value: 'activity_group',
+    sortable_form_association_value: 'activity_group_categories'
+  } }
+
+    - if @templates.any?
+      %div
+        = select_tag :template_picker,
+            options_from_collection_for_select(@templates, :id, :base_name),
+            prompt: 'Select a template...',
+            data: { sortable_form_target: 'templateSelect' }
+        = button_tag 'Add template categories', type: 'button',
+            data: { action: 'click->sortable-form#addFromTemplate' }
+
+    %br
+
+    %template{ data: { sortable_form_target: 'categoryTemplate' } }
+      = f.fields_for :activity_group_categories, ActivityGroupCategory.new, index: 'NEW_RECORD' do |cf|
+        = render 'activity_groups/category_fields', f: cf
+
+    %div{ data: { sortable_form_target: 'list' } }
+      = f.fields_for :activity_group_categories do |cf|
+        = render 'activity_groups/category_fields', f: cf
+
+    = link_to 'Add category manually', '#',
+        data: { action: 'click->sortable-form#addCategory', sortable_form_target: 'addButton' }
+
+  %br
+
+  = f.submit (@activity_group.new_record? ? 'Create' : 'Save')

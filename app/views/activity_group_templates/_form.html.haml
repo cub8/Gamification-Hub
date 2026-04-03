@@ -1,0 +1,28 @@
+= form_with model: [@story_group, @activity_group_template] do |f|
+  - if @activity_group_template.errors.any?
+    %div
+      %ul
+        - @activity_group_template.errors.full_messages.each do |msg|
+          %li= msg
+
+  %div
+    = f.label :base_name, 'Base name'
+    = f.text_field :base_name
+
+  %h3 Categories
+
+  %div{ data: { controller: 'sortable-form', sortable_form_handle_value: '.drag-handle', sortable_form_model_name_value: 'activity_group_template', sortable_form_association_value: 'activity_group_template_categories' } }
+    %template{ data: { sortable_form_target: 'categoryTemplate' } }
+      = f.fields_for :activity_group_template_categories, ActivityGroupTemplateCategory.new, index: 'NEW_RECORD' do |cf|
+        = render 'activity_group_templates/category_fields', f: cf
+
+    %div{ data: { sortable_form_target: 'list' } }
+      = f.fields_for :activity_group_template_categories do |cf|
+        = render 'activity_group_templates/category_fields', f: cf
+
+    = link_to 'Add category', '#',
+        data: { action: 'click->sortable-form#addCategory', sortable_form_target: 'addButton' }
+
+  %br
+
+  = f.submit (@activity_group_template.new_record? ? 'Create' : 'Save')
