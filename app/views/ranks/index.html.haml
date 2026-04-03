@@ -16,8 +16,9 @@
         %td= rank.required_currency_value
         %td
           = link_to 'Show', story_group_rank_path(@story_group, rank)
-          = link_to 'Edit', edit_story_group_rank_path(@story_group, rank)
-          = link_to 'Delete', story_group_rank_path(@story_group, rank), data: { turbo_method: :delete }
+          - if policy(@story_group).update?
+            = link_to 'Edit', edit_story_group_rank_path(@story_group, rank)
+            = link_to 'Delete', story_group_rank_path(@story_group, rank), data: { turbo_method: :delete }
 
 = link_to 'New Rank', new_story_group_rank_path(@story_group)
 |

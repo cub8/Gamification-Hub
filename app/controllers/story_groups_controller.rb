@@ -66,6 +66,14 @@ class StoryGroupsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def story_group_params
-    params.expect(story_group: %i[name description icon currency_name currency_icon])
+    params.expect(
+      story_group: %i[
+        name
+        description
+        icon
+        currency_name
+        currency_icon
+      ],
+    )
   end
 end

@@ -10,5 +10,7 @@
 - if @badge.icon.attached?
   = image_tag @badge.icon, width: 100
 
+%br
+
 = link_to "Edit", edit_story_group_badge_path(@story_group, @badge)
 = link_to "Back", story_group_badges_path(@story_group)

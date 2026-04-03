@@ -10,7 +10,7 @@ class RanksController < ApplicationController
 
   # GET /story_groups/:story_group_id/ranks
   def index
-    @ranks = @story_group.ranks
+    @ranks = @story_group.ranks.order(:required_currency_value)
   end
 
   # GET /story_groups/:story_group_id/ranks/:id
@@ -18,7 +18,7 @@ class RanksController < ApplicationController
 
   # GET /story_groups/:story_group_id/ranks/new
   def new
-    @rank = @story_group.ranks.new
+    @rank = @story_group.ranks.build
   end
 
   # GET /story_groups/:story_group_id/ranks/:id/edit
@@ -61,6 +61,13 @@ class RanksController < ApplicationController
   end
 
   def rank_params
-    params.expect(rank: %i[name discount required_currency_value icon])
+    params.expect(
+      rank: %i[
+        name
+        discount
+        required_currency_value
+        icon
+      ],
+    )
   end
 end

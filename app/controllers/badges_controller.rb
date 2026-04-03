@@ -18,7 +18,7 @@ class BadgesController < ApplicationController
 
   # GET /story_groups/:story_group_id/badges/new
   def new
-    @badge = @story_group.badges.new
+    @badge = @story_group.badges.build
   end
 
   # GET /story_groups/:story_group_id/badges/:id/edit
@@ -61,6 +61,13 @@ class BadgesController < ApplicationController
   end
 
   def badge_params
-    params.expect(badge: %i[name description discount icon])
+    params.expect(
+      badge: %i[
+        name
+        description
+        discount
+        icon
+      ],
+    )
   end
 end

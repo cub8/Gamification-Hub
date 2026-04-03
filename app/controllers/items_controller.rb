@@ -56,13 +56,15 @@ class ItemsController < ApplicationController
   end
 
   def item_params
-    params.require(:item).permit(
-      :name,
-      :story_description,
-      :didactic_description,
-      :price,
-      :image,
-      :can_buy_at_0_lives,
+    params.expect(
+      item: %i[
+        name
+        story_description
+        didactic_description
+        price
+        image
+        can_buy_at_0_lives
+      ],
     )
   end
 end
