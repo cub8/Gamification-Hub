@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
-  # set_story_groups weryfikuje przynależność story_group do nauczyciela
   before_action :set_story_group, only: %i[show edit update destroy]
 
   # GET /story_groups
