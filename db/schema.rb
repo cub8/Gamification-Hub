@@ -78,6 +78,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_152121) do
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_activity_groups_on_story_group_id"
+  create_table "badges", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.integer "discount", default: 0
+    t.string "name"
+    t.bigint "story_group_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["story_group_id"], name: "index_badges_on_story_group_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -90,6 +98,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_152121) do
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_items_on_story_group_id"
+  end
+
+  create_table "ranks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "discount"
+    t.string "name"
+    t.integer "required_currency_value"
+    t.bigint "story_group_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["story_group_id"], name: "index_ranks_on_story_group_id"
   end
 
   create_table "story_groups", force: :cascade do |t|
@@ -121,5 +139,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_152121) do
   add_foreign_key "activity_group_template_categories", "activity_group_templates"
   add_foreign_key "activity_group_templates", "story_groups"
   add_foreign_key "activity_groups", "story_groups"
+  add_foreign_key "badges", "story_groups"
   add_foreign_key "items", "story_groups"
+  add_foreign_key "ranks", "story_groups"
 end

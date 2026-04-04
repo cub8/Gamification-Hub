@@ -5,7 +5,10 @@ Rails.application.routes.draw do
     resources :items, except: :show
     resources :activity_group_templates
     resources :activity_groups, except: :show
+    resources :ranks
+    resources :badges
   end
+
   get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout

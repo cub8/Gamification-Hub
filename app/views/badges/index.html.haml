@@ -1,0 +1,21 @@
+%h1 Badges
+
+#badges
+  %table.table
+    %tr
+      %th Name
+      %th Discount
+      %th
+    - @badges.each do |badge|
+      %tr
+        %td= badge.name
+        %td= "#{badge.discount}%"
+        %td
+          = link_to 'Show', story_group_badge_path(@story_group, badge)
+          - if policy(@story_group).update?
+            = link_to 'Edit', edit_story_group_badge_path(@story_group, badge)
+            = link_to 'Delete', story_group_badge_path(@story_group, badge), data: { turbo_method: :delete }
+
+= link_to "New badge", new_story_group_badge_path(@story_group)
+|
+= link_to 'Back', story_group_path(@story_group)

@@ -1,0 +1,5 @@
+%h1 Edit Badge
+
+= render "form", badge: @badge
+
+= link_to "cancel", story_group_badge_path(@story_group, @badge)

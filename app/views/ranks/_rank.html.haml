@@ -1,0 +1,12 @@
+%div{id: dom_id(rank)}
+  %p
+    %strong Name:
+    = rank.name
+
+  %p
+    %strong Discount:
+    = "#{rank.discount}%"
+
+  %p
+    %strong Required currency value:
+    = rank.required_currency_value
