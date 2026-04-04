@@ -17,10 +17,9 @@
     = link_to "Edit this story group", edit_story_group_path(@story_group)
     |
   = link_to "Back to story groups", story_groups_path
-
-<<<<<<< HEAD
-  = button_to "Destroy this story group", @story_group, method: :delete
-
+  - if policy(@story_group).destroy?
+    |
+    = link_to "Destroy this story group", @story_group, data: { turbo_method: :delete }
 
 %hr
 %h2 Shop
@@ -30,11 +29,7 @@
 %hr
 %h2 Activity Groups
 
-= link_to "Activity group templates", story_group_activity_group_templates_path(@story_group)
-|
-= link_to "Activity groups", story_group_activity_groups_path(@story_group)
-=======
-  - if policy(@story_group).destroy?
-    |
-    = link_to "Destroy this story group", @story_group, data: { turbo_method: :delete }
->>>>>>> origin/main
+- if policy(@story_group).update?
+  = link_to "Activity group templates", story_group_activity_group_templates_path(@story_group)
+  |
+  = link_to "Activity groups", story_group_activity_groups_path(@story_group)

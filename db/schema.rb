@@ -78,6 +78,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_152121) do
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_activity_groups_on_story_group_id"
+  end
+
   create_table "badges", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"

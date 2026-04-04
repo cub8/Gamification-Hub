@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class ActivityGroupTemplatesController < ApplicationController
+  include StoryGroupAuthorization
+
   before_action :set_story_group
-  before_action :authorize
+  before_action :authorize_story_group_manage!
 
   def index
     @activity_group_templates = @story_group.activity_group_templates
@@ -67,12 +69,6 @@ class ActivityGroupTemplatesController < ApplicationController
 
   def set_story_group
     @story_group = StoryGroup.find(params[:story_group_id])
-  end
-
-  def authorize
-    return if @current_user.has_access_to_story_group?(@story_group)
-
-    redirect_to root_path, alert: 'Not found'
   end
 
   def activity_group_template_params
