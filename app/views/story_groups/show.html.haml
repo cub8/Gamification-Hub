@@ -7,6 +7,10 @@
 - if policy(@story_group).update?
   |
   = link_to "Items", story_group_items_path(@story_group)
+  |
+  = link_to "Activity group templates", story_group_activity_group_templates_path(@story_group)
+  |
+  = link_to "Activity groups", story_group_activity_groups_path(@story_group)
 
 %hr
 
@@ -20,16 +24,3 @@
   - if policy(@story_group).destroy?
     |
     = link_to "Destroy this story group", @story_group, data: { turbo_method: :delete }
-
-%hr
-%h2 Shop
-
-= link_to "Go to shop", story_group_items_path(@story_group)
-
-%hr
-%h2 Activity Groups
-
-- if policy(@story_group).update?
-  = link_to "Activity group templates", story_group_activity_group_templates_path(@story_group)
-  |
-  = link_to "Activity groups", story_group_activity_groups_path(@story_group)

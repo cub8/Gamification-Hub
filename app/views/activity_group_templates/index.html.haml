@@ -12,7 +12,7 @@
   - @activity_group_templates.each do |template|
     %div
       %strong= template.base_name
-      \(#{template.activity_group_template_categories.count} categories)
+      \(#{template.categories.count} categories)
 
       = link_to 'Edit', edit_story_group_activity_group_template_path(@story_group, template)
       |

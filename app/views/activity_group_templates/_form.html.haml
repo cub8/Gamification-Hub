@@ -11,17 +11,16 @@
 
   %h3 Categories
 
-  %div{ data: { controller: 'sortable-form', sortable_form_handle_value: '.drag-handle', sortable_form_model_name_value: 'activity_group_template', sortable_form_association_value: 'activity_group_template_categories' } }
-    %template{ data: { sortable_form_target: 'categoryTemplate' } }
-      = f.fields_for :activity_group_template_categories, ActivityGroupTemplateCategory.new, index: 'NEW_RECORD' do |cf|
-        = render 'activity_group_templates/category_fields', f: cf
+  %div{ data: { controller: 'sortable-form nested-rondo', sortable_form_handle_value: '.drag-handle' } }
+    %div#categories-list{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
+      = f.fields_for :categories do |cf|
+        = render ActivityGroup::CategoryFormComponent.new(f: cf)
 
-    %div{ data: { sortable_form_target: 'list' } }
-      = f.fields_for :activity_group_template_categories do |cf|
-        = render 'activity_group_templates/category_fields', f: cf
-
-    = link_to 'Add category', '#',
-        data: { action: 'click->sortable-form#addCategory', sortable_form_target: 'addButton' }
+    %br
+    %div
+      = link_to_add_association 'Add category', f, :categories,
+        partial: 'activity_group_templates/category_form',
+        data: { association_insertion_node: '#categories-list', association_insertion_method: 'append' }
 
   %br
 

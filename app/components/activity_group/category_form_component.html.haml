@@ -1,8 +1,7 @@
-%div.category-fields{ data: { sortable_form_target: 'item' } }
+%div.nested-fields.category-fields{ data: { sortable_form_target: 'item' } }
   %span.drag-handle ☰
 
   = f.hidden_field :position, data: { sortable_form_target: 'position' }
-  = f.hidden_field :_destroy, value: false, data: { sortable_form_target: 'destroy' }
 
   %div
     = f.label :story_description, 'Story description'
@@ -16,6 +15,6 @@
     = f.label :reward, 'Reward'
     = f.number_field :reward
 
-  = link_to 'Remove', '#', data: { action: 'click->sortable-form#removeCategory' }
+  = helpers.link_to_remove_association 'Remove', f
 
   %hr

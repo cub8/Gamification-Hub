@@ -13,16 +13,16 @@ class ActivityGroupTemplatesController < ApplicationController
   def show
     @activity_group_template = @story_group.activity_group_templates.find(params[:id])
     render json: {
-      id: @activity_group_template.id,
-      base_name: @activity_group_template.base_name,
+      id:         @activity_group_template.id,
+      base_name:  @activity_group_template.base_name,
       categories: @activity_group_template.activity_group_template_categories.order(:position).map do |c|
         {
-          story_description: c.story_description,
+          story_description:    c.story_description,
           didactic_description: c.didactic_description,
-          reward: c.reward,
-          position: c.position
+          reward:               c.reward,
+          position:             c.position,
         }
-      end
+      end,
     }
   end
 
@@ -74,9 +74,9 @@ class ActivityGroupTemplatesController < ApplicationController
   def activity_group_template_params
     params.require(:activity_group_template).permit(
       :base_name,
-      activity_group_template_categories_attributes: %i[
+      categories_attributes: %i[
         id story_description didactic_description reward position _destroy
-      ]
+      ],
     )
   end
 end
