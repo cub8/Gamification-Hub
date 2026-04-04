@@ -7,6 +7,10 @@
 - if policy(@story_group).update?
   |
   = link_to "Items", story_group_items_path(@story_group)
+  |
+  = link_to "Teachers", story_group_story_group_teachers_path(@story_group)
+  |
+  = link_to "Students", story_group_story_group_students_path(@story_group)
 
 %hr
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_04_140154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -74,6 +74,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
     t.index ["story_group_id"], name: "index_ranks_on_story_group_id"
   end
 
+  create_table "story_group_students", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "current_currency", default: 0
+    t.integer "lives", default: 3
+    t.integer "story_group_id"
+    t.integer "total_currency", default: 0
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+  end
+
+  create_table "story_group_teachers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "story_group_id"
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+  end
+
+  create_table "story_group_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "story_group_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["story_group_id"], name: "index_story_group_users_on_story_group_id"
+    t.index ["user_id"], name: "index_story_group_users_on_user_id"
+  end
+
   create_table "story_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency_name"
@@ -102,4 +128,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
   add_foreign_key "badges", "story_groups"
   add_foreign_key "items", "story_groups"
   add_foreign_key "ranks", "story_groups"
+  add_foreign_key "story_group_users", "story_groups"
+  add_foreign_key "story_group_users", "users"
 end

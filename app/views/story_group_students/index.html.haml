@@ -1,0 +1,39 @@
+%h2 Students
+
+%table
+  %thead
+    %tr
+      %th Email
+      %th
+  %tbody
+    - @story_group_students.each do |student|
+      %tr
+        %td= student.user.email
+        %td= student.lives
+        %td= student.current_currency
+        %td= student.total_currency
+        %td
+          = button_to "Remove",
+            story_group_story_group_student_path(@story_group, student),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+
+%hr
+
+%h3 Add Student
+
+= form_with model: [@story_group, @story_group_student] do |f|
+  .field
+    = f.label :user_id, "Select student"
+    %br
+    = f.collection_select :user_id,
+      User.all,
+      :id,
+      :email,
+      { prompt: "Choose a user" }
+
+  .actions
+    = f.submit "Add Student"
+
+%p
+  = link_to "Back", story_group_path(@story_group)

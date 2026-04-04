@@ -5,9 +5,16 @@ class StoryGroup < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :ranks, dependent: :destroy
   has_many :badges, dependent: :destroy
-
+  has_many :story_group_students, foreign_key: 'story_group_id', dependent: :destroy
+  has_many :story_group_teachers, foreign_key: 'story_group_id', dependent: :destroy
+  has_many :students, through: :story_group_students, source: :user
+  has_many :teachers, through: :story_group_teachers, source: :user
   has_one_attached :icon
   has_one_attached :currency_icon
+
+  def members
+    (students + teachers).uniq
+  end
 
   validates :name, :currency_name, length: { maximum: 40 }
   validates :description, length: { maximum: 255 }

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :items, except: :show
     resources :ranks
     resources :badges
+    resources :story_group_teachers
+    resources :story_group_students
   end
 
   get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
