@@ -7,7 +7,12 @@ Rails.application.routes.draw do
     resources :badges
   end
 
-  get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
+  namespace 'auth' do
+    get '/:provider/callback', to: 'usos#create', as: :callback
+    resource :passwordless, only: %i[new create], controller: 'passwordless'
+    get 'passwordless/:token', to: 'passwordless#verify', as: :passwordless_verify
+  end
+
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
   get '/home', to: 'home#index', as: :home

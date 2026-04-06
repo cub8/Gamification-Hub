@@ -3,11 +3,10 @@
 class LoginToken < ApplicationRecord
   belongs_to :user
 
-  has_secure_token length: 32
-
   before_create :setup_expires_at!
 
-  encrypts :token
+  has_secure_token length: 32
+  encrypts :token, deterministic: true
 
   def expired?
     ::Time.current > expires_at

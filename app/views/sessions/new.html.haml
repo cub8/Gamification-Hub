@@ -1,5 +1,5 @@
 %h1 Login
 %h2 Select login method
 
-= button_to 'USOS', '/auth/uam_usos', method: :post, data: { turbo: false }
-= development_login_buttons
+= button_to 'Zaloguj się przez USOS', '/auth/uam_usos', method: :post, data: { turbo: false }
+= button_to 'Zaloguj się przez email', new_auth_passwordless_path, method: :get
