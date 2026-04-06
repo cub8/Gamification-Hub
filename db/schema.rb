@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_06_133724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
     t.index ["story_group_id"], name: "index_items_on_story_group_id"
   end
 
+  create_table "login_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.string "token"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_login_tokens_on_user_id"
+  end
+
   create_table "ranks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "discount"
@@ -101,5 +110,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_27_222829) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "badges", "story_groups"
   add_foreign_key "items", "story_groups"
+  add_foreign_key "login_tokens", "users"
   add_foreign_key "ranks", "story_groups"
 end
