@@ -39,7 +39,7 @@ class ActivityGroupTemplatesController < ApplicationController
     @activity_group_template = @story_group.activity_group_templates.build(activity_group_template_params)
 
     if @activity_group_template.save
-      redirect_to story_group_activity_group_templates_path(@story_group),
+      redirect_to story_group_activity_groups_path(@story_group),
                   notice: 'Activity group template was successfully created.', status: :see_other
     else
       render :new, status: :unprocessable_content
@@ -50,7 +50,7 @@ class ActivityGroupTemplatesController < ApplicationController
     @activity_group_template = @story_group.activity_group_templates.find(params[:id])
 
     if @activity_group_template.update(activity_group_template_params)
-      redirect_to story_group_activity_group_templates_path(@story_group),
+      redirect_to story_group_activity_groups_path(@story_group),
                   notice: 'Activity group template was successfully updated.', status: :see_other
     else
       render :edit, status: :unprocessable_content
@@ -61,7 +61,7 @@ class ActivityGroupTemplatesController < ApplicationController
     @activity_group_template = @story_group.activity_group_templates.find(params[:id])
     @activity_group_template.destroy!
 
-    redirect_to story_group_activity_group_templates_path(@story_group),
+    redirect_to story_group_activity_groups_path(@story_group),
                 notice: 'Activity group template was successfully destroyed.', status: :see_other
   end
 

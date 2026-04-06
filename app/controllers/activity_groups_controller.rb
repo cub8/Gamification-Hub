@@ -9,6 +9,7 @@ class ActivityGroupsController < ApplicationController
 
   def index
     @activity_groups = @story_group.activity_groups.includes(:activity_group_categories)
+    @activity_group_templates = @story_group.activity_group_templates
   end
 
   def new

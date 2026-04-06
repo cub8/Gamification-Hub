@@ -1,14 +1,40 @@
 %h1 Activity Groups
 
-= link_to 'New activity group', new_story_group_activity_group_path(@story_group)
-|
 = link_to 'Back to story group', @story_group
 
 %hr
 
+%h2 Templates
+
+= link_to 'New template', new_story_group_activity_group_template_path(@story_group)
+
+%br
+%br
+
+- if @activity_group_templates.empty?
+  %p No templates yet.
+- else
+  - @activity_group_templates.each do |template|
+    %div
+      %strong= template.base_name
+      \(#{template.categories.count} categories)
+
+      = link_to 'Edit', edit_story_group_activity_group_template_path(@story_group, template)
+      |
+      = button_to 'Delete', story_group_activity_group_template_path(@story_group, template),
+          method: :delete, data: { turbo_confirm: 'Are you sure?' }
+
+    %hr
+
+%h2 Groups
+
+= link_to 'New activity group', new_story_group_activity_group_path(@story_group)
+
+%br
+%br
+
 - if @activity_groups.empty?
-  %p No activity groups yet. Create one from the
-  = link_to 'templates page', story_group_activity_group_templates_path(@story_group)
+  %p No activity groups yet.
 - else
   .activity-group-columns
     - @activity_groups.each do |group|
@@ -34,4 +60,5 @@
         .mt-2
           = link_to 'Edit', edit_story_group_activity_group_path(@story_group, group)
           |
-          = button_to 'Delete', story_group_activity_group_path(@story_group, group), method: :delete, data: { turbo_confirm: 'Are you sure?' }
+          = button_to 'Delete', story_group_activity_group_path(@story_group, group),
+              method: :delete, data: { turbo_confirm: 'Are you sure?' }
