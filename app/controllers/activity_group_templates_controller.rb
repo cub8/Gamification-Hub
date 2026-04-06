@@ -15,7 +15,7 @@ class ActivityGroupTemplatesController < ApplicationController
     render json: {
       id:         @activity_group_template.id,
       base_name:  @activity_group_template.base_name,
-      categories: @activity_group_template.activity_group_template_categories.order(:position).map do |c|
+      categories: @activity_group_template.categories.order(:position).map do |c|
         {
           story_description:    c.story_description,
           didactic_description: c.didactic_description,
@@ -28,7 +28,7 @@ class ActivityGroupTemplatesController < ApplicationController
 
   def new
     @activity_group_template = @story_group.activity_group_templates.build
-    @activity_group_template.activity_group_template_categories.build
+    @activity_group_template.categories.build
   end
 
   def edit

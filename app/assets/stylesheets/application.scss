@@ -1,27 +1,2 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
-
-.drag-handle {
-  cursor: grab;
-  user-select: none;
-  padding: 0 6px;
-}
-
-.sortable-dragging * {
-  user-select: none;
-}
-
-.activity-group-columns {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  overflow-x: auto;
-}
-
-.activity-group-column {
-  min-width: 250px;
-  flex: 0 0 auto;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  padding: 0.75rem;
-}

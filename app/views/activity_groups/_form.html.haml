@@ -12,11 +12,10 @@
   %h3 Categories
 
   %div{ data: {
-    controller: 'sortable-form',
+    controller: 'sortable-form nested-rondo template-loader',
     sortable_form_handle_value: '.drag-handle',
-    sortable_form_templates_url_value: story_group_activity_group_templates_path(@story_group),
-    sortable_form_model_name_value: 'activity_group',
-    sortable_form_association_value: 'activity_group_categories'
+    template_loader_url_value: story_group_activity_group_templates_path(@story_group),
+    template_loader_association_value: 'activity_group_category'
   } }
 
     - if @templates.any?
@@ -24,22 +23,18 @@
         = select_tag :template_picker,
             options_from_collection_for_select(@templates, :id, :base_name),
             prompt: 'Select a template...',
-            data: { sortable_form_target: 'templateSelect' }
+            data: { template_loader_target: 'select' }
         = button_tag 'Add template categories', type: 'button',
-            data: { action: 'click->sortable-form#addFromTemplate' }
+            data: { action: 'click->template-loader#loadTemplate' }
 
     %br
 
-    %template{ data: { sortable_form_target: 'categoryTemplate' } }
-      = f.fields_for :activity_group_categories, ActivityGroupCategory.new, index: 'NEW_RECORD' do |cf|
-        = render 'activity_groups/category_fields', f: cf
-
-    %div{ data: { sortable_form_target: 'list' } }
+    %div{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
       = f.fields_for :activity_group_categories do |cf|
-        = render 'activity_groups/category_fields', f: cf
+        = render 'activity_groups/category_form', f: cf
 
-    = link_to 'Add category manually', '#',
-        data: { action: 'click->sortable-form#addCategory', sortable_form_target: 'addButton' }
+    = link_to_add_association 'Add category', f, :activity_group_categories,
+        partial: 'activity_groups/category_form'
 
   %br
 
