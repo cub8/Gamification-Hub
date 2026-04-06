@@ -14,6 +14,7 @@ class ActivityGroupsController < ApplicationController
 
   def new
     @activity_group = @story_group.activity_groups.build
+    @activity_group.name = ActivityGroup.next_name_for(@story_group)
   end
 
   def edit
@@ -65,7 +66,7 @@ class ActivityGroupsController < ApplicationController
       :name,
       activity_group_categories_attributes: %i[
         id story_description didactic_description reward position _destroy
-      ]
+      ],
     )
   end
 end
