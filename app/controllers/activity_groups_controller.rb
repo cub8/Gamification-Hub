@@ -10,11 +10,12 @@ class ActivityGroupsController < ApplicationController
   def index
     @activity_groups = @story_group.activity_groups.includes(:activity_group_categories)
     @activity_group_templates = @story_group.activity_group_templates
+    @next_group_name = ActivityGroup.next_name_for(@story_group)
   end
 
   def new
     @activity_group = @story_group.activity_groups.build
-    @activity_group.name = ActivityGroup.next_name_for(@story_group)
+    @activity_group.name = params[:name].presence || ActivityGroup.next_name_for(@story_group)
   end
 
   def edit
