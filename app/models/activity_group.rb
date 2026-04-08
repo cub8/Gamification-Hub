@@ -18,4 +18,16 @@ class ActivityGroup < ApplicationRecord
   rescue ArgumentError, TypeError
     "#{last.name} #{story_group.activity_groups.count + 1}"
   end
+
+  def self.next_number_for_base(story_group, base_name)
+    all = story_group.activity_groups.to_a
+    matching = all.select { |g| g.name.to_s.split(' ')[0..-2].join(' ') == base_name }
+
+    last = matching.last
+    return all.count + 1 unless last
+
+    Integer(last.name.to_s.split(' ').last) + 1
+  rescue ArgumentError, TypeError
+    all.count + 1
+  end
 end

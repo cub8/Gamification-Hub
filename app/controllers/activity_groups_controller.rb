@@ -44,6 +44,29 @@ class ActivityGroupsController < ApplicationController
     end
   end
 
+  def create_bulk
+    template = @story_group.activity_group_templates.find(params[:template_id])
+    base_name = params[:base_name].presence || template.base_name
+    count = [[params[:count].to_i, 1].max, 50].min
+
+    next_number = ActivityGroup.next_number_for_base(@story_group, base_name)
+
+    count.times do |i|
+      group = @story_group.activity_groups.create!(name: "#{base_name} #{next_number + i}")
+      template.categories.order(:position).each_with_index do |cat, idx|
+        group.activity_group_categories.create!(
+          story_description: cat.story_description,
+          didactic_description: cat.didactic_description,
+          reward: cat.reward,
+          position: idx
+        )
+      end
+    end
+
+    redirect_to story_group_activity_groups_path(@story_group),
+                notice: "#{count} activity group(s) created successfully.", status: :see_other
+  end
+
   def destroy
     @activity_group = @story_group.activity_groups.find(params[:id])
     @activity_group.destroy!
