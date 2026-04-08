@@ -47,7 +47,7 @@ class ActivityGroupsController < ApplicationController
   def create_bulk
     template = @story_group.activity_group_templates.find(params[:template_id])
     base_name = params[:base_name].presence || template.base_name
-    count = [[params[:count].to_i, 1].max, 50].min
+    count = params[:count].to_i.clamp(1, 50)
 
     next_number = ActivityGroup.next_number_for_base(@story_group, base_name)
 
@@ -55,10 +55,10 @@ class ActivityGroupsController < ApplicationController
       group = @story_group.activity_groups.create!(name: "#{base_name} #{next_number + i}")
       template.categories.order(:position).each_with_index do |cat, idx|
         group.activity_group_categories.create!(
-          story_description: cat.story_description,
+          story_description:    cat.story_description,
           didactic_description: cat.didactic_description,
-          reward: cat.reward,
-          position: idx
+          reward:               cat.reward,
+          position:             idx,
         )
       end
     end
