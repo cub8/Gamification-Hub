@@ -91,15 +91,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_04_140154) do
     t.integer "user_id"
   end
 
-  create_table "story_group_users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "story_group_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["story_group_id"], name: "index_story_group_users_on_story_group_id"
-    t.index ["user_id"], name: "index_story_group_users_on_user_id"
-  end
-
   create_table "story_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency_name"
@@ -128,6 +119,4 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_04_140154) do
   add_foreign_key "badges", "story_groups"
   add_foreign_key "items", "story_groups"
   add_foreign_key "ranks", "story_groups"
-  add_foreign_key "story_group_users", "story_groups"
-  add_foreign_key "story_group_users", "users"
 end

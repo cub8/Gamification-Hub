@@ -3,8 +3,8 @@
 %table
   %thead
     %tr
-      %th Email
-      %th
+    %th Email
+    %th
   %tbody
     - @story_group_teachers.each do |teacher|
       %tr
@@ -23,11 +23,13 @@
   .field
     = f.label :user_id, "Select teacher"
     %br
-    = f.collection_select :user_id,
-      User.where(role: [:teacher, :organization_admin, :global_admin]),
-      :id,
-      :email,
-      { prompt: "Choose a user" }
+    = f.select :user_id,
+      options_from_collection_for_select( teachers,
+        :id,
+        :email,
+      ),
+      { prompt: "Choose a user" },
+      { data: { controller: "tom-select", tom_select_options_value: teacher_map.to_json} }
 
   .actions
     = f.submit "Add Teacher"

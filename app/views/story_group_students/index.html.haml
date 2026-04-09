@@ -26,11 +26,13 @@
   .field
     = f.label :user_id, "Select student"
     %br
-    = f.collection_select :user_id,
-      User.all,
-      :id,
-      :email,
-      { prompt: "Choose a user" }
+    = f.select :user_id,
+      options_from_collection_for_select( User.all,
+        :id,
+        :email,
+      ),
+      { prompt: "Choose a user" },
+      { data: { controller: "tom-select", tom_select_options_value: student_map.to_json} }
 
   .actions
     = f.submit "Add Student"
