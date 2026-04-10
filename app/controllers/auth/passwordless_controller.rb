@@ -16,7 +16,7 @@ class Auth::PasswordlessController < ApplicationController
 
     user = login_token.user
     session[:user_id] = user.id
-    redirect_to home_path
+    redirect_to home_path, notice: 'Zalogowano pomyślnie.'
   end
 
   def create
