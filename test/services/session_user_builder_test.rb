@@ -3,8 +3,21 @@
 require 'test_helper'
 
 class SessionUserBuilderTest < ActiveSupport::TestCase
+  class TestAdapter < Providers::BaseAdapter
+    private
+
+    def build_params
+      @full_name = @auth[:full_name]
+      @email = @auth[:email]
+      @role = @auth[:role]
+      @university_name = @auth[:university_name]
+      @university_number = @auth[:university_number]
+      @usos_id = @auth[:usos_id]
+    end
+  end
+
   setup do
-    @provider = Providers::DevelopmentAdapter.new(
+    @provider = TestAdapter.new(
       {
         full_name:         'Jan Nowak',
         email:             'jan.nowak@gmail.com',
@@ -42,7 +55,7 @@ university_name: 'Example university',)
   end
 
   test 'raise an error if no usos_id or email in provider' do
-    provider = Providers::DevelopmentAdapter.new(
+    provider = TestAdapter.new(
       {
         full_name:       'Jan Nowak',
         role:            'student',

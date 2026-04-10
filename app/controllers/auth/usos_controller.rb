@@ -29,12 +29,6 @@ class Auth::UsosController < ApplicationController
     when 'uam_usos'
       auth = request.env['omniauth.auth']
       Providers::UsosAdapter.new(auth)
-    when 'development'
-      permitted = %i[email full_name university_name university_number]
-      permitted << :role unless Rails.env.production?
-      auth = params.permit(permitted)
-
-      Providers::DevelopmentAdapter.new(auth)
     else
       raise InvalidProviderError
     end
