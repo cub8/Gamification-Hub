@@ -34,7 +34,7 @@ export default class extends Controller {
             <div>
               <strong>${escape(data.name || "")}</strong><br>
               <small style="color: #888;">
-                ${escape(data.email || "")} (USOS ID: ${escape(String(data.id))})
+                ${escape(data.email || "")} (Index: ${escape(String(data.id))})
               </small>
             </div>
           `
@@ -44,7 +44,7 @@ export default class extends Controller {
             <div>
               <strong>${escape(data.name || "")}</strong>
               <small style="color: #888;">
-                ${escape(data.email || "")}
+                &nbsp; ${escape(data.email || "")}
               </small>
             </div>
           `

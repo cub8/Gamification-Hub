@@ -4,6 +4,9 @@
   %thead
     %tr
       %th Email
+      %th Lives
+      %th Current currency
+      %th Total currency
       %th
   %tbody
     - @story_group_students.each do |student|
@@ -27,12 +30,12 @@
     = f.label :user_id, "Select student"
     %br
     = f.select :user_id,
-      options_from_collection_for_select( User.all,
+      options_from_collection_for_select( students(@current_user),
         :id,
         :email,
       ),
       { prompt: "Choose a user" },
-      { data: { controller: "tom-select", tom_select_options_value: student_map.to_json} }
+      { data: { controller: "tom-select", tom_select_options_value: student_map(@current_user).to_json} }
 
   .actions
     = f.submit "Add Student"

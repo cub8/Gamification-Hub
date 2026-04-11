@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :story_group_teacher do
-    user_id { 1 }
-    story_group_id { 1 }
+    association :user, factory: :user
+    association :story_group, factory: :story_group
   end
 end

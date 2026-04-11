@@ -10,6 +10,8 @@ class StoryGroupStudentPolicy < ApplicationPolicy
       elsif user.teacher?
         scope.joins(:story_group)
              .where(story_groups: { owner_id: user.id })
+             .joins(:user)
+             .where(users: { university_name: user.university_name })
              .distinct
              .includes(:user)
       else
