@@ -31,7 +31,7 @@
 
     %div{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
       = f.fields_for :activity_group_categories do |cf|
-        = render 'activity_groups/category_form', f: cf
+        = render ActivityGroup::CategoryFormComponent.new(f: cf)
 
     = link_to_add_association 'Add category', f, :activity_group_categories,
         partial: 'activity_groups/category_form'

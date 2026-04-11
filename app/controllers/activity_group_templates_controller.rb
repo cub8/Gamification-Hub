@@ -7,7 +7,7 @@ class ActivityGroupTemplatesController < ApplicationController
   before_action :authorize_story_group_manage!
 
   def index
-    @activity_group_templates = @story_group.activity_group_templates
+    @activity_group_templates = policy_scope(@story_group.activity_group_templates)
   end
 
   def show
@@ -72,10 +72,14 @@ class ActivityGroupTemplatesController < ApplicationController
   end
 
   def activity_group_template_params
-    params.require(:activity_group_template).permit(
-      :base_name,
-      categories_attributes: %i[
-        id story_description didactic_description reward position _destroy
+    params.expect(
+      activity_group_template: [
+        :base_name,
+        {
+          categories_attributes: [%i[
+            id story_description didactic_description reward position _destroy
+          ]],
+        },
       ],
     )
   end

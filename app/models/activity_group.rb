@@ -21,15 +21,16 @@ class ActivityGroup < ApplicationRecord
     end
 
     def next_number_for_base(story_group, base_name)
-      all = story_group.activity_groups.to_a
-      matching = all.select { |g| g.name.to_s.split(' ')[0..-2].join(' ') == base_name }
+      matching = story_group.activity_groups
+                            .where('name ~* ?', "^#{Regexp.escape(base_name)} [0-9]+$")
+                            .order(:id)
 
       last = matching.last
-      return all.count + 1 unless last
+      return story_group.activity_groups.count + 1 unless last
 
       Integer(last.name.to_s.split(' ').last) + 1
     rescue ArgumentError, TypeError
-      all.count + 1
+      story_group.activity_groups.count + 1
     end
   end
 end

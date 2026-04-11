@@ -8,8 +8,8 @@ class ActivityGroupsController < ApplicationController
   before_action :set_templates, only: %i[new edit create update]
 
   def index
-    @activity_groups = @story_group.activity_groups.includes(:activity_group_categories)
-    @activity_group_templates = @story_group.activity_group_templates
+    @activity_groups = policy_scope(@story_group.activity_groups).includes(:activity_group_categories)
+    @activity_group_templates = policy_scope(@story_group.activity_group_templates)
     @next_group_name = ActivityGroup.next_name_for(@story_group)
   end
 
@@ -49,19 +49,12 @@ class ActivityGroupsController < ApplicationController
     base_name = params[:base_name].presence || template.base_name
     count = params[:count].to_i.clamp(1, 50)
 
-    next_number = ActivityGroup.next_number_for_base(@story_group, base_name)
-
-    count.times do |i|
-      group = @story_group.activity_groups.create!(name: "#{base_name} #{next_number + i}")
-      template.categories.order(:position).each_with_index do |cat, idx|
-        group.activity_group_categories.create!(
-          story_description:    cat.story_description,
-          didactic_description: cat.didactic_description,
-          reward:               cat.reward,
-          position:             idx,
-        )
-      end
-    end
+    ActivityGroupBulkBuilder.new(
+      story_group: @story_group,
+      template:    template,
+      base_name:   base_name,
+      count:       count,
+    ).build
 
     redirect_to story_group_activity_groups_path(@story_group),
                 notice: "#{count} activity group(s) created successfully.", status: :see_other
@@ -86,10 +79,14 @@ class ActivityGroupsController < ApplicationController
   end
 
   def activity_group_params
-    params.require(:activity_group).permit(
-      :name,
-      activity_group_categories_attributes: %i[
-        id story_description didactic_description reward position _destroy
+    params.expect(
+      activity_group: [
+        :name,
+        {
+          activity_group_categories_attributes: [%i[
+            id story_description didactic_description reward position _destroy
+          ]],
+        },
       ],
     )
   end
