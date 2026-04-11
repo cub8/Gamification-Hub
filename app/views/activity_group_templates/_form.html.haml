@@ -1,0 +1,27 @@
+= form_with model: [@story_group, @activity_group_template] do |f|
+  - if @activity_group_template.errors.any?
+    %div
+      %ul
+        - @activity_group_template.errors.full_messages.each do |msg|
+          %li= msg
+
+  %div
+    = f.label :base_name, 'Base name'
+    = f.text_field :base_name
+
+  %h3 Categories
+
+  %div{ data: { controller: 'sortable-form nested-rondo', sortable_form_handle_value: '.drag-handle' } }
+    %div#categories-list{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
+      = f.fields_for :categories do |cf|
+        = render ActivityGroup::CategoryFormComponent.new(f: cf)
+
+    %br
+    %div
+      = link_to_add_association 'Add category', f, :categories,
+        partial: 'activity_group_templates/category_form',
+        data: { association_insertion_node: '#categories-list', association_insertion_method: 'append' }
+
+  %br
+
+  = f.submit (@activity_group_template.new_record? ? 'Create' : 'Save')

@@ -1,0 +1,25 @@
+%div{ data: { controller: 'bulk-create-dialog' } }
+  = link_to 'Create multiple groups', '#',
+      data: { action: 'click->bulk-create-dialog#open' }
+
+  %dialog{ data: { bulk_create_dialog_target: 'dialog' } }
+    %h3 Create multiple activity groups
+    = form_with url: create_bulk_story_group_activity_groups_path(story_group), method: :post do |f|
+      %div
+        = label_tag :template_id, 'Template'
+        %select{ name: 'template_id', required: true,
+            data: { bulk_create_dialog_target: 'templateSelect', action: 'change->bulk-create-dialog#fillBaseName' } }
+          %option{ value: '', disabled: true, selected: true } Select template...
+          - activity_group_templates.each do |t|
+            %option{ value: t.id, data: { base_name: t.base_name } }= t.base_name
+      %div
+        = label_tag :base_name, 'Base name'
+        = text_field_tag :base_name, nil,
+            required: true,
+            data: { bulk_create_dialog_target: 'baseNameInput' }
+      %div
+        = label_tag :count, 'Number of groups'
+        = number_field_tag :count, 1, min: 1, max: 50, required: true
+      %div
+        %button{ type: 'button', data: { action: 'click->bulk-create-dialog#close' } } Cancel
+        = f.submit 'Create'

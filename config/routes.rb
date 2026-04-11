@@ -3,6 +3,10 @@
 Rails.application.routes.draw do
   resources :story_groups do
     resources :items, except: :show
+    resources :activity_group_templates
+    resources :activity_groups, except: :show do
+      post :create_bulk, on: :collection
+    end
     resources :ranks
     resources :badges
   end
