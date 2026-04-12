@@ -1,0 +1,20 @@
+%div.nested-fields.category-fields{ data: { sortable_form_target: 'item' } }
+  %span.drag-handle ☰
+
+  = f.hidden_field :position, data: { sortable_form_target: 'position' }
+
+  %div
+    = f.label :story_description, 'Story description'
+    = f.text_area :story_description
+
+  %div
+    = f.label :didactic_description, 'Didactic description'
+    = f.text_area :didactic_description
+
+  %div
+    = f.label :reward, 'Reward'
+    = f.number_field :reward
+
+  = helpers.link_to_remove_association 'Remove', f
+
+  %hr

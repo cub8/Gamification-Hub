@@ -11,6 +11,8 @@
   = link_to "Teachers", story_group_story_group_teachers_path(@story_group)
   |
   = link_to "Students", story_group_story_group_students_path(@story_group)
+  |
+  = link_to "Activity groups", story_group_activity_groups_path(@story_group)
 
 %hr
 
@@ -21,7 +23,6 @@
     = link_to "Edit this story group", edit_story_group_path(@story_group)
     |
   = link_to "Back to story groups", story_groups_path
-
   - if policy(@story_group).destroy?
     |
     = link_to "Destroy this story group", @story_group, data: { turbo_method: :delete }
