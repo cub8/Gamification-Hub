@@ -27,15 +27,15 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   end
 
   def index?
-    (teacher? && owner?) || admin?
+    (teacher? && owner? && same_org?) || admin?
   end
 
   def create?
-    !record.nil? || !record.user.nil? || (teacher? && owner?) || admin?
+    !record.nil? || !record.user.nil? || (teacher? && owner? && same_org?) || admin?
   end
 
   def destroy?
-    (teacher? && owner?) || admin?
+    (teacher? && owner? && same_org?) || admin?
   end
 
   private
@@ -50,6 +50,14 @@ class StoryGroupStudentPolicy < ApplicationPolicy
 
   def owner?
     record.story_group.owner_id == user.id
+  end
+
+  def same_org?
+    record.nil? ||
+      record.user.nil? ||
+      record.user.university_name.nil? ||
+      user.university_name.nil? ||
+      record.user.university_name == user.university_name
   end
 
 end
