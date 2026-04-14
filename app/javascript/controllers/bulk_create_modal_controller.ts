@@ -1,21 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 import { application } from "@controllers/application"
 
-class BulkCreateDialogController extends Controller {
-  static targets = ["dialog", "templateSelect", "baseNameInput"]
+class BulkCreateModalController extends Controller {
+  static targets = ["templateSelect", "baseNameInput"]
 
-  declare readonly dialogTarget: HTMLDialogElement
   declare readonly templateSelectTarget: HTMLSelectElement
   declare readonly baseNameInputTarget: HTMLInputElement
-
-  open(event: Event) {
-    event.preventDefault()
-    this.dialogTarget.showModal()
-  }
-
-  close() {
-    this.dialogTarget.close()
-  }
 
   fillBaseName() {
     const select = this.templateSelectTarget
@@ -24,4 +14,4 @@ class BulkCreateDialogController extends Controller {
   }
 }
 
-application.register("bulk-create-dialog", BulkCreateDialogController)
+application.register("bulk-create-modal", BulkCreateModalController)
