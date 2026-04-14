@@ -15,6 +15,8 @@ class Auth::PasswordlessController < ApplicationController
     return redirect_to login_path, alert: 'Nieprawidłowy token' if login_token.nil? || login_token.expired?
 
     user = login_token.user
+    user.consume_login_token!
+
     session[:user_id] = user.id
     redirect_to home_path, notice: 'Zalogowano pomyślnie.'
   end

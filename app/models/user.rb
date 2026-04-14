@@ -25,11 +25,11 @@ class User < ApplicationRecord
   encrypts :full_name, deterministic: true
 
   def create_login_token!
-    destroy_login_token!
+    consume_login_token!
     self.login_token = LoginToken.create!(user: self)
   end
 
-  def destroy_login_token!
+  def consume_login_token!
     login_token&.destroy!
   end
 end

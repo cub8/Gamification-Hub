@@ -46,6 +46,22 @@ class Auth::PasswordlessControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Zalogowano pomyślnie.', flash[:notice]
   end
 
+  test '#verify - cant sign in with same token twice' do
+    user = FactoryBot.create(:user)
+    login_token = user.create_login_token!
+
+    get auth_passwordless_verify_path(token: login_token.token)
+    assert_redirected_to home_path
+    assert_equal 'Zalogowano pomyślnie.', flash[:notice]
+
+    assert_nil user.reload.login_token
+
+    delete logout_path
+    get auth_passwordless_verify_path(token: login_token.token)
+    assert_redirected_to login_path
+    assert_equal 'Nieprawidłowy token', flash[:alert]
+  end
+
   test '#verify - cant sign in if invalid token' do
     assert_nil LoginToken.find_by(token: '123456')
 
