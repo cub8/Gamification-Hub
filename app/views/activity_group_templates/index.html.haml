@@ -1,0 +1,21 @@
+%h1 Activity Group Templates
+
+= link_to 'New template', new_story_group_activity_group_template_path(@story_group)
+|
+= link_to 'Back to story group', @story_group
+
+%hr
+
+- if @activity_group_templates.empty?
+  %p No templates yet.
+- else
+  - @activity_group_templates.each do |template|
+    %div
+      %strong= template.base_name
+      \(#{template.categories.count} categories)
+
+      = link_to 'Edit', edit_story_group_activity_group_template_path(@story_group, template)
+      |
+      = button_to 'Delete', story_group_activity_group_template_path(@story_group, template), method: :delete, data: { turbo_confirm: 'Are you sure?' }
+
+    %hr

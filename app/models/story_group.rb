@@ -8,6 +8,11 @@ class StoryGroup < ApplicationRecord
 
   has_one_attached :icon
   has_one_attached :currency_icon
+  has_many :items, dependent: :destroy
+  has_many :activity_group_templates, dependent: :destroy
+  has_many :activity_groups, dependent: :destroy
+
+  belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
 
   validates :name, :currency_name, length: { maximum: 40 }
   validates :description, length: { maximum: 255 }

@@ -326,6 +326,8 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
+    rondo_form (1.0.0)
+      railties (>= 6.0)
     rouge (4.7.0)
     rubocop (1.86.0)
       json (~> 2.3)
@@ -449,6 +451,7 @@ DEPENDENCIES
   pundit (~> 2.5.2)
   rack-attack (~> 6.8.0)
   rails (~> 8.1.2.1)
+  rondo_form (~> 1.0)
   rubocop (~> 1.84)
   rubocop-espago (~> 1.2)
   ruby-lsp (~> 0.26)
@@ -587,6 +590,7 @@ CHECKSUMS
   rdoc (7.2.0) sha256=8650f76cd4009c3b54955eb5d7e3a075c60a57276766ebf36f9085e8c9f23192
   regexp_parser (2.11.3) sha256=ca13f381a173b7a93450e53459075c9b76a10433caadcb2f1180f2c741fc55a4
   reline (0.6.3) sha256=1198b04973565b36ec0f11542ab3f5cfeeec34823f4e54cebde90968092b1835
+  rondo_form (1.0.0) sha256=357b996b14c7564b058a2d05c32e77fa03e4cab7be897aefb62df865d6334f57
   rouge (4.7.0) sha256=dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739
   rubocop (1.86.0) sha256=4ff1186fe16ebe9baff5e7aad66bb0ad4cabf5cdcd419f773146dbba2565d186
   rubocop-ast (1.49.1) sha256=4412f3ee70f6fe4546cc489548e0f6fcf76cafcfa80fa03af67098ffed755035

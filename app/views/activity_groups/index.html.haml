@@ -1,0 +1,67 @@
+%h1 Activity Groups
+
+= link_to 'Back to story group', @story_group
+
+%hr
+
+%h2 Templates
+
+= link_to 'New template', new_story_group_activity_group_template_path(@story_group)
+
+%br
+%br
+
+- if @activity_group_templates.empty?
+  %p No templates yet.
+- else
+  - @activity_group_templates.each do |template|
+    %div
+      %strong= template.base_name
+      \(#{template.categories.count} categories)
+
+      = link_to 'Edit', edit_story_group_activity_group_template_path(@story_group, template)
+      |
+      = button_to 'Delete', story_group_activity_group_template_path(@story_group, template),
+          method: :delete, data: { turbo_confirm: 'Are you sure?' }
+
+    %hr
+
+%h2 Groups
+
+- if @activity_group_templates.any?
+  = render 'bulk_create_modal', story_group: @story_group, activity_group_templates: @activity_group_templates
+
+= render 'name_modal', story_group: @story_group, next_group_name: @next_group_name
+
+%br
+%br
+
+- if @activity_groups.empty?
+  %p No activity groups yet.
+- else
+  .activity-group-columns
+    - @activity_groups.each do |group|
+      .activity-group-column
+        %h4= group.name
+
+        - if group.activity_group_categories.any?
+          %table.table.table-sm
+            %thead
+              %tr
+                %th Story description
+                %th Didactic description
+                %th Reward
+            %tbody
+              - group.activity_group_categories.each do |category|
+                %tr
+                  %td= category.story_description
+                  %td= category.didactic_description
+                  %td= category.reward
+        - else
+          %p.text-muted No categories.
+
+        .mt-2
+          = link_to 'Edit', edit_story_group_activity_group_path(@story_group, group)
+          |
+          = button_to 'Delete', story_group_activity_group_path(@story_group, group),
+              method: :delete, data: { turbo_confirm: 'Are you sure?' }
