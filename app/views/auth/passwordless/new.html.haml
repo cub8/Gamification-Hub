@@ -1,0 +1,9 @@
+%h1 Email login
+
+= form_with url: auth_passwordless_path, method: :post do |f|
+  %div.d-block
+    = f.label :email
+    = f.email_field :email
+  = f.submit
+
+= link_to 'Go back', login_path

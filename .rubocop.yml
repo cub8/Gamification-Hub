@@ -1,5 +1,11 @@
-# Omakase Ruby styling for Rails
+# Espago Ruby styling for Rails
 inherit_gem: { rubocop-espago: rubocop.yml }
 
 Style/Documentation:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - "db/cable_schema.rb"
+    - "db/queue_schema.rb"
+    - "db/cache_schema.rb"

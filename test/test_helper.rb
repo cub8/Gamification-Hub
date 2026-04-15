@@ -19,9 +19,8 @@ end
 module ActionDispatch
   class IntegrationTest
     def sign_in(user)
-      get auth_callback_path('development'), params: {
-        email: user.email,
-      }
+      login_token = user.create_login_token!
+      get auth_passwordless_verify_path(token: login_token.raw_token)
     end
 
     def sign_out

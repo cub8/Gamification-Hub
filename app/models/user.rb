@@ -9,6 +9,7 @@ class User < ApplicationRecord
   }
 
   has_many :story_groups, foreign_key: 'owner_id'
+  has_one :login_token, dependent: :destroy
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
@@ -22,4 +23,13 @@ class User < ApplicationRecord
   encrypts :email, deterministic: true
   encrypts :university_number, deterministic: true
   encrypts :full_name, deterministic: true
+
+  def create_login_token!
+    consume_login_token!
+    LoginToken.create!(user: self)
+  end
+
+  def consume_login_token!
+    login_token&.destroy!
+  end
 end
