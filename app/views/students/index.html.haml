@@ -17,7 +17,7 @@
         %td= student.total_currency
         %td
           = button_to "Remove",
-            story_group_story_group_student_path(@story_group, student),
+            story_group_student_path(@story_group, student),
             method: :delete,
             data: { confirm: "Are you sure?" }
 
@@ -25,7 +25,7 @@
 
 %h3 Add Student
 
-= form_with model: [@story_group, @story_group_student] do |f|
+= form_with url: story_group_students_path(@story_group), scope: :story_group_student, method: :post do |f|
   .field
     = f.label :user_id, "Select student"
     %br

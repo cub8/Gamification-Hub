@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class StoryGroupStudentsController < ApplicationController
+class StudentsController < ApplicationController
 
   before_action :set_story_group
   before_action :set_student, only: %i[destroy]
@@ -20,7 +20,7 @@ class StoryGroupStudentsController < ApplicationController
     authorize @story_group_student
 
     if @story_group_student.save
-      redirect_to story_group_story_group_students_path(@story_group),
+      redirect_to story_group_students_path(@story_group),
                   notice: 'Student was successfully added to story group.'
     else
       index
@@ -33,7 +33,7 @@ class StoryGroupStudentsController < ApplicationController
 
     @story_group_student.destroy
 
-    redirect_to story_group_story_group_students_path(@story_group),
+    redirect_to story_group_students_path(@story_group),
                 notice: 'Student was successfully removed from story group.'
   end
 

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class StoryGroupTeachersControllerTest < ActionDispatch::IntegrationTest
+class TeachersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @current_user = FactoryBot.create(:user, role: :teacher)
     sign_in @current_user
@@ -13,13 +13,13 @@ class StoryGroupTeachersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get index' do
-    get story_group_story_group_teachers_url(@story_group)
+    get story_group_teachers_url(@story_group)
     assert_response :success
   end
 
   test 'should create story_group_teacher' do
     assert_difference('StoryGroupTeacher.count') do
-      post story_group_story_group_teachers_url(@story_group),
+      post story_group_teachers_url(@story_group),
            params: {
              story_group_teacher: {
                user_id: @teacher2.id,
@@ -27,15 +27,15 @@ class StoryGroupTeachersControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_story_group_teachers_url(@story_group)
+    assert_redirected_to story_group_teachers_url(@story_group)
   end
 
   test 'should destroy story_group_teacher' do
     assert_difference('StoryGroupTeacher.count', -1) do
-      delete story_group_story_group_teacher_url(@story_group, @story_group_teacher)
+      delete story_group_teacher_url(@story_group, @story_group_teacher)
     end
 
-    assert_redirected_to story_group_story_group_teachers_url(@story_group)
+    assert_redirected_to story_group_teachers_url(@story_group)
   end
 
 end

@@ -9,8 +9,8 @@ Rails.application.routes.draw do
     end
     resources :ranks
     resources :badges
-    resources :story_group_teachers
-    resources :story_group_students
+    resources :teachers, only: %i[new index create destroy]
+    resources :students, only: %i[index create destroy]
   end
 
   get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StoryGroupTeachersHelper
+module TeachersHelper
 
   def teachers(user)
     if user.global_admin?
