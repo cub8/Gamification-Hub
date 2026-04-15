@@ -24,7 +24,7 @@ class TeachersController < ApplicationController
       redirect_to story_group_teachers_path(@story_group),
                   notice: 'Teacher was successfully added to story group.'
     else
-      index
+      new
       render :new, status: :unprocessable_content
     end
   end
