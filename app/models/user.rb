@@ -26,7 +26,7 @@ class User < ApplicationRecord
 
   def create_login_token!
     consume_login_token!
-    self.login_token = LoginToken.create!(user: self)
+    LoginToken.create!(user: self)
   end
 
   def consume_login_token!

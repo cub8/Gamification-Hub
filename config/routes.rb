@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback
     resource :passwordless, only: %i[new create], controller: 'passwordless'
-    get 'passwordless/:token', to: 'passwordless#verify', as: :passwordless_verify
+    get 'passwordless/verify', to: 'passwordless#verify', as: :passwordless_verify
   end
 
   get '/login', to: 'sessions#new', as: :login

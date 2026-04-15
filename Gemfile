@@ -24,7 +24,6 @@ gem 'solid_cache', '~> 1.0' # Adapter for Rails.cache (caching stuff)
 gem 'solid_queue', '~> 1.3' # Adapter ActiveJob (queues)
 
 # Others
-# gem "bcrypt", "~> 3.1.7" # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem 'bootsnap', '~> 1.23', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'haml-rails', '~> 3.0' # For easier writing HTML with embedded Ruby
 gem 'image_processing', '~> 1.2' # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -32,6 +31,7 @@ gem 'omniauth', '~> 2.1' # OAuth framework
 gem 'omniauth-oauth', '~> 1.2' # OAuth 1.0
 gem 'omniauth-rails_csrf_protection', '~> 2.0' # OAuth CSRF compatibility
 gem 'pundit', '~> 2.5.2' # For roles managements
+gem 'rack-attack', '~> 6.8.0' # For throttling incoming request in authentication
 gem 'tzinfo-data', '~> 1', platforms: %i[windows jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'view_component', '~> 4.5' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
 

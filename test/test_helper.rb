@@ -20,7 +20,7 @@ module ActionDispatch
   class IntegrationTest
     def sign_in(user)
       login_token = user.create_login_token!
-      get auth_passwordless_verify_path(token: login_token.token)
+      get auth_passwordless_verify_path(token: login_token.raw_token)
     end
 
     def sign_out

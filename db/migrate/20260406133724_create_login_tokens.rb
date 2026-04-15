@@ -10,6 +10,6 @@ class CreateLoginTokens < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    # add_index :login_tokens, :token_digest, unique: true
+    add_index :login_tokens, :token_digest, unique: true
   end
 end

@@ -10,14 +10,16 @@ class Auth::PasswordlessController < ApplicationController
 
   def verify
     token = params.expect(:token)
-    login_token = LoginToken.find_by(token: token)
+    login_token = LoginToken.find_by_token(token)
 
     return redirect_to login_path, alert: 'Nieprawidłowy token' if login_token.nil? || login_token.expired?
 
     user = login_token.user
     user.consume_login_token!
 
+    reset_session
     session[:user_id] = user.id
+
     redirect_to home_path, notice: 'Zalogowano pomyślnie.'
   end
 
@@ -27,7 +29,7 @@ class Auth::PasswordlessController < ApplicationController
 
     if user
       token = user.create_login_token!
-      token_link = auth_passwordless_verify_url(token: token.token)
+      token_link = auth_passwordless_verify_url(token: token.raw_token)
 
       PasswordlessMailer.with(
         token_link: token_link,

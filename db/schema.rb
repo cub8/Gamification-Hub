@@ -70,6 +70,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_06_133724) do
     t.string "token_digest"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["token_digest"], name: "index_login_tokens_on_token_digest", unique: true
     t.index ["user_id"], name: "index_login_tokens_on_user_id"
   end
 
