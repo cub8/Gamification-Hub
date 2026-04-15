@@ -25,11 +25,7 @@ class StoryGroupTeachersController < ApplicationController
       redirect_to story_group_story_group_teachers_path(@story_group),
                   notice: 'Teacher was successfully added to story group.'
     else
-      @story_group_teachers = policy_scope(@story_group.story_group_teachers)
-      @story_group_teacher = StoryGroupTeacher.new
-      @story_group_teacher.story_group_id = @story_group.id
-
-      authorize @story_group_teacher
+      index
       render :index, status: :unprocessable_content
     end
   end
