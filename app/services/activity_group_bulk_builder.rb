@@ -13,8 +13,8 @@ class ActivityGroupBulkBuilder
     @count.times do |i|
       name = "#{@template.base_name} #{next_number + i}"
       group = @story_group.activity_groups.create!(
-        name:                     name,
-        activity_group_template:  @template,
+        name:                    name,
+        activity_group_template: @template,
       )
       @template.categories.order(:position).each_with_index do |cat, idx|
         group.activity_group_categories.create!(

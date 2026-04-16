@@ -8,7 +8,7 @@ class ActivityGroupsController < ApplicationController
 
   def index
     @activity_group_templates = policy_scope(@story_group.activity_group_templates)
-                                  .includes(activity_groups: :activity_group_categories)
+                                .includes(activity_groups: :activity_group_categories)
   end
 
   def edit
