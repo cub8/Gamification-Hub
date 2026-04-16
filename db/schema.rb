@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_06_133724) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_16_172953) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -73,10 +73,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_06_133724) do
   end
 
   create_table "activity_groups", force: :cascade do |t|
+    t.bigint "activity_group_template_id"
     t.datetime "created_at", null: false
     t.string "name"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["activity_group_template_id"], name: "index_activity_groups_on_activity_group_template_id"
     t.index ["story_group_id"], name: "index_activity_groups_on_story_group_id"
   end
 
@@ -270,8 +272,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_06_133724) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activity_group_categories", "activity_groups"
   add_foreign_key "activity_group_template_categories", "activity_group_templates"
-  add_foreign_key "activity_group_templates", "story_groups"
-  add_foreign_key "activity_groups", "story_groups"
+  add_foreign_key "activity_groups", "activity_group_templates"
   add_foreign_key "badges", "story_groups"
   add_foreign_key "items", "story_groups"
   add_foreign_key "login_tokens", "users"

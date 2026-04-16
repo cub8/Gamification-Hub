@@ -12,22 +12,9 @@
   %h3 Categories
 
   %div{ data: {
-    controller: 'sortable-form nested-rondo template-loader',
+    controller: 'sortable-form nested-rondo',
     sortable_form_handle_value: '.drag-handle',
-    template_loader_url_value: story_group_activity_group_templates_path(@story_group),
-    template_loader_association_value: 'activity_group_categories'
   } }
-
-    - if @templates.any?
-      %div
-        = select_tag :template_picker,
-            options_from_collection_for_select(@templates, :id, :base_name),
-            prompt: 'Select a template...',
-            data: { template_loader_target: 'select' }
-        = button_tag 'Add template categories', type: 'button',
-            data: { action: 'click->template-loader#loadTemplate' }
-
-    %br
 
     %div{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
       = f.fields_for :activity_group_categories do |cf|
@@ -38,4 +25,4 @@
 
   %br
 
-  = f.submit (@activity_group.new_record? ? 'Create' : 'Save')
+  = f.submit 'Save'
