@@ -1,30 +1,20 @@
-%div{ data: { controller: 'bulk-create-modal' } }
-  = link_to 'Create multiple groups', '#',
-      data: { bs_toggle: 'modal', bs_target: '#bulk-create-modal' }
+- modal_id = "bulk-create-modal-#{template.id}"
 
-  .modal.fade#bulk-create-modal{ tabindex: '-1' }
-    .modal-dialog
-      .modal-content
-        .modal-header
-          %h5.modal-title Create multiple activity groups
-          %button.btn-close{ type: 'button', data: { bs_dismiss: 'modal' } }
-        = form_with url: create_bulk_story_group_activity_groups_path(story_group), method: :post do |f|
-          .modal-body
-            %div
-              = label_tag :template_id, 'Template'
-              %select{ name: 'template_id', required: true,
-                  data: { bulk_create_modal_target: 'templateSelect', action: 'change->bulk-create-modal#fillBaseName' } }
-                %option{ value: '', disabled: true, selected: true } Select template...
-                - activity_group_templates.each do |t|
-                  %option{ value: t.id, data: { base_name: t.base_name } }= t.base_name
-            %div
-              = label_tag :base_name, 'Base name'
-              = text_field_tag :base_name, nil,
-                  required: true,
-                  data: { bulk_create_modal_target: 'baseNameInput' }
-            %div
-              = label_tag :count, 'Number of groups'
-              = number_field_tag :count, 1, min: 1, max: 50, required: true
-          .modal-footer
-            %button{ type: 'button', data: { bs_dismiss: 'modal' } } Cancel
-            = f.submit 'Create'
+= link_to 'Add multiple groups', '#',
+    data: { bs_toggle: 'modal', bs_target: "##{modal_id}" }
+
+.modal.fade{ id: modal_id, tabindex: '-1' }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Add multiple groups
+        %button.btn-close{ type: 'button', data: { bs_dismiss: 'modal' } }
+      = form_with url: create_bulk_story_group_activity_groups_path(story_group), method: :post do |f|
+        = hidden_field_tag :template_id, template.id
+        .modal-body
+          %div
+            = label_tag :count, 'Number of groups'
+            = number_field_tag :count, 1, min: 1, max: 50, required: true
+        .modal-footer
+          %button{ type: 'button', data: { bs_dismiss: 'modal' } } Cancel
+          = f.submit 'Create'

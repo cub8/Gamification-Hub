@@ -5,17 +5,10 @@ class ActivityGroupsController < ApplicationController
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!
-  before_action :set_templates, only: %i[new edit create update]
 
   def index
-    @activity_groups = policy_scope(@story_group.activity_groups).includes(:activity_group_categories)
     @activity_group_templates = policy_scope(@story_group.activity_group_templates)
-    @next_group_name = ActivityGroup.next_name_for(@story_group)
-  end
-
-  def new
-    @activity_group = @story_group.activity_groups.build
-    @activity_group.name = params[:name].presence || ActivityGroup.next_name_for(@story_group)
+                                .includes(activity_groups: :activity_group_categories)
   end
 
   def edit
@@ -23,14 +16,16 @@ class ActivityGroupsController < ApplicationController
   end
 
   def create
-    @activity_group = @story_group.activity_groups.build(activity_group_params)
+    template = @story_group.activity_group_templates.find(params.dig(:activity_group, :activity_group_template_id))
+    name = params.dig(:activity_group, :name).presence || ActivityGroup.next_name_for_template(template)
 
-    if @activity_group.save
-      redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Activity group was successfully created.', status: :see_other
-    else
-      render :new, status: :unprocessable_content
-    end
+    ActivityGroupBuilder.new(story_group: @story_group, template: template).build(name: name)
+
+    redirect_to story_group_activity_groups_path(@story_group),
+                notice: 'Activity group was successfully created.', status: :see_other
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to story_group_activity_groups_path(@story_group),
+                alert: e.message, status: :see_other
   end
 
   def update
@@ -46,15 +41,9 @@ class ActivityGroupsController < ApplicationController
 
   def create_bulk
     template = @story_group.activity_group_templates.find(params[:template_id])
-    base_name = params[:base_name].presence || template.base_name
     count = params[:count].to_i.clamp(1, 50)
 
-    ActivityGroupBulkBuilder.new(
-      story_group: @story_group,
-      template:    template,
-      base_name:   base_name,
-      count:       count,
-    ).build
+    ActivityGroupBuilder.new(story_group: @story_group, template: template).build_many(count: count)
 
     redirect_to story_group_activity_groups_path(@story_group),
                 notice: "#{count} activity group(s) created successfully.", status: :see_other
@@ -72,10 +61,6 @@ class ActivityGroupsController < ApplicationController
 
   def set_story_group
     @story_group = StoryGroup.find(params[:story_group_id])
-  end
-
-  def set_templates
-    @templates = @story_group.activity_group_templates
   end
 
   def activity_group_params

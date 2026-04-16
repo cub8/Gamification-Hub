@@ -1,6 +1,4 @@
 import "@controllers/hello_controller"
 import "@controllers/sortable_form_controller"
 import "@controllers/nested_rondo_controller"
-import "@controllers/template_loader_controller"
 import "@controllers/tom_select_controller"
-import "@controllers/bulk_create_modal_controller"
