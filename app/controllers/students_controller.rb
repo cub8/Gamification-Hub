@@ -30,6 +30,11 @@ class StudentsController < ApplicationController
       redirect_to story_group_students_path(@story_group),
                   notice: 'Student was successfully added to story group.'
     else
+      @students = if @current_user.global_admin?
+                    User.all
+                  else
+                    User.where(university_name: @current_user.university_name)
+                  end
       render :new, status: :unprocessable_content
     end
   end

@@ -29,6 +29,12 @@ class TeachersController < ApplicationController
       redirect_to story_group_teachers_path(@story_group),
                   notice: 'Teacher was successfully added to story group.'
     else
+      @teachers = if @current_user.global_admin?
+                    User.where(role: %i[teacher organization_admin global_admin])
+                  else
+                    User.where(role:            %i[teacher organization_admin global_admin],
+                               university_name: @current_user.university_name,)
+                  end
       render :new, status: :unprocessable_content
     end
   end
