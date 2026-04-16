@@ -245,6 +245,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_172953) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "story_group_students", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "current_currency", default: 0
+    t.integer "lives", default: 3
+    t.integer "story_group_id"
+    t.integer "total_currency", default: 0
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+  end
+
+  create_table "story_group_teachers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "story_group_id"
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+  end
+
+  create_table "story_group_users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "story_group_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["story_group_id"], name: "index_story_group_users_on_story_group_id"
+    t.index ["user_id"], name: "index_story_group_users_on_user_id"
+  end
+
   create_table "story_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency_name"
@@ -283,4 +309,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_172953) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "story_group_users", "story_groups"
+  add_foreign_key "story_group_users", "users"
 end

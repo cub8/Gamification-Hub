@@ -1,0 +1,28 @@
+%h2 Students
+
+%table.table
+  %thead
+    %tr
+      %th Email
+      %th Lives
+      %th Current currency
+      %th Total currency
+      %th
+  %tbody
+    - @students.each do |student|
+      %tr
+        %td= student.user.email
+        %td= student.lives
+        %td= student.current_currency
+        %td= student.total_currency
+        %td
+          = button_to "Remove",
+            story_group_student_path(@story_group, student),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+
+%p
+  = link_to "Add Student",
+    new_story_group_student_path(@story_group)
+  |
+  = link_to "Back", story_group_path(@story_group)

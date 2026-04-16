@@ -1,0 +1,22 @@
+%h2 Teachers
+
+%table.table
+  %thead
+    %tr
+    %th Email
+    %th
+  %tbody
+    - @teachers.each do |teacher|
+      %tr
+        %td= teacher.user.email
+        %td
+          = button_to "Remove",
+            story_group_teacher_path(@story_group, teacher),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+
+%p
+  = link_to "Add Teacher",
+    new_story_group_teacher_path(@story_group)
+  |
+  = link_to "Back", story_group_path(@story_group)

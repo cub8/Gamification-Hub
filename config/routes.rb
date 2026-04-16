@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     end
     resources :ranks
     resources :badges
+    resources :teachers, only: %i[new index create destroy]
+    resources :students, only: %i[new index create destroy]
   end
 
   namespace 'auth' do
