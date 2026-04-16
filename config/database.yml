@@ -9,9 +9,10 @@ development:
   primary:
     <<: *default
     database: gamification_hub_development
+    migrations_paths: db/queue_migrate
   queue:
     <<: *default
-    database: gamification_hub_development
+    database: gamification_hub_queue_development
     migrations_paths: db/queue_migrate
 
 # Warning: The database defined as "test" will be erased and
