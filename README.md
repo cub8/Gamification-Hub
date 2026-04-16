@@ -110,9 +110,7 @@ Bez konfiguracji dostępne jest tylko logowanie przez email. Dostępne jest 17 t
 
 ### Dostęp do skrzynki pocztowej
 
-Na środowisku developmenckim emaila są wysyłane na testową skrzynkę pocztową. Przy logowaniu należy kliknąć w potwierdzający Magic Link.
-
-Po zalogowaniu należy wejść na ścieżkę: http://localhost:3000/letter_opener , aby przejrzeć skrzynkę pocztową.
+Na środowisku developmenckim emaila są wysyłane na testową skrzynkę pocztową. Przy logowaniu należy kliknąć w potwierdzający Magic Link. Na WSL istnieje problem przez który wysłane linki nie otwierają się automatycznie. Dlatego po próbie zalogowania się należy wejść na ścieżkę: http://localhost:3000/letter_opener , aby przejrzeć skrzynkę pocztową.
 
 ### Konfiguracja credentiali
 
