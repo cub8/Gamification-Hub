@@ -1,0 +1,19 @@
+%h3 Add Student
+
+= form_with url: story_group_students_path(@story_group), scope: :story_group_student, method: :post do |f|
+  .field
+    = f.label :user_id, "Select student"
+    %br
+    = f.select :user_id,
+      options_from_collection_for_select( students(@current_user),
+        :id,
+        :email,
+      ),
+      { prompt: "Choose a user" },
+      { data: { controller: "tom-select", tom_select_options_value: student_map(@current_user).to_json} }
+
+  .actions
+    = f.submit "Add Student"
+
+%p
+  = link_to "Back", story_group_students_path(@story_group)

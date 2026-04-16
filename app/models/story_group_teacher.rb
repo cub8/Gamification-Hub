@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class StoryGroupTeacher < ApplicationRecord
-  belongs_to :user, foreign_key: 'user_id'
-  belongs_to :story_group, foreign_key: 'story_group_id'
+  belongs_to :user
+  belongs_to :story_group
 
-  validates :user_id, presence: true
-  validates :story_group_id, presence: true
+  delegate :full_name, :university_number, :email, to: :user
+  scope :with_user, -> { includes(:user) }
+
   validates :user_id, uniqueness: { scope: :story_group_id }
 end

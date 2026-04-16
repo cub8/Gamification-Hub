@@ -15,10 +15,6 @@ class StoryGroup < ApplicationRecord
   has_many :activity_group_templates, dependent: :destroy
   has_many :activity_groups, dependent: :destroy
 
-  def members
-    (students + teachers).uniq
-  end
-
   validates :name, :currency_name, length: { maximum: 40 }
   validates :description, length: { maximum: 255 }
   validate :acceptable_icon

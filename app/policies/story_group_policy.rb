@@ -6,9 +6,18 @@ class StoryGroupPolicy < ApplicationPolicy
       if user.organization_admin? || user.global_admin?
         scope.all.includes(:owner)
       elsif user.teacher?
-        scope.where(owner_id: user.id).includes(:owner) # and also those to which they belong as teacher and student
+        owner = scope.where(owner_id: user.id) # and also those to which they belong as teacher and student
+        teaching = scope.where(id: user.teacher_story_groups.select(:id))
+        enrolled = scope.where(id: user.student_story_groups.select(:id))
+
+        owner.or(teaching)
+             .or(enrolled)
+             .distinct
+             .includes(:owner)
       else
-        scope.none
+        scope.where(id: user.student_story_groups.select(:id))
+             .distinct
+             .includes(:owner)
       end
     end
   end
@@ -26,7 +35,7 @@ class StoryGroupPolicy < ApplicationPolicy
   end
 
   def update?
-    owner? || admin?
+    owner? || admin? || assistant?
   end
 
   def edit?
@@ -34,7 +43,11 @@ class StoryGroupPolicy < ApplicationPolicy
   end
 
   def destroy?
-    update?
+    owner? || admin?
+  end
+
+  def owner?
+    record.owner_id == user.id
   end
 
   private
@@ -43,13 +56,13 @@ class StoryGroupPolicy < ApplicationPolicy
     user.global_admin? || user.organization_admin?
   end
 
-  def owner?
-    record.owner_id == user.id
-  end
-
   # For teachers and students belonging
   # to the story group
   def member?
-    false
+    assistant? || record.students.include?(user)
+  end
+
+  def assistant?
+    record.teachers.include?(user)
   end
 end

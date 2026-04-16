@@ -7,6 +7,9 @@ class StudentsController < ApplicationController
 
   def index
     @story_group_students = policy_scope(@story_group.student_memberships)
+  end
+
+  def new
     @story_group_student = StoryGroupStudent.new
     @story_group_student.story_group_id = @story_group.id
 
@@ -23,8 +26,8 @@ class StudentsController < ApplicationController
       redirect_to story_group_students_path(@story_group),
                   notice: 'Student was successfully added to story group.'
     else
-      index
-      render :index, status: :unprocessable_content
+      new
+      render :new, status: :unprocessable_content
     end
   end
 
