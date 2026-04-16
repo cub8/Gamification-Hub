@@ -8,5 +8,6 @@ class CreateStoryGroupTeachers < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
+    add_index :story_group_teachers, %i[user_id story_group_id], unique: true
   end
 end

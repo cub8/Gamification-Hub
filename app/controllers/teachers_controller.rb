@@ -8,7 +8,7 @@ class TeachersController < ApplicationController
   before_action :set_teacher, only: %i[destroy]
 
   def index
-    @story_group_teachers = policy_scope(@story_group.story_group_teachers)
+    @story_group_teachers = policy_scope(@story_group.teacher_memberships)
   end
 
   def new
@@ -43,7 +43,7 @@ class TeachersController < ApplicationController
   end
 
   def set_teacher
-    @story_group_teacher = @story_group.story_group_teachers.find(params[:id])
+    @story_group_teacher = @story_group.teacher_memberships.find(params[:id])
   end
 
   def teacher_params

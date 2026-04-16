@@ -5,17 +5,15 @@ class StoryGroup < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :ranks, dependent: :destroy
   has_many :badges, dependent: :destroy
-  has_many :story_group_students, foreign_key: 'story_group_id', dependent: :destroy
-  has_many :story_group_teachers, foreign_key: 'story_group_id', dependent: :destroy
-  has_many :students, through: :story_group_students, source: :user
-  has_many :teachers, through: :story_group_teachers, source: :user
+  has_many :student_memberships, class_name: 'StoryGroupStudent', foreign_key: 'story_group_id', dependent: :destroy
+  has_many :teacher_memberships, class_name: 'StoryGroupTeacher', foreign_key: 'story_group_id', dependent: :destroy
+  has_many :students, through: :student_memberships, source: :user
+  has_many :teachers, through: :teacher_memberships, source: :user
   has_one_attached :icon
   has_one_attached :currency_icon
   has_many :items, dependent: :destroy
   has_many :activity_group_templates, dependent: :destroy
   has_many :activity_groups, dependent: :destroy
-
-  belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
 
   def members
     (students + teachers).uniq

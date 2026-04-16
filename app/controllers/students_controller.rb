@@ -6,7 +6,7 @@ class StudentsController < ApplicationController
   before_action :set_student, only: %i[destroy]
 
   def index
-    @story_group_students = policy_scope(@story_group.story_group_students)
+    @story_group_students = policy_scope(@story_group.student_memberships)
     @story_group_student = StoryGroupStudent.new
     @story_group_student.story_group_id = @story_group.id
 
@@ -44,7 +44,7 @@ class StudentsController < ApplicationController
   end
 
   def set_student
-    @story_group_student = @story_group.story_group_students.find(params[:id])
+    @story_group_student = @story_group.student_memberships.find(params[:id])
   end
 
   def student_params

@@ -8,10 +8,13 @@ class StoryGroupStudentPolicy < ApplicationPolicy
       if admin?
         scope.all.includes(:user)
       elsif user.teacher?
-        scope.joins(:story_group)
-             .where(story_groups: { owner_id: user.id })
-             .joins(:user)
-             .where(users: { university_name: user.university_name })
+        owned = scope.joins(:story_group)
+                     .where(story_groups: { owner_id: user.id })
+
+        teaching = scope.joins(:story_group)
+                        .where(story_groups: { id: user.teacher_story_groups.select(:id) })
+
+        owned.or(teaching)
              .distinct
              .includes(:user)
       else
@@ -27,15 +30,15 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   end
 
   def index?
-    (teacher? && owner? && same_org?) || admin?
+    story_group_teacher? || admin?
   end
 
   def create?
-    !record.nil? || !record.user.nil? || (teacher? && owner? && same_org?) || admin?
+    story_group_teacher? || admin?
   end
 
   def destroy?
-    (teacher? && owner? && same_org?) || admin?
+    story_group_teacher? || admin?
   end
 
   private
@@ -44,20 +47,8 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     user.organization_admin? || user.global_admin?
   end
 
-  def teacher?
-    user.teacher? || admin?
-  end
-
-  def owner?
-    record.story_group.owner_id == user.id
-  end
-
-  def same_org?
-    record.nil? ||
-      record.user.nil? ||
-      record.user.university_name.nil? ||
-      user.university_name.nil? ||
-      record.user.university_name == user.university_name
+  def story_group_teacher?
+    record.story_group.owner == user || user.teacher_story_groups.include?(record.story_group)
   end
 
 end

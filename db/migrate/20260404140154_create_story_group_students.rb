@@ -11,5 +11,6 @@ class CreateStoryGroupStudents < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
+    add_index :story_group_students, %i[user_id story_group_id], unique: true
   end
 end
