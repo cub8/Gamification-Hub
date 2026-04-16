@@ -10,13 +10,9 @@
   .field
     = f.label :user_id, "Select teacher"
     = f.select :user_id,
-      options_from_collection_for_select(@teachers,
-        :university_number, 
-        :email,
-        @teacher.user_id,
-      ),
-      { prompt: "Choose a user" },
-      { data: { controller: "tom-select", tom_select_options_value: teacher_map(@teachers).to_json} }
+        options_from_collection_for_select(@teachers, :id, :email, @teacher.user_id),
+        { prompt: "Choose a user" },
+        { data: { controller: "tom-select", tom_select_options_value: teacher_map(@teachers).to_json} }
 
   .actions
     = f.submit "Add Teacher"

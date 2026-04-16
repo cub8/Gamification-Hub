@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StudentsController < ApplicationController
-
   before_action :set_story_group
   before_action :set_student, only: %i[destroy]
 
@@ -11,30 +10,20 @@ class StudentsController < ApplicationController
 
   def new
     @student = @story_group.student_memberships.build
-
-    @students = if @current_user.global_admin?
-                  User.all
-                else
-                  User.where(university_name: @current_user.university_name)
-                end
+    set_students_for_select
 
     authorize @student
   end
 
   def create
     @student = @story_group.student_memberships.build(student_params)
-
     authorize @student
 
     if @student.save
       redirect_to story_group_students_path(@story_group),
                   notice: 'Student was successfully added to story group.'
     else
-      @students = if @current_user.global_admin?
-                    User.all
-                  else
-                    User.where(university_name: @current_user.university_name)
-                  end
+      set_students_for_select
       render :new, status: :unprocessable_content
     end
   end
@@ -56,6 +45,15 @@ class StudentsController < ApplicationController
 
   def set_student
     @student = @story_group.student_memberships.find(params[:id])
+  end
+
+  def set_students_for_select
+    @students =
+      if @current_user.global_admin?
+        User.all
+      else
+        User.where(university_name: @current_user.university_name)
+      end
   end
 
   def student_params

@@ -13,13 +13,7 @@ class TeachersController < ApplicationController
 
   def new
     @teacher = @story_group.teacher_memberships.build
-
-    @teachers = if @current_user.global_admin?
-                  User.where(role: %i[teacher organization_admin global_admin])
-                else
-                  User.where(role:            %i[teacher organization_admin global_admin],
-                             university_name: @current_user.university_name,)
-                end
+    set_teachers_for_select
   end
 
   def create
@@ -29,12 +23,7 @@ class TeachersController < ApplicationController
       redirect_to story_group_teachers_path(@story_group),
                   notice: 'Teacher was successfully added to story group.'
     else
-      @teachers = if @current_user.global_admin?
-                    User.where(role: %i[teacher organization_admin global_admin])
-                  else
-                    User.where(role:            %i[teacher organization_admin global_admin],
-                               university_name: @current_user.university_name,)
-                  end
+      set_teachers_for_select
       render :new, status: :unprocessable_content
     end
   end
@@ -54,6 +43,18 @@ class TeachersController < ApplicationController
 
   def set_teacher
     @teacher = @story_group.teacher_memberships.find(params[:id])
+  end
+
+  def set_teachers_for_select
+    @teachers =
+      if @current_user.global_admin?
+        User.where(role: %i[teacher organization_admin global_admin])
+      else
+        User.where(
+          role:            %i[teacher organization_admin global_admin],
+          university_name: @current_user.university_name,
+        )
+      end
   end
 
   def teacher_params

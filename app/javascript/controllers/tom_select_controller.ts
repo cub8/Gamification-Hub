@@ -26,19 +26,15 @@ class TomSelectController extends Controller {
       options,
       create: false,
       maxItems: 1,
-
       valueField: "value",
       labelField: "text",
-
       searchField: ["name", "email", "university_number"],
-
       sortField: [
         {
           field: "name",
           direction: "asc",
         },
       ],
-
       render: {
         option: this.renderOption,
         item: this.renderItem,
