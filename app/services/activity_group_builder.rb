@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-class ActivityGroupBulkBuilder
-  def initialize(story_group:, template:, count: nil)
+class ActivityGroupBuilder
+  def initialize(story_group:, template:)
     @story_group = story_group
     @template    = template
-    @count       = count
   end
 
-  def build_one(name:)
+  def build(name:)
     group = @story_group.activity_groups.create!(
       name:                    name,
       activity_group_template: @template,
@@ -15,10 +14,10 @@ class ActivityGroupBulkBuilder
     copy_categories(group)
   end
 
-  def build
+  def build_many(count:)
     next_number = ActivityGroup.next_number_for_base(@template)
 
-    @count.times do |i|
+    count.times do |i|
       name = "#{@template.base_name} #{next_number + i}"
       group = @story_group.activity_groups.create!(
         name:                    name,

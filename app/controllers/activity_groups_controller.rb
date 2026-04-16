@@ -19,7 +19,7 @@ class ActivityGroupsController < ApplicationController
     template = @story_group.activity_group_templates.find(params.dig(:activity_group, :activity_group_template_id))
     name = params.dig(:activity_group, :name).presence || ActivityGroup.next_name_for_template(template)
 
-    ActivityGroupBulkBuilder.new(story_group: @story_group, template: template).build_one(name: name)
+    ActivityGroupBuilder.new(story_group: @story_group, template: template).build(name: name)
 
     redirect_to story_group_activity_groups_path(@story_group),
                 notice: 'Activity group was successfully created.', status: :see_other
@@ -43,11 +43,7 @@ class ActivityGroupsController < ApplicationController
     template = @story_group.activity_group_templates.find(params[:template_id])
     count = params[:count].to_i.clamp(1, 50)
 
-    ActivityGroupBulkBuilder.new(
-      story_group: @story_group,
-      template:    template,
-      count:       count,
-    ).build
+    ActivityGroupBuilder.new(story_group: @story_group, template: template).build_many(count: count)
 
     redirect_to story_group_activity_groups_path(@story_group),
                 notice: "#{count} activity group(s) created successfully.", status: :see_other
