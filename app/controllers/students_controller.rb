@@ -6,35 +6,38 @@ class StudentsController < ApplicationController
   before_action :set_student, only: %i[destroy]
 
   def index
-    @story_group_students = policy_scope(@story_group.student_memberships)
+    @students = policy_scope(@story_group.student_memberships)
   end
 
   def new
-    @story_group_student = StoryGroupStudent.new
-    @story_group_student.story_group_id = @story_group.id
+    @student = @story_group.student_memberships.build
 
-    authorize @story_group_student
+    @students = if @current_user.global_admin?
+                  User.all
+                else
+                  User.where(university_name: @current_user.university_name)
+                end
+
+    authorize @student
   end
 
   def create
-    @story_group_student = StoryGroupStudent.new(student_params)
-    @story_group_student.story_group_id = @story_group.id
+    @student = @story_group.student_memberships.build(student_params)
 
-    authorize @story_group_student
+    authorize @student
 
-    if @story_group_student.save
+    if @student.save
       redirect_to story_group_students_path(@story_group),
                   notice: 'Student was successfully added to story group.'
     else
-      new
       render :new, status: :unprocessable_content
     end
   end
 
   def destroy
-    authorize @story_group_student
+    authorize @student
 
-    @story_group_student.destroy
+    @student.destroy
 
     redirect_to story_group_students_path(@story_group),
                 notice: 'Student was successfully removed from story group.'
@@ -47,7 +50,7 @@ class StudentsController < ApplicationController
   end
 
   def set_student
-    @story_group_student = @story_group.student_memberships.find(params[:id])
+    @student = @story_group.student_memberships.find(params[:id])
   end
 
   def student_params

@@ -1,14 +1,12 @@
 %h2 Teachers
 
-%table
+%table.table
   %thead
     %tr
     %th Email
     %th
-      = link_to "Add Teacher",
-        new_story_group_teacher_path(@story_group)
   %tbody
-    - @story_group_teachers.each do |teacher|
+    - @teachers.each do |teacher|
       %tr
         %td= teacher.user.email
         %td
@@ -18,4 +16,7 @@
             data: { confirm: "Are you sure?" }
 
 %p
+  = link_to "Add Teacher",
+    new_story_group_teacher_path(@story_group)
+  |
   = link_to "Back", story_group_path(@story_group)

@@ -1,16 +1,22 @@
 %h3 Add Student
 
-= form_with url: story_group_students_path(@story_group), scope: :story_group_student, method: :post do |f|
+- if @student.errors.any?
+  .errors{ style: "color: red; margin-bottom: 1em;" }
+    %ul
+      - @student.errors.full_messages.each do |message|
+        %li= message
+
+= form_with model: @student do |f|
   .field
     = f.label :user_id, "Select student"
-    %br
     = f.select :user_id,
-      options_from_collection_for_select( students(@current_user),
-        :id,
+      options_from_collection_for_select(@students,
+        :university_number,
         :email,
+        @student.user_id,
       ),
       { prompt: "Choose a user" },
-      { data: { controller: "tom-select", tom_select_options_value: student_map(@current_user).to_json} }
+      { data: { controller: "tom-select", tom_select_options_value: student_map(@students).to_json} }
 
   .actions
     = f.submit "Add Student"

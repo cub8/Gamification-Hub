@@ -3,14 +3,15 @@ import { Controller } from "@hotwired/stimulus"
 import TomSelect from "tom-select"
 
 type OptionData = {
-  id?: number | string
+  university_number?: number | string
   name?: string
   email?: string
   value?: string
   text?: string
 }
 
-// Connects to data-controller="tom-select"
+type EscapeCallback = (input: string) => string
+
 class TomSelectController extends Controller {
   private select?: TomSelect
 
@@ -29,7 +30,7 @@ class TomSelectController extends Controller {
       valueField: "value",
       labelField: "text",
 
-      searchField: ["name", "email", "id"],
+      searchField: ["name", "email", "university_number"],
 
       sortField: [
         {
@@ -49,24 +50,22 @@ class TomSelectController extends Controller {
     this.select?.destroy()
   }
 
-  private renderOption = (
-    data: OptionData,
-    escape: (input: string) => string,
-  ): string => {
+  private renderOption(data: OptionData, escape: EscapeCallback) {
+    const idPart = data.university_number != null ?
+      ` (Index: ${escape(String(data.university_number))})` :
+      ""
+
     return `
       <div>
         <strong>${escape(data.name || "")}</strong><br>
         <small style="color: #888;">
-          ${escape(data.email || "")} (Index: ${escape(String(data.id ?? ""))})
+          ${escape(data.email || "")}${idPart}
         </small>
       </div>
     `
   }
 
-  private renderItem = (
-    data: OptionData,
-    escape: (input: string) => string,
-  ): string => {
+  private renderItem(data: OptionData, escape: EscapeCallback) {
     return `
       <div>
         <strong>${escape(data.name || "")}</strong>

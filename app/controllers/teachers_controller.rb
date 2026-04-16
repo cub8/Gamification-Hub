@@ -8,29 +8,33 @@ class TeachersController < ApplicationController
   before_action :set_teacher, only: %i[destroy]
 
   def index
-    @story_group_teachers = policy_scope(@story_group.teacher_memberships)
+    @teachers = policy_scope(@story_group.teacher_memberships)
   end
 
   def new
-    @story_group_teacher = StoryGroupTeacher.new
-    @story_group_teacher.story_group_id = @story_group.id
+    @teacher = @story_group.teacher_memberships.build
+
+    @teachers = if @current_user.global_admin?
+                  User.where(role: %i[teacher organization_admin global_admin])
+                else
+                  User.where(role:            %i[teacher organization_admin global_admin],
+                             university_name: @current_user.university_name,)
+                end
   end
 
   def create
-    @story_group_teacher = StoryGroupTeacher.new(teacher_params)
-    @story_group_teacher.story_group_id = @story_group.id
+    @teacher = @story_group.teacher_memberships.build(teacher_params)
 
-    if @story_group_teacher.save
+    if @teacher.save
       redirect_to story_group_teachers_path(@story_group),
                   notice: 'Teacher was successfully added to story group.'
     else
-      new
       render :new, status: :unprocessable_content
     end
   end
 
   def destroy
-    @story_group_teacher.destroy
+    @teacher.destroy
 
     redirect_to story_group_teachers_path(@story_group),
                 notice: 'Teacher was successfully removed from story group.'
@@ -43,7 +47,7 @@ class TeachersController < ApplicationController
   end
 
   def set_teacher
-    @story_group_teacher = @story_group.teacher_memberships.find(params[:id])
+    @teacher = @story_group.teacher_memberships.find(params[:id])
   end
 
   def teacher_params

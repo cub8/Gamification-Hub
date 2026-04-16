@@ -1,16 +1,22 @@
 %h3 Add Teacher
 
-= form_with url: story_group_teachers_path(@story_group), scope: :story_group_teacher, method: :post do |f|
+- if @teacher.errors.any?
+  .errors{ style: "color: red; margin-bottom: 1em;" }
+    %ul
+      - @teacher.errors.full_messages.each do |message|
+        %li= message
+
+= form_with model: @teacher do |f|
   .field
     = f.label :user_id, "Select teacher"
-    %br
     = f.select :user_id,
-      options_from_collection_for_select(teachers(@current_user),
-        :id,
+      options_from_collection_for_select(@teachers,
+        :university_number, 
         :email,
+        @teacher.user_id,
       ),
       { prompt: "Choose a user" },
-      { data: { controller: "tom-select", tom_select_options_value: teacher_map(@current_user).to_json} }
+      { data: { controller: "tom-select", tom_select_options_value: teacher_map(@teachers).to_json} }
 
   .actions
     = f.submit "Add Teacher"

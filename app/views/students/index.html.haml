@@ -1,6 +1,6 @@
 %h2 Students
 
-%table
+%table.table
   %thead
     %tr
       %th Email
@@ -8,10 +8,8 @@
       %th Current currency
       %th Total currency
       %th
-        = link_to "Add Student",
-          new_story_group_student_path(@story_group)
   %tbody
-    - @story_group_students.each do |student|
+    - @students.each do |student|
       %tr
         %td= student.user.email
         %td= student.lives
@@ -24,4 +22,7 @@
             data: { confirm: "Are you sure?" }
 
 %p
+  = link_to "Add Student",
+    new_story_group_student_path(@story_group)
+  |
   = link_to "Back", story_group_path(@story_group)
