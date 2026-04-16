@@ -73,6 +73,45 @@ $ overmind start
 
 overmind skorzysta ze zmiennych środowiskowych z pliku `.overmind.env` i uruchomi procesy z `Procfile.dev`
 
+### Logowanie się
+
+Bez konfiguracji dostępne jest tylko logowanie przez email. Dostępne jest 17 testowych kont - 10 studenckich, 5 nauczycielskich, 1 admin organizacji i 1 admin globalny.
+
+#### Studenci
+
+| Email                            |
+| :------------------------------- |
+| `jan.nowak@example.com`          |
+| `jacek.kowalski@example.com`     |
+| `monika.szczepaniak@example.com` |
+| `filip.jaskolka@example.com`     |
+| `julia.kaznodzieja@example.com`  |
+| `anna.wisniewska@example.com`    |
+| `piotr.zielinski@example.com`    |
+| `katarzyna.wozniak@example.com`  |
+| `marek.lewandowski@example.com`  |
+
+#### Nauczyciele
+
+| Email                           |
+| :------------------------------ |
+| `tomasz.nowakowski@example.com` |
+| `barbara.kowalczyk@example.com` |
+| `andrzej.wozniak@example.com`   |
+| `elzbieta.mazur@example.com`    |
+| `mariusz.kaczmarek@example.com` |
+
+#### Admini
+
+| Email                                | Typ         |
+| :----------------------------------- | :---------- |
+| `pawel.wisniewski@example.com`       | organizacja |
+| `malgorzata.lewandowska@example.com` | globalny    |
+
+### Dostęp do skrzynki pocztowej
+
+Na środowisku developmenckim emaila są wysyłane na testową skrzynkę pocztową. Przy logowaniu należy kliknąć w potwierdzający Magic Link. Na WSL istnieje problem przez który wysłane linki nie otwierają się automatycznie. Dlatego po próbie zalogowania się należy wejść na ścieżkę: http://localhost:3000/letter_opener , aby przejrzeć skrzynkę pocztową.
+
 ### Konfiguracja credentiali
 
 Credentiale służą do tego, aby w bezpieczny sposób przechowywać ukryte dane w formacie **YAML** w plikach konfiguracyjnych. Wszystkie wrażliwe dane, klucze itd. zarówno testowe jak i produkcyjne powinny właśnie tam być umieszczane.

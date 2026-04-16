@@ -8,6 +8,7 @@ class User < ApplicationRecord
     global_admin:       4,
   }
 
+<<<<<<< feature/add-users-to-story-group
   has_many :student_memberships, class_name: 'StoryGroupStudent', foreign_key: 'user_id', dependent: :destroy
   has_many :teacher_memberships, class_name: 'StoryGroupTeacher', foreign_key: 'user_id', dependent: :destroy
   has_many :owner_story_groups, class_name: 'StoryGroup', foreign_key: 'owner_id'
@@ -17,6 +18,10 @@ class User < ApplicationRecord
   def all_story_groups
     (owner_story_groups + student_story_groups + teacher_story_groups).uniq
   end
+=======
+  has_many :story_groups, foreign_key: 'owner_id'
+  has_one :login_token, dependent: :destroy
+>>>>>>> main
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 
@@ -30,4 +35,13 @@ class User < ApplicationRecord
   encrypts :email, deterministic: true
   encrypts :university_number, deterministic: true
   encrypts :full_name, deterministic: true
+
+  def create_login_token!
+    consume_login_token!
+    LoginToken.create!(user: self)
+  end
+
+  def consume_login_token!
+    login_token&.destroy!
+  end
 end

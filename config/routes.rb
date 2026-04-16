@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
+
   resources :story_groups do
     resources :items, except: :show
     resources :activity_group_templates
@@ -13,7 +15,12 @@ Rails.application.routes.draw do
     resources :students, only: %i[new index create destroy]
   end
 
-  get '/auth/:provider/callback', to: 'sessions#create', as: :auth_callback
+  namespace 'auth' do
+    get '/:provider/callback', to: 'usos#create', as: :callback
+    resource :passwordless, only: %i[new create], controller: 'passwordless'
+    get 'passwordless/verify', to: 'passwordless#verify', as: :passwordless_verify
+  end
+
   get '/login', to: 'sessions#new', as: :login
   delete '/logout', to: 'sessions#destroy', as: :logout
   get '/home', to: 'home#index', as: :home

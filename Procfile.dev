@@ -1,3 +1,4 @@
 web: RUBY_DEBUG_OPEN=true bundle exec bin/rails server
 js: yarn build --watch
 css: yarn watch:css
+jobs: bin/jobs

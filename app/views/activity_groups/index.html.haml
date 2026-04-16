@@ -29,9 +29,9 @@
 %h2 Groups
 
 - if @activity_group_templates.any?
-  = render 'bulk_create_dialog', story_group: @story_group, activity_group_templates: @activity_group_templates
+  = render 'bulk_create_modal', story_group: @story_group, activity_group_templates: @activity_group_templates
 
-= render 'name_dialog', story_group: @story_group, next_group_name: @next_group_name
+= render 'name_modal', story_group: @story_group, next_group_name: @next_group_name
 
 %br
 %br
