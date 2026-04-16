@@ -50,6 +50,7 @@ group :development do
   gem 'better_errors', '~> 2.10' # Better error console
   gem 'binding_of_caller', '~> 2.0' # For interactive console
   gem 'letter_opener', '~> 1.10' # For e-mail handling in development [https://github.com/ryanb/letter_opener]
+  gem 'letter_opener_web', '~> 3.0.0' # For browsing emails [https://github.com/fgrehm/letter_opener_web]
   gem 'web-console', '~> 4.3' # Use console on exceptions pages [https://github.com/rails/web-console]
 end
 
