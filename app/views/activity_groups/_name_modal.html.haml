@@ -1,0 +1,20 @@
+- modal_id = "activity-group-name-modal-#{template.id}"
+
+= link_to 'Add group', '#',
+    data: { bs_toggle: 'modal', bs_target: "##{modal_id}" }
+
+.modal.fade{ id: modal_id, tabindex: '-1' }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title New activity group
+        %button.btn-close{ type: 'button', data: { bs_dismiss: 'modal' } }
+      = form_with url: story_group_activity_groups_path(story_group), method: :post do |f|
+        = hidden_field_tag 'activity_group[activity_group_template_id]', template.id
+        .modal-body
+          %div
+            = label_tag 'activity_group[name]', 'Name'
+            = text_field_tag 'activity_group[name]', ActivityGroup.next_name_for_template(template), required: true
+        .modal-footer
+          %button{ type: 'button', data: { bs_dismiss: 'modal' } } Cancel
+          = f.submit 'Create'

@@ -17,19 +17,15 @@ class ActivityGroupsController < ApplicationController
 
   def create
     template = @story_group.activity_group_templates.find(params.dig(:activity_group, :activity_group_template_id))
-    @activity_group = @story_group.activity_groups.build(
-      activity_group_template: template,
-      name:                    ActivityGroup.next_name_for_template(template),
-    )
+    name = params.dig(:activity_group, :name).presence || ActivityGroup.next_name_for_template(template)
 
-    if @activity_group.save
-      copy_categories_from_template(@activity_group, template)
-      redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Activity group was successfully created.', status: :see_other
-    else
-      redirect_to story_group_activity_groups_path(@story_group),
-                  alert: @activity_group.errors.full_messages.to_sentence, status: :see_other
-    end
+    ActivityGroupBulkBuilder.new(story_group: @story_group, template: template).build_one(name: name)
+
+    redirect_to story_group_activity_groups_path(@story_group),
+                notice: 'Activity group was successfully created.', status: :see_other
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to story_group_activity_groups_path(@story_group),
+                alert: e.message, status: :see_other
   end
 
   def update
@@ -69,17 +65,6 @@ class ActivityGroupsController < ApplicationController
 
   def set_story_group
     @story_group = StoryGroup.find(params[:story_group_id])
-  end
-
-  def copy_categories_from_template(group, template)
-    template.categories.order(:position).each_with_index do |cat, idx|
-      group.activity_group_categories.create!(
-        story_description:    cat.story_description,
-        didactic_description: cat.didactic_description,
-        reward:               cat.reward,
-        position:             idx,
-      )
-    end
   end
 
   def activity_group_params

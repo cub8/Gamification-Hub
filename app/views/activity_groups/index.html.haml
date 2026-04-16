@@ -22,11 +22,7 @@
       %br
 
       = render 'bulk_create_modal', story_group: @story_group, template: template
-
-      = button_to 'Add group',
-          story_group_activity_groups_path(@story_group),
-          method: :post,
-          params: { activity_group: { activity_group_template_id: template.id } }
+      = render 'name_modal', story_group: @story_group, template: template
 
       %br
       %br
