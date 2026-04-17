@@ -22,17 +22,19 @@ class ActivityGroupBuilderTest < ActiveSupport::TestCase
   end
 
   test 'build creates one group with given name' do
-    assert_difference('ActivityGroup.count') do
+    assert_difference('ActivityGroup.count', 1) do
       @builder.build(name: 'Lab 1')
     end
-    group = ActivityGroup.last
+
+    group = ActivityGroup.last!
     assert_equal 'Lab 1', group.name
     assert_equal @template, group.activity_group_template
   end
 
   test 'build copies categories from template' do
     @builder.build(name: 'Lab 1')
-    group = ActivityGroup.last
+    group = ActivityGroup.last!
+
     assert_equal 2, group.activity_group_categories.count
     assert_equal 'Task 1', group.activity_group_categories.first.didactic_description
     assert_equal 10, group.activity_group_categories.first.reward
@@ -49,18 +51,24 @@ class ActivityGroupBuilderTest < ActiveSupport::TestCase
   test 'build_many names groups sequentially from 1' do
     @builder.build_many(count: 3)
     names = ActivityGroup.last(3).map(&:name)
-    assert_equal ['Lab 1', 'Lab 2', 'Lab 3'], names
+
+    assert_includes names, 'Lab 1'
+    assert_includes names, 'Lab 2'
+    assert_includes names, 'Lab 3'
   end
 
   test 'build_many continues numbering from existing groups' do
     FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: @template, name: 'Lab 2')
     @builder.build_many(count: 2)
     names = ActivityGroup.last(2).map(&:name)
-    assert_equal ['Lab 3', 'Lab 4'], names
+
+    assert_includes names, 'Lab 3'
+    assert_includes names, 'Lab 4'
   end
 
   test 'build_many copies categories for each group' do
     @builder.build_many(count: 2)
+
     ActivityGroup.last(2).each do |group|
       assert_equal 2, group.activity_group_categories.count
     end

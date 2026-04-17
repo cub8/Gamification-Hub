@@ -30,26 +30,29 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create activity group with auto-generated name' do
-    assert_difference('ActivityGroup.count') do
+    assert_difference('ActivityGroup.count', 1) do
       post story_group_activity_groups_url(@story_group),
            params: { activity_group: { activity_group_template_id: @template.id } }
     end
-    assert_equal 'Lab 2', ActivityGroup.last.name
+
+    assert_equal 'Lab 2', ActivityGroup.last!.name
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
 
   test 'should create activity group with provided name' do
-    assert_difference('ActivityGroup.count') do
+    assert_difference('ActivityGroup.count', 1) do
       post story_group_activity_groups_url(@story_group),
            params: { activity_group: { activity_group_template_id: @template.id, name: 'Custom Name' } }
     end
-    assert_equal 'Custom Name', ActivityGroup.last.name
+
+    assert_equal 'Custom Name', ActivityGroup.last!.name
   end
 
   test 'should copy categories from template on create' do
     post story_group_activity_groups_url(@story_group),
          params: { activity_group: { activity_group_template_id: @template.id } }
-    group = ActivityGroup.last
+    group = ActivityGroup.last!
+
     assert_equal @template.categories.count, group.activity_group_categories.count
     assert_equal 'Task 1', group.activity_group_categories.first.didactic_description
     assert_equal 10, group.activity_group_categories.first.reward
@@ -58,6 +61,7 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
   test 'should update activity group' do
     patch story_group_activity_group_url(@story_group, @activity_group),
           params: { activity_group: { name: 'Updated Lab' } }
+
     assert_equal 'Updated Lab', @activity_group.reload.name
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
@@ -66,6 +70,7 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('ActivityGroup.count', -1) do
       delete story_group_activity_group_url(@story_group, @activity_group)
     end
+
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
 
@@ -74,6 +79,7 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
       post create_bulk_story_group_activity_groups_url(@story_group),
            params: { template_id: @template.id, count: 3 }
     end
+
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
 

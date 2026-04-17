@@ -13,29 +13,65 @@ class ActivityGroupTest < ActiveSupport::TestCase
   end
 
   test 'next_number_for_base increments from last matching group' do
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: @template, name: 'Lab 1')
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: @template, name: 'Lab 2')
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: @template,
+      name:                    'Lab 1',
+    )
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: @template,
+      name:                    'Lab 2',
+    )
+
     assert_equal 3, ActivityGroup.next_number_for_base(@template)
   end
 
   test 'next_number_for_base is scoped per template' do
     other_template = FactoryBot.create(:activity_group_template, story_group: @story_group, base_name: 'Lab')
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: other_template,
-name: 'Lab 1',)
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: other_template,
-name: 'Lab 2',)
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: other_template,
+      name:                    'Lab 1',
+    )
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: other_template,
+      name:                    'Lab 2',
+    )
+
     assert_equal 1, ActivityGroup.next_number_for_base(@template)
   end
 
   test 'next_number_for_base ignores groups with non-numeric suffix' do
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: @template,
-name: 'Lab Advanced',)
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: @template, name: 'Lab')
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: @template,
+      name:                    'Lab Advanced',
+    )
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: @template,
+      name:                    'Lab',
+    )
+
     assert_equal 3, ActivityGroup.next_number_for_base(@template)
   end
 
   test 'next_name_for_template returns base_name with next number' do
-    FactoryBot.create(:activity_group, story_group: @story_group, activity_group_template: @template, name: 'Lab 1')
+    FactoryBot.create(
+      :activity_group,
+      story_group:             @story_group,
+      activity_group_template: @template,
+      name:                    'Lab 1',
+    )
+
     assert_equal 'Lab 2', ActivityGroup.next_name_for_template(@template)
   end
 

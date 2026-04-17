@@ -26,7 +26,7 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create activity_group_template' do
-    assert_difference('ActivityGroupTemplate.count') do
+    assert_difference('ActivityGroupTemplate.count', 1) do
       post story_group_activity_group_templates_url(@story_group),
            params: {
              activity_group_template: {
@@ -37,6 +37,7 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
              },
            }
     end
+
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
 
@@ -47,6 +48,7 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
               base_name: 'Updated Lab',
             },
           }
+
     assert_redirected_to story_group_activity_groups_url(@story_group)
     assert_equal 'Updated Lab', @template.reload.base_name
   end
@@ -55,6 +57,7 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_difference('ActivityGroupTemplate.count', -1) do
       delete story_group_activity_group_template_url(@story_group, @template)
     end
+
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
 
