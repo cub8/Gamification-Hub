@@ -8,6 +8,7 @@
       %th Current currency
       %th Total currency
       %th
+      %th
   %tbody
     - @students.each do |student|
       %tr
@@ -15,6 +16,10 @@
         %td= student.lives
         %td= student.current_currency
         %td= student.total_currency
+        %td
+          = button_to "Manage",
+            edit_story_group_student_path(@story_group, student),
+            method: :get
         %td
           = button_to "Remove",
             story_group_student_path(@story_group, student),

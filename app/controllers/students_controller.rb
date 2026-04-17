@@ -2,7 +2,7 @@
 
 class StudentsController < ApplicationController
   before_action :set_story_group
-  before_action :set_student, only: %i[destroy]
+  before_action :set_student, only: %i[edit update destroy]
 
   def index
     @students = policy_scope(@story_group.student_memberships)
@@ -15,8 +15,12 @@ class StudentsController < ApplicationController
     authorize @student
   end
 
+  def edit
+    authorize @student
+  end
+
   def create
-    @student = @story_group.student_memberships.build(student_params)
+    @student = @story_group.student_memberships.build(create_student_params)
     authorize @student
 
     if @student.save
@@ -25,6 +29,16 @@ class StudentsController < ApplicationController
     else
       set_students_for_select
       render :new, status: :unprocessable_content
+    end
+  end
+
+  def update
+    authorize @student
+
+    if @student.update(update_student_params)
+      redirect_to @student, notice: 'Student was successfully updated.', status: :see_other
+    else
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -56,10 +70,18 @@ class StudentsController < ApplicationController
       end
   end
 
-  def student_params
+  def create_student_params
     params.expect(
       story_group_student: %i[
         user_id
+      ],
+    )
+  end
+
+  def update_student_params
+    params.expect(
+      story_group_student: %i[
+        lives
       ],
     )
   end
