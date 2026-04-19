@@ -4,6 +4,8 @@ class StoryGroupStudent < ApplicationRecord
   belongs_to :user
   belongs_to :story_group
 
+  has_many :students_badges
+
   delegate :full_name, :university_number, :email, to: :user
   scope :with_user, -> { includes(:user) }
 
