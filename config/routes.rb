@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :story_groups do
     resources :items, except: :show
     resources :activity_group_templates
-    resources :activity_groups, except: :new do
+    resources :activity_groups, except: %i[show new] do
       post :create_bulk, on: :collection
       resource :students_activity_group_categories, only: %i[show update]
     end

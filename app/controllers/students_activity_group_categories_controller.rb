@@ -19,28 +19,12 @@ class StudentsActivityGroupCategoriesController < ApplicationController
   def update
     category = @activity_group.activity_group_categories.find(params[:category_id])
     student  = @story_group.student_memberships.find(params[:student_id])
+    granter  = ActivityGroupRewardGranter.new(category: category, student: student)
 
-    ActiveRecord::Base.transaction do
-      if params[:completed] == '1'
-        record = StudentActivityGroupCategory.find_or_create_by(
-          activity_group_category_id: category.id,
-          student_id:                 student.id,
-        )
-        if record.previously_new_record?
-          student.increment!(:current_currency, category.reward)
-          student.increment!(:total_currency, category.reward)
-        end
-      else
-        record = StudentActivityGroupCategory.find_by(
-          activity_group_category_id: category.id,
-          student_id:                 student.id,
-        )
-        if record
-          record.destroy!
-          student.decrement!(:current_currency, category.reward)
-          student.decrement!(:total_currency, category.reward)
-        end
-      end
+    if params[:completed] == '1'
+      granter.grant
+    else
+      granter.revoke
     end
 
     head :ok
