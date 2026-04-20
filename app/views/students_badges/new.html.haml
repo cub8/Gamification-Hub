@@ -11,7 +11,8 @@
 = form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge do |f|
   .field
     = f.label :badge_id, "Select badge"
-    = f.collection_select :badge_id, @badges, :id, :name
+    = f.collection_select :badge_id, @badges, :id, :name, {},
+      { data: { controller: "tom-select-basic" } }
 
   .actions
     = f.submit "Assign badge"

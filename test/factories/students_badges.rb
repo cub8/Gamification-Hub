@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :students_badge do
-    story_group_student { nil }
-    badge { nil }
+    association :story_group_student
+    association :badge
   end
 end

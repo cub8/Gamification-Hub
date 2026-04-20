@@ -36,7 +36,8 @@ class StudentsController < ApplicationController
     authorize @student
 
     if @student.update(update_student_params)
-      redirect_to @student, notice: 'Student was successfully updated.', status: :see_other
+      redirect_to story_group_students_path(@story_group),
+                  notice: 'Student was successfully updated.', status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
