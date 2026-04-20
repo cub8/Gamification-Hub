@@ -30,42 +30,33 @@
       - if template.activity_groups.empty?
         %p No groups yet.
       - else
-        - template.activity_groups.each do |group|
-          %h4= group.name
+        .activity-group-columns
+          - template.activity_groups.each do |group|
+            .activity-group-column
+              %h4= group.name
 
-          = link_to 'Edit', edit_story_group_activity_group_path(@story_group, group)
-          |
-          = button_to 'Delete', story_group_activity_group_path(@story_group, group),
-              method: :delete, data: { turbo_confirm: 'Are you sure?' }
-
-          - if group.activity_group_categories.any? && @students.any?
-            = form_with url: save_completions_story_group_activity_group_path(@story_group, group), method: :patch do |f|
-              .table-responsive
-                %table.table.table-sm.table-bordered
+              - if group.activity_group_categories.any?
+                %table.table.table-sm
                   %thead
                     %tr
-                      %th Student
-                      - group.activity_group_categories.each do |cat|
-                        %th= cat.story_description
-                    %tr
-                      %th
-                      - group.activity_group_categories.each do |cat|
-                        %th= cat.didactic_description
-                    %tr
-                      %th Points
-                      - group.activity_group_categories.each do |cat|
-                        %th= cat.reward
+                      %th Story description
+                      %th Didactic description
+                      %th Reward
                   %tbody
-                    - @students.each do |student|
+                    - group.activity_group_categories.each do |category|
                       %tr
-                        %td= student.full_name
-                        - group.activity_group_categories.each do |cat|
-                          %td
-                            = check_box_tag "completions[#{student.id}][#{cat.id}]",
-                                            '1',
-                                            @completed.include?([cat.id, student.id])
-              = f.submit 'Save rewards'
+                        %td= category.story_description
+                        %td= category.didactic_description
+                        %td= category.reward
+              - else
+                %p.text-muted No categories.
 
-          %br
+              .mt-2
+                = link_to 'Give rewards', story_group_activity_group_students_activity_group_categories_path(@story_group, group)
+                |
+                = link_to 'Edit', edit_story_group_activity_group_path(@story_group, group)
+                |
+                = button_to 'Delete', story_group_activity_group_path(@story_group, group),
+                    method: :delete, data: { turbo_confirm: 'Are you sure?' }
 
       %hr
