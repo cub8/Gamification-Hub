@@ -11,9 +11,9 @@ class StudentsActivityGroupCategoriesController < ApplicationController
     @categories = @activity_group.activity_group_categories
     @students   = @story_group.student_memberships.with_user
     @completed  = StudentActivityGroupCategory
-                    .where(activity_group_category: @categories)
-                    .pluck(:activity_group_category_id, :student_id)
-                    .to_set
+                  .where(activity_group_category: @categories)
+                  .pluck(:activity_group_category_id, :student_id)
+                  .to_set
   end
 
   def update

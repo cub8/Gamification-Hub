@@ -28,7 +28,7 @@
       %br
 
       - if template.activity_groups.empty?
-        %p No groups yet.
+        %p.text-muted No groups yet.
       - else
         .activity-group-columns
           - template.activity_groups.each do |group|
