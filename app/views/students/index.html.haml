@@ -11,6 +11,8 @@
       %th
       %th
       %th
+      %th
+      %th
   %tbody
     - @students.each do |student|
       %tr
@@ -22,6 +24,14 @@
           = button_to "Show",
             story_group_student_path(@story_group, student),
             method: :get
+        %td
+          = button_to "Grant Life",
+            update_lives_story_group_student_path(@story_group, student, change: 1),
+            method: :post
+        %td
+          = button_to "Take Life",
+            update_lives_story_group_student_path(@story_group, student, change: -1),
+            method: :post
         %td
           = button_to "Manage lives",
             edit_story_group_student_path(@story_group, student),

@@ -8,14 +8,6 @@
   %strong Lives:
   = @student.lives
 
-= button_to "Grant Life",
-  grant_life_story_group_student_path(@story_group, @student),
-  method: :post
-
-= button_to "Take Life",
-  take_life_story_group_student_path(@story_group, @student),
-  method: :post
-
 %p
   %strong Current Currency:
   = @student.current_currency

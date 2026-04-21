@@ -11,4 +11,11 @@ class StoryGroupStudent < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :story_group_id }
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+
+  def update_lives(change)
+    new_lives = lives + change
+    return false if new_lives < 0
+
+    update(lives: new_lives)
+  end
 end

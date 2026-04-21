@@ -2,7 +2,7 @@
 
 class StudentsController < ApplicationController
   before_action :set_story_group
-  before_action :set_student, only: %i[show edit update destroy grant_life take_life]
+  before_action :set_student, only: %i[show edit update destroy update_lives]
 
   def index
     @students = policy_scope(@story_group.student_memberships)
@@ -47,25 +47,17 @@ class StudentsController < ApplicationController
     end
   end
 
-  def take_life
+  def update_lives
     authorize @student
 
-    if @student.lives > 0 && @student.update(lives: @student.lives - 1)
-      redirect_to story_group_student_path(@story_group, @student),
-                  notice: 'Student\'s life was successfully taken away', status: :see_other
-    else
-      render :show, status: :unprocessable_content
-    end
-  end
+    change = params[:change].to_i
 
-  def grant_life
-    authorize @student
-
-    if @student.update(lives: @student.lives + 1)
-      redirect_to story_group_student_path(@story_group, @student),
-                  notice: 'Student was succesfully granted life', status: :see_other
+    if @student.update_lives(change)
+      redirect_to story_group_students_path(@story_group),
+                  notice: 'Successfully updated student\'s lives'
     else
-      render :show, status: :unprocessable_content
+      @students = policy_scope(@story_group.student_memberships)
+      render :index, status: :unprocessable_content
     end
   end
 

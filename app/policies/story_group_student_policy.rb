@@ -57,11 +57,7 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
-  def grant_life?
-    story_group_teacher? || admin?
-  end
-
-  def take_life?
+  def update_lives?
     story_group_teacher? || admin?
   end
 
