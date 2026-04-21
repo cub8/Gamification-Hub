@@ -33,6 +33,10 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
+  def show?
+    story_group_teacher? || admin?
+  end
+
   def new?
     story_group_teacher? || admin?
   end
@@ -50,6 +54,14 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   end
 
   def destroy?
+    story_group_teacher? || admin?
+  end
+
+  def grant_life?
+    story_group_teacher? || admin?
+  end
+
+  def take_life?
     story_group_teacher? || admin?
   end
 

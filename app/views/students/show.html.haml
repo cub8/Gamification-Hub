@@ -1,0 +1,28 @@
+%h1= @student.full_name
+
+%p
+  %strong Index:
+  = @student.university_number
+
+%p
+  %strong Lives:
+  = @student.lives
+
+= button_to "Grant Life",
+  grant_life_story_group_student_path(@story_group, @student),
+  method: :post
+
+= button_to "Take Life",
+  take_life_story_group_student_path(@story_group, @student),
+  method: :post
+
+%p
+  %strong Current Currency:
+  = @student.current_currency
+
+%p
+  %strong Total Currency:
+  = @student.total_currency
+
+%p
+  = link_to "Back", story_group_students_path(@story_group)

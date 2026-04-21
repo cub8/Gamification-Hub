@@ -27,6 +27,11 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should get show' do
+    get story_group_student_url(@story_group, @story_group_student)
+    assert_response :success
+  end
+
   test 'should create story_group_student' do
     assert_difference('StoryGroupStudent.count') do
       post story_group_students_url(@story_group),
