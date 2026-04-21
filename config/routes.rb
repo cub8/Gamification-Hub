@@ -12,7 +12,12 @@ Rails.application.routes.draw do
     resources :ranks
     resources :badges
     resources :teachers, only: %i[new index create destroy]
-    resources :students, only: %i[new index create destroy]
+    resources :students do
+      member do
+        post :update_lives
+      end
+      resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
+    end
   end
 
   namespace 'auth' do

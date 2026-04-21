@@ -9,7 +9,7 @@ development:
   primary:
     <<: *default
     database: gamification_hub_development
-    migrations_paths: db/queue_migrate
+    migrations_paths: db/migrate
   queue:
     <<: *default
     database: gamification_hub_queue_development

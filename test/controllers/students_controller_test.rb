@@ -17,6 +17,21 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should get new' do
+    get new_story_group_student_url(@story_group)
+    assert_response :success
+  end
+
+  test 'should get edit' do
+    get edit_story_group_student_url(@story_group, @story_group_student)
+    assert_response :success
+  end
+
+  test 'should get show' do
+    get story_group_student_url(@story_group, @story_group_student)
+    assert_response :success
+  end
+
   test 'should create story_group_student' do
     assert_difference('StoryGroupStudent.count') do
       post story_group_students_url(@story_group),
@@ -26,6 +41,17 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
              },
            }
     end
+
+    assert_redirected_to story_group_students_url(@story_group)
+  end
+
+  test 'should update story_group_student' do
+    patch story_group_student_url(@story_group, @story_group_student),
+          params: {
+            story_group_student: {
+              lives: @story_group_student.lives + 1,
+            },
+          }
 
     assert_redirected_to story_group_students_url(@story_group)
   end

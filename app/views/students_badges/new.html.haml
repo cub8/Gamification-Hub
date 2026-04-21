@@ -1,0 +1,22 @@
+%h3 
+  Give badge to
+  = @student.full_name
+
+- if @badge.errors.any?
+  .errors{ style: "color: red; margin-bottom: 1em;" }
+    %ul
+      - @badge.errors.full_messages.each do |message|
+        %li= message
+
+= form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge do |f|
+  .field
+    = f.label :badge_id, "Select badge"
+    = f.collection_select :badge_id, @badges, :id, :name,
+      { prompt: 'Select badge' },
+      { data: { controller: "tom-select-basic" } }
+
+  .actions
+    = f.submit "Assign badge"
+
+%p
+  = link_to "Back", story_group_student_badges_path(@story_group, @student)
