@@ -9,8 +9,7 @@
 - elsif @students.empty?
   %p No students in this story group.
 - else
-  %div{data: { controller: 'completions',
-               completions_url_value: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group) }}
+  = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch do |f|
     %table.table.table-sm.table-bordered
       %thead
         %tr
@@ -33,7 +32,6 @@
               %td
                 = check_box_tag "completions[#{student.id}][#{cat.id}]",
                                 '1',
-                                @completed.include?([cat.id, student.id]),
-                                data: { action: 'change->completions#toggle',
-                                        student_id: student.id,
-                                        category_id: cat.id }
+                                @completed.include?([cat.id, student.id])
+
+    = f.submit 'Save rewards'
