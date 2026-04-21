@@ -15,7 +15,8 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
            params: {
              badge: {
                name:        'Achievement',
-               description: 'An achievement badge',
+               story_description: 'An achievement badge',
+               didactic_description: 'A badge for achieving something',
                discount:    10,
              },
            }
@@ -32,7 +33,8 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
          params: {
            badge: {
              name:        'Achievement',
-             description: 'An achievement badge',
+             story_description: 'An achievement badge',
+             didactic_description: 'A badge for achieving something',
              discount:    10,
            },
          }
@@ -57,7 +59,8 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
            params: {
              badge: {
                name:        'Achievement',
-               description: 'An achievement badge',
+               story_description: 'An achievement badge',
+               didactic_description: 'A badge for achieving something',
                discount:    10,
              },
            }
