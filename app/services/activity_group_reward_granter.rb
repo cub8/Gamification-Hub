@@ -10,8 +10,8 @@ class ActivityGroupRewardGranter
     categories   = @activity_group.activity_group_categories.index_by(&:id)
     students     = @story_group.student_memberships.index_by(&:id)
     existing     = StudentActivityGroupCategory
-                     .where(activity_group_category_id: categories.keys)
-                     .index_by { |c| [c.activity_group_category_id, c.student_id] }
+                   .where(activity_group_category_id: categories.keys)
+                   .index_by { |c| [c.activity_group_category_id, c.student_id] }
     existing_set = existing.keys.to_set
 
     ActiveRecord::Base.transaction do
