@@ -56,6 +56,7 @@ class StudentsController < ApplicationController
       redirect_to story_group_students_path(@story_group),
                   notice: 'Successfully updated student\'s lives'
     else
+      @failed_student_id = @student.id
       @students = policy_scope(@story_group.student_memberships)
       render :index, status: :unprocessable_content
     end

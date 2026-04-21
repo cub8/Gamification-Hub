@@ -21,9 +21,8 @@
         %td= student.current_currency
         %td= student.total_currency
         %td
-          = button_to "Show",
-            story_group_student_path(@story_group, student),
-            method: :get
+          = link_to "Show",
+            story_group_student_path(@story_group, student)
         %td
           = button_to "Grant Life",
             update_lives_story_group_student_path(@story_group, student, change: 1),
@@ -33,18 +32,23 @@
             update_lives_story_group_student_path(@story_group, student, change: -1),
             method: :post
         %td
-          = button_to "Manage lives",
-            edit_story_group_student_path(@story_group, student),
-            method: :get
+          = link_to "Edit",
+            edit_story_group_student_path(@story_group, student)
         %td
-          = button_to "Manage badges",
-            story_group_student_badges_path(@story_group, student),
-            method: :get
+          = link_to "Manage badges",
+            story_group_student_badges_path(@story_group, student)
         %td
           = button_to "Remove",
             story_group_student_path(@story_group, student),
             method: :delete,
             data: { confirm: "Are you sure?" }
+      - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
+        %tr
+          %td{ colspan: 10 }
+            .errors{ style: "color: red; margin-bottom: 1em; display: flex" }
+              %ul
+                - @student.errors.full_messages.each do |message|
+                  %li= message
 
 %p
   = link_to "Add Student",

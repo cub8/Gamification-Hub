@@ -14,7 +14,6 @@ class StoryGroupStudent < ApplicationRecord
 
   def update_lives(change)
     new_lives = lives + change
-    return false if new_lives < 0
 
     update(lives: new_lives)
   end
