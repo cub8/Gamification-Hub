@@ -14,10 +14,10 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
       post story_group_badges_url(@story_group),
            params: {
              badge: {
-               name:        'Achievement',
-               story_description: 'An achievement badge',
+               name:                 'Achievement',
+               story_description:    'An achievement badge',
                didactic_description: 'A badge for achieving something',
-               discount:    10,
+               discount:             10,
              },
            }
     end
@@ -32,10 +32,10 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
     post story_group_badges_url(other_story_group),
          params: {
            badge: {
-             name:        'Achievement',
-             story_description: 'An achievement badge',
+             name:                 'Achievement',
+             story_description:    'An achievement badge',
              didactic_description: 'A badge for achieving something',
-             discount:    10,
+             discount:             10,
            },
          }
 
@@ -58,10 +58,10 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
       post story_group_badges_url(@story_group),
            params: {
              badge: {
-               name:        'Achievement',
-               story_description: 'An achievement badge',
+               name:                 'Achievement',
+               story_description:    'An achievement badge',
                didactic_description: 'A badge for achieving something',
-               discount:    10,
+               discount:             10,
              },
            }
     end
