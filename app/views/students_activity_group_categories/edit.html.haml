@@ -10,7 +10,6 @@
   %p No students in this story group.
 - else
   = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch do |f|
-    = hidden_field_tag 'completions[_placeholder]', ''
     %table.table.table-sm.table-bordered
       %thead
         %tr

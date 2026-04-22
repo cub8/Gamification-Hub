@@ -38,9 +38,11 @@ class StudentsActivityGroupCategoriesController < ApplicationController
 
   def parsed_reward_params
     set = Set.new
-    params.expect(completions: {}).except('_placeholder').each do |student_id, category_hash|
+    params.expect(completions: {}).each do |student_id, category_hash|
       category_hash.each_key { |category_id| set.add([category_id.to_i, student_id.to_i]) }
     end
+    set
+  rescue ActionController::ParameterMissing
     set
   end
 end
