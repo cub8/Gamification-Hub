@@ -7,7 +7,8 @@
     %tr
     %th Icon
     %th Name
-    %th
+    - if policy(@student).update?
+      %th
   %tbody
     - @badges.each do |badge|
       %tr
@@ -15,14 +16,19 @@
           - if badge.icon.attached?
             = image_tag badge.icon, width: 40
         %td= badge.name
-        %td
-          = button_to "Remove",
-            story_group_student_badge_path(@story_group, @student, badge),
-            method: :delete,
-            data: { confirm: "Are you sure?" }
+        - if policy(@student).update?
+          %td
+            = button_to "Remove",
+              story_group_student_badge_path(@story_group, @student, badge),
+              method: :delete,
+              data: { confirm: "Are you sure?" }
 
-%p
-  = link_to "Give Badge",
-    new_story_group_student_badge_path(@story_group, @student)
-  |
-  = link_to "Back", story_group_students_path(@story_group)
+- if policy(@student).update?
+  %p
+    = link_to "Give Badge",
+      new_story_group_student_badge_path(@story_group, @student)
+    |
+    = link_to "Back", story_group_students_path(@story_group)
+- if policy(@story_group).student?
+  %p
+    = link_to "Back", story_group_path(@story_group)

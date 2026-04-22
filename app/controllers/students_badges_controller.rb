@@ -5,7 +5,7 @@ class StudentsBadgesController < ApplicationController
 
   before_action :set_story_group
   before_action :set_student
-  before_action :authorize_story_group_student_manage!
+  before_action :authorize_story_group_student_manage!, except: %i[index]
   before_action :set_badge, only: %i[destroy]
 
   def index

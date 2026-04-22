@@ -1,10 +1,9 @@
 %h1= @story_group.name
 
-= link_to "Ranks", story_group_ranks_path(@story_group)
-|
-= link_to "Badges", story_group_badges_path(@story_group)
-
 - if policy(@story_group).update?
+  = link_to "Ranks", story_group_ranks_path(@story_group)
+  |
+  = link_to "Badges", story_group_badges_path(@story_group)
   |
   = link_to "Items", story_group_items_path(@story_group)
   |
@@ -13,6 +12,8 @@
   = link_to "Students", story_group_students_path(@story_group)
   |
   = link_to "Activity groups", story_group_activity_groups_path(@story_group)
+- if defined?(@student) && policy(@story_group).student?
+  = link_to "My Badges", story_group_student_badges_path(@story_group, @student)
 
 %hr
 
