@@ -9,8 +9,8 @@ class StudentsActivityGroupCategoriesController < ApplicationController
 
   def edit
     @categories = @activity_group.activity_group_categories
-    @students   = @story_group.student_memberships.with_user.joins(:user).sort_by do |m|
-      I18n.transliterate(m.user.full_name)
+    @students   = @story_group.student_memberships.with_user.joins(:user).sort_by do |student|
+      I18n.transliterate(student.full_name)
     end
     @completed  = StudentsActivityGroupCategory
                   .where(activity_group_category: @categories)

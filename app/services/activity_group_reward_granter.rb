@@ -20,6 +20,7 @@ class ActivityGroupRewardGranter
 
   def grant_new(completed_pairs)
     categories_to_add = completed_pairs - @existing_rewards
+
     categories_to_add.each do |category_id, student_id|
       next unless valid_pair?(category_id, student_id)
 
