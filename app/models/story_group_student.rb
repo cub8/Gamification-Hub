@@ -17,9 +17,6 @@ class StoryGroupStudent < ApplicationRecord
   private
 
   def set_default_lives_from_group
-    return unless lives.nil? && story_group.present?
-
-    self.lives = story_group.default_lives
-
+    self.lives ||= story_group.default_lives
   end
 end

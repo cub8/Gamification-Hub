@@ -4,11 +4,15 @@
   %table.table
     %tr
       %th Name
+      %th Story Description
+      %th Didactic Description
       %th Discount
       %th
     - @badges.each do |badge|
       %tr
         %td= badge.name
+        %td= badge.story_description
+        %td= badge.didactic_description
         %td= "#{badge.discount}%"
         %td
           = link_to 'Show', story_group_badge_path(@story_group, badge)
