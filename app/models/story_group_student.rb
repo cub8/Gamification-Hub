@@ -19,4 +19,10 @@ class StoryGroupStudent < ApplicationRecord
   def set_default_lives_from_group
     self.lives ||= story_group.default_lives
   end
+  
+  def update_lives(change)
+    new_lives = lives + change
+
+    update(lives: new_lives)
+  end
 end

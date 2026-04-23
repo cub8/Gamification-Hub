@@ -2,10 +2,14 @@
 
 class StudentsController < ApplicationController
   before_action :set_story_group
-  before_action :set_student, only: %i[edit update destroy]
+  before_action :set_student, only: %i[show edit update destroy update_lives]
 
   def index
     @students = policy_scope(@story_group.student_memberships)
+  end
+
+  def show
+    authorize @student
   end
 
   def new
@@ -40,6 +44,21 @@ class StudentsController < ApplicationController
                   notice: 'Student was successfully updated.', status: :see_other
     else
       render :edit, status: :unprocessable_content
+    end
+  end
+
+  def update_lives
+    authorize @student
+
+    change = params[:change].to_i
+
+    if @student.update_lives(change)
+      redirect_to story_group_students_path(@story_group),
+                  notice: 'Successfully updated student\'s lives'
+    else
+      @failed_student_id = @student.id
+      @students = policy_scope(@story_group.student_memberships)
+      render :index, status: :unprocessable_content
     end
   end
 
