@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_19_145938) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -152,6 +152,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_145938) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "students_activity_group_categories", force: :cascade do |t|
+    t.bigint "activity_group_category_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "student_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_group_category_id"], name: "idx_on_activity_group_category_id_f3aa56fe63"
+    t.index ["student_id", "activity_group_category_id"], name: "index_student_activity_group_categories_unique", unique: true
+    t.index ["student_id"], name: "index_students_activity_group_categories_on_student_id"
+  end
+
   create_table "students_badges", force: :cascade do |t|
     t.bigint "badge_id", null: false
     t.datetime "created_at", null: false
@@ -186,6 +196,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_19_145938) do
   add_foreign_key "items", "story_groups"
   add_foreign_key "login_tokens", "users"
   add_foreign_key "ranks", "story_groups"
+  add_foreign_key "students_activity_group_categories", "activity_group_categories"
+  add_foreign_key "students_activity_group_categories", "story_group_students", column: "student_id"
   add_foreign_key "students_badges", "badges"
   add_foreign_key "students_badges", "story_group_students"
 end
