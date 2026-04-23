@@ -2,6 +2,7 @@
 
 class ActivityGroupCategory < ApplicationRecord
   belongs_to :activity_group
+  has_many :student_activity_group_categories, foreign_key: :activity_group_category_id, dependent: :destroy
 
   default_scope { order(position: :asc) }
 

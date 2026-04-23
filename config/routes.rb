@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :activity_group_templates
     resources :activity_groups, except: %i[show new] do
       post :create_bulk, on: :collection
+      resource :students_activity_group_categories, only: %i[edit update]
     end
     resources :ranks
     resources :badges
