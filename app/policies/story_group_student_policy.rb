@@ -33,11 +33,31 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
+  def show?
+    story_group_teacher? || admin?
+  end
+
+  def new?
+    story_group_teacher? || admin?
+  end
+
+  def edit?
+    story_group_teacher? || admin?
+  end
+
   def create?
     story_group_teacher? || admin?
   end
 
+  def update?
+    story_group_teacher? || admin?
+  end
+
   def destroy?
+    story_group_teacher? || admin?
+  end
+
+  def update_lives?
     story_group_teacher? || admin?
   end
 

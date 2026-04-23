@@ -3,6 +3,8 @@
 class Badge < ApplicationRecord
   has_one_attached :icon
 
+  has_many :students_badges
+
   belongs_to :story_group
 
   validates :name, length: { maximum: 40 }

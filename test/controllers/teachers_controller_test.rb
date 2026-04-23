@@ -17,6 +17,11 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should get new' do
+    get new_story_group_teacher_url(@story_group)
+    assert_response :success
+  end
+
   test 'should create story_group_teacher' do
     assert_difference('StoryGroupTeacher.count') do
       post story_group_teachers_url(@story_group),

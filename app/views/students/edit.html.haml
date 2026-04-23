@@ -1,0 +1,18 @@
+%h3 Edit Student
+
+- if @student.errors.any?
+  .errors{ style: "color: red; margin-bottom: 1em;" }
+    %ul
+      - @student.errors.full_messages.each do |message|
+        %li= message
+
+= form_with model: @student do |f|
+  .field
+    = f.label :lives, "Add or subtract lives"
+    = f.number_field :lives    
+
+  .actions
+    = f.submit "Edit Student"
+
+%p
+  = link_to "Back", story_group_students_path(@story_group)
