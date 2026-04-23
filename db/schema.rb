@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_23_020312) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -84,9 +84,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
 
   create_table "badges", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.text "description"
+    t.text "didactic_description"
     t.integer "discount", default: 0
     t.string "name"
+    t.text "story_description"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_badges_on_story_group_id"
@@ -127,7 +128,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
   create_table "story_group_students", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "current_currency", default: 0
-    t.integer "lives", default: 3
+    t.integer "lives"
     t.integer "story_group_id"
     t.integer "total_currency", default: 0
     t.datetime "updated_at", null: false
@@ -146,6 +147,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
   create_table "story_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency_name"
+    t.integer "default_lives", default: 3
     t.text "description"
     t.string "name"
     t.integer "owner_id"

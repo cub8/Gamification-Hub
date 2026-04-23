@@ -8,5 +8,6 @@ FactoryBot.define do
     icon { nil }
     currency_name { 'MyString' }
     currency_icon { nil }
+    default_lives { 3 }
   end
 end

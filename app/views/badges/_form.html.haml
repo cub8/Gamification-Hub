@@ -11,8 +11,12 @@
     = form.text_field :name
 
   %div
-    = form.label :description, style: "display: block"
-    = form.text_area :description
+    = form.label :story_description, style: "display: block"
+    = form.text_area :story_description
+
+  %div
+    = form.label :didactic_description, style: "display: block"
+    = form.text_area :didactic_description
 
   %div
     = form.label 'Discount (%)', style: "display: block"

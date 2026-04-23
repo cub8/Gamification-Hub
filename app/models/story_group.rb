@@ -19,6 +19,7 @@ class StoryGroup < ApplicationRecord
   validates :description, length: { maximum: 255 }
   validate :acceptable_icon
   validate :acceptable_currency_icon
+  validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   # Te akceptowalne pliki obrazów raczej do zmiany, na razie tak przykładowo
   def acceptable_icon
