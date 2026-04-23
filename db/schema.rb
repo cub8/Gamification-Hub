@@ -152,15 +152,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "story_group_users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "story_group_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["story_group_id"], name: "index_story_group_users_on_story_group_id"
-    t.index ["user_id"], name: "index_story_group_users_on_user_id"
-  end
-
   create_table "students_activity_group_categories", force: :cascade do |t|
     t.bigint "activity_group_category_id", null: false
     t.datetime "created_at", null: false
@@ -205,8 +196,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_153517) do
   add_foreign_key "items", "story_groups"
   add_foreign_key "login_tokens", "users"
   add_foreign_key "ranks", "story_groups"
-  add_foreign_key "story_group_users", "story_groups"
-  add_foreign_key "story_group_users", "users"
   add_foreign_key "students_activity_group_categories", "activity_group_categories"
   add_foreign_key "students_activity_group_categories", "story_group_students", column: "student_id"
   add_foreign_key "students_badges", "badges"
