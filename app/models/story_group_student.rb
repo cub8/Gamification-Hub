@@ -15,8 +15,6 @@ class StoryGroupStudent < ApplicationRecord
   validates :user_id, uniqueness: { scope: :story_group_id }
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  private
-
   def set_default_lives_from_group
     self.lives ||= story_group.default_lives
   end
