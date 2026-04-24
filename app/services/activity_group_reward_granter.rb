@@ -46,7 +46,7 @@ class ActivityGroupRewardGranter
       transactionable: category,
       kind:            :reward,
     )
-    
+
     student.increment!(:current_currency, category.reward)
     student.increment!(:total_currency, category.reward)
   end
