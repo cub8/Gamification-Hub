@@ -158,15 +158,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_24_175031) do
     t.index ["user_id", "story_group_id"], name: "index_story_group_teachers_on_user_id_and_story_group_id", unique: true
   end
 
-  create_table "story_group_users", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "story_group_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["story_group_id"], name: "index_story_group_users_on_story_group_id"
-    t.index ["user_id"], name: "index_story_group_users_on_user_id"
-  end
-
   create_table "story_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "currency_name"
