@@ -2,6 +2,7 @@
 
 class Item < ApplicationRecord
   belongs_to :story_group
+  has_many :currency_transactions, as: :transactionable
 
   validates :name, presence: true
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
