@@ -7,7 +7,9 @@ class StudentsProfileController < ApplicationController
   before_action :authorize_story_group_read!
   before_action :set_student
 
-  def index; end
+  def index
+    authorize @student, :profile?, policy_class: StoryGroupStudentPolicy
+  end
 
   private
 

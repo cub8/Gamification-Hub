@@ -61,6 +61,10 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
+  def profile?
+    user == record.user
+  end
+
   private
 
   def admin?
