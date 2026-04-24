@@ -11,10 +11,7 @@ class StoryGroupsController < ApplicationController
   # GET /story_groups/1
   def show
     authorize @story_group
-    return unless @current_user.student?
-
     @student = @story_group.student_memberships.find_by(user_id: @current_user.id)
-
   end
 
   # GET /story_groups/new

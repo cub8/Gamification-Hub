@@ -7,9 +7,7 @@ class StudentsProfileController < ApplicationController
   before_action :authorize_story_group_read!
   before_action :set_student
 
-  def index
-    authorize @student, :profile?, policy_class: StoryGroupStudentPolicy
-  end
+  def index; end
 
   private
 
@@ -18,6 +16,6 @@ class StudentsProfileController < ApplicationController
   end
 
   def set_student
-    @student = @story_group.student_memberships.find(params.expect(:student_id))
+    @student = @story_group.student_memberships.find_by!(user_id: @current_user.id)
   end
 end

@@ -6,7 +6,7 @@
 %h3
   = link_to "My Badges", story_group_student_badges_path(@story_group, @student)
 
-- if !@student.rank.nil?
+- if @student.rank
   %h3 My Rank
 
   %p
