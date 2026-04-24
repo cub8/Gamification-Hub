@@ -12,5 +12,6 @@
 
 %br
 
-= link_to "Edit", edit_story_group_badge_path(@story_group, @badge)
+- if policy(@story_group).update?
+  = link_to "Edit", edit_story_group_badge_path(@story_group, @badge)
 = link_to "Back", story_group_badges_path(@story_group)

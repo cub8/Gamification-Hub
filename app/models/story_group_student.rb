@@ -17,4 +17,10 @@ class StoryGroupStudent < ApplicationRecord
 
     update(lives: new_lives)
   end
+
+  def rank
+    story_group.ranks.where('required_currency_value <= ?', total_currency)
+               .order(required_currency_value: :desc)
+               .first
+  end
 end

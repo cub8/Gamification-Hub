@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       member do
         post :update_lives
       end
+      resources :students_profile, path: :profile, as: :profile, only: %i[index]
       resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
     end
   end

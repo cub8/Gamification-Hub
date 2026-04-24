@@ -31,4 +31,4 @@
     = link_to "Back", story_group_students_path(@story_group)
 - if policy(@story_group).student?
   %p
-    = link_to "Back", story_group_path(@story_group)
+    = link_to "Back", story_group_student_profile_index_path(@story_group, @student)
