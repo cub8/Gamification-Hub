@@ -28,4 +28,8 @@
     = form.file_field :currency_icon, accept: "image/*"
 
   %div
+    = form.label :default_lives, style: "display: block"
+    = form.number_field :default_lives, min: 0, step: 1
+
+  %div
     = form.submit

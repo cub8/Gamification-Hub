@@ -9,29 +9,43 @@ class BadgeTest < ActiveSupport::TestCase
 
   test 'badge name validation' do
     badge = Badge.new(
-      name:        'A' * 50,
-      description: 'Too long name',
-      discount:    10,
+      name:                 'A' * 50,
+      story_description:    'Too long name',
+      didactic_description: 'Too long didactic description',
+      discount:             10,
     )
     assert_equal true, badge.invalid?
     assert_equal true, badge.errors[:name].any?
   end
 
-  test 'badge description validation' do
+  test 'badge story description validation' do
     badge = Badge.new(
-      name:        'Valid',
-      description: 'A' * 300,
-      discount:    10,
+      name:                 'Valid',
+      story_description:    'A' * 300,
+      didactic_description: 'Valid didactic description',
+      discount:             10,
     )
     assert_equal true, badge.invalid?
-    assert_equal true, badge.errors[:description].any?
+    assert_equal true, badge.errors[:story_description].any?
+  end
+
+  test 'badge didactic description validation' do
+    badge = Badge.new(
+      name:                 'Valid',
+      story_description:    'Valid story description',
+      didactic_description: 'A' * 300,
+      discount:             10,
+    )
+    assert_equal true, badge.invalid?
+    assert_equal true, badge.errors[:didactic_description].any?
   end
 
   test 'badge discount validation' do
     badge = Badge.new(
-      name:        'Valid',
-      description: 'Valid description',
-      discount:    -5,
+      name:                 'Valid',
+      story_description:    'Valid story description',
+      didactic_description: 'Valid didactic description',
+      discount:             -5,
     )
     assert_equal true, badge.invalid?
     assert_equal true, badge.errors[:discount].any?
@@ -39,10 +53,11 @@ class BadgeTest < ActiveSupport::TestCase
 
   test 'badge saves with valid attributes' do
     badge = Badge.new(
-      story_group: @story_group,
-      name:        'Starter',
-      description: 'A starter badge',
-      discount:    10,
+      story_group:          @story_group,
+      name:                 'Starter',
+      story_description:    'A starter badge',
+      didactic_description: 'A didactic description for the starter badge',
+      discount:             10,
     )
     assert_equal true, badge.valid?
     assert_equal true, badge.save
