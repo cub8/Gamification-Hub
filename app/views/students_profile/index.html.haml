@@ -11,8 +11,8 @@
 
   %p
     - if @student.rank.icon.attached?
-      = image_tag @student.rank.icon, width: 100
-  %h5= @student.rank.name
+      = image_tag @student.rank.icon, height: 50
+      = @student.rank.name
 
 %p
   = link_to "Back", story_group_path(@story_group)
