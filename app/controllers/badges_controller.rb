@@ -64,7 +64,8 @@ class BadgesController < ApplicationController
     params.expect(
       badge: %i[
         name
-        description
+        story_description
+        didactic_description
         discount
         icon
       ],

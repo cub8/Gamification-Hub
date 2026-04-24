@@ -77,6 +77,7 @@ class StoryGroupsController < ApplicationController
         icon
         currency_name
         currency_icon
+        default_lives
       ],
     )
   end
