@@ -21,6 +21,6 @@ class ShopControllerTest < ActionDispatch::IntegrationTest
     @current_user = @teacher
     sign_in @current_user
     get story_group_shop_index_url(@story_group)
-    assert_response :redirect
+    assert_redirected_to root_path
   end
 end

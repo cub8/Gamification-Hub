@@ -22,7 +22,7 @@ class StudentsProfileControllerTest < ActionDispatch::IntegrationTest
     @current_user = @teacher
     sign_in @current_user
     get story_group_profile_index_url(@story_group)
-    assert_response :redirect
+    assert_redirected_to root_path
   end
 
   test 'unrelated user should not get index' do
@@ -30,6 +30,6 @@ class StudentsProfileControllerTest < ActionDispatch::IntegrationTest
     @current_user = @unrelated_user
     sign_in @current_user
     get story_group_profile_index_url(@story_group)
-    assert_response :redirect
+    assert_redirected_to root_path
   end
 end
