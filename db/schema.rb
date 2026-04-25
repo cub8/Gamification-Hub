@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_23_020312) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_24_175031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -91,6 +91,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_020312) do
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
     t.index ["story_group_id"], name: "index_badges_on_story_group_id"
+  end
+
+  create_table "currency_transactions", force: :cascade do |t|
+    t.integer "amount", null: false
+    t.datetime "created_at", null: false
+    t.bigint "granted_by_user_id"
+    t.integer "kind", null: false
+    t.bigint "student_id", null: false
+    t.bigint "transactionable_id", null: false
+    t.string "transactionable_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["granted_by_user_id"], name: "index_currency_transactions_on_granted_by_user_id"
+    t.index ["student_id"], name: "index_currency_transactions_on_student_id"
+    t.index ["transactionable_type", "transactionable_id"], name: "index_currency_transactions_on_transactionable"
   end
 
   create_table "items", force: :cascade do |t|
@@ -195,6 +209,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_020312) do
   add_foreign_key "activity_groups", "activity_group_templates"
   add_foreign_key "activity_groups", "story_groups"
   add_foreign_key "badges", "story_groups"
+  add_foreign_key "currency_transactions", "story_group_students", column: "student_id"
+  add_foreign_key "currency_transactions", "users", column: "granted_by_user_id"
   add_foreign_key "items", "story_groups"
   add_foreign_key "login_tokens", "users"
   add_foreign_key "ranks", "story_groups"
