@@ -18,6 +18,7 @@
             = link_to 'Edit', edit_story_group_rank_path(@story_group, rank)
             = link_to 'Delete', story_group_rank_path(@story_group, rank), data: { turbo_method: :delete }
 
-= link_to 'New Rank', new_story_group_rank_path(@story_group)
-|
+- if policy(@story_group).update?
+  = link_to 'New Rank', new_story_group_rank_path(@story_group)
+  |
 = link_to 'Back', story_group_path(@story_group)

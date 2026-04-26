@@ -50,6 +50,10 @@ class StoryGroupPolicy < ApplicationPolicy
     record.owner_id == user.id
   end
 
+  def student?
+    record.students.include?(user)
+  end
+
   private
 
   def admin?
@@ -59,7 +63,7 @@ class StoryGroupPolicy < ApplicationPolicy
   # For teachers and students belonging
   # to the story group
   def member?
-    assistant? || record.students.include?(user)
+    assistant? || student?
   end
 
   def assistant?

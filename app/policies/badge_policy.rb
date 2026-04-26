@@ -7,6 +7,10 @@ class BadgePolicy < ApplicationPolicy
     def resolve
       return scope if can_manage_associated_story_group?
 
+      if user
+        return scope
+      end
+
       scope.none
     end
   end

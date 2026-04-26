@@ -19,6 +19,8 @@ Rails.application.routes.draw do
       end
       resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
     end
+    resources :shop, only: %i[index]
+    resources :students_profile, path: :profile, as: :profile, only: %i[index]
   end
 
   namespace 'auth' do

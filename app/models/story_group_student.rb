@@ -16,8 +16,6 @@ class StoryGroupStudent < ApplicationRecord
   validates :user_id, uniqueness: { scope: :story_group_id }
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  private
-
   def set_default_lives_from_group
     self.lives ||= story_group.default_lives
   end
@@ -26,5 +24,11 @@ class StoryGroupStudent < ApplicationRecord
     new_lives = lives + change
 
     update(lives: new_lives)
+  end
+
+  def rank
+    story_group.ranks.where('required_currency_value <= ?', total_currency)
+               .order(required_currency_value: :desc)
+               .first
   end
 end
