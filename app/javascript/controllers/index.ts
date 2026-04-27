@@ -1,6 +1,5 @@
 import "@controllers/hello_controller"
 import "@controllers/sortable_form_controller"
 import "@controllers/nested_rondo_controller"
-import "@controllers/tom_select_controller"
+import "@controllers/tom_select_user_controller"
 import "@controllers/tom_select_basic_controller"
-import "@controllers/item_tom_select_controller"
