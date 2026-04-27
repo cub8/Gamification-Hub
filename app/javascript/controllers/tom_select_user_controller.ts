@@ -12,7 +12,7 @@ type OptionData = {
 
 type EscapeCallback = (input: string) => string
 
-class TomSelectController extends Controller {
+class TomSelectUserController extends Controller {
   private select?: TomSelect
 
   connect() {
@@ -24,6 +24,7 @@ class TomSelectController extends Controller {
 
     this.select = new TomSelect(this.element as HTMLSelectElement, {
       options,
+      plugins: ["clear_button"],
       create: false,
       maxItems: 1,
       valueField: "value",
@@ -73,4 +74,4 @@ class TomSelectController extends Controller {
   }
 }
 
-application.register("tom-select", TomSelectController)
+application.register("tom-select-user", TomSelectUserController)

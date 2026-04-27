@@ -16,7 +16,7 @@ class StoryGroup < ApplicationRecord
   has_many :activity_groups, dependent: :destroy
 
   validates :name, :currency_name, length: { maximum: 40 }
-  validates :description, length: { maximum: 255 }
+  validates :description, length: { maximum: 1024 }
   validate :acceptable_icon
   validate :acceptable_currency_icon
   validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

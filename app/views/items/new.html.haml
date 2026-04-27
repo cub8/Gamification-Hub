@@ -2,6 +2,6 @@
 
 %h1 New item
 
-= render 'form'
+= render 'form', item: @item
 
 = link_to "Back", story_group_items_path(@story_group)
