@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_24_175031) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_26_012127) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -111,12 +111,34 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_24_175031) do
     t.boolean "can_buy_at_0_lives"
     t.datetime "created_at", null: false
     t.text "didactic_description"
+    t.bigint "min_rank_for_discount_id"
     t.string "name"
     t.integer "price"
     t.text "story_description"
     t.bigint "story_group_id", null: false
+    t.bigint "unlock_rank_id"
     t.datetime "updated_at", null: false
+    t.index ["min_rank_for_discount_id"], name: "index_items_on_min_rank_for_discount_id"
     t.index ["story_group_id"], name: "index_items_on_story_group_id"
+    t.index ["unlock_rank_id"], name: "index_items_on_unlock_rank_id"
+  end
+
+  create_table "items_min_badges_for_discounts", force: :cascade do |t|
+    t.bigint "badge_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "item_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["badge_id"], name: "index_items_min_badges_for_discounts_on_badge_id"
+    t.index ["item_id"], name: "index_items_min_badges_for_discounts_on_item_id"
+  end
+
+  create_table "items_unlock_badges", force: :cascade do |t|
+    t.bigint "badge_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "item_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["badge_id"], name: "index_items_unlock_badges_on_badge_id"
+    t.index ["item_id"], name: "index_items_unlock_badges_on_item_id"
   end
 
   create_table "login_tokens", force: :cascade do |t|
@@ -187,6 +209,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_24_175031) do
     t.index ["story_group_student_id"], name: "index_students_badges_on_story_group_student_id"
   end
 
+  create_table "students_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "discount_applied", default: 0
+    t.bigint "item_id", null: false
+    t.integer "price_paid"
+    t.bigint "story_group_student_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_students_items_on_item_id"
+    t.index ["story_group_student_id"], name: "index_students_items_on_story_group_student_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -211,11 +244,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_24_175031) do
   add_foreign_key "badges", "story_groups"
   add_foreign_key "currency_transactions", "story_group_students", column: "student_id"
   add_foreign_key "currency_transactions", "users", column: "granted_by_user_id"
+  add_foreign_key "items", "ranks", column: "min_rank_for_discount_id"
+  add_foreign_key "items", "ranks", column: "unlock_rank_id"
   add_foreign_key "items", "story_groups"
+  add_foreign_key "items_min_badges_for_discounts", "badges"
+  add_foreign_key "items_min_badges_for_discounts", "items"
+  add_foreign_key "items_unlock_badges", "badges"
+  add_foreign_key "items_unlock_badges", "items"
   add_foreign_key "login_tokens", "users"
   add_foreign_key "ranks", "story_groups"
   add_foreign_key "students_activity_group_categories", "activity_group_categories"
   add_foreign_key "students_activity_group_categories", "story_group_students", column: "student_id"
   add_foreign_key "students_badges", "badges"
   add_foreign_key "students_badges", "story_group_students"
+  add_foreign_key "students_items", "items"
+  add_foreign_key "students_items", "story_group_students"
 end
