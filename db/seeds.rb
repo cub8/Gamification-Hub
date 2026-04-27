@@ -259,11 +259,161 @@ def build_badges
   )
 end
 
+def build_items
+  story_group = StoryGroup.find_by!(name: 'Kosmiczne króliki')
+  pilot_marcheton = Rank.find_by!(name: 'Pilot Marcheton-7')
+  strateg_imperium = Rank.find_by!(name: 'Strateg Imperium')
+  kosmiczny_krolik = Rank.find_by!(name: 'Kosmiczny Królik')
+  mistrz_marchewki = Rank.find_by!(name: 'Mistrz Marchewki')
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  '0.5% oceny',
+    story_description:     'Najwyższa Rada Królików przyznaje specjalną nagrodę za szczególne zasługi',
+    didactic_description:  'Podniesienie oceny POZYTYWNEJ o pół stopnia',
+    min_rank_for_discount: mistrz_marchewki,
+    unlock_rank:           strateg_imperium,
+    unlock_badges:         [Badge.find_by!(name: 'Zawsze na pokładzie')],
+    price:                 80,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  '+3% do oceny',
+    story_description:     'Wielka Marchewka dodaje królikowi punktów mocy',
+    didactic_description:  '+3 punkty procentowe do ogólnego wyniku studenta/studentki',
+    price:                 80,
+    unlock_rank:           pilot_marcheton,
+    min_rank_for_discount: strateg_imperium,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 'Zaliczenie wejściówki',
+    story_description:    'Statek wrócił z misji uszkodzony, ale wrócił',
+    didactic_description: 'Zaliczenie słabo napisanej wejściówki na 50%',
+    price:                35,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 '+10% do wejściówki',
+    story_description:    'Wsparcie dowództwa królików',
+    didactic_description: '+10 punktów procentowych do wejściówki (do maksymalnie 100% w wyniku)',
+    price:                33,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 '+5% do wejściówki',
+    story_description:    'Flota dosyła dodatkowe zapasy',
+    didactic_description: '+5 punktów procentowych do wejściówki (do maksymalnie 100% w wyniku)',
+    price:                30,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 '+5 minut do wejściówki',
+    story_description:    'Spowolnienie czasu w nadprzestrzeni',
+    didactic_description: 'Dodatkowe 5 minut na wejściówce',
+    price:                15,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 'Konsultacja',
+    story_description:    'Konsultacja z Mistrzem Królików',
+    didactic_description: 'Możliwość zadania pytania (nie wprost o prawidłową odpowiedź) prowadzącego podczas wejściówki',
+    price:                15,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 'Poprawa wejściówki',
+    story_description:    'Awaryjny powrót statku do bazy',
+    didactic_description: 'Możliwość ponownego napisania (poprawy) wejściówki',
+    price:                15,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:          story_group,
+    name:                 'Bezpieczna poprawa',
+    story_description:    'Statek trafia do hangaru ochronnego',
+    didactic_description: 'Możliwość ponownego napisania (poprawy) wejściówki z zamrożeniem obecnego wyniku (czyli nie można pogorszyć wyniku)',
+    price:                20,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  'Poprawa trzech wejściówek',
+    story_description:     'W statku trzeba naprawić kilka modułów',
+    didactic_description:  'Możliwość ponownego napisania (poprawy) trzech wybranych wejściówek',
+    price:                 40,
+    unlock_rank:           kosmiczny_krolik,
+    min_rank_for_discount: pilot_marcheton,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  'Bezpieczna poprawa trzech wejściówek',
+    story_description:     'W statku trzeba naprawić kilka modułów i na ten czas królik otrzymuje statek zastępczy',
+    didactic_description:  'Możliwość ponownego napisania (poprawy) trzech wybranych z zamrożeniem obecnego wyniku (czyli nie można pogorszyć wyniku)',
+    price:                 50,
+    unlock_rank:           kosmiczny_krolik,
+    min_rank_for_discount: pilot_marcheton,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  'Spóźnienie',
+    story_description:     'Teleporter działał z opóźnieniem',
+    didactic_description:  'Jedno spóźnienie bez straty marchewek za punktualność',
+    price:                 5,
+    unlock_rank:           kosmiczny_krolik,
+    min_rank_for_discount: pilot_marcheton,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  'Usprawiedliwienie',
+    story_description:     'Misja zdalna dla floty',
+    didactic_description:  'Jedna usprawiedliwiona nieobecność bez straty marchewek za obecność i punktualność',
+    price:                 10,
+    unlock_rank:           kosmiczny_krolik,
+    min_rank_for_discount: pilot_marcheton,
+  )
+
+  FactoryBot.create(
+    :item,
+    story_group:           story_group,
+    name:                  '1up',
+    story_description:     'Reanimacja królika',
+    didactic_description:  'Odzzyskanie jednego życia w ramach grywalizacji - kontynuacja gry',
+    price:                 50,
+    min_rank_for_discount: mistrz_marchewki,
+    can_buy_at_0_lives:    true,
+  )
+end
+
 build_students
 build_teachers
 build_admins
 build_story_group
 build_ranks
 build_badges
+build_items
 
 # rubocop:enable Style/TopLevelMethodDefinition
