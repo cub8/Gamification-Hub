@@ -12,5 +12,6 @@
 
 %br
 
-= link_to "Edit", edit_story_group_rank_path(@story_group, @rank)
+- if policy(@story_group).update?
+  = link_to "Edit", edit_story_group_rank_path(@story_group, @rank)
 = link_to "Back", story_group_ranks_path(@story_group)

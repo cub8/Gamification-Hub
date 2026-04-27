@@ -7,7 +7,10 @@ class StudentsBadgePolicy < ApplicationPolicy
     def resolve
       return scope if can_manage_associated_story_group_student?
 
-      scope.none
+      scope.joins(story_group_student: :user)
+           .where(users: { id: user.id })
+           .distinct
+           .includes(story_group_student: :user)
     end
   end
 end

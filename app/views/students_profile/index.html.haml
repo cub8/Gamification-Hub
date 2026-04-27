@@ -1,0 +1,18 @@
+%h1 My Profile
+
+%h3= "My current currency: #{@student.current_currency}"
+%h5= "Total currency: #{@student.total_currency}"
+
+%h3
+  = link_to "My Badges", story_group_student_badges_path(@story_group, @student)
+
+- if @student.rank
+  %h3 My Rank
+
+  %p
+    - if @student.rank.icon.attached?
+      = image_tag @student.rank.icon, height: 50
+      = @student.rank.name
+
+%p
+  = link_to "Back", story_group_path(@story_group)
