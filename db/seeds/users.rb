@@ -12,6 +12,20 @@ module Seeds
       { email: 'piotr.zielinski@example.com', full_name: 'Piotr Zieliński', university_number: 's123462' },
       { email: 'katarzyna.wozniak@example.com', full_name: 'Katarzyna Woźniak', university_number: 's123463' },
       { email: 'marek.lewandowski@example.com', full_name: 'Marek Lewandowski', university_number: 's123464' },
+      { email: 'magdalena.dabrowska@example.com', full_name: 'Magdalena Dąbrowska', university_number: 's123465' },
+      { email: 'tomasz.mazur@example.com', full_name: 'Tomasz Mazur', university_number: 's123466' },
+      {
+        email:             'agnieszka.kwiatkowska@example.com',
+        full_name:         'Agnieszka Kwiatkowska',
+        university_number: 's123467',
+      },
+      { email: 'lukasz.krawczyk@example.com', full_name: 'Łukasz Krawczyk', university_number: 's123468' },
+      { email: 'barbara.kaczmarek@example.com', full_name: 'Barbara Kaczmarek', university_number: 's123469' },
+      { email: 'marcin.stepien@example.com', full_name: 'Marcin Stępień', university_number: 's123470' },
+      { email: 'weronika.wojcik@example.com', full_name: 'Weronika Wójcik', university_number: 's123471' },
+      { email: 'michal.pajak@example.com', full_name: 'Michał Pająk', university_number: 's123472' },
+      { email: 'karolina.duda@example.com', full_name: 'Karolina Duda', university_number: 's123473' },
+      { email: 'krzysztof.adamczyk@example.com', full_name: 'Krzysztof Adamczyk', university_number: 's123474' },
     ].freeze
 
     TEACHERS = [

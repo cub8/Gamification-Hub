@@ -25,7 +25,7 @@ module Seeds
         User.find_by!(email: 'barbara.kowalczyk@example.com'),
         User.find_by!(email: 'andrzej.wozniak@example.com'),
       ]
-      students = User.where(role: :student).first(5) + [User.where(role: :teacher).last!]
+      students = User.where(role: :student).first(15) + [User.where(role: :teacher).last!]
 
       story_group = FactoryBot.create(
         :story_group,
