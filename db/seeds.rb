@@ -135,11 +135,135 @@ def build_story_group
   )
 
   puts '- Finished building story group'
+
+  story_group
+end
+
+def build_ranks
+  story_group = StoryGroup.find_by!(name: 'Kosmiczne króliki')
+
+  FactoryBot.create(
+    :rank,
+    story_group:             story_group,
+    name:                    'Rekrut',
+    required_currency_value: 0,
+    discount:                0,
+  )
+
+  FactoryBot.create(
+    :rank,
+    story_group:             story_group,
+    name:                    'Kosmiczny Królik',
+    required_currency_value: 40,
+    discount:                3,
+  )
+
+  FactoryBot.create(
+    :rank,
+    story_group:             story_group,
+    name:                    'Pilot Marcheton-7',
+    required_currency_value: 80,
+    discount:                5,
+  )
+
+  FactoryBot.create(
+    :rank,
+    story_group:             story_group,
+    name:                    'Strateg Imperium',
+    required_currency_value: 130,
+    discount:                10,
+  )
+
+  FactoryBot.create(
+    :rank,
+    story_group:             story_group,
+    name:                    'Mistrz Marchewki',
+    required_currency_value: 190,
+    discount:                20,
+  )
+end
+
+def build_badges
+  story_group = StoryGroup.find_by!(name: 'Kosmiczne króliki')
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Dzielny Królik',
+    discount:             2,
+    story_description:    'Królik nie uciekł z pola misji',
+    didactic_description: 'Niezaliczona wejściówka, ale zdobyte co najmniej 4 marchewki łącznie w innych kategoriach na danym laboratorium',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Zawsze na pokładzie',
+    discount:             3,
+    story_description:    'Rekrut nigdy nie opuścił statku',
+    didactic_description: 'Co najmniej 26 marchewek za obecność',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Złota Marchewka',
+    discount:             2,
+    story_description:    'Idealna misja',
+    didactic_description: 'Pierwszy raz wejściówka bez błędów',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Strateg Floty',
+    discount:             3,
+    story_description:    'Dowództwo zauważyło skuteczność',
+    didactic_description: 'Co najmniej 3 wejściówki z rzędu ≥ średnia grupy',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Perfekcyjny Lot',
+    discount:             5,
+    story_description:    'Lot bez najmniejszej rysy',
+    didactic_description: 'Co najmniej 3 wejściówki z rzędu bez błędów',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Mechanik Załogi',
+    discount:             2,
+    story_description:    'Królik naprawiał cudze statki',
+    didactic_description: 'Zdobyte co najmniej 3 marchewki za pomoc innym',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Agent Chaosu',
+    discount:             2,
+    story_description:    'Rekrut zrobił coś „po króliczemu”',
+    didactic_description: 'Zdobyte co najmniej 3 marchewki za ciekawą uwagę',
+  )
+
+  FactoryBot.create(
+    :badge,
+    story_group:          story_group,
+    name:                 'Królik Drużynowy',
+    discount:             3,
+    story_description:    'Królik uratował załogę',
+    didactic_description: 'Wyjaśnienie jakiegoś trudnego zagadnienia/zadania całej grupie',
+  )
 end
 
 build_students
 build_teachers
 build_admins
 build_story_group
+build_ranks
+build_badges
 
 # rubocop:enable Style/TopLevelMethodDefinition
