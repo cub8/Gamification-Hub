@@ -1,4 +1,11 @@
-= form_with model: [@story_group, @item] do |f|
+= form_with model: [@story_group, item] do |f|
+  - if item.errors.any?
+    %div{style: "color: red"}
+      %h4= "#{pluralize(item.errors.count, "error")} prohibited this item from being saved:"
+      %ul
+        - item.errors.each do |error|
+          %li= error.full_message
+
   %div
     = f.label :name, 'Name'
     = f.text_field :name
