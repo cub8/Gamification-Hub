@@ -29,19 +29,19 @@
 
   %div
     = f.label :unlock_rank_id, 'Minimalna ranga do zakupu'
-    = f.collection_select :unlock_rank_id, @story_group.ranks, :id, :name, { include_blank: 'Brak (dowolna)' }, { data: { controller: 'item-tom-select' } }
+    = f.collection_select :unlock_rank_id, @story_group.ranks.order(:required_currency_value), :id, :name, { include_blank: 'Brak (dowolna)' }, { data: { controller: 'item-tom-select' } }
 
   %div
     = f.label :min_rank_for_discount_id, 'Ranga od której nalicza się promocja'
-    = f.collection_select :min_rank_for_discount_id, @story_group.ranks, :id, :name, { include_blank: 'Brak (od najniższej)' }, { data: { controller: 'item-tom-select' } }
+    = f.collection_select :min_rank_for_discount_id, @story_group.ranks.order(:required_currency_value), :id, :name, { include_blank: 'Brak (od najniższej)' }, { data: { controller: 'item-tom-select' } }
 
   %div
     = f.label :unlock_badge_ids, 'Odznaki odblokowujące zakup'
-    = f.collection_select :unlock_badge_ids, @story_group.badges, :id, :name, {}, { multiple: true, data: { controller: 'item-tom-select' } }
+    = f.collection_select :unlock_badge_ids, @story_group.badges, :id, :name, { include_blank: 'Brak' }, { multiple: true, data: { controller: 'item-tom-select' } }
 
   %div
-    = f.label :discount_badge_ids, 'Odznaki nabijające promocje'
-    = f.collection_select :discount_badge_ids, @story_group.badges, :id, :name, {}, { multiple: true, data: { controller: 'item-tom-select' } }
+    = f.label :discount_badge_ids, 'Odznaki wymagane do nabijania promocji'
+    = f.collection_select :discount_badge_ids, @story_group.badges, :id, :name, { include_blank: 'Brak' }, { multiple: true, data: { controller: 'item-tom-select' } }
 
   %br
 

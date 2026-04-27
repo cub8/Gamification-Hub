@@ -8,16 +8,13 @@ class ItemTomSelectController extends Controller {
   connect() {
     
     const el = this.element as HTMLSelectElement
-
+    const plugins = el.multiple ? ["remove_button"] : ["clear_button"]
+    
     this.select = new TomSelect(el, {
-      plugins: ['remove_button'],
+      plugins,
       create: false,
-      sortField: [
-        {
-          field: "text",
-          direction: "asc"
-        }
-      ]
+      hidePlaceholder: true,
+      placeholder: el.options[0]?.text
     })
   }
 
