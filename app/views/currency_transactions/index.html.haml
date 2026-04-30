@@ -25,12 +25,4 @@
           %td= transaction.amount
           %td= transaction.created_at.strftime('%Y-%m-%d %H:%M')
           %td= transaction.kind
-          %td
-            - if transaction.kind == 'adjustment'
-              = transaction.granted_by_user&.full_name
-            - elsif transaction.transactionable.is_a?(ActivityGroupCategory)
-              = transaction.transactionable.didactic_description
-            - elsif transaction.transactionable.is_a?(Item)
-              = transaction.transactionable.name
-            - else
-              = transaction.transactionable_type
+          %td= transaction_source(transaction)
