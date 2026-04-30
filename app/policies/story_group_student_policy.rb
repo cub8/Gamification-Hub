@@ -61,6 +61,10 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
+  def adjust_currency?
+    story_group_teacher? || admin?
+  end
+
   private
 
   def admin?
