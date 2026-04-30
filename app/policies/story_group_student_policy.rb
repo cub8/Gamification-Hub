@@ -34,7 +34,7 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   end
 
   def show?
-    story_group_teacher? || admin?
+    story_group_teacher? || admin? || own_record?
   end
 
   def new?
@@ -69,6 +69,10 @@ class StoryGroupStudentPolicy < ApplicationPolicy
 
   def story_group_teacher?
     record.story_group.owner == user || user.teacher_story_groups.include?(record.story_group)
+  end
+
+  def own_record?
+    record.user == user
   end
 
 end

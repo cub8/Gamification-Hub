@@ -38,6 +38,9 @@
           = link_to "Manage badges",
             story_group_student_badges_path(@story_group, student)
         %td
+          = link_to "Transactions",
+            story_group_student_currency_transactions_path(@story_group, student)
+        %td
           = button_to "Remove",
             story_group_student_path(@story_group, student),
             method: :delete,
