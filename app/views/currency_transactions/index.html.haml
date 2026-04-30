@@ -2,7 +2,10 @@
 
 %h2 Currency Transactions
 
-= link_to 'Back', story_group_students_path(@story_group)
+- if @student.user == @current_user
+  = link_to 'Back', story_group_profile_index_path(@story_group)
+- else
+  = link_to 'Back', story_group_students_path(@story_group)
 
 %hr
 
