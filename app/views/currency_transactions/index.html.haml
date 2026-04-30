@@ -1,0 +1,33 @@
+%h1= @student.full_name
+
+%h2 Currency Transactions
+
+= link_to 'Back', story_group_students_path(@story_group)
+
+%hr
+
+- if @transactions.empty?
+  %p No transactions yet.
+- else
+  %table.table.table-sm.table-bordered
+    %thead
+      %tr
+        %th Amount
+        %th Date
+        %th Type
+        %th Source
+    %tbody
+      - @transactions.each do |transaction|
+        %tr
+          %td= transaction.amount
+          %td= transaction.created_at.strftime('%Y-%m-%d %H:%M')
+          %td= transaction.kind
+          %td
+            - if transaction.kind == 'adjustment'
+              = transaction.granted_by_user&.full_name
+            - elsif transaction.transactionable.is_a?(ActivityGroupCategory)
+              = transaction.transactionable.didactic_description
+            - elsif transaction.transactionable.is_a?(Item)
+              = transaction.transactionable.name
+            - else
+              = transaction.transactionable_type

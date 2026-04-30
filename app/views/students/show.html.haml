@@ -17,4 +17,7 @@
   = @student.total_currency
 
 %p
+  = link_to "Transactions", story_group_student_currency_transactions_path(@story_group, @student)
+
+%p
   = link_to "Back", story_group_students_path(@story_group)
