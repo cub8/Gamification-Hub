@@ -12,7 +12,7 @@ class CurrencyAdjustmentsController < ApplicationController
     authorize @student, :adjust_currency?
 
     amount = params.expect(currency_adjustment: :amount)[:amount].to_i
-    CurrencyAdjuster.new(student: @student, granted_by_user: @current_user).adjust(amount)
+    CurrencyAdjusterService.new(student: @student, granted_by_user: @current_user).adjust(amount)
 
     redirect_to story_group_students_path(@story_group), notice: 'Currency adjusted.'
   end

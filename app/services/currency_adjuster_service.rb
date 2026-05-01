@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CurrencyAdjuster
+class CurrencyAdjusterService
   def initialize(student:, granted_by_user:)
     @student         = student
     @granted_by_user = granted_by_user
