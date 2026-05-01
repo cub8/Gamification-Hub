@@ -1,0 +1,43 @@
+%h2 Invites
+
+%table.table
+  %thead
+    %tr
+      %th Code
+      %th Uses
+      %th Max uses
+      %th Expires at
+      %th
+      %th
+      %th
+  %tbody
+    - @invites.each do |invite|
+      %tr
+        %td= invite.code
+        %td= invite.uses
+        %td= invite.max_uses
+        %td= invite.expires_at
+        %td
+          = link_to "Show",
+            story_group_invite_path(@story_group, invite)
+        %td
+          = link_to "Edit",
+            edit_story_group_invite_path(@story_group, invite)
+        %td
+          = button_to "Remove",
+            story_group_invite_path(@story_group, invite),
+            method: :delete,
+            data: { confirm: "Are you sure?" }
+      - if defined?(@failed_invite_id) && invite.id == @failed_invite_id && @invite.errors.any?
+        %tr
+          %td{ colspan: 10 }
+            .errors{ style: "color: red; margin-bottom: 1em; display: flex" }
+              %ul
+                - @invite.errors.full_messages.each do |message|
+                  %li= message
+
+%p
+  = link_to "Add Invite",
+    new_story_group_invite_path(@story_group)
+  |
+  = link_to "Back", story_group_path(@story_group)

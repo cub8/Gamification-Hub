@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
     resources :shop, only: %i[index]
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
+    resources :story_group_invites, path: :invites, as: :invites
   end
 
   namespace 'auth' do

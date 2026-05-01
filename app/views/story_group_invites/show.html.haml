@@ -1,0 +1,20 @@
+%h1 Invite
+
+%p
+  %strong Code:
+  = @invite.code
+
+%p
+  %strong Uses:
+  = @invite.uses
+
+%p
+  %strong Max uses:
+  = @invite.max_uses
+
+%p
+  %strong Expires at:
+  = @invite.expires_at
+
+%p
+  = link_to "Back", story_group_invites_path(@story_group)

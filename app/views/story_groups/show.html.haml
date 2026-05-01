@@ -12,6 +12,8 @@
   = link_to "Students", story_group_students_path(@story_group)
   |
   = link_to "Activity groups", story_group_activity_groups_path(@story_group)
+  |
+  = link_to "Invites", story_group_invites_path(@story_group)
 - if policy(@story_group).student?
   |
   = link_to "My Profile", story_group_profile_index_path(@story_group)
