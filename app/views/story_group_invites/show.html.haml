@@ -5,6 +5,9 @@
   = @invite.code
 
 %p
+  = invite_qr_code(@invite)
+
+%p
   %strong Uses:
   = @invite.uses
 

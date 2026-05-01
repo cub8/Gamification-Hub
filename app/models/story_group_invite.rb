@@ -13,7 +13,7 @@ class StoryGroupInvite < ApplicationRecord
   end
 
   def use
-    uses += 1
+    self.uses += 1
 
     update(uses: uses)
   end
