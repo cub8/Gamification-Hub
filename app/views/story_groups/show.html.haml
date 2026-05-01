@@ -1,5 +1,7 @@
 %h1= @story_group.name
 
+= link_to "Ranking", story_group_ranking_path(@story_group)
+|
 = link_to "Ranks", story_group_ranks_path(@story_group)
 |
 = link_to "Badges", story_group_badges_path(@story_group)
