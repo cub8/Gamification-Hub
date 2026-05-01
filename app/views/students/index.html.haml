@@ -41,6 +41,9 @@
           = link_to "Transactions",
             story_group_student_currency_transactions_path(@story_group, student)
         %td
+          = link_to "Adjust currency",
+            new_story_group_student_currency_adjustment_path(@story_group, student)
+        %td
           = button_to "Remove",
             story_group_student_path(@story_group, student),
             method: :delete,
