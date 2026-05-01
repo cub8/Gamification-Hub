@@ -4,6 +4,20 @@
 
 %hr
 
+- if policy(@story_group).update?
+  - if @story_group.ranking_enabled?
+    %p Ranking is enabled for students.
+    = button_to 'Disable Ranking', disable_story_group_ranking_path(@story_group),
+      method: :post,
+      data: { turbo_confirm: 'Are you sure you want to disable the ranking?' }
+  - else
+    %p Ranking is disabled for students.
+    = button_to 'Enable Ranking', enable_story_group_ranking_path(@story_group),
+      method: :post,
+      data: { turbo_confirm: 'Are you sure you want to enable the ranking?' }
+
+%hr
+
 - if @students.empty?
   %p No students yet.
 - else
