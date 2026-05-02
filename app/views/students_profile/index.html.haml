@@ -15,4 +15,7 @@
       = @student.rank.name
 
 %p
+  = link_to "My Transactions", story_group_student_currency_transactions_path(@story_group, @student)
+
+%p
   = link_to "Back", story_group_path(@story_group)

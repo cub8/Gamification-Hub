@@ -22,7 +22,9 @@ Rails.application.routes.draw do
       member do
         post :update_lives
       end
+      resource :currency_adjustment, only: %i[new create]
       resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
+      resources :currency_transactions, only: :index
     end
     resources :shop, only: %i[index]
     resources :students_profile, path: :profile, as: :profile, only: %i[index]

@@ -23,7 +23,7 @@ class ItemsController < ApplicationController
     if @item.save
       redirect_to story_group_items_path(@story_group)
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
     if @item.update(item_params)
       redirect_to story_group_items_path(@story_group)
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -53,13 +53,17 @@ class ItemsController < ApplicationController
 
   def item_params
     params.expect(
-      item: %i[
-        name
-        story_description
-        didactic_description
-        price
-        image
-        can_buy_at_0_lives
+      item: [
+        :name,
+        :story_description,
+        :didactic_description,
+        :price,
+        :image,
+        :can_buy_at_0_lives,
+        :unlock_rank_id,
+        :min_rank_for_discount_id,
+        { unlock_badge_ids: [] },
+        { discount_badge_ids: [] },
       ],
     )
   end

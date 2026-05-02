@@ -75,21 +75,31 @@ overmind skorzysta ze zmiennych środowiskowych z pliku `.overmind.env` i urucho
 
 ### Logowanie się
 
-Bez konfiguracji dostępne jest tylko logowanie przez email. Dostępne jest 17 testowych kont - 10 studenckich, 5 nauczycielskich, 1 admin organizacji i 1 admin globalny.
+Bez konfiguracji dostępne jest tylko logowanie przez email. Dostępne jest 27 testowych kont - 20 studenckich, 5 nauczycielskich, 1 admin organizacji i 1 admin globalny.
 
 #### Studenci
 
-| Email                            |
-| :------------------------------- |
-| `jan.nowak@example.com`          |
-| `jacek.kowalski@example.com`     |
-| `monika.szczepaniak@example.com` |
-| `filip.jaskolka@example.com`     |
-| `julia.kaznodzieja@example.com`  |
-| `anna.wisniewska@example.com`    |
-| `piotr.zielinski@example.com`    |
-| `katarzyna.wozniak@example.com`  |
-| `marek.lewandowski@example.com`  |
+| Email                               |
+| :---------------------------------- |
+| `jan.nowak@example.com`             |
+| `jacek.kowalski@example.com`        |
+| `monika.szczepaniak@example.com`    |
+| `filip.jaskolka@example.com`        |
+| `julia.kaznodzieja@example.com`     |
+| `anna.wisniewska@example.com`       |
+| `piotr.zielinski@example.com`       |
+| `katarzyna.wozniak@example.com`     |
+| `marek.lewandowski@example.com`     |
+| `magdalena.dabrowska@example.com`   |
+| `tomasz.mazur@example.com`          |
+| `agnieszka.kwiatkowska@example.com` |
+| `lukasz.krawczyk@example.com`       |
+| `barbara.kaczmarek@example.com`     |
+| `marcin.stepien@example.com`        |
+| `weronika.wojcik@example.com`       |
+| `michal.pajak@example.com`          |
+| `karolina.duda@example.com`         |
+| `krzysztof.adamczyk@example.com`    |
 
 #### Nauczyciele
 
@@ -111,6 +121,38 @@ Bez konfiguracji dostępne jest tylko logowanie przez email. Dostępne jest 17 t
 ### Dostęp do skrzynki pocztowej
 
 Na środowisku developmenckim emaila są wysyłane na testową skrzynkę pocztową. Przy logowaniu należy kliknąć w potwierdzający Magic Link. Na WSL istnieje problem przez który wysłane linki nie otwierają się automatycznie. Dlatego po próbie zalogowania się należy wejść na ścieżkę: http://localhost:3000/letter_opener , aby przejrzeć skrzynkę pocztową.
+
+### Podstawowa konfiguracja
+
+Podstawa konfiguracja zawiera:
+- jedną grupę fabularną
+- rangi
+- odznaki
+- przedmioty
+- dwa szablony grup aktywności
+- dwóch nauczycieli wspomagających
+- jedenastu studentów
+
+Właścicielem grupy fabularnej jest `tomasz.nowakowski@example.com`.
+Nauczycielami w grupie są:
+- `barbara.kowalczyk@example.com`
+- `andrzej.wozniak@example.com`
+Studentami w grupie są:
+- `jan.nowak@example.com`
+- `jacek.kowalski@example.com`
+- `monika.szczepaniak@example.com`
+- `filip.jaskolka@example.com`
+- `julia.kaznodzieja@example.com`
+- `anna.wisniewska@example.com`
+- `piotr.zielinski@example.com`
+- `katarzyna.wozniak@example.com`
+- `marek.lewandowski@example.com`
+- `mariusz.kaczmarek@example.com`
+- `magdalena.dabrowska@example.com`
+- `tomasz.mazur@example.com`
+- `agnieszka.kwiatkowska@example.com`
+- `lukasz.krawczyk@example.com`
+- `barbara.kaczmarek@example.com`
 
 ### Konfiguracja credentiali
 

@@ -15,10 +15,6 @@ class User < ApplicationRecord
   has_many :teacher_story_groups, through: :teacher_memberships, source: :story_group
   has_one :login_token, dependent: :destroy
 
-  def all_story_groups
-    (owner_story_groups + student_story_groups + teacher_story_groups).uniq
-  end
-
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, length: { maximum: 255 }, uniqueness: true, allow_nil: true
@@ -31,6 +27,10 @@ class User < ApplicationRecord
   encrypts :email, deterministic: true
   encrypts :university_number, deterministic: true
   encrypts :full_name, deterministic: true
+
+  def all_story_groups
+    (owner_story_groups + student_story_groups + teacher_story_groups).uniq
+  end
 
   def create_login_token!
     consume_login_token!

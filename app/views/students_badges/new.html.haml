@@ -1,4 +1,4 @@
-%h3 
+%h3
   Give badge to
   = @student.full_name
 
@@ -9,7 +9,7 @@
         %li= message
 
 = form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge do |f|
-  .field
+  .field.w-25
     = f.label :badge_id, "Select badge"
     = f.collection_select :badge_id, @badges, :id, :name,
       { prompt: 'Select badge' },

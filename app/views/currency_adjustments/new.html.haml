@@ -1,0 +1,12 @@
+%h1= @student.full_name
+
+%h2 Adjust Currency
+
+= link_to 'Back', story_group_students_path(@story_group)
+
+%hr
+
+= form_with url: story_group_student_currency_adjustment_path(@story_group, @student), method: :post do |f|
+  = f.label :amount, 'Amount (positive or negative)'
+  = f.number_field :amount, name: 'currency_adjustment[amount]'
+  = f.submit 'Adjust'

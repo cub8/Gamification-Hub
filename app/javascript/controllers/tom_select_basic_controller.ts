@@ -6,9 +6,13 @@ class TomSelectBasicController extends Controller {
   private select?: TomSelect
 
   connect() {
-    this.select = new TomSelect(this.element as HTMLSelectElement, {
+    const el = this.element as HTMLSelectElement
+    const plugins = el.multiple ? ["remove_button"] : ["clear_button"]
+
+    this.select = new TomSelect(el, {
+      plugins,
       create: false,
-      maxItems: 1,
+      hidePlaceholder: true,
     })
   }
 
