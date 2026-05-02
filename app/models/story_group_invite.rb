@@ -6,15 +6,20 @@ class StoryGroupInvite < ApplicationRecord
   belongs_to :story_group
 
   validates :code, uniqueness: true
-  validates :max_uses, numericality: { greater_than_or_equal_to: :uses }
+  validates :uses, numericality: { less_than_or_equal_to: :max_uses }
 
   def generate_code
     self.code ||= SecureRandom.urlsafe_base64(8)
   end
 
-  def use
-    self.uses += 1
+  def use?
+    uses < max_uses && Time.current < expires_at
+  end
 
-    update(uses: uses)
+  def use
+    return unless use?
+
+    increment!(:uses)
+
   end
 end
