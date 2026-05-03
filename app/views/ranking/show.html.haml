@@ -1,0 +1,35 @@
+%h1 Ranking
+
+= link_to 'Back', story_group_path(@story_group)
+
+%hr
+
+- if policy(@story_group).update?
+  - if @story_group.ranking_enabled?
+    %p Ranking is enabled for students.
+    = button_to 'Disable Ranking', change_status_story_group_ranking_path(@story_group),
+      params: { ranking_enabled: false },
+      data: { turbo_confirm: 'Are you sure you want to disable the ranking?' }
+  - else
+    %p Ranking is disabled for students.
+    = button_to 'Enable Ranking', change_status_story_group_ranking_path(@story_group),
+      params: { ranking_enabled: true },
+      data: { turbo_confirm: 'Are you sure you want to enable the ranking?' }
+
+%hr
+
+- if @students.empty?
+  %p No students yet.
+- else
+  %table.table.table-sm.table-bordered
+    %thead
+      %tr
+        %th Position
+        %th Name
+        %th Total currency
+    %tbody
+      - @students.each_with_index do |student, index|
+        %tr
+          %td= index + 1
+          %td= student.full_name
+          %td= student.total_currency

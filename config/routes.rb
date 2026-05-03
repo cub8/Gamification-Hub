@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   resources :story_groups do
+    resource :ranking, only: :show, controller: :ranking do
+      post :change_status
+    end
     resources :items, except: :show
     resources :activity_group_templates
     resources :activity_groups, except: %i[show new] do
