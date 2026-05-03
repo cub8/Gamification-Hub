@@ -5,8 +5,7 @@ Rails.application.routes.draw do
 
   resources :story_groups do
     resource :ranking, only: :show, controller: :ranking do
-      post :enable
-      post :disable
+      post :change_status
     end
     resources :items, except: :show
     resources :activity_group_templates
