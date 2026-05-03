@@ -11,13 +11,13 @@
 %p
   %strong Price:
   - disc_info = @item.discount_info_for(@student)
-  - if disc_info[:value] > 0
+  - if disc_info.value > 0
     %s= @item.price
     %strong= "#{@item.discounted_price_for(@student)} #{@story_group.currency_name}"
-    - if disc_info[:capped]
+    - if disc_info.capped
       (MAX -50%)
     - else
-      = "(-#{disc_info[:value]}%)"
+      = "(-#{disc_info.value}%)"
   - else
     = "#{@item.price} #{@story_group.currency_name}"
 
