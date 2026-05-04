@@ -24,7 +24,7 @@ Rails.application.routes.draw do
       resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
       resources :currency_transactions, only: :index
     end
-    resources :shop, only: %i[index]
+    resources :shop, only: %i[index show]
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
   end
 

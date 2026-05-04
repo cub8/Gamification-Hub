@@ -8,6 +8,7 @@ class StoryGroupStudent < ApplicationRecord
   has_many :students_badges, dependent: :destroy
   has_many :currency_transactions,              foreign_key: :student_id, dependent: :destroy
   has_many :students_items, dependent: :destroy
+  has_many :badges, through: :students_badges
 
   delegate :full_name, :university_number, :email, to: :user
   scope :with_user, -> { includes(:user) }
