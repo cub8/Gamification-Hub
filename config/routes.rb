@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
   resources :story_groups do
+    resource :ranking, only: :show, controller: :ranking do
+      post :change_status
+    end
     resources :items, except: :show
     resources :activity_group_templates
     resources :activity_groups, except: %i[show new] do
@@ -17,7 +20,9 @@ Rails.application.routes.draw do
       member do
         post :update_lives
       end
+      resource :currency_adjustment, only: %i[new create]
       resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
+      resources :currency_transactions, only: :index
     end
     resources :shop, only: %i[index show]
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
