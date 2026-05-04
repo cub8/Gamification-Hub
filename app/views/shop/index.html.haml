@@ -13,21 +13,18 @@
     %th
 
   - @items.each do |item|
-    - disc_info = item.discount_info_for(@student)
+    - discount_info = item.discount_info_for(@student)
+    - discounted_price = item.discounted_price_for(@student)
     %tr
       %td= item.name
       %td= item.story_description
       %td
-        - if disc_info.value > 0
+        - if discounted_price < item.price
           %s= item.price
           %br
-          %strong= "#{item.discounted_price_for(@student)} #{@story_group.currency_name}"
+          %strong= "#{discounted_price} #{@story_group.currency_name}"
           %br
-          %small
-            - if disc_info.capped
-              (MAX -50%)
-            - else
-              = "(-#{disc_info.value}%)"
+          %small= discount_label(discount_info)
         - else
           = "#{item.price} #{@story_group.currency_name}"
       %td

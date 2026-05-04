@@ -19,8 +19,7 @@ class DiscountCalculatorService
     requires_rank = @item.min_rank_for_discount.present?
     requires_badges = @item.discount_badges.any?
 
-    meets_rank = requires_rank && @student.rank.present? && @student.total_currency >=
-                                                            @item.min_rank_for_discount.required_currency_value
+    meets_rank = requires_rank && @student.total_currency >= @item.min_rank_for_discount.required_currency_value
     meets_badges = requires_badges && student_badges.intersect?(@item.discount_badges)
 
     return true if !requires_rank && !requires_badges
@@ -39,6 +38,6 @@ class DiscountCalculatorService
   end
 
   def student_badges
-    @student_badges ||= @student.students_badges.includes(:badge).map(&:badge)
+    @student.badges
   end
 end

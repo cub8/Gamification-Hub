@@ -7,7 +7,7 @@ class DiscountTest < ActiveSupport::TestCase
     discount = Discount.new(65)
 
     assert_equal 50, discount.value
-    assert discount.capped
+    assert_equal true, discount.capped
     assert_equal 65, discount.raw_total
   end
 

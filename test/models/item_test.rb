@@ -3,14 +3,14 @@
 require 'test_helper'
 
 class ItemTest < ActiveSupport::TestCase
-  def setup
-    @story_group = create(:story_group)
-    @user = create(:user)
-    @student = create(:story_group_student, story_group: @story_group, user: @user, total_currency: 10)
+  setup do
+    @story_group = FactoryBot.create(:story_group)
+    @user = FactoryBot.create(:user)
+    @student = FactoryBot.create(:story_group_student, story_group: @story_group, user: @user, total_currency: 10)
 
-    create(:rank, story_group: @story_group, required_currency_value: 0, discount: 20)
+    FactoryBot.create(:rank, story_group: @story_group, required_currency_value: 0, discount: 20)
 
-    @item = create(:item, story_group: @story_group, price: 100)
+    @item = FactoryBot.create(:item, story_group: @story_group, price: 100)
   end
 
   test 'discount_info_for returns a Discount object with correct value' do
