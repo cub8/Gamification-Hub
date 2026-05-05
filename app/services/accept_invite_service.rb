@@ -20,6 +20,7 @@ class AcceptInviteService
         end
       end
     end
+
     result
   end
 end
