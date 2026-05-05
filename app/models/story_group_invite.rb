@@ -12,12 +12,12 @@ class StoryGroupInvite < ApplicationRecord
     self.code ||= SecureRandom.urlsafe_base64(8)
   end
 
-  def use?
+  def usable?
     uses < max_uses && Time.current < expires_at
   end
 
-  def use
-    return unless use?
+  def use!
+    return unless usable?
 
     increment!(:uses)
 

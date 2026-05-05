@@ -7,33 +7,22 @@ class JoinController < ApplicationController
   # show może być widokiem rejestracji, na razie widoczny jest tylko w przypadku błędu
 
   def show
-    return unless @current_user
-
     join_story_group
   end
 
   def create
-    return unless @current_user
-
     join_story_group
   end
 
   private
 
   def join_story_group
-    if @invite.use?
+    service = AcceptInviteService.new(user: @current_user, invite: @invite)
+    result = service.call
 
-      @story_group = @invite.story_group
-
-      @student = @story_group.student_memberships.build(user: @current_user)
-      @invite.use
-
-      if @student.save
-        redirect_to story_group_path(@story_group),
-                    notice: 'Student was successfully added to story group.'
-      else
-        render :show, status: :unprocessable_content
-      end
+    if result[:success]
+      redirect_to story_group_path(@invite.story_group),
+                  notice: 'Student was successfully added to story group.'
     else
       render :show, status: :unprocessable_content
     end
@@ -41,11 +30,9 @@ class JoinController < ApplicationController
 
   def set_invite
     @invite = StoryGroupInvite.find_by!(code: params[:code])
-
     return if @invite
 
     flash[:alert] = 'Invalid or missing invite code.'
     redirect_to home_path
-
   end
 end

@@ -22,4 +22,20 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to story_group_url(@story_group)
   end
+
+  test 'should detect max_uses' do
+    @invite.update!(uses: 10, max_uses: 10)
+
+    @student = FactoryBot.create(:user, role: :student)
+    sign_in @student
+
+    assert_no_difference('StoryGroupStudent.count') do
+      post join_index_url,
+           params: {
+             code: @invite.code,
+           }
+    end
+
+    assert_response :unprocessable_content
+  end
 end
