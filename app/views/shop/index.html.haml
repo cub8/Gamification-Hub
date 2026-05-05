@@ -1,2 +1,37 @@
-%h1 Shop#index
-%p Find me in app/views/shop/index.html.haml
+%h1 Shop: #{@story_group.name}
+
+%p
+  %strong Your funds:
+  = "#{@student.current_currency} #{@story_group.currency_name}"
+
+%table.table
+  %tr
+    %th Name
+    %th Story Description
+    %th Price
+    %th Image
+    %th
+
+  - @items.each do |item|
+    - discount_info = item.discount_info_for(@student)
+    - discounted_price = item.discounted_price_for(@student)
+    %tr
+      %td= item.name
+      %td= item.story_description
+      %td
+        - if discounted_price < item.price
+          %s= item.price
+          %br
+          %strong= "#{discounted_price} #{@story_group.currency_name}"
+          %br
+          %small= discount_label(discount_info)
+        - else
+          = "#{item.price} #{@story_group.currency_name}"
+      %td
+        - if item.image.attached?
+          = image_tag item.image, width: 100
+      %td
+        = link_to 'Show details', story_group_shop_path(@story_group, item)
+
+%br
+= link_to 'Back to Story group', story_group_path(@story_group)

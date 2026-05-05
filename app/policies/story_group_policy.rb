@@ -46,6 +46,10 @@ class StoryGroupPolicy < ApplicationPolicy
     owner? || admin?
   end
 
+  def view_ranking?
+    admin? || owner? || assistant? || (student? && record.ranking_enabled?)
+  end
+
   def owner?
     record.owner_id == user.id
   end
