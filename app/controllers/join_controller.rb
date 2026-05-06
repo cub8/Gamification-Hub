@@ -9,22 +9,18 @@ class JoinController < ApplicationController
   def show; end
 
   def create
-    join_story_group
-  end
-
-  private
-
-  def join_story_group
     service = AcceptInviteService.new(user: @current_user, invite: @invite)
     result = service.call
 
     if result[:success]
       redirect_to story_group_path(@invite.story_group),
-                  notice: 'Student was successfully added to story group.'
+                  notice: 'You have successfully joined the story group!'
     else
-      redirect_to home_path
+      redirect_to home_path, alert: 'Something went wrong'
     end
   end
+
+  private
 
   def set_invite
     @invite = StoryGroupInvite.find_by!(code: params[:code])

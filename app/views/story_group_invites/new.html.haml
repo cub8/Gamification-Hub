@@ -1,22 +1,6 @@
 %h3 Add Invite
 
-- if @invite.errors.any?
-  .errors{ style: "color: red; margin-bottom: 1em;" }
-    %ul
-      - @invite.errors.full_messages.each do |message|
-        %li= message
-
-= form_with model: @invite do |f|
-  .field
-    = f.label :max_uses, "Max uses"
-    = f.number_field :max_uses, min: 1, step: 1
-
-  .field
-    = f.label :expires_at, "Expiration date"
-    = f.datetime_select :expires_at
-
-  .actions
-    = f.submit "Add Invite"
+= render 'form', invite: @invite
 
 %p
   = link_to "Back", story_group_invites_path(@story_group)
