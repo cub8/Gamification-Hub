@@ -36,6 +36,6 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_response :unprocessable_content
+    assert_redirected_to home_path
   end
 end

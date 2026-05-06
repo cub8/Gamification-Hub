@@ -6,9 +6,7 @@ class JoinController < ApplicationController
   # Logika show i create na przyszłość - create to po prostu post do dołączenia użytkownika,
   # show może być widokiem rejestracji, na razie widoczny jest tylko w przypadku błędu
 
-  def show
-    join_story_group
-  end
+  def show; end
 
   def create
     join_story_group
@@ -24,7 +22,7 @@ class JoinController < ApplicationController
       redirect_to story_group_path(@invite.story_group),
                   notice: 'Student was successfully added to story group.'
     else
-      render :show, status: :unprocessable_content
+      redirect_to home_path
     end
   end
 
