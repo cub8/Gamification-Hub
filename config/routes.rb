@@ -3,6 +3,11 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
+  resources :join, param: :code, only: %i[show] do
+    collection do
+      post :create
+    end
+  end
   resources :story_groups do
     resource :ranking, only: :show, controller: :ranking do
       post :change_status
@@ -26,6 +31,7 @@ Rails.application.routes.draw do
     end
     resources :shop, only: %i[index show]
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
+    resources :story_group_invites, path: :invites, as: :invites
   end
 
   namespace 'auth' do

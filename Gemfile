@@ -33,6 +33,7 @@ gem 'omniauth-rails_csrf_protection', '~> 2.0' # OAuth CSRF compatibility
 gem 'pundit', '~> 2.5.2' # For roles managements
 gem 'rack-attack', '~> 6.8.0' # For throttling incoming request in authentication
 gem 'rondo_form', '~> 1.0' # For nested forms
+gem 'rqrcode', '~> 3.0' # For generating QR codes
 gem 'tzinfo-data', '~> 1', platforms: %i[windows jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'view_component', '~> 4.5' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
 

@@ -1,0 +1,19 @@
+- modal_id = "join-modal"
+
+= link_to 'Join story group', '#',
+    data: { bs_toggle: 'modal', bs_target: "##{modal_id}" }
+
+.modal.fade{ id: modal_id, tabindex: '-1' }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Join story group
+        %button.btn-close{ type: 'button', data: { bs_dismiss: 'modal' } }
+      = form_with url: join_index_path, method: :post do |f|
+        .modal-body
+          %div
+            = label_tag :code, 'Story Group code'
+            = text_field_tag :code, nil, required: true, class: 'form-control'
+        .modal-footer
+          %button{ type: 'button', data: { bs_dismiss: 'modal' } } Cancel
+          = f.submit 'Join'

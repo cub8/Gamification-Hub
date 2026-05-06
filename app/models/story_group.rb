@@ -14,6 +14,7 @@ class StoryGroup < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :activity_group_templates, dependent: :destroy
   has_many :activity_groups, dependent: :destroy
+  has_many :invites, class_name: 'StoryGroupInvite', foreign_key: 'story_group_id', dependent: :destroy
 
   validates :name, :currency_name, length: { maximum: 40 }
   validates :description, length: { maximum: 1024 }
