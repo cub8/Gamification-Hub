@@ -17,6 +17,18 @@ class ShopController < ApplicationController
     @item = @story_group.items.find(params[:id])
   end
 
+  def buy
+    @item = Item.find(params[:id])
+
+    result = ItemPurchaseService.new(student: @student, item: @item).call
+
+    if result.success?
+      redirect_to story_group_shop_index_path(@story_group), notice: 'Przedmiot został pomyślnie kupiony!'
+    else
+      redirect_to story_group_shop_path(@story_group, @item), alert: result.errors.join(', ')
+    end
+  end
+
   private
 
   def set_story_group
