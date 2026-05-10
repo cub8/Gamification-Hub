@@ -10,12 +10,13 @@
     %th Story Description
     %th Price
     %th Image
-    %th
+    %th Akcja
 
   - @items.each do |item|
     - discount_info = item.discount_info_for(@student)
     - discounted_price = item.discounted_price_for(@student)
-    %tr
+    - eligibility = PurchaseEligibilityService.new(student: @student, item: item).call
+    %tr{ class: ('text-muted bg-light' unless eligibility.eligible?) }
       %td= item.name
       %td= item.story_description
       %td
@@ -32,6 +33,16 @@
           = image_tag item.image, width: 100
       %td
         = link_to 'Show details', story_group_shop_path(@story_group, item)
+        
+        - if eligibility.eligible?
+          = button_to 'Kup', buy_story_group_shop_path(@story_group, item), method: :post, class: 'btn btn-success btn-sm mt-1'
+        - else
+          .text-danger.mt-1
+            %small Zablokowane:
+            %ul.list-unstyled.mb-0
+              - eligibility.errors.each do |error|
+                %li
+                  %small= error
 
 %br
 = link_to 'Back to Story group', story_group_path(@story_group)
