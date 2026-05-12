@@ -1,63 +1,61 @@
-%h2 Students
+- content_for :title, "Students"
 
-%table.table
-  %thead
-    %tr
-      %th Email
-      %th Lives
-      %th Current currency
-      %th Total currency
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-  %tbody
-    - @students.each do |student|
-      %tr
-        %td= student.user.email
-        %td= student.lives
-        %td= student.current_currency
-        %td= student.total_currency
-        %td
-          = link_to "Show",
-            story_group_student_path(@story_group, student)
-        %td
-          = button_to "Grant Life",
-            update_lives_story_group_student_path(@story_group, student, change: 1),
-            method: :post
-        %td
-          = button_to "Take Life",
-            update_lives_story_group_student_path(@story_group, student, change: -1),
-            method: :post
-        %td
-          = link_to "Edit",
-            edit_story_group_student_path(@story_group, student)
-        %td
-          = link_to "Manage badges",
-            story_group_student_badges_path(@story_group, student)
-        %td
-          = link_to "Transactions",
-            story_group_student_currency_transactions_path(@story_group, student)
-        %td
-          = link_to "Adjust currency",
-            new_story_group_student_currency_adjustment_path(@story_group, student)
-        %td
-          = button_to "Remove",
-            story_group_student_path(@story_group, student),
-            method: :delete,
-            data: { confirm: "Are you sure?" }
-      - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Students
+    = link_to "+ Add Student", new_story_group_student_path(@story_group), class: "btn btn-orange"
+
+  - if @students.empty?
+    %p.text-muted No students yet.
+  - else
+    %table.table.table-sm.table-hover
+      %thead
         %tr
-          %td{ colspan: 10 }
-            .errors{ style: "color: red; margin-bottom: 1em; display: flex" }
-              %ul
-                - @student.errors.full_messages.each do |message|
-                  %li= message
-
-%p
-  = link_to "Add Student",
-    new_story_group_student_path(@story_group)
-  |
-  = link_to "Back", story_group_path(@story_group)
+          %th Full name
+          %th Email address
+          %th Lives
+          %th Current currency
+          %th Total currency
+          %th.text-end Actions
+      %tbody
+        - @students.each do |student|
+          %tr
+            %td= student.full_name
+            %td= student.email
+            %td
+              .d-flex.align-items-center.gap-1
+                = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
+                  method: :post,
+                  class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
+                  %i.bi.bi-dash
+                %span= student.lives
+                = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
+                  method: :post,
+                  class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
+                  %i.bi.bi-plus
+            %td= student.current_currency
+            %td= student.total_currency
+            %td.text-end
+              .d-flex.justify-content-end.gap-1
+                = link_to story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "View profile" do
+                  %i.bi.bi-eye
+                = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                  %i.bi.bi-pencil
+                = link_to story_group_student_badges_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges" do
+                  %i.bi.bi-award
+                = link_to story_group_student_currency_transactions_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Transactions" do
+                  %i.bi.bi-cash-coin
+                = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
+                  %i.bi.bi-currency-exchange
+                = button_to story_group_student_path(@story_group, student),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Remove" do
+                  %i.bi.bi-trash
+          - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
+            %tr
+              %td{ colspan: 6 }
+                .sg-errors
+                  %ul
+                    - @student.errors.full_messages.each do |message|
+                      %li= message
