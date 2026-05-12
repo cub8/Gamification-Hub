@@ -1,10 +1,7 @@
 - content_for :title, "New story group"
 
-%h1 New story group
-
-= render "form", story_group: @story_group
-
-%br
-
-%div
-  = link_to "Back to story groups", story_groups_path
+%turbo-frame#modal
+  .sg-modal-backdrop
+    .sg-form-card
+      %h1.sg-form-title New Story Group
+      = render "form", story_group: @story_group, cancel_path: story_groups_path, submit_label: "Create"

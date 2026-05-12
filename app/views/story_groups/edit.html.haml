@@ -1,10 +1,7 @@
-- content_for :title, "Editing story group"
+- content_for :title, "Edit story group"
 
-%h1 Editing story group
-
-= render "form", story_group: @story_group
-
-%br
-
-%div
-  = link_to "Back", @story_group
+%turbo-frame#modal
+  .sg-modal-backdrop
+    .sg-form-card
+      %h1.sg-form-title Edit Story Group
+      = render "form", story_group: @story_group, cancel_path: story_group_path(@story_group), submit_label: "Save"
