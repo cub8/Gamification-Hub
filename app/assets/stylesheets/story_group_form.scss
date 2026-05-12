@@ -1,15 +1,4 @@
-// Figma design tokens
-$sg-text: #ebebeb;
-$sg-secondary: #88796f;
-$sg-background-light: #4a433f;
-$sg-background-light-hover: #685f5a;
-$sg-text-dimmed: #b1b1b1;
-$sg-text-more-dimmed: #848484;
-$sg-primary: #f77c00;
-$sg-primary-hover: #ffa143;
-$sg-danger: #dc3545;
-$sg-danger-hover: #bf2f3d;
-$sg-background: #302b28;
+@import "variables";
 
 turbo-frame#modal:empty {
   display: none;
@@ -29,25 +18,25 @@ turbo-frame#modal:empty {
 }
 
 .sg-form-card {
-  background-color: $sg-background;
-  border: 2px solid $sg-primary;
+  background-color: $color-background;
+  border: 2px solid $color-primary;
   border-radius: 10px;
   padding: 20px;
   width: 100%;
   max-width: 629px;
-  color: $sg-text;
+  color: $color-text;
 }
 
 .sg-form-title {
   font-size: 1.75rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: $sg-text;
+  color: $color-text;
 }
 
 .sg-section {
-  background-color: $sg-background;
-  border: 1px solid $sg-secondary;
+  background-color: $color-background;
+  border: 1px solid $color-secondary;
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -57,7 +46,7 @@ turbo-frame#modal:empty {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 1.25rem;
-  color: $sg-text;
+  color: $color-text;
 }
 
 .sg-form-group {
@@ -71,26 +60,26 @@ turbo-frame#modal:empty {
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: $sg-text;
+    color: $color-text;
     margin-bottom: 0.5rem;
   }
 
   .form-control {
-    background-color: $sg-background-light;
-    border-color: $sg-background-light;
-    color: $sg-text;
+    background-color: $color-background-light;
+    border-color: $color-background-light;
+    color: $color-text;
     border-radius: 0.5rem;
     padding: 0.625rem 0.875rem;
 
     &::placeholder {
-      color: $sg-secondary;
+      color: $color-secondary;
     }
 
     &:focus {
-      background-color: $sg-background-light;
-      border-color: $sg-primary;
+      background-color: $color-background-light;
+      border-color: $color-primary;
       box-shadow: 0 0 0 0.2rem rgba(247, 124, 0, 0.25);
-      color: $sg-text;
+      color: $color-text;
     }
   }
 
@@ -102,10 +91,10 @@ turbo-frame#modal:empty {
 
 .sg-file-upload {
   .sg-file-btn {
-    background-color: $sg-background-light;
-    border: 1.5px solid $sg-secondary;
+    background-color: $color-background-light;
+    border: 1.5px solid $color-secondary;
     border-radius: 0.5rem;
-    color: $sg-text;
+    color: $color-text;
     padding: 0.625rem 1rem;
     cursor: pointer;
     display: inline-flex;
@@ -115,7 +104,7 @@ turbo-frame#modal:empty {
     transition: background-color 0.15s;
 
     &:hover {
-      background-color: $sg-background-light-hover;
+      background-color: $color-background-light-hover;
     }
 
     i {
@@ -126,7 +115,7 @@ turbo-frame#modal:empty {
   .sg-file-hint {
     display: block;
     font-size: 0.75rem;
-    color: $sg-secondary;
+    color: $color-secondary;
     margin-top: 0.375rem;
   }
 }
@@ -141,19 +130,19 @@ turbo-frame#modal:empty {
   .sg-btn-cancel {
     background: none;
     border: none;
-    color: $sg-text;
+    color: $color-text;
     font-size: 0.875rem;
     cursor: pointer;
     padding: 0.5rem 1rem;
     text-decoration: none;
 
     &:hover {
-      color: $sg-text-dimmed;
+      color: $color-text-dimmed;
     }
   }
 
   .sg-btn-submit {
-    background-color: $sg-primary;
+    background-color: $color-primary;
     border: none;
     color: #ffffff;
     font-size: 0.875rem;
@@ -164,18 +153,18 @@ turbo-frame#modal:empty {
     transition: background-color 0.15s;
 
     &:hover {
-      background-color: $sg-primary-hover;
+      background-color: $color-primary-hover;
     }
   }
 }
 
 .sg-errors {
   background-color: rgba(220, 53, 69, 0.2);
-  border: 1px solid $sg-danger;
+  border: 1px solid $color-danger;
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1rem;
-  color: $sg-text;
+  color: $color-text;
 
   h2 {
     font-size: 0.875rem;

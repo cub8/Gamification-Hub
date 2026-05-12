@@ -1,0 +1,55 @@
+@import "variables";
+
+.dark-page {
+  background-color: $color-background;
+  color: $color-text;
+  min-height: 100vh;
+  padding: 1.5rem 2rem;
+
+  h1, h2, h3 {
+    color: $color-text;
+  }
+
+  .table {
+    color: $color-text;
+    border-color: $color-background-light;
+
+    thead th {
+      color: $color-text;
+      border-bottom-color: $color-secondary;
+      font-weight: 600;
+    }
+
+    tbody tr {
+      border-bottom-color: $color-background-light;
+
+      &:hover td {
+        background-color: $color-background-light;
+        color: $color-text;
+      }
+    }
+
+    td, th {
+      background-color: transparent;
+      border-color: $color-background-light;
+      color: $color-text;
+    }
+  }
+
+  .text-muted {
+    color: $color-text-more-dimmed !important;
+  }
+}
+
+.btn-orange {
+  background-color: $color-primary;
+  border-color: $color-primary;
+  color: #ffffff;
+  font-weight: 600;
+
+  &:hover {
+    background-color: $color-primary-hover;
+    border-color: $color-primary-hover;
+    color: #ffffff;
+  }
+}

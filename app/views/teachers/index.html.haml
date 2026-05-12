@@ -1,22 +1,29 @@
-%h2 Teachers
+- content_for :title, "Teachers"
 
-%table.table
-  %thead
-    %tr
-    %th Email
-    %th
-  %tbody
-    - @teachers.each do |teacher|
-      %tr
-        %td= teacher.user.email
-        %td
-          = button_to "Remove",
-            story_group_teacher_path(@story_group, teacher),
-            method: :delete,
-            data: { confirm: "Are you sure?" }
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Teachers
+    = link_to "+ Add Teacher", new_story_group_teacher_path(@story_group), class: "btn btn-orange"
 
-%p
-  = link_to "Add Teacher",
-    new_story_group_teacher_path(@story_group)
-  |
-  = link_to "Back", story_group_path(@story_group)
+  - if @teachers.empty?
+    %p.text-muted No teachers yet.
+  - else
+    %table.table.table-sm.table-hover
+      %thead
+        %tr
+          %th Full name
+          %th Email address
+          %th Added
+          %th.text-end Actions
+      %tbody
+        - @teachers.each do |teacher|
+          %tr
+            %td= teacher.full_name
+            %td= teacher.email
+            %td= teacher.created_at.strftime("%H:%M %d %b %Y")
+            %td.text-end
+              = button_to story_group_teacher_path(@story_group, teacher),
+                method: :delete,
+                form: { data: { turbo_confirm: "Are you sure you want to remove #{teacher.full_name}?" } },
+                class: "btn btn-sm btn-danger border-0" do
+                %i.bi.bi-trash
