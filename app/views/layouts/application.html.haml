@@ -15,13 +15,18 @@
     %link{href: "/icon.png", rel: "apple-touch-icon"}/
     = stylesheet_link_tag :app, "data-turbo-track": "reload"
     = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
-  %body
-    - if @current_user
-      = link_to 'Logout', logout_path, data: { turbo_method: :delete }, class: 'text-danger'
-      |
-      = link_to 'Home', root_path, class: 'text-danger'
-    - if notice
-      %p{style: "color: green"}= notice
-    - if alert
-      %p{style: "color: red"}= alert
-    = yield
+  %body.vh-100.d-flex.flex-column.overflow-hidden
+    %header
+      Something inside the header!
+      - if @current_user
+        = link_to 'Logout', logout_path, data: { turbo_method: :delete }, class: 'text-danger'
+        |
+        = link_to 'Home', root_path, class: 'text-danger'
+    %main.d-flex.flex-grow-1.overflow-hidden.p-2.gap-2{ data: { controller: 'desktop-sidebar' } }
+      - if @current_user
+        %div{ class: ('d-none' if @sidebar_collapsed), data: { desktop_sidebar_target: 'full' } }
+          = render Shared::MainSidebarComponent.new(current_path: url_for, user: @current_user, story_group: @story_group, collapsed: false)
+        %div{ class: ('d-none' unless @sidebar_collapsed), data: { desktop_sidebar_target: 'collapsed' } }
+          = render Shared::MainSidebarComponent.new(current_path: url_for, user: @current_user, story_group: @story_group, collapsed: true)
+      #app-content.flex-grow-1.overflow-auto
+        = yield

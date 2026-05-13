@@ -1,0 +1,14 @@
+.sidebar.d-flex.flex-column.h-100.p-2.gap-2{class: sidebar_class}
+  - primary_buttons.each do |btn|
+    = render Shared::SidebarButtonComponent.new(btn[:text], btn[:path], icon: btn[:icon], current_path: current_path, collapsed: collapsed)
+
+  - if story_group
+    .sidebar-separator
+    = render Shared::SidebarButtonComponent.new(story_group.name, story_group_path(story_group), icon: 'fa-book', current_path: current_path, collapsed: collapsed)
+
+    - story_group_buttons.each do |btn|
+      = render Shared::SidebarButtonComponent.new(btn[:text], btn[:path], icon: btn[:icon], current_path: current_path, collapsed: collapsed)
+
+  .mt-auto
+
+  = render toggle_button

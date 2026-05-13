@@ -10,11 +10,16 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_user
   before_action :authenticate!
+  before_action :set_sidebar_state
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
 
   protected
+
+  def set_sidebar_state
+    @sidebar_collapsed = cookies[:sidebar_collapsed] == 'true'
+  end
 
   def set_current_user
     @current_user = User.find_by(id: session[:user_id])
