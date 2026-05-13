@@ -22,10 +22,13 @@ class ItemPurchaseServiceTest < ActiveSupport::TestCase
 
     service = ItemPurchaseService.new(student: @student, item: @item)
 
-    assert_difference -> { @student.reload.current_currency }     => -50,
-                      -> { @student.students_items.count }        => 1,
-                      -> { @student.currency_transactions.count } => 1 do
+    diff = {
+      -> { @student.reload.current_currency }     => -50,
+      -> { @student.students_items.count }        => 1,
+      -> { @student.currency_transactions.count } => 1,
+    }
 
+    assert_difference diff do
       result = service.call
       assert result.success?, result.errors.join(', ')
     end

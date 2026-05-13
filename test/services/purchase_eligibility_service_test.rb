@@ -7,11 +7,9 @@ class PurchaseEligibilityServiceTest < ActiveSupport::TestCase
     @story_group = FactoryBot.create(:story_group)
     @user = FactoryBot.create(:user)
 
-    # Domyślnie student ma 1 życie i 10 waluty
     @student = FactoryBot.create(:story_group_student, story_group: @story_group, user: @user, lives: 1,
 total_currency: 10,)
 
-    # Domyślnie przedmiot nie ma wymagań
     @item = FactoryBot.create(:item, story_group: @story_group, can_buy_at_0_lives: false)
   end
 
