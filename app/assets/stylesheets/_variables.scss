@@ -1,12 +1,14 @@
-// Figma design tokens
-$color-background: #302b28;
-$color-background-light: #4a433f;
-$color-background-light-hover: #685f5a;
-$color-secondary: #88796f;
-$color-text: #ebebeb;
-$color-text-dimmed: #b1b1b1;
-$color-text-more-dimmed: #848484;
-$color-primary: #f77c00;
-$color-primary-hover: #ffa143;
-$color-danger: #dc3545;
-$color-danger-hover: #bf2f3d;
+// bootstrap overrides
+$primary: #F77C00;
+$secondary: #88796F;
+
+// other
+$primary-hover: #FFA143;
+$secondary-darker: #4A413B;
+$background: #302B28;
+$background-light: #4A433F;
+$background-light-hover: #685F5A;
+$text-main: #EBEBEB;
+$text-dimmed: #B1B1B1;
+$text-more-dimmed: #848484;
+$text-dark: #2A2A2A;

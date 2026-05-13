@@ -1,27 +1,33 @@
-%h1 Home#index
-%p Your data:
+.d-flex
+  %main
+    %h1 Home#index
+    %p Your data:
 
-%p
-  %b Imię i nazwisko:
-  = @current_user.full_name
+    %p
+      %b Imię i nazwisko:
+      = @current_user.full_name
 
-%p
-  %b Email:
-  = @current_user.email
+    %p
+      %b Email:
+      = @current_user.email
 
-%p
-  %b Indeks:
-  = @current_user.university_number
+    %p
+      %b Indeks:
+      = @current_user.university_number
 
-%p
-  %b Nazwa uczelni wyższej:
-  = @current_user.university_name
+    %p
+      %b Nazwa uczelni wyższej:
+      = @current_user.university_name
 
-%p
-  %b USOS ID:
-  = @current_user.usos_id
+    %p
+      %b USOS ID:
+      = @current_user.usos_id
 
-%p
-  = link_to "Your Story Groups", story_groups_path
-  |
-  = render 'join_modal'
+    %p
+      = link_to "Your Story Groups", story_groups_path
+      |
+      = render 'join_modal'
+
+    %p
+      %i.fa-solid.fa-user
+      %i.fa-regular.fa-user

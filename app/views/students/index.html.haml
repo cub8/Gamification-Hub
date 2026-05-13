@@ -3,7 +3,7 @@
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Students
-    = link_to "+ Add Student", new_story_group_student_path(@story_group), class: "btn btn-orange"
+    = link_to "+ Add Student", new_story_group_student_path(@story_group), class: "btn btn-primary"
 
   - if @students.empty?
     %p.text-muted No students yet.

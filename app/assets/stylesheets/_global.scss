@@ -1,0 +1,25 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: $background;
+  color: $text-main;
+}
+
+.turbo-progress-bar {
+  background-color: $primary;
+}
+
+.text-dimmed {
+  color: $text-dimmed;
+}
+
+.text-more-dimmed {
+  color: $text-more-dimmed;
+}
+
+.btn-primary {
+  color: $text-dark;
+}

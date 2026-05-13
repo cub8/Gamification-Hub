@@ -18,25 +18,25 @@ turbo-frame#modal:empty {
 }
 
 .sg-form-card {
-  background-color: $color-background;
-  border: 2px solid $color-primary;
+  background-color: $background;
+  border: 2px solid $primary;
   border-radius: 10px;
   padding: 20px;
   width: 100%;
   max-width: 629px;
-  color: $color-text;
+  color: $text-main;
 }
 
 .sg-form-title {
   font-size: 1.75rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: $color-text;
+  color: $text-main;
 }
 
 .sg-section {
-  background-color: $color-background;
-  border: 1px solid $color-secondary;
+  background-color: $background;
+  border: 1px solid $secondary;
   border-radius: 0.75rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -46,7 +46,7 @@ turbo-frame#modal:empty {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 1.25rem;
-  color: $color-text;
+  color: $text-main;
 }
 
 .sg-form-group {
@@ -60,26 +60,26 @@ turbo-frame#modal:empty {
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: $color-text;
+    color: $text-main;
     margin-bottom: 0.5rem;
   }
 
   .form-control {
-    background-color: $color-background-light;
-    border-color: $color-background-light;
-    color: $color-text;
+    background-color: $background-light;
+    border-color: $background-light;
+    color: $text-main;
     border-radius: 0.5rem;
     padding: 0.625rem 0.875rem;
 
     &::placeholder {
-      color: $color-secondary;
+      color: $secondary;
     }
 
     &:focus {
-      background-color: $color-background-light;
-      border-color: $color-primary;
+      background-color: $background-light;
+      border-color: $primary;
       box-shadow: 0 0 0 0.2rem rgba(247, 124, 0, 0.25);
-      color: $color-text;
+      color: $text-main;
     }
   }
 
@@ -91,10 +91,10 @@ turbo-frame#modal:empty {
 
 .sg-file-upload {
   .sg-file-btn {
-    background-color: $color-background-light;
-    border: 1.5px solid $color-secondary;
+    background-color: $background-light;
+    border: 1.5px solid $secondary;
     border-radius: 0.5rem;
-    color: $color-text;
+    color: $text-main;
     padding: 0.625rem 1rem;
     cursor: pointer;
     display: inline-flex;
@@ -104,7 +104,7 @@ turbo-frame#modal:empty {
     transition: background-color 0.15s;
 
     &:hover {
-      background-color: $color-background-light-hover;
+      background-color: $background-light-hover;
     }
 
     i {
@@ -115,7 +115,7 @@ turbo-frame#modal:empty {
   .sg-file-hint {
     display: block;
     font-size: 0.75rem;
-    color: $color-secondary;
+    color: $secondary;
     margin-top: 0.375rem;
   }
 }
@@ -130,19 +130,19 @@ turbo-frame#modal:empty {
   .sg-btn-cancel {
     background: none;
     border: none;
-    color: $color-text;
+    color: $text-main;
     font-size: 0.875rem;
     cursor: pointer;
     padding: 0.5rem 1rem;
     text-decoration: none;
 
     &:hover {
-      color: $color-text-dimmed;
+      color: $text-dimmed;
     }
   }
 
   .sg-btn-submit {
-    background-color: $color-primary;
+    background-color: $primary;
     border: none;
     color: #ffffff;
     font-size: 0.875rem;
@@ -153,18 +153,18 @@ turbo-frame#modal:empty {
     transition: background-color 0.15s;
 
     &:hover {
-      background-color: $color-primary-hover;
+      background-color: $primary-hover;
     }
   }
 }
 
 .sg-errors {
   background-color: rgba(220, 53, 69, 0.2);
-  border: 1px solid $color-danger;
+  border: 1px solid $danger;
   border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1rem;
-  color: $color-text;
+  color: $text-main;
 
   h2 {
     font-size: 0.875rem;

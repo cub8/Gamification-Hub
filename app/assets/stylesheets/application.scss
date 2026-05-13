@@ -1,6 +1,8 @@
+@import "variables";
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
 @import "tom-select/dist/css/tom-select.bootstrap5";
-@import "variables";
+@import "global";
+@import "sidebar";
 @import "theme";
 @import "story_group_form";

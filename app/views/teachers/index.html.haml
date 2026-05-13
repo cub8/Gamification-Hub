@@ -3,7 +3,7 @@
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Teachers
-    = link_to "+ Add Teacher", new_story_group_teacher_path(@story_group), class: "btn btn-orange"
+    = link_to "+ Add Teacher", new_story_group_teacher_path(@story_group), class: "btn btn-primary"
 
   - if @teachers.empty?
     %p.text-muted No teachers yet.
