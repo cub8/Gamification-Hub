@@ -1,7 +1,3 @@
-// bootstrap overrides
-$primary: #F77C00;
-$secondary: #88796F;
-
 // other
 $primary-hover: #FFA143;
 $secondary-darker: #4A413B;
@@ -12,3 +8,12 @@ $text-main: #EBEBEB;
 $text-dimmed: #B1B1B1;
 $text-more-dimmed: #848484;
 $text-dark: #2A2A2A;
+
+// bootstrap overrides
+$primary: #F77C00;
+$secondary: #88796F;
+$dropdown-border-color: $secondary;
+
+$dropdown-bg: $background-light;
+$dropdown-link-hover-bg: transparent;
+$dropdown-color: $text-main;
