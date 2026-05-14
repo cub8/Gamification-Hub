@@ -1,55 +1,75 @@
+- if item.errors.any?
+  .sg-errors
+    %h2 Please fix the following errors:
+    %ul
+      - item.errors.full_messages.each do |message|
+        %li= message
+
 = form_with model: [@story_group, item] do |f|
-  - if item.errors.any?
-    %div{style: "color: red"}
-      %h4= "#{pluralize(item.errors.count, "error")} prohibited this item from being saved:"
-      %ul
-        - item.errors.each do |error|
-          %li= error.full_message
+  .sg-section
+    .sg-section-title Basic Information
 
-  %div
-    = f.label :name, 'Name'
-    = f.text_field :name
+    .sg-form-group
+      = f.label :name, "Name"
+      = f.text_field :name, class: "form-control"
 
-  %div
-    = f.label :story_description, 'Story description'
-    = f.text_area :story_description
+    .sg-form-group
+      = f.label :story_description, "Story description"
+      = f.text_area :story_description, class: "form-control"
 
-  %div
-    = f.label :didactic_description, 'Didactic description'
-    = f.text_area :didactic_description
+    .sg-form-group
+      = f.label :didactic_description, "Didactic description"
+      = f.text_area :didactic_description, class: "form-control"
 
-  %div
-    = f.label :price, 'Price'
-    = f.number_field :price
+    .sg-form-group
+      = f.label :price, "Price"
+      = f.number_field :price, min: 0, class: "form-control"
 
-  %div
-    = f.label :image, 'Image'
-    = f.file_field :image
+    .sg-form-group.d-flex.align-items-center.gap-2
+      = f.check_box :can_buy_at_0_lives, class: "form-check-input mt-0"
+      = f.label :can_buy_at_0_lives, "Can buy at 0 lives", class: "mb-0"
 
-  %div
-    = f.label :can_buy_at_0_lives, 'Can buy at 0 lives?'
-    = f.check_box :can_buy_at_0_lives
+  .sg-section
+    .sg-section-title Image
 
-  %hr
+    .sg-form-group
+      - if item.image.attached?
+        .mb-2
+          = image_tag item.image, width: 60, height: 60, style: "object-fit: contain;"
+      .sg-file-upload
+        = f.label :image, class: "sg-file-btn" do
+          %i.bi.bi-upload
+          = item.image.attached? ? "Replace image" : "Upload image"
+        = f.file_field :image, accept: "image/*", class: "d-none"
+        %small.sg-file-hint GIF, JPG or PNG
 
-  %h3 Wymagania i Promocje
+  .sg-section
+    .sg-section-title Requirements & Discounts
 
-  %div
-    = f.label :unlock_rank_id, 'Minimalna ranga do zakupu'
-    = f.collection_select :unlock_rank_id, @story_group.ranks.order(:required_currency_value), :id, :name, { include_blank: 'Brak (dowolna)' }, { data: { controller: 'tom-select-basic' } }
+    .sg-form-group
+      = f.label :unlock_rank_id, "Minimum rank to purchase"
+      = f.collection_select :unlock_rank_id, @story_group.ranks.order(:required_currency_value), :id, :name,
+        { include_blank: "None (any rank)" },
+        { class: "form-control", data: { controller: "tom-select-basic" } }
 
-  %div
-    = f.label :min_rank_for_discount_id, 'Ranga od której nalicza się promocja'
-    = f.collection_select :min_rank_for_discount_id, @story_group.ranks.order(:required_currency_value), :id, :name, { include_blank: 'Brak (od najniższej)' }, { data: { controller: 'tom-select-basic' } }
+    .sg-form-group
+      = f.label :min_rank_for_discount_id, "Rank from which discount applies"
+      = f.collection_select :min_rank_for_discount_id, @story_group.ranks.order(:required_currency_value), :id, :name,
+        { include_blank: "None (from lowest)" },
+        { class: "form-control", data: { controller: "tom-select-basic" } }
 
-  %div
-    = f.label :unlock_badge_ids, 'Odznaki odblokowujące zakup'
-    = f.collection_select :unlock_badge_ids, @story_group.badges, :id, :name, { include_blank: 'Brak' }, { multiple: true, data: { controller: 'tom-select-basic' } }
+    .sg-form-group
+      = f.label :unlock_badge_ids, "Badges required to unlock purchase"
+      = f.collection_select :unlock_badge_ids, @story_group.badges, :id, :name,
+        { include_blank: "None" },
+        { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 
-  %div
-    = f.label :discount_badge_ids, 'Odznaki wymagane do nabijania promocji'
-    = f.collection_select :discount_badge_ids, @story_group.badges, :id, :name, { include_blank: 'Brak' }, { multiple: true, data: { controller: 'tom-select-basic' } }
+    .sg-form-group
+      = f.label :discount_badge_ids, "Badges required for discount"
+      = f.collection_select :discount_badge_ids, @story_group.badges, :id, :name,
+        { include_blank: "None" },
+        { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 
-  %br
-
-  = f.submit (@item.new_record? ? 'Create' : 'Save')
+  .sg-form-actions
+    = yield :form_cancel
+    = f.submit class: "sg-btn-submit"

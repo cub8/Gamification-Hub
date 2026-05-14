@@ -1,30 +1,48 @@
-%h1 Items
+- content_for :title, "Items"
 
-#items
-  %table.table
-    %tr
-      %th Name
-      %th Story Description
-      %th Didactic Description
-      %th Price
-      %th Image
-      %th Available at 0 lives?
-      %th
-    - @items.each do |item|
-      %tr
-        %td= item.name
-        %td= item.story_description
-        %td= item.didactic_description
-        %td= item.price
-        %td
-          - if item.image.attached?
-            = image_tag item.image, width: 100
-        %td= item.can_buy_at_0_lives ? 'YES' : 'NO'
-        %td
-          = link_to 'Edit', edit_story_group_item_path(@story_group, item)
-          = link_to 'Delete', story_group_item_path(@story_group, item), data: { turbo_method: :delete }
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Items
+    = link_to new_story_group_item_path(@story_group), class: "btn btn-primary" do
+      %i.bi.bi-plus-lg.me-1
+      New Item
 
-= link_to 'Add item', new_story_group_item_path(@story_group)
-|
-= link_to 'Back to Story group', story_group_path(@story_group)
-
+  - if @items.empty?
+    %p.text-dimmed No items yet.
+  - else
+    %table.table.table-sm.table-hover
+      %thead
+        %tr
+          %th Image
+          %th Name
+          %th Story description
+          %th Didactic description
+          %th.text-end Price
+          %th.text-center 0 lives
+          %th.text-end Actions
+      %tbody
+        - @items.each do |item|
+          %tr
+            %td
+              - if item.image.attached?
+                = image_tag item.image, width: 36, height: 36, style: "object-fit: contain;"
+              - else
+                %i.bi.bi-box-seam.fs-4.text-dimmed
+            %td= item.name
+            %td.text-dimmed= item.story_description
+            %td.text-dimmed= item.didactic_description
+            %td.text-end= item.price
+            %td.text-center
+              - if item.can_buy_at_0_lives
+                %i.bi.bi-check-lg.text-success
+              - else
+                %i.bi.bi-x-lg.text-dimmed
+            %td.text-end
+              .d-flex.justify-content-end.gap-1
+                = link_to edit_story_group_item_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                  %i.bi.bi-pencil
+                = button_to story_group_item_path(@story_group, item),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Delete item \"#{item.name}\"?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                  %i.bi.bi-trash
