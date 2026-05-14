@@ -1,22 +1,30 @@
-%h3
-  Give badge to
-  = @student.full_name
+- content_for :title, "Give Badge — #{@student.full_name}"
 
-- if @badge.errors.any?
-  .errors{ style: "color: red; margin-bottom: 1em;" }
-    %ul
-      - @badge.errors.full_messages.each do |message|
-        %li= message
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-8.col-lg-6
+      %h1.sg-form-title Give Badge
 
-= form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge do |f|
-  .field.w-25
-    = f.label :badge_id, "Select badge"
-    = f.collection_select :badge_id, @badges, :id, :name,
-      { prompt: 'Select badge' },
-      { data: { controller: "tom-select-basic" } }
+      - if @badge.errors.any?
+        .sg-errors
+          %h2 Please fix the following errors:
+          %ul
+            - @badge.errors.full_messages.each do |message|
+              %li= message
 
-  .actions
-    = f.submit "Assign badge"
+      = form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge do |f|
+        .sg-section
+          .sg-section-title
+            = @student.full_name
+            %small.text-dimmed.fw-normal.ms-2= @student.email
 
-%p
-  = link_to "Back", story_group_student_badges_path(@story_group, @student)
+          .sg-form-group
+            = f.label :badge_id, "Select badge"
+            = f.collection_select :badge_id, @badges, :id, :name,
+              { prompt: "Choose a badge" },
+              { class: "form-control",
+                data: { controller: "tom-select-basic" } }
+
+        .sg-form-actions
+          = link_to "Cancel", story_group_student_badges_path(@story_group, @student), class: "sg-btn-cancel"
+          = f.submit "Assign Badge", class: "sg-btn-submit"
