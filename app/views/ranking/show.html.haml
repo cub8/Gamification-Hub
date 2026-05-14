@@ -1,35 +1,48 @@
-%h1 Ranking
+- content_for :title, "Ranking"
 
-= link_to 'Back', story_group_path(@story_group)
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Ranking
 
-%hr
+    - if policy(@story_group).update?
+      - if @story_group.ranking_enabled?
+        = button_to change_status_story_group_ranking_path(@story_group),
+          params: { ranking_enabled: false },
+          form: { data: { turbo_confirm: "Are you sure you want to disable the ranking?" } },
+          class: "btn btn-secondary" do
+          %i.bi.bi-eye-slash.me-1
+          Disable ranking
+      - else
+        = button_to change_status_story_group_ranking_path(@story_group),
+          params: { ranking_enabled: true },
+          form: { data: { turbo_confirm: "Are you sure you want to enable the ranking?" } },
+          class: "btn btn-primary" do
+          %i.bi.bi-eye.me-1
+          Enable ranking
 
-- if policy(@story_group).update?
-  - if @story_group.ranking_enabled?
-    %p Ranking is enabled for students.
-    = button_to 'Disable Ranking', change_status_story_group_ranking_path(@story_group),
-      params: { ranking_enabled: false },
-      data: { turbo_confirm: 'Are you sure you want to disable the ranking?' }
+  - if policy(@story_group).update? && !@story_group.ranking_enabled?
+    .alert.alert-warning.mb-3
+      %i.bi.bi-exclamation-triangle.me-1
+      Ranking is currently hidden from students.
+
+  - if @students.empty?
+    %p.text-dimmed No students yet.
   - else
-    %p Ranking is disabled for students.
-    = button_to 'Enable Ranking', change_status_story_group_ranking_path(@story_group),
-      params: { ranking_enabled: true },
-      data: { turbo_confirm: 'Are you sure you want to enable the ranking?' }
-
-%hr
-
-- if @students.empty?
-  %p No students yet.
-- else
-  %table.table.table-sm.table-bordered
-    %thead
-      %tr
-        %th Position
-        %th Name
-        %th Total currency
-    %tbody
-      - @students.each_with_index do |student, index|
+    %table.table.table-sm.table-hover
+      %thead
         %tr
-          %td= index + 1
-          %td= student.full_name
-          %td= student.total_currency
+          %th.text-center #
+          %th Full name
+          %th Rank
+          %th.text-end Total currency
+      %tbody
+        - @students.each_with_index do |student, index|
+          %tr
+            %td.text-center.text-dimmed= index + 1
+            %td= student.full_name
+            %td
+              - if (rank = student.rank)
+                = rank.name
+              - else
+                %span.text-dimmed —
+            %td.text-end= student.total_currency
