@@ -1,21 +1,34 @@
-%h1= @badge.name
-%p
-  %strong Story Description:
-  = @badge.story_description
+- content_for :title, @badge.name
 
-%p
-  %strong Didactic Description:
-  = @badge.didactic_description
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0= @badge.name
+    .d-flex.gap-2
+      - if policy(@story_group).update?
+        = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-secondary" do
+          %i.bi.bi-pencil.me-1
+          Edit
+      = link_to story_group_badges_path(@story_group), class: "btn btn-secondary" do
+        %i.bi.bi-arrow-left.me-1
+        Back
 
-%p
-  %strong Discount:
-  = "#{@badge.discount}%"
+  .sg-section
+    .d-flex.gap-4.align-items-start
+      - if @badge.icon.attached?
+        = image_tag @badge.icon, width: 80, height: 80, style: "object-fit: contain; flex-shrink: 0;"
+      - else
+        .d-flex.align-items-center.justify-content-center{ style: "width: 80px; height: 80px; flex-shrink: 0;" }
+          %i.bi.bi-patch-check{ style: "font-size: 3rem;" }
 
-- if @badge.icon.attached?
-  = image_tag @badge.icon, width: 100
+      .d-flex.flex-column.gap-3.flex-grow-1
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Story description
+          %span= @badge.story_description.presence || "—"
 
-%br
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Didactic description
+          %span= @badge.didactic_description.presence || "—"
 
-- if policy(@story_group).update?
-  = link_to "Edit", edit_story_group_badge_path(@story_group, @badge)
-= link_to "Back", story_group_badges_path(@story_group)
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Discount
+          %span= "#{@badge.discount}%"
