@@ -1,43 +1,43 @@
-%h2 Invites
+- content_for :title, "Invites"
 
-%table.table
-  %thead
-    %tr
-      %th Code
-      %th Uses
-      %th Max uses
-      %th Expires at
-      %th
-      %th
-      %th
-  %tbody
-    - @invites.each do |invite|
-      %tr
-        %td= invite.code
-        %td= invite.uses
-        %td= invite.max_uses
-        %td= invite.expires_at
-        %td
-          = link_to "Show",
-            story_group_invite_path(@story_group, invite)
-        %td
-          = link_to "Edit",
-            edit_story_group_invite_path(@story_group, invite)
-        %td
-          = button_to "Remove",
-            story_group_invite_path(@story_group, invite),
-            method: :delete,
-            data: { confirm: "Are you sure?" }
-      - if defined?(@failed_invite_id) && invite.id == @failed_invite_id && @invite.errors.any?
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Invites
+    = link_to new_story_group_invite_path(@story_group), class: "btn btn-primary" do
+      %i.bi.bi-plus-lg.me-1
+      New Invite
+
+  - if @invites.empty?
+    %p.text-dimmed No invites yet.
+  - else
+    %table.table.table-sm.table-hover
+      %thead
         %tr
-          %td{ colspan: 10 }
-            .errors{ style: "color: red; margin-bottom: 1em; display: flex" }
-              %ul
-                - @invite.errors.full_messages.each do |message|
-                  %li= message
-
-%p
-  = link_to "Add Invite",
-    new_story_group_invite_path(@story_group)
-  |
-  = link_to "Back", story_group_path(@story_group)
+          %th Code
+          %th.text-center Uses
+          %th Expires at
+          %th.text-center Status
+          %th.text-end Actions
+      %tbody
+        - @invites.each do |invite|
+          %tr
+            %td
+              %code.text-main= invite.code
+            %td.text-center.text-dimmed= "#{invite.uses} / #{invite.max_uses}"
+            %td.text-dimmed= invite.expires_at.strftime("%Y-%m-%d %H:%M")
+            %td.text-center
+              - if invite.usable?
+                %span.badge.bg-success Active
+              - else
+                %span.badge.bg-secondary Expired
+            %td.text-end
+              .d-flex.justify-content-end.gap-1
+                = link_to story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0", title: "View" do
+                  %i.bi.bi-eye
+                = link_to edit_story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                  %i.bi.bi-pencil
+                = button_to story_group_invite_path(@story_group, invite),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Remove invite #{invite.code}?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Remove" do
+                  %i.bi.bi-trash
