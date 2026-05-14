@@ -1,26 +1,40 @@
-= form_with(model: [@story_group, rank]) do |form|
-  - if rank.errors.any?
-    %div{style: "color: red"}
-      %h2= "#{pluralize(rank.errors.count, "error")} prohibited this rank from being saved:"
-      %ul
-        - rank.errors.each do |error|
-          %li= error.full_message
+- if rank.errors.any?
+  .sg-errors
+    %h2 Please fix the following errors:
+    %ul
+      - rank.errors.full_messages.each do |message|
+        %li= message
 
-  %div
-    = form.label :name, style: "display: block"
-    = form.text_field :name
+= form_with model: [@story_group, rank] do |f|
+  .sg-section
+    .sg-section-title Basic Information
 
-  %div
-    = form.label 'Discount (%)', style: "display: block"
-    = form.number_field :discount, in: 0..100, step: 1
+    .sg-form-group
+      = f.label :name, "Name"
+      = f.text_field :name, class: "form-control"
 
-  %div
-    = form.label :required_currency_value, "Required Currency Value", style: "display: block"
-    = form.number_field :required_currency_value, min: 0, step: 1
+    .sg-form-group
+      = f.label :required_currency_value, "Required currency"
+      = f.number_field :required_currency_value, min: 0, step: 1, class: "form-control"
 
-  %div
-    = form.label :icon, style: "display: block"
-    = form.file_field :icon, accept: "image/*"
+    .sg-form-group
+      = f.label :discount, "Discount (%)"
+      = f.number_field :discount, in: 0..100, step: 1, class: "form-control"
 
-  %div
-    = form.submit
+  .sg-section
+    .sg-section-title Icon
+
+    .sg-form-group
+      - if rank.icon.attached?
+        .mb-2
+          = image_tag rank.icon, width: 60, height: 60, style: "object-fit: contain;"
+      .sg-file-upload
+        = f.label :icon, class: "sg-file-btn" do
+          %i.bi.bi-upload
+          = rank.icon.attached? ? "Replace icon" : "Upload icon"
+        = f.file_field :icon, accept: "image/*", class: "d-none"
+        %small.sg-file-hint GIF, JPG or PNG
+
+  .sg-form-actions
+    = yield :form_cancel
+    = f.submit class: "sg-btn-submit"

@@ -5,7 +5,7 @@
     %h1.h3.mb-0= @badge.name
     .d-flex.gap-2
       - if policy(@story_group).update?
-        = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-secondary" do
+        = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-primary" do
           %i.bi.bi-pencil.me-1
           Edit
       = link_to story_group_badges_path(@story_group), class: "btn btn-secondary" do

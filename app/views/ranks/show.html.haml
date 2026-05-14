@@ -1,17 +1,30 @@
-%h1= @rank.name
-%p
-  %strong Discount:
-  = "#{@rank.discount}%"
+- content_for :title, @rank.name
 
-%p
-  %strong Required Currency Value:
-  = @rank.required_currency_value
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0= @rank.name
+    .d-flex.gap-2
+      - if policy(@story_group).update?
+        = link_to edit_story_group_rank_path(@story_group, @rank), class: "btn btn-primary" do
+          %i.bi.bi-pencil.me-1
+          Edit
+      = link_to story_group_ranks_path(@story_group), class: "btn btn-secondary" do
+        %i.bi.bi-arrow-left.me-1
+        Back
 
-- if @rank.icon.attached?
-  = image_tag @rank.icon, width: 100
+  .sg-section
+    .d-flex.gap-4.align-items-start
+      - if @rank.icon.attached?
+        = image_tag @rank.icon, width: 80, height: 80, style: "object-fit: contain; flex-shrink: 0;"
+      - else
+        .d-flex.align-items-center.justify-content-center{ style: "width: 80px; height: 80px; flex-shrink: 0;" }
+          %i.bi.bi-trophy{ style: "font-size: 3rem;" }
 
-%br
+      .d-flex.flex-column.gap-3.flex-grow-1
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Required currency
+          %span= @rank.required_currency_value
 
-- if policy(@story_group).update?
-  = link_to "Edit", edit_story_group_rank_path(@story_group, @rank)
-= link_to "Back", story_group_ranks_path(@story_group)
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Discount
+          %span= "#{@rank.discount}%"

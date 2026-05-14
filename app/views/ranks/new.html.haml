@@ -1,5 +1,11 @@
-%h1 New Rank
+- content_for :title, "New Rank"
 
-= render "form", rank: @rank
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-8.col-lg-6
+      %h1.sg-form-title New Rank
 
-= link_to "cancel", story_group_ranks_path(@story_group)
+      - content_for :form_cancel do
+        = link_to "Cancel", story_group_ranks_path(@story_group), class: "sg-btn-cancel"
+
+      = render "form", rank: @rank
