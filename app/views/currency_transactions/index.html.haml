@@ -1,28 +1,39 @@
-%h1= @student.full_name
+- content_for :title, "Transactions — #{@student.full_name}"
 
-%h2 Currency Transactions
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %div
+      %h1.h3.mb-0 Currency Transactions
+      %small.text-dimmed= @student.full_name
+    .d-flex.align-items-center.gap-3
+      %span.text-dimmed
+        Balance:
+        %strong.text-main= @student.current_currency
+      - if @student.user == @current_user
+        = link_to "Back", story_group_profile_index_path(@story_group), class: "btn btn-secondary"
+      - else
+        = link_to "Back", story_group_students_path(@story_group), class: "btn btn-secondary"
 
-- if @student.user == @current_user
-  = link_to 'Back', story_group_profile_index_path(@story_group)
-- else
-  = link_to 'Back', story_group_students_path(@story_group)
-
-%hr
-
-- if @transactions.empty?
-  %p No transactions yet.
-- else
-  %table.table.table-sm.table-bordered
-    %thead
-      %tr
-        %th Amount
-        %th Date
-        %th Type
-        %th Source
-    %tbody
-      - @transactions.each do |transaction|
+  - if @transactions.empty?
+    %p.text-dimmed No transactions yet.
+  - else
+    %table.table.table-sm.table-hover
+      %thead
         %tr
-          %td= transaction.amount
-          %td= transaction.created_at.strftime('%Y-%m-%d %H:%M')
-          %td= transaction.kind
-          %td= transaction_source(transaction)
+          %th Amount
+          %th Type
+          %th Source
+          %th.text-end Date
+      %tbody
+        - @transactions.each do |transaction|
+          %tr
+            %td
+              - if transaction.amount >= 0
+                %span.text-success= "+#{transaction.amount}"
+              - else
+                %span.text-danger= transaction.amount
+            %td
+              - badge_class = { "reward" => "bg-primary", "adjustment" => "bg-secondary", "purchase" => "bg-info" }[transaction.kind] || "bg-secondary"
+              %span.badge{ class: badge_class }= transaction.kind.capitalize
+            %td.text-dimmed= transaction_source(transaction)
+            %td.text-end.text-dimmed= transaction.created_at.strftime("%Y-%m-%d %H:%M")

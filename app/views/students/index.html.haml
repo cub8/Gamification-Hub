@@ -43,8 +43,6 @@
                   %i.bi.bi-pencil
                 = link_to story_group_student_badges_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges" do
                   %i.bi.bi-award
-                = link_to story_group_student_currency_transactions_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Transactions" do
-                  %i.bi.bi-cash-coin
                 = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
                   %i.bi.bi-currency-exchange
                 = button_to story_group_student_path(@story_group, student),
