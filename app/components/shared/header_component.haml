@@ -1,0 +1,16 @@
+%header.w-100.px-3.py-1.d-flex.align-items-center
+
+  %a.d-flex.align-items-center.text-decoration-none.h-100{href: home_path}
+    = image_tag 'logo.png', alt: 'App logo', class: 'h-100'
+
+  .ms-auto.d-flex.align-items-center.gap-1
+    %button.btn.btn-flat.fs-5
+      Dołącz do grupy
+    #header-actions.d-block.h-100.d-flex.justify-content-between.align-items-center.ms-2
+      - if @current_user.teacher?
+        .notification-wrapper.position-relative.d-flex.align-items-center.justify-content-center
+          %i.fa-solid.fa-fw.fa-bell.fs-3.cursor-pointer.notification-bell
+          -# .notification-dot.rounded-circle.position-absolute
+      .dropdown
+        = image_tag 'default_user.jpg', alt: 'User icon', class: 'h-100 user-icon rounded-circle cursor-pointer', data: { bs_toggle: 'dropdown', bs_auto_close: 'outside' }
+        = render Shared::UserDropdownComponent.new(user: @current_user)

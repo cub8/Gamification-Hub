@@ -51,7 +51,7 @@ class NestedRondoController extends Controller {
     let newId = new Date().getTime()
     let newContent = content.replace(regexpBraced, `[${newId}]$1`)
 
-    if (newContent == content) {
+    if (newContent === content) {
       // assoc can be singular or plural
       regexpBraced = new RegExp(`\\[new_${assocs}\\](.*?\\s)`, "g")
       newContent = content.replace(regexpBraced, `[${newId}]$1`)

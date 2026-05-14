@@ -1,0 +1,39 @@
+html,
+body {
+  height: 100%;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background-color: $background;
+  color: $text-main;
+}
+
+.turbo-progress-bar {
+  background-color: $primary;
+}
+
+.text-dimmed {
+  color: $text-dimmed;
+}
+
+.text-more-dimmed {
+  color: $text-more-dimmed;
+}
+
+.btn-primary {
+  color: $text-dark;
+}
+
+.btn-flat {
+  color: $text-main;
+
+  &:hover {
+    background-color: $background-light-hover;
+    color: $text-main;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
