@@ -3,12 +3,11 @@
 class Shared::SidebarButtonComponent < ViewComponent::Base
   attr_reader :current_path, :href, :text, :icon, :button_class, :role, :collapsed, :data
 
-  def initialize(text, href, current_path:, icon:, role: nil, collapsed: false, data: {})
+  def initialize(text, href, current_path:, icon:, collapsed: false, data: {})
     @current_path = current_path
     @href = href
     @text = text
     @icon = icon
-    @role = role
     @collapsed = collapsed
     @data = data
     @button_class = establish_button_class
@@ -23,7 +22,6 @@ class Shared::SidebarButtonComponent < ViewComponent::Base
   def establish_button_class
     classes = []
     classes << (@current_path == @href ? 'btn-primary' : 'sidebar-idle-btn')
-    classes << 'text-center' if collapsed
     classes.join(' ')
   end
 

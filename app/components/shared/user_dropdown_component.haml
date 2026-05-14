@@ -1,0 +1,17 @@
+.dropdown-menu.w-auto
+  .d-flex.user-data.gap-2.px-2.me-4
+    .profile.flex-shrink-0.d-flex.justify-content-center.align-items-center
+      = image_tag 'default_user.jpg', alt: 'User icon', class: 'user-icon rounded-circle'
+    .data.d-flex.flex-column
+      .fullname.text-nowrap= @user.full_name
+      .role.text-dimmed= @user.role.titleize
+
+  .dropdown-divider
+
+  %a.btn.btn-flat.p-2.rounded.d-flex.align-items-center.text-start.mx-2{ href: ''}
+    %i.fa-solid.fa-fw.fa-gear
+    %span.ms-2 Ustawienia
+
+  %a.btn.btn-flat.p-2.rounded.d-flex.align-items-center.text-start.mx-2{ href: logout_path, data: { turbo_method: :delete } }
+    %i.fa-solid.fa-fw.fa-arrow-right-from-bracket
+    %span.ms-2 Wyloguj się

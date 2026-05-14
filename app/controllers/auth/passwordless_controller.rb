@@ -3,6 +3,8 @@
 class Auth::PasswordlessController < ApplicationController
   include LoggedUserRedirector
 
+  layout 'public'
+
   skip_before_action :authenticate!
   before_action :redirect_logged_user
 

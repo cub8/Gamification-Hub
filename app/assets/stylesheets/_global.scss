@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  font-family: "Inter", sans-serif;
 }
 
 body {
@@ -50,4 +51,17 @@ body {
       color: $text-main;
     }
   }
+}
+
+.btn-flat {
+  color: $text-main;
+
+  &:hover {
+    background-color: $background-light-hover;
+    color: $text-main;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
