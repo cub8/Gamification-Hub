@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  font-family: Inter;
 }
 
 body {
@@ -22,4 +23,16 @@ body {
 
 .btn-primary {
   color: $text-dark;
+}
+
+.btn-flat {
+  color: $text-main;
+
+  &:hover {
+    background-color: $background-light-hover;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

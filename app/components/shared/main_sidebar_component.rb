@@ -57,6 +57,7 @@ class Shared::MainSidebarComponent < ViewComponent::Base
       ]
     else
       [
+        { text: 'Studenci', path: helpers.story_group_students_path(story_group), icon: 'fa-graduation-cap' },
         { text: 'Grupy aktywności', path: helpers.story_group_activity_groups_path(story_group), icon: 'fa-table' },
         { text: 'Przedmioty', path: helpers.story_group_items_path(story_group), icon: 'fa-flask' },
         { text: 'Rangi', path: helpers.story_group_ranks_path(story_group), icon: 'fa-angles-up' },

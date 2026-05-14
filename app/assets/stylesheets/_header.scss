@@ -1,0 +1,20 @@
+header {
+  height: 60px;
+
+  border-bottom: 2px solid transparent;
+  background-image:
+    linear-gradient(90deg, $secondary-darker 0%, $background 100%),
+    linear-gradient(-90deg, $secondary 0%, $secondary-darker 100%);
+
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+#header-actions {
+  width: 90px;
+
+  .user-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
