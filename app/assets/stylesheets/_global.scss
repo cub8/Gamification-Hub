@@ -25,13 +25,24 @@ body {
   color: $text-dark;
 }
 
+.btn-secondary {
+  color: $text-main;
+  background-color: $background-light;
+  border: solid 1px $secondary;
+
+  &:hover {
+    color: $text-main;
+    background-color: $background-light-hover;
+  }
+}
+
 .ts-wrapper {
   .ts-control {
     background-color: $background-light;
     border-color: $secondary;
     color: $text-main;
 
-    > input::placeholder {
+    >input::placeholder {
       color: $secondary;
     }
   }

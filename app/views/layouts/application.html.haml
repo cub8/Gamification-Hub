@@ -13,7 +13,7 @@
     %link{href: "/icon.png", rel: "icon", type: "image/png"}/
     %link{href: "/icon.svg", rel: "icon", type: "image/svg+xml"}/
     %link{href: "/icon.png", rel: "apple-touch-icon"}/
-    = stylesheet_link_tag :app, "data-turbo-track": "reload"
+    = stylesheet_link_tag :application, "data-turbo-track": "reload"
     = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
   %body.vh-100.d-flex.flex-column.overflow-hidden
     = render Shared::HeaderComponent.new(current_user: @current_user)
