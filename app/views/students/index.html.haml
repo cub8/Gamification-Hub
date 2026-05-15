@@ -3,7 +3,9 @@
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Students
-    = link_to "+ Add Student", new_story_group_student_path(@story_group), class: "btn btn-primary"
+    = link_to new_story_group_student_path(@story_group), class: "btn btn-primary" do
+      %i.fa-solid.fa-plus
+      Add Student
 
   - if @students.empty?
     %p.text-muted No students yet.
@@ -49,7 +51,7 @@
                   method: :delete,
                   form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
                   class: "btn btn-sm btn-danger border-0", title: "Remove" do
-                  %i.bi.bi-trash
+                  %i.fa-solid.fa-trash
           - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
             %tr
               %td{ colspan: 6 }
