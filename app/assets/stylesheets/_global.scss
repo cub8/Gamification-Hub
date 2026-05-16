@@ -25,6 +25,10 @@ body {
   color: $text-dark;
 }
 
+.btn-secondary {
+  color: $text-main;
+}
+
 .ts-wrapper {
   .ts-control {
     background-color: $background-light;

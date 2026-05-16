@@ -11,34 +11,34 @@
   - if @ranks.empty?
     %p.text-dimmed No ranks yet.
   - else
-    %table.table.table-sm.table-hover
-      %thead
-        %tr
-          %th Icon
-          %th Name
-          %th.text-end Required currency
-          %th.text-center Discount
-          %th.text-end Actions
-      %tbody
-        - @ranks.each do |rank|
-          %tr
-            %td
-              - if rank.icon.attached?
-                = image_tag rank.icon, width: 36, height: 36, style: "object-fit: contain;"
-              - else
-                %i.bi.bi-trophy.fs-4.text-dimmed
-            %td= rank.name
-            %td.text-end= rank.required_currency_value
-            %td.text-center= "#{rank.discount}%"
-            %td.text-end
-              .d-flex.justify-content-end.gap-1
-                = link_to story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "View" do
-                  %i.bi.bi-eye
-                - if policy(@story_group).update?
-                  = link_to edit_story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
-                    %i.bi.bi-pencil
-                  = button_to story_group_rank_path(@story_group, rank),
-                    method: :delete,
-                    form: { data: { turbo_confirm: "Delete rank \"#{rank.name}\"?" } },
-                    class: "btn btn-sm btn-danger border-0", title: "Delete" do
-                    %i.bi.bi-trash
+    .row.g-3
+      - @ranks.each do |rank|
+        .col-12.col-sm-6.col-md-4.col-xl-3
+          .dark-card
+            - if rank.icon.attached?
+              .dark-card-cover
+                = image_tag rank.icon
+            - else
+              .dark-card-icon
+                %i.bi.bi-trophy{ style: "font-size: 2.5rem;" }
+
+            .dark-card-body
+              .dark-card-title= rank.name
+              .d-flex.align-items-center.gap-2.mt-2
+                %span.text-dimmed.small Required:
+                %span.small= rank.required_currency_value
+              .d-flex.align-items-center.gap-2
+                %span.text-dimmed.small Discount:
+                %span.small= "#{rank.discount}%"
+
+            .dark-card-actions
+              = link_to story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "View" do
+                %i.bi.bi-eye
+              - if policy(@story_group).update?
+                = link_to edit_story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                  %i.bi.bi-pencil
+                = button_to story_group_rank_path(@story_group, rank),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Delete rank \"#{rank.name}\"?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                  %i.bi.bi-trash
