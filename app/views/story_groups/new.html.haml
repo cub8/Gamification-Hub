@@ -1,7 +1,7 @@
 - content_for :title, "New story group"
 
 %turbo-frame#modal
-  .sg-modal-backdrop
-    .sg-form-card
-      %h1.sg-form-title New Story Group
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 New Story Group
       = render "form", story_group: @story_group, cancel_path: story_groups_path, submit_label: "Create"

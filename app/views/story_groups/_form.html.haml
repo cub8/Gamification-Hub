@@ -1,57 +1,57 @@
 = form_with(model: story_group) do |form|
   - if story_group.errors.any?
-    .sg-errors
+    .form-errors.p-3.mb-3
       %h2= "#{pluralize(story_group.errors.count, "error")} prohibited this story group from being saved:"
       %ul
         - story_group.errors.each do |error|
           %li= error.full_message
 
-  .sg-section
-    %h2.sg-section-title Basic Information
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Basic Information
 
-    .sg-form-group
+    .field-group.mb-3
       = form.label :name, "Name"
       = form.text_field :name, class: "form-control"
 
-    .sg-form-group
+    .field-group.mb-3
       = form.label :description, "Description"
       = form.text_area :description, class: "form-control", placeholder: "Once upon a time..."
 
-    .sg-form-group
+    .field-group.mb-3
       = form.label :icon, "Group icon"
-      .sg-file-upload
-        = form.label :icon, class: "sg-file-btn" do
-          %i.bi.bi-upload
+      .file-upload
+        = form.label :icon, class: "file-btn px-3 py-2" do
+          %i.fa-solid.fa-upload
           Upload file
         = form.file_field :icon, accept: "image/jpeg,image/png", class: "d-none"
-        %span.sg-file-hint Accepted formats: JPEG, PNG
+        %span.file-hint.mt-1 Accepted formats: JPEG, PNG
 
-  .sg-section
-    %h2.sg-section-title Currency
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Currency
 
     .row.g-3
       .col-md-6
-        .sg-form-group
+        .field-group.mb-3
           = form.label :currency_name, "Currency name"
           = form.text_field :currency_name, class: "form-control"
 
       .col-md-6
-        .sg-form-group
+        .field-group.mb-3
           = form.label :currency_icon, "Currency icon"
-          .sg-file-upload
-            = form.label :currency_icon, class: "sg-file-btn" do
-              %i.bi.bi-upload
+          .file-upload
+            = form.label :currency_icon, class: "file-btn px-3 py-2" do
+              %i.fa-solid.fa-upload
               Upload file
             = form.file_field :currency_icon, accept: "image/jpeg,image/png", class: "d-none"
-            %span.sg-file-hint Accepted formats: JPEG, PNG
+            %span.file-hint.mt-1 Accepted formats: JPEG, PNG
 
-  .sg-section
-    %h2.sg-section-title Lives
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Lives
 
-    .sg-form-group
+    .field-group.mb-3
       = form.label :default_lives, "Default lives"
       = form.number_field :default_lives, min: 0, step: 1, class: "form-control"
 
-  .sg-form-actions
-    = link_to "Cancel", cancel_path, class: "sg-btn-cancel", data: { turbo_frame: "_top" }
-    = form.submit submit_label, class: "sg-btn-submit"
+  .form-actions.gap-3.mt-4
+    = link_to "Cancel", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
+    = form.submit submit_label, class: "btn-submit py-2 px-4"

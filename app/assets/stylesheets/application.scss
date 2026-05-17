@@ -1,11 +1,9 @@
 @import "variables";
 @import 'bootstrap/scss/bootstrap';
-$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
-@import 'bootstrap-icons/font/bootstrap-icons';
 @import "tom-select/dist/css/tom-select.bootstrap5";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "global";
 @import "sidebar";
 @import "header";
 @import "theme";
-@import "story_group_form";
+@import "forms";

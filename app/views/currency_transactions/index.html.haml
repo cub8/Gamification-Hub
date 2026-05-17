@@ -33,7 +33,6 @@
               - else
                 %span.text-danger= transaction.amount
             %td
-              - badge_class = { "reward" => "bg-primary", "adjustment" => "bg-secondary", "purchase" => "bg-info" }[transaction.kind] || "bg-secondary"
-              %span.badge{ class: badge_class }= transaction.kind.capitalize
+              %span.badge{ class: transaction_badge_class(transaction) }= transaction.kind.capitalize
             %td.text-dimmed= transaction_source(transaction)
             %td.text-end.text-dimmed= transaction.created_at.strftime("%Y-%m-%d %H:%M")

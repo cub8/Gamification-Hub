@@ -29,24 +29,24 @@
                 = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
                   method: :post,
                   class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
-                  %i.bi.bi-dash
+                  %i.fa-solid.fa-minus
                 %span= student.lives
                 = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
                   method: :post,
                   class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
-                  %i.bi.bi-plus
+                  %i.fa-solid.fa-plus
             %td= student.current_currency
             %td= student.total_currency
             %td.text-end
               .d-flex.justify-content-end.gap-1
                 = link_to story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "View profile" do
-                  %i.bi.bi-eye
+                  %i.fa-solid.fa-eye
                 = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
-                  %i.bi.bi-pencil
+                  %i.fa-solid.fa-pen
                 = link_to story_group_student_badges_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges" do
-                  %i.bi.bi-award
+                  %i.fa-solid.fa-award
                 = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
-                  %i.bi.bi-currency-exchange
+                  %i.fa-solid.fa-money-bill-transfer
                 = button_to story_group_student_path(@story_group, student),
                   method: :delete,
                   form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
@@ -55,7 +55,7 @@
           - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
             %tr
               %td{ colspan: 6 }
-                .sg-errors
+                .form-errors.p-3.mb-3
                   %ul
                     - @student.errors.full_messages.each do |message|
                       %li= message

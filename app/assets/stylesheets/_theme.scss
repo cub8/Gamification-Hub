@@ -1,5 +1,3 @@
-@import "variables";
-
 .dark-page {
   padding: 1.5rem 2rem;
 
@@ -24,4 +22,16 @@
       color: $text-main;
     }
   }
+}
+
+.show-icon-placeholder {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
