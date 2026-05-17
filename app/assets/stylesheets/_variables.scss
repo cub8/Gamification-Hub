@@ -8,6 +8,8 @@ $text-main: #EBEBEB;
 $text-dimmed: #B1B1B1;
 $text-more-dimmed: #848484;
 $text-dark: #2A2A2A;
+$success-alert-color: #74cc84;
+$success-alert-bg: #091B05;
 
 // bootstrap overrides
 $primary: #F77C00;
@@ -17,3 +19,5 @@ $dropdown-border-color: $secondary;
 $dropdown-bg: $background-light;
 $dropdown-link-hover-bg: transparent;
 $dropdown-color: $text-main;
+
+$btn-close-color: $text-main;

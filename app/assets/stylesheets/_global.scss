@@ -2,6 +2,7 @@ html,
 body {
   height: 100%;
   font-family: "Inter", sans-serif;
+  font-weight: medium;
 }
 
 body {
@@ -25,6 +26,17 @@ body {
   color: $text-dark;
 }
 
+.btn-secondary {
+  color: $text-main;
+  background-color: $background-light;
+  border: solid 1px $secondary;
+
+  &:hover {
+    color: $text-main;
+    background-color: $background-light-hover;
+  }
+}
+
 .btn-flat {
   color: $text-main;
 
@@ -32,6 +44,12 @@ body {
     background-color: $background-light-hover;
     color: $text-main;
   }
+}
+
+.alert-success {
+  color: $success-alert-color;
+  background-color: $success-alert-bg;
+  border: 1px solid $success-alert-color;
 }
 
 .cursor-pointer {

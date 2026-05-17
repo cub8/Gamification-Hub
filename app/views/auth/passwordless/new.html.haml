@@ -1,9 +1,8 @@
-%h1 Email login
+%h1.fs-2 Logowanie adresem e-mail
 
-= form_with url: auth_passwordless_path, method: :post do |f|
-  %div.d-block
-    = f.label :email
-    = f.email_field :email
-  = f.submit
+= form_with url: auth_passwordless_path, method: :post, class: 'w-75' do |f|
+  %div.d-block.field-group.mb-2
+    = f.email_field :email, placeholder: 'jan.nowak@example.com', class: 'form-control'
+  = f.submit 'Kontynuuj', class: 'btn btn-primary w-100 fw-medium'
 
-= link_to 'Go back', login_path
+= link_to 'Cofnij', login_path, class: 'btn-link text-dimmed'
