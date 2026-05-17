@@ -2,11 +2,11 @@
 
 module CurrencyTransactionsHelper
   def transaction_badge_class(transaction)
-    {
+    ({
       'reward'     => 'bg-primary',
       'adjustment' => 'bg-secondary',
       'purchase'   => 'bg-info',
-    }[transaction.kind] || 'bg-secondary'
+    }[transaction.kind] || 'bg-secondary').html_safe
   end
 
   def transaction_source(transaction)
