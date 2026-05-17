@@ -3,25 +3,25 @@
 .dark-page
   .row.justify-content-center
     .col-12.col-md-8.col-lg-6
-      %h1.sg-form-title Edit Lives
+      %h1.page-title.mb-4 Edit Lives
 
       - if @student.errors.any?
-        .sg-errors
+        .form-errors.p-3.mb-3
           %h2 Please fix the following errors:
           %ul
             - @student.errors.full_messages.each do |message|
               %li= message
 
       = form_with model: @student, url: story_group_student_path(@story_group, @student), method: :patch do |f|
-        .sg-section
-          .sg-section-title
+        .form-section.p-4.mb-3
+          .section-title.mb-3
             = @student.full_name
             %small.text-dimmed.fw-normal.ms-2= @student.email
 
-          .sg-form-group
+          .field-group.mb-3
             = f.label :lives, "Lives"
             = f.number_field :lives, class: "form-control", min: 0
 
-        .sg-form-actions
-          = link_to "Cancel", story_group_students_path(@story_group), class: "sg-btn-cancel"
-          = f.submit "Save", class: "sg-btn-submit"
+        .form-actions.gap-3.mt-4
+          = link_to "Cancel", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3"
+          = f.submit "Save", class: "btn-submit py-2 px-4"

@@ -4,7 +4,7 @@
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Invites
     = link_to new_story_group_invite_path(@story_group), class: "btn btn-primary" do
-      %i.bi.bi-plus-lg.me-1
+      %i.fa-solid.fa-plus.me-1
       New Invite
 
   - if @invites.empty?
@@ -33,11 +33,11 @@
             %td.text-end
               .d-flex.justify-content-end.gap-1
                 = link_to story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0", title: "View" do
-                  %i.bi.bi-eye
+                  %i.fa-solid.fa-eye
                 = link_to edit_story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
-                  %i.bi.bi-pencil
+                  %i.fa-solid.fa-pen
                 = button_to story_group_invite_path(@story_group, invite),
                   method: :delete,
                   form: { data: { turbo_confirm: "Remove invite #{invite.code}?" } },
                   class: "btn btn-sm btn-danger border-0", title: "Remove" do
-                  %i.bi.bi-trash
+                  %i.fa-solid.fa-trash
