@@ -55,7 +55,7 @@ class TomSelectUserController extends Controller {
     return `
       <div>
         <strong>${escape(data.name || "")}</strong><br>
-        <small style="color: #888;">
+        <small class="text-dimmed">
           ${escape(data.email || "")}${idPart}
         </small>
       </div>
@@ -66,7 +66,7 @@ class TomSelectUserController extends Controller {
     return `
       <div>
         <strong>${escape(data.name || "")}</strong>
-        <small style="color: #888;">
+        <small class="text-dimmed">
           &nbsp; ${escape(data.email || "")}
         </small>
       </div>

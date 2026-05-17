@@ -1,24 +1,44 @@
-%h1 Ranks
+- content_for :title, "Ranks"
 
-#ranks
-  %table.table
-    %tr
-      %th Name
-      %th Discount
-      %th Required currency value
-      %th
-    - @ranks.each do |rank|
-      %tr
-        %td= rank.name
-        %td= "#{rank.discount}%"
-        %td= rank.required_currency_value
-        %td
-          = link_to 'Show', story_group_rank_path(@story_group, rank)
-          - if policy(@story_group).update?
-            = link_to 'Edit', edit_story_group_rank_path(@story_group, rank)
-            = link_to 'Delete', story_group_rank_path(@story_group, rank), data: { turbo_method: :delete }
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Ranks
+    - if policy(@story_group).update?
+      = link_to new_story_group_rank_path(@story_group), class: "btn btn-primary" do
+        %i.fa-solid.fa-plus.me-1
+        New Rank
 
-- if policy(@story_group).update?
-  = link_to 'New Rank', new_story_group_rank_path(@story_group)
-  |
-= link_to 'Back', story_group_path(@story_group)
+  - if @ranks.empty?
+    %p.text-dimmed No ranks yet.
+  - else
+    %table.table.table-sm.table-hover
+      %thead
+        %tr
+          %th Icon
+          %th Name
+          %th.text-end Required currency
+          %th.text-center Discount
+          %th.text-end Actions
+      %tbody
+        - @ranks.each do |rank|
+          %tr
+            %td
+              - if rank.icon.attached?
+                = image_tag rank.icon, width: 36, height: 36, class: "object-fit-contain"
+              - else
+                %i.fa-solid.fa-trophy.fs-4.text-dimmed
+            %td= rank.name
+            %td.text-end= rank.required_currency_value
+            %td.text-center= "#{rank.discount}%"
+            %td.text-end
+              .d-flex.justify-content-end.gap-1
+                = link_to story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "View" do
+                  %i.fa-solid.fa-eye
+                - if policy(@story_group).update?
+                  = link_to edit_story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                    %i.fa-solid.fa-pen
+                  = button_to story_group_rank_path(@story_group, rank),
+                    method: :delete,
+                    form: { data: { turbo_confirm: "Delete rank \"#{rank.name}\"?" } },
+                    class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                    %i.fa-solid.fa-trash

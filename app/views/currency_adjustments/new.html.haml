@@ -1,12 +1,29 @@
-%h1= @student.full_name
+- content_for :title, "Adjust Currency"
 
-%h2 Adjust Currency
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-8.col-lg-6
+      %h1.page-title.mb-4 Adjust Currency
 
-= link_to 'Back', story_group_students_path(@story_group)
+      = form_with url: story_group_student_currency_adjustment_path(@story_group, @student), method: :post do |f|
+        .form-section.p-4.mb-3
+          .section-title.mb-3
+            = @student.full_name
+            %small.text-dimmed.fw-normal.ms-2= @student.email
 
-%hr
+          .field-group.mb-3
+            = f.label :amount, "Amount"
+            = f.number_field :amount, name: "currency_adjustment[amount]", class: "form-control", placeholder: "e.g. 100 or -50"
+            %small.text-dimmed Use a negative value to deduct currency.
 
-= form_with url: story_group_student_currency_adjustment_path(@story_group, @student), method: :post do |f|
-  = f.label :amount, 'Amount (positive or negative)'
-  = f.number_field :amount, name: 'currency_adjustment[amount]'
-  = f.submit 'Adjust'
+          .d-flex.gap-3.mt-2
+            .text-dimmed
+              Current currency:
+              %strong.text-main= @student.current_currency
+            .text-dimmed
+              Total currency:
+              %strong.text-main= @student.total_currency
+
+        .form-actions.gap-3.mt-4
+          = link_to "Cancel", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3"
+          = f.submit "Adjust", class: "btn-submit py-2 px-4"

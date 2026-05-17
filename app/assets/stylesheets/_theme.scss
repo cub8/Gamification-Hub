@@ -1,0 +1,37 @@
+.dark-page {
+  padding: 1.5rem 2rem;
+
+  .table {
+    thead th {
+      border-bottom-color: $secondary;
+      font-weight: 600;
+    }
+
+    tbody tr {
+      border-bottom-color: $background-light;
+
+      &:hover td {
+        background-color: $background-light;
+        color: $text-main;
+      }
+    }
+
+    td, th {
+      background-color: transparent;
+      border-color: $background-light;
+      color: $text-main;
+    }
+  }
+}
+
+.show-icon-placeholder {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

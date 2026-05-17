@@ -1,6 +1,29 @@
-%h3 Add Invite
+- content_for :title, "New Invite"
 
-= render 'form', invite: @invite
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-8.col-lg-6
+      %h1.page-title.mb-4 New Invite
 
-%p
-  = link_to "Back", story_group_invites_path(@story_group)
+      - if @invite.errors.any?
+        .form-errors.p-3.mb-3
+          %h2 Please fix the following errors:
+          %ul
+            - @invite.errors.full_messages.each do |message|
+              %li= message
+
+      = form_with model: @invite, url: story_group_invites_path(@story_group) do |f|
+        .form-section.p-4.mb-3
+          .section-title.mb-3 Invite Settings
+
+          .field-group.mb-3
+            = f.label :max_uses, "Max uses"
+            = f.number_field :max_uses, min: 1, step: 1, class: "form-control"
+
+          .field-group.mb-3
+            = f.label :expires_at, "Expiration date"
+            = f.datetime_local_field :expires_at, class: "form-control"
+
+        .form-actions.gap-3.mt-4
+          = link_to "Cancel", story_group_invites_path(@story_group), class: "btn-cancel py-2 px-3"
+          = f.submit "Create Invite", class: "btn-submit py-2 px-4"

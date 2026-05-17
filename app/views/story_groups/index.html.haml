@@ -20,7 +20,7 @@
 
 - if policy(:story_group).create?
   %p
-    = link_to "New story group", new_story_group_path
+    = link_to "New story group", new_story_group_path, data: { turbo_frame: "modal" }
 
 %p
   = link_to "Home", root_path

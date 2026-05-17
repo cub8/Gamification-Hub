@@ -1,7 +1,11 @@
-= link_to 'Back to shop', story_group_items_path(@story_group)
+- content_for :title, "Edit Item — #{@item.name}"
 
-%h1 Edit item
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-10.col-lg-8
+      %h1.page-title.mb-4 Edit Item
 
-= render 'form', item: @item
+      - content_for :form_cancel do
+        = link_to "Cancel", story_group_items_path(@story_group), class: "btn-cancel py-2 px-3"
 
-= link_to "Back", story_group_items_path(@story_group)
+      = render "form", item: @item

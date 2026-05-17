@@ -24,4 +24,9 @@
       %div{ class: ('d-none' unless @sidebar_collapsed), data: { desktop_sidebar_target: 'collapsed' } }
         = render Shared::MainSidebarComponent.new(current_path: url_for, user: @current_user, story_group: @story_group, collapsed: true)
       #app-content.flex-grow-1.overflow-auto
+        - if notice
+          %p.text-success= notice
+        - if alert
+          %p.text-danger= alert
         = yield
+        %turbo-frame#modal

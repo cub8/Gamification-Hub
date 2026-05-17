@@ -1,5 +1,11 @@
-%h1 New Badge
+- content_for :title, "New Badge"
 
-= render "form", badge: @badge
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-8.col-lg-6
+      %h1.page-title.mb-4 New Badge
 
-= link_to "cancel", story_group_badges_path(@story_group)
+      - content_for :form_cancel do
+        = link_to "Cancel", story_group_badges_path(@story_group), class: "btn-cancel py-2 px-3"
+
+      = render "form", badge: @badge

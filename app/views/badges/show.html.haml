@@ -1,21 +1,34 @@
-%h1= @badge.name
-%p
-  %strong Story Description:
-  = @badge.story_description
+- content_for :title, @badge.name
 
-%p
-  %strong Didactic Description:
-  = @badge.didactic_description
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0= @badge.name
+    .d-flex.gap-2
+      - if policy(@story_group).update?
+        = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-primary" do
+          %i.fa-solid.fa-pen.me-1
+          Edit
+      = link_to story_group_badges_path(@story_group), class: "btn btn-secondary" do
+        %i.fa-solid.fa-arrow-left.me-1
+        Back
 
-%p
-  %strong Discount:
-  = "#{@badge.discount}%"
+  .form-section.p-4.mb-3
+    .d-flex.gap-4.align-items-start
+      - if @badge.icon.attached?
+        = image_tag @badge.icon, width: 80, height: 80, class: "object-fit-contain flex-shrink-0"
+      - else
+        .show-icon-placeholder.d-flex.align-items-center.justify-content-center
+          %i.fa-solid.fa-award.fa-3x
 
-- if @badge.icon.attached?
-  = image_tag @badge.icon, width: 100
+      .d-flex.flex-column.gap-3.flex-grow-1
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed.text-label Story description
+          %span= @badge.story_description.presence || "—"
 
-%br
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed.text-label Didactic description
+          %span= @badge.didactic_description.presence || "—"
 
-- if policy(@story_group).update?
-  = link_to "Edit", edit_story_group_badge_path(@story_group, @badge)
-= link_to "Back", story_group_badges_path(@story_group)
+        .d-flex.flex-column.gap-1
+          %span.text-dimmed.text-label Discount
+          %span= "#{@badge.discount}%"

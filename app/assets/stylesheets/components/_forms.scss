@@ -1,0 +1,158 @@
+turbo-frame#modal:empty {
+  display: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  z-index: 1050;
+}
+
+.form-card {
+  background-color: $background;
+  border: 2px solid $primary;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 629px;
+  color: $text-main;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: $text-main;
+}
+
+.form-section {
+  background-color: $background;
+  border: 1px solid $secondary;
+  border-radius: 0.75rem;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $text-main;
+}
+
+.field-group {
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-main;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    background-color: $background-light;
+    border-color: $background-light;
+    color: $text-main;
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.875rem;
+
+    &::placeholder {
+      color: $secondary;
+    }
+
+    &:focus {
+      background-color: $background-light;
+      border-color: $primary;
+      box-shadow: 0 0 0 0.2rem rgba(247, 124, 0, 0.25);
+      color: $text-main;
+    }
+  }
+
+  textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+  }
+}
+
+.file-upload {
+  .file-btn {
+    background-color: $background-light;
+    border: 1.5px solid $secondary;
+    border-radius: 0.5rem;
+    color: $text-main;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: $background-light-hover;
+    }
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  .file-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: $secondary;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  .btn-cancel {
+    background: none;
+    border: none;
+    color: $text-main;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      color: $text-dimmed;
+    }
+  }
+
+  .btn-submit {
+    background-color: $primary;
+    border: none;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: $primary-hover;
+    }
+  }
+}
+
+.form-errors {
+  background-color: rgba(220, 53, 69, 0.2);
+  border: 1px solid $danger;
+  border-radius: 0.5rem;
+  color: $text-main;
+
+  h2 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+  }
+}

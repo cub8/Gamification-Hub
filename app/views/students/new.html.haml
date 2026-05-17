@@ -1,21 +1,29 @@
-%h3 Add Student
+- content_for :title, "Add Student"
 
-- if @student.errors.any?
-  .errors{ style: "color: red; margin-bottom: 1em;" }
-    %ul
-      - @student.errors.full_messages.each do |message|
-        %li= message
+.dark-page
+  .row.justify-content-center
+    .col-12.col-md-8.col-lg-6
+      %h1.page-title.mb-4 Add Student
 
-= form_with model: @student do |f|
-  .field.w-25
-    = f.label :user_id, "Select student"
-    = f.select :user_id,
-        options_from_collection_for_select(@students,:id, :email, @student.user_id),
-        { prompt: "Choose a user" },
-        { data: { controller: "tom-select-user", tom_select_options_value: student_map(@students).to_json} }
+      - if @student.errors.any?
+        .form-errors.p-3.mb-3
+          %h2 Please fix the following errors:
+          %ul
+            - @student.errors.full_messages.each do |message|
+              %li= message
 
-  .actions
-    = f.submit "Add Student"
+      = form_with model: @student, url: story_group_students_path(@story_group) do |f|
+        .form-section.p-4.mb-3
+          .section-title.mb-3 Basic Information
 
-%p
-  = link_to "Back", story_group_students_path(@story_group)
+          .field-group.mb-3
+            = f.label :user_id, "Select student"
+            = f.select :user_id,
+                options_from_collection_for_select(@students, :id, :email, @student.user_id),
+                { prompt: "Choose a user" },
+                { class: "form-control",
+                  data: { controller: "tom-select-user", tom_select_options_value: student_map(@students).to_json } }
+
+        .form-actions.gap-3.mt-4
+          = link_to "Cancel", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3"
+          = f.submit "Add Student", class: "btn-submit py-2 px-4"

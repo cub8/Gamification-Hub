@@ -1,8 +1,8 @@
-.sidebar.d-flex.flex-column.h-100.p-2.gap-2{class: sidebar_class}
+.sidebar.rounded.d-flex.flex-column.h-100.p-2.gap-2{class: sidebar_class}
   - primary_buttons.each do |btn|
     = render Shared::SidebarButtonComponent.new(btn[:text], btn[:path], icon: btn[:icon], current_path: current_path, collapsed: collapsed)
 
-  - if story_group && !story_group.new_record?
+  - if story_group&.persisted?
     .sidebar-separator
     = render Shared::SidebarButtonComponent.new(story_group.name, story_group_path(story_group), icon: 'fa-book-open', current_path: current_path, collapsed: collapsed)
 

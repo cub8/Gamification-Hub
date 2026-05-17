@@ -1,26 +1,42 @@
-%h1= @student.full_name
+- content_for :title, @student.full_name
 
-%p
-  %strong Index:
-  = @student.university_number
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %div
+      %h1.h3.mb-0= @student.full_name
+      %small.text-dimmed= @student.email
+    = link_to "Back", story_group_students_path(@story_group), class: "btn btn-secondary"
 
-%p
-  %strong Lives:
-  = @student.lives
+  .row.g-3
+    .col-12.col-md-6
+      .form-section.p-4.mb-3
+        .section-title.mb-3 Basic Information
+        .d-flex.flex-column.gap-2
+          .d-flex.justify-content-between
+            %span.text-dimmed Index
+            %span.text-main= @student.university_number || "—"
+          .d-flex.justify-content-between
+            %span.text-dimmed Email
+            %span.text-main= @student.email
 
-%p
-  %strong Current Currency:
-  = @student.current_currency
+    .col-12.col-md-6
+      .form-section.p-4.mb-3
+        .section-title.mb-3 Currency & Lives
+        .d-flex.flex-column.gap-2
+          .d-flex.justify-content-between
+            %span.text-dimmed Lives
+            %span.text-main= @student.lives
+          .d-flex.justify-content-between
+            %span.text-dimmed Current currency
+            %span.text-main= @student.current_currency
+          .d-flex.justify-content-between
+            %span.text-dimmed Total currency
+            %span.text-main= @student.total_currency
 
-%p
-  %strong Total Currency:
-  = @student.total_currency
-
-%p
-  = link_to "Transactions", story_group_student_currency_transactions_path(@story_group, @student)
-
-%p
-  = link_to "Adjust currency", new_story_group_student_currency_adjustment_path(@story_group, @student)
-
-%p
-  = link_to "Back", story_group_students_path(@story_group)
+  .d-flex.gap-2.mt-3
+    = link_to story_group_student_currency_transactions_path(@story_group, @student), class: "btn btn-secondary" do
+      %i.fa-solid.fa-clock-rotate-left.me-1
+      Transaction history
+    = link_to new_story_group_student_currency_adjustment_path(@story_group, @student), class: "btn btn-secondary" do
+      %i.fa-solid.fa-money-bill-transfer.me-1
+      Adjust currency

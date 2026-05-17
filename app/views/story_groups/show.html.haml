@@ -29,7 +29,7 @@
 
 %div
   - if policy(@story_group).update?
-    = link_to "Edit this story group", edit_story_group_path(@story_group)
+    = link_to "Edit this story group", edit_story_group_path(@story_group), data: { turbo_frame: "modal" }
     |
   = link_to "Back to story groups", story_groups_path
   - if policy(@story_group).destroy?
