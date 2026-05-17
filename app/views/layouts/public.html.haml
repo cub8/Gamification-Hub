@@ -18,7 +18,9 @@
   %body.vh-100.d-flex.flex-column.justify-content-center.align-items-center.overflow-hidden
     .public-panel.w-auto.p-4.d-flex.align-items-center.flex-column.gap-4.rounded
       - if notice
-        .alert.alert-success{ role: 'alert' }
+        .alert.alert-success.fw-500.alert-dismissible.fade.show{role: "alert"}
           = notice
+          %button.btn-close{type: 'button', data: { bs_dismiss: 'alert' }, 'aria-label' => 'Close'}
+
       = image_tag 'logo.png', alt: 'App logo', class: 'login-logo-icon'
       = yield

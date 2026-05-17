@@ -2,6 +2,7 @@ html,
 body {
   height: 100%;
   font-family: "Inter", sans-serif;
+  font-weight: medium;
 }
 
 body {
@@ -34,6 +35,12 @@ body {
     color: $text-main;
     background-color: $background-light-hover;
   }
+}
+
+.alert-success {
+  color: $success-alert-color;
+  background-color: $success-alert-bg;
+  border: 1px solid $success-alert-color;
 }
 
 .ts-wrapper {
