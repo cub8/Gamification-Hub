@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 module CurrencyTransactionsHelper
-  def transaction_badge_class(transaction)
-    case transaction.kind
-    when 'reward'   then 'bg-primary'
-    when 'purchase' then 'bg-info'
-    else                 'bg-secondary'
-    end
+  def transaction_kind_badge(transaction)
+    badge_class = case transaction.kind
+                  when 'reward'   then 'bg-primary'
+                  when 'purchase' then 'bg-info'
+                  else                 'bg-secondary'
+                  end
+    content_tag(:span, transaction.kind.capitalize, class: "badge #{badge_class}")
   end
 
   def transaction_source(transaction)
