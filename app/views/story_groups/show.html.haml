@@ -1,37 +1,69 @@
-%h1= @story_group.name
+- content_for :title, @story_group.name
 
-- if policy(@story_group).view_ranking?
-  = link_to "Ranking", story_group_ranking_path(@story_group)
-  |
-= link_to "Ranks", story_group_ranks_path(@story_group)
-|
-= link_to "Badges", story_group_badges_path(@story_group)
-- if policy(@story_group).update?
-  |
-  = link_to "Items", story_group_items_path(@story_group)
-  |
-  = link_to "Teachers", story_group_teachers_path(@story_group)
-  |
-  = link_to "Students", story_group_students_path(@story_group)
-  |
-  = link_to "Activity groups", story_group_activity_groups_path(@story_group)
-  |
-  = link_to "Invites", story_group_invites_path(@story_group)
-- if policy(@story_group).student?
-  |
-  = link_to "My Profile", story_group_profile_index_path(@story_group)
-  |
-  = link_to "Shop", story_group_shop_index_path(@story_group)
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    .d-flex.align-items-center.gap-3
+      = link_to story_groups_path, class: "btn btn-secondary" do
+        %i.fa-solid.fa-arrow-left
+      %h1.h3.mb-0= @story_group.name
+    - if policy(@story_group).update?
+      = link_to edit_story_group_path(@story_group), class: "btn btn-primary", data: { turbo_frame: "modal" } do
+        %i.fa-solid.fa-pen.me-1
+        Edit
 
-%hr
+  .form-section.p-4.mb-3
+    .d-flex.gap-4.align-items-start
+      - if @story_group.icon.attached?
+        = image_tag @story_group.icon, width: 80, height: 80, class: "object-fit-contain flex-shrink-0 rounded"
+      - else
+        .show-icon-placeholder.d-flex.align-items-center.justify-content-center
+          %i.fa-solid.fa-book-open.fa-3x
 
-= render @story_group
+      .flex-grow-1
+        - if @story_group.description.present?
+          %p.mb-0= @story_group.description
+        - else
+          %p.text-dimmed.mb-0 Brak opisu.
 
-%div
-  - if policy(@story_group).update?
-    = link_to "Edit this story group", edit_story_group_path(@story_group), data: { turbo_frame: "modal" }
-    |
-  = link_to "Back to story groups", story_groups_path
+  .row.g-3.mb-3
+    .col-12.col-md-6
+      .form-section.p-4.h-100
+        .section-title.mb-3 Informacje o grupie
+        .d-flex.flex-column.gap-3
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Właściciel
+            %span= @story_group.owner.full_name
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Waluta
+            .d-flex.align-items-center.gap-2
+              - if @story_group.currency_icon.attached?
+                = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
+              %span= @story_group.currency_name
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Domyślne życia
+            %span= @story_group.default_lives
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Ranking
+            - if @story_group.ranking_enabled
+              %span.badge.bg-success Włączony
+            - else
+              %span.badge.bg-secondary Wyłączony
+
+    .col-12.col-md-6
+      .form-section.p-4.h-100
+        .section-title.mb-3 Członkowie
+        .d-flex.flex-column.gap-3
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Studenci
+            %span.fw-semibold= @story_group.students.count
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Nauczyciele
+            %span.fw-semibold= @story_group.teachers.count
+
   - if policy(@story_group).destroy?
-    |
-    = link_to "Destroy this story group", @story_group, data: { turbo_method: :delete }
+    .d-flex.justify-content-end
+      = button_to @story_group, method: :delete,
+          form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
+          class: "btn btn-danger" do
+        %i.fa-solid.fa-trash.me-1
+        Usuń grupę

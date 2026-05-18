@@ -11,8 +11,10 @@
         = link_to "Uczę się", story_groups_path(filter: "student"), class: "nav-link px-0 me-4 #{'active' if params[:filter] == 'student'}"
       %li.nav-item
         = link_to "Nauczam", story_groups_path(filter: "teacher"), class: "nav-link px-0 #{'active' if params[:filter] == 'teacher'}"
-    %button.btn.btn-link.text-dimmed.p-0
-      %i.fa-solid.fa-magnifying-glass
+    .d-flex.align-items-center.gap-3
+      = render 'home/join_modal'
+      %button.btn.btn-link.text-dimmed.p-0
+        %i.fa-solid.fa-magnifying-glass
 
   - if @story_groups.empty?
     %p.text-dimmed No story groups yet.
