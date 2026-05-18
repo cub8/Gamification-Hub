@@ -5,10 +5,10 @@
     .d-flex.align-items-center.gap-3
       - if @student.user == @current_user
         = link_to story_group_profile_index_path(@story_group), class: "btn btn-secondary" do
-          %i.bi.bi-arrow-left
+          %i.fa-solid.fa-arrow-left
       - else
         = link_to story_group_students_path(@story_group), class: "btn btn-secondary" do
-          %i.bi.bi-arrow-left
+          %i.fa-solid.fa-arrow-left
       %div
         %h1.h3.mb-0 Currency Transactions
         %small.text-dimmed= @student.full_name
@@ -35,7 +35,6 @@
               - else
                 %span.text-danger= transaction.amount
             %td
-              - badge_class = { "reward" => "bg-primary", "adjustment" => "bg-secondary", "purchase" => "bg-info" }[transaction.kind] || "bg-secondary"
-              %span.badge{ class: badge_class }= transaction.kind.capitalize
+              = transaction_kind_badge(transaction)
             %td.text-dimmed= transaction_source(transaction)
             %td.text-end.text-dimmed= transaction.created_at.strftime("%Y-%m-%d %H:%M")

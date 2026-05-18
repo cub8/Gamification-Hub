@@ -4,13 +4,13 @@
   .d-flex.align-items-center.justify-content-between.mb-4
     .d-flex.align-items-center.gap-3
       = link_to story_group_students_path(@story_group), class: "btn btn-secondary" do
-        %i.bi.bi-arrow-left
+        %i.fa-solid.fa-arrow-left
       %div
         %h1.h3.mb-0 Badges
         %small.text-dimmed= @student.full_name
     - if policy(@student).update?
       = link_to new_story_group_student_badge_path(@story_group, @student), class: "btn btn-primary" do
-        %i.bi.bi-plus-lg.me-1
+        %i.fa-solid.fa-plus.me-1
         Give Badge
 
   - if @badges.empty?
@@ -29,9 +29,9 @@
           %tr
             %td
               - if badge.icon.attached?
-                = image_tag badge.icon, width: 36, height: 36, style: "object-fit: contain;"
+                = image_tag badge.icon, width: 36, height: 36, class: "object-fit-contain"
               - else
-                %i.bi.bi-patch-check.fs-4.text-dimmed
+                %i.fa-solid.fa-award.fs-4.text-dimmed
             %td= badge.name
             %td.text-dimmed= badge.story_description
             - if policy(@student).update?
@@ -40,4 +40,4 @@
                   method: :delete,
                   form: { data: { turbo_confirm: "Remove badge \"#{badge.name}\" from #{@student.full_name}?" } },
                   class: "btn btn-sm btn-danger border-0", title: "Remove" do
-                  %i.bi.bi-trash
+                  %i.fa-solid.fa-trash

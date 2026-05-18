@@ -1,0 +1,27 @@
+.ts-wrapper {
+  .ts-control {
+    background-color: $background-light;
+    border-color: $secondary;
+    color: $text-main;
+
+    >input::placeholder {
+      color: $secondary;
+    }
+  }
+
+  &.focus .ts-control {
+    border-color: $primary;
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+  }
+
+  .ts-dropdown {
+    background-color: $background-light;
+    border-color: $secondary;
+    color: $text-main;
+
+    .active {
+      background-color: $background-light-hover;
+      color: $text-main;
+    }
+  }
+}

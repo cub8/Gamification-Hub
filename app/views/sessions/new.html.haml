@@ -1,5 +1,16 @@
-%h1 Login
-%h2 Select login method
+%h1.fs-2 Witaj w Gamification Hub!
 
-= button_to 'Zaloguj się przez USOS', '/auth/uam_usos', method: :post, data: { turbo: false }
-= button_to 'Zaloguj się przez email', new_auth_passwordless_path, method: :get
+#login-actions.d-flex.flex-column.align-items-center.gap-2
+  = button_to '/auth/uam_usos', data: { turbo: false }, class: 'btn btn-primary' do
+    %i.fa-solid.fa-fw.fa-graduation-cap
+    Zaloguj się przez usos
+
+  %span lub
+
+  = link_to new_auth_passwordless_path, class: 'btn btn-secondary' do
+    %i.fa-solid.fa-fw.fa-at
+    Zaloguj się przez email
+
+  %span.text-dimmed
+    Nie masz konta?
+    = link_to 'Zarejestruj się', ''

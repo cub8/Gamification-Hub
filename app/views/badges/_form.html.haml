@@ -1,44 +1,44 @@
 - if badge.errors.any?
-  .sg-errors
+  .form-errors.p-3.mb-3
     %h2 Please fix the following errors:
     %ul
       - badge.errors.full_messages.each do |message|
         %li= message
 
 = form_with model: [@story_group, badge] do |f|
-  .sg-section
-    .sg-section-title Basic Information
+  .form-section.p-4.mb-3
+    .section-title.mb-3 Basic Information
 
-    .sg-form-group
+    .field-group.mb-3
       = f.label :name, "Name"
       = f.text_field :name, class: "form-control"
 
-    .sg-form-group
+    .field-group.mb-3
       = f.label :story_description, "Story description"
       = f.text_area :story_description, class: "form-control"
 
-    .sg-form-group
+    .field-group.mb-3
       = f.label :didactic_description, "Didactic description"
       = f.text_area :didactic_description, class: "form-control"
 
-    .sg-form-group
+    .field-group.mb-3
       = f.label :discount, "Discount (%)"
       = f.number_field :discount, in: 0..100, step: 1, class: "form-control"
 
-  .sg-section
-    .sg-section-title Icon
+  .form-section.p-4.mb-3
+    .section-title.mb-3 Icon
 
-    .sg-form-group
+    .field-group.mb-3
       - if badge.icon.attached?
         .mb-2
-          = image_tag badge.icon, width: 60, height: 60, style: "object-fit: contain;"
-      .sg-file-upload
-        = f.label :icon, class: "sg-file-btn" do
-          %i.bi.bi-upload
+          = image_tag badge.icon, width: 60, height: 60, class: "object-fit-contain"
+      .file-upload
+        = f.label :icon, class: "file-btn px-3 py-2" do
+          %i.fa-solid.fa-upload
           = badge.icon.attached? ? "Replace icon" : "Upload icon"
         = f.file_field :icon, accept: "image/*", class: "d-none"
-        %small.sg-file-hint GIF, JPG or PNG
+        %small.file-hint.mt-1 GIF, JPG or PNG
 
-  .sg-form-actions
+  .form-actions.gap-3.mt-4
     = yield :form_cancel
-    = f.submit class: "sg-btn-submit"
+    = f.submit class: "btn-submit py-2 px-4"

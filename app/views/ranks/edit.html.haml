@@ -3,9 +3,9 @@
 .dark-page
   .row.justify-content-center
     .col-12.col-md-8.col-lg-6
-      %h1.sg-form-title Edit Rank
+      %h1.page-title.mb-4 Edit Rank
 
       - content_for :form_cancel do
-        = link_to "Cancel", story_group_rank_path(@story_group, @rank), class: "sg-btn-cancel"
+        = link_to "Cancel", story_group_rank_path(@story_group, @rank), class: "btn-cancel py-2 px-3"
 
       = render "form", rank: @rank

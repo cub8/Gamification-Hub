@@ -2,6 +2,7 @@ html,
 body {
   height: 100%;
   font-family: "Inter", sans-serif;
+  font-weight: medium;
 }
 
 body {
@@ -27,33 +28,12 @@ body {
 
 .btn-secondary {
   color: $text-main;
-}
+  background-color: $background-light;
+  border: solid 1px $secondary;
 
-.ts-wrapper {
-  .ts-control {
-    background-color: $background-light;
-    border-color: $secondary;
+  &:hover {
     color: $text-main;
-
-    > input::placeholder {
-      color: $secondary;
-    }
-  }
-
-  &.focus .ts-control {
-    border-color: $primary;
-    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
-  }
-
-  .ts-dropdown {
-    background-color: $background-light;
-    border-color: $secondary;
-    color: $text-main;
-
-    .active {
-      background-color: $background-light-hover;
-      color: $text-main;
-    }
+    background-color: $background-light-hover;
   }
 }
 
@@ -64,6 +44,12 @@ body {
     background-color: $background-light-hover;
     color: $text-main;
   }
+}
+
+.alert-success {
+  color: $success-alert-color;
+  background-color: $success-alert-bg;
+  border: 1px solid $success-alert-color;
 }
 
 .cursor-pointer {

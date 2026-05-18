@@ -4,26 +4,26 @@
   .d-flex.align-items-center.justify-content-between.mb-4
     .d-flex.align-items-center.gap-3
       = link_to story_group_ranks_path(@story_group), class: "btn btn-secondary" do
-        %i.bi.bi-arrow-left
+        %i.fa-solid.fa-arrow-left
       %h1.h3.mb-0= @rank.name
     - if policy(@story_group).update?
       = link_to edit_story_group_rank_path(@story_group, @rank), class: "btn btn-primary" do
-        %i.bi.bi-pencil.me-1
+        %i.fa-solid.fa-pen.me-1
         Edit
 
-  .sg-section
+  .form-section.p-4.mb-3
     .d-flex.gap-4.align-items-start
       - if @rank.icon.attached?
-        = image_tag @rank.icon, width: 80, height: 80, style: "object-fit: contain; flex-shrink: 0;"
+        = image_tag @rank.icon, width: 80, height: 80, class: "object-fit-contain flex-shrink-0"
       - else
-        .d-flex.align-items-center.justify-content-center{ style: "width: 80px; height: 80px; flex-shrink: 0;" }
-          %i.bi.bi-trophy{ style: "font-size: 3rem;" }
+        .show-icon-placeholder.d-flex.align-items-center.justify-content-center
+          %i.fa-solid.fa-trophy.fa-3x
 
       .d-flex.flex-column.gap-3.flex-grow-1
         .d-flex.flex-column.gap-1
-          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Required currency
+          %span.text-dimmed.text-label Required currency
           %span= @rank.required_currency_value
 
         .d-flex.flex-column.gap-1
-          %span.text-dimmed{ style: "font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;" } Discount
+          %span.text-dimmed.text-label Discount
           %span= "#{@rank.discount}%"

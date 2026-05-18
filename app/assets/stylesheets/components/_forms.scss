@@ -1,10 +1,8 @@
-@import "variables";
-
 turbo-frame#modal:empty {
   display: none;
 }
 
-.sg-modal-backdrop {
+.modal-overlay {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
@@ -12,50 +10,38 @@ turbo-frame#modal:empty {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 2rem 1rem;
   overflow-y: auto;
   z-index: 1050;
 }
 
-.sg-form-card {
+.form-card {
   background-color: $background;
   border: 2px solid $primary;
   border-radius: 10px;
-  padding: 20px;
   width: 100%;
   max-width: 629px;
   color: $text-main;
 }
 
-.sg-form-title {
+.page-title {
   font-size: 1.75rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
   color: $text-main;
 }
 
-.sg-section {
+.form-section {
   background-color: $background;
   border: 1px solid $secondary;
   border-radius: 0.75rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
 }
 
-.sg-section-title {
+.section-title {
   font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 1.25rem;
   color: $text-main;
 }
 
-.sg-form-group {
-  margin-bottom: 1.25rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
+.field-group {
   label {
     display: block;
     font-size: 0.875rem;
@@ -66,7 +52,7 @@ turbo-frame#modal:empty {
 
   .form-control {
     background-color: $background-light;
-    border-color: $background-light;
+    border-color: $secondary;
     color: $text-main;
     border-radius: 0.5rem;
     padding: 0.625rem 0.875rem;
@@ -89,13 +75,12 @@ turbo-frame#modal:empty {
   }
 }
 
-.sg-file-upload {
-  .sg-file-btn {
+.file-upload {
+  .file-btn {
     background-color: $background-light;
     border: 1.5px solid $secondary;
     border-radius: 0.5rem;
     color: $text-main;
-    padding: 0.625rem 1rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -112,28 +97,24 @@ turbo-frame#modal:empty {
     }
   }
 
-  .sg-file-hint {
+  .file-hint {
     display: block;
     font-size: 0.75rem;
     color: $secondary;
-    margin-top: 0.375rem;
   }
 }
 
-.sg-form-actions {
+.form-actions {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
 
-  .sg-btn-cancel {
+  .btn-cancel {
     background: none;
     border: none;
     color: $text-main;
     font-size: 0.875rem;
     cursor: pointer;
-    padding: 0.5rem 1rem;
     text-decoration: none;
 
     &:hover {
@@ -141,14 +122,13 @@ turbo-frame#modal:empty {
     }
   }
 
-  .sg-btn-submit {
+  .btn-submit {
     background-color: $primary;
     border: none;
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: 0.5rem;
-    padding: 0.625rem 1.5rem;
     cursor: pointer;
     transition: background-color 0.15s;
 
@@ -158,12 +138,10 @@ turbo-frame#modal:empty {
   }
 }
 
-.sg-errors {
+.form-errors {
   background-color: rgba(220, 53, 69, 0.2);
   border: 1px solid $danger;
   border-radius: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 1rem;
   color: $text-main;
 
   h2 {

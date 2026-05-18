@@ -1,10 +1,6 @@
 @import "variables";
 @import 'bootstrap/scss/bootstrap';
-@import "tom-select/dist/css/tom-select.bootstrap5";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "global";
-@import "theme";
-@import "components/sidebar";
-@import "components/header";
+@import "public_global";
 @import "components/forms";
-@import "components/tom_select";

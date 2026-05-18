@@ -1,7 +1,7 @@
 - content_for :title, "Edit story group"
 
 %turbo-frame#modal
-  .sg-modal-backdrop
-    .sg-form-card
-      %h1.sg-form-title Edit Story Group
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Edit Story Group
       = render "form", story_group: @story_group, cancel_path: story_group_path(@story_group), submit_label: "Save"

@@ -4,7 +4,7 @@
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Items
     = link_to new_story_group_item_path(@story_group), class: "btn btn-primary" do
-      %i.bi.bi-plus-lg.me-1
+      %i.fa-solid.fa-plus.me-1
       New Item
 
   - if @items.empty?
@@ -19,7 +19,7 @@
                 = image_tag item.image
             - else
               .dark-card-icon
-                %i.bi.bi-box-seam{ style: "font-size: 2.5rem;" }
+                %i.fa-solid.fa-box.fa-3x
 
             .dark-card-body
               .dark-card-title= item.name
@@ -33,9 +33,9 @@
 
             .dark-card-actions
               = link_to edit_story_group_item_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
-                %i.bi.bi-pencil
+                %i.fa-solid.fa-pen
               = button_to story_group_item_path(@story_group, item),
                 method: :delete,
                 form: { data: { turbo_confirm: "Delete item \"#{item.name}\"?" } },
                 class: "btn btn-sm btn-danger border-0", title: "Delete" do
-                %i.bi.bi-trash
+                %i.fa-solid.fa-trash
