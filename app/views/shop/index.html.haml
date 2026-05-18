@@ -1,48 +1,56 @@
-%h1 Shop: #{@story_group.name}
+- content_for :title, "Sklep"
 
-%p
-  %strong Your funds:
-  = "#{@student.current_currency} #{@story_group.currency_name}"
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0 Sklep
+    .d-flex.align-items-center.gap-2
+      - if @story_group.currency_icon.attached?
+        = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
+      %span.fw-semibold= @student.current_currency
+      %span.text-dimmed= @story_group.currency_name
 
-%table.table
-  %tr
-    %th Name
-    %th Story Description
-    %th Price
-    %th Image
-    %th Akcja
+  - if @items.empty?
+    %p.text-dimmed Brak przedmiotów w sklepie.
+  - else
+    .row.g-3
+      - @items.each do |item|
+        - discount_info = item.discount_info_for(@student)
+        - discounted_price = item.discounted_price_for(@student)
+        - eligibility = PurchaseEligibilityService.new(student: @student, item: item).call
+        .col-12.col-sm-6.col-md-4.col-xl-3
+          .dark-card{ class: ('opacity-75' unless eligibility.eligible?) }
+            - if item.image.attached?
+              .dark-card-cover
+                = image_tag item.image
+            - else
+              .dark-card-icon
+                %i.fa-solid.fa-box.fa-3x
 
-  - @items.each do |item|
-    - discount_info = item.discount_info_for(@student)
-    - discounted_price = item.discounted_price_for(@student)
-    - eligibility = PurchaseEligibilityService.new(student: @student, item: item).call
-    %tr{ class: ('text-muted bg-light' unless eligibility.eligible?) }
-      %td= item.name
-      %td= item.story_description
-      %td
-        - if discounted_price < item.price
-          %s= item.price
-          %br
-          %strong= "#{discounted_price} #{@story_group.currency_name}"
-          %br
-          %small= discount_label(discount_info)
-        - else
-          = "#{item.price} #{@story_group.currency_name}"
-      %td
-        - if item.image.attached?
-          = image_tag item.image, width: 100
-      %td
-        = link_to 'Show details', story_group_shop_path(@story_group, item)
-        
-        - if eligibility.eligible?
-          = button_to 'Kup', buy_story_group_shop_path(@story_group, item), method: :post, class: 'btn btn-success btn-sm mt-1'
-        - else
-          .text-danger.mt-1
-            %small Zablokowane:
-            %ul.list-unstyled.mb-0
-              - eligibility.errors.each do |error|
-                %li
-                  %small= error
+            .dark-card-body
+              .dark-card-title= item.name
+              - if item.story_description.present?
+                %p.text-dimmed.small.fst-italic.mb-2= truncate(item.story_description, length: 80)
 
-%br
-= link_to 'Back to Story group', story_group_path(@story_group)
+              .mt-2
+                - if discounted_price < item.price
+                  .d-flex.align-items-center.gap-2.flex-wrap
+                    %s.text-dimmed.small= item.price
+                    %strong= discounted_price
+                    %span.text-dimmed.small= @story_group.currency_name
+                    %span.badge.bg-success= discount_label(discount_info)
+                - else
+                  .d-flex.align-items-center.gap-1
+                    %strong= item.price
+                    %span.text-dimmed.small= @story_group.currency_name
+
+            .dark-card-actions
+              = link_to story_group_shop_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Szczegóły" do
+                %i.fa-solid.fa-eye
+              - if eligibility.eligible?
+                = button_to buy_story_group_shop_path(@story_group, item), method: :post, class: "btn btn-sm btn-primary" do
+                  %i.fa-solid.fa-cart-shopping.me-1
+                  Kup
+              - else
+                %span.btn.btn-sm.btn-secondary.disabled
+                  %i.fa-solid.fa-lock.me-1
+                  Zablokowane

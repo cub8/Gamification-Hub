@@ -3,7 +3,11 @@
 .dark-page
   .mb-5
     %h1.h2.mb-1 Witaj, #{@current_user.full_name}!
-    %p.text-dimmed Oto twój panel nauczyciela.
+    %p.text-dimmed
+      - if @current_user.teacher?
+        Oto twój panel nauczyciela.
+      - else
+        Oto twój panel studenta.
 
   .row.g-4
     .col-12.col-lg-4
