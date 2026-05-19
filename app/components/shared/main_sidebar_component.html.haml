@@ -1,4 +1,8 @@
 .sidebar.rounded.d-flex.flex-column.h-100.p-2.gap-2{class: sidebar_class}
+  = render toggle_button
+
+  .sidebar-separator
+
   - primary_buttons.each do |btn|
     = render Shared::SidebarButtonComponent.new(btn[:text], btn[:path], icon: btn[:icon], current_path: current_path, collapsed: collapsed)
 
@@ -8,7 +12,3 @@
 
     - story_group_buttons.each do |btn|
       = render Shared::SidebarButtonComponent.new(btn[:text], btn[:path], icon: btn[:icon], current_path: current_path, collapsed: collapsed)
-
-  .mt-auto
-
-  = render toggle_button
