@@ -1,0 +1,29 @@
+.dark-card.flex-row.align-items-stretch.p-0{ class: ('opacity-75' if locked) }
+  = link_to story_group_shop_path(@story_group, item), data: { turbo_frame: "modal" }, class: "d-flex align-items-stretch flex-grow-1 text-decoration-none overflow-hidden" do
+    - if item.image.attached?
+      = image_tag item.image, class: "dark-card-side-cover"
+    - else
+      .dark-card-side-icon
+        %i.fa-solid.fa-box.fa-2x.text-dimmed
+    .d-flex.flex-column.justify-content-center.gap-1.p-3.overflow-hidden.flex-grow-1
+      .dark-card-title= item.name
+      - if item.story_description.present?
+        %p.text-dimmed.small.fst-italic.mb-0= truncate(item.story_description, length: 120)
+      .d-flex.align-items-center.gap-2.mt-1
+        - if @discounted_prices[item.id] < item.price
+          %s.text-dimmed.small= item.price
+          %strong= @discounted_prices[item.id]
+          %span.text-dimmed.small= @story_group.currency_name
+          %span.badge.bg-success= discount_label(@discount_infos[item.id])
+        - else
+          %strong= item.price
+          %span.text-dimmed.small= @story_group.currency_name
+  .d-flex.align-items-center.px-3
+    - if locked
+      %span.btn.btn-sm.btn-secondary.disabled.text-white
+        %i.fa-solid.fa-lock.me-1
+        Zablokowane
+    - else
+      = button_to buy_story_group_shop_path(@story_group, item), method: :post, class: "btn btn-sm btn-primary" do
+        %i.fa-solid.fa-cart-shopping.me-1
+        Kup

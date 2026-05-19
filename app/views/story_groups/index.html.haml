@@ -1,23 +1,22 @@
 - content_for :title, "Story Groups"
 
 .dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
+  .mb-4
     %ul.nav.mb-0
       %li.nav-item
         = link_to "Wszystkie grupy", story_groups_path, class: "nav-link px-0 me-4 #{'active' if params[:filter].blank?}"
-      %li.nav-item
-        = link_to "Moje", story_groups_path(filter: "mine"), class: "nav-link px-0 me-4 #{'active' if params[:filter] == 'mine'}"
-      %li.nav-item
-        = link_to "Uczę się", story_groups_path(filter: "student"), class: "nav-link px-0 me-4 #{'active' if params[:filter] == 'student'}"
-      %li.nav-item
-        = link_to "Nauczam", story_groups_path(filter: "teacher"), class: "nav-link px-0 #{'active' if params[:filter] == 'teacher'}"
-    .d-flex.align-items-center.gap-3
-      = render 'home/join_modal'
-      %button.btn.btn-link.text-dimmed.p-0
-        %i.fa-solid.fa-magnifying-glass
+      - if @show_mine_tab
+        %li.nav-item
+          = link_to "Moje", story_groups_path(filter: "mine"), class: "nav-link px-0 me-4 #{'active' if params[:filter] == 'mine'}"
+      - if @show_student_tab
+        %li.nav-item
+          = link_to "Uczę się", story_groups_path(filter: "student"), class: "nav-link px-0 me-4 #{'active' if params[:filter] == 'student'}"
+      - if @show_teacher_tab
+        %li.nav-item
+          = link_to "Nauczam", story_groups_path(filter: "teacher"), class: "nav-link px-0 #{'active' if params[:filter] == 'teacher'}"
 
   - if @story_groups.empty?
-    %p.text-dimmed No story groups yet.
+    %p.text-dimmed Brak grup fabularnych.
   - else
     .row.g-3
       - @story_groups.each do |story_group|

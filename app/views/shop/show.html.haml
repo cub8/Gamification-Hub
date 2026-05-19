@@ -1,56 +1,45 @@
 - content_for :title, @item.name
-- discount_info = @item.discount_info_for(@student)
-- discounted_price = @item.discounted_price_for(@student)
-- eligibility = PurchaseEligibilityService.new(student: @student, item: @item).call
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    .d-flex.align-items-center.gap-3
-      = link_to story_group_shop_index_path(@story_group), class: "btn btn-secondary" do
-        %i.fa-solid.fa-arrow-left
-      %h1.h3.mb-0= @item.name
-    - if eligibility.eligible?
-      = button_to buy_story_group_shop_path(@story_group, @item), method: :post, class: "btn btn-primary" do
-        %i.fa-solid.fa-cart-shopping.me-1
-        Kup
+%turbo-frame#modal
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h2.page-title.mb-4= @item.name
 
-  .row.g-4
-    .col-12.col-md-5
-      .form-section.p-4.d-flex.justify-content-center.align-items-center
-        - if @item.image.attached?
+      - if @item.image.attached?
+        .text-center.mb-4
           = image_tag @item.image, class: "img-fluid rounded"
+
+      - if @item.story_description.present?
+        %p.fst-italic.mb-2= @item.story_description
+      - if @item.didactic_description.present?
+        %p.mb-3= @item.didactic_description
+      - if @item.story_description.blank? && @item.didactic_description.blank?
+        %p.text-dimmed.mb-3 Brak opisu.
+
+      .d-flex.align-items-center.gap-2.mb-4
+        - if @story_group.currency_icon.attached?
+          = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
+        - if @discounted_price < @item.price
+          %s.text-dimmed= @item.price
+          %strong.ms-1= @discounted_price
+          %span.text-dimmed.small= @story_group.currency_name
+          %span.badge.bg-success.ms-1= discount_label(@discount_info)
         - else
-          %i.fa-solid.fa-box.fa-5x.text-dimmed.py-4
+          %strong= @item.price
+          %span.text-dimmed.small.ms-1= @story_group.currency_name
 
-    .col-12.col-md-7
-      .form-section.p-4.mb-3
-        .section-title.mb-3 Opis
-        - if @item.story_description.present?
-          %p.fst-italic.mb-2= @item.story_description
-        - if @item.didactic_description.present?
-          %p.mb-0= @item.didactic_description
-        - if @item.story_description.blank? && @item.didactic_description.blank?
-          %p.text-dimmed.mb-0 Brak opisu.
+      - unless @eligibility.eligible?
+        .alert.alert-warning.mb-4
+          .fw-semibold.mb-1
+            %i.fa-solid.fa-lock.me-1
+            Przedmiot zablokowany
+          %ul.mb-0.ps-3
+            - @eligibility.errors.each do |error|
+              %li.small= error
 
-      .form-section.p-4
-        .section-title.mb-3 Cena
-        .d-flex.align-items-center.gap-2.mb-3
-          - if @story_group.currency_icon.attached?
-            = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
-          - if discounted_price < @item.price
-            %s.text-dimmed= @item.price
-            %strong.ms-1= discounted_price
-            %span.text-dimmed.small= @story_group.currency_name
-            %span.badge.bg-success.ms-1= discount_label(discount_info)
-          - else
-            %strong= @item.price
-            %span.text-dimmed.small.ms-1= @story_group.currency_name
-
-        - unless eligibility.eligible?
-          .alert.alert-warning.mb-0
-            .d-flex.align-items-center.gap-2.fw-semibold.mb-2
-              %i.fa-solid.fa-lock
-              Przedmiot zablokowany
-            %ul.mb-0.ps-3
-              - eligibility.errors.each do |error|
-                %li.small= error
+      .d-flex.justify-content-end.align-items-center.gap-2
+        = link_to "Zamknij", story_group_shop_index_path(@story_group), class: "btn btn-secondary"
+        - if @eligibility.eligible?
+          = button_to buy_story_group_shop_path(@story_group, @item), method: :post, form: { data: { turbo_frame: "_top" } }, class: "btn btn-primary" do
+            %i.fa-solid.fa-cart-shopping.me-1
+            Kup

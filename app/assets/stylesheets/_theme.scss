@@ -92,6 +92,23 @@
     padding-top: 0.75rem;
     border-top: 1px solid $background-light-hover;
   }
+
+  .dark-card-side-cover {
+    width: 110px;
+    object-fit: cover;
+    border-radius: 0.75rem 0 0 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .dark-card-side-icon {
+    width: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: $background;
+    border-radius: 0.75rem 0 0 0.75rem;
+  }
 }
 
 .show-icon-placeholder {
@@ -100,8 +117,15 @@
   flex-shrink: 0;
 }
 
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $text-main;
+}
+
 .text-label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+

@@ -47,20 +47,19 @@ class Shared::MainSidebarComponent < ViewComponent::Base
     return [] unless story_group
 
     if story_group_student?
-      buttons = [
+      [
+        (if story_group.ranking_enabled
+           {
+             text: 'Ranking',
+             path: helpers.story_group_ranking_path(story_group),
+             icon: 'fa-ranking-star',
+           }
+         end),
         { text: 'Sklep', path: helpers.story_group_shop_index_path(story_group), icon: 'fa-sack-dollar' },
         { text: 'Moje przedmioty', path: helpers.story_group_items_path(story_group), icon: 'fa-flask' },
         { text: 'Rangi', path: helpers.story_group_ranks_path(story_group), icon: 'fa-angles-up' },
         { text: 'Odznaki', path: helpers.story_group_badges_path(story_group), icon: 'fa-award' },
-      ]
-      if story_group.ranking_enabled
-        buttons.prepend({
-                          text: 'Ranking',
-                          path: helpers.story_group_ranking_path(story_group),
-                          icon: 'fa-ranking-star',
-                        })
-      end
-      buttons
+      ].compact
     else
       [
         { text: 'Studenci', path: helpers.story_group_students_path(story_group), icon: 'fa-graduation-cap' },

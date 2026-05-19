@@ -10,11 +10,27 @@ class ShopController < ApplicationController
   def index
     authorize @story_group, :student?, policy_class: StoryGroupPolicy
     @items = @story_group.items.includes(:unlock_rank, :min_rank_for_discount, :unlock_badges, :discount_badges)
+
+    @discount_infos    = {}
+    @discounted_prices = {}
+    eligibilities      = {}
+
+    @items.each do |item|
+      discount                    = item.discount_info_for(@student)
+      @discount_infos[item.id]    = discount
+      @discounted_prices[item.id] = PriceCalculatorService.new(price: item.price, discount: discount).calculate
+      eligibilities[item.id]      = PurchaseEligibilityService.new(student: @student, item: item).call
+    end
+
+    @eligible_items, @locked_items = @items.partition { |i| eligibilities[i.id].eligible? }
   end
 
   def show
     authorize @story_group, :student?, policy_class: StoryGroupPolicy
-    @item = @story_group.items.find(params[:id])
+    @item             = @story_group.items.find(params[:id])
+    @discount_info    = @item.discount_info_for(@student)
+    @discounted_price = PriceCalculatorService.new(price: @item.price, discount: @discount_info).calculate
+    @eligibility      = PurchaseEligibilityService.new(student: @student, item: @item).call
   end
 
   def buy
@@ -25,7 +41,7 @@ class ShopController < ApplicationController
     if result.success?
       redirect_to story_group_shop_index_path(@story_group), notice: 'Przedmiot został pomyślnie kupiony!'
     else
-      redirect_to story_group_shop_path(@story_group, @item), alert: result.errors.join(', ')
+      redirect_to story_group_shop_index_path(@story_group), alert: result.errors.join(', ')
     end
   end
 

@@ -11,23 +11,13 @@
         %i.fa-solid.fa-pen.me-1
         Edit
 
-  .form-section.p-4.mb-3
-    .d-flex.gap-4.align-items-start
-      - if @story_group.icon.attached?
-        = image_tag @story_group.icon, width: 80, height: 80, class: "object-fit-contain flex-shrink-0 rounded"
-      - else
-        .show-icon-placeholder.d-flex.align-items-center.justify-content-center
-          %i.fa-solid.fa-book-open.fa-3x
-
-      .flex-grow-1
-        - if @story_group.description.present?
-          %p.mb-0= @story_group.description
-        - else
-          %p.text-dimmed.mb-0 Brak opisu.
+  - if @story_group.description.present?
+    .dark-card.mb-3
+      %p.mb-0= @story_group.description
 
   .row.g-3.mb-3
     .col-12.col-md-6
-      .form-section.p-4.h-100
+      .dark-card
         .section-title.mb-3 Informacje o grupie
         .d-flex.flex-column.gap-3
           .d-flex.justify-content-between.align-items-center
@@ -50,7 +40,7 @@
               %span.badge.bg-secondary Wyłączony
 
     .col-12.col-md-6
-      .form-section.p-4.h-100
+      .dark-card
         .section-title.mb-3 Członkowie
         .d-flex.flex-column.gap-3
           .d-flex.justify-content-between.align-items-center

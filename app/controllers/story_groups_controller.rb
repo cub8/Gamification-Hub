@@ -5,7 +5,18 @@ class StoryGroupsController < ApplicationController
 
   # GET /story_groups
   def index
-    @story_groups = policy_scope(StoryGroup)
+    all_groups = policy_scope(StoryGroup)
+
+    @story_groups = case params[:filter]
+                    when 'mine'    then all_groups.where(owner_id: current_user.id)
+                    when 'student' then all_groups.where(id: current_user.student_story_groups.select(:id))
+                    when 'teacher' then all_groups.where(id: current_user.teacher_story_groups.select(:id))
+                    else                all_groups
+                    end
+
+    @show_mine_tab    = all_groups.exists?(owner_id: current_user.id)
+    @show_student_tab = current_user.student_story_groups.exists?
+    @show_teacher_tab = current_user.teacher_story_groups.exists?
   end
 
   # GET /story_groups/1
