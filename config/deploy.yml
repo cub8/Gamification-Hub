@@ -10,8 +10,6 @@ servers:
   web:
     hosts:
       - 150.254.78.144
-    boot:
-      limit: 1
   job:
     hosts:
       - 150.254.78.144
