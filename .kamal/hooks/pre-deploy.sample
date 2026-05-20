@@ -17,25 +17,25 @@
 # KAMAL_DESTINATION (if set)
 
 # Only check the build status for production deployments
-if ENV["KAMAL_COMMAND"] == "rollback" || ENV["KAMAL_DESTINATION"] != "production"
+if ENV['KAMAL_COMMAND'] == 'rollback' || ENV['KAMAL_DESTINATION'] != 'production'
   exit 0
 end
 
-require "bundler/inline"
+require 'bundler/inline'
 
 # true = install gems so this is fast on repeat invocations
 gemfile(true, quiet: true) do
-  source "https://rubygems.org"
+  source 'https://rubygems.org'
 
-  gem "octokit"
-  gem "faraday-retry"
+  gem 'octokit'
+  gem 'faraday-retry'
 end
 
 MAX_ATTEMPTS = 72
 ATTEMPTS_GAP = 10
 
 def exit_with_error(message)
-  $stderr.puts message
+  warn message
   exit 1
 end
 
@@ -45,7 +45,7 @@ class GithubStatusChecks
   def initialize
     @remote_url = github_repo_from_remote_url
     @git_sha = `git rev-parse HEAD`.strip
-    @github_client = Octokit::Client.new(access_token: ENV["GITHUB_TOKEN"])
+    @github_client = Octokit::Client.new(access_token: ENV['GITHUB_TOKEN'])
     refresh!
   end
 
@@ -63,7 +63,7 @@ class GithubStatusChecks
   end
 
   def complete_count
-    combined_status[:statuses].count { |status| status[:state] != "pending"}
+    combined_status[:statuses].count { |status| status[:state] != 'pending' }
   end
 
   def total_count
@@ -74,40 +74,41 @@ class GithubStatusChecks
     if total_count > 0
       "Completed #{complete_count}/#{total_count} checks, see #{first_status_url} ..."
     else
-      "Build not started..."
+      'Build not started...'
     end
   end
 
   private
-    def github_repo_from_remote_url
-      url = `git config --get remote.origin.url`.strip.delete_suffix(".git")
-      if url.start_with?("https://github.com/")
-        url.delete_prefix("https://github.com/")
-      elsif url.start_with?("git@github.com:")
-        url.delete_prefix("git@github.com:")
-      else
-        url
-      end
+
+  def github_repo_from_remote_url
+    url = `git config --get remote.origin.url`.strip.delete_suffix('.git')
+    if url.start_with?('https://github.com/')
+      url.delete_prefix('https://github.com/')
+    elsif url.start_with?('git@github.com:')
+      url.delete_prefix('git@github.com:')
+    else
+      url
     end
+  end
 end
 
 
 $stdout.sync = true
 
 begin
-  puts "Checking build status..."
+  puts 'Checking build status...'
 
   attempts = 0
   checks = GithubStatusChecks.new
 
   loop do
     case checks.state
-    when "success"
+    when 'success'
       puts "Checks passed, see #{checks.first_status_url}"
       exit 0
-    when "failure"
+    when 'failure'
       exit_with_error "Checks failed, see #{checks.first_status_url}"
-    when "pending"
+    when 'pending'
       attempts += 1
     end
 
@@ -118,5 +119,5 @@ begin
     checks.refresh!
   end
 rescue Octokit::NotFound
-  exit_with_error "Build status could not be found"
+  exit_with_error 'Build status could not be found'
 end
