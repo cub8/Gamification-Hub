@@ -47,6 +47,8 @@
                   %i.fa-solid.fa-award
                 = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
                   %i.fa-solid.fa-money-bill-transfer
+                = link_to story_group_student_students_items_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Show items" do
+                  %i.fa-solid.fa-flask
                 = button_to story_group_student_path(@story_group, student),
                   method: :delete,
                   form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },

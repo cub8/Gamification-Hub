@@ -1,0 +1,21 @@
+%h1= @students_item.item.name
+
+.card
+  .card-body
+    %p
+      %strong Opis fabularny:
+      = @students_item.item.story_description
+    %p
+      %strong Zapłacona kwota:
+      = "#{@students_item.price_paid} #{@story_group.currency_name}"
+    %p
+      %strong Zastosowana zniżka w momencie zakupu:
+      = "#{@students_item.discount_applied}%"
+    %p
+      %strong Data zakupu:
+      = @students_item.created_at.strftime('%Y-%m-%d %H:%M')
+    
+    - if @students_item.item.image.attached?
+      = image_tag @students_item.item.image, width: 200, class: 'mt-3'
+
+= link_to 'Powrót do listy', story_group_student_students_items_path(@story_group, @student), class: 'btn btn-secondary mt-3'
