@@ -8,7 +8,10 @@ ssh:
 
 servers:
   web:
-    - 150.254.78.144
+    hosts:
+      - 150.254.78.144
+    boot:
+      limit: 1
   job:
     hosts:
       - 150.254.78.144
