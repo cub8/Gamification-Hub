@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resource :currency_adjustment, only: %i[new create]
       resources :students_badges, path: :badges, as: :badges, only: %i[new index create destroy]
       resources :currency_transactions, only: :index
+      resources :students_items, path: :items, only: %i[index show]
     end
     resources :shop, only: %i[index show] do
       post :buy, on: :member
