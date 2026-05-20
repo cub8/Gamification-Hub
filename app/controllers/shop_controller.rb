@@ -9,7 +9,8 @@ class ShopController < ApplicationController
 
   def index
     authorize @story_group, :student?, policy_class: StoryGroupPolicy
-    @items = @story_group.items.includes(:unlock_rank, :min_rank_for_discount, :unlock_badges, :discount_badges)
+    @items = @story_group.items.with_attached_image.includes(:unlock_rank, :min_rank_for_discount, :unlock_badges,
+                                                             :discount_badges,)
 
     @discount_infos    = {}
     @discounted_prices = {}

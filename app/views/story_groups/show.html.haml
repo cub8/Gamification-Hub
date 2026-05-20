@@ -6,10 +6,22 @@
       = link_to story_groups_path, class: "btn btn-secondary" do
         %i.fa-solid.fa-arrow-left
       %h1.h3.mb-0= @story_group.name
-    - if policy(@story_group).update?
-      = link_to edit_story_group_path(@story_group), class: "btn btn-primary", data: { turbo_frame: "modal" } do
-        %i.fa-solid.fa-pen.me-1
-        Edit
+    .d-flex.align-items-center.gap-2
+      - if policy(@story_group).update?
+        = link_to edit_story_group_path(@story_group), class: "btn btn-primary", data: { turbo_frame: "modal" } do
+          %i.fa-solid.fa-pen.me-1
+          Edytuj
+      - if policy(@story_group).destroy?
+        .dropdown
+          %button.btn.btn-secondary.border-0{ type: "button", data: { bs_toggle: "dropdown" }, "aria-expanded": false }
+            %i.fa-solid.fa-ellipsis-vertical
+          %ul.dropdown-menu.dropdown-menu-end
+            %li
+              = button_to @story_group, method: :delete,
+                  form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
+                  class: "dropdown-item text-danger border-0 bg-transparent w-100 text-start" do
+                %i.fa-solid.fa-trash.me-1
+                Usuń grupę
 
   - if @story_group.description.present?
     .dark-card.mb-3
@@ -34,7 +46,7 @@
             %span= @story_group.default_lives
           .d-flex.justify-content-between.align-items-center
             %span.text-dimmed Ranking
-            - if @story_group.ranking_enabled
+            - if @story_group.ranking_enabled?
               %span.badge.bg-success Włączony
             - else
               %span.badge.bg-secondary Wyłączony
@@ -50,10 +62,3 @@
             %span.text-dimmed Nauczyciele
             %span.fw-semibold= @story_group.teachers.count
 
-  - if policy(@story_group).destroy?
-    .d-flex.justify-content-end
-      = button_to @story_group, method: :delete,
-          form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
-          class: "btn btn-danger" do
-        %i.fa-solid.fa-trash.me-1
-        Usuń grupę

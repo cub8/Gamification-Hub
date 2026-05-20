@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
   before_action :set_item, only: %i[edit update destroy]
 
   def index
-    @items = policy_scope(@story_group.items)
+    @items = policy_scope(@story_group.items).with_attached_image
   end
 
   def new

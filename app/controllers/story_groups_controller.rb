@@ -12,7 +12,7 @@ class StoryGroupsController < ApplicationController
                     when 'student' then all_groups.where(id: current_user.student_story_groups.select(:id))
                     when 'teacher' then all_groups.where(id: current_user.teacher_story_groups.select(:id))
                     else                all_groups
-                    end
+                    end.with_attached_icon
 
     @show_mine_tab    = all_groups.exists?(owner_id: current_user.id)
     @show_student_tab = current_user.student_story_groups.exists?

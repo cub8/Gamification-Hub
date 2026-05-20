@@ -5,9 +5,11 @@
     .form-card.p-4
       %h2.page-title.mb-4= @item.name
 
-      - if @item.image.attached?
-        .text-center.mb-4
+      .text-center.mb-4
+        - if @item.image.attached?
           = image_tag @item.image, class: "img-fluid rounded"
+        - else
+          %i.fa-solid.fa-box.fa-4x.text-dimmed
 
       - if @item.story_description.present?
         %p.fst-italic.mb-2= @item.story_description
