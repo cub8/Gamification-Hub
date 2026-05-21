@@ -1,7 +1,8 @@
 - modal_id = "join-modal"
 
-= link_to 'Join story group', '#',
-    data: { bs_toggle: 'modal', bs_target: "##{modal_id}" }
+= link_to '#', class: "btn btn-secondary", data: { bs_toggle: 'modal', bs_target: "##{modal_id}" } do
+  %i.fa-solid.fa-right-to-bracket.me-2
+  Dołącz do grupy
 
 .modal.fade{ id: modal_id, tabindex: '-1' }
   .modal-dialog

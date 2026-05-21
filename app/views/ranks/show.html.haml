@@ -1,30 +1,27 @@
 - content_for :title, @rank.name
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0= @rank.name
-    .d-flex.gap-2
-      - if policy(@story_group).update?
-        = link_to edit_story_group_rank_path(@story_group, @rank), class: "btn btn-primary" do
-          %i.fa-solid.fa-pen.me-1
-          Edit
-      = link_to story_group_ranks_path(@story_group), class: "btn btn-secondary" do
-        %i.fa-solid.fa-arrow-left.me-1
-        Back
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h2.page-title.mb-4= @rank.name
 
-  .form-section.p-4.mb-3
-    .d-flex.gap-4.align-items-start
-      - if @rank.icon.attached?
-        = image_tag @rank.icon, width: 80, height: 80, class: "object-fit-contain flex-shrink-0"
-      - else
-        .show-icon-placeholder.d-flex.align-items-center.justify-content-center
-          %i.fa-solid.fa-trophy.fa-3x
+      .text-center.mb-4
+        - if @rank.icon.attached?
+          = image_tag @rank.icon, class: "img-fluid rounded"
+        - else
+          %i.fa-solid.fa-trophy.fa-4x.text-dimmed
 
-      .d-flex.flex-column.gap-3.flex-grow-1
-        .d-flex.flex-column.gap-1
-          %span.text-dimmed.text-label Required currency
+      .d-flex.flex-column.gap-2.mb-4
+        .d-flex.justify-content-between
+          %span.text-dimmed Required currency
           %span= @rank.required_currency_value
-
-        .d-flex.flex-column.gap-1
-          %span.text-dimmed.text-label Discount
+        .d-flex.justify-content-between
+          %span.text-dimmed Discount
           %span= "#{@rank.discount}%"
+
+      .d-flex.justify-content-end.align-items-center.gap-2
+        = link_to "Zamknij", story_group_ranks_path(@story_group), class: "btn btn-secondary"
+        - if policy(@story_group).update?
+          = link_to edit_story_group_rank_path(@story_group, @rank), class: "btn btn-primary", data: { turbo_frame: "_top" } do
+            %i.fa-solid.fa-pen.me-1
+            Edytuj

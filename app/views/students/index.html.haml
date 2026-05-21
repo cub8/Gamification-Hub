@@ -4,11 +4,11 @@
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Students
     = link_to new_story_group_student_path(@story_group), class: "btn btn-primary" do
-      %i.fa-solid.fa-plus
+      %i.fa-solid.fa-plus.me-1
       Add Student
 
   - if @students.empty?
-    %p.text-muted No students yet.
+    %p.text-dimmed No students yet.
   - else
     %table.table.table-sm.table-hover
       %thead
@@ -28,11 +28,13 @@
               .d-flex.align-items-center.gap-1
                 = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
                   method: :post,
+                  form: { data: { turbo_confirm: "Czy na pewno chcesz odebrać życie studentowi #{student.full_name}?" } },
                   class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
                   %i.fa-solid.fa-minus
                 %span= student.lives
                 = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
                   method: :post,
+                  form: { data: { turbo_confirm: "Czy na pewno chcesz dodać życie studentowi #{student.full_name}?" } },
                   class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
                   %i.fa-solid.fa-plus
             %td= student.current_currency

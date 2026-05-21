@@ -2,10 +2,12 @@
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %div
-      %h1.h3.mb-0= @student.full_name
-      %small.text-dimmed= @student.email
-    = link_to "Back", story_group_students_path(@story_group), class: "btn btn-secondary"
+    .d-flex.align-items-center.gap-3
+      = link_to story_group_students_path(@story_group), class: "btn btn-secondary" do
+        %i.fa-solid.fa-arrow-left
+      %div
+        %h1.h3.mb-0= @student.full_name
+        %small.text-dimmed= @student.email
 
   .row.g-3
     .col-12.col-md-6
