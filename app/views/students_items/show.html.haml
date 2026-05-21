@@ -29,4 +29,4 @@
           %span= @students_item.created_at.strftime('%d.%m.%Y %H:%M')
 
       .d-flex.justify-content-end
-        = link_to "Zamknij", story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary"
+        = link_to "Zamknij", story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary", data: { turbo_frame: "_top" }
