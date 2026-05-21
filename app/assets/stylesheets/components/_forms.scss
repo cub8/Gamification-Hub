@@ -35,12 +35,6 @@ turbo-frame#modal:empty {
   border-radius: 0.75rem;
 }
 
-.section-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: $text-main;
-}
-
 .field-group {
   label {
     display: block;
@@ -125,7 +119,7 @@ turbo-frame#modal:empty {
   .btn-submit {
     background-color: $primary;
     border: none;
-    color: #ffffff;
+    color: $text-dark;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: 0.5rem;

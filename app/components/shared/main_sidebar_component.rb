@@ -48,13 +48,18 @@ class Shared::MainSidebarComponent < ViewComponent::Base
 
     if story_group_student?
       [
+        (if story_group.ranking_enabled
+           {
+             text: 'Ranking',
+             path: helpers.story_group_ranking_path(story_group),
+             icon: 'fa-ranking-star',
+           }
+         end),
         { text: 'Sklep', path: helpers.story_group_shop_index_path(story_group), icon: 'fa-sack-dollar' },
-        { text: 'Ranking', path: helpers.story_group_ranking_path(story_group), icon: 'fa-ranking-star' },
         { text: 'Moje przedmioty', path: helpers.story_group_items_path(story_group), icon: 'fa-flask' },
         { text: 'Rangi', path: helpers.story_group_ranks_path(story_group), icon: 'fa-angles-up' },
         { text: 'Odznaki', path: helpers.story_group_badges_path(story_group), icon: 'fa-award' },
-        { text: 'Nauczyciele', path: helpers.story_group_teachers_path(story_group), icon: 'fa-briefcase' },
-      ]
+      ].compact
     else
       [
         { text: 'Studenci', path: helpers.story_group_students_path(story_group), icon: 'fa-graduation-cap' },

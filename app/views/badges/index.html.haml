@@ -11,36 +11,30 @@
   - if @badges.empty?
     %p.text-dimmed No badges yet.
   - else
-    %table.table.table-sm.table-hover
-      %thead
-        %tr
-          %th Icon
-          %th Name
-          %th Story description
-          %th Didactic description
-          %th.text-center Discount
-          %th.text-end Actions
-      %tbody
-        - @badges.each do |badge|
-          %tr
-            %td
+    .row.g-3
+      - @badges.each do |badge|
+        .col-12.col-sm-6.col-md-4.col-xl-3
+          .dark-card
+            = link_to story_group_badge_path(@story_group, badge), data: { turbo_frame: "modal" }, class: "text-decoration-none d-flex flex-column flex-grow-1" do
               - if badge.icon.attached?
-                = image_tag badge.icon, width: 36, height: 36, class: "object-fit-contain"
+                .dark-card-cover
+                  = image_tag badge.icon
               - else
-                %i.fa-solid.fa-award.fs-4.text-dimmed
-            %td= badge.name
-            %td.text-dimmed= badge.story_description
-            %td.text-dimmed= badge.didactic_description
-            %td.text-center= "#{badge.discount}%"
-            %td.text-end
-              .d-flex.justify-content-end.gap-1
-                = link_to story_group_badge_path(@story_group, badge), class: "btn btn-sm btn-secondary border-0", title: "View" do
-                  %i.fa-solid.fa-eye
-                - if policy(@story_group).update?
-                  = link_to edit_story_group_badge_path(@story_group, badge), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
-                    %i.fa-solid.fa-pen
-                  = button_to story_group_badge_path(@story_group, badge),
-                    method: :delete,
-                    form: { data: { turbo_confirm: "Delete badge \"#{badge.name}\"?" } },
-                    class: "btn btn-sm btn-danger border-0", title: "Delete" do
-                    %i.fa-solid.fa-trash
+                .dark-card-icon
+                  %i.fa-solid.fa-award.fa-3x
+
+              .dark-card-body
+                .dark-card-title= badge.name
+                %p.text-dimmed.small.fst-italic.mb-1= truncate(badge.story_description, length: 80)
+                %p.text-dimmed.small.mb-0= truncate(badge.didactic_description, length: 80)
+                %span.badge.bg-secondary.mt-2= "#{badge.discount}% discount"
+
+            - if policy(@story_group).update?
+              .dark-card-actions
+                = link_to edit_story_group_badge_path(@story_group, badge), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                  %i.fa-solid.fa-pen
+                = button_to story_group_badge_path(@story_group, badge),
+                  method: :delete,
+                  form: { data: { turbo_confirm: "Delete badge \"#{badge.name}\"?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                  %i.fa-solid.fa-trash

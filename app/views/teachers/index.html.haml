@@ -3,10 +3,12 @@
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Teachers
-    = link_to "+ Add Teacher", new_story_group_teacher_path(@story_group), class: "btn btn-primary"
+    = link_to new_story_group_teacher_path(@story_group), class: "btn btn-primary" do
+      %i.fa-solid.fa-plus.me-1
+      Add Teacher
 
   - if @teachers.empty?
-    %p.text-muted No teachers yet.
+    %p.text-dimmed No teachers yet.
   - else
     %table.table.table-sm.table-hover
       %thead
