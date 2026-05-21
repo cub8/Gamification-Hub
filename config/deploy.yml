@@ -40,3 +40,14 @@ asset_path: /rails/public/assets
 
 builder:
   arch: amd64
+
+accessories:
+  db:
+    image: postgres:18.4-alpine
+    host: 150.254.78.144
+    port: "127.0.0.1:5432:5432"
+    env:
+      secret:
+        - POSTGRES_PASSWORD
+    directories:
+      - /opt/postgres:/var/lib/postgresql
