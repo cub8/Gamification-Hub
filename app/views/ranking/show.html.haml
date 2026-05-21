@@ -41,8 +41,8 @@
             %td.text-center.text-dimmed= index + 1
             %td= student.full_name
             %td
-              - if (rank = student.rank)
-                = rank.name
+              - if @student_ranks[student.id]
+                = @student_ranks[student.id].name
               - else
                 %span.text-dimmed —
             %td.text-end= student.total_currency

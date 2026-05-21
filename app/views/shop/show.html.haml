@@ -1,29 +1,47 @@
-%h1= @item.name
+- content_for :title, @item.name
 
-%p
-  %strong Story Description:
-  = @item.story_description
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h2.page-title.mb-4= @item.name
 
-%p
-  %strong Didactic Description:
-  = @item.didactic_description
+      .text-center.mb-4
+        - if @item.image.attached?
+          = image_tag @item.image, class: "img-fluid rounded"
+        - else
+          %i.fa-solid.fa-box.fa-4x.text-dimmed
 
-%p
-  %strong Price:
-  - discount_info = @item.discount_info_for(@student)
-  - discounted_price = @item.discounted_price_for(@student)
+      - if @item.story_description.present?
+        %p.fst-italic.mb-2= @item.story_description
+      - if @item.didactic_description.present?
+        %p.mb-3= @item.didactic_description
+      - if @item.story_description.blank? && @item.didactic_description.blank?
+        %p.text-dimmed.mb-3 Brak opisu.
 
-  - if discounted_price < @item.price
-    %s= @item.price
-    %strong= "#{discounted_price} #{@story_group.currency_name}"
-    = discount_label(discount_info)
-  - else
-    = "#{@item.price} #{@story_group.currency_name}"
+      .d-flex.align-items-center.gap-2.mb-4
+        - if @story_group.currency_icon.attached?
+          = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
+        - if @discounted_price < @item.price
+          %s.text-dimmed= @item.price
+          %strong.ms-1= @discounted_price
+          %span.text-dimmed.small= @story_group.currency_name
+          %span.badge.bg-success.ms-1= discount_label(@discount_info)
+        - else
+          %strong= @item.price
+          %span.text-dimmed.small.ms-1= @story_group.currency_name
 
+      - unless @eligibility.eligible?
+        .alert.alert-warning.mb-4
+          .fw-semibold.mb-1
+            %i.fa-solid.fa-lock.me-1
+            Przedmiot zablokowany
+          %ul.mb-0.ps-3
+            - @eligibility.errors.each do |error|
+              %li.small= error
 
-- if @item.image.attached?
-  %br
-  = image_tag @item.image, width: 200
-
-%br
-= link_to 'Back to Shop', story_group_shop_index_path(@story_group)
+      .d-flex.justify-content-end.align-items-center.gap-2
+        = link_to "Zamknij", story_group_shop_index_path(@story_group), class: "btn btn-secondary"
+        - if @eligibility.eligible?
+          = button_to buy_story_group_shop_path(@story_group, @item), method: :post, form: { data: { turbo_frame: "_top" } }, class: "btn btn-primary" do
+            %i.fa-solid.fa-cart-shopping.me-1
+            Kup

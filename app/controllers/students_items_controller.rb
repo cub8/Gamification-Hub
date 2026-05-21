@@ -6,7 +6,7 @@ class StudentsItemsController < ApplicationController
   before_action :authorize_access!
 
   def index
-    @students_items = @student.students_items.includes(:item).order(created_at: :desc)
+    @students_items = @student.students_items.includes(item: { image_attachment: :blob }).order(created_at: :desc)
   end
 
   def show

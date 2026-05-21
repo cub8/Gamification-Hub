@@ -10,6 +10,12 @@ class RankingController < ApplicationController
     authorize @story_group, :view_ranking?
     skip_policy_scope
     @students = @story_group.student_memberships.with_user.order(total_currency: :desc)
+
+    ranks = @story_group.ranks.order(required_currency_value: :desc).to_a
+    @student_ranks = @students.to_h do |student|
+      rank = ranks.bsearch { |r| r.required_currency_value <= student.total_currency }
+      [student.id, rank]
+    end
   end
 
   def change_status
