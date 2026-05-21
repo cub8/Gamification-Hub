@@ -1,0 +1,17 @@
+#!/bin/bash
+# bin/deploy
+
+# Make sure a version tag is passed
+if [ -z "$1" ]; then
+  echo "Error: You must provide a version (e.g., bin/deploy 1.0.0)"
+  exit 1
+fi
+
+VERSION=$1
+
+# 1. Tag the git commit and push it to GitHub/GitLab
+git tag $VERSION
+git push origin $VERSION
+
+# 2. Deploy using Kamal with that exact version
+kamal deploy --version=$VERSION

@@ -37,14 +37,14 @@ test:
 # URL environment variable explicitly:
 #
 #   production:
-#     url: <%= ENV["MY_APP_DATABASE_URL"] %>
+#     url: <%= ENV["MY_APP_DATABASE_URL"] %>This is my db setup:
 #
 # Connection URLs for non-primary databases can also be configured using
 # environment variables. The variable name is formed by concatenating the
 # connection name with `_DATABASE_URL`. For example:
 #
 #   CACHE_DATABASE_URL="postgres://cacheuser:cachepass@localhost/cachedatabase"
-#
+#GAMIFICATION_HUB_DATABASE_PASSWORD
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
@@ -52,7 +52,9 @@ production:
   primary: &primary_production
     <<: *default
     database: gamification_hub_production
-    username: gamification_hub
+    username: postgres
+    host: gamification_hub-db # if real production
+    # host: host.docker.internal # if testing locally production container
     password: <%= ENV["GAMIFICATION_HUB_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
