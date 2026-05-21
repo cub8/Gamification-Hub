@@ -3,14 +3,15 @@
 class StudentsItemsController < ApplicationController
   before_action :set_story_group
   before_action :set_student
-  before_action :authorize_access!
 
   def index
-    @students_items = @student.students_items.includes(:item).order(created_at: :desc)
+    authorize @student, policy_class: StudentsItemPolicy
+    @students_items = policy_scope(@student.students_items).includes(:item).order(created_at: :desc)
   end
 
   def show
     @students_item = @student.students_items.find(params[:id])
+    authorize @students_item
   end
 
   private
@@ -21,13 +22,5 @@ class StudentsItemsController < ApplicationController
 
   def set_student
     @student = @story_group.student_memberships.find(params[:student_id])
-  end
-
-  def authorize_access!
-    return if current_user.teacher?
-    return if @story_group.owner_id == current_user.id
-    return if current_user == @student.user
-
-    redirect_to home_path, alert: 'Brak dostępu do tej akcji.'
   end
 end

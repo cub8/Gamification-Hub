@@ -52,9 +52,9 @@ class StudentsItemsControllerTest < ActionDispatch::IntegrationTest
     sign_in @other_student_user
 
     get story_group_student_students_items_path(@story_group, @student)
-    assert_redirected_to home_path
+    assert_redirected_to root_path
 
     get story_group_student_students_item_path(@story_group, @student, @students_item)
-    assert_redirected_to home_path
+    assert_redirected_to root_path
   end
 end
