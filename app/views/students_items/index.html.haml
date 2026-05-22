@@ -1,20 +1,30 @@
-%h1 Przedmioty studenta: #{@student.user.email}
+- content_for :title, @own_items ? "Moje przedmioty" : "Przedmioty studenta"
 
-%table.table
-  %tr
-    %th Nazwa przedmiotu
-    %th Opis fabularny
-    %th Zapłacona kwota
-    %th Zastosowana zniżka
-    %th Data zakupu
+.dark-page
+  .d-flex.align-items-center.gap-3.mb-4
+    - unless @own_items
+      = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary" do
+        %i.fa-solid.fa-arrow-left
+    %h1.h3.mb-0= @own_items ? "Moje przedmioty" : @student.full_name
 
-  - @students_items.each do |students_item|
-    %tr
-      %td= students_item.item.name
-      %td= students_item.item.story_description
-      %td= "#{students_item.price_paid} #{@story_group.currency_name}"
-      %td= "(-#{students_item.discount_applied}%)"
-      %td= students_item.created_at.strftime('%Y-%m-%d %H:%M')
-      %td= link_to 'Pokaż', story_group_student_students_item_path(@story_group, @student, students_item), class: 'btn btn-info btn-sm'
-
-= link_to 'Powrót', story_group_student_path(@story_group, @student), class: 'btn btn-secondary'
+  - if @students_items.empty?
+    %p.text-dimmed Nie posiadasz jeszcze żadnych przedmiotów.
+  - else
+    .d-flex.flex-column.gap-3
+      - @students_items.each do |students_item|
+        .dark-card.flex-row.align-items-stretch.p-0
+          = link_to story_group_student_students_item_path(@story_group, @student, students_item), data: { turbo_frame: "modal" }, class: "d-flex align-items-stretch flex-grow-1 text-decoration-none overflow-hidden" do
+            - if students_item.item.image.attached?
+              = image_tag students_item.item.image, class: "dark-card-side-cover"
+            - else
+              .dark-card-side-icon
+                %i.fa-solid.fa-box.fa-2x.text-dimmed
+            .d-flex.flex-column.justify-content-center.gap-1.p-3.overflow-hidden.flex-grow-1
+              .dark-card-title= students_item.item.name
+              - if students_item.item.story_description.present?
+                %p.text-dimmed.small.fst-italic.mb-0= truncate(students_item.item.story_description, length: 120)
+              .d-flex.align-items-center.gap-2.mt-1
+                %strong= students_item.price_paid
+                %span.text-dimmed.small= @story_group.currency_name
+                - if students_item.discount_applied > 0
+                  %span.badge.bg-success= "-#{students_item.discount_applied}%"

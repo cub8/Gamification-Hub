@@ -56,7 +56,6 @@ class Shared::MainSidebarComponent < ViewComponent::Base
            }
          end),
         { text: 'Sklep', path: helpers.story_group_shop_index_path(story_group), icon: 'fa-sack-dollar' },
-        { text: 'Ranking', path: helpers.story_group_ranking_path(story_group), icon: 'fa-ranking-star' },
         {
           text: 'Moje przedmioty',
           path: helpers.story_group_student_students_items_path(story_group, user),

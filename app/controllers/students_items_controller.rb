@@ -3,10 +3,14 @@
 class StudentsItemsController < ApplicationController
   before_action :set_story_group
   before_action :set_student
+  before_action :set_own_items
+
 
   def index
     authorize @student, policy_class: StudentsItemPolicy
-    @students_items = policy_scope(@student.students_items).includes(:item).order(created_at: :desc)
+    @students_items = policy_scope(@student.students_items)
+                      .includes(item: { image_attachment: :blob })
+                      .order(created_at: :desc)
   end
 
   def show
@@ -22,5 +26,9 @@ class StudentsItemsController < ApplicationController
 
   def set_student
     @student = @story_group.student_memberships.find(params[:student_id])
+  end
+
+  def set_own_items
+    @own_items = current_user == @student.user
   end
 end
