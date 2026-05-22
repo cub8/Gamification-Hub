@@ -14,4 +14,4 @@ git tag $VERSION
 git push origin $VERSION
 
 # 2. Deploy using Kamal with that exact version
-kamal deploy --version=$VERSION
+bin/kamal deploy --version=$VERSION
