@@ -1,4 +1,4 @@
-= form_with(model: story_group) do |form|
+= form_with model: story_group, data: { turbo_frame: "_top" } do |form|
   - if story_group.errors.any?
     .form-errors.p-3.mb-3
       %h2= "#{pluralize(story_group.errors.count, "error")} prohibited this story group from being saved:"
