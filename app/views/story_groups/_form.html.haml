@@ -1,4 +1,4 @@
-= form_with(model: story_group) do |form|
+= form_with model: story_group, data: { turbo_frame: "_top" } do |form|
   - if story_group.errors.any?
     .form-errors.p-3.mb-3
       %h2= "#{pluralize(story_group.errors.count, "error")} prohibited this story group from being saved:"
@@ -17,13 +17,20 @@
       = form.label :description, "Description"
       = form.text_area :description, class: "form-control", placeholder: "Once upon a time..."
 
-    .field-group.mb-3
+    .field-group.mb-3{ data: { controller: "file-upload" } }
       = form.label :icon, "Group icon"
       .file-upload
         = form.label :icon, class: "file-btn px-3 py-2" do
           %i.fa-solid.fa-upload
           Upload file
-        = form.file_field :icon, accept: "image/jpeg,image/png", class: "d-none"
+        = form.file_field :icon,
+          accept: "image/jpeg,image/png",
+          class: "d-none",
+          data: { file_upload_target: "input", action: "change->file-upload#update" }
+
+        %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
+          %i.fa-solid.fa-image
+          %span.uploaded-file-name
         %span.file-hint.mt-1 Accepted formats: JPEG, PNG
 
   .form-section.p-4.mb-3
@@ -36,13 +43,19 @@
           = form.text_field :currency_name, class: "form-control"
 
       .col-md-6
-        .field-group.mb-3
+        .field-group.mb-3{ data: { controller: "file-upload" } }
           = form.label :currency_icon, "Currency icon"
           .file-upload
             = form.label :currency_icon, class: "file-btn px-3 py-2" do
               %i.fa-solid.fa-upload
               Upload file
-            = form.file_field :currency_icon, accept: "image/jpeg,image/png", class: "d-none"
+            = form.file_field :currency_icon,
+              class: "d-none",
+              data: { file_upload_target: "input", action: "change->file-upload#update" }
+
+            %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
+              %i.fa-solid.fa-image
+              %span.uploaded-file-name
             %span.file-hint.mt-1 Accepted formats: JPEG, PNG
 
   .form-section.p-4.mb-3

@@ -61,6 +61,12 @@ body {
   border: 1px solid $success-alert-color;
 }
 
+.alert-danger {
+  color: $danger-alert-color;
+  background-color: $danger-alert-bg;
+  border: 1px solid $danger-alert-color;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
