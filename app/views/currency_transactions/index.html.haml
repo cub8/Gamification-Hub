@@ -9,26 +9,26 @@
             = link_to story_group_profile_index_path(@story_group), class: "btn btn-secondary" do
               %i.fa-solid.fa-arrow-left
           - else
-            = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", data: { turbo_frame: '_top' } do
+            = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
               %i.fa-solid.fa-arrow-left
           %div
-            %h1.h3.mb-0 Currency Transactions
+            %h1.h3.mb-0 Transakcje walutowe
             %small.text-dimmed= @student.full_name
         %span.text-dimmed
-          Balance:
+          Saldo:
           %strong.text-main= @student.current_currency
 
       - if @transactions.empty?
-        %p.text-dimmed No transactions yet.
+        %p.text-dimmed Brak transakcji.
       - else
         .table-responsive.flex-grow-1.overflow-auto
           %table.table.table-sm.table-hover
             %thead
               %tr
-                %th Amount
-                %th Type
-                %th Source
-                %th.text-end Date
+                %th Kwota
+                %th Typ
+                %th Źródło
+                %th.text-end Data
             %tbody.overflow-scroll
               - @transactions.each do |transaction|
                 %tr

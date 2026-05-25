@@ -41,13 +41,13 @@
             %td= student.total_currency
             %td.text-end
               .d-flex.justify-content-end.gap-1
-                = link_to story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "View profile" , data: { turbo_frame: "modal" }do
+                = link_to story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Sprawdź profile" , data: { turbo_frame: "modal" }do
                   %i.fa-solid.fa-eye
-                = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Edytuj" do
                   %i.fa-solid.fa-pen
-                = link_to new_story_group_student_badge_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges", data: { turbo_frame: "modal" } do
+                = link_to new_story_group_student_badge_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Przydziel odznakę", data: { turbo_frame: "modal" } do
                   %i.fa-solid.fa-award
-                = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
+                = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Skoryguj walutę", data: { turbo_frame: "modal" } do
                   %i.fa-solid.fa-money-bill-transfer
                 = button_to story_group_student_path(@story_group, student),
                   method: :delete,

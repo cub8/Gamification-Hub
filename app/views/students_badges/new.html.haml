@@ -3,7 +3,11 @@
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3
     .form-card.p-4
-      %h1.page-title.mb-4 Przydziel odznakę
+      .d-flex.align-items-center.gap-3.mb-3
+        = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
+          %i.fa-solid.fa-arrow-left
+        .d-flex.align-items-center
+          %h1.page-title.mb-0 Przydziel odznakę
 
       - if @badge.errors.any?
         .form-errors.p-3.mb-3
@@ -26,5 +30,5 @@
                 data: { controller: "tom-select-basic" } }
 
         .form-actions.gap-3.mt-4
-          = link_to "Anuluj", story_group_student_path(@story_group, @student), class: "btn-cancel py-2 px-3"
+          = link_to "Anuluj", story_group_student_path(@story_group, @student), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true }
           = f.submit "Zapisz", class: "btn-submit py-2 px-4"
