@@ -45,7 +45,7 @@
                   %i.fa-solid.fa-eye
                 = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
                   %i.fa-solid.fa-pen
-                = link_to story_group_student_badges_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges" do
+                = link_to new_story_group_student_badge_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges" do
                   %i.fa-solid.fa-award
                 = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
                   %i.fa-solid.fa-money-bill-transfer

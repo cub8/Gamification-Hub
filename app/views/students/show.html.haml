@@ -9,9 +9,9 @@
         %h1.h3.mb-0= @student.full_name
         %small.text-dimmed= @student.email
 
-  .row.g-3
+  .row.g-3.mb-3
     .col-12.col-md-6
-      .form-section.p-4.mb-3
+      .dark-panel.p-4.mb-3
         .section-title.mb-3 Basic Information
         .d-flex.flex-column.gap-2
           .d-flex.justify-content-between
@@ -22,7 +22,7 @@
             %span.text-main= @student.email
 
     .col-12.col-md-6
-      .form-section.p-4.mb-3
+      .dark-panel.p-4.mb-3
         .section-title.mb-3 Currency & Lives
         .d-flex.flex-column.gap-2
           .d-flex.justify-content-between
@@ -35,6 +35,10 @@
             %span.text-dimmed Total currency
             %span.text-main= @student.total_currency
 
+  .row
+    .col-12
+      = render 'badges', badges: @badges
+
   .d-flex.gap-2.mt-3
     = link_to story_group_student_currency_transactions_path(@story_group, @student), class: "btn btn-secondary" do
       %i.fa-solid.fa-clock-rotate-left.me-1
@@ -43,5 +47,10 @@
       %i.fa-solid.fa-money-bill-transfer.me-1
       Adjust currency
     = link_to story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary" do
-      %i.fa-solid.fa-money-bill-transfer.me-1
+      %i.fa-solid.fa-flask.me-1
       Items
+    .ms-auto
+    - if policy(@student).update?
+      = link_to new_story_group_student_badge_path(@story_group, @student), class: "btn btn-primary" do
+        %i.fa-solid.fa-plus.me-1
+        Give Badge

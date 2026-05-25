@@ -10,6 +10,7 @@ class StudentsController < ApplicationController
 
   def show
     authorize @student
+    @badges = policy_scope(@student.students_badges)
   end
 
   def new

@@ -1,0 +1,28 @@
+- if badges.empty?
+  %p.text-dimmed No badges assigned yet.
+- else
+  %table.table.table-sm.table-hover
+    %thead
+      %tr
+        %th Icon
+        %th Name
+        %th Description
+        - if policy(@student).update?
+          %th.text-end Actions
+    %tbody
+      - badges.each do |badge|
+        %tr
+          %td
+            - if badge.icon.attached?
+              = image_tag badge.icon, width: 36, height: 36, class: "object-fit-contain"
+            - else
+              %i.fa-solid.fa-award.fs-4.text-dimmed
+          %td= badge.name
+          %td.text-dimmed= badge.story_description
+          - if policy(@student).update?
+            %td.text-end
+              = button_to story_group_student_badge_path(@story_group, @student, badge),
+                method: :delete,
+                form: { data: { turbo_confirm: "Remove badge \"#{badge.name}\" from #{@student.full_name}?" } },
+                class: "btn btn-sm btn-danger border-0", title: "Remove" do
+                %i.fa-solid.fa-trash

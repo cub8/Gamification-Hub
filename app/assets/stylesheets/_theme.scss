@@ -16,7 +16,8 @@
       }
     }
 
-    td, th {
+    td,
+    th {
       background-color: transparent;
       border-color: $background-light;
       color: $text-main;
@@ -39,15 +40,27 @@
   }
 }
 
-.dark-card {
+.dark-panel-base {
   background-color: $background-light;
   border: 1px solid $secondary;
   border-radius: 0.75rem;
-  padding: 1.25rem;
   height: 100%;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   transition: border-color 0.15s;
+}
+
+.dark-panel {
+  @extend .dark-panel-base;
+
+  &:hover {
+    border-color: $secondary-light;
+  }
+}
+
+.dark-card {
+  @extend .dark-panel-base;
 
   &:hover {
     border-color: $primary;
@@ -128,4 +141,3 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-
