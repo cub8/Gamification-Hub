@@ -1,56 +1,59 @@
 - content_for :title, @student.full_name
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    .d-flex.align-items-center.gap-3
-      = link_to story_group_students_path(@story_group), class: "btn btn-secondary" do
-        %i.fa-solid.fa-arrow-left
-      %div
-        %h1.h3.mb-0= @student.full_name
-        %small.text-dimmed= @student.email
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3.dark-page
+    .modal-card.p-4.students-modal.h-auto
+      = render 'layouts/modal_messages'
+      .d-flex.align-items-center.justify-content-between.mb-4
+        .d-flex.align-items-center.gap-3
+          = link_to story_group_students_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: '_top' } do
+            %i.fa-solid.fa-arrow-left
+          %div
+            %h1.h3.mb-0= @student.full_name
+            %small.text-dimmed= @student.email
 
-  .row.g-3.mb-3
-    .col-12.col-md-6
-      .dark-panel.p-4.mb-3
-        .section-title.mb-3 Basic Information
-        .d-flex.flex-column.gap-2
-          .d-flex.justify-content-between
-            %span.text-dimmed Index
-            %span.text-main= @student.university_number || "—"
-          .d-flex.justify-content-between
-            %span.text-dimmed Email
-            %span.text-main= @student.email
+      .row.g-3.mb-3
+        .col-12.col-md-6
+          .dark-panel.p-4.mb-3
+            .section-title.mb-3 Basic Information
+            .d-flex.flex-column.gap-2
+              .d-flex.justify-content-between
+                %span.text-dimmed Index
+                %span.text-main= @student.university_number || "—"
+              .d-flex.justify-content-between
+                %span.text-dimmed Email
+                %span.text-main= @student.email
 
-    .col-12.col-md-6
-      .dark-panel.p-4.mb-3
-        .section-title.mb-3 Currency & Lives
-        .d-flex.flex-column.gap-2
-          .d-flex.justify-content-between
-            %span.text-dimmed Lives
-            %span.text-main= @student.lives
-          .d-flex.justify-content-between
-            %span.text-dimmed Current currency
-            %span.text-main= @student.current_currency
-          .d-flex.justify-content-between
-            %span.text-dimmed Total currency
-            %span.text-main= @student.total_currency
+        .col-12.col-md-6
+          .dark-panel.p-4.mb-3
+            .section-title.mb-3 Currency & Lives
+            .d-flex.flex-column.gap-2
+              .d-flex.justify-content-between
+                %span.text-dimmed Lives
+                %span.text-main= @student.lives
+              .d-flex.justify-content-between
+                %span.text-dimmed Current currency
+                %span.text-main= @student.current_currency
+              .d-flex.justify-content-between
+                %span.text-dimmed Total currency
+                %span.text-main= @student.total_currency
 
-  .row
-    .col-12
-      = render 'badges', badges: @badges
+      .row
+        .col-12
+          = render 'badges', badges: @badges
 
-  .d-flex.gap-2.mt-3
-    = link_to story_group_student_currency_transactions_path(@story_group, @student), class: "btn btn-secondary" do
-      %i.fa-solid.fa-clock-rotate-left.me-1
-      Transaction history
-    = link_to new_story_group_student_currency_adjustment_path(@story_group, @student), class: "btn btn-secondary" do
-      %i.fa-solid.fa-money-bill-transfer.me-1
-      Adjust currency
-    = link_to story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary" do
-      %i.fa-solid.fa-flask.me-1
-      Items
-    .ms-auto
-    - if policy(@student).update?
-      = link_to new_story_group_student_badge_path(@story_group, @student), class: "btn btn-primary" do
-        %i.fa-solid.fa-plus.me-1
-        Give Badge
+      .d-flex.gap-2.mt-3
+        = link_to story_group_student_currency_transactions_path(@story_group, @student), class: "btn btn-secondary" do
+          %i.fa-solid.fa-clock-rotate-left.me-1
+          Historia transakcji
+        = link_to new_story_group_student_currency_adjustment_path(@story_group, @student), class: "btn btn-secondary" do
+          %i.fa-solid.fa-money-bill-transfer.me-1
+          Popraw walutę
+        = link_to story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary" do
+          %i.fa-solid.fa-flask.me-1
+          Przedmioty
+        .ms-auto
+        - if policy(@student).update?
+          = link_to new_story_group_student_badge_path(@story_group, @student), class: "btn btn-primary" do
+            %i.fa-solid.fa-plus.me-1
+            Przydziel odznakę
