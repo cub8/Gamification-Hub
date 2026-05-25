@@ -1,17 +1,22 @@
 - if invite.errors.any?
-  .errors{ style: "color: red; margin-bottom: 1em;" }
+  .form-errors.p-3.mb-3
+    %h2 Popraw następujące błędy:
     %ul
       - invite.errors.full_messages.each do |message|
         %li= message
 
-= form_with model: invite do |f|
-  .field
-    = f.label :max_uses, "Max uses"
-    = f.number_field :max_uses, min: 1, step: 1
+= form_with model: [@story_group, invite], url: url do |f|
+  .form-section.p-4.mb-3
+    .section-title.mb-3 Ustawienia zaproszenia
 
-  .field
-    = f.label :expires_at, "Expiration date"
-    = f.datetime_field :expires_at
+    .field-group.mb-3
+      = f.label :max_uses, "Maksymalna liczba użyć"
+      = f.number_field :max_uses, min: 1, step: 1, class: "form-control"
 
-  .actions
-    = f.submit
+    .field-group.mb-3
+      = f.label :expires_at, "Data wygaśnięcia"
+      = f.datetime_local_field :expires_at, class: "form-control"
+
+  .form-actions.gap-3.mt-4
+    = yield :form_cancel
+    = f.submit invite.persisted? ? "Update" : "Create", class: "btn-submit py-2 px-4"

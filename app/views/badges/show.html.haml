@@ -21,7 +21,7 @@
           %span= "#{@badge.discount}%"
 
       .d-flex.justify-content-end.align-items-center.gap-2
-        = link_to "Zamknij", story_group_badges_path(@story_group), class: "btn btn-secondary"
+        = link_to "Zamknij", story_group_badges_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top" }
         - if policy(@story_group).update?
           = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-primary", data: { turbo_frame: "_top" } do
             %i.fa-solid.fa-pen.me-1

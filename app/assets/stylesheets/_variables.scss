@@ -23,7 +23,9 @@ $dropdown-border-color: $secondary;
 $danger: #ff4343;
 
 $dropdown-bg: $background-light;
-$dropdown-link-hover-bg: transparent;
+$dropdown-link-hover-bg: $background-light-hover;
+$dropdown-link-active-bg: $background-light-hover;
+$dropdown-link-active-color: $text-main;
 $dropdown-color: $text-main;
 
 $btn-close-color: $text-main;

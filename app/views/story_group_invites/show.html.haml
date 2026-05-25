@@ -1,23 +1,34 @@
-%h1 Invite
+- content_for :title, "Zaproszenie — #{@invite.code}"
 
-%p
-  %strong Code:
-  = @invite.code
+.dark-page
+  .d-flex.align-items-center.gap-3.mb-4
+    = link_to story_group_invites_path(@story_group), class: "btn btn-secondary" do
+      %i.fa-solid.fa-arrow-left
+    %h1.h3.mb-0 Zaproszenie
 
-%p
-  = invite_qr_code(@invite)
+  .row.g-4
+    .col-12.col-md-6
+      .dark-panel
+        .text-center.mb-4
+          = invite_qr_code(@invite)
+        %p.text-center.mb-0
+          %code.fs-5= @invite.code
 
-%p
-  %strong Uses:
-  = @invite.uses
-
-%p
-  %strong Max uses:
-  = @invite.max_uses
-
-%p
-  %strong Expires at:
-  = @invite.expires_at
-
-%p
-  = link_to "Back", story_group_invites_path(@story_group)
+    .col-12.col-md-6
+      .dark-panel.gap-3
+        .d-flex.justify-content-between.align-items-center
+          %span.text-dimmed Status
+          - if @invite.usable?
+            %span.badge.bg-success Aktywne
+          - else
+            %span.badge.bg-secondary Wygasłe
+        .d-flex.justify-content-between.align-items-center
+          %span.text-dimmed Użycia
+          %span= "#{@invite.uses} / #{@invite.max_uses}"
+        .d-flex.justify-content-between.align-items-center
+          %span.text-dimmed Wygasa
+          %span= @invite.expires_at.strftime("%d.%m.%Y %H:%M")
+        .mt-auto.d-flex.justify-content-end
+          = link_to edit_story_group_invite_path(@story_group, @invite), class: "btn btn-primary" do
+            %i.fa-solid.fa-pen.me-1
+            Edytuj

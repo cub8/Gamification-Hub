@@ -13,7 +13,11 @@ class Shared::MainSidebarComponent < ViewComponent::Base
   private
 
   def story_group_student?
-    story_group.students.include?(user)
+    my_student_membership.present?
+  end
+
+  def my_student_membership
+    @my_student_membership ||= story_group.student_memberships.find_by(user: user)
   end
 
   def sidebar_class
@@ -58,7 +62,7 @@ class Shared::MainSidebarComponent < ViewComponent::Base
         { text: 'Sklep', path: helpers.story_group_shop_index_path(story_group), icon: 'fa-sack-dollar' },
         {
           text: 'Moje przedmioty',
-          path: helpers.story_group_student_students_items_path(story_group, user),
+          path: helpers.story_group_student_students_items_path(story_group, my_student_membership),
           icon: 'fa-flask',
         },
         { text: 'Rangi', path: helpers.story_group_ranks_path(story_group), icon: 'fa-angles-up' },
