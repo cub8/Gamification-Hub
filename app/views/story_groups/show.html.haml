@@ -15,14 +15,12 @@
         .dropdown
           %button.btn.btn-secondary.border-0{ type: "button", data: { bs_toggle: "dropdown" }, "aria-expanded": false }
             %i.fa-solid.fa-ellipsis-vertical
-          %ul.dropdown-menu.dropdown-menu-end
-            %li
-              = button_to @story_group, method: :delete,
-                  form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
-                  class: "dropdown-item text-danger border-0 bg-transparent w-100 text-start" do
-                %i.fa-solid.fa-trash.me-1
-                Usuń grupę
-
+          .dropdown-menu
+            = button_to @story_group, method: :delete,
+                form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
+                class: "btn btn-flat text-danger border-0 text-start mx-2 rounded" do
+              %i.fa-solid.fa-trash.me-1
+              Usuń grupę
   - if @story_group.description.present?
     .dark-panel.mb-3
       %p.mb-0= @story_group.description
