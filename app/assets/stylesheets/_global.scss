@@ -46,6 +46,15 @@ body {
   }
 }
 
+.btn-flat-danger {
+  @extend .text-danger;
+
+  &:hover {
+    background-color: $background-light-hover !important;
+    @extend .text-danger;
+  }
+}
+
 .alert-success {
   color: $success-alert-color;
   background-color: $success-alert-bg;

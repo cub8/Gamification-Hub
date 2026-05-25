@@ -14,11 +14,6 @@ class StudentsBadgesControllerTest < ActionDispatch::IntegrationTest
     @students_badge = FactoryBot.create(:students_badge, story_group_student: @story_group_student, badge: @badge1)
   end
 
-  test 'should get index' do
-    get story_group_student_badges_url(@story_group, @story_group_student)
-    assert_response :success
-  end
-
   test 'should get new' do
     get new_story_group_student_badge_url(@story_group, @story_group_student)
     assert_response :success

@@ -26,5 +26,5 @@
                 data: { controller: "tom-select-basic" } }
 
         .form-actions.gap-3.mt-4
-          = link_to "Cancel", story_group_student_badges_path(@story_group, @student), class: "btn-cancel py-2 px-3"
+          = link_to "Cancel", story_group_student_path(@story_group, @student), class: "btn-cancel py-2 px-3"
           = f.submit "Assign Badge", class: "btn-submit py-2 px-4"
