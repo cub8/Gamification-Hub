@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
-  resources :join, param: :code, only: %i[show] do
+  resources :join, param: :code, only: %i[show new] do
     collection do
       post :create
     end
