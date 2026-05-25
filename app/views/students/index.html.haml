@@ -49,11 +49,17 @@
                   %i.fa-solid.fa-award
                 = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
                   %i.fa-solid.fa-money-bill-transfer
-                = button_to story_group_student_path(@story_group, student),
-                  method: :delete,
-                  form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
-                  class: "btn btn-sm btn-danger border-0", title: "Remove" do
-                  %i.fa-solid.fa-trash
+                .dropdown
+                  %button.btn.btn-sm.btn-secondary.border-0{ data: { bs_toggle: "dropdown" }, "aria-expanded": "false" }
+                    %i.fa-solid.fa-ellipsis-vertical
+                  %ul.dropdown-menu.dropdown-menu-end
+                    %li
+                      = button_to story_group_student_path(@story_group, student),
+                        method: :delete,
+                        form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
+                        class: "dropdown-item text-danger" do
+                        %i.fa-solid.fa-trash.me-2
+                        Usuń
           - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
             %tr
               %td{ colspan: 6 }
