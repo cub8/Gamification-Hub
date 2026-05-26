@@ -13,15 +13,15 @@
 
       .d-flex.flex-column.gap-2.mb-4
         .d-flex.justify-content-between
-          %span.text-dimmed Required currency
+          %span.text-dimmed Wymagana waluta
           %span= @rank.required_currency_value
         .d-flex.justify-content-between
-          %span.text-dimmed Discount
+          %span.text-dimmed Zniżka
           %span= "#{@rank.discount}%"
 
       .d-flex.justify-content-end.align-items-center.gap-2
-        = link_to "Zamknij", story_group_ranks_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top" }
+        = link_to "Zamknij", story_group_ranks_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top", turbo_prefetch: true }
         - if policy(@story_group).update?
-          = link_to edit_story_group_rank_path(@story_group, @rank), class: "btn btn-primary", data: { turbo_frame: "_top" } do
+          = link_to edit_story_group_rank_path(@story_group, @rank), class: "btn btn-primary", data: { turbo_prefetch: true } do
             %i.fa-solid.fa-pen.me-1
             Edytuj

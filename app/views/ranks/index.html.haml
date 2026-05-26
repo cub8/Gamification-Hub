@@ -1,15 +1,15 @@
-- content_for :title, "Ranks"
+- content_for :title, "Rangi"
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Ranks
+    %h1.h3.mb-0 Rangi
     - if policy(@story_group).update?
-      = link_to new_story_group_rank_path(@story_group), class: "btn btn-primary" do
+      = link_to new_story_group_rank_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal', turbo_prefetch: true } do
         %i.fa-solid.fa-plus.me-1
-        New Rank
+        Nowa ranga
 
   - if @ranks.empty?
-    %p.text-dimmed No ranks yet.
+    %p.text-dimmed Brak rang.
   - else
     .row.g-3
       - @ranks.each do |rank|
@@ -26,18 +26,18 @@
               .dark-card-body
                 .dark-card-title= rank.name
                 .d-flex.align-items-center.gap-2.mt-2
-                  %span.text-dimmed.small Required:
+                  %span.text-dimmed.small Wymagane:
                   %span.small= rank.required_currency_value
                 .d-flex.align-items-center.gap-2
-                  %span.text-dimmed.small Discount:
+                  %span.text-dimmed.small Zniżka:
                   %span.small= "#{rank.discount}%"
 
             - if policy(@story_group).update?
               .dark-card-actions
-                = link_to edit_story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                = link_to edit_story_group_rank_path(@story_group, rank), class: "btn btn-sm btn-secondary border-0", title: "Edytuj", data: { turbo_frame: 'modal', turbo_prefetch: true } do
                   %i.fa-solid.fa-pen
                 = button_to story_group_rank_path(@story_group, rank),
                   method: :delete,
-                  form: { data: { turbo_confirm: "Delete rank \"#{rank.name}\"?" } },
-                  class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                  form: { data: { turbo_confirm: "Usunąć rangę \"#{rank.name}\"?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Usuń" do
                   %i.fa-solid.fa-trash

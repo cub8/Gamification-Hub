@@ -7,7 +7,7 @@
         .alert.alert-danger.mb-3= @error
 
       = form_with url: join_index_path, method: :post, data: { turbo_frame: '_top' } do |f|
-        .mb-3
+        .field-group.mb-3
           = label_tag :code, 'Kod zaproszenia', class: 'form-label'
           = text_field_tag :code, nil, required: true, class: 'form-control', placeholder: 'Wpisz kod zaproszenia'
 
