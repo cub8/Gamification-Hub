@@ -30,5 +30,5 @@
               %strong.text-main= @student.total_currency
 
         .form-actions.gap-3.mt-4
-          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", daa: { turbo_frame: '_top' }
+          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top' , turbo_prefetch: true }
           = f.submit "Skoryguj", class: "btn-submit py-2 px-4"

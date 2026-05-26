@@ -1,13 +1,13 @@
-- content_for :title, "Edit Lives — #{@student.full_name}"
+- content_for :title, "Edytuj — #{@student.full_name}"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-8.col-lg-6
-      %h1.page-title.mb-4 Edit Lives
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3.dark-page
+    .form-card.p-4.h-auto
+      %h1.page-title.mb-4 Edytuj studenta
 
       - if @student.errors.any?
         .form-errors.p-3.mb-3
-          %h2 Please fix the following errors:
+          %h2 Popraw poniższe błędy:
           %ul
             - @student.errors.full_messages.each do |message|
               %li= message
@@ -19,9 +19,9 @@
             %small.text-dimmed.fw-normal.ms-2= @student.email
 
           .field-group.mb-3
-            = f.label :lives, "Lives"
+            = f.label :lives, "Życia"
             = f.number_field :lives, class: "form-control", min: 0
 
         .form-actions.gap-3.mt-4
-          = link_to "Cancel", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3"
-          = f.submit "Save", class: "btn-submit py-2 px-4"
+          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top' }
+          = f.submit "Aktualizuj", class: "btn-submit py-2 px-4"
