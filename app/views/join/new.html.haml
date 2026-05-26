@@ -12,5 +12,5 @@
           = text_field_tag :code, nil, required: true, class: 'form-control', placeholder: 'Wpisz kod zaproszenia'
 
         .d-flex.justify-content-end.gap-2
-          = link_to 'Anuluj', home_path, class: 'btn btn-secondary', data: { turbo_frame: '_top' }
+          = link_to 'Anuluj', @back_path, class: 'btn btn-secondary', data: { turbo_frame: '_top', turbo_prefetch: true }
           = f.submit 'Dołącz', class: 'btn btn-primary'
