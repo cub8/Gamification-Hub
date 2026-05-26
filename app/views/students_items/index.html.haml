@@ -10,7 +10,7 @@
         %h1.h3.mb-0= @own_items ? "Moje przedmioty" : @student.full_name
 
       - if @students_items.empty?
-        %p.text-dimmed 
+        %p.text-dimmed
           - if @own_items
             Nie posiadasz jeszcze żadnych przedmiotów.
           - else

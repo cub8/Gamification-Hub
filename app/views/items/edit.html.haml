@@ -1,11 +1,7 @@
-- content_for :title, "Edit Item — #{@item.name}"
+- content_for :title, "Edytuj przedmiot — #{@item.name}"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-10.col-lg-8
-      %h1.page-title.mb-4 Edit Item
-
-      - content_for :form_cancel do
-        = link_to "Cancel", story_group_items_path(@story_group), class: "btn-cancel py-2 px-3"
-
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Edytuj przedmiot
       = render "form", item: @item

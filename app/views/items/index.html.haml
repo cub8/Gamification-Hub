@@ -1,14 +1,14 @@
-- content_for :title, "Items"
+- content_for :title, "Przedmioty"
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Items
-    = link_to new_story_group_item_path(@story_group), class: "btn btn-primary" do
+    %h1.h3.mb-0 Przedmioty
+    = link_to new_story_group_item_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal', turbo_prefetch: true } do
       %i.fa-solid.fa-plus.me-1
-      New Item
+      Nowy przedmiot.
 
   - if @items.empty?
-    %p.text-dimmed No items yet.
+    %p.text-dimmed Brak przedmiotów.
   - else
     .row.g-3
       - @items.each do |item|
@@ -26,16 +26,16 @@
               %p.text-dimmed.small.fst-italic.mb-1= truncate(item.story_description, length: 80)
               %p.text-dimmed.small.mb-1= truncate(item.didactic_description, length: 80)
               .d-flex.align-items-center.gap-2.mt-2
-                %span.text-dimmed.small Price:
+                %span.text-dimmed.small Cena:
                 %strong.small= item.price
               - if item.can_buy_at_0_lives
-                %span.badge.bg-secondary.mt-1 Available at 0 lives
+                %span.badge.bg-secondary.mt-1 Dostępne dla 0 żyć
 
             .dark-card-actions
-              = link_to edit_story_group_item_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+              = link_to edit_story_group_item_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Edit", data: { turbo_frame: 'modal', turbo_prefetch: true } do
                 %i.fa-solid.fa-pen
               = button_to story_group_item_path(@story_group, item),
                 method: :delete,
-                form: { data: { turbo_confirm: "Delete item \"#{item.name}\"?" } },
+                form: { data: { turbo_confirm: "Usunąć przedmiot \"#{item.name}\"?" } },
                 class: "btn btn-sm btn-danger border-0", title: "Delete" do
                 %i.fa-solid.fa-trash
