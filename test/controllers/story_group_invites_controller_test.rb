@@ -31,7 +31,7 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_invites_url(@story_group)
+    assert_turbo_redirected_to story_group_invites_url(@story_group)
   end
 
   test 'should get edit' do
@@ -48,7 +48,7 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
             },
           }
 
-    assert_redirected_to story_group_invites_url(@story_group)
+    assert_turbo_redirected_to story_group_invites_url(@story_group)
   end
 
   test 'should get show' do

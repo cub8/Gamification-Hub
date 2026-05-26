@@ -20,8 +20,8 @@ class TeachersController < ApplicationController
     @teacher = @story_group.teacher_memberships.build(teacher_params)
 
     if @teacher.save
-      redirect_to story_group_teachers_path(@story_group),
-                  notice: 'Teacher was successfully added to story group.'
+      redirect_outside_turbo_frame story_group_teachers_path(@story_group),
+                                   notice: 'Pomyślnie dodano nauczyciela do grupy.'
     else
       set_teachers_for_select
       render :new, status: :unprocessable_content
@@ -32,7 +32,7 @@ class TeachersController < ApplicationController
     @teacher.destroy
 
     redirect_to story_group_teachers_path(@story_group),
-                notice: 'Teacher was successfully removed from story group.'
+                notice: 'Pomyślnie usunięto nauczyciela z grupy.'
   end
 
   private

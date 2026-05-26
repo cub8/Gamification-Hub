@@ -1,15 +1,15 @@
-- content_for :title, "Badges"
+- content_for :title, "Odznaki"
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Badges
+    %h1.h3.mb-0 Odznaki
     - if policy(@story_group).update?
-      = link_to new_story_group_badge_path(@story_group), class: "btn btn-primary" do
+      = link_to new_story_group_badge_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal', turbo_prefetch: true } do
         %i.fa-solid.fa-plus.me-1
-        New Badge
+        Nowa odznaka
 
   - if @badges.empty?
-    %p.text-dimmed No badges yet.
+    %p.text-dimmed Brak odznak.
   - else
     .row.g-3
       - @badges.each do |badge|
@@ -27,14 +27,14 @@
                 .dark-card-title= badge.name
                 %p.text-dimmed.small.fst-italic.mb-1= truncate(badge.story_description, length: 80)
                 %p.text-dimmed.small.mb-0= truncate(badge.didactic_description, length: 80)
-                %span.badge.bg-secondary.mt-2= "#{badge.discount}% discount"
+                %span.badge.bg-secondary.mt-2= "Zniżka: #{badge.discount}%"
 
             - if policy(@story_group).update?
               .dark-card-actions
-                = link_to edit_story_group_badge_path(@story_group, badge), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                = link_to edit_story_group_badge_path(@story_group, badge), class: "btn btn-sm btn-secondary border-0", title: "Edytuj", data: { turbo_frame: 'modal', turbo_prefetch: true } do
                   %i.fa-solid.fa-pen
                 = button_to story_group_badge_path(@story_group, badge),
                   method: :delete,
-                  form: { data: { turbo_confirm: "Delete badge \"#{badge.name}\"?" } },
-                  class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                  form: { data: { turbo_confirm: "Usunąć odznakę \"#{badge.name}\"?" } },
+                  class: "btn btn-sm btn-danger border-0", title: "Usuń" do
                   %i.fa-solid.fa-trash

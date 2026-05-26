@@ -1,11 +1,7 @@
-- content_for :title, "New Badge"
+- content_for :title, "Nowa odznaka"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-8.col-lg-6
-      %h1.page-title.mb-4 New Badge
-
-      - content_for :form_cancel do
-        = link_to "Cancel", story_group_badges_path(@story_group), class: "btn-cancel py-2 px-3"
-
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Nowa odznaka
       = render "form", badge: @badge

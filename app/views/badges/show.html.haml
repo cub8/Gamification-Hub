@@ -17,12 +17,12 @@
         - if @badge.didactic_description.present?
           %p.mb-1= @badge.didactic_description
         .d-flex.justify-content-between
-          %span.text-dimmed Discount
+          %span.text-dimmed Zniżka
           %span= "#{@badge.discount}%"
 
       .d-flex.justify-content-end.align-items-center.gap-2
-        = link_to "Zamknij", story_group_badges_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top" }
+        = link_to "Zamknij", story_group_badges_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top", turbo_prefetch: true }
         - if policy(@story_group).update?
-          = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-primary", data: { turbo_frame: "_top" } do
+          = link_to edit_story_group_badge_path(@story_group, @badge), class: "btn btn-primary", data: { turbo_prefetch: true } do
             %i.fa-solid.fa-pen.me-1
             Edytuj

@@ -1,31 +1,32 @@
-- content_for :title, "Teachers"
+- content_for :title, "Nauczyciele"
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Teachers
-    = link_to new_story_group_teacher_path(@story_group), class: "btn btn-primary" do
+    %h1.h3.mb-0 Nauczyciele
+    = link_to new_story_group_teacher_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal', turbo_prefetch: true } do
       %i.fa-solid.fa-plus.me-1
-      Add Teacher
+      Dodaj nauczyciela
 
   - if @teachers.empty?
-    %p.text-dimmed No teachers yet.
+    %p.text-dimmed Brak nauczycieli.
   - else
-    %table.table.table-sm.table-hover
+    %table.table.table-hover.align-middle.mb-0
       %thead
         %tr
-          %th Full name
-          %th Email address
-          %th Added
-          %th.text-end Actions
+          %th.ps-4 Imię i nazwisko
+          %th Email
+          %th Dodano
+          %th.text-end.pe-4 Akcje
       %tbody
         - @teachers.each do |teacher|
           %tr
-            %td= teacher.full_name
+            %td.ps-4= teacher.full_name
             %td= teacher.email
-            %td= teacher.created_at.strftime("%H:%M %d %b %Y")
-            %td.text-end
+            %td= teacher.created_at.strftime("%H:%M %d.%m.%Y")
+            %td.text-end.pe-4
               = button_to story_group_teacher_path(@story_group, teacher),
                 method: :delete,
-                form: { data: { turbo_confirm: "Are you sure you want to remove #{teacher.full_name}?" } },
-                class: "btn btn-sm btn-danger border-0" do
+                form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć nauczyciela #{teacher.full_name}?" } },
+                class: "btn btn-sm btn-danger border-0",
+                title: "Usuń" do
                 %i.fa-solid.fa-trash

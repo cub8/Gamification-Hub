@@ -23,8 +23,8 @@ class StoryGroupInvitesController < ApplicationController
     @invite = @story_group.invites.build(invite_params)
 
     if @invite.save
-      redirect_to story_group_invites_path(@story_group),
-                  notice: 'Invite was successfully added to story group.'
+      redirect_outside_turbo_frame story_group_invites_path(@story_group),
+                                   notice: 'Pomyślnie utworzono zaproszenie.'
     else
       render :new, status: :unprocessable_content
     end
@@ -32,8 +32,8 @@ class StoryGroupInvitesController < ApplicationController
 
   def update
     if @invite.update(invite_params)
-      redirect_to story_group_invites_path(@story_group),
-                  notice: 'Invite was successfully updated.', status: :see_other
+      redirect_outside_turbo_frame story_group_invites_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano zaproszenie.'
     else
       render :edit, status: :unprocessable_content
     end
@@ -43,7 +43,7 @@ class StoryGroupInvitesController < ApplicationController
     @invite.destroy
 
     redirect_to story_group_invites_path(@story_group),
-                notice: 'Invite was successfully removed from story group.'
+                notice: 'Pomyślnie usunięto zaproszenie.'
   end
 
   private

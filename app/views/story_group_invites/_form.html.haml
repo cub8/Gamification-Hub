@@ -18,5 +18,5 @@
       = f.datetime_field :expires_at, class: "form-control"
 
   .form-actions.gap-3.mt-4
-    = yield :form_cancel
-    = f.submit invite.persisted? ? "Aktualizuj" : "Utwórz", class: "btn-submit py-2 px-4"
+    = link_to "Anuluj", story_group_invites_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top', turbo_prefetch: true }
+    = f.submit invite.persisted? ? "Zapisz" : "Utwórz", class: "btn-submit py-2 px-4"
