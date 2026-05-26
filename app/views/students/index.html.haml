@@ -1,11 +1,11 @@
-- content_for :title, "Students"
+- content_for :title, "Studenci"
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Students
-    = link_to new_story_group_student_path(@story_group), class: "btn btn-primary" do
+    = link_to new_story_group_student_path(@story_group), class: "btn btn-primary", data: { turbo_prefetch: true, turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus.me-1
-      Add Student
+      Dodaj studenta
 
   - if @students.empty?
     %p.text-dimmed No students yet.

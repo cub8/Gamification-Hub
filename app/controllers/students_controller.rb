@@ -29,8 +29,8 @@ class StudentsController < ApplicationController
     authorize @student
 
     if @student.save
-      redirect_to story_group_students_path(@story_group),
-                  notice: 'Pomyślnie dodano studenta do grupy.'
+      redirect_outside_turbo_frame story_group_students_path(@story_group),
+                                   notice: 'Pomyślnie dodano studenta do grupy.'
     else
       set_students_for_select
       render :new, status: :unprocessable_content
@@ -41,8 +41,8 @@ class StudentsController < ApplicationController
     authorize @student
 
     if @student.update(update_student_params)
-      redirect_to story_group_students_path(@story_group),
-                  notice: 'Pomyślnie zaktualizowano studenta.', status: :see_other
+      redirect_outside_turbo_frame story_group_students_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit, status: :unprocessable_content
     end

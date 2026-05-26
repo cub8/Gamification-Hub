@@ -17,6 +17,12 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def redirect_outside_turbo_frame(path, notice: nil)
+    flash[:notice] = notice if notice
+
+    render turbo_stream: turbo_stream.action(:redirect, path)
+  end
+
   def set_sidebar_state
     @sidebar_collapsed = cookies[:sidebar_collapsed] == 'true'
   end

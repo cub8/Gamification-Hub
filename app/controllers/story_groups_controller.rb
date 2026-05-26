@@ -44,7 +44,8 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     if @story_group.save
-      redirect_to @story_group, notice: 'Story group was successfully created.'
+      redirect_outside_turbo_frame story_group_path(@story_group),
+                                   notice: 'Pomyślnie utworzono grupę fabularną.'
     else
       render :new, status: :unprocessable_content
     end
@@ -55,7 +56,8 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     if @story_group.update(story_group_params)
-      redirect_to @story_group, notice: 'Story group was successfully updated.', status: :see_other
+      redirect_outside_turbo_frame story_group_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano grupę fabularną.'
     else
       render :edit, status: :unprocessable_content
     end
@@ -66,7 +68,7 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     @story_group.destroy!
-    redirect_to story_groups_path, notice: 'Story group was successfully destroyed.', status: :see_other
+    redirect_to story_groups_path, notice: 'Pomyślnie usunięto grupę fabularną.', status: :see_other
   end
 
   private
