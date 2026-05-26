@@ -32,16 +32,23 @@
   .form-section.p-4.mb-3
     .section-title.mb-3 Ikona
 
-    .field-group.mb-3
+    .field-group.mb-3{ data: { controller: "file-upload" } }
       - if item.image.attached?
         .mb-2
           = image_tag item.image, width: 60, height: 60, class: "object-fit-contain"
       .file-upload
         = f.label :image, class: "file-btn px-3 py-2" do
           %i.fa-solid.fa-upload
-          = item.image.attached? ? "Replace image" : "Upload image"
-        = f.file_field :image, accept: "image/*", class: "d-none"
-        %small.file-hint.mt-1 GIF, JPG or PNG
+          = item.image.attached? ? "Zastąp obraz" : "Prześlij"
+        = f.file_field :image,
+            accept: "image/*",
+            class: "d-none",
+            data: { file_upload_target: "input", action: "change->file-upload#update" }
+
+        %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
+          %i.fa-solid.fa-image
+          %span.uploaded-file-name
+        %span.file-hint.mt-1 Akceptowane formaty: GIF, JPEG, PNG
 
   .form-section.p-4.mb-3
     .section-title.mb-3 Wymagania i zniżki
@@ -71,5 +78,5 @@
         { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 
   .form-actions.gap-3.mt-4
-    = link_to "Anuluj", story_group_items_path(@story_group), class: "btn-cancel py-2 px-3"
+    = link_to "Anuluj", story_group_items_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top', turbo_prefetch: true}
     = f.submit 'Zapisz', class: "btn-submit py-2 px-4"

@@ -7,18 +7,18 @@
           %li= error.full_message
 
   .form-section.p-4.mb-3
-    %h2.section-title.mb-3 Basic Information
+    %h2.section-title.mb-3 Podstawowe
 
     .field-group.mb-3
-      = form.label :name, "Name"
+      = form.label :name, "Nazwa"
       = form.text_field :name, class: "form-control"
 
     .field-group.mb-3
-      = form.label :description, "Description"
-      = form.text_area :description, class: "form-control", placeholder: "Once upon a time..."
+      = form.label :description, "Opis"
+      = form.text_area :description, class: "form-control", placeholder: "Dawno dawno temu..."
 
     .field-group.mb-3{ data: { controller: "file-upload" } }
-      = form.label :icon, "Group icon"
+      = form.label :icon, "Ikona grupy"
       .file-upload
         = form.label :icon, class: "file-btn px-3 py-2" do
           %i.fa-solid.fa-upload
@@ -31,20 +31,20 @@
         %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
           %i.fa-solid.fa-image
           %span.uploaded-file-name
-        %span.file-hint.mt-1 Accepted formats: JPEG, PNG
+        %span.file-hint.mt-1 Akceptowane formaty: JPEG, PNG
 
   .form-section.p-4.mb-3
-    %h2.section-title.mb-3 Currency
+    %h2.section-title.mb-3 Waluta
 
     .row.g-3
       .col-md-6
         .field-group.mb-3
-          = form.label :currency_name, "Currency name"
+          = form.label :currency_name, "Nazwa waluty"
           = form.text_field :currency_name, class: "form-control"
 
       .col-md-6
         .field-group.mb-3{ data: { controller: "file-upload" } }
-          = form.label :currency_icon, "Currency icon"
+          = form.label :currency_icon, "Ikona waluty"
           .file-upload
             = form.label :currency_icon, class: "file-btn px-3 py-2" do
               %i.fa-solid.fa-upload
@@ -56,15 +56,15 @@
             %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
               %i.fa-solid.fa-image
               %span.uploaded-file-name
-            %span.file-hint.mt-1 Accepted formats: JPEG, PNG
+            %span.file-hint.mt-1 Akceptowane formaty: JPEG, PNG
 
   .form-section.p-4.mb-3
-    %h2.section-title.mb-3 Lives
+    %h2.section-title.mb-3 Życia
 
     .field-group.mb-3
-      = form.label :default_lives, "Default lives"
+      = form.label :default_lives, "Domyślna liczba żyć"
       = form.number_field :default_lives, min: 0, step: 1, class: "form-control"
 
   .form-actions.gap-3.mt-4
     = link_to "Cancel", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
-    = form.submit submit_label, class: "btn-submit py-2 px-4"
+    = form.submit 'Zapisz', class: "btn-submit py-2 px-4"
