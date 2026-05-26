@@ -2,12 +2,11 @@
 
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3
-    .modal-card.p-4.w-25
-      .d-flex.align-items-center.gap-3.mb-3
-        = link_to story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary", title: 'Do przedmiotów studenta', data: { turbo_prefetch: true } do
+    .form-card.p-4
+      .d-flex.align-items-center.gap-3.mb-4
+        = go_back_from_show_link(@own_items, story_group: @story_group, student: @student) do
           %i.fa-solid.fa-arrow-left
-        .d-flex.align-items-center
-        %h2.page-title.mb-4= @students_item.item.name
+        %h2.page-title.mb-0= @students_item.item.name
 
       .text-center.mb-4
         - if @students_item.item.image.attached?
@@ -33,4 +32,4 @@
           %span= @students_item.created_at.strftime('%d.%m.%Y %H:%M')
 
       .d-flex.justify-content-end
-        = link_to "Zamknij", story_group_students_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: '_top', turbo_prefetch: true }
+        = close_show_link(@own_items, story_group: @story_group, student: @student)
