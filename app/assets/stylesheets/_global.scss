@@ -78,3 +78,8 @@ body {
   width: 75%;
   color: $text-main;
 }
+
+.action-container-over-link {
+  @extend .position-relative;
+  z-index: 2;
+}

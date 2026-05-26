@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class JoinController < ApplicationController
-  before_action :set_invite
+  before_action :set_invite, except: :new
 
   # Logika show i create na przyszłość - create to po prostu post do dołączenia użytkownika,
   # show może być widokiem rejestracji, na razie widoczny jest tylko w przypadku błędu
@@ -23,10 +23,10 @@ class JoinController < ApplicationController
   private
 
   def set_invite
-    @invite = StoryGroupInvite.find_by!(code: params[:code])
+    @invite = StoryGroupInvite.find_by(code: params[:code])
     return if @invite
 
-    flash[:alert] = 'Invalid or missing invite code.'
-    redirect_to home_path
+    @error = 'Nieprawidłowy kod zaproszenia.'
+    render :new, status: :unprocessable_entity
   end
 end

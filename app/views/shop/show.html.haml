@@ -40,7 +40,7 @@
               %li.small= error
 
       .d-flex.justify-content-end.align-items-center.gap-2
-        = link_to "Zamknij", story_group_shop_index_path(@story_group), class: "btn btn-secondary"
+        = link_to "Zamknij", story_group_shop_index_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top" }
         - if @eligibility.eligible?
           = button_to buy_story_group_shop_path(@story_group, @item), method: :post, form: { data: { turbo_frame: "_top" } }, class: "btn btn-primary" do
             %i.fa-solid.fa-cart-shopping.me-1

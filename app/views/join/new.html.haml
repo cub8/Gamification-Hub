@@ -1,0 +1,16 @@
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h2.page-title.mb-4 Dołącz do grupy
+
+      - if @error
+        .alert.alert-danger.mb-3= @error
+
+      = form_with url: join_index_path, method: :post, data: { turbo_frame: '_top' } do |f|
+        .mb-3
+          = label_tag :code, 'Kod zaproszenia', class: 'form-label'
+          = text_field_tag :code, nil, required: true, class: 'form-control', placeholder: 'Wpisz kod zaproszenia'
+
+        .d-flex.justify-content-end.gap-2
+          = link_to 'Anuluj', home_path, class: 'btn btn-secondary', data: { turbo_frame: '_top' }
+          = f.submit 'Dołącz', class: 'btn btn-primary'
