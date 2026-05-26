@@ -6,7 +6,8 @@
       %tr
         %th Icon
         %th Name
-        %th Description
+        %th Opis fabularny
+        %th Opis dydaktyczny
         - if policy(@student).update?
           %th.text-end Actions
     %tbody
@@ -19,6 +20,7 @@
               %i.fa-solid.fa-award.fs-4.text-dimmed
           %td= badge.name
           %td.text-dimmed= badge.story_description
+          %td.text-dimmed= badge.didactic_description
           - if policy(@student).update?
             %td.text-end
               = button_to story_group_student_badge_path(@story_group, @student, badge),

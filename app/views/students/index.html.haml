@@ -1,13 +1,13 @@
-- content_for :title, "Students"
+- content_for :title, "Studenci"
 - content_for :head do
   %meta{ name: "turbo-cache-control", content: "no-preview" }
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Students
-    = link_to new_story_group_student_path(@story_group), class: "btn btn-primary" do
+    = link_to new_story_group_student_path(@story_group), class: "btn btn-primary", data: { turbo_prefetch: true, turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus.me-1
-      Add Student
+      Dodaj studenta
 
   - if @students.empty?
     %p.text-dimmed No students yet.
@@ -23,12 +23,12 @@
           %th.text-end Actions
       %tbody
         - @students.each do |student|
-          %tr
+          %tr.position-relative
             %td
-              = link_to student.full_name, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset"
+              = link_to student.full_name, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
             %td
-              = link_to student.email, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset"
-            %td
+              = link_to student.email, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
+            %td.position-relative.z-2
               .d-flex.align-items-center.gap-1
                 = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
                   method: :post,
@@ -42,29 +42,29 @@
                   class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
                   %i.fa-solid.fa-plus
             %td
-              = link_to student.current_currency, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset"
+              = link_to student.current_currency, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
             %td
-              = link_to student.total_currency, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset"
+              = link_to student.total_currency, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
             %td.text-end
               .d-flex.justify-content-end.gap-1
-                = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
+                = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Edytuj", data: { turbo_frame: "modal" } do
                   %i.fa-solid.fa-pen
-                = link_to new_story_group_student_badge_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Manage badges" do
+                = link_to new_story_group_student_badge_path(@story_group, student), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Przydziel odznakę", data: { turbo_frame: "modal" } do
                   %i.fa-solid.fa-award
-                = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0", title: "Adjust currency" do
+                = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Skoryguj walutę", data: { turbo_frame: "modal" } do
                   %i.fa-solid.fa-money-bill-transfer
                 .dropdown
-                  %button.btn.btn-sm.btn-secondary.border-0{ data: { bs_toggle: "dropdown" }, "aria-expanded": "false" }
+                  %button.btn.btn-sm.btn-secondary.border-0.position-relative.z-2{ data: { bs_toggle: "dropdown" }, "aria-expanded": "false" }
                     %i.fa-solid.fa-ellipsis-vertical
-                  %ul.dropdown-menu.dropdown-menu-end
+                  %ul.dropdown-menu.z-3.px-2.text-start
                     %li
                       = button_to story_group_student_path(@story_group, student),
-                        method: :delete,
-                        form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
-                        class: "dropdown-item text-danger" do
+                          method: :delete,
+                          form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
+                          class: 'dropdown-item text-danger rounded p-1' do
                         %i.fa-solid.fa-trash.me-2
                         Usuń
-          - if defined?(@failed_student_id) && student.id == @failed_student_id && @student.errors.any?
+          - if student.id == @failed_student_id && @student.errors.any?
             %tr
               %td{ colspan: 6 }
                 .form-errors.p-3.mb-3

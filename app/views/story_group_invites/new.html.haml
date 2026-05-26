@@ -1,11 +1,7 @@
 - content_for :title, "Nowe zaproszenie"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-8.col-lg-6
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
       %h1.page-title.mb-4 Nowe zaproszenie
-
-      - content_for :form_cancel do
-        = link_to "Anuluj", story_group_invites_path(@story_group), class: "btn-cancel py-2 px-3"
-
       = render "form", invite: @invite, url: story_group_invites_path(@story_group)

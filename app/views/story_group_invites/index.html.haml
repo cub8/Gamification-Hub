@@ -1,43 +1,44 @@
-- content_for :title, "Invites"
+- content_for :title, "Zaproszenia"
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Invites
-    = link_to new_story_group_invite_path(@story_group), class: "btn btn-primary" do
+    %h1.h3.mb-0 Zaproszenia
+    = link_to new_story_group_invite_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal', turbo_prefetch: true } do
       %i.fa-solid.fa-plus.me-1
-      New Invite
+      Nowe zaproszenie
 
   - if @invites.empty?
-    %p.text-dimmed No invites yet.
+    %p.text-dimmed Brak zaproszeń.
   - else
-    %table.table.table-sm.table-hover
-      %thead
-        %tr
-          %th Code
-          %th.text-center Uses
-          %th Expires at
-          %th.text-center Status
-          %th.text-end Actions
-      %tbody
-        - @invites.each do |invite|
+    .table-responsive
+      %table.table.table-sm.table-hover
+        %thead
           %tr
-            %td
-              %code.text-main= invite.code
-            %td.text-center.text-dimmed= "#{invite.uses} / #{invite.max_uses}"
-            %td.text-dimmed= invite.expires_at.strftime("%Y-%m-%d %H:%M")
-            %td.text-center
-              - if invite.usable?
-                %span.badge.bg-success Active
-              - else
-                %span.badge.bg-secondary Expired
-            %td.text-end
-              .d-flex.justify-content-end.gap-1
-                = link_to story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0", title: "View" do
-                  %i.fa-solid.fa-eye
-                = link_to edit_story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0", title: "Edit" do
-                  %i.fa-solid.fa-pen
-                = button_to story_group_invite_path(@story_group, invite),
-                  method: :delete,
-                  form: { data: { turbo_confirm: "Remove invite #{invite.code}?" } },
-                  class: "btn btn-sm btn-danger border-0", title: "Remove" do
-                  %i.fa-solid.fa-trash
+            %th Kod
+            %th.text-center Użycia
+            %th Wygasa
+            %th.text-center Status
+            %th.text-end Akcje
+        %tbody
+          - @invites.each do |invite|
+            %tr.position-relative
+              %td
+                = link_to invite.code, story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
+              %td.text-center.text-dimmed
+                = link_to "#{invite.uses} / #{invite.max_uses}", story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
+              %td.text-dimmed
+                = link_to invite.expires_at.strftime("%d.%m.%Y %H:%M"), story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
+              %td.text-center
+                - if invite.usable?
+                  %span.badge.bg-success.position-relative.z-2 Aktywne
+                - else
+                  %span.badge.bg-secondary.position-relative.z-2 Wygasłe
+              %td.text-end
+                .d-flex.justify-content-end.gap-1
+                  = link_to edit_story_group_invite_path(@story_group, invite), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Edytuj", data: { turbo_frame: 'modal', turbo_prefetch: true } do
+                    %i.fa-solid.fa-pen
+                  = button_to story_group_invite_path(@story_group, invite),
+                    method: :delete,
+                    form: { data: { turbo_confirm: "Usunąć zaproszenie #{invite.code}?" } },
+                    class: "btn btn-sm btn-danger border-0 position-relative z-2", title: "Usuń" do
+                    %i.fa-solid.fa-trash

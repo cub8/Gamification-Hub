@@ -17,7 +17,7 @@ class StudentsBadgesController < ApplicationController
     @badge = @student.students_badges.build(badge_params)
 
     if @badge.save
-      redirect_to story_group_student_badges_path(@story_group, @student),
+      redirect_to story_group_student_path(@story_group, @student),
                   notice: 'Badge was successfully given to student.'
     else
       @badges = Badge.where(story_group_id: @story_group.id)
@@ -28,7 +28,7 @@ class StudentsBadgesController < ApplicationController
   def destroy
     @badge.destroy
 
-    redirect_to story_group_student_badges_path(@story_group, @student),
+    redirect_to story_group_student_path(@story_group, @student),
                 notice: 'Badge was successfully taken from student.'
   end
 

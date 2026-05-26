@@ -31,7 +31,7 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_url(StoryGroup.last)
+    assert_turbo_redirected_to story_group_url(StoryGroup.last)
   end
 
   test 'should show story_group' do
@@ -53,7 +53,7 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
               name:          @story_group.name,
             },
           }
-    assert_redirected_to story_group_url(@story_group)
+    assert_turbo_redirected_to story_group_url(@story_group)
   end
 
   test 'should destroy story_group' do

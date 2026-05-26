@@ -3,7 +3,10 @@
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3
     .form-card.p-4
-      %h2.page-title.mb-4= @students_item.item.name
+      .d-flex.align-items-center.gap-3.mb-4
+        = go_back_from_show_link(@own_items, story_group: @story_group, student: @student) do
+          %i.fa-solid.fa-arrow-left
+        %h2.page-title.mb-0= @students_item.item.name
 
       .text-center.mb-4
         - if @students_item.item.image.attached?
@@ -29,4 +32,4 @@
           %span= @students_item.created_at.strftime('%d.%m.%Y %H:%M')
 
       .d-flex.justify-content-end
-        = link_to "Zamknij", story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary", data: { turbo_frame: "_top" }
+        = close_show_link(@own_items, story_group: @story_group, student: @student)

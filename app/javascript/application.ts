@@ -5,3 +5,7 @@ import "bootstrap"
 import "@fortawesome/fontawesome-free/js/all"
 
 import "@utils/bootstrap_setup"
+
+Turbo.StreamActions.redirect = function() {
+  Turbo.visit(this.target)
+}

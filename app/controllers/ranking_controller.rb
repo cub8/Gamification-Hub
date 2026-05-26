@@ -21,7 +21,7 @@ class RankingController < ApplicationController
   def change_status
     enabled = params[:ranking_enabled] == 'true'
     @story_group.update!(ranking_enabled: enabled)
-    notice = enabled ? 'Ranking enabled.' : 'Ranking disabled.'
+    notice = enabled ? 'Ranking został włączony.' : 'Ranking został wyłączony.'
     redirect_to story_group_ranking_path(@story_group), notice: notice
   end
 

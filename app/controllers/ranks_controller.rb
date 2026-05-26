@@ -29,25 +29,27 @@ class RanksController < ApplicationController
     @rank = @story_group.ranks.build(rank_params)
 
     if @rank.save
-      redirect_to story_group_rank_path(@story_group, @rank), notice: 'Rank was successfully created.'
+      redirect_outside_turbo_frame story_group_ranks_path(@story_group),
+                                   notice: 'Pomyślnie utworzono rangę.'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
   # PATCH/PUT /story_groups/:story_group_id/ranks/:id
   def update
     if @rank.update(rank_params)
-      redirect_to story_group_rank_path(@story_group, @rank), notice: 'Rank was successfully updated.'
+      redirect_outside_turbo_frame story_group_ranks_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano rangę.'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
   # DELETE /story_groups/:story_group_id/ranks/:id
   def destroy
     @rank.destroy
-    redirect_to story_group_ranks_path(@story_group), notice: 'Rank was successfully destroyed.'
+    redirect_to story_group_ranks_path(@story_group), notice: 'Pomyślnie usunięto rangę.'
   end
 
   private

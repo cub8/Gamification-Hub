@@ -1,13 +1,17 @@
-- content_for :title, "Give Badge — #{@student.full_name}"
+- content_for :title, "Przydziel odznakę — #{@student.full_name}"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-8.col-lg-6
-      %h1.page-title.mb-4 Give Badge
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      .d-flex.align-items-center.gap-3.mb-3
+        = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
+          %i.fa-solid.fa-arrow-left
+        .d-flex.align-items-center
+          %h1.page-title.mb-0 Przydziel odznakę
 
       - if @badge.errors.any?
         .form-errors.p-3.mb-3
-          %h2 Please fix the following errors:
+          %h2 Popraw poniższe błędy:
           %ul
             - @badge.errors.full_messages.each do |message|
               %li= message
@@ -19,12 +23,12 @@
             %small.text-dimmed.fw-normal.ms-2= @student.email
 
           .field-group.mb-3
-            = f.label :badge_id, "Select badge"
+            = f.label :badge_id, "Wybierz odznakę"
             = f.collection_select :badge_id, @badges, :id, :name,
               { prompt: "Choose a badge" },
               { class: "form-control",
                 data: { controller: "tom-select-basic" } }
 
         .form-actions.gap-3.mt-4
-          = link_to "Cancel", story_group_student_path(@story_group, @student), class: "btn-cancel py-2 px-3"
-          = f.submit "Assign Badge", class: "btn-submit py-2 px-4"
+          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true, turbo_frame: '_top' }
+          = f.submit "Zapisz", class: "btn-submit py-2 px-4"

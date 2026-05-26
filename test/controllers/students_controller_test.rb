@@ -42,7 +42,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_students_url(@story_group)
+    assert_turbo_redirected_to story_group_students_url(@story_group)
   end
 
   test 'should update story_group_student' do
@@ -53,7 +53,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
             },
           }
 
-    assert_redirected_to story_group_students_url(@story_group)
+    assert_turbo_redirected_to story_group_students_url(@story_group)
   end
 
   test 'should destroy story_group_student' do
@@ -63,5 +63,4 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to story_group_students_url(@story_group)
   end
-
 end

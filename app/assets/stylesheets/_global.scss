@@ -70,3 +70,16 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.modal-card {
+  background-color: $background;
+  border: 2px solid $primary;
+  border-radius: 10px;
+  width: 75%;
+  color: $text-main;
+}
+
+.action-container-over-link {
+  @extend .position-relative;
+  z-index: 2;
+}

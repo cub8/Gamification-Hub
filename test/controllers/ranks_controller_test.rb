@@ -21,7 +21,7 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_rank_url(@story_group, Rank.last)
+    assert_turbo_redirected_to story_group_ranks_url(@story_group)
   end
 
   test 'should not create rank for story group not owned by teacher' do

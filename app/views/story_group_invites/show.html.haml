@@ -1,34 +1,35 @@
 - content_for :title, "Zaproszenie — #{@invite.code}"
 
-.dark-page
-  .d-flex.align-items-center.gap-3.mb-4
-    = link_to story_group_invites_path(@story_group), class: "btn btn-secondary" do
-      %i.fa-solid.fa-arrow-left
-    %h1.h3.mb-0 Zaproszenie
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      .text-center.mb-4
+        %h1.page-title.mb-2 Zaproszenie
+        %code.fs-4= @invite.code
 
-  .row.g-4
-    .col-12.col-md-6
-      .dark-panel
-        .text-center.mb-4
+      .d-flex.flex-column.align-items-center.gap-4.mb-4
+        .text-center
           = invite_qr_code(@invite)
-        %p.text-center.mb-0
-          %code.fs-5= @invite.code
 
-    .col-12.col-md-6
-      .dark-panel.gap-3
-        .d-flex.justify-content-between.align-items-center
-          %span.text-dimmed Status
-          - if @invite.usable?
-            %span.badge.bg-success Aktywne
-          - else
-            %span.badge.bg-secondary Wygasłe
-        .d-flex.justify-content-between.align-items-center
-          %span.text-dimmed Użycia
-          %span= "#{@invite.uses} / #{@invite.max_uses}"
-        .d-flex.justify-content-between.align-items-center
-          %span.text-dimmed Wygasa
-          %span= @invite.expires_at.strftime("%d.%m.%Y %H:%M")
-        .mt-auto.d-flex.justify-content-end
-          = link_to edit_story_group_invite_path(@story_group, @invite), class: "btn btn-primary" do
-            %i.fa-solid.fa-pen.me-1
-            Edytuj
+        .w-100
+          .row.justify-content-center
+            .col-12.col-md-10
+              .d-flex.flex-column.gap-2
+                .d-flex.justify-content-between.align-items-center
+                  %span.text-dimmed Status
+                  - if @invite.usable?
+                    %span.badge.bg-success Aktywne
+                  - else
+                    %span.badge.bg-secondary Wygasłe
+                .d-flex.justify-content-between.align-items-center
+                  %span.text-dimmed Użycia
+                  %span= "#{@invite.uses} / #{@invite.max_uses}"
+                .d-flex.justify-content-between.align-items-center
+                  %span.text-dimmed Wygasa
+                  %span= @invite.expires_at.strftime("%d.%m.%Y %H:%M")
+
+      .d-flex.justify-content-end.align-items-center.gap-2
+        = link_to "Zamknij", story_group_invites_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top", turbo_prefetch: true }
+        = link_to edit_story_group_invite_path(@story_group, @invite), class: "btn btn-primary", data: { turbo_prefetch: true } do
+          %i.fa-solid.fa-pen.me-1
+          Edytuj

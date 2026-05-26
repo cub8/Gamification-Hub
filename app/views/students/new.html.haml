@@ -1,29 +1,29 @@
-- content_for :title, "Add Student"
+- content_for :title, "Dodaj studenta"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-8.col-lg-6
-      %h1.page-title.mb-4 Add Student
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Dodaj studenta
 
       - if @student.errors.any?
         .form-errors.p-3.mb-3
-          %h2 Please fix the following errors:
+          %h2 Popraw poniższe błędy:
           %ul
             - @student.errors.full_messages.each do |message|
               %li= message
 
       = form_with model: @student, url: story_group_students_path(@story_group) do |f|
         .form-section.p-4.mb-3
-          .section-title.mb-3 Basic Information
+          .section-title.mb-3 Podstawowe informacje
 
           .field-group.mb-3
-            = f.label :user_id, "Select student"
+            = f.label :user_id, "Wybierz studenta"
             = f.select :user_id,
                 options_from_collection_for_select(@students, :id, :email, @student.user_id),
-                { prompt: "Choose a user" },
+                { prompt: "Wybierz studenta" },
                 { class: "form-control",
                   data: { controller: "tom-select-user", tom_select_options_value: student_map(@students).to_json } }
 
         .form-actions.gap-3.mt-4
-          = link_to "Cancel", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3"
-          = f.submit "Add Student", class: "btn-submit py-2 px-4"
+          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true, turbo_frame: '_top' }
+          = f.submit "Dodaj studenta", class: "btn-submit py-2 px-4"

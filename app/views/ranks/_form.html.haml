@@ -1,40 +1,47 @@
 - if rank.errors.any?
   .form-errors.p-3.mb-3
-    %h2 Please fix the following errors:
+    %h2 Proszę poprawić następujące błędy:
     %ul
       - rank.errors.full_messages.each do |message|
         %li= message
 
 = form_with model: [@story_group, rank] do |f|
   .form-section.p-4.mb-3
-    .section-title.mb-3 Basic Information
+    .section-title.mb-3 Podstawowe informacje
 
     .field-group.mb-3
-      = f.label :name, "Name"
+      = f.label :name, "Nazwa"
       = f.text_field :name, class: "form-control"
 
     .field-group.mb-3
-      = f.label :required_currency_value, "Required currency"
+      = f.label :required_currency_value, "Wymagana waluta"
       = f.number_field :required_currency_value, min: 0, step: 1, class: "form-control"
 
     .field-group.mb-3
-      = f.label :discount, "Discount (%)"
+      = f.label :discount, "Zniżka (%)"
       = f.number_field :discount, in: 0..100, step: 1, class: "form-control"
 
   .form-section.p-4.mb-3
-    .section-title.mb-3 Icon
+    .section-title.mb-3 Ikona
 
-    .field-group.mb-3
+    .field-group.mb-3{ data: { controller: "file-upload" } }
       - if rank.icon.attached?
         .mb-2
           = image_tag rank.icon, width: 60, height: 60, class: "object-fit-contain"
       .file-upload
         = f.label :icon, class: "file-btn px-3 py-2" do
           %i.fa-solid.fa-upload
-          = rank.icon.attached? ? "Replace icon" : "Upload icon"
-        = f.file_field :icon, accept: "image/*", class: "d-none"
-        %small.file-hint.mt-1 GIF, JPG or PNG
+          = rank.icon.attached? ? "Zmień ikonę" : "Wgraj ikonę"
+        = f.file_field :icon,
+            accept: "image/*",
+            class: "d-none",
+            data: { file_upload_target: "input", action: "change->file-upload#update" }
+
+        %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
+          %i.fa-solid.fa-image
+          %span.uploaded-file-name
+        %span.file-hint.mt-1 GIF, JPG lub PNG
 
   .form-actions.gap-3.mt-4
-    = yield :form_cancel
-    = f.submit class: "btn-submit py-2 px-4"
+    = link_to "Anuluj", story_group_ranks_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true, turbo_frame: '_top' }
+    = f.submit "Zapisz", class: "btn-submit py-2 px-4"

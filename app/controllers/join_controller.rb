@@ -3,10 +3,11 @@
 class JoinController < ApplicationController
   before_action :set_invite, except: :new
 
-  # Logika show i create na przyszłość - create to po prostu post do dołączenia użytkownika,
-  # show może być widokiem rejestracji, na razie widoczny jest tylko w przypadku błędu
-
   def show; end
+
+  def new
+    @back_path = request.referrer || home_path
+  end
 
   def create
     service = AcceptInviteService.new(user: @current_user, invite: @invite)
@@ -14,9 +15,9 @@ class JoinController < ApplicationController
 
     if result[:success]
       redirect_to story_group_path(@invite.story_group),
-                  notice: 'You have successfully joined the story group!'
+                  notice: 'Pomyślnie dołączono do grupy fabularnej!'
     else
-      redirect_to home_path, alert: 'Something went wrong'
+      redirect_to home_path, alert: 'Coś poszło nie tak.'
     end
   end
 

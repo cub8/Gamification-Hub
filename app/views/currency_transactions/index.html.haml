@@ -1,40 +1,43 @@
 - content_for :title, "Transactions — #{@student.full_name}"
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    .d-flex.align-items-center.gap-3
-      - if @student.user == @current_user
-        = link_to story_group_profile_index_path(@story_group), class: "btn btn-secondary" do
-          %i.fa-solid.fa-arrow-left
-      - else
-        = link_to story_group_students_path(@story_group), class: "btn btn-secondary" do
-          %i.fa-solid.fa-arrow-left
-      %div
-        %h1.h3.mb-0 Currency Transactions
-        %small.text-dimmed= @student.full_name
-    %span.text-dimmed
-      Balance:
-      %strong.text-main= @student.current_currency
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3.dark-page
+    .modal-card.p-4.h-100.d-flex.flex-column
+      .d-flex.align-items-center.justify-content-between.mb-4
+        .d-flex.align-items-center.gap-3
+          - if @student.user == @current_user
+            = link_to story_group_profile_index_path(@story_group), class: "btn btn-secondary" do
+              %i.fa-solid.fa-arrow-left
+          - else
+            = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
+              %i.fa-solid.fa-arrow-left
+          %div
+            %h1.h3.mb-0 Transakcje walutowe
+            %small.text-dimmed= @student.full_name
+        %span.text-dimmed
+          Saldo:
+          %strong.text-main= @student.current_currency
 
-  - if @transactions.empty?
-    %p.text-dimmed No transactions yet.
-  - else
-    %table.table.table-sm.table-hover
-      %thead
-        %tr
-          %th Amount
-          %th Type
-          %th Source
-          %th.text-end Date
-      %tbody
-        - @transactions.each do |transaction|
-          %tr
-            %td
-              - if transaction.amount >= 0
-                %span.text-success= "+#{transaction.amount}"
-              - else
-                %span.text-danger= transaction.amount
-            %td
-              = transaction_kind_badge(transaction)
-            %td.text-dimmed= transaction_source(transaction)
-            %td.text-end.text-dimmed= transaction.created_at.strftime("%Y-%m-%d %H:%M")
+      - if @transactions.empty?
+        %p.text-dimmed Brak transakcji.
+      - else
+        .table-responsive.flex-grow-1.overflow-auto
+          %table.table.table-sm.table-hover
+            %thead
+              %tr
+                %th Kwota
+                %th Typ
+                %th Źródło
+                %th.text-end Data
+            %tbody.overflow-scroll
+              - @transactions.each do |transaction|
+                %tr
+                  %td
+                    - if transaction.amount >= 0
+                      %span.text-success= "+#{transaction.amount}"
+                    - else
+                      %span.text-danger= transaction.amount
+                  %td
+                    = transaction_kind_badge(transaction)
+                  %td.text-dimmed= transaction_source(transaction)
+                  %td.text-end.text-dimmed= transaction.created_at.strftime("%Y-%m-%d %H:%M")

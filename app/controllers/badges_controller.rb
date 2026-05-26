@@ -29,25 +29,27 @@ class BadgesController < ApplicationController
     @badge = @story_group.badges.build(badge_params)
 
     if @badge.save
-      redirect_to story_group_badge_path(@story_group, @badge), notice: 'Badge was successfully created.'
+      redirect_outside_turbo_frame story_group_badges_path(@story_group),
+                                   notice: 'Pomyślnie utworzono odznakę.'
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
   # PATCH/PUT /story_groups/:story_group_id/badges/:id
   def update
     if @badge.update(badge_params)
-      redirect_to story_group_badge_path(@story_group, @badge), notice: 'Badge was successfully updated.'
+      redirect_outside_turbo_frame story_group_badges_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano odznakę.'
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
   # DELETE /story_groups/:story_group_id/badges/:id
   def destroy
     @badge.destroy
-    redirect_to story_group_badges_path(@story_group), notice: 'Badge was successfully destroyed.'
+    redirect_to story_group_badges_path(@story_group), notice: 'Pomyślnie usunięto odznakę.'
   end
 
   private

@@ -21,7 +21,9 @@ class ItemsController < ApplicationController
     @item = @story_group.items.build(item_params)
 
     if @item.save
-      redirect_to story_group_items_path(@story_group)
+      redirect_outside_turbo_frame story_group_items_path(@story_group),
+                                   notice: 'Pomyślnie utworzono przedmiot.'
+
     else
       render :new, status: :unprocessable_content
     end
@@ -29,7 +31,9 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
-      redirect_to story_group_items_path(@story_group)
+      redirect_outside_turbo_frame story_group_items_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano przedmiot.'
+
     else
       render :edit, status: :unprocessable_content
     end

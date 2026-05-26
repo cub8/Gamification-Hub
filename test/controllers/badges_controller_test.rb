@@ -22,7 +22,7 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_badge_url(@story_group, Badge.last)
+    assert_turbo_redirected_to story_group_badges_url(@story_group)
   end
 
   test 'should not create badge for story group not owned by teacher' do

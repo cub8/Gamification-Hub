@@ -7,10 +7,10 @@
         .alert.alert-danger.mb-3= @error
 
       = form_with url: join_index_path, method: :post, data: { turbo_frame: '_top' } do |f|
-        .mb-3
+        .field-group.mb-3
           = label_tag :code, 'Kod zaproszenia', class: 'form-label'
           = text_field_tag :code, nil, required: true, class: 'form-control', placeholder: 'Wpisz kod zaproszenia'
 
         .d-flex.justify-content-end.gap-2
-          = link_to 'Anuluj', home_path, class: 'btn btn-secondary', data: { turbo_frame: '_top' }
+          = link_to 'Anuluj', @back_path, class: 'btn btn-secondary', data: { turbo_frame: '_top', turbo_prefetch: true }
           = f.submit 'Dołącz', class: 'btn btn-primary'

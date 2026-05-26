@@ -29,8 +29,8 @@ class StudentsController < ApplicationController
     authorize @student
 
     if @student.save
-      redirect_to story_group_students_path(@story_group),
-                  notice: 'Student was successfully added to story group.'
+      redirect_outside_turbo_frame story_group_students_path(@story_group),
+                                   notice: 'Pomyślnie dodano studenta do grupy.'
     else
       set_students_for_select
       render :new, status: :unprocessable_content
@@ -41,8 +41,8 @@ class StudentsController < ApplicationController
     authorize @student
 
     if @student.update(update_student_params)
-      redirect_to story_group_students_path(@story_group),
-                  notice: 'Student was successfully updated.', status: :see_other
+      redirect_outside_turbo_frame story_group_students_path(@story_group),
+                                   notice: 'Pomyślnie zaktualizowano.'
     else
       render :edit, status: :unprocessable_content
     end
@@ -55,7 +55,7 @@ class StudentsController < ApplicationController
 
     if @student.update_lives(change)
       redirect_to story_group_students_path(@story_group),
-                  notice: 'Successfully updated student\'s lives'
+                  notice: 'Pomyślnie zaktualizowano liczbę żyć studenta.'
     else
       @failed_student_id = @student.id
       @students = policy_scope(@story_group.student_memberships)
@@ -69,7 +69,7 @@ class StudentsController < ApplicationController
     @student.destroy
 
     redirect_to story_group_students_path(@story_group),
-                notice: 'Student was successfully removed from story group.'
+                notice: 'Pomyślnie usunięto studenta z grupy.'
   end
 
   private

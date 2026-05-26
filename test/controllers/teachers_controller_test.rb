@@ -32,7 +32,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_teachers_url(@story_group)
+    assert_turbo_redirected_to story_group_teachers_url(@story_group)
   end
 
   test 'should destroy story_group_teacher' do

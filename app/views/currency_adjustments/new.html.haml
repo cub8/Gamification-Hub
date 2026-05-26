@@ -1,9 +1,14 @@
 - content_for :title, "Adjust Currency"
 
-.dark-page
-  .row.justify-content-center
-    .col-12.col-md-8.col-lg-6
-      %h1.page-title.mb-4 Adjust Currency
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3.dark-page
+    .form-card.p-4
+      .d-flex.align-items-center.justify-content-between.mb-4
+        .d-flex.align-items-center.gap-3
+          = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
+            %i.fa-solid.fa-arrow-left
+          .d-flex.align-items-center
+            %h1.page-title.mb-0 Skoryguj walutę
 
       = form_with url: story_group_student_currency_adjustment_path(@story_group, @student), method: :post do |f|
         .form-section.p-4.mb-3
@@ -14,16 +19,16 @@
           .field-group.mb-3
             = f.label :amount, "Amount"
             = f.number_field :amount, name: "currency_adjustment[amount]", class: "form-control", placeholder: "e.g. 100 or -50"
-            %small.text-dimmed Use a negative value to deduct currency.
+            %small.text-dimmed Użyj negatywnej wartości aby zmniejszyć walutę.
 
           .d-flex.gap-3.mt-2
             .text-dimmed
-              Current currency:
+              Obecna waluta:
               %strong.text-main= @student.current_currency
             .text-dimmed
-              Total currency:
+              Łącza waluta:
               %strong.text-main= @student.total_currency
 
         .form-actions.gap-3.mt-4
-          = link_to "Cancel", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3"
-          = f.submit "Adjust", class: "btn-submit py-2 px-4"
+          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top' , turbo_prefetch: true }
+          = f.submit "Skoryguj", class: "btn-submit py-2 px-4"

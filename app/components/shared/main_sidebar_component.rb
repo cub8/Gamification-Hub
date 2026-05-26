@@ -78,7 +78,6 @@ class Shared::MainSidebarComponent < ViewComponent::Base
         { text: 'Ranking', path: helpers.story_group_ranking_path(story_group), icon: 'fa-ranking-star' },
         { text: 'Zaproszenia', path: helpers.story_group_invites_path(story_group), icon: 'fa-qrcode' },
         { text: 'Nauczyciele', path: helpers.story_group_teachers_path(story_group), icon: 'fa-briefcase' },
-        { text: 'Ustawienia grupy', path: helpers.edit_story_group_path(story_group), icon: 'fa-gears' },
       ]
     end
   end
