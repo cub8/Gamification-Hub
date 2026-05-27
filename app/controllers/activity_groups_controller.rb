@@ -9,6 +9,7 @@ class ActivityGroupsController < ApplicationController
   def index
     @activity_group_templates = policy_scope(@story_group.activity_group_templates)
                                 .includes(activity_groups: :activity_group_categories)
+    @open_collapse_id = cookies["activity_groups_#{@story_group.id}"]
   end
 
   def edit

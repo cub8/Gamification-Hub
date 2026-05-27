@@ -7,12 +7,6 @@ class CollapseMemoryController extends Controller {
   declare readonly keyValue: string
 
   connect() {
-    const savedId = localStorage.getItem(this.keyValue)
-    if (savedId) {
-      const el = document.getElementById(savedId)
-      if (el) el.classList.add("show")
-    }
-
     this.element.addEventListener("show.bs.collapse", this.onShow)
     this.element.addEventListener("hide.bs.collapse", this.onHide)
   }
@@ -23,13 +17,18 @@ class CollapseMemoryController extends Controller {
   }
 
   private onShow = (e: Event) => {
-    localStorage.setItem(this.keyValue, (e.target as Element).id)
+    document.cookie = `${this.keyValue}=${(e.target as Element).id}; path=/; max-age=${60 * 60 * 24 * 30}`
   }
 
   private onHide = (e: Event) => {
-    if (localStorage.getItem(this.keyValue) === (e.target as Element).id) {
-      localStorage.removeItem(this.keyValue)
+    if (this.cookieValue() === (e.target as Element).id) {
+      document.cookie = `${this.keyValue}=; path=/; max-age=0`
     }
+  }
+
+  private cookieValue(): string {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${this.keyValue}=([^;]*)`))
+    return match ? decodeURIComponent(match[1]) : ""
   }
 }
 

@@ -165,7 +165,10 @@
       border-bottom: 2px solid $secondary;
     }
 
-    thead tr,
+    thead tr {
+      border: none;
+    }
+
     thead th {
       background-color: $background-light;
       border: none;
@@ -186,8 +189,8 @@
     }
   }
 
-  .dark-panel-base .collapse .btn-flat:not(.btn),
-  .dark-panel-base .collapsing .btn-flat:not(.btn) {
+  .dark-panel-base .collapse .group-row,
+  .dark-panel-base .collapsing .group-row {
     background-color: $background;
   }
 

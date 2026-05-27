@@ -1,4 +1,6 @@
 - content_for :title, "Grupy aktywności"
+- content_for :head do
+  %meta{ name: 'turbo-cache-control', content: 'no-cache' }
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
@@ -10,7 +12,7 @@
   - if @activity_group_templates.empty?
     %p.text-dimmed Brak szablonów.
   - else
-    .d-flex.flex-column.gap-3{ data: { controller: 'collapse-memory', collapse_memory_key_value: "activity-groups-#{@story_group.id}" } }
+    .d-flex.flex-column.gap-3{ data: { controller: 'collapse-memory', collapse_memory_key_value: "activity_groups_#{@story_group.id}" } }
       - @activity_group_templates.each do |template|
         - collapse_id        = "template-groups-#{template.id}"
         - delete_template_id = "delete-template-#{template.id}"
@@ -33,14 +35,14 @@
                       %i.fa-solid.fa-trash.me-2
                       Usuń
 
-          .collapse{ id: collapse_id }
+          .collapse{ id: collapse_id, class: @open_collapse_id == collapse_id ? 'show' : nil }
             - if template.activity_groups.empty?
               %p.text-center.text-dimmed.py-3.mb-0 Brak grup aktywności.
             - else
               - template.activity_groups.each do |group|
                 - delete_group_id = "delete-group-#{group.id}"
 
-                .d-flex.align-items-center.justify-content-between.px-3.py-2.border-top.border-secondary.btn-flat
+                .d-flex.align-items-center.justify-content-between.px-3.py-2.border-top.border-secondary.btn-flat.group-row
                   = link_to group.name, edit_story_group_activity_group_students_activity_group_categories_path(@story_group, group), class: "flex-grow-1 text-reset text-decoration-none py-1"
                   .d-flex.align-items-center.gap-2
                     = link_to edit_story_group_activity_group_path(@story_group, group), class: "btn btn-sm btn-secondary border-0", data: { turbo_frame: 'modal' } do
