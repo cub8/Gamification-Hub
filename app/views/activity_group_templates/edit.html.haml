@@ -1,7 +1,7 @@
-%h1 Edit Activity Group Template
+- content_for :title, "Edytuj szablon — #{@activity_group_template.base_name}"
 
-= render 'form'
-
-%br
-
-= link_to 'Back', story_group_activity_groups_path(@story_group)
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h2.page-title.mb-4 Edytuj Szablon Grupy Aktywności
+      = render 'form'

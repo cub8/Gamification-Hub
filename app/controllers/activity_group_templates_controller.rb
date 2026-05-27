@@ -50,8 +50,13 @@ class ActivityGroupTemplatesController < ApplicationController
     @activity_group_template = @story_group.activity_group_templates.find(params[:id])
 
     if @activity_group_template.update(activity_group_template_params)
-      redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Activity group template was successfully updated.', status: :see_other
+      if params[:partial_save].present?
+        redirect_to edit_story_group_activity_group_template_path(@story_group, @activity_group_template),
+                    status: :see_other
+      else
+        redirect_to story_group_activity_groups_path(@story_group),
+                    notice: 'Activity group template was successfully updated.', status: :see_other
+      end
     else
       render :edit, status: :unprocessable_content
     end

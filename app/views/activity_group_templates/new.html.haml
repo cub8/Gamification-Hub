@@ -1,7 +1,7 @@
-%h1 New Activity Group Template
+- content_for :title, "Nowy szablon"
 
-= render 'form'
-
-%br
-
-= link_to 'Back', story_group_activity_groups_path(@story_group)
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h2.page-title.mb-4 Nowy Szablon Grupy Aktywności
+      = render 'form'

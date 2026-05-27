@@ -3,7 +3,7 @@
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
     %h1.h3.mb-0 Grupy Aktywności
-    = link_to new_story_group_activity_group_template_path(@story_group), class: "btn btn-primary" do
+    = link_to new_story_group_activity_group_template_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus.me-1
       Utwórz nowy szablon
 
@@ -12,7 +12,8 @@
   - else
     .d-flex.flex-column.gap-3
       - @activity_group_templates.each do |template|
-        - collapse_id = "template-groups-#{template.id}"
+        - collapse_id          = "template-groups-#{template.id}"
+        - delete_template_id   = "delete-template-#{template.id}"
 
         .dark-panel-base.p-0.h-auto.overflow-hidden
           .d-flex.align-items-center.justify-content-between.px-3.py-3
@@ -20,7 +21,7 @@
               %i.fa-solid.fa-layer-group.text-dimmed
               %span.fw-semibold= template.base_name
             .d-flex.align-items-center.gap-2
-              = link_to edit_story_group_activity_group_template_path(@story_group, template), class: "btn btn-sm btn-secondary border-0" do
+              = link_to edit_story_group_activity_group_template_path(@story_group, template), class: "btn btn-sm btn-secondary border-0", data: { turbo_frame: 'modal' } do
                 %i.fa-solid.fa-gears.me-1
                 Edytuj
               .dropdown
@@ -28,10 +29,7 @@
                   %i.fa-solid.fa-ellipsis-vertical
                 %ul.dropdown-menu.dropdown-menu-end
                   %li
-                    = button_to story_group_activity_group_template_path(@story_group, template),
-                      method: :delete,
-                      form: { data: { turbo_confirm: "Usunąć szablon #{template.base_name}?" } },
-                      class: "dropdown-item text-danger" do
+                    %button.dropdown-item.text-danger{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_template_id}" } }
                       %i.fa-solid.fa-trash.me-2
                       Usuń
 
@@ -40,10 +38,12 @@
               %p.text-center.text-dimmed.py-3.mb-0 Brak grup aktywności.
             - else
               - template.activity_groups.each do |group|
+                - delete_group_id = "delete-group-#{group.id}"
+
                 .d-flex.align-items-center.justify-content-between.px-3.py-2.border-top.border-secondary
                   = link_to group.name, edit_story_group_activity_group_students_activity_group_categories_path(@story_group, group), class: "flex-grow-1 text-reset text-decoration-none"
                   .d-flex.align-items-center.gap-2
-                    = link_to edit_story_group_activity_group_path(@story_group, group), class: "btn btn-sm btn-secondary border-0" do
+                    = link_to edit_story_group_activity_group_path(@story_group, group), class: "btn btn-sm btn-secondary border-0", data: { turbo_frame: 'modal' } do
                       %i.fa-solid.fa-gears.me-1
                       Edytuj
                     .dropdown
@@ -51,12 +51,15 @@
                         %i.fa-solid.fa-ellipsis-vertical
                       %ul.dropdown-menu.dropdown-menu-end
                         %li
-                          = button_to story_group_activity_group_path(@story_group, group),
-                            method: :delete,
-                            form: { data: { turbo_confirm: "Usunąć grupę #{group.name}?" } },
-                            class: "dropdown-item text-danger" do
+                          %button.dropdown-item.text-danger{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_group_id}" } }
                             %i.fa-solid.fa-trash.me-2
                             Usuń
+
+                = render 'confirm_delete_modal',
+                  modal_id:    delete_group_id,
+                  title:       'Usuń Grupę Aktywności',
+                  message:     "Czy na pewno chcesz usunąć grupę #{group.name}?",
+                  delete_path: story_group_activity_group_path(@story_group, group)
 
             .row.g-0.border-top.border-secondary
               .col-6.border-end.border-secondary
@@ -70,3 +73,8 @@
 
         = render 'name_modal', story_group: @story_group, template: template
         = render 'bulk_create_modal', story_group: @story_group, template: template
+        = render 'confirm_delete_modal',
+          modal_id:    delete_template_id,
+          title:       'Usuń Szablon Grupy Aktywności',
+          message:     "Czy na pewno chcesz usunąć szablon #{template.base_name}?",
+          delete_path: story_group_activity_group_template_path(@story_group, template)
