@@ -12,10 +12,10 @@
   - else
     .d-flex.flex-column.gap-3
       - @activity_group_templates.each do |template|
-        - collapse_id          = "template-groups-#{template.id}"
-        - delete_template_id   = "delete-template-#{template.id}"
+        - collapse_id        = "template-groups-#{template.id}"
+        - delete_template_id = "delete-template-#{template.id}"
 
-        .dark-panel-base.p-0.h-auto.overflow-hidden
+        .dark-panel-base.p-0.h-auto
           .d-flex.align-items-center.justify-content-between.px-3.py-3
             .d-flex.align-items-center.gap-3.cursor-pointer.flex-grow-1{ data: { bs_toggle: 'collapse', bs_target: "##{collapse_id}" } }
               %i.fa-solid.fa-layer-group.text-dimmed
@@ -25,11 +25,11 @@
                 %i.fa-solid.fa-gears.me-1
                 Edytuj
               .dropdown
-                %button.btn.btn-sm.btn-secondary.border-0{ type: 'button', data: { bs_toggle: 'dropdown' }, 'aria-expanded': 'false' }
+                %button.btn.btn-sm.btn-secondary.border-0{ type: 'button', data: { bs_toggle: 'dropdown', bs_strategy: 'fixed' }, 'aria-expanded': 'false' }
                   %i.fa-solid.fa-ellipsis-vertical
                 %ul.dropdown-menu.dropdown-menu-end
                   %li
-                    %button.dropdown-item.text-danger{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_template_id}" } }
+                    %button.btn.btn-flat-danger.border-0.w-100.text-start.px-3.py-2.rounded{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_template_id}" } }
                       %i.fa-solid.fa-trash.me-2
                       Usuń
 
@@ -40,18 +40,18 @@
               - template.activity_groups.each do |group|
                 - delete_group_id = "delete-group-#{group.id}"
 
-                .d-flex.align-items-center.justify-content-between.px-3.py-2.border-top.border-secondary
-                  = link_to group.name, edit_story_group_activity_group_students_activity_group_categories_path(@story_group, group), class: "flex-grow-1 text-reset text-decoration-none"
+                .d-flex.align-items-center.justify-content-between.px-3.py-2.border-top.border-secondary.btn-flat
+                  = link_to group.name, edit_story_group_activity_group_students_activity_group_categories_path(@story_group, group), class: "flex-grow-1 text-reset text-decoration-none py-1"
                   .d-flex.align-items-center.gap-2
                     = link_to edit_story_group_activity_group_path(@story_group, group), class: "btn btn-sm btn-secondary border-0", data: { turbo_frame: 'modal' } do
                       %i.fa-solid.fa-gears.me-1
                       Edytuj
                     .dropdown
-                      %button.btn.btn-sm.btn-secondary.border-0{ type: 'button', data: { bs_toggle: 'dropdown' }, 'aria-expanded': 'false' }
+                      %button.btn.btn-sm.btn-secondary.border-0{ type: 'button', data: { bs_toggle: 'dropdown', bs_strategy: 'fixed' }, 'aria-expanded': 'false' }
                         %i.fa-solid.fa-ellipsis-vertical
                       %ul.dropdown-menu.dropdown-menu-end
                         %li
-                          %button.dropdown-item.text-danger{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_group_id}" } }
+                          %button.btn.btn-flat-danger.border-0.w-100.text-start.px-3.py-2.rounded{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_group_id}" } }
                             %i.fa-solid.fa-trash.me-2
                             Usuń
 
@@ -63,11 +63,11 @@
 
             .row.g-0.border-top.border-secondary
               .col-6.border-end.border-secondary
-                %button.btn.btn-flat.w-100.border-0.py-3.d-flex.flex-column.align-items-center.justify-content-center{ type: 'button', data: { bs_toggle: 'modal', bs_target: "#name-modal-#{template.id}" } }
+                %button.btn.btn-flat.w-100.border-0.py-3.d-flex.flex-column.align-items-center.justify-content-center.rounded-bottom-3{ type: 'button', data: { bs_toggle: 'modal', bs_target: "#name-modal-#{template.id}" } }
                   %i.fa-solid.fa-plus.mb-1
                   %small Stwórz nową grupę
               .col-6
-                %button.btn.btn-flat.w-100.border-0.py-3.d-flex.flex-column.align-items-center.justify-content-center{ type: 'button', data: { bs_toggle: 'modal', bs_target: "#bulk-modal-#{template.id}" } }
+                %button.btn.btn-flat.w-100.border-0.py-3.d-flex.flex-column.align-items-center.justify-content-center.rounded-bottom-3{ type: 'button', data: { bs_toggle: 'modal', bs_target: "#bulk-modal-#{template.id}" } }
                   %i.fa-solid.fa-plus.mb-1
                   %small Stwórz wiele grup
 

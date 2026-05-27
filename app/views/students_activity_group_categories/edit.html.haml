@@ -30,10 +30,11 @@
                 %td.sticky-col= student.full_name
                 - @categories.each do |cat|
                   - completed = @completed.include?([cat.id, student.id])
-                  %td.text-center
-                    = check_box_tag "completions[#{student.id}][#{cat.id}]", '1', completed,
-                                    disabled: completed,
-                                    class: 'form-check-input'
+                  %td.p-0
+                    %label.d-flex.align-items-center.justify-content-center.w-100.py-2.cursor-pointer
+                      = check_box_tag "completions[#{student.id}][#{cat.id}]", '1', completed,
+                                      disabled: completed,
+                                      class: 'form-check-input'
 
       %button.btn.btn-primary.position-fixed.bottom-0.end-0.m-4{ type: 'submit' }
         %i.fa-solid.fa-check.me-1

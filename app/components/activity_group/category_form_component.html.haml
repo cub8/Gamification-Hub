@@ -1,25 +1,30 @@
+- collapse_id = "category-#{f.object.object_id}"
+
 .nested-fields.form-section.mb-3{ data: { sortable_form_target: 'item' } }
   = f.hidden_field :position, data: { sortable_form_target: 'position' }
 
   .d-flex.align-items-center.justify-content-between.px-3.py-2.border-bottom.border-secondary
-    .d-flex.align-items-center.gap-2
-      %i.fa-solid.fa-bars.drag-handle.cursor-pointer.text-dimmed
+    %i.fa-solid.fa-bars.drag-handle.cursor-pointer.text-dimmed
+    .d-flex.align-items-center.gap-2.flex-grow-1.cursor-pointer.mx-2{ data: { bs_toggle: 'collapse', bs_target: "##{collapse_id}" } }
       %span.fw-semibold= f.object.didactic_description.presence || 'Nowa kategoria'
+      %i.fa-solid.fa-chevron-down.ms-auto.text-dimmed
     = helpers.link_to_remove_association '<i class="fa-solid fa-trash"></i>'.html_safe, f, class: 'btn btn-sm btn-danger border-0'
 
-  .p-3
-    .field-group.mb-3
-      = f.label :story_description, 'Opis Fabularny'
-      = f.text_area :story_description, class: 'form-control'
+  .collapse{ id: collapse_id, class: f.object.persisted? ? '' : 'show' }
+    .p-3
+      .field-group.mb-3
+        = f.label :story_description, 'Opis Fabularny'
+        = f.text_area :story_description, class: 'form-control'
 
-    .field-group.mb-3
-      = f.label :didactic_description, 'Opis Dydaktyczny'
-      = f.text_area :didactic_description, class: 'form-control'
+      .field-group.mb-3
+        = f.label :didactic_description, 'Opis Dydaktyczny'
+        = f.text_area :didactic_description, class: 'form-control'
 
-    .d-flex.align-items-end.gap-2
-      .field-group.flex-grow-1.mb-0
-        = f.label :reward, 'Nagroda'
-        = f.number_field :reward, class: 'form-control'
-      %button.btn.btn-primary{ type: 'submit', name: 'partial_save', value: '1', data: { turbo_frame: 'modal' } }
-        %i.fa-solid.fa-check.me-1
-        Zapisz
+      .d-flex.align-items-end.gap-2
+        .field-group.flex-grow-1.mb-0
+          = f.label :reward, 'Nagroda'
+          = f.number_field :reward, class: 'form-control'
+        - if @partial_save
+          %button.btn.btn-primary{ type: 'submit', name: 'partial_save', value: '1', data: { turbo_frame: 'modal' } }
+            %i.fa-solid.fa-check.me-1
+            Zapisz

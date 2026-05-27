@@ -15,12 +15,13 @@
   %div{ data: { controller: 'sortable-form nested-rondo', sortable_form_handle_value: '.drag-handle', nested_rondo_field_class_value: 'nested-fields' } }
     %div#activity-group-categories-list{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
       = f.fields_for :activity_group_categories do |cf|
-        = render ActivityGroup::CategoryFormComponent.new(f: cf)
+        = render ActivityGroup::CategoryFormComponent.new(f: cf, partial_save: @activity_group.persisted?)
 
-    .mt-2
-      = link_to_add_association f, :activity_group_categories, { partial: 'activity_groups/category_form' }, { class: 'btn btn-sm btn-secondary border-0' } do
-        %i.fa-solid.fa-plus.me-1
-        Dodaj kategorię
+    = link_to_add_association f, :activity_group_categories,
+                              { partial: 'activity_groups/category_form', locals: { partial_save: @activity_group.persisted? } },
+                              { class: 'btn btn-secondary border-0 w-100 mt-3' } do
+      %i.fa-solid.fa-plus.me-1
+      Dodaj kategorię
 
   .form-actions.gap-3.mt-4
     = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'btn-cancel py-2 px-3', data: { turbo_frame: '_top' }

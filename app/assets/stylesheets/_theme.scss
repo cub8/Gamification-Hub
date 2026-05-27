@@ -153,6 +153,7 @@
   overflow-y: auto;
   max-height: calc(100vh - 13rem);
   -webkit-overflow-scrolling: touch;
+  background-color: $background-light;
 }
 
 .dark-page {
@@ -161,10 +162,11 @@
       position: sticky;
       top: 0;
       z-index: 2;
+      border-bottom: 2px solid $secondary;
     }
 
     thead th {
-      background-color: $background;
+      background-color: $background-light;
     }
 
     thead th.sticky-col {
@@ -172,11 +174,15 @@
     }
 
     .sticky-col {
-      background-color: $background;
+      background-color: $background-light;
     }
 
     tbody tr:hover .sticky-col {
-      background-color: $background-light;
+      background-color: $background-light-hover;
     }
+  }
+
+  .table-scroll-area .table tbody tr:hover td {
+    background-color: $background-light-hover;
   }
 }
