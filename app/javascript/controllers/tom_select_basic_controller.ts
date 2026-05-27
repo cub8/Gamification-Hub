@@ -10,7 +10,7 @@ class TomSelectBasicController extends Controller {
     const plugins = el.multiple ? ["remove_button"] : ["clear_button"]
 
     this.select = new TomSelect(el, {
-      plugins,
+      plugins: ["dropdown_input", ...plugins],
       create: false,
       hidePlaceholder: true,
     })

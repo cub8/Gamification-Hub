@@ -24,7 +24,7 @@ class TomSelectUserController extends Controller {
 
     this.select = new TomSelect(this.element as HTMLSelectElement, {
       options,
-      plugins: ["clear_button"],
+      plugins: ["clear_button", "dropdown_input"],
       create: false,
       maxItems: 1,
       valueField: "value",

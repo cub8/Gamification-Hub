@@ -14,7 +14,7 @@
       = f.number_field :max_uses, min: 1, step: 1, class: "form-control"
 
     .field-group.mb-3
-      = f.label :expires_at, "Data wygaśnięcia", class: 'd-inline mb-1'
+      = f.label :expires_at, "Data wygaśnięcia"
       = f.text_field :expires_at,
           class: "form-control",
           data: { controller: 'flatpickr', flatpickr_enable_time: true, flatpickr_min_date: Time.now }
