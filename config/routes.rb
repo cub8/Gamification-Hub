@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     resources :story_group_invites, path: :invites, as: :invites
   end
 
+  resources :notifications, only: %i[index]
+
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback
     resource :passwordless, only: %i[new create], controller: 'passwordless'
