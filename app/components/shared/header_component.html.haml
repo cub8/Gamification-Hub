@@ -9,10 +9,15 @@
 
     #header-actions.d-block.h-100.d-flex.justify-content-between.align-items-center.ms-2.gap-4
       - if @current_user.teacher?
-        .notification-wrapper.position-relative.d-flex.align-items-center.justify-content-center
-          %i.fa-solid.fa-fw.fa-bell.fs-3.cursor-pointer.notification-bell
-          .notification-dot.rounded-circle.position-absolute
+        = helpers.turbo_stream_from @current_user, :notifications
+
+        = link_to notifications_path, class: 'btn btn-flat fs-5' do
+          .notification-wrapper.position-relative.d-flex.align-items-center.justify-content-center
+            %i.fa-solid.fa-fw.fa-bell.fs-3.cursor-pointer.notification-bell
+            #notification-dot-container
+              - if @current_user.notifications.unread.exists?
+                .notification-dot.rounded-circle.position-absolute{ id: 'notification-dot' }
+      
       .dropdown
         = image_tag 'default_user.jpg', alt: 'User icon', class: 'h-100 user-icon rounded-circle cursor-pointer', data: { bs_toggle: 'dropdown', bs_auto_close: 'outside' }
         = render Shared::UserDropdownComponent.new(user: @current_user)
-
