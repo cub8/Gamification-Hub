@@ -15,7 +15,9 @@
 
     .field-group.mb-3
       = f.label :expires_at, "Data wygaśnięcia"
-      = f.datetime_field :expires_at, class: "form-control"
+      = f.text_field :expires_at,
+          class: "form-control",
+          data: { controller: 'flatpickr', flatpickr_enable_time: true, flatpickr_min_date: Time.now }
 
   .form-actions.gap-3.mt-4
     = link_to "Anuluj", story_group_invites_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top', turbo_prefetch: true }
