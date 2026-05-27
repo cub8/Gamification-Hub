@@ -3,6 +3,7 @@
     background-color: $background-light;
     border-color: $secondary;
     color: $text-main;
+    padding-right: 0.375rem !important;
 
     >input::placeholder {
       color: $secondary;
@@ -22,6 +23,46 @@
     .active {
       background-color: $background-light-hover;
       color: $text-main;
+    }
+
+    .dropdown-input {
+      &:focus {
+        border-color: $primary;
+        box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+      }
+    }
+  }
+
+  input {
+    color: $text-main !important;
+  }
+
+  &.plugin-clear_button {
+    .clear-button {
+      right: 12px !important;
+      color: $text-main !important;
+      font-size: 1.1em;
+
+      &:hover {
+        color: $primary !important;
+      }
+    }
+  }
+
+  &.plugin-remove_button {
+    .item {
+      background-color: $background-light-hover !important;
+      color: $text-main !important;
+
+      .remove {
+        border-left: 1px solid $text-dimmed !important;
+        color: $text-main;
+
+        &:hover {
+          background: rgba($primary, 0.1);
+          color: $primary;
+        }
+      }
     }
   }
 }
