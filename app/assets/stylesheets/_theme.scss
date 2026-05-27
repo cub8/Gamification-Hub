@@ -148,9 +148,6 @@
   z-index: 1;
 }
 
-// Horizontally + vertically scrollable table container.
-// Bounded height is required for thead position:sticky to work correctly —
-// without it the scroll happens in a parent (#app-content) and sticky has no effect.
 .table-scroll-area {
   overflow-x: auto;
   overflow-y: auto;
@@ -160,7 +157,6 @@
 
 .dark-page {
   .table {
-    // Sticky entire thead as one block — avoids row overlap when multiple header rows exist
     thead {
       position: sticky;
       top: 0;
@@ -171,7 +167,6 @@
       background-color: $background;
     }
 
-    // Intersection: sticky column inside sticky thead needs higher z-index
     thead th.sticky-col {
       z-index: 3;
     }
