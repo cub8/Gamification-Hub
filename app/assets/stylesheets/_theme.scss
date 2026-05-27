@@ -141,3 +141,47 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+// Horizontally + vertically scrollable table container.
+// Bounded height is required for thead position:sticky to work correctly —
+// without it the scroll happens in a parent (#app-content) and sticky has no effect.
+.table-scroll-area {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 13rem);
+  -webkit-overflow-scrolling: touch;
+}
+
+.dark-page {
+  .table {
+    // Sticky entire thead as one block — avoids row overlap when multiple header rows exist
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    thead th {
+      background-color: $background;
+    }
+
+    // Intersection: sticky column inside sticky thead needs higher z-index
+    thead th.sticky-col {
+      z-index: 3;
+    }
+
+    .sticky-col {
+      background-color: $background;
+    }
+
+    tbody tr:hover .sticky-col {
+      background-color: $background-light;
+    }
+  }
+}

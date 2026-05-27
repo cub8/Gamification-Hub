@@ -1,39 +1,40 @@
-%h2= @activity_group.name
+- content_for :title, @activity_group.name
 
-= link_to 'Back to activity groups', story_group_activity_groups_path(@story_group)
+.dark-page
+  .d-flex.align-items-center.mb-4
+    .d-flex.align-items-center.gap-3
+      = link_to story_group_activity_groups_path(@story_group), class: "btn btn-secondary" do
+        %i.fa-solid.fa-arrow-left
+      %h1.h3.mb-0= @activity_group.name
 
-%hr
+  - if @categories.empty?
+    %p.text-dimmed Brak kategorii zdefiniowanych dla tej grupy.
+  - elsif @students.empty?
+    %p.text-dimmed Brak studentów w tej grupie.
+  - else
+    = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch do |f|
+      .table-scroll-area
+        %table.table.table-bordered.align-middle
+          %thead
+            %tr
+              %th.sticky-col Opis Dydaktyczny
+              - @categories.each do |cat|
+                %th.text-center= cat.didactic_description
+            %tr
+              %th.sticky-col Punkty
+              - @categories.each do |cat|
+                %th.text-center= cat.reward
+          %tbody
+            - @students.each do |student|
+              %tr
+                %td.sticky-col= student.full_name
+                - @categories.each do |cat|
+                  - completed = @completed.include?([cat.id, student.id])
+                  %td.text-center
+                    = check_box_tag "completions[#{student.id}][#{cat.id}]", '1', completed,
+                                    disabled: completed,
+                                    class: 'form-check-input'
 
-- if @categories.empty?
-  %p No categories defined for this group.
-- elsif @students.empty?
-  %p No students in this story group.
-- else
-  = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch do |f|
-    %table.table.table-sm.table-bordered
-      %thead
-        %tr
-          %th Story description
-          - @categories.each do |cat|
-            %th= cat.story_description
-        %tr
-          %th Didactic description
-          - @categories.each do |cat|
-            %th= cat.didactic_description
-        %tr
-          %th Points
-          - @categories.each do |cat|
-            %th= cat.reward
-      %tbody
-        - @students.each do |student|
-          %tr
-            %td= student.full_name
-            - @categories.each do |cat|
-              - completed = @completed.include?([cat.id, student.id])
-              %td
-                = check_box_tag "completions[#{student.id}][#{cat.id}]",
-                                '1',
-                                completed,
-                                disabled: completed
-
-    = f.submit 'Save rewards'
+      %button.btn.btn-primary.position-fixed.bottom-0.end-0.m-4{ type: 'submit' }
+        %i.fa-solid.fa-check.me-1
+        Zapisz
