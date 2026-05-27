@@ -165,8 +165,10 @@
       border-bottom: 2px solid $secondary;
     }
 
+    thead tr,
     thead th {
       background-color: $background-light;
+      border: none;
     }
 
     thead th.sticky-col {
@@ -175,11 +177,18 @@
 
     .sticky-col {
       background-color: $background-light;
+      border-right: none;
+      box-shadow: inset -1px 0 0 $secondary;
     }
 
     tbody tr:hover .sticky-col {
       background-color: $background-light-hover;
     }
+  }
+
+  .dark-panel-base .collapse .btn-flat:not(.btn),
+  .dark-panel-base .collapsing .btn-flat:not(.btn) {
+    background-color: $background;
   }
 
   .table-scroll-area .table tbody tr:hover td {

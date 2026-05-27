@@ -3,5 +3,6 @@
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3
     .form-card.p-4
+      = render 'layouts/modal_messages'
       %h2.page-title.mb-4 Edytuj Grupę Aktywności
       = render 'form'

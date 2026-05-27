@@ -10,7 +10,7 @@
   - if @activity_group_templates.empty?
     %p.text-dimmed Brak szablonów.
   - else
-    .d-flex.flex-column.gap-3
+    .d-flex.flex-column.gap-3{ data: { controller: 'collapse-memory', collapse_memory_key_value: "activity-groups-#{@story_group.id}" } }
       - @activity_group_templates.each do |template|
         - collapse_id        = "template-groups-#{template.id}"
         - delete_template_id = "delete-template-#{template.id}"
