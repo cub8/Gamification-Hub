@@ -1,8 +1,4 @@
-- modal_id = "bulk-create-modal-#{template.id}"
-
-%button.btn.btn-secondary{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{modal_id}" } }
-  %i.fa-solid.fa-layer-group.me-2
-  Dodaj wiele grup
+- modal_id = "bulk-modal-#{template.id}"
 
 .modal.fade{ id: modal_id, tabindex: '-1' }
   .modal-dialog
