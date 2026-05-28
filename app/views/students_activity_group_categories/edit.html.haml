@@ -24,6 +24,7 @@
           %thead
             %tr
               %th.sticky-col
+                Zaznacz kolumnę
               - @categories.each do |cat|
                 %th.p-0.text-center
                   %label
@@ -31,9 +32,11 @@
                                     class: 'form-check-input',
                                     data: { col_index: cat.id, action: 'change->column-select#toggleColumn' }
             %tr
-              %th.sticky-col Opis Dydaktyczny
+              %th.sticky-col.text-left.align-middle
+                Opis Dydaktyczny
               - @categories.each do |cat|
-                %th.text-center= cat.didactic_description
+                %th.text-center.align-middle
+                  = cat.didactic_description
             %tr
               %th.sticky-col Punkty
               - @categories.each do |cat|
@@ -51,7 +54,7 @@
                                       class: 'form-check-input',
                                       data: { col_index: cat.id }
 
-      .d-flex.justify-content-end.pt-3
+      .d-flex.justify-content-end.pt-3.z-3.p
         %button.btn.btn-primary{ type: 'submit' }
           %i.fa-solid.fa-check.me-1
           Zapisz

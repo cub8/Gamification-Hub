@@ -151,7 +151,7 @@
 .table-scroll-area {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: calc(100vh - 13rem);
+  max-height: calc(100vh - 15rem);
   -webkit-overflow-scrolling: touch;
   background-color: $background-light;
   border-bottom: 1px solid $secondary;
@@ -174,21 +174,21 @@
     border-collapse: separate;
     border-spacing: 0;
 
-    td, th {
+    td,
+    th {
       border-right: 1px solid $secondary;
       border-bottom: 1px solid $secondary;
     }
 
-    tr > :first-child {
+    tr> :first-child {
       border-left: 1px solid $secondary;
     }
 
-    thead tr:first-child > * {
+    thead tr:first-child>* {
       border-top: 1px solid $secondary;
-      border-bottom: none;
     }
 
-    thead tr:last-child > * {
+    thead tr:last-child>* {
       border-bottom: 2px solid $secondary;
     }
 
@@ -214,7 +214,7 @@
     .p-0 {
       position: relative;
 
-      > label {
+      >label {
         position: absolute;
         inset: 0;
         display: flex;
