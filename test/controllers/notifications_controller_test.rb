@@ -12,35 +12,40 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     @student = FactoryBot.create(:story_group_student, story_group: @story_group, user: @student_user)
     @item = FactoryBot.create(:item, story_group: @story_group)
 
-    @unread_notification = FactoryBot.create(:notification,
-                                             user:                @teacher_user,
-                                             story_group:         @story_group,
-                                             story_group_student: @student,
-                                             item:                @item,)
+    @unread_notification = FactoryBot.create(
+      :notification,
+      user:                @teacher_user,
+      story_group:         @story_group,
+      story_group_student: @student,
+      item:                @item,
+    )
 
-    @read_notification = FactoryBot.create(:notification,
-                                           user:                @teacher_user,
-                                           story_group:         @story_group,
-                                           story_group_student: @student,
-                                           item:                @item,
-                                           read_at:             1.day.ago,)
+    @read_notification = FactoryBot.create(
+      :notification,
+      user:                @teacher_user,
+      story_group:         @story_group,
+      story_group_student: @student,
+      item:                @item,
+      read_at:             1.day.ago,
+    )
 
-    @other_user_notification = FactoryBot.create(:notification,
-                                                 user:                @other_user,
-                                                 story_group:         @story_group,
-                                                 story_group_student: @student,
-                                                 item:                @item,)
+    @other_user_notification = FactoryBot.create(
+      :notification,
+      user:                @other_user,
+      story_group:         @story_group,
+      story_group_student: @student,
+      item:                @item,
+    )
   end
 
-  test 'should get index and mark unread notifications as read' do
+  test 'should mark unread notifications as read' do
     sign_in @teacher_user
 
     assert_nil @unread_notification.read_at
     assert_not_nil @read_notification.read_at
     assert_nil @other_user_notification.read_at
 
-    get notifications_path
-
+    post mark_as_read_notifications_path
     assert_response :success
 
     @unread_notification.reload
