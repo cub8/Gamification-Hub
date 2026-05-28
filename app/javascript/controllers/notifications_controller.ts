@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import * as Turbo from "@hotwired/turbo"
 import { application } from "@controllers/application"
 
 interface TurboFrameElement extends HTMLElement {
@@ -20,42 +19,46 @@ export default class NotificationsController extends Controller {
 
   private timeoutId: ReturnType<typeof setTimeout> | null = null
   private observer: MutationObserver | null = null
-  private readonly DELAY = 2000
+  private readonly DELAY = 500
 
-  unreadListTargetConnected(element: HTMLElement): void {
+  unreadListTargetConnected(element: HTMLElement) {
     this.setupObserver(element)
   }
 
-  handleShown(): void {
+  handleShown() {
     if (this.hasFrameTarget) {
-      this.frameTarget.innerHTML = `
+      this.frameTarget.innerHTML = this.loadingHtml
+      this.frameTarget.reload()
+    }
+    this.resetTimer()
+  }
+
+  handleHidden() {
+    this.clearTimer()
+  }
+
+  disconnect() {
+    this.clearTimer()
+    this.observer?.disconnect()
+  }
+
+  private setupObserver(element: HTMLElement) {
+    this.observer?.disconnect()
+    this.observer = new MutationObserver(() => this.handleListChange())
+    this.observer.observe(element, { childList: true })
+  }
+
+  private get loadingHtml() {
+    return `
         <div class="p-3 text-center">
           <div class="spinner-border spinner-border-sm text-primary" role="status">
             <span class="visually-hidden">Ładowanie...</span>
           </div>
         </div>
       `
-      this.frameTarget.reload()
-    }
-    this.resetTimer()
   }
 
-  handleHidden(): void {
-    this.clearTimer()
-  }
-
-  disconnect(): void {
-    this.clearTimer()
-    this.observer?.disconnect()
-  }
-
-  private setupObserver(element: HTMLElement): void {
-    this.observer?.disconnect()
-    this.observer = new MutationObserver(() => this.handleListChange())
-    this.observer.observe(element, { childList: true })
-  }
-
-  private handleListChange(): void {
+  private handleListChange() {
     if (this.hasUnreadSectionTarget && this.hasUnreadListTarget && this.unreadListTarget.children.length > 0) {
       this.unreadSectionTarget.classList.remove("d-none")
 
@@ -66,19 +69,19 @@ export default class NotificationsController extends Controller {
     }
   }
 
-  private resetTimer(): void {
+  private resetTimer() {
     this.clearTimer()
     this.timeoutId = setTimeout(() => this.markAsRead(), this.DELAY)
   }
 
-  private clearTimer(): void {
+  private clearTimer() {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId)
       this.timeoutId = null
     }
   }
 
-  private markAsRead(): void {
+  private markAsRead() {
     const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement | null)?.content
 
     fetch(this.urlValue, {
