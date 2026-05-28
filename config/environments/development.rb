@@ -87,3 +87,5 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 end
+
+Rails.application.routes.default_url_options = { host: 'localhost', port: 3000 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_01_163233) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -151,6 +151,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_163233) do
     t.index ["user_id"], name: "index_login_tokens_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "item_id", null: false
+    t.datetime "read_at"
+    t.bigint "story_group_id", null: false
+    t.bigint "story_group_student_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["item_id"], name: "index_notifications_on_item_id"
+    t.index ["story_group_id"], name: "index_notifications_on_story_group_id"
+    t.index ["story_group_student_id"], name: "index_notifications_on_story_group_student_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "ranks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "discount"
@@ -264,6 +278,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_01_163233) do
   add_foreign_key "items_unlock_badges", "badges"
   add_foreign_key "items_unlock_badges", "items"
   add_foreign_key "login_tokens", "users"
+  add_foreign_key "notifications", "items"
+  add_foreign_key "notifications", "story_group_students"
+  add_foreign_key "notifications", "story_groups"
+  add_foreign_key "notifications", "users"
   add_foreign_key "ranks", "story_groups"
   add_foreign_key "story_group_invites", "story_groups"
   add_foreign_key "students_activity_group_categories", "activity_group_categories"
