@@ -37,7 +37,9 @@ Rails.application.routes.draw do
     resources :story_group_invites, path: :invites, as: :invites
   end
 
-  resources :notifications, only: %i[index]
+  resources :notifications, only: %i[index] do
+    post :mark_as_read, on: :collection
+  end
 
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback

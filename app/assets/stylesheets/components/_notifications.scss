@@ -1,0 +1,70 @@
+.notifications-dropdown {
+  min-width: 350px;
+  max-width: 450px;
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: $background-light;
+  border: 1px solid $secondary;
+  border-radius: 8px;
+
+  .notifications-header {
+    font-weight: 600;
+    font-size: 1rem;
+    color: $text-main;
+    border-bottom: 1px solid $secondary;
+  }
+
+  .notifications-section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-main;
+    background-color: $background-light;
+    border-top: 1px solid $secondary;
+    border-bottom: 1px solid $secondary;
+  }
+
+  .notification-item {
+    color: $text-main;
+    transition: background-color 0.2s;
+    border-left: 4px solid transparent;
+
+    &:hover {
+      background-color: $background-light-hover;
+    }
+
+    &.unread {
+      border-left-color: $primary;
+    }
+
+    .notification-avatar {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+
+    .notification-text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+
+      .text-orange {
+        color: $primary;
+        font-weight: 600;
+      }
+    }
+
+    .notification-time {
+      font-size: 0.75rem;
+      color: $text-dimmed !important;
+      margin-top: 4px;
+    }
+  }
+}
+
+.notification-dot {
+  top: 2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  background-color: $primary;
+  border: 2px solid $background;
+}

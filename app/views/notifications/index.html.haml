@@ -1,18 +1,18 @@
-%h1 Ostatnie zdarzenia
+= turbo_frame_tag 'notifications_list' do
+  .notifications-content
+    .notifications-header.px-3.py-2
+      Powiadomienia
 
-%table.table.mt-4
-  %thead
-    %tr
-      %th Grupa
-      %th Student
-      %th Zdarzenie
-      %th Przedmiot
-      %th Data
-  %tbody
-    - @notifications.each do |notification|
-      %tr
-        %td= notification.story_group.name
-        %td= notification.story_group_student.user.email
-        %td Kupił(a) przedmiot w sklepie
-        %td= notification.item.name
-        %td= notification.created_at.strftime('%Y-%m-%d %H:%M')
+    - if @notifications.any?
+      #unread-notifications-section{class: ('d-none' if @unread.empty?), data: { notifications_target: 'unreadSection' } }
+        .notifications-section-title.px-3.py-1 Nowe
+        #unread-notifications-list.notifications-list{data: { notifications_target: 'unreadList' } }
+          = render partial: 'notifications/notification', collection: @unread
+
+    - if @read.any?
+      .notifications-section-title.px-3.py-1 Więcej
+      .notifications-list
+        = render partial: 'notifications/notification', collection: @read
+    - else
+      .p-4.text-center.text-muted
+        Brak powiadomień

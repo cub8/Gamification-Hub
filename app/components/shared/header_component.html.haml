@@ -9,15 +9,21 @@
 
     #header-actions.d-block.h-100.d-flex.justify-content-between.align-items-center.ms-2.gap-4
       - if @current_user.teacher?
-        = helpers.turbo_stream_from @current_user, :notifications
+        = helpers.turbo_stream_from @current_user, :notifications, class: 'position-absolute'
 
-        = link_to notifications_path, class: 'btn btn-flat fs-5' do
-          .notification-wrapper.position-relative.d-flex.align-items-center.justify-content-center
+        .dropdown{ data: { controller: 'notifications', notifications_url_value: mark_as_read_notifications_path, action: 'shown.bs.dropdown->notifications#handleShown hidden.bs.dropdown->notifications#handleHidden' } }
+          .notification-wrapper.position-relative.d-flex.align-items-center.justify-content-center{ data: { bs_toggle: 'dropdown', bs_auto_close: 'outside' }, role: 'button' }
             %i.fa-solid.fa-fw.fa-bell.fs-3.cursor-pointer.notification-bell
-            #notification-dot-container
+            #notification-dot-container{ data: { turbo_permanent: true } }
               - if @current_user.notifications.unread.exists?
                 .notification-dot.rounded-circle.position-absolute{ id: 'notification-dot' }
-      
+
+          .dropdown-menu.dropdown-menu-end.notifications-dropdown.p-0.shadow-lg
+            = helpers.turbo_frame_tag 'notifications_list', src: notifications_path, data: { notifications_target: 'frame' } do
+              .p-3.text-center
+                .spinner-border.spinner-border-sm.text-primary{ role: 'status' }
+                  %span.visually-hidden Ładowanie...
+
       .dropdown
         = image_tag 'default_user.jpg', alt: 'User icon', class: 'h-100 user-icon rounded-circle cursor-pointer', data: { bs_toggle: 'dropdown', bs_auto_close: 'outside' }
         = render Shared::UserDropdownComponent.new(user: @current_user)

@@ -1,0 +1,26 @@
+- student = notification.story_group_student
+- user = student.user
+- item = notification.item
+- story_group = notification.story_group
+
+= link_to story_group_student_students_items_path(story_group, student), class: "notification-item d-flex align-items-start gap-2 px-3 py-2 text-decoration-none #{'unread' if notification.read_at.nil?}", data: { turbo_frame: '_top' } do
+  .notification-avatar-wrapper.flex-shrink-0
+    - if story_group.icon.attached?
+      = image_tag story_group.icon, class: 'notification-avatar rounded-circle'
+    - else
+      .notification-avatar.rounded-circle.d-flex.align-items-center.justify-content-center.bg-secondary.text-white
+        %i.fa-solid.fa-users-gear.fa-xs
+
+  .notification-body.flex-grow-1
+    .notification-text
+      Student
+      %span.fw-bold= user.full_name
+      zakupił
+      %span.fw-bold= item.name
+      w grupie
+      %span.text-orange= story_group.name
+      !
+
+    .notification-time.text-muted.small
+      = time_ago_in_words(notification.created_at)
+      temu
