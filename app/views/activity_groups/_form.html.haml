@@ -1,28 +1,28 @@
-= form_with model: [@story_group, @activity_group] do |f|
+= form_with model: [@story_group, @activity_group], data: { turbo_frame: '_top' } do |f|
   - if @activity_group.errors.any?
-    %div
+    .form-errors.p-3.mb-3
+      %h2 Popraw następujące błędy:
       %ul
         - @activity_group.errors.full_messages.each do |msg|
           %li= msg
 
-  %div
-    = f.label :name, 'Name'
-    = f.text_field :name
+  .form-section.p-4.mb-3
+    .section-title.mb-3 Informacje podstawowe
+    .field-group
+      = f.label :name, 'Nazwa'
+      = f.text_field :name, class: 'form-control'
 
-  %h3 Categories
-
-  %div{ data: {
-    controller: 'sortable-form nested-rondo',
-    sortable_form_handle_value: '.drag-handle',
-  } }
-
-    %div{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
+  %div{ data: { controller: 'sortable-form nested-rondo', sortable_form_handle_value: '.drag-handle', nested_rondo_field_class_value: 'nested-fields' } }
+    %div#activity-group-categories-list{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
       = f.fields_for :activity_group_categories do |cf|
-        = render ActivityGroup::CategoryFormComponent.new(f: cf)
+        = render ActivityGroup::CategoryFormComponent.new(f: cf, partial_save: @activity_group.persisted?)
 
-    = link_to_add_association 'Add category', f, :activity_group_categories,
-        partial: 'activity_groups/category_form'
+    = link_to_add_association f, :activity_group_categories,
+                              { partial: 'activity_groups/category_form', locals: { partial_save: @activity_group.persisted? } },
+                              { class: 'btn btn-secondary border-0 w-100 mt-3' } do
+      %i.fa-solid.fa-plus.me-1
+      Dodaj kategorię
 
-  %br
-
-  = f.submit 'Save'
+  .form-actions.gap-3.mt-4
+    = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'btn-cancel py-2 px-3', data: { turbo_frame: '_top' }
+    = f.submit 'Zapisz', class: 'btn-submit py-2 px-4'

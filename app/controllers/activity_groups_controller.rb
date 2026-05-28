@@ -9,6 +9,7 @@ class ActivityGroupsController < ApplicationController
   def index
     @activity_group_templates = policy_scope(@story_group.activity_group_templates)
                                 .includes(activity_groups: :activity_group_categories)
+    @open_collapse_id = cookies["activity_groups_#{@story_group.id}"]
   end
 
   def edit
@@ -32,8 +33,13 @@ class ActivityGroupsController < ApplicationController
     @activity_group = @story_group.activity_groups.find(params[:id])
 
     if @activity_group.update(activity_group_params)
-      redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Activity group was successfully updated.', status: :see_other
+      if params[:partial_save].present?
+        redirect_to edit_story_group_activity_group_path(@story_group, @activity_group),
+                    status: :see_other
+      else
+        redirect_to story_group_activity_groups_path(@story_group),
+                    notice: 'Activity group was successfully updated.', status: :see_other
+      end
     else
       render :edit, status: :unprocessable_content
     end

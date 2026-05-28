@@ -1,27 +1,28 @@
-= form_with model: [@story_group, @activity_group_template] do |f|
+= form_with model: [@story_group, @activity_group_template], data: { turbo_frame: '_top' } do |f|
   - if @activity_group_template.errors.any?
-    %div
+    .form-errors.p-3.mb-3
+      %h2 Popraw następujące błędy:
       %ul
         - @activity_group_template.errors.full_messages.each do |msg|
           %li= msg
 
-  %div
-    = f.label :base_name, 'Base name'
-    = f.text_field :base_name
+  .form-section.p-4.mb-3
+    .section-title.mb-3 Informacje podstawowe
+    .field-group
+      = f.label :base_name, 'Nazwa'
+      = f.text_field :base_name, class: 'form-control'
 
-  %h3 Categories
-
-  %div{ data: { controller: 'sortable-form nested-rondo', sortable_form_handle_value: '.drag-handle' } }
-    %div#categories-list{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
+  %div{ data: { controller: 'sortable-form nested-rondo', sortable_form_handle_value: '.drag-handle', nested_rondo_field_class_value: 'nested-fields' } }
+    %div#template-categories-list{ data: { sortable_form_target: 'list', nested_rondo_target: 'fieldContain' } }
       = f.fields_for :categories do |cf|
-        = render ActivityGroup::CategoryFormComponent.new(f: cf)
+        = render ActivityGroup::CategoryFormComponent.new(f: cf, partial_save: @activity_group_template.persisted?)
 
-    %br
-    %div
-      = link_to_add_association 'Add category', f, :categories,
-        partial: 'activity_group_templates/category_form',
-        data: { association_insertion_node: '#categories-list', association_insertion_method: 'append' }
+    = link_to_add_association f, :categories,
+                              { partial: 'activity_group_templates/category_form', locals: { partial_save: @activity_group_template.persisted? } },
+                              { class: 'btn btn-secondary border-0 w-100 mt-3' } do
+      %i.fa-solid.fa-plus.me-1
+      Dodaj kategorię
 
-  %br
-
-  = f.submit (@activity_group_template.new_record? ? 'Create' : 'Save')
+  .form-actions.gap-3.mt-4
+    = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'btn-cancel py-2 px-3', data: { turbo_frame: '_top' }
+    = f.submit(@activity_group_template.new_record? ? 'Utwórz' : 'Zapisz', class: 'btn-submit py-2 px-4')

@@ -1,0 +1,14 @@
+- modal_id    = local_assigns.fetch(:modal_id)
+- title       = local_assigns.fetch(:title)
+- message     = local_assigns.fetch(:message)
+- delete_path = local_assigns.fetch(:delete_path)
+
+.modal.fade{ id: modal_id, tabindex: '-1' }
+  .modal-dialog
+    .form-card.p-4.pe-auto
+      %h2.page-title.mb-3= title
+      %p.text-dimmed.mb-0= message
+      .d-flex.justify-content-end.align-items-center.gap-2.mt-4
+        %button.btn.btn-secondary{ type: 'button', data: { bs_dismiss: 'modal' } } Anuluj
+        = button_to delete_path, method: :delete, class: 'btn btn-primary' do
+          Usuń

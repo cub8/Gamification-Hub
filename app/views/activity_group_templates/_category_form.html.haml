@@ -1,2 +1,2 @@
--# bridge partial
-= render ActivityGroup::CategoryFormComponent.new(f: f)
+- partial_save = local_assigns.fetch(:partial_save, false)
+= render ActivityGroup::CategoryFormComponent.new(f: f, partial_save: partial_save)
