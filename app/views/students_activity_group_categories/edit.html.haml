@@ -1,15 +1,16 @@
 - content_for :title, @activity_group.name
 
-.dark-page
+.dark-page{ data: { controller: 'table-search' } }
   .d-flex.align-items-center.justify-content-between.mb-4
     .d-flex.align-items-center.gap-3
       = link_to story_group_activity_groups_path(@story_group), class: "btn btn-secondary" do
         %i.fa-solid.fa-arrow-left
       %h1.h3.mb-0= @activity_group.name
-    = form_with url: edit_story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :get do |f|
+    .field-group.mb-0
       .input-group
-        = f.text_field :search, placeholder: 'Wyszukaj studenta', value: params[:search], class: 'form-control'
-        %button.btn.btn-secondary.border-0{ type: 'submit' }
+        = text_field_tag :search, nil, placeholder: 'Wyszukaj studenta', class: 'form-control',
+                         data: { action: 'input->table-search#filter', table_search_target: 'input' }
+        %span.input-group-text
           %i.fa-solid.fa-magnifying-glass
 
   - if @categories.empty?
@@ -19,8 +20,16 @@
   - else
     = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch do |f|
       .table-scroll-area
-        %table.table.table-bordered.align-middle{ data: { controller: 'column-select' } }
+        %table.table.align-middle.mb-0{ data: { controller: 'column-select', table_search_target: 'table' } }
           %thead
+            %tr
+              %th.sticky-col
+              - @categories.each do |cat|
+                %th.p-0.text-center
+                  %label
+                    = check_box_tag "select_col_#{cat.id}", '1', false,
+                                    class: 'form-check-input',
+                                    data: { col_index: cat.id, action: 'change->column-select#toggleColumn' }
             %tr
               %th.sticky-col Opis Dydaktyczny
               - @categories.each do |cat|
@@ -29,13 +38,6 @@
               %th.sticky-col Punkty
               - @categories.each do |cat|
                 %th.text-center= cat.reward
-            %tr
-              %th.sticky-col
-              - @categories.each do |cat|
-                %th.text-center
-                  = check_box_tag "select_col_#{cat.id}", '1', false,
-                                  class: 'form-check-input',
-                                  data: { col_index: cat.id, action: 'change->column-select#toggleColumn' }
           %tbody
             - @students.each do |student|
               %tr
@@ -43,12 +45,13 @@
                 - @categories.each do |cat|
                   - completed = @completed.include?([cat.id, student.id])
                   %td.p-0
-                    %label.d-flex.align-items-center.justify-content-center.w-100.py-2.cursor-pointer
+                    %label
                       = check_box_tag "completions[#{student.id}][#{cat.id}]", '1', completed,
                                       disabled: completed,
                                       class: 'form-check-input',
                                       data: { col_index: cat.id }
 
-      %button.btn.btn-primary.position-fixed.bottom-0.end-0.m-4{ type: 'submit' }
-        %i.fa-solid.fa-check.me-1
-        Zapisz
+      .d-flex.justify-content-end.pt-3
+        %button.btn.btn-primary{ type: 'submit' }
+          %i.fa-solid.fa-check.me-1
+          Zapisz

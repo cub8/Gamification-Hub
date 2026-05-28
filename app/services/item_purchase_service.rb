@@ -31,6 +31,7 @@ class ItemPurchaseService
     end
 
     execute_purchase!(price, discount_info.value)
+    notify_teachers!
 
     Result.new
   rescue StandardError => e
@@ -53,6 +54,24 @@ class ItemPurchaseService
         amount:          -price,
         kind:            2,
         transactionable: @item,
+      )
+    end
+  end
+
+  def notify_teachers!
+    story_group = @item.story_group
+    recipients = [User.find(story_group.owner_id)]
+
+    if story_group.respond_to?(:teachers)
+      recipients += story_group.teachers.to_a
+    end
+
+    recipients.uniq.each do |teacher|
+      Notification.create!(
+        user:                teacher,
+        story_group:         story_group,
+        story_group_student: @student,
+        item:                @item,
       )
     end
   end

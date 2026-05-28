@@ -154,6 +154,7 @@
   max-height: calc(100vh - 13rem);
   -webkit-overflow-scrolling: touch;
   background-color: $background-light;
+  border-bottom: 1px solid $secondary;
 }
 
 .dark-page {
@@ -162,39 +163,75 @@
       position: sticky;
       top: 0;
       z-index: 2;
-      border-bottom: 2px solid $secondary;
-    }
-
-    thead tr {
-      border: none;
-    }
-
-    thead th {
-      background-color: $background-light;
-      border: none;
     }
 
     thead th.sticky-col {
       z-index: 3;
     }
+  }
+
+  .table-scroll-area .table {
+    border-collapse: separate;
+    border-spacing: 0;
+
+    td, th {
+      border-right: 1px solid $secondary;
+      border-bottom: 1px solid $secondary;
+    }
+
+    tr > :first-child {
+      border-left: 1px solid $secondary;
+    }
+
+    thead tr:first-child > * {
+      border-top: 1px solid $secondary;
+      border-bottom: none;
+    }
+
+    thead tr:last-child > * {
+      border-bottom: 2px solid $secondary;
+    }
+
+    thead th {
+      background-color: $background-light;
+    }
 
     .sticky-col {
       background-color: $background-light;
-      border-right: none;
-      box-shadow: inset -1px 0 0 $secondary;
+      box-shadow: none;
+      border-right: 2px solid $secondary;
     }
 
-    tbody tr:hover .sticky-col {
+    tbody tr:hover td {
       background-color: $background-light-hover;
     }
-  }
 
-  .dark-panel-base .collapse .group-row,
-  .dark-panel-base .collapsing .group-row {
-    background-color: $background;
-  }
+    .form-check-input:focus {
+      box-shadow: none;
+      border-color: $secondary;
+    }
 
-  .table-scroll-area .table tbody tr:hover td {
-    background-color: $background-light-hover;
+    .p-0 {
+      position: relative;
+
+      > label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
   }
+}
+
+.group-row {
+  background-color: $secondary-darker;
+}
+
+.dark-page .input-group-text {
+  background-color: $background-light;
+  border-color: $secondary;
+  color: $text-dimmed;
 }

@@ -12,9 +12,6 @@ class StudentsActivityGroupCategoriesController < ApplicationController
     @students   = @story_group.student_memberships.with_user.joins(:user).sort_by do |student|
       I18n.transliterate(student.full_name)
     end
-    if params[:search].present?
-      @students = @students.select { |s| s.full_name.downcase.include?(params[:search].strip.downcase) }
-    end
     @completed  = StudentsActivityGroupCategory
                   .where(activity_group_category: @categories)
                   .pluck(:activity_group_category_id, :student_id)

@@ -7,7 +7,7 @@ class ColumnSelectController extends Controller {
     const colIndex = header.dataset.colIndex!
 
     this.element
-      .querySelectorAll<HTMLInputElement>(`tbody input[type="checkbox"][data-col-index="${colIndex}"]:not(:disabled)`)
+      .querySelectorAll<HTMLInputElement>(`tbody tr:not([hidden]) input[type="checkbox"][data-col-index="${colIndex}"]:not(:disabled)`)
       .forEach(cb => { cb.checked = header.checked })
   }
 }

@@ -9,7 +9,7 @@ class CurrencyAdjusterService
   def adjust(amount)
     ActiveRecord::Base.transaction do
       @student.increment!(:current_currency, amount)
-      @student.increment!(:total_currency, amount)
+      @student.increment!(:total_currency, amount) if amount.positive?
       CurrencyTransaction.create!(
         student:         @student,
         amount:          amount,
