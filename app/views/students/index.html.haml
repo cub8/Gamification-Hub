@@ -4,23 +4,23 @@
 
 .dark-page
   .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Students
+    %h1.h3.mb-0 Studenci
     = link_to new_story_group_student_path(@story_group), class: "btn btn-primary", data: { turbo_prefetch: true, turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus.me-1
       Dodaj studenta
 
   - if @students.empty?
-    %p.text-dimmed No students yet.
+    %p.text-dimmed Brak studentów.
   - else
     %table.table.table-sm.table-hover
       %thead
         %tr
-          %th Full name
-          %th Email address
-          %th Lives
-          %th Current currency
-          %th Total currency
-          %th.text-end Actions
+          %th Imię i nazwisko
+          %th Adres email
+          %th Życia
+          %th Obecna waluta
+          %th Łączna waluta
+          %th.text-end Akcje
       %tbody
         - @students.each do |student|
           %tr.position-relative
