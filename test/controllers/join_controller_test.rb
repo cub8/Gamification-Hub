@@ -20,7 +20,7 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_url(@story_group)
+    assert_turbo_redirected_to story_group_url(@story_group)
   end
 
   test 'should detect max_uses' do
@@ -36,6 +36,6 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to home_path
+    assert_turbo_redirected_to home_path
   end
 end

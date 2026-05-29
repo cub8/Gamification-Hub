@@ -28,7 +28,7 @@ class JoinController < ApplicationController
     return if @invite
 
     @error = 'Nieprawidłowy kod zaproszenia.'
-    @back_path = params[:back_path]
+    @back_path = url_from(params[:back_path]) || home_path
     render :new, status: :unprocessable_entity
   end
 end

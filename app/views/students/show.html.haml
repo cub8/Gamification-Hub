@@ -15,10 +15,10 @@
       .row.g-3.mb-3
         .col-12.col-md-6
           .dark-panel.p-4.mb-3
-            .section-title.mb-3 Basic Information
+            .section-title.mb-3 Podstawowe dane
             .d-flex.flex-column.gap-2
               .d-flex.justify-content-between
-                %span.text-dimmed Index
+                %span.text-dimmed Indeks
                 %span.text-main= @student.university_number || "—"
               .d-flex.justify-content-between
                 %span.text-dimmed Email
@@ -26,16 +26,16 @@
 
         .col-12.col-md-6
           .dark-panel.p-4.mb-3
-            .section-title.mb-3 Currency & Lives
+            .section-title.mb-3 Waluta i życia
             .d-flex.flex-column.gap-2
               .d-flex.justify-content-between
-                %span.text-dimmed Lives
+                %span.text-dimmed Życia
                 %span.text-main= @student.lives
               .d-flex.justify-content-between
-                %span.text-dimmed Current currency
+                %span.text-dimmed Obecna waluta
                 %span.text-main= @student.current_currency
               .d-flex.justify-content-between
-                %span.text-dimmed Total currency
+                %span.text-dimmed Łączna waluta
                 %span.text-main= @student.total_currency
 
       .row

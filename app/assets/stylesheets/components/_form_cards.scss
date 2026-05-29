@@ -1,0 +1,25 @@
+.form-selectable-item {
+  @extend .rounded;
+  @extend .p-2;
+  @extend .cursor-pointer;
+
+  background-color: $background-light;
+  border: 2px solid $secondary;
+
+  &.selected,
+  &.selected:hover {
+    border: 2px solid $primary;
+  }
+
+  &:hover {
+    border: 2px solid $primary-hover;
+  }
+
+  .icon-container {
+    width: 20%;
+  }
+
+  .content-container {
+    width: 80%;
+  }
+}

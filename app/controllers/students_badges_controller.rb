@@ -18,7 +18,7 @@ class StudentsBadgesController < ApplicationController
 
     if @badge.save
       redirect_to story_group_student_path(@story_group, @student),
-                  notice: 'Badge was successfully given to student.'
+                  notice: 'Odznaka została pomyślnie przyznana studentowi.'
     else
       @badges = Badge.where(story_group_id: @story_group.id)
       render :new, status: :unprocessable_content
@@ -29,7 +29,7 @@ class StudentsBadgesController < ApplicationController
     @badge.destroy
 
     redirect_to story_group_student_path(@story_group, @student),
-                notice: 'Badge was successfully taken from student.'
+                notice: 'Odznaka została pomyślnie odebrana studentowi.'
   end
 
   private

@@ -23,7 +23,7 @@ class StudentsActivityGroupCategoriesController < ApplicationController
                               .save(parsed_reward_params)
 
     redirect_to edit_story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group),
-                notice: 'Rewards saved.', status: :see_other
+                notice: 'Zapisano nagrody.'
   end
 
   private
