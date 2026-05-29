@@ -17,18 +17,33 @@
               %li= message
 
       = form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge do |f|
-        .form-section.p-4.mb-3
+        .p-4.mb-3
           .section-title.mb-3
             = @student.full_name
             %small.text-dimmed.fw-normal.ms-2= @student.email
+          %div
+            .d-flex.justify-content-end.mb-3
+              .field-group.w-100
+                .search-box.input-group
+                  = text_field_tag :search,
+                                  nil,
+                                  placeholder: 'Wyszukaj odznakę',
+                                  class: 'form-control'
+                  %span.input-group-text
+                    %i.fa-solid.fa-magnifying-glass
 
-          .field-group.mb-3
-            = f.label :badge_id, "Wybierz odznakę"
-            = f.collection_select :badge_id, @badges, :id, :name,
-              { prompt: "Choose a badge" },
-              { class: "form-control",
-                data: { controller: "tom-select-basic" } }
+            .d-flex.flex-column.gap-2
+              - @badges.each do |badge|
+                .form-selectable-item
+                  .d-flex
+                    .icon-container.d-flex.justify-content-center.align-items-center
+                      %i.fa-solid.fa-award.fa-3x
+                    .content-container
+                      .fw-bold= badge.name
+                      %p.text-dimmed.small.fst-italic.mb-1= truncate(badge.story_description, length: 80)
+                      %p.text-dimmed.small.mb-0= truncate(badge.didactic_description, length: 80)
 
+            = f.collection_select :badge_id, @badges, :id, :name, { prompt: '' }, class: 'd-none'
         .form-actions.gap-3.mt-4
           = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true, turbo_frame: '_top' }
           = f.submit "Zapisz", class: "btn-submit py-2 px-4"

@@ -151,7 +151,7 @@
 .table-scroll-area {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: calc(100vh - 15rem);
+  max-height: calc(100vh - 18rem);
   -webkit-overflow-scrolling: touch;
   background-color: $background-light;
   border-bottom: 1px solid $secondary;
@@ -231,6 +231,12 @@
 }
 
 .dark-page .input-group-text {
+  background-color: $background-light;
+  border-color: $secondary;
+  color: $text-dimmed;
+}
+
+.input-group-text {
   background-color: $background-light;
   border-color: $secondary;
   color: $text-dimmed;
