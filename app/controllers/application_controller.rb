@@ -17,8 +17,9 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def redirect_outside_turbo_frame(path, notice: nil)
+  def redirect_outside_turbo_frame(path, notice: nil, alert: nil)
     flash[:notice] = notice if notice
+    fash[:alert] = alert if alert
 
     render turbo_stream: turbo_stream.action(:redirect, path)
   end

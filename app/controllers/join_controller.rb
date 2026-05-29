@@ -14,10 +14,10 @@ class JoinController < ApplicationController
     result = service.call
 
     if result[:success]
-      redirect_to story_group_path(@invite.story_group),
-                  notice: 'Pomyślnie dołączono do grupy fabularnej!'
+      redirect_outside_turbo_frame story_group_path(@invite.story_group),
+                                   notice: 'Pomyślnie dołączono do grupy fabularnej!'
     else
-      redirect_to home_path, alert: 'Coś poszło nie tak.'
+      redirect_outside_turbo_frame home_path, alert: 'Coś poszło nie tak.'
     end
   end
 
@@ -28,6 +28,7 @@ class JoinController < ApplicationController
     return if @invite
 
     @error = 'Nieprawidłowy kod zaproszenia.'
+    @back_path = params[:back_path]
     render :new, status: :unprocessable_entity
   end
 end
