@@ -28,8 +28,11 @@ class Auth::PasswordlessController < ApplicationController
   def create
     email = params.expect(:email)
     user = User.find_by(email: email)
+    service = BypassLoginService.new(email: email)
 
     if user
+      return bypass_login(user) if service.can_bypass_login?
+
       token = user.create_login_token!
       token_link = auth_passwordless_verify_url(token: token.raw_token)
 
@@ -41,5 +44,13 @@ class Auth::PasswordlessController < ApplicationController
     end
 
     redirect_to new_auth_passwordless_path, notice: 'Wysłaliśmy na Twój adres email link logujący!'
+  end
+
+  private
+
+  def bypass_login(user)
+    reset_session
+    session[:user_id] = user.id
+    redirect_to home_path, notice: 'Zalogowano pomyślnie.'
   end
 end
