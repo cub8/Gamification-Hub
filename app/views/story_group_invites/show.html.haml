@@ -23,10 +23,14 @@
                     %span.badge.bg-secondary Wygasłe
                 .d-flex.justify-content-between.align-items-center
                   %span.text-dimmed Użycia
-                  %span= "#{@invite.uses} / #{@invite.max_uses}"
-                .d-flex.justify-content-between.align-items-center
-                  %span.text-dimmed Wygasa
-                  %span= @invite.expires_at.strftime("%d.%m.%Y %H:%M")
+                  - unless @invite.max_uses.nil?
+                    %span= "#{@invite.uses} / #{@invite.max_uses}"
+                  - else
+                    %span= "#{@invite.uses}"
+                - unless @invite.expires_at.nil?
+                  .d-flex.justify-content-between.align-items-center
+                    %span.text-dimmed Wygasa
+                    %span= @invite.expires_at.strftime("%d.%m.%Y %H:%M")
 
       .d-flex.justify-content-end.align-items-center.gap-2
         = link_to "Zamknij", story_group_invites_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top", turbo_prefetch: true }
