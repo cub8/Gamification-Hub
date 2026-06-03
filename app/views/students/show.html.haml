@@ -3,7 +3,7 @@
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3.dark-page
     .modal-card.p-4.h-auto
-      = render 'layouts/modal_messages'
+      = render MessagesComponent.new(id: 'modal-messages', flash: flash, notice: notice, alert: alert)
       .d-flex.align-items-center.justify-content-between.mb-4
         .d-flex.align-items-center.gap-3
           = link_to story_group_students_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: '_top', turbo_prefetch: true } do
