@@ -9,6 +9,10 @@ ssh:
 proxy:
   ssl: true
   host: gamificationhub.projektstudencki.pl
+  buffering:
+    requests: true
+    max_request_body: 30_000_000 # 30 MB in bytes
+    memory: 2_000_000 # 2MB kept in RAM while uploading data to disk
 
 servers:
   web:
