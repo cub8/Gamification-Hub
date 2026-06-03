@@ -1,13 +1,13 @@
-%h1 My Profile
+%h1 Mój profil
 
-%h3= "My current currency: #{@student.current_currency}"
-%h5= "Total currency: #{@student.total_currency}"
+%h3= "Moja obecna waluta: #{@student.current_currency}"
+%h5= "Łączna waluta: #{@student.total_currency}"
 
 %h3
-  = link_to "My Badges", story_group_student_badges_path(@story_group, @student)
+  = link_to "Moje odznaki", story_group_student_badges_path(@story_group, @student)
 
 - if @student.rank
-  %h3 My Rank
+  %h3 Moja ranga
 
   %p
     - if @student.rank.icon.attached?
@@ -15,7 +15,7 @@
       = @student.rank.name
 
 %p
-  = link_to "My Transactions", story_group_student_currency_transactions_path(@story_group, @student)
+  = link_to "Moje transakcje", story_group_student_currency_transactions_path(@story_group, @student)
 
 %p
-  = link_to "Back", story_group_path(@story_group)
+  = link_to "Wróć", story_group_path(@story_group)

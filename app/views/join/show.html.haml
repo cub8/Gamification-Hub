@@ -1,13 +1,13 @@
 - if !user_in_group(@current_user, @invite.story_group)
-  %h3= "You are about to join #{@invite.story_group.name}"
+  %h3= "Dołączasz do grupy #{@invite.story_group.name}"
 
   %p
-    = button_to "Join",
+    = button_to "Dołącz",
       join_index_path(code: @invite.code),
       method: :post
 
   %p
-    = link_to "Back", home_path
+    = link_to "Wróć", home_path
 
 - else
-  %h3= "You are already part of this group"
+  %h3= "Jesteś już członkiem tej grupy"

@@ -5,11 +5,11 @@
     %thead
       %tr
         %th Ikona
-        %th Name
+        %th Nazwa
         %th Opis fabularny
         %th Opis dydaktyczny
         - if policy(@student).update?
-          %th.text-end Actions
+          %th.text-end Akcje
     %tbody
       - badges.each do |badge|
         %tr
@@ -25,6 +25,6 @@
             %td.text-end
               = button_to story_group_student_badge_path(@story_group, @student, badge),
                 method: :delete,
-                form: { data: { turbo_confirm: "Remove badge \"#{badge.name}\" from #{@student.full_name}?" } },
-                class: "btn btn-sm btn-danger border-0", title: "Remove" do
+                form: { data: { turbo_confirm: "Odebrać odznakę \"#{badge.name}\" studentowi #{@student.full_name}?" } },
+                class: "btn btn-sm btn-danger border-0", title: "Odbierz" do
                 %i.fa-solid.fa-trash

@@ -1,7 +1,7 @@
-- content_for :title, "Edit story group"
+- content_for :title, "Edytuj grupę — #{@story_group.name}"
 
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3
     .form-card.p-4
-      %h1.page-title.mb-4 Edit Story Group
+      %h1.page-title.mb-4 Edytuj grupę
       = render "form", story_group: @story_group, cancel_path: story_group_path(@story_group), submit_label: "Save"

@@ -17,9 +17,9 @@ class Auth::UsosController < ApplicationController
 
     redirect_to home_path
   rescue InvalidProviderError
-    redirect_to root_path, alert: 'Invalid provider.'
+    redirect_to root_path, alert: 'Nieprawidłowy dostawca logowania.'
   rescue Providers::InvalidAuthError
-    redirect_to root_path, alert: 'Invalid authorization attempt.'
+    redirect_to root_path, alert: 'Nieprawidłowa próba autoryzacji.'
   end
 
   private

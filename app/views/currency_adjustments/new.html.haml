@@ -1,4 +1,4 @@
-- content_for :title, "Adjust Currency"
+- content_for :title, "Korekta waluty"
 
 = turbo_frame_tag 'modal' do
   .modal-overlay.py-5.px-3.dark-page
@@ -17,8 +17,8 @@
             %small.text-dimmed.fw-normal.ms-2= @student.email
 
           .field-group.mb-3
-            = f.label :amount, "Amount"
-            = f.number_field :amount, name: "currency_adjustment[amount]", class: "form-control", placeholder: "e.g. 100 or -50"
+            = f.label :amount, "Kwota"
+            = f.number_field :amount, name: "currency_adjustment[amount]", class: "form-control", placeholder: "np. 100 lub -50"
             %small.text-dimmed Użyj negatywnej wartości aby zmniejszyć walutę.
 
           .d-flex.gap-3.mt-2
