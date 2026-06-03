@@ -25,15 +25,9 @@
               %td
                 = link_to invite.code, story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
               %td.text-center.text-dimmed
-                - unless invite.max_uses.nil?
-                  = link_to "#{invite.uses} / #{invite.max_uses}", story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }  
-                - else
-                  = link_to "#{invite.uses}", story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }  
+                = link_to invite_uses_label(invite), story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }  
               %td.text-dimmed
-                - unless invite.expires_at.nil?
-                  = link_to invite.expires_at.strftime("%d.%m.%Y %H:%M"), story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
-                -else
-                  \-
+                = link_to exp_time_label(invite), story_group_invite_path(@story_group, invite), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
               %td.text-center
                 - if invite.usable?
                   %span.badge.bg-success.position-relative.z-2 Aktywne

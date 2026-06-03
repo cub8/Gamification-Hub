@@ -23,10 +23,7 @@
                     %span.badge.bg-secondary Wygasłe
                 .d-flex.justify-content-between.align-items-center
                   %span.text-dimmed Użycia
-                  - unless @invite.max_uses.nil?
-                    %span= "#{@invite.uses} / #{@invite.max_uses}"
-                  - else
-                    %span= "#{@invite.uses}"
+                  %span= invite_uses_label(@invite)
                 - unless @invite.expires_at.nil?
                   .d-flex.justify-content-between.align-items-center
                     %span.text-dimmed Wygasa
