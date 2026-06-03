@@ -1,11 +1,11 @@
-#modal_messages
+%div{id: @id, data: { turbo_temporary: true} }
   - if flash.any?
     .container-fluid.mt-3
       - if notice
         .alert.alert-success.fw-500.alert-dismissible.fade.show{role: "alert"}
           = notice
-          %button.btn-close{type: 'button', data: { bs_dismiss: 'alert' }, 'aria-label' => 'Close'}
+          = close_button
       - if alert
         .alert.alert-danger.fw-500.alert-dismissible.fade.show{role: "alert"}
           = alert
-          %button.btn-close{type: 'button', data: { bs_dismiss: 'alert' }, 'aria-label' => 'Close'}
+          = close_button

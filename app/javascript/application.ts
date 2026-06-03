@@ -1,8 +1,4 @@
-import "@hotwired/turbo-rails"
+import "@utils/turbo_setup"
 import "@controllers"
 import "bootstrap"
 import "@utils/bootstrap_setup"
-
-Turbo.StreamActions.redirect = function() {
-  Turbo.visit(this.target)
-}
