@@ -21,4 +21,16 @@ module StoryGroupInvitesHelper
       alt: 'Invite QR Code',
     )
   end
+
+  def invite_uses_label(invite)
+    return invite.uses.to_s if invite.max_uses.nil?
+
+    "#{invite.uses} / #{invite.max_uses}"
+  end
+
+  def exp_time_label(invite)
+    return '-' if invite.expires_at.nil?
+
+    invite.expires_at.strftime('%d.%m.%Y %H:%M')
+  end
 end
