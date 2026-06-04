@@ -3,7 +3,7 @@
     = render Shared::SidebarButtonComponent.new(btn[:text], btn[:path], icon: btn[:icon], current_path: current_path, collapsed: collapsed)
 
   - if story_group&.persisted?
-    .sidebar-separator
+    .sidebar-separator.my-2
     = render Shared::SidebarButtonComponent.new(story_group.name, story_group_path(story_group), icon: 'fa-book-open', current_path: current_path, collapsed: collapsed)
 
     - story_group_buttons.each do |btn|
