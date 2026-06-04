@@ -1,0 +1,103 @@
+.dark-page
+  .d-flex.align-items-center.justify-content-between.mb-4
+    %h1.h3.mb-0= @story_group.name
+    .d-flex.align-items-center.gap-2
+      - if policy(@story_group).update? || policy(@story_group).destroy?
+        .dropdown
+          %button.btn.btn-secondary.border-0{ type: "button", data: { bs_toggle: "dropdown" }, "aria-expanded": false }
+            %i.fa-solid.fa-ellipsis-vertical
+          .dropdown-menu.dropdown-menu-end
+            - if policy(@story_group).update?
+              = link_to edit_story_group_path(@story_group), class: "btn btn-flat border-0 text-start w-100 rounded", data: { turbo_frame: "modal" } do
+                %i.fa-solid.fa-pen.me-2
+                Edytuj grupę
+            - if policy(@story_group).destroy?
+              = button_to @story_group, method: :delete,
+                  form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
+                  class: "btn btn-flat text-danger border-0 text-start w-100 rounded" do
+                %i.fa-solid.fa-trash.me-1
+                Usuń grupę
+
+  .row.g-3.mb-4
+    .col-12.col-md-6
+      .dark-panel
+        .section-title.mb-3 Informacje o Grupie
+        .d-flex.flex-column.gap-3
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Właściciel
+            %span= @story_group.owner.full_name
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Waluta
+            .d-flex.align-items-center.gap-2
+              - if @story_group.currency_icon.attached?
+                = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
+              %span= @story_group.currency_name
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Domyślna ilość żyć
+            %span= @story_group.default_lives
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Ranking
+            - if @story_group.ranking_enabled?
+              %span.badge.bg-success Włączony
+            - else
+              %span.badge.bg-secondary Wyłączony
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Studenci
+            %span.fw-semibold= @story_group.students.count
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Nauczyciele wspomagający
+            %span.fw-semibold= @story_group.teachers.count
+
+    .col-12.col-md-6
+      .dark-panel
+        .section-title.mb-3 Opis
+        - if @story_group.description.present?
+          %p.mb-0= @story_group.description
+        - else
+          %p.text-dimmed.mb-0 Brak opisu.
+
+  .row.g-3
+    .col-12.col-md-6
+      .dark-panel
+        .section-title.mb-3 Ostatnie Transakcje
+        - if @recent_transactions.empty?
+          %p.text-dimmed.mb-0 Brak transakcji.
+        - else
+          .d-flex.flex-column.gap-3
+            - @recent_transactions.each do |transaction|
+              .dark-card.flex-row.align-items-stretch.p-0
+                - if transaction.transactionable.is_a?(Item) && transaction.transactionable.image.attached?
+                  = image_tag transaction.transactionable.image, class: "dark-card-side-cover"
+                - else
+                  .dark-card-side-icon
+                    %i.fa-solid.fa-coins.fa-xl.text-dimmed
+                .d-flex.flex-column.justify-content-center.gap-1.p-3.flex-grow-1
+                  %span.small= transaction_description(transaction, @story_group)
+                  %span.text-dimmed.small= transaction.created_at.strftime("%d.%m.%Y %H:%M")
+
+    .col-12.col-md-6
+      .dark-panel
+        .section-title.mb-3 Ostatnie Grupy Aktywności
+        - if @recent_activity_groups.empty?
+          %p.text-dimmed.mb-0 Brak grup aktywności.
+        - else
+          .d-flex.flex-column.gap-3
+            - @recent_activity_groups.each do |ag|
+              .dark-panel
+                .fw-semibold.mb-2= ag.name
+                - rankings = @activity_group_rankings[ag.id] || []
+                - if rankings.empty?
+                  %span.text-dimmed.small Brak zaliczonych aktywności.
+                - else
+                  .d-flex.flex-column.gap-2
+                    - rankings.each_with_index do |(student, points), i|
+                      .d-flex.align-items-center.justify-content-between
+                        .d-flex.align-items-center.gap-2
+                          - if i == 0
+                            %i.fa-solid.fa-crown.text-warning
+                          - elsif i == 1
+                            %i.fa-solid.fa-trophy.text-secondary
+                          - else
+                            %i.fa-solid.fa-medal.text-bronze
+                          %span.small= student.full_name
+                        %span.badge.bg-secondary= points

@@ -2,16 +2,25 @@
 
 module StudentsItemsHelper
   def go_back_from_show_link(own_items, story_group:, student:, &block)
-    back_frame = own_items ? '_top' : 'modal'
+    path = if params[:back_path] == 'story_group'
+             story_group_path(story_group)
+           elsif own_items
+             story_group_student_students_items_path(story_group, student)
+           else
+             story_group_student_path(story_group, student)
+           end
 
-    link_to story_group_student_students_items_path(story_group, student),
+    link_to path,
             class: 'btn btn-secondary',
-            title: 'Do listy przedmiotów',
-            data:  { turbo_frame: back_frame, turbo_prefetch: true }, &block
+            title: 'Wstecz',
+            data:  { turbo_frame: '_top', turbo_prefetch: true }, &block
   end
 
   def close_show_link(own_items, story_group:, student:)
-    if own_items
+    if params[:back_path] == 'story_group'
+      close_path = story_group_path(story_group)
+      redirect_to_modal = '_top'
+    elsif own_items
       close_path = story_group_student_students_items_path(story_group, student)
       redirect_to_modal = '_top'
     else

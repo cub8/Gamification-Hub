@@ -1,0 +1,85 @@
+.dark-page
+  .dark-panel.mb-4
+    - if @story_group.description.present?
+      %p.mb-2= @story_group.description
+    .d-flex.align-items-center.gap-2.text-dimmed.small
+      %i.fa-solid.fa-user
+      = @story_group.owner.full_name
+
+  .dark-panel.mb-4
+    .row.g-3.align-items-center
+      .col-12.col-md-4
+        .d-flex.align-items-center.gap-3
+          - if @rank
+            - if @rank.icon.attached?
+              = image_tag @rank.icon, width: 56, height: 56, class: "object-fit-contain"
+            - else
+              %i.fa-solid.fa-shield-halved.fa-3x.text-dimmed
+          - else
+            %i.fa-solid.fa-shield-halved.fa-3x.text-dimmed
+          %div
+            %p.text-dimmed.small.mb-0 Moja Ranga
+            .fw-semibold= @rank&.name || "Brak rangi"
+
+      .col-12.col-md-8
+        .d-flex.flex-column.gap-2
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Życia
+            .d-flex.align-items-center.gap-2
+              %i.fa-solid.fa-heart.text-danger
+              %span.fw-semibold= @student.lives
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Obecna waluta
+            .d-flex.align-items-center.gap-2
+              - if @story_group.currency_icon.attached?
+                = image_tag @story_group.currency_icon, width: 18, height: 18, class: "object-fit-contain"
+              %span.fw-semibold= @student.current_currency
+          .d-flex.justify-content-between.align-items-center
+            %span.text-dimmed Łącznie uzbierano
+            .d-flex.align-items-center.gap-2
+              - if @story_group.currency_icon.attached?
+                = image_tag @story_group.currency_icon, width: 18, height: 18, class: "object-fit-contain"
+              %span.fw-semibold= @student.total_currency
+
+  .row.g-3
+    .col-12.col-md-6
+      .section-title.mb-3 Moje Odznaki
+      - if @badges.empty?
+        %p.text-dimmed Nie posiadasz jeszcze żadnych odznak.
+      - else
+        .d-flex.flex-column.gap-3
+          - @badges.each do |badge|
+            .dark-card.flex-row.align-items-stretch.p-0
+              - if badge.icon.attached?
+                = image_tag badge.icon, class: "dark-card-side-cover"
+              - else
+                .dark-card-side-icon
+                  %i.fa-solid.fa-award.fa-2x.text-dimmed
+              .d-flex.flex-column.justify-content-center.gap-1.p-3.flex-grow-1
+                .dark-card-title= badge.name
+                - if badge.story_description.present?
+                  %p.text-dimmed.small.fst-italic.mb-0= badge.story_description
+
+    .col-12.col-md-6
+      .section-title.mb-3 Moje Przedmioty
+      - if @students_items.empty?
+        %p.text-dimmed Nie posiadasz jeszcze żadnych przedmiotów.
+      - else
+        .d-flex.flex-column.gap-3
+          - @students_items.each do |students_item|
+            .dark-card.flex-row.align-items-stretch.p-0
+              = link_to story_group_student_students_item_path(@story_group, @student, students_item, back_path: 'story_group'),
+                  data: { turbo_frame: "modal" },
+                  class: "d-flex align-items-stretch flex-grow-1 text-decoration-none overflow-hidden" do
+                - if students_item.item.image.attached?
+                  = image_tag students_item.item.image, class: "dark-card-side-cover"
+                - else
+                  .dark-card-side-icon
+                    %i.fa-solid.fa-box.fa-2x.text-dimmed
+                .d-flex.flex-column.justify-content-center.gap-1.p-3.flex-grow-1
+                  .dark-card-title= students_item.item.name
+                  - if students_item.item.story_description.present?
+                    %p.text-dimmed.small.fst-italic.mb-0= truncate(students_item.item.story_description, length: 120)
+                  .d-flex.align-items-center.gap-2.mt-1
+                    %strong= students_item.price_paid
+                    %span.text-dimmed.small= @story_group.currency_name

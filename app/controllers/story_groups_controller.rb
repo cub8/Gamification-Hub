@@ -23,6 +23,18 @@ class StoryGroupsController < ApplicationController
   def show
     authorize @story_group
     @student = @story_group.student_memberships.find_by(user_id: @current_user.id)
+
+    if @student
+      dashboard       = StoryGroupStudentDashboard.new(student: @student).load
+      @rank           = dashboard.rank
+      @badges         = dashboard.badges
+      @students_items = dashboard.students_items
+    else
+      dashboard                = StoryGroupTeacherDashboard.new(story_group: @story_group).load
+      @recent_transactions     = dashboard.recent_transactions
+      @recent_activity_groups  = dashboard.recent_activity_groups
+      @activity_group_rankings = dashboard.activity_group_rankings
+    end
   end
 
   # GET /story_groups/new
