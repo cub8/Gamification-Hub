@@ -40,7 +40,7 @@ class ActivityGroupTemplatesController < ApplicationController
 
     if @activity_group_template.save
       redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Activity group template was successfully created.', status: :see_other
+                  notice: 'Pomyślnie utworzono szablon grupy aktywności.', status: :see_other
     else
       render :new, status: :unprocessable_content
     end
@@ -55,7 +55,7 @@ class ActivityGroupTemplatesController < ApplicationController
                     status: :see_other
       else
         redirect_to story_group_activity_groups_path(@story_group),
-                    notice: 'Activity group template was successfully updated.', status: :see_other
+                    notice: 'Pomyślnie zaktualizowano szablon grupy aktywności.', status: :see_other
       end
     else
       render :edit, status: :unprocessable_content
@@ -67,7 +67,7 @@ class ActivityGroupTemplatesController < ApplicationController
     @activity_group_template.destroy!
 
     redirect_to story_group_activity_groups_path(@story_group),
-                notice: 'Activity group template was successfully destroyed.', status: :see_other
+                notice: 'Pomyślnie usunięto szablon grupy aktywności.', status: :see_other
   end
 
   private

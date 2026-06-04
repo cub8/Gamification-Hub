@@ -32,10 +32,10 @@
                 %span.badge.bg-secondary.mt-1 Dostępne dla 0 żyć
 
             .dark-card-actions
-              = link_to edit_story_group_item_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Edit", data: { turbo_frame: 'modal', turbo_prefetch: true } do
+              = link_to edit_story_group_item_path(@story_group, item), class: "btn btn-sm btn-secondary border-0", title: "Edytuj", data: { turbo_frame: 'modal', turbo_prefetch: true } do
                 %i.fa-solid.fa-pen
               = button_to story_group_item_path(@story_group, item),
                 method: :delete,
                 form: { data: { turbo_confirm: "Usunąć przedmiot \"#{item.name}\"?" } },
-                class: "btn btn-sm btn-danger border-0", title: "Delete" do
+                class: "btn btn-sm btn-danger border-0", title: "Usuń" do
                 %i.fa-solid.fa-trash

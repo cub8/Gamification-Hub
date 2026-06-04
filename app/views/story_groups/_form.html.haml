@@ -1,7 +1,7 @@
 = form_with model: story_group do |form|
   - if story_group.errors.any?
     .form-errors.p-3.mb-3
-      %h2= "#{pluralize(story_group.errors.count, "error")} prohibited this story group from being saved:"
+      %h2= "#{pluralize(story_group.errors.count, "błąd", "błędy")} uniemożliwił zapisanie grupy:"
       %ul
         - story_group.errors.each do |error|
           %li= error.full_message
@@ -22,7 +22,7 @@
       .file-upload
         = form.label :icon, class: "file-btn px-3 py-2" do
           %i.fa-solid.fa-upload
-          Upload file
+          Wgraj plik
         = form.file_field :icon,
           accept: "image/jpeg,image/png",
           class: "d-none",
@@ -48,7 +48,7 @@
           .file-upload
             = form.label :currency_icon, class: "file-btn px-3 py-2" do
               %i.fa-solid.fa-upload
-              Upload file
+              Wgraj plik
             = form.file_field :currency_icon,
               class: "d-none",
               data: { file_upload_target: "input", action: "change->file-upload#update" }
@@ -66,5 +66,5 @@
       = form.number_field :default_lives, min: 0, step: 1, class: "form-control"
 
   .form-actions.gap-3.mt-4
-    = link_to "Cancel", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
+    = link_to "Anuluj", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
     = form.submit 'Zapisz', class: "btn-submit py-2 px-4"

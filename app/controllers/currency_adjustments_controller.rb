@@ -14,7 +14,7 @@ class CurrencyAdjustmentsController < ApplicationController
     amount = params.expect(currency_adjustment: :amount)[:amount].to_i
     CurrencyAdjusterService.new(student: @student, granted_by_user: @current_user).adjust(amount)
 
-    redirect_outside_turbo_frame story_group_students_path(@story_group), notice: 'Currency adjusted.'
+    redirect_outside_turbo_frame story_group_students_path(@story_group), notice: 'Waluta została skorygowana.'
   end
 
   private

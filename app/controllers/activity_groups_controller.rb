@@ -23,7 +23,7 @@ class ActivityGroupsController < ApplicationController
     ActivityGroupBuilder.new(story_group: @story_group, template: template).build(name: name)
 
     redirect_to story_group_activity_groups_path(@story_group),
-                notice: 'Activity group was successfully created.', status: :see_other
+                notice: 'Pomyślnie utworzono grupę aktywności.', status: :see_other
   rescue ActiveRecord::RecordInvalid => e
     redirect_to story_group_activity_groups_path(@story_group),
                 alert: e.message, status: :see_other
@@ -38,7 +38,7 @@ class ActivityGroupsController < ApplicationController
                     status: :see_other
       else
         redirect_to story_group_activity_groups_path(@story_group),
-                    notice: 'Activity group was successfully updated.', status: :see_other
+                    notice: 'Pomyślnie zaktualizowano grupę aktywności.', status: :see_other
       end
     else
       render :edit, status: :unprocessable_content
@@ -52,7 +52,7 @@ class ActivityGroupsController < ApplicationController
     ActivityGroupBuilder.new(story_group: @story_group, template: template).build_many(count: count)
 
     redirect_to story_group_activity_groups_path(@story_group),
-                notice: "#{count} activity group(s) created successfully.", status: :see_other
+                notice: "Pomyślnie utworzono #{count} grup aktywności.", status: :see_other
   end
 
   def destroy
@@ -60,7 +60,7 @@ class ActivityGroupsController < ApplicationController
     @activity_group.destroy!
 
     redirect_to story_group_activity_groups_path(@story_group),
-                notice: 'Activity group was successfully destroyed.', status: :see_other
+                notice: 'Pomyślnie usunięto grupę aktywności.', status: :see_other
   end
 
   private

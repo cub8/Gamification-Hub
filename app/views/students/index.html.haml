@@ -58,7 +58,7 @@
                     %li
                       = button_to story_group_student_path(@story_group, student),
                           method: :delete,
-                          form: { data: { turbo_confirm: "Are you sure you want to remove #{student.full_name}?" } },
+                          form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć studenta #{student.full_name}?" } },
                           class: 'dropdown-item text-danger rounded p-1' do
                         %i.fa-solid.fa-trash.me-2
                         Usuń

@@ -1,4 +1,4 @@
-- content_for :title, "Story Groups"
+- content_for :title, "Grupy"
 
 .dark-page
   .mb-4
@@ -37,4 +37,4 @@
   - if policy(:story_group).create?
     = link_to new_story_group_path, class: "btn btn-primary position-fixed bottom-0 end-0 mb-4 me-4", data: { turbo_frame: "modal" } do
       %i.fa-solid.fa-plus.me-2
-      Utwórz grupę fabularną
+      Utwórz grupę

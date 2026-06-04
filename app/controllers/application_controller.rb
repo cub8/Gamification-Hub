@@ -33,14 +33,14 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate!
-    redirect_to login_path, alert: 'Please log in before continuing.' unless @current_user
+    redirect_to login_path, alert: 'Zaloguj się, aby kontynuować.' unless @current_user
   end
 
   def record_not_found
-    redirect_to root_path, alert: 'Not found'
+    redirect_to root_path, alert: 'Nie znaleziono.'
   end
 
   def not_authorized
-    redirect_to root_path, alert: 'Not found'
+    redirect_to root_path, alert: 'Nie znaleziono.'
   end
 end

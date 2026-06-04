@@ -56,25 +56,25 @@
     .field-group.mb-3
       = f.label :unlock_rank_id, "Minimalna ranga wymagana do odblokowania zakupu"
       = f.collection_select :unlock_rank_id, @story_group.ranks.order(:required_currency_value), :id, :name,
-        { include_blank: "None (any rank)" },
+        { include_blank: "Brak (dowolna ranga)" },
         { class: "form-control", data: { controller: "tom-select-basic" } }
 
     .field-group.mb-3
       = f.label :min_rank_for_discount_id, "Ranga od której nabija się zniżka"
       = f.collection_select :min_rank_for_discount_id, @story_group.ranks.order(:required_currency_value), :id, :name,
-        { include_blank: "None (from lowest)" },
+        { include_blank: "Brak (od najniższej)" },
         { class: "form-control", data: { controller: "tom-select-basic" } }
 
     .field-group.mb-3
       = f.label :unlock_badge_ids, "Odznaki wymagane do odblokowania zakupu"
       = f.collection_select :unlock_badge_ids, @story_group.badges, :id, :name,
-        { include_blank: "None" },
+        { include_blank: "Brak" },
         { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 
     .field-group.mb-3
       = f.label :discount_badge_ids, "Odznaki od których nabija się zniżka"
       = f.collection_select :discount_badge_ids, @story_group.badges, :id, :name,
-        { include_blank: "None" },
+        { include_blank: "Brak" },
         { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 
   .form-actions.gap-3.mt-4
