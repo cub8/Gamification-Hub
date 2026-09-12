@@ -1,0 +1,15 @@
+-# Flash messages for the redesign layout.
+-# Replaces MessagesComponent (Bootstrap .alert + data-bs-dismiss).
+
+- messages = { notice: flash[:notice] || notice, alert: flash[:alert] || alert }.compact
+
+- if messages.any?
+  .flex.flex-col.gap-2.mb-4{ id: 'flash-messages' }
+    - messages.each do |kind, message|
+      - tone = kind == :alert ? 'text-heart-ink' : 'text-earn'
+      %div{ class: "gh-plate flex items-start gap-3 px-4 py-3 #{tone}",
+            role: kind == :alert ? 'alert' : 'status' }
+        %span.flex-1= message
+        %button.gh-linkbtn{ type: 'button',
+                            data: { action: 'flash#dismiss' },
+                            'aria-label': 'Zamknij' } &times;

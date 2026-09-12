@@ -1,0 +1,30 @@
+/* Card Table theme tokens (verbatim from base.css) */
+.app{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--table);color:var(--ink);
+  font-family:var(--f-ui);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased;
+  --f-ui:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --f-text:"Literata",Georgia,serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace}
+.app[data-theme="light"]{color-scheme:light;
+  --table:#E7E0EE;--tint:rgba(231,224,238,.86);--zone:rgba(53,32,74,.26);--pat:rgba(53,32,74,.075);
+  --chrome:#FBF8FC;--card:#FFFDF9;--card-2:#F3EEF6;--card-3:#E6DEEC;
+  --ink:#221A2B;--ink-2:#584C64;--ink-3:#85798F;
+  --line:#E4DCEA;--line-2:#CFC3DA;
+  --item:#FF7A1A;--item-edge:#C45A10;--on-item:#221A2B;
+  --badge:#16A394;--badge-edge:#0B7166;--badge-ink:#0B665C;
+  --rank:#E9B53B;--rank-edge:#AE8418;--on-rank:#221A2B;
+  --lock:#BDB6C8;--lock-edge:#948BA2;
+  --neutral:#CFC3DA;--neutral-edge:#A597B3;
+  --earn:#1C7F48;--spend:#B4500B;--heart:#E0385F;--heart-ink:#B3264A;
+  --focus:#6B3FD1;--edge:rgba(34,26,43,.14);--scrim:rgba(34,26,43,.45)}
+.app[data-theme="dark"]{color-scheme:dark;
+  --table:#1B1224;--tint:rgba(27,18,36,.83);--zone:rgba(242,236,246,.22);--pat:rgba(242,236,246,.05);
+  --chrome:#221A2C;--card:#2A2135;--card-2:#342A40;--card-3:#40354D;
+  --ink:#F2ECF6;--ink-2:#C0B4CD;--ink-3:#958A9F;
+  --line:#3B3149;--line-2:#56496A;
+  --item:#FF8A33;--item-edge:#B5570F;--on-item:#1B1224;
+  --badge:#2BC2B1;--badge-edge:#137A6F;--badge-ink:#6FE3D5;
+  --rank:#F2C24E;--rank-edge:#A57C16;--on-rank:#1B1224;
+  --lock:#5E536C;--lock-edge:#3F3649;
+  --neutral:#56496A;--neutral-edge:#3B3149;
+  --earn:#63D6A0;--spend:#FF9A4D;--heart:#FF6B86;--heart-ink:#FF9CB0;
+  --focus:#C6A8FF;--edge:rgba(0,0,0,.42);--scrim:rgba(8,4,12,.62)}

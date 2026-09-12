@@ -1,0 +1,7 @@
+-# Light/dark toggle. Sets data-gh-theme on <html> and persists a cookie.
+
+%div{ data: { controller: 'theme' } }
+  %button.gh-linkbtn{ type: 'button',
+                      data: { action: 'theme#toggle' },
+                      'aria-label': 'Przełącz motyw' }
+    Zmień motyw

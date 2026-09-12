@@ -1,0 +1,53 @@
+-# "Card Table" redesign layout.
+-#
+-# Opt a controller in with `layout "redesign"`. Loads redesign.css/redesign.js
+-# only — no Bootstrap, no legacy Stimulus controllers.
+-#
+-# Replaces BOTH old layouts: `chrome` is false for auth-style screens, which
+-# renders the centred single-column shell that `public` used to provide.
+-# Set it per controller with `@chrome = false` (or content_for :chrome).
+
+!!!
+%html{ lang: 'pl', data: { gh_theme: gh_theme } }
+  %head
+    %meta{ charset: 'utf-8' }/
+    %title= content_for(:title) || 'Gamification Hub'
+    %meta{ content: 'width=device-width,initial-scale=1', name: 'viewport' }/
+    %meta{ content: 'Gamification Hub', name: 'application-name' }/
+    %meta{ content: 'yes', name: 'mobile-web-app-capable' }/
+    %meta{ name: 'turbo-prefetch', content: 'false' }/
+    = csrf_meta_tags
+    = csp_meta_tag
+    = yield :head
+    %link{ href: '/icon.png', rel: 'icon', type: 'image/png' }/
+    %link{ href: '/icon.svg', rel: 'icon', type: 'image/svg+xml' }/
+    %link{ href: '/icon.png', rel: 'apple-touch-icon' }/
+    = stylesheet_link_tag :redesign, 'data-turbo-track': 'reload'
+    = javascript_include_tag 'redesign', 'data-turbo-track': 'reload', type: 'module'
+
+  %body.min-h-screen.bg-table.text-ink.font-ui
+    - if @chrome == false
+      -# Focused shell: auth, wizard and other flows with no navigation.
+      %main.min-h-screen.flex.flex-col.items-center.justify-center.gap-6.px-4.py-10
+        = link_to root_path, class: 'flex flex-col items-center gap-3' do
+          = image_tag 'logo.png', alt: 'Gamification Hub', class: 'h-14 w-auto'
+        %section.gh-panel.w-full.max-w-md.p-6
+          = render 'layouts/redesign/flash'
+          = yield
+        = render 'layouts/redesign/theme_toggle'
+    - else
+      .min-h-screen.flex.flex-col
+        -# TODO: Shared::Redesign::HeaderComponent — not built yet.
+        -# TODO: Shared::Redesign::SidebarComponent — not built yet.
+        -# TODO: mobile tab bar + "Więcej" sheet — net new, see AUDIT.md §6.2.
+        %main#app-content.flex-1.overflow-auto.px-4.py-6
+          = render 'layouts/redesign/flash'
+          = yield
+
+    -# One dialog for the whole page. Links target it with
+    -# data: { turbo_frame: 'modal' }, exactly as before.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose' } }
+      .gh-dialog-body
+        = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
+                                           action: 'turbo:frame-load->dialog#open' }
