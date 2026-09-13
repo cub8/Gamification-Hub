@@ -1,12 +1,23 @@
 -# The mobile "Więcej" sheet — everything the tab bar could not fit.
--# Mockup: js-expanded/10-core.js `sheetMore()`, out-of-group branch.
+-# Mockup: js-expanded/10-core.js `sheetMore()`.
 %dialog#gh-more-sheet.gh-dialog.gh-dialog--menu{ data: { action: 'click->menu#closeOnBackdrop' },
                                                  'aria-labelledby': 'gh-more-title' }
   .gh-dialog-body
     %span.gh-grab{ 'aria-hidden': 'true' }
     %h2#gh-more-title.gh-h2 Więcej
 
-    - if user.teacher?
+    -# In a group this is where the sections the tab bar could not fit live.
+    -# The mockup lists ALL of them, including the three already in the tab bar
+    -# (10-core.js:278), so the sheet is a complete index rather than a
+    -# remainder you have to reason about.
+    - if chrome
+      %ul.gh-menu.gh-more-m
+        - chrome.items.each do |item|
+          %li
+            = link_to item.path, 'aria-current': ('page' if item.current?(current_path)) do
+              %i.fa-solid{ class: item.icon }
+              %span= item.label
+    - elsif user.teacher?
       %ul.gh-menu
         %li
           = link_to new_story_group_path, data: { turbo_frame: 'modal' } do

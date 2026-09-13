@@ -2,17 +2,18 @@
 
 # Redesign desktop sidebar.
 #
-# Ported from design/mockup-src/js-expanded/10-core.js:168 (`sidebar()`), the
-# out-of-group branch: the primary nav, then a flat list of the user's groups,
-# then the collapse toggle. The in-group `.deck` card and its section nav land
-# with the first group screen.
+# Ported from design/mockup-src/js-expanded/10-core.js:168 (`sidebar()`). The
+# primary nav and the collapse toggle are constant; the middle slot is either
+# the in-group deck or the list of your groups, never both — the mockup's
+# if/else at :171-183 is exclusive, and so is ours.
 class Shared::Redesign::SidebarComponent < ViewComponent::Base
-  attr_reader :user, :current_path, :collapsed
+  attr_reader :user, :current_path, :collapsed, :group_chrome
 
-  def initialize(user:, current_path:, collapsed: false)
+  def initialize(user:, current_path:, collapsed: false, group_chrome: nil)
     @user = user
     @current_path = current_path
     @collapsed = collapsed
+    @group_chrome = group_chrome
   end
 
   private
@@ -46,6 +47,8 @@ class Shared::Redesign::SidebarComponent < ViewComponent::Base
     @teacher_group_ids ||= user.teacher_story_groups.ids
   end
 
+  # The primary nav matches exactly; section items carry their own rule, since
+  # a detail page has to keep its section lit.
   def current?(path)
     current_path == path
   end

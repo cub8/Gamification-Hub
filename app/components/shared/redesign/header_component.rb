@@ -2,15 +2,16 @@
 
 # Redesign header: logo, join, theme, notifications, account.
 #
-# Ported from design/mockup-src/js-expanded/10-core.js:155 (`header()`), minus
-# the two in-group pieces — the group switcher `.gsw` and the student balance
-# chip `.bal` both render only when `inGroup()` is true, and no group screen is
-# on this layout yet.
+# Ported from design/mockup-src/js-expanded/10-core.js:155 (`header()`). The
+# group switcher `.gsw` renders only inside a group and only below 720px, where
+# the sidebar and its deck are gone. The student balance chip `.bal`
+# (00-base.css:217) is the one in-group piece still missing.
 class Shared::Redesign::HeaderComponent < ViewComponent::Base
-  attr_reader :user
+  attr_reader :user, :group_chrome
 
-  def initialize(user:)
+  def initialize(user:, group_chrome: nil)
     @user = user
+    @group_chrome = group_chrome
   end
 
   private

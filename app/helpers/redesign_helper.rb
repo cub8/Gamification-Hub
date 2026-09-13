@@ -26,6 +26,23 @@ module RedesignHelper
     format('%<m>d:%<s>02d', m: seconds / 60, s: seconds % 60)
   end
 
+  # The in-group chrome for the screen being rendered, or nil out of a group.
+  #
+  # Reads @story_group, which 17 nested controllers already set and which the
+  # Bootstrap layout has always passed to its own sidebar. Memoised because the
+  # header, the sidebar, the tab bar, the "Więcej" sheet and the switcher all
+  # ask for it on every page.
+  #
+  # ONE predicate for the whole chrome. The mockup has two that disagree —
+  # `inGroup()` (10-core.js:153) and the `.in-group` body class (:337) — which
+  # is how its phone header ends up with the logo, the switcher and the spacer
+  # all competing for 58px on a focus route.
+  def gh_group_chrome
+    return @gh_group_chrome if defined?(@gh_group_chrome)
+
+    @gh_group_chrome = Redesign::GroupChrome.for(user: @current_user, story_group: @story_group)
+  end
+
   # Polish plural picker: 1 -> one, 2-4 -> few, otherwise many, with the usual
   # 12-14 exception (12 minut, not 12 minuty). The app has no rails-i18n, so
   # Polish copy is written inline as everywhere else; this keeps the form right

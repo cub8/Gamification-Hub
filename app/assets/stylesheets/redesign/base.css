@@ -20,4 +20,15 @@
     outline: 2px solid var(--gh-focus);
     outline-offset: 2px;
   }
+
+  /* Turbo's websocket element renders nothing, but the browser does not know
+     that: an unknown element is `display: inline`, so it becomes a real flex
+     or grid item. In the header it sat between the theme toggle and the bell
+     and took a `gap` on each side, doubling the space between them.
+
+     Global rather than a header rule: it is a fact about the element, and
+     `turbo_stream_from` can be called from inside any layout. */
+  turbo-cable-stream-source {
+    display: none;
+  }
 }

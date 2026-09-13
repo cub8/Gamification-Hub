@@ -7,7 +7,11 @@
         %i.fa-solid{ class: item.icon }
         %span= item.label
 
-  - if groups.any?
+  -# In a group the deck takes this slot; the group list does not survive
+  -# alongside it (10-core.js:171-183). You leave through "Zmień grupę".
+  - if group_chrome
+    = render 'layouts/redesign/deck', chrome: group_chrome, current_path: current_path
+  - elsif groups.any?
     %p.gh-sb-sec Twoje grupy
     .gh-glist
       - groups.each do |story_group|

@@ -18,8 +18,19 @@
     display: flex;
     gap: 4px;
     margin-top: 22px;
-    border-bottom: 2px solid var(--gh-zone);
+    /* The strip's rule is a background, not a border-bottom (29-gh.css:2).
+       A border sits OUTSIDE the padding box, and the active tab's marker has
+       to overlap it — so with `overflow-x` making this a scroll container, the
+       marker counted as 2px of scrollable overflow and raised a vertical
+       scrollbar over nothing. Painted inside the padding box instead, both the
+       rule and the marker stay in bounds. */
+    padding-bottom: 2px;
+    background: linear-gradient(var(--gh-zone), var(--gh-zone)) no-repeat bottom / 100% 2px;
+    /* Horizontal only, so the tabs can still slide on a narrow phone. Stating
+       the other axis matters: left at `visible` it computes to `auto` the
+       moment one axis is not visible, which was the other half of the bug. */
     overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .gh-gt2 {

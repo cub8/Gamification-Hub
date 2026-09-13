@@ -3,6 +3,17 @@
     = image_tag 'logo.png', alt: ''
     %span.gh-logo-word Gamification Hub
 
+  -# Mobile only: below 720px the sidebar and its deck are gone, so this is the
+  -# only thing naming the group you are in. chrome.css keeps it display:none
+  -# on desktop, where the deck says it better.
+  - if group_chrome
+    %button.gh-gsw{ type: 'button',
+                    data: { action: 'menu#open', menu_id_param: 'gh-group-switcher' },
+                    'aria-label': "Grupa #{group_chrome.name}, zmień grupę" }
+      = render 'layouts/redesign/group_thumb', story_group: group_chrome.story_group, size: nil
+      %span.gh-gsw-name= group_chrome.name
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+
   %span.gh-sp
 
   -# The mockup gates this on `role === 'student'` (10-core.js:162) because its

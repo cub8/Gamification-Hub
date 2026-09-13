@@ -47,12 +47,14 @@
       .gh-shell{ data: { controller: 'theme menu sidebar',
                          theme_light_label_value: 'Jasny motyw',
                          theme_dark_label_value: 'Ciemny motyw' } }
-        = render Shared::Redesign::HeaderComponent.new(user: @current_user)
+        = render Shared::Redesign::HeaderComponent.new(user:         @current_user,
+                                                        group_chrome: gh_group_chrome)
 
         .gh-body
           = render Shared::Redesign::SidebarComponent.new(user:         @current_user,
                                                           current_path: request.path,
-                                                          collapsed:    @sidebar_collapsed)
+                                                          collapsed:    @sidebar_collapsed,
+                                                          group_chrome: gh_group_chrome)
           .gh-tw
             -# Scoped to the well, not the page: the header and sidebar sit on
             -# flat --gh-chrome, exactly as .tpat does inside .tw in the mockup.
@@ -62,7 +64,8 @@
               = yield
 
         = render Shared::Redesign::TabBarComponent.new(user:         @current_user,
-                                                       current_path: request.path)
+                                                       current_path: request.path,
+                                                       group_chrome: gh_group_chrome)
 
         -# These MUST stay inside .gh-shell: it owns the theme/menu/sidebar
         -# controllers, and a Stimulus action only reaches a controller on an
@@ -71,7 +74,13 @@
         -# top layer, so neither disturbs the shell's flex layout nor is clipped
         -# by its overflow:hidden.
         = render 'layouts/redesign/account_menu', user: @current_user
-        = render 'layouts/redesign/more_sheet', user: @current_user
+        = render 'layouts/redesign/more_sheet', user: @current_user,
+          chrome: gh_group_chrome, current_path: request.path
+
+        -# Only in a group: out of one, "Grupy" in the primary nav is the picker.
+        - if gh_group_chrome
+          = render 'layouts/redesign/group_switcher', user: @current_user,
+            chrome: gh_group_chrome
 
         -# Anchored panel: content that behaves like the mockup's popover
         -# (notifications) rather than a centred modal. Links target it with
