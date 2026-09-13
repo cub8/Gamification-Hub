@@ -37,7 +37,11 @@ Rails.application.routes.draw do
       post :buy, on: :member
     end
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
-    resources :story_group_invites, path: :invites, as: :invites
+    resources :story_group_invites, path: :invites, as: :invites do
+      # The delete confirmation is a dialog with a consequence sentence in it,
+      # not a browser confirm, so it needs a URL of its own to render into.
+      get :confirm_destroy, on: :member
+    end
   end
 
   resources :notifications, only: %i[index] do

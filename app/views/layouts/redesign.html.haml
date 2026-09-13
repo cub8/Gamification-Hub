@@ -82,6 +82,10 @@
             = turbo_frame_tag 'panel', data: { dialog_target: 'frame',
                                                action: 'turbo:frame-load->dialog#open' }
 
+    -# Outside .gh-shell for the same reason the dialog is: its overflow:hidden
+    -# would clip a fixed layer pinned to the bottom of the viewport.
+    = render 'layouts/redesign/toasts'
+
     -# One dialog for the whole page. Links target it with
     -# data: { turbo_frame: 'modal' }, exactly as before.
     %dialog.gh-dialog{ data: { controller: 'dialog',

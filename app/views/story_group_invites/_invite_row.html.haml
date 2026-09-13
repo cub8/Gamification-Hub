@@ -1,0 +1,41 @@
+-# One row of the invites list. Mockup: 30-isg.js `ivRow`.
+- fresh = local_assigns[:fresh_id].present? && local_assigns[:fresh_id] == invite.id
+
+.gh-iv{ class: ('gh-iv--fresh' if fresh) }
+  %span.gh-iv-cd= invite.code
+
+  %span.gh-iv-st
+    %span.gh-stt{ class: invite.active? ? 'gh-stt--on' : 'gh-stt--off' }= invite.status_label
+
+  %span.gh-iv-u
+    = "Użycia: #{invite_uses_label(invite)}"
+    -# Only a limited code has a denominator, so only a limited code gets a bar.
+    - if invite.max_uses
+      .gh-bar{ role: 'progressbar',
+               'aria-valuemin': 0,
+               'aria-valuemax': invite.max_uses,
+               'aria-valuenow': invite.uses,
+               'aria-label': "Wykorzystanie kodu #{invite.code}" }
+        %i{ style: "--gh-p: #{gh_percent(invite.uses, invite.max_uses)}%" }
+
+  %span.gh-iv-e= invite_expiry_label(invite)
+
+  %span.gh-iv-acts
+    -# Nothing to project once a code is dead, so "Pokaż" goes with it.
+    - if invite.active?
+      = link_to story_group_invite_path(@story_group, invite), class: 'gh-btn gh-btn--sm',
+        data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-qrcode
+        Pokaż
+
+    = render 'copy_button', invite: invite, labelled: false
+
+    = link_to edit_story_group_invite_path(@story_group, invite), class: 'gh-iconbtn',
+      title: 'Edytuj', 'aria-label': "Edytuj zaproszenie #{invite.code}",
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-pen
+
+    = link_to confirm_destroy_story_group_invite_path(@story_group, invite), class: 'gh-iconbtn',
+      title: 'Usuń', 'aria-label': "Usuń zaproszenie #{invite.code}",
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-trash

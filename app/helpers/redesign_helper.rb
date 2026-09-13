@@ -81,6 +81,13 @@ module RedesignHelper
     end
   end
 
+  # "30.09, 23:59" — the mockup's `fmt()` (30-isg.js:18), used wherever a date
+  # is an absolute deadline rather than a point in a feed. Unlike gh_when it
+  # never says "dziś": an invite that dies today has to show the hour it dies.
+  def gh_stamp(time)
+    time.strftime('%d.%m, %H:%M')
+  end
+
   # One line describing a currency movement, for the cross-group feed.
   #
   # `transactionable` is polymorphic and optional, and an Item can be hard

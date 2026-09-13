@@ -12,12 +12,27 @@
     margin: auto;
     background: transparent;
     color: var(--gh-ink);
+    /* A DEFINITE width, not just a cap. A <dialog> is width:fit-content, so
+       with only a max-width it shrink-wraps its content and jumps narrower the
+       moment a row is hidden — which the invite limits dialog does on every
+       switch. The mockup's .dlg has carried `width: min(540px, 100%)` all
+       along (00-base.css:454); this is the half that never got ported. */
+    width: min(92vw, 560px);
     max-width: min(92vw, 560px);
     max-height: 86vh;
   }
 
   .gh-dialog::backdrop {
     background: var(--gh-scrim);
+  }
+
+  /* The code dialog is wider than the rest (27-isg.css:14, `.dlg-code`). The
+     <dialog> lives in the layout and the frame content cannot put a class on
+     it, so the content announces itself instead and :has() does the rest — no
+     JavaScript, and nothing for dialog_controller to know about. */
+  .gh-dialog:has(.gh-qrbox) {
+    width: min(92vw, 620px);
+    max-width: min(92vw, 620px);
   }
 
   /* The surface is painted on the SCROLLING element itself, exactly as the
@@ -59,6 +74,7 @@
      turbo:frame-load and must keep doing only that. */
 
   .gh-dialog--menu {
+    width: min(92vw, 380px);
     max-width: min(92vw, 380px);
   }
 
@@ -68,6 +84,7 @@
      the specific trigger either, and neither do we. */
   .gh-dialog--anchored {
     margin: 64px 14px auto auto;
+    width: min(92vw, 370px);
     max-width: min(92vw, 370px);
   }
 
@@ -206,6 +223,26 @@
       height: 4px;
       margin: 0 auto 14px;
       background: var(--gh-line-2);
+    }
+  }
+
+  /* The same content rendered as a page instead of in the dialog (ctrl-click,
+     JavaScript off). Without a surface it sits straight on the table texture,
+     because these screens keep the app shell rather than the focused one the
+     join flow uses, and so never land inside .gh-acard.
+
+     Pair with .gh-panel, which paints the card and its shadow. The numbers are
+     the dialog's own: .dlg's width and .dlg-in's padding (00-base.css:454-456),
+     so the page version reads as the same object. */
+  .gh-dlg-page {
+    width: min(560px, 100%);
+    margin-top: 22px;
+    padding: 26px 28px 24px;
+  }
+
+  @media (max-width: 720px) {
+    .gh-dlg-page {
+      padding: 18px 16px;
     }
   }
 

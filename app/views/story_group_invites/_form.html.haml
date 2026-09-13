@@ -1,24 +1,112 @@
-- if invite.errors.any?
-  .form-errors.p-3.mb-3
-    %h2 Popraw następujące błędy:
-    %ul
-      - invite.errors.full_messages.each do |message|
-        %li= message
+-# The limits dialog, shared by new and edit. Mockup: 30-isg.js `mForm`.
+-#
+-# Tag helpers rather than `form_with model:`: three of these five fields are
+-# form-only (the two switches and the split date/time), so there is no record
+-# to bind them to. InviteForm reads them back under the same scope.
+-#
+-# Both switches are real checkboxes, not the mockup's <button role="switch">:
+-# they post their own value and toggle with Space, and a :has() rule in
+-# invites.css shows and hides each row, so the whole form works with
+-# JavaScript off. invite_form_controller only keeps the summary sentence and
+-# the unit label honest — InviteForm decides what becomes NULL.
+- invite = form.invite
+- editing = form.persisted?
+- limit_error = form.error_for(:max_uses)
+- expiry_error = form.error_for(:expires_at)
+- scope = ->(field) { "story_group_invite[#{field}]" }
 
-= form_with model: [@story_group, invite], url: url do |f|
-  .form-section.p-4.mb-3
-    .section-title.mb-3 Ustawienia zaproszenia
+%h2#gh-invite-title.gh-h2
+  = editing ? "Edytuj zaproszenie #{invite.code}" : 'Nowe zaproszenie'
+%p
+  - if editing
+    Kod zostaje ten sam. Zmieniasz tylko ograniczenia.
+  - else
+    Oba ograniczenia są opcjonalne.
 
-    .field-group.mb-3
-      = f.label :max_uses, "Maksymalna liczba użyć"
-      = f.number_field :max_uses, min: 1, step: 1, class: "form-control"
+= form_with url: (editing ? story_group_invite_path(@story_group, invite) : story_group_invites_path(@story_group)),
+  method: (editing ? :patch : :post),
+  data: { controller: 'invite-form',
+          turbo_frame: (@in_modal ? 'modal' : nil),
+          invite_form_summary_prefix_value: 'Kod będzie działał',
+          invite_form_limit_prefix_value: 'dla',
+          invite_form_no_limit_value: 'bez limitu osób',
+          invite_form_expiry_prefix_value: 'do',
+          invite_form_no_expiry_value: 'i bez daty ważności',
+          invite_form_people_forms_value: %w[osoby osób osób].to_json,
+          invite_form_unit_forms_value: %w[osoba osoby osób].to_json } do
 
-    .field-group.mb-3
-      = f.label :expires_at, "Data wygaśnięcia"
-      = f.text_field :expires_at,
-          class: "form-control",
-          data: { controller: 'flatpickr', flatpickr_enable_time: true, flatpickr_min_date: Time.now }
+  -# Create only: on an existing code the presets would silently discard limits
+  -# the teacher set on purpose (30-isg.js:35).
+  - unless editing
+    .gh-presets
+      %button.gh-fchip{ type: 'button',
+                        data: { preset: 'today', action: 'invite-form#preset' } }
+        Na dzisiejsze zajęcia
+      %button.gh-fchip{ type: 'button',
+                        data: { preset: 'none', action: 'invite-form#preset' } }
+        Bez ograniczeń
 
-  .form-actions.gap-3.mt-4
-    = link_to "Anuluj", story_group_invites_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top', turbo_prefetch: true }
-    = f.submit invite.persisted? ? "Zapisz" : "Utwórz", class: "btn-submit py-2 px-4"
+  .gh-lim
+    .gh-swrow
+      -# The companion hidden field is what makes "off" arrive at all: an
+      -# unchecked checkbox posts nothing.
+      = hidden_field_tag scope.call(:limit_enabled), '0', id: nil
+      = check_box_tag scope.call(:limit_enabled), '1', form.limit_enabled?,
+        id: 'gh-limit-switch', class: 'gh-sw', role: 'switch',
+        data: { invite_form_target: 'limitSwitch', action: 'invite-form#refresh' }
+      %span
+        %b
+          = label_tag 'gh-limit-switch', 'Limit użyć'
+        %span.gh-hint Kod przestanie działać, gdy dołączy tyle osób.
+
+    .gh-row2
+      .gh-inp.gh-inp--num{ class: ('gh-inp--bad' if limit_error) }
+        = number_field_tag scope.call(:max_uses), form.max_uses, min: 1, step: 1,
+          id: 'gh-max-uses', 'aria-label': 'Limit użyć',
+          'aria-invalid': limit_error ? 'true' : nil,
+          'aria-describedby': (limit_error ? 'gh-limit-error' : nil),
+          data: { invite_form_target: 'maxUses', action: 'invite-form#refresh' }
+      %span.gh-k{ data: { invite_form_target: 'unit' } }= form.unit_label
+
+    - if limit_error
+      %p#gh-limit-error.gh-err{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= limit_error
+
+  .gh-lim
+    .gh-swrow
+      = hidden_field_tag scope.call(:expiry_enabled), '0', id: nil
+      = check_box_tag scope.call(:expiry_enabled), '1', form.expiry_enabled?,
+        id: 'gh-expiry-switch', class: 'gh-sw', role: 'switch',
+        data: { invite_form_target: 'expirySwitch', action: 'invite-form#refresh' }
+      %span
+        %b
+          = label_tag 'gh-expiry-switch', 'Data ważności'
+        %span.gh-hint Po tej chwili kod przestanie działać.
+
+    .gh-row2
+      .gh-inp{ class: ('gh-inp--bad' if expiry_error) }
+        = date_field_tag scope.call(:expires_on), form.expires_on,
+          id: 'gh-expires-on', 'aria-label': 'Data',
+          'aria-invalid': expiry_error ? 'true' : nil,
+          'aria-describedby': (expiry_error ? 'gh-expiry-error' : nil),
+          data: { invite_form_target: 'date', today: Time.zone.today.to_fs(:iso8601),
+                  action: 'invite-form#refresh' }
+      .gh-inp
+        = time_field_tag scope.call(:expires_time), form.expires_time,
+          id: 'gh-expires-time', 'aria-label': 'Godzina',
+          data: { invite_form_target: 'time', end_of_day: InviteForm::DEFAULT_TIME,
+                  action: 'invite-form#refresh' }
+
+    -# The mockup leaves this paragraph without an id, so its expiry error is
+    -# never announced with the field (30-isg.js:39). Wired here.
+    - if expiry_error
+      %p#gh-expiry-error.gh-err{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= expiry_error
+
+  %p#gh-invite-summary.gh-expl{ data: { invite_form_target: 'summary' } }= form.summary
+
+  .gh-dlg-b
+    = render 'cancel'
+    %button.gh-btn{ type: 'submit' }= editing ? 'Zapisz zmiany' : 'Utwórz zaproszenie'

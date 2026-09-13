@@ -64,13 +64,14 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'a flash message is fully wired for dismissal' do
-    user = FactoryBot.create(:user)
-    post auth_passwordless_path, params: { email: user.email }
-    travel 61.seconds do
-      post auth_passwordless_path, params: { email: user.email }
-      follow_redirect!
-    end
+  # An ALERT, deliberately: notices rise as toasts now and have no dismiss
+  # button to wire. The inline plate is what an error still gets, and it is the
+  # error that must not fade on a timer.
+  test 'a flash alert is fully wired for dismissal' do
+    get auth_passwordless_verify_path(token: 'nie-ma-takiego')
+    follow_redirect!
+
+    assert_select '.gh-plate', /Nieprawidłowy token/
 
     # The bug this pins: the close button dispatched flash#dismiss but nothing
     # carried data-controller="flash", so the action had no controller to reach.
@@ -83,6 +84,19 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
     end
     # The close control must not be the underlined link style.
     assert_select 'button.gh-close.gh-linkbtn', false
+  end
+
+  test 'a notice rises as a toast instead of sitting in the content' do
+    user = FactoryBot.create(:user)
+    post auth_passwordless_path, params: { email: user.email }
+    travel 61.seconds do
+      post auth_passwordless_path, params: { email: user.email }
+      follow_redirect!
+    end
+
+    assert_select '#gh-toasts[data-controller=toast] template[data-toast-target=seed]',
+                  'Wysłaliśmy nowy link. Poprzedni już nie działa.'
+    assert_select '#flash-messages', false
   end
 
   test 'the table pattern layer is present' do

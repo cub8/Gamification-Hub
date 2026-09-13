@@ -137,4 +137,113 @@
     font: 450 13px/1.4 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
+
+  /* A bare count, sized to be read across a room (21-item.css:34). */
+  .gh-inp--num input {
+    width: 104px;
+    text-align: right;
+    font: 800 22px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Switch (20-form.css:50-54) ----
+
+     The mockup uses <button role="switch"> because its dialog re-renders from
+     JS state on every toggle. Ours is a real checkbox with role="switch": it
+     posts its own value, toggles with Space, and needs no hidden field, so the
+     form still works with JavaScript off. The knob is ::after rather than the
+     mockup's child <i> — a replaced element like <input> cannot have children,
+     which is the whole reason the mockup reached for a <button>. */
+  .gh-swrow {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .gh-swrow b {
+    display: block;
+    font: 650 14.5px/1.3 var(--gh-f-ui);
+  }
+
+  .gh-sw {
+    --gh-c: 6px;
+    position: relative;
+    width: 54px;
+    height: 30px;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    appearance: none;
+    background: var(--gh-card-3);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-sw::after {
+    --gh-c: 5px;
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    background: var(--gh-ink-3);
+    transition: left 0.15s;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-sw:checked {
+    background: var(--gh-item);
+  }
+
+  .gh-sw:checked::after {
+    left: 28px;
+    background: var(--gh-on-item);
+  }
+
+  .gh-sw:focus-visible {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 3px;
+  }
+
+  /* The code, big enough to read from the back row (20-form.css:103). */
+  .gh-code-big {
+    --gh-c: 10px;
+    display: inline-block;
+    margin: 6px 0 12px;
+    padding: 14px 20px;
+    background: var(--gh-card-2);
+    font: 700 36px/1 var(--gh-f-mono);
+    letter-spacing: 0.16em;
+    color: var(--gh-ink);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
 }
