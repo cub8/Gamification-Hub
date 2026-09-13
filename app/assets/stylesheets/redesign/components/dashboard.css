@@ -538,6 +538,17 @@
   }
 
   @media (max-width: 720px) {
+    /* Title over its actions, not beside them (00-base.css:548). Without this
+       the flex row survives on a phone and the button cluster squeezes the
+       lead down to one word per line. Only shows up on a page head that HAS
+       actions, which is why the two start screens never revealed it. */
+    .gh-phead {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      padding: 18px;
+    }
+
     .gh-sgrid {
       grid-template-columns: minmax(0, 1fr);
     }

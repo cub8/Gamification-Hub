@@ -52,6 +52,18 @@ module RedesignHelper
                                                     .join
   end
 
+  # Monogram for a group with no artwork uploaded. Unlike gh_initials this
+  # skips short words, so "Wstęp do algorytmiki" reads "WA" and not "WD".
+  # Mirrors the mockup's `mono()` (30-gh.js:23).
+  def gh_monogram(name)
+    words = name.to_s.split(/\s+/).select { |word| word.length > 2 }
+    words = name.to_s.split(/\s+/) if words.empty?
+
+    words.first(2)
+         .map { |word| word[0].to_s.upcase }
+         .join
+  end
+
   # Which of the five avatar tints a name gets. Stable for a given name and
   # deliberately not tied to the user id, so the same person is the same colour
   # wherever they appear. Mirrors the mockup's `hue()` (00-shared.js:167).

@@ -125,4 +125,12 @@
   .gh-close:hover {
     color: var(--gh-ink);
   }
+
+  /* A wrapping row of buttons (20-form.css:104) — the action cluster in a page
+     header, a card footer or a dialog. */
+  .gh-rowb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }

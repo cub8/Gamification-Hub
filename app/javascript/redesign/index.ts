@@ -1,6 +1,7 @@
 import "@redesign/countdown_controller"
 import "@redesign/dialog_controller"
 import "@redesign/flash_controller"
+import "@redesign/group_search_controller"
 import "@redesign/menu_controller"
 import "@redesign/sidebar_controller"
 import "@redesign/theme_controller"

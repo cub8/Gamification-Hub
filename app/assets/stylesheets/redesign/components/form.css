@@ -76,4 +76,56 @@
     color: var(--gh-heart-ink);
     font: 620 13.5px var(--gh-f-ui);
   }
+
+  /* Search field (00-base.css:396-400). Same octagon well as an input, but it
+     wraps the icon and the field together, so the shape lives on the label. */
+  .gh-search {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 260px;
+    height: 40px;
+    padding: 0 12px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-search::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-search:focus-within::before {
+    background: var(--gh-card-3);
+  }
+
+  .gh-search:focus-within {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  .gh-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font: 500 14.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    outline: none;
+  }
 }

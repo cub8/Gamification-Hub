@@ -53,8 +53,10 @@
 @import "./redesign/components/typography.css";
 @import "./redesign/components/icons.css";
 @import "./redesign/components/table.css";
+@import "./redesign/components/tag.css";
 @import "./redesign/components/chrome.css";
 @import "./redesign/components/card.css";
 @import "./redesign/components/form.css";
 @import "./redesign/components/auth.css";
 @import "./redesign/components/dashboard.css";
+@import "./redesign/components/groups.css";

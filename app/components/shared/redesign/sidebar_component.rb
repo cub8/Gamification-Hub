@@ -27,13 +27,19 @@ class Shared::Redesign::SidebarComponent < ViewComponent::Base
     @groups ||= user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
   end
 
-  # "Prowadzisz" for a group you own or co-teach, "Uczysz się" for one you
-  # joined as a student. Owner is checked first: owning implies teaching.
+  # "Prowadzisz" for a group you own, "Wspierasz" for one you co-teach,
+  # "Uczysz się" for one you joined as a student. Owner is checked first:
+  # owning implies teaching. The labels come from StoryGroupsListing so this
+  # list and the "Grupy" screen cannot disagree about what you are in a group.
   def role_label(story_group)
-    return 'Prowadzisz' if story_group.owner_id == user.id
-    return 'Wspierasz'  if teacher_group_ids.include?(story_group.id)
+    StoryGroupsListing::ROLE_LABELS[role_for(story_group)]
+  end
 
-    'Uczysz się'
+  def role_for(story_group)
+    return :own if story_group.owner_id == user.id
+    return :sup if teacher_group_ids.include?(story_group.id)
+
+    :lrn
   end
 
   def teacher_group_ids

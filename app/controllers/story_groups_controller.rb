@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
+  # Only #index is converted to the "Card Table" redesign. #show, #new and
+  # #edit still render Bootstrap markup and so stay on the application layout.
+  # RedesignLayout is all-or-nothing, hence its two lines inlined here instead
+  # of `include RedesignLayout`.
+  layout 'redesign', only: :index
+  helper RedesignHelper
+
   before_action :set_story_group, only: %i[show edit update destroy]
 
   # GET /story_groups
   def index
-    all_groups = policy_scope(StoryGroup)
+    scope = policy_scope(StoryGroup)
 
-    @story_groups = case params[:filter]
-                    when 'mine'    then all_groups.where(owner_id: current_user.id)
-                    when 'student' then all_groups.where(id: current_user.student_story_groups.select(:id))
-                    when 'teacher' then all_groups.where(id: current_user.teacher_story_groups.select(:id))
-                    else                all_groups
-                    end.with_attached_icon
-
-    @show_mine_tab    = all_groups.exists?(owner_id: current_user.id)
-    @show_student_tab = current_user.student_story_groups.exists?
-    @show_teacher_tab = current_user.teacher_story_groups.exists?
+    @listing = StoryGroupsListing.new(scope: scope, user: current_user, filter: params[:filter]).load
   end
 
   # GET /story_groups/1
