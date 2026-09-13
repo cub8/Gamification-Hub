@@ -17,7 +17,8 @@ import { Controller } from "@hotwired/stimulus"
  *                                          action: "turbo:frame-load->dialog#open" }
  *
  * Links open it exactly as before: data: { turbo_frame: "modal" }.
- * Close buttons inside the frame use data: { action: "dialog#close" }.
+ * Close buttons inside the frame use data: { action: "dialog#close" }, and the
+ * dialog itself should carry click->dialog#closeOnBackdrop for light dismiss.
  */
 class DialogController extends Controller<HTMLDialogElement> {
   static targets = ["frame"]
@@ -37,6 +38,21 @@ class DialogController extends Controller<HTMLDialogElement> {
   }
 
   close() {
+    this.element.close()
+  }
+
+  /**
+   * Light dismiss. A native <dialog> does NOT close on an outside click — only
+   * Escape is free — so without this the panel could only be dismissed with the
+   * keyboard.
+   *
+   * The ::backdrop is painted by the dialog itself, so a click on it reports
+   * the dialog as the target while a click on anything inside reports that
+   * child. Comparing target to currentTarget is what separates the two.
+   */
+  closeOnBackdrop(event: MouseEvent) {
+    if (event.target !== event.currentTarget) return
+
     this.element.close()
   }
 

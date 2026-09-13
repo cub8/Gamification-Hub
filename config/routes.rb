@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     get '/:provider/callback', to: 'usos#create', as: :callback
     resource :passwordless, only: %i[new create], controller: 'passwordless'
     get 'passwordless/verify', to: 'passwordless#verify', as: :passwordless_verify
+    get 'passwordless/inbox', to: 'passwordless#inbox', as: :passwordless_inbox
   end
 
   get '/login', to: 'sessions#new', as: :login

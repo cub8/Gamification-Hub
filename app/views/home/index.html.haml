@@ -1,28 +1,8 @@
-- content_for :title, "Strona główna"
+- content_for :title, 'Start'
 
-.dark-page
-  .mb-5
-    %h1.h2.mb-1 Witaj, #{@current_user.full_name}!
-    %p.text-dimmed
-      - if @current_user.teacher?
-        Oto twój panel nauczyciela.
-      - else
-        Oto twój panel studenta.
-
-  .row.g-4
-    .col-12.col-lg-4
-      .form-section.p-4
-        .section-title.mb-3 Twój profil
-        .d-flex.flex-column.gap-3
-          .d-flex.flex-column.gap-1
-            %span.text-dimmed.text-label Email
-            %span= @current_user.email
-          .d-flex.flex-column.gap-1
-            %span.text-dimmed.text-label Uczelnia
-            %span= @current_user.university_name.presence || "—"
-          .d-flex.flex-column.gap-1
-            %span.text-dimmed.text-label Numer indeksu
-            %span= @current_user.university_number.presence || "—"
-          .d-flex.flex-column.gap-1
-            %span.text-dimmed.text-label USOS ID
-            %span= @current_user.usos_id.presence || "—"
+-# Dispatcher, mirroring story_groups/show.html.haml. Role comes from the
+-# User enum, the same check this screen used before the conversion.
+- if @current_user.teacher?
+  = render 'teacher_start'
+- else
+  = render 'student_start'

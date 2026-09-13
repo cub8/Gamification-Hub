@@ -2,11 +2,11 @@
 
 class SessionsController < ApplicationController
   include LoggedUserRedirector
-
-  layout 'public'
+  include RedesignLayout
 
   skip_before_action :authenticate!, only: :new
   before_action :redirect_logged_user, only: :new
+  before_action -> { @chrome = false }, only: :new
 
   def new; end
 

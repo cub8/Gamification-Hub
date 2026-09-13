@@ -1,0 +1,478 @@
+/* --------------------------------------------------------------------------
+   Application chrome: header, desktop sidebar, content well, mobile tab bar.
+
+   Ported from design/mockup-src/css/00-base.css (208-276 for the shell,
+   531-616 for the 720px swap) and js-expanded/10-core.js for the structure.
+
+   Only the OUT-OF-GROUP variant is here (the mockup's `chrome: 'app'` routes).
+   The in-group deck, its section nav, the group switcher and the balance chip
+   land with the first group screen — see the plan. Nothing here should grow a
+   `.gh-deck` / `.gh-gsw` / `.gh-bal` rule until then.
+
+   The shell is a fixed-height flex column with internal scrolling, the same
+   model the Bootstrap layout already uses (`body.vh-100.overflow-hidden` +
+   `#app-content.overflow-auto`). That is what lets the tab bar stay pinned on
+   phones without position:fixed.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* ---- Shell ---- */
+
+  .gh-shell {
+    /* dvh so the mobile URL bar cannot push the tab bar off-screen; the vh
+       line above it is the fallback for browsers without dvh. */
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .gh-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  /* The content well. Position:relative + overflow:hidden is what lets the
+     table texture and the scrolling content both fill it exactly. */
+  .gh-tw {
+    flex: 1;
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .gh-main {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+    padding: 26px 30px 40px;
+    scrollbar-gutter: stable;
+  }
+
+  /* ---- Header ---- */
+
+  .gh-hd {
+    flex: 0 0 auto;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px 0 14px;
+    background: var(--gh-chrome);
+    border-bottom: 1px solid var(--gh-line);
+    position: relative;
+    z-index: 6;
+  }
+
+  .gh-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--gh-ink);
+    font: 800 19px/1 var(--gh-f-ui);
+    font-stretch: 86%;
+    letter-spacing: -0.01em;
+  }
+
+  .gh-logo img {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    object-fit: contain;
+  }
+
+  .gh-sp {
+    flex: 1;
+  }
+
+  .gh-iconbtn {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: var(--gh-ink-2);
+    text-decoration: none;
+  }
+
+  .gh-iconbtn:hover {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+  }
+
+  /* Container for the unread badge.
+     .gh-iconbtn is `display: grid; place-items: center` with a single cell, so
+     a second IN-FLOW child creates a second row and shoves the glyph upward —
+     the bell looked off-centre for exactly this reason. Taking the slot out of
+     flow restores one centred cell, and the badge positions against it. */
+  .gh-dot-slot {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Unread badge on the bell. */
+  .gh-count {
+    --gh-c: 5px;
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 4px;
+    display: grid;
+    place-items: center;
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+    font: 780 11px/1 var(--gh-f-ui);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* Both theme glyphs ship and CSS picks one. This cannot be a single
+     server-rendered icon: with no cookie set, `gh_theme` is nil and the server
+     genuinely does not know which way prefers-color-scheme will resolve. The
+     three selector states mirror tokens.css exactly. */
+  .gh-ic-sun {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-gh-theme="light"]) .gh-ic-sun {
+      display: block;
+    }
+
+    :root:not([data-gh-theme="light"]) .gh-ic-moon {
+      display: none;
+    }
+  }
+
+  :root[data-gh-theme="dark"] .gh-ic-sun {
+    display: block;
+  }
+
+  :root[data-gh-theme="dark"] .gh-ic-moon {
+    display: none;
+  }
+
+  /* ---- Avatar ---- */
+
+  .gh-av {
+    --gh-c: 8px;
+    --gh-h: var(--gh-item);
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    font: 760 14px/1 var(--gh-f-ui);
+    color: var(--gh-ink);
+    background: color-mix(in srgb, var(--gh-h) 34%, var(--gh-card));
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-av--sm {
+    --gh-c: 5px;
+    width: 28px;
+    height: 28px;
+    font-size: 11.5px;
+  }
+
+  .gh-av[data-gh-h="0"] { --gh-h: var(--gh-item); }
+  .gh-av[data-gh-h="1"] { --gh-h: var(--gh-badge); }
+  .gh-av[data-gh-h="2"] { --gh-h: var(--gh-rank); }
+  .gh-av[data-gh-h="3"] { --gh-h: var(--gh-focus); }
+  .gh-av[data-gh-h="4"] { --gh-h: var(--gh-heart); }
+
+  .gh-avbtn {
+    border: 0;
+    background: none;
+    padding: 2px;
+    cursor: pointer;
+  }
+
+  /* ---- Group thumbnail ---- */
+
+  .gh-gthumb {
+    --gh-c: 6px;
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    overflow: hidden;
+    background-color: var(--gh-card-3);
+    color: var(--gh-ink-2);
+    font: 720 10px/1 var(--gh-f-ui);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-gthumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gh-gthumb--lg {
+    --gh-c: 8px;
+    width: 46px;
+    height: 46px;
+    font-size: 15px;
+  }
+
+  /* ---- Sidebar ---- */
+
+  .gh-sb {
+    width: 276px;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--gh-chrome);
+    border-right: 1px solid var(--gh-line);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 10px;
+    transition: width 0.18s;
+  }
+
+  .gh-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .gh-nav--primary {
+    padding: 0 10px;
+  }
+
+  .gh-nl {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    color: var(--gh-ink-2);
+    text-decoration: none;
+    font: 560 15px/1.2 var(--gh-f-ui);
+    white-space: nowrap;
+  }
+
+  .gh-nl:hover {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+  }
+
+  /* The active marker is an inset shadow, not a border: it must not shift the
+     text, and the sidebar is not a clipped surface so box-shadow is safe here. */
+  .gh-nl--on {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+    font-weight: 720;
+    box-shadow: inset 4px 0 0 var(--gh-item);
+  }
+
+  .gh-sb-sec {
+    font: 680 13px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-3);
+    padding: 18px 22px 8px;
+  }
+
+  .gh-glist {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    gap: 2px;
+  }
+
+  .gh-gl {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 7px 10px;
+    text-decoration: none;
+    color: var(--gh-ink);
+  }
+
+  .gh-gl:hover {
+    background: var(--gh-card-2);
+  }
+
+  .gh-gl .gh-gthumb {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+
+  .gh-gl-t {
+    min-width: 0;
+  }
+
+  .gh-gl-t b {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    font-stretch: 90%;
+  }
+
+  .gh-gl-t small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+    margin-top: 1px;
+  }
+
+  .gh-sb-foot {
+    margin-top: auto;
+    padding: 10px;
+  }
+
+  .gh-sb-col {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    border: 0;
+    background: none;
+    padding: 9px 12px;
+    cursor: pointer;
+    font: 560 14px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+
+  .gh-sb-col:hover {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+  }
+
+  /* Collapsed: icons only. Driven by a class the sidebar controller toggles,
+     never by a breakpoint — the mockup has no width-driven collapse and
+     inventing one would fight the user's explicit choice. */
+  .gh-sb--collapsed {
+    width: 82px;
+  }
+
+  .gh-sb--collapsed .gh-nl > span,
+  .gh-sb--collapsed .gh-sb-col > span,
+  .gh-sb--collapsed .gh-sb-sec,
+  .gh-sb--collapsed .gh-gl-t {
+    display: none;
+  }
+
+  .gh-sb--collapsed .gh-nl,
+  .gh-sb--collapsed .gh-sb-col,
+  .gh-sb--collapsed .gh-gl {
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  /* ---- Mobile tab bar ---- */
+
+  .gh-tabbar {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    .gh-sb {
+      display: none;
+    }
+
+    .gh-hd {
+      height: 58px;
+      padding: 0 8px 0 10px;
+      gap: 6px;
+    }
+
+    .gh-logo-word {
+      display: none;
+    }
+
+    .gh-hd-join span {
+      display: none;
+    }
+
+    .gh-hd-theme {
+      display: none;
+    }
+
+    .gh-av {
+      width: 34px;
+      height: 34px;
+    }
+
+    .gh-main {
+      padding: 16px 12px 28px;
+      scrollbar-gutter: auto;
+    }
+
+    .gh-tabbar {
+      flex: 0 0 auto;
+      display: flex;
+      height: 66px;
+      background: var(--gh-chrome);
+      border-top: 1px solid var(--gh-line);
+      position: relative;
+      z-index: 6;
+    }
+
+    .gh-tab {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+      font: 620 11.5px/1 var(--gh-f-ui);
+      color: var(--gh-ink-3);
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .gh-tab--on {
+      color: var(--gh-ink);
+    }
+
+    .gh-tab--on::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 22%;
+      right: 22%;
+      height: 3px;
+      background: var(--gh-item);
+    }
+  }
+}

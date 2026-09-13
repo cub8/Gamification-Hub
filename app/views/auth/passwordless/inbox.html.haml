@@ -1,0 +1,30 @@
+- content_for :title, 'Sprawdź skrzynkę'
+- waiting_label = 'Wyślij ponownie za %{time}'
+- idle_label    = 'Wyślij link ponownie'
+
+.text-center
+  .gh-big-ic.mx-auto
+    %i.fa-solid.fa-envelope
+  %h1.gh-h1 Sprawdź skrzynkę
+  %p.gh-lead.mx-auto Wysłaliśmy link na adres
+  %p.gh-addr= @email
+  %p.gh-small.mt-4
+    = "Link działa przez #{gh_minutes(LoginToken::EXPIRES_IN.in_minutes.to_i)}."
+    Jeśli go nie widzisz, zajrzyj do folderu Spam.
+
+  .gh-stack
+    = button_to auth_passwordless_path,
+      params: { email: @email },
+      disabled: @cooldown.positive?,
+      class: 'gh-btn gh-btn--sec',
+      data: { countdown_target: 'button' },
+      form: { data: { controller: 'countdown',
+                      countdown_seconds_value: @cooldown,
+                      countdown_idle_label_value: idle_label,
+                      countdown_waiting_label_value: waiting_label } } do
+      - if @cooldown.positive?
+        = waiting_label.sub('%{time}', gh_mmss(@cooldown))
+      - else
+        = idle_label
+
+    = link_to 'Zmień adres e-mail', new_auth_passwordless_path, class: 'gh-linkbtn'

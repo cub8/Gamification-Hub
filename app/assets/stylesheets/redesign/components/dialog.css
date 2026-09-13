@@ -1,0 +1,211 @@
+@layer components {
+
+  /* ---- Dialog ---- */
+
+  .gh-dialog {
+    --gh-c: 14px;
+    border: 0;
+    padding: 0;
+    /* Tailwind's preflight zeroes `margin` on `*`, which destroys the UA
+       stylesheet's `margin: auto` on <dialog> — without this line a modal
+       dialog renders in the top-left corner instead of centred. */
+    margin: auto;
+    background: transparent;
+    color: var(--gh-ink);
+    max-width: min(92vw, 560px);
+    max-height: 86vh;
+  }
+
+  .gh-dialog::backdrop {
+    background: var(--gh-scrim);
+  }
+
+  /* The surface is painted on the SCROLLING element itself, exactly as the
+     mockup's .pop is (00-base.css). It must not be an absolutely positioned
+     ::before layer: an abspos child of a scroll container scrolls away with the
+     content, so a long list would scroll out from under its own background. A
+     background on a scroll container is painted against its padding box and
+     stays put, which is the whole point. */
+  .gh-dialog-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 86vh;
+    /* --chrome, not --card: deeper than the cards behind it, so the panel
+       separates from the page instead of blending into it. The mockup paints
+       --chrome on .dlg and .pop alike, and it is the header bar's colour. */
+    background: var(--gh-chrome);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+}
+
+@layer components {
+
+  /* ---- Menu dialogs: the avatar menu and the mobile "Więcej" sheet ----
+
+     Ported from 00-base.css:452-460 (.dlg / .grab) and 506-510 (.menu), plus
+     the 720px block that turns every dialog into a bottom sheet.
+
+     These are plain server-rendered <dialog>s driven by menu_controller, not
+     the shared turbo-frame modal — dialog_controller opens on
+     turbo:frame-load and must keep doing only that. */
+
+  .gh-dialog--menu {
+    max-width: min(92vw, 380px);
+  }
+
+  /* Anchored panel: the account menu, the "Więcej" sheet and the notifications
+     list. Corner-pinned under the header, matching the mockup's
+     `.pop-w{top:64px;right:14px;width:370px}` — the mockup does not anchor to
+     the specific trigger either, and neither do we. */
+  .gh-dialog--anchored {
+    margin: 64px 14px auto auto;
+    max-width: min(92vw, 370px);
+  }
+
+  /* No scrim on desktop: the mockup's `.pop-ovl` has no background at all and
+     only gains `var(--scrim)` at ≤720px, where the panel becomes a sheet.
+     Written as a min-width rule so the base scrim needs no undo below it.
+
+     The dialog stays `showModal()` rather than `show()`, so the page behind is
+     inert while it is open. That is deliberate: a non-modal dialog is laid out
+     in normal flow, where `.gh-shell { overflow: hidden }` would clip it. The
+     top layer is what makes this robust. */
+  @media (min-width: 721px) {
+    .gh-dialog--anchored::backdrop {
+      background: transparent;
+    }
+
+    .gh-dialog--anchored .gh-dialog-body {
+      max-height: 520px;
+    }
+  }
+
+  .gh-menu {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  .gh-menu button,
+  .gh-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 8px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    color: var(--gh-ink);
+    font: 560 15px var(--gh-f-ui);
+  }
+
+  .gh-menu button:hover,
+  .gh-menu a:hover {
+    background: var(--gh-card-2);
+  }
+
+  .gh-menu i {
+    width: 20px;
+    text-align: center;
+    color: var(--gh-ink-2);
+  }
+
+  /* Section label: "Nowe" / "Wcześniej" in the notifications panel, "Konto" in
+     the "Więcej" sheet. Lifted from the mockup's 90-core.css `.pop-sec`. */
+  .gh-pop-sec {
+    font: 680 11.5px/1.2 var(--gh-f-ui);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--gh-ink-3);
+    padding: 10px 0 4px;
+  }
+
+  /* Panel header: title left, a link-style action right. */
+  .gh-pop-h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  /* button_to wraps its button in a <form>; display:contents hands the flex
+     slot straight to the button so the form does not become a layout box. */
+  .gh-pop-h form {
+    display: contents;
+  }
+
+  .gh-pop-h .gh-linkbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+  }
+
+  /* Identity block at the top of the avatar menu. */
+  .gh-pop-me {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gh-line);
+  }
+
+  .gh-pop-me b {
+    display: block;
+    font: 720 15px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-pop-me small {
+    font-size: 13px;
+    color: var(--gh-ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  /* Drag handle: only meaningful once the dialog is a bottom sheet. */
+  .gh-grab {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    /* Every dialog becomes a bottom sheet: full width, pinned to the bottom
+       edge, and only the top corners cut — the bottom two would float above
+       the screen edge. */
+    .gh-dialog,
+    .gh-dialog--menu,
+    .gh-dialog--anchored {
+      margin: auto auto 0;
+      width: 100%;
+      max-width: 100%;
+      max-height: 92dvh;
+    }
+
+    /* Only the top corners are cut — the bottom two would float above the
+       screen edge. */
+    .gh-dialog-body {
+      max-height: 92dvh;
+      padding: 10px 16px 20px;
+      clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%, 0 18px);
+    }
+
+    .gh-grab {
+      display: block;
+      width: 44px;
+      height: 4px;
+      margin: 0 auto 14px;
+      background: var(--gh-line-2);
+    }
+  }
+}

@@ -1,0 +1,23 @@
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    background: var(--gh-table);
+  }
+
+  body {
+    background: var(--gh-table);
+    color: var(--gh-ink);
+    font-family: var(--gh-f-ui);
+    font-size: 15px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+}

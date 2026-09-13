@@ -1,0 +1,13 @@
+%nav.gh-tabbar{ 'aria-label': 'Nawigacja' }
+  - items.each do |item|
+    - on = current?(item.path)
+    = link_to item.path, class: "gh-tab #{'gh-tab--on' if on}",
+      'aria-current': ('page' if on),
+      data: (item.icon == 'fa-bell' ? { turbo_frame: 'panel' } : {}) do
+      %i.fa-solid{ class: item.icon }
+      %span= item.label
+
+  %button.gh-tab{ type: 'button',
+                  data: { action: 'menu#open', menu_id_param: 'gh-more-sheet' } }
+    %i.fa-solid.fa-ellipsis
+    %span Więcej

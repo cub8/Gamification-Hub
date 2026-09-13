@@ -1,0 +1,37 @@
+@layer components {
+
+  /* ---- Type scale ---- */
+
+  .gh-h1 {
+    font: 780 36px/1.04 var(--gh-f-ui);
+    font-stretch: 86%;
+    letter-spacing: -.012em;
+  }
+
+  .gh-h2 {
+    font: 760 21px/1.15 var(--gh-f-ui);
+    font-stretch: 90%;
+  }
+
+  .gh-h3 {
+    font: 720 17px/1.2 var(--gh-f-ui);
+    font-stretch: 92%;
+  }
+
+  .gh-lead {
+    font: 450 16px/1.45 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+    margin-top: 6px;
+    max-width: 62ch;
+  }
+
+  .gh-num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-small {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--gh-ink-2);
+  }
+}

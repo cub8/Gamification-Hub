@@ -1,0 +1,128 @@
+@layer components {
+
+  /* ---- Buttons: flat chips with a physical bottom edge ---- */
+
+  .gh-btn {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px 3px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: 680 15px/1 var(--gh-f-ui);
+    color: var(--gh-on-item);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform .08s;
+  }
+
+  .gh-btn::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+    background: linear-gradient(to top, var(--gh-item-edge) 0 3px, var(--gh-item) 3px);
+  }
+
+  .gh-btn:hover::before {
+    background: linear-gradient(to top, var(--gh-item-edge) 0 3px,
+      color-mix(in srgb, var(--gh-item) 88%, #fff) 3px);
+  }
+
+  .gh-btn:active {
+    transform: translateY(2px);
+  }
+
+  .gh-btn:active::before {
+    background: linear-gradient(to top, var(--gh-item-edge) 0 1px, var(--gh-item) 1px);
+  }
+
+  .gh-btn--sec {
+    color: var(--gh-ink);
+  }
+
+  .gh-btn--sec::before {
+    background: linear-gradient(to top, var(--gh-line-2) 0 3px, var(--gh-card-3) 3px);
+  }
+
+  .gh-btn--sec:hover::before {
+    background: linear-gradient(to top, var(--gh-line-2) 0 3px,
+      color-mix(in srgb, var(--gh-card-3) 80%, var(--gh-ink) 8%) 3px);
+  }
+
+  .gh-btn--gold {
+    color: var(--gh-on-rank);
+  }
+
+  .gh-btn--gold::before {
+    background: linear-gradient(to top, var(--gh-rank-edge) 0 3px, var(--gh-rank) 3px);
+  }
+
+  .gh-btn--sm {
+    min-height: 34px;
+    padding: 0 12px 3px;
+    font-size: 14px;
+  }
+
+  .gh-btn[disabled] {
+    cursor: not-allowed;
+    color: var(--gh-ink-3);
+    transform: none;
+  }
+
+  .gh-btn[disabled]::before {
+    background: var(--gh-card-3);
+  }
+
+  .gh-linkbtn {
+    border: 0;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    font: 600 14px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .gh-linkbtn:hover {
+    color: var(--gh-ink);
+  }
+
+  /* Icon-only dismiss control (flash messages, dialogs).
+     Deliberately NOT .gh-linkbtn — that one is underlined by design, which
+     looks wrong on a glyph. */
+  .gh-close {
+    flex: 0 0 auto;
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--gh-ink-3);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .gh-close:hover {
+    color: var(--gh-ink);
+  }
+}

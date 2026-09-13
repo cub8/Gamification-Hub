@@ -33,4 +33,12 @@ class StoryGroupStudent < ApplicationRecord
                .order(required_currency_value: :desc)
                .first
   end
+
+  # The rank being worked toward. Nil once the top rank is reached, and also
+  # nil when the group defines no ranks at all — callers must handle both.
+  def next_rank
+    story_group.ranks.where('required_currency_value > ?', total_currency)
+               .order(required_currency_value: :asc)
+               .first
+  end
 end

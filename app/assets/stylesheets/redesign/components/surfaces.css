@@ -1,0 +1,53 @@
+@layer components {
+
+  /* ---- Surfaces ---- */
+
+  .gh-panel {
+    --gh-c: 14px;
+    position: relative;
+    isolation: isolate;
+    filter: drop-shadow(0 3px 0 var(--gh-edge));
+  }
+
+  .gh-panel::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+    background: var(--gh-card);
+  }
+
+  .gh-plate {
+    --gh-c: 8px;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .gh-plate::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+    background: var(--gh-chrome);
+  }
+}

@@ -1,0 +1,36 @@
+%header.gh-hd
+  = link_to home_path, class: 'gh-logo', 'aria-label': 'Gamification Hub, start' do
+    = image_tag 'logo.png', alt: ''
+    %span.gh-logo-word Gamification Hub
+
+  %span.gh-sp
+
+  - if user.student?
+    = link_to new_join_path, class: 'gh-btn gh-btn--sec gh-btn--sm gh-hd-join',
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-plus
+      %span Dołącz do grupy
+
+  -# Both glyphs ship; chrome.css shows the one for the theme you would switch
+  -# TO. With no cookie set the server cannot know how prefers-color-scheme
+  -# resolves, so this cannot be a single server-rendered icon.
+  %button.gh-iconbtn.gh-hd-theme{ type: 'button',
+                                  data: { action: 'theme#toggle' },
+                                  'aria-label': 'Przełącz motyw' }
+    %i.fa-solid.fa-moon.gh-ic-moon
+    %i.fa-solid.fa-sun.gh-ic-sun
+
+  - if user.teacher?
+    = helpers.turbo_stream_from user, :notifications
+    -# The panel frame, not the modal one: notifications are a popover in the
+    -# mockup — corner-pinned and unscrimmed on desktop — not a centred dialog.
+    = link_to notifications_path, class: 'gh-iconbtn',
+      data: { turbo_frame: 'panel' }, 'aria-label': bell_label do
+      %i.fa-solid.fa-bell
+      = render 'layouts/redesign/notification_dot', count: unread_count
+
+  %button.gh-avbtn{ type: 'button',
+                    data: { action: 'menu#open', menu_id_param: 'gh-account-menu' },
+                    'aria-label': "Konto: #{user.full_name}" }
+    %span.gh-av{ 'data-gh-h': helpers.gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
+      = helpers.gh_initials(user.full_name)

@@ -1,0 +1,79 @@
+/* Form fields. Lifted from design/mockup-src/css/20-form.css. */
+
+@layer components {
+
+  /* ---- Form fields ---- */
+
+  .gh-fld {
+    margin-top: 16px;
+  }
+
+  .gh-fld > label {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    margin-bottom: 8px;
+  }
+
+  .gh-inp {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+  }
+
+  .gh-inp::before,
+  .gh-inp::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-inp::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-inp::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-inp:focus-within::before {
+    background: var(--gh-focus);
+  }
+
+  .gh-inp--bad::before {
+    background: var(--gh-heart);
+  }
+
+  .gh-inp input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 12px 14px;
+    font: 500 15.5px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink);
+  }
+
+  .gh-err {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 7px;
+    color: var(--gh-heart-ink);
+    font: 620 13.5px var(--gh-f-ui);
+  }
+}

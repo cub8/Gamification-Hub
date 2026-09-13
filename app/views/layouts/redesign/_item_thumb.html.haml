@@ -1,0 +1,12 @@
+-# An item as a mini entity card: the mockup's miniCard() (00-shared.js:173).
+-# Orange frame, because an item is orange in this design language.
+-#
+-# `item` may be nil — a purchase whose Item was hard deleted. Soft delete (D1)
+-# will make that impossible; until then the fallback glyph stands in.
+%span.gh-card.gh-mc
+  %span.gh-card-f
+    %span.gh-card-i
+      - if item&.image&.attached?
+        = image_tag item.image, alt: ''
+      - else
+        %i.fa-solid.fa-flask{ 'aria-hidden': 'true' }

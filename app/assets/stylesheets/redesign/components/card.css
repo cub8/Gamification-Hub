@@ -1,0 +1,254 @@
+/* --------------------------------------------------------------------------
+   The card primitive.
+
+   Ported from design/mockup-src/css/00-base.css:135-170. Entities are cards and
+   the frame colour carries the meaning: item = orange, badge = teal,
+   rank/currency = gold, sealed = grey, neutral = everything else.
+
+   The frame is a real layer (`.gh-card-f` painted `--gh-frame`, with
+   `.gh-card-i` inset on top of it), never a border — a border breaks at the
+   cut corners. The drop-shadow gives the card its physical edge.
+
+   All five variants ship even though the start screens only use `--neutral`:
+   each is a two-line custom-property swap, and the shop, badge and rank screens
+   need them next.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  .gh-card {
+    --gh-cc: 12px;
+    --gh-frame: var(--gh-item);
+    --gh-frame-edge: var(--gh-item-edge);
+    position: relative;
+    display: block;
+    filter: drop-shadow(0 3px 0 var(--gh-frame-edge));
+  }
+
+  .gh-card--badge {
+    --gh-frame: var(--gh-badge);
+    --gh-frame-edge: var(--gh-badge-edge);
+  }
+
+  .gh-card--gold {
+    --gh-frame: var(--gh-rank);
+    --gh-frame-edge: var(--gh-rank-edge);
+  }
+
+  .gh-card--sealed {
+    --gh-frame: var(--gh-lock);
+    --gh-frame-edge: var(--gh-lock-edge);
+  }
+
+  .gh-card--neutral {
+    --gh-frame: var(--gh-neutral);
+    --gh-frame-edge: var(--gh-neutral-edge);
+  }
+
+  .gh-card-f {
+    --gh-c: var(--gh-cc);
+    display: block;
+    height: 100%;
+    padding: 5px;
+    background: var(--gh-frame);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-card-i {
+    --gh-c: calc(var(--gh-cc) - 2px);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--gh-card);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 11px 10px 9px 12px;
+  }
+
+  .gh-card-name {
+    flex: 1;
+    min-width: 0;
+    font: 720 17px/1.12 var(--gh-f-ui);
+    font-stretch: 80%;
+    text-wrap: balance;
+    hyphens: auto;
+  }
+
+  .gh-card-foot {
+    margin-top: auto;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 66px;
+  }
+
+  .gh-card-foot .gh-btn {
+    flex: 1;
+  }
+
+  /* Artwork well. Without an image it is a hatched field tinted by the frame
+     colour, so a card with no upload still reads as an entity of its kind. */
+  .gh-art {
+    --gh-c: 8px;
+    position: relative;
+    margin: 0 10px;
+    aspect-ratio: 16 / 10;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--gh-frame) 12%, transparent) 0 6px,
+        transparent 6px 12px
+      ),
+      color-mix(in srgb, var(--gh-frame) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-frame) 58%, var(--gh-ink));
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* The glyph reads at full frame colour on dark, muted toward ink on light.
+     Three selector states, mirroring tokens.css. */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-gh-theme="light"]) .gh-art {
+      color: var(--gh-frame);
+    }
+  }
+
+  :root[data-gh-theme="dark"] .gh-art {
+    color: var(--gh-frame);
+  }
+
+  .gh-art img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gh-art i {
+    font-size: 40px;
+  }
+
+  /* Progress meter (rank progress on the group cards). */
+  .gh-bar {
+    --gh-c: 4px;
+    position: relative;
+    height: 10px;
+    background: var(--gh-card-3);
+    overflow: hidden;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-bar > i {
+    --gh-c: 4px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--gh-p);
+    background: var(--gh-rank);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* The gold-rimmed currency token (20-form.css:40). A cream face inside a
+     gold rim, so an uploaded currency icon always reads as a coin. */
+  .gh-tok {
+    --gh-c: 29%;
+    --gh-s: 24px;
+    display: inline-grid;
+    flex: 0 0 auto;
+    width: var(--gh-s);
+    height: var(--gh-s);
+    padding: max(2px, calc(var(--gh-s) * 0.08));
+    background: var(--gh-rank);
+    vertical-align: middle;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-tok > span {
+    --gh-c: 29%;
+    display: grid;
+    place-items: center;
+    background: #fff8e6;
+    color: #221a2b;
+    font: 800 11px/1 var(--gh-f-ui);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-tok img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
+}

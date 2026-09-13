@@ -12,11 +12,22 @@ type Theme = "light" | "dark"
  *
  * The attribute is namespaced (`data-gh-theme`, not `data-theme`) so it cannot
  * be confused with another framework's theming while Bootstrap is still around.
+ *
+ * The label names the theme you would switch TO, matching the mockup. Both
+ * labels come from the view so the Polish copy stays in the template.
  */
 class ThemeController extends Controller {
-  static values = { cookie: { type: String, default: "gh_theme" } }
+  static targets = ["label"]
+  static values = {
+    cookie: { type: String, default: "gh_theme" },
+    lightLabel: { type: String, default: "Jasny motyw" },
+    darkLabel: { type: String, default: "Ciemny motyw" },
+  }
 
   declare readonly cookieValue: string
+  declare readonly lightLabelValue: string
+  declare readonly darkLabelValue: string
+  declare readonly labelTargets: HTMLElement[]
 
   toggle() {
     this.apply(this.current === "dark" ? "light" : "dark")
@@ -31,6 +42,12 @@ class ThemeController extends Controller {
   private apply(theme: Theme) {
     document.documentElement.setAttribute("data-gh-theme", theme)
     document.cookie = `${this.cookieValue}=${theme};path=/;max-age=31536000;samesite=lax`
+
+    // Plural: the chrome shows the toggle in the header, the account menu and
+    // the "Więcej" sheet at once, and all of them must agree.
+    const label = theme === "dark" ? this.lightLabelValue : this.darkLabelValue
+
+    this.labelTargets.forEach((element) => (element.textContent = label))
   }
 
   private get current(): Theme {
