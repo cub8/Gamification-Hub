@@ -1,0 +1,7 @@
+- content_for :title, 'Dołączono do grupy'
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'join/step_done', story_group: @story_group, membership: @membership
+- else
+  = render 'join/step_done', story_group: @story_group, membership: @membership

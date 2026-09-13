@@ -1,0 +1,106 @@
+/* --------------------------------------------------------------------------
+   Joining a group — the six-box code and the confirmation art.
+
+   Ported from design/mockup-src/css/00-base.css:480-489 and its 720px block
+   at :608-610.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  .gh-code {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+    margin: 22px 0 12px;
+  }
+
+  /* Frame layer plus inset fill, never a border: the box is clipped to an
+     octagon and a border would break at the cuts. */
+  .gh-slot {
+    --gh-c: 9px;
+    position: relative;
+    isolation: isolate;
+    width: 54px;
+    height: 64px;
+  }
+
+  .gh-slot::before,
+  .gh-slot::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-slot::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-slot::after {
+    --gh-c: 8px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  /* The frame itself is the focus ring — the box you are typing in lights up
+     in the item colour, which is why the input's own outline is suppressed. */
+  .gh-slot:focus-within::before {
+    background: var(--gh-item);
+  }
+
+  .gh-slot input {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    text-align: center;
+    text-transform: uppercase;
+    font: 700 28px/1 var(--gh-f-mono);
+    color: var(--gh-ink);
+    caret-color: var(--gh-item);
+  }
+
+  .gh-hint-q {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .gh-joined-art {
+    --gh-c: 10px;
+    aspect-ratio: 21 / 9;
+    margin: 0 0 16px;
+    font: 800 36px/1 var(--gh-f-ui);
+    font-stretch: 80%;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 720px) {
+    .gh-code {
+      gap: 7px;
+    }
+
+    .gh-slot {
+      width: 44px;
+      height: 56px;
+    }
+
+    .gh-slot input {
+      font-size: 24px;
+    }
+  }
+}

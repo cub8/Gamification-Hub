@@ -128,4 +128,13 @@
     color: var(--gh-ink);
     outline: none;
   }
+
+  /* Explanatory note under a field (20-form.css:19). Sits where .gh-err would,
+     and is replaced by it when the field goes bad. */
+  .gh-hint {
+    display: block;
+    margin-top: 7px;
+    font: 450 13px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
 }

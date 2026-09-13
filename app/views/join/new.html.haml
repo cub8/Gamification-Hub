@@ -1,18 +1,10 @@
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h2.page-title.mb-4 Dołącz do grupy
+-# Each step renders either into the layout's shared `modal` frame or as a
+-# focused page — never both. A page carrying its own <turbo-frame id="modal">
+-# would collide with the one the layout already has inside the dialog.
+- content_for :title, 'Dołącz do grupy'
 
-      - if @error
-        .alert.alert-danger.mb-3= @error
-
-      = form_with url: join_index_path, method: :post do |f|
-        = f.hidden_field :back_path, value: @back_path
-
-        .field-group.mb-3
-          = label_tag :code, 'Kod zaproszenia', class: 'form-label'
-          = text_field_tag :code, nil, required: true, class: 'form-control', placeholder: 'Wpisz kod zaproszenia'
-
-        .d-flex.justify-content-end.gap-2
-          = link_to 'Anuluj', @back_path, class: 'btn btn-secondary', data: { turbo_frame: '_top', turbo_prefetch: true }
-          = f.submit 'Dołącz', class: 'btn btn-primary'
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'join/step_code', code: @code, lookup: @lookup
+- else
+  = render 'join/step_code', code: @code, lookup: @lookup

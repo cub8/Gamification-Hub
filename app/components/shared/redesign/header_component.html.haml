@@ -5,11 +5,13 @@
 
   %span.gh-sp
 
-  - if user.student?
-    = link_to new_join_path, class: 'gh-btn gh-btn--sec gh-btn--sm gh-hd-join',
-      data: { turbo_frame: 'modal' } do
-      %i.fa-solid.fa-plus
-      %span Dołącz do grupy
+  -# The mockup gates this on `role === 'student'` (10-core.js:162) because its
+  -# teacher persona is never also a student. Ours can be, and the groups index
+  -# already lists their "Uczę się" groups, so everyone gets it.
+  = link_to new_join_path, class: 'gh-btn gh-btn--sec gh-btn--sm gh-hd-join',
+    data: { turbo_frame: 'modal' } do
+    %i.fa-solid.fa-plus
+    %span Dołącz do grupy
 
   -# Both glyphs ship; chrome.css shows the one for the theme you would switch
   -# TO. With no cookie set the server cannot know how prefers-color-scheme

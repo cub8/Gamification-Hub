@@ -124,13 +124,14 @@ class StartRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-hd i.fa-bell', false
   end
 
-  test 'a teacher header offers the bell and no join button' do
+  test 'a teacher header offers the bell, and the join button too' do
     sign_in FactoryBot.create(:user, role: :teacher)
     get home_path
 
     assert_select '.gh-hd i.fa-bell'
-    # "Dołącz do grupy" is a student affordance, mirroring the mockup.
-    assert_select '.gh-hd .gh-hd-join', false
+    # The mockup gates joining on the student persona; we do not, because a
+    # teacher here can also be a student in someone else's group.
+    assert_select '.gh-hd .gh-hd-join', 1
   end
 
   test 'the unread count renders in its own container, not the Bootstrap one' do

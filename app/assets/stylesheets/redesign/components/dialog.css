@@ -208,4 +208,25 @@
       background: var(--gh-line-2);
     }
   }
+
+  /* A dialog's action row (00-base.css:458). Right-aligned on desktop; on a
+     phone, where every dialog is a bottom sheet, the buttons share the width
+     so both are thumb-sized. */
+  .gh-dlg-b {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  @media (max-width: 720px) {
+    .gh-dlg-b {
+      justify-content: stretch;
+    }
+
+    .gh-dlg-b .gh-btn {
+      flex: 1;
+    }
+  }
 }

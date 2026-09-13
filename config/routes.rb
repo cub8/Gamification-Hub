@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   resources :join, param: :code, only: %i[show new] do
     collection do
       post :create
+      # Step 1 submits here. Declared on the collection so it is matched before
+      # /join/:code, which would otherwise swallow "lookup" as a code.
+      get :lookup
     end
   end
   resources :story_groups do
