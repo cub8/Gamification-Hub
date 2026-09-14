@@ -31,4 +31,13 @@
   turbo-cable-stream-source {
     display: none;
   }
+
+  /* The UA's own `[hidden] { display: none }` is an AUTHOR-beatable rule, so
+     any component that sets a display of its own silently overrules it —
+     `.gh-tag { display: inline-flex }` would render an empty chip for a badge
+     worth 0%. Toggling `el.hidden` is how every preview in this bundle shows
+     and hides an optional line, so the attribute has to win outright. */
+  [hidden] {
+    display: none !important;
+  }
 }

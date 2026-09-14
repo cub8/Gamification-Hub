@@ -27,7 +27,12 @@ Rails.application.routes.draw do
       # a browser confirm cannot hold, so it needs a URL to render into.
       get :confirm_destroy, on: :member
     end
-    resources :badges
+    resources :badges, except: :show do
+      # Same as ranks: the delete confirmation carries a consequence sentence
+      # and, when items unlock on the badge, the list of what stops being
+      # buyable — neither of which fits in a browser confirm.
+      get :confirm_destroy, on: :member
+    end
     resources :teachers, only: %i[new index create destroy]
     resources :students do
       member do

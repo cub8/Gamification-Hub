@@ -1,0 +1,12 @@
+-# The three art states of a badge in one place, so no screen has to re-derive
+-# them: an uploaded image, one of the preset glyphs, or neither.
+-#
+-# Mirrors the same branch in ranks/_rank_thumb, kept as its own partial here
+-# because a badge shows its art in four places (card front, mini card, form
+-# preview, award row) instead of two.
+- if badge.upload?
+  = image_tag badge.icon, alt: ''
+- elsif (glyph = gh_glyph(badge.icon_glyph))
+  = glyph
+- else
+  %i.fa-solid.fa-award{ 'aria-hidden': 'true' }

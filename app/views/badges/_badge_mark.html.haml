@@ -1,0 +1,9 @@
+-# The house mark on the back of a badge — the mockup's MARK (30-br.js:11).
+-#
+-# Inline SVG rather than the header's logo.png, because it takes its colour
+-# from the badge tokens: the octagon is --gh-badge and the letters are punched
+-# out of it in the card's own background, so it works in both themes with no
+-# second asset. The octagon is the app's one shape (DECISIONS.md:22).
+%svg{ viewBox: '0 0 40 40', 'aria-hidden': 'true' }
+  %path{ d: 'M12 1h16l11 11v16L28 39H12L1 28V12z', fill: 'var(--gh-badge)' }
+  %text.gh-mark-t{ x: 20, y: 25.4, 'text-anchor': 'middle' } GH

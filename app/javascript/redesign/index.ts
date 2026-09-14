@@ -1,3 +1,5 @@
+import "@redesign/badge_flip_controller"
+import "@redesign/badge_form_controller"
 import "@redesign/clipboard_controller"
 import "@redesign/countdown_controller"
 import "@redesign/dialog_controller"

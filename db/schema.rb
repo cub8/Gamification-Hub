@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_14_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_14_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -84,12 +84,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_14_090000) do
 
   create_table "badges", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.text "didactic_description"
     t.integer "discount", default: 0
+    t.string "icon_glyph"
     t.string "name"
     t.text "story_description"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["story_group_id", "deleted_at"], name: "index_badges_on_story_group_id_and_deleted_at"
     t.index ["story_group_id"], name: "index_badges_on_story_group_id"
   end
 

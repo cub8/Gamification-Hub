@@ -46,7 +46,7 @@ class StudentStartDashboard
   end
 
   def build_groups
-    badge_totals = Badge.where(story_group_id: memberships.map(&:story_group_id))
+    badge_totals = Badge.kept.where(story_group_id: memberships.map(&:story_group_id))
                         .group(:story_group_id)
                         .count
     earned = StudentsBadge.where(story_group_student_id: memberships.map(&:id))

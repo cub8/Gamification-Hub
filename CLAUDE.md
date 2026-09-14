@@ -40,3 +40,14 @@ Rules while converting:
 - Some mockup screens change behaviour, not just styling (soft delete instead
   of archiving, required nickname at join, negative corrections that lower only
   spendable balance). DECISIONS.md lists them. Flag these before implementing.
+
+Already covered screens:
+- chrome, notifications
+- student and teacher dashboard
+- story group index
+- ranks index, new, edit - teacher and student perspective
+- badges index, new, edit - teacher and student perspective
+- invites index, show, new, edit
+- login screens
+
+

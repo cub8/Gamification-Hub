@@ -57,7 +57,8 @@
     background: var(--gh-heart);
   }
 
-  .gh-inp input {
+  .gh-inp input,
+  .gh-inp textarea {
     flex: 1;
     min-width: 0;
     border: 0;
@@ -66,6 +67,23 @@
     padding: 12px 14px;
     font: 500 15.5px/1.4 var(--gh-f-ui);
     color: var(--gh-ink);
+  }
+
+  /* Badges are the first screen in this bundle with a textarea; items and the
+     group wizard need the same one next.
+     
+     `rows` alone is not enough: two rows of text land flush against the well's
+     own 2px inset and the resize grip sits on top of the second line, which is
+     what the mockup's inline `min-height:72px` (30-br.js:47-48) is there to
+     stop. Resizing is vertical only — a textarea dragged wider escapes the
+     octagon well behind it, which is a painted layer and does not follow.
+     
+     The mockup also sets the "Jak zdobyć" field in Literata and leaves the
+     story field in the UI face. Not ported: it is the story that shows as
+     Literata on the finished card, so the two would have read swapped. */
+  .gh-inp textarea {
+    min-height: 72px;
+    resize: vertical;
   }
 
   .gh-err {

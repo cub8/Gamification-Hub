@@ -67,13 +67,13 @@
 
     .field-group.mb-3
       = f.label :unlock_badge_ids, "Odznaki wymagane do odblokowania zakupu"
-      = f.collection_select :unlock_badge_ids, @story_group.badges, :id, :name,
+      = f.collection_select :unlock_badge_ids, @story_group.badges.kept, :id, :name,
         { include_blank: "Brak" },
         { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 
     .field-group.mb-3
       = f.label :discount_badge_ids, "Odznaki od których nabija się zniżka"
-      = f.collection_select :discount_badge_ids, @story_group.badges, :id, :name,
+      = f.collection_select :discount_badge_ids, @story_group.badges.kept, :id, :name,
         { include_blank: "Brak" },
         { multiple: true, class: "form-control", data: { controller: "tom-select-basic" } }
 

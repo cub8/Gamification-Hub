@@ -307,4 +307,43 @@
     height: 80%;
     object-fit: contain;
   }
+
+  /* Flavour text — the story on a card, as opposed to the rules above it.
+     Literata, italic: the one place in the app where a different typeface
+     carries meaning rather than decoration (00-base.css:153). */
+  .gh-flavor {
+    font: italic 400 13.5px/1.46 var(--gh-f-text);
+    color: var(--gh-ink-2);
+    margin: 9px 12px 0;
+    padding-top: 8px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  /* A row of chips between the artwork and the rules (00-base.css:127). */
+  .gh-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px 0;
+  }
+
+  /* The quiet fact in a card foot: how many students hold this, how many times
+     it was bought (24-lists.css:13). */
+  .gh-meta {
+    font: 560 13px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* The buttons opposite it. `.gh-card-foot .gh-btn { flex: 1 }` above would
+     otherwise stretch a "Przyznaj" across the whole foot. */
+  .gh-card-acts {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .gh-card-acts .gh-btn {
+    flex: 0 0 auto;
+  }
 }
