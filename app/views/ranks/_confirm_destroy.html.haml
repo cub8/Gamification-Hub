@@ -1,0 +1,31 @@
+-# Mockup: 30-br.js:81-83. A dialog rather than data-turbo-confirm, because the
+-# point of it is the consequence — and, when items depend on the rank, the list
+-# of what has to be fixed first, which a browser confirm cannot carry.
+%h2#gh-del-title.gh-h2= "Usunąć rangę „#{rank.name}”?"
+%p Studenci z tą rangą spadną do rangi niżej.
+
+- if dependent_items.any?
+  - one = dependent_items.one?
+  %p.gh-warn{ role: 'alert' }
+    %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+    %span
+      = "#{one ? 'Przedmiot' : 'Przedmioty'} #{gh_and_list(dependent_items.map(&:name))}"
+      = one ? 'wymaga tej rangi.' : 'wymagają tej rangi.'
+      = "Zanim ją usuniesz, przypisz #{one ? 'mu' : 'im'} inną rangę."
+
+.gh-dlg-b
+  -# Anuluj first and focused: the safe button is the one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', edit_story_group_rank_path(@story_group, rank), class: 'gh-btn gh-btn--sec'
+
+  - if dependent_items.any?
+    -# Disabled here and refused in the controller. The button is the courtesy;
+    -# the foreign keys on items are the reason.
+    %button.gh-btn{ type: 'button', disabled: true } Usuń rangę
+  - else
+    = button_to 'Usuń rangę', story_group_rank_path(@story_group, rank),
+      method: :delete, class: 'gh-btn',
+      form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

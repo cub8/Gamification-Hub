@@ -128,4 +128,34 @@ module RedesignHelper
 
     ((value.to_f / max) * 100).round.clamp(0, 100)
   end
+
+  # "a", "a i b", "a, b i c" — the mockup's andList (30-br.js:6). Rails'
+  # to_sentence needs rails-i18n for the Polish connector and the app does not
+  # load it, so the connectors are written here like every other piece of Polish
+  # copy in this bundle.
+  def gh_and_list(items)
+    list = Array(items)
+    return list.first.to_s if list.size < 2
+
+    "#{list[0..-2].join(', ')} i #{list.last}"
+  end
+
+  # One of the preset glyphs (Redesign::Glyphs), written into the page.
+  #
+  # INLINED, not `image_tag`. The whole glyph system runs on `currentColor`:
+  # `.gh-gph { stroke: currentColor }` plus `.gh-gph .f { fill: currentColor }`
+  # is what tints one shape gold on a rank card, teal on a badge and orange on
+  # an item, and flips it between themes. An external <img> cannot inherit
+  # currentColor, so as a file reference each glyph would need one copy per
+  # colour role per theme. The asset on disk stays the single source either way
+  # — Redesign::Glyphs.asset_for is there for the callers that do want a URL.
+  #
+  # Returns nil for an unknown key so a record whose art has been retired
+  # renders its fallback rather than raising.
+  def gh_glyph(key, css_class: 'gh-gph')
+    markup = Redesign::Glyphs.markup(key)
+    return if markup.nil?
+
+    tag.svg(markup.html_safe, class: css_class, viewBox: '0 0 64 64', 'aria-hidden': 'true')
+  end
 end

@@ -160,8 +160,64 @@
     object-fit: cover;
   }
 
+  /* Rank and currency art is cropped to this well's own 16:10 at upload time
+     (image_crop_controller), so `contain` fills it exactly and can never cut.
+     Scoped to --gold rather than made the default: story group icons are not
+     cropped yet, and .gh-ixc / .gh-gcard still need `cover` to fill.
+
+     NEVER give this a `width` of its own. The box is the full well and
+     `object-position`'s default 50% 50% is what centres the picture inside it.
+     `width: auto` on an ABSOLUTELY POSITIONED replaced element resolves to
+     intrinsic-ratio × height, not to the containing block — and then `left: 0`
+     and `right: 0` are over-constrained, `right` is dropped, and the art ends
+     up flush against the left edge. */
+  .gh-card--gold .gh-art img {
+    object-fit: contain;
+  }
+
+  /* The same picture in a square thumbnail (.gh-mc, dashboard.css): letterboxed
+     on the frame tint rather than cut. The teacher chose the framing in the
+     cropper; cropping it a second time here would throw that choice away.
+     Outranks `.gh-mc img` on specificity, so the import order does not matter. */
+  .gh-card--gold.gh-mc img {
+    object-fit: contain;
+  }
+
   .gh-art i {
     font-size: 40px;
+  }
+
+  /* Preset artwork (Redesign::Glyphs), inlined by RedesignHelper#gh_glyph.
+     Ported from 00-base.css:150-151.
+
+     `currentColor` is the whole design: the same shape is gold inside a rank
+     card, teal inside a badge and orange inside an item, because .gh-art and
+     .gh-mc set the colour from --gh-frame. It is also why these are inlined
+     rather than <img> — an external image cannot inherit it. */
+  .gh-gph {
+    width: 52%;
+    height: auto;
+    max-height: 78%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3.4;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  /* The filled ghost behind the outline: the mockup draws every glyph twice,
+     once faintly filled and once stroked, which is what gives them weight
+     without a second colour. */
+  .gh-gph .f {
+    fill: currentColor;
+    fill-opacity: 0.2;
+  }
+
+  .gh-mc .gh-gph {
+    width: 60%;
+    height: 60%;
+    max-height: none;
+    stroke-width: 4.2;
   }
 
   /* Progress meter (rank progress on the group cards). */

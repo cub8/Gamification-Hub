@@ -1,0 +1,15 @@
+-# A rank as a mini entity card — the mockup's mini('gold', glyph)
+-# (30-lists.js:15). Gold, because rank and currency are gold in this design
+-# language (DECISIONS.md:22).
+-#
+-# The three art states in one place so no screen has to re-derive them: an
+-# uploaded image, one of the preset glyphs, or neither.
+%span.gh-card.gh-card--gold.gh-mc
+  %span.gh-card-f
+    %span.gh-card-i{ data: local_assigns[:inner_data] }
+      - if rank.upload?
+        = image_tag rank.icon, alt: ''
+      - elsif (glyph = gh_glyph(rank.icon_glyph))
+        = glyph
+      - else
+        %i.fa-solid.fa-ranking-star{ 'aria-hidden': 'true' }

@@ -21,7 +21,12 @@ Rails.application.routes.draw do
       post :create_bulk, on: :collection
       resource :students_activity_group_categories, only: %i[edit update]
     end
-    resources :ranks
+    resources :ranks, except: :show do
+      # Same as invites: the delete confirmation is a dialog carrying a
+      # consequence sentence and the list of items that require the rank, which
+      # a browser confirm cannot hold, so it needs a URL to render into.
+      get :confirm_destroy, on: :member
+    end
     resources :badges
     resources :teachers, only: %i[new index create destroy]
     resources :students do

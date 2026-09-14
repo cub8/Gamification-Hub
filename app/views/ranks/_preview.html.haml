@@ -1,0 +1,59 @@
+-# The form's preview column. Mockup: pvRank(), js-expanded/30-br.js:70-72.
+-#
+-# Server-rendered so it is right before a single keystroke and right with no
+-# JavaScript at all; rank_form_controller then keeps it honest as you type. It
+-# never generates markup — it moves these rows and rewrites their text, which
+-# is why the thumbnails can stay Rails-rendered SVG.
+-#
+-# THE DRAFT REPLACES THE RANK BEING EDITED. The mockup splices it in at a
+-# hardcoded index 2 (30-br.js:32), so editing any other rank leaves the real
+-# rung in the ladder as well and the rank appears twice. Here the edited rank
+-# is simply not rendered — the draft is it — so changing the threshold MOVES
+-# the rung instead of cloning it.
+- saved   = ladder.rungs.map(&:rank).reject { |other| other == rank }
+- entries = (saved.map { |other| [other, false] } << [rank, true])
+- entries = entries.sort_by { |entry, draft| [entry.required_currency_value.to_i, draft ? 1 : 0] }
+
+%details.gh-pvd{ open: true }
+  %summary
+    Podgląd rangi
+    %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+
+  %section.gh-panel.gh-pv
+    %h3 Karta rangi
+    .gh-pvflip
+      %article.gh-card.gh-card--gold
+        .gh-card-f
+          .gh-card-i
+            .gh-card-top
+              %h4.gh-card-name{ class: ('gh-ph' if rank.name.blank?),
+                                data: { rank_form_target: 'cardName' } }
+                = rank.name.presence || 'Nazwa rangi'
+            .gh-art{ data: { rank_form_target: 'cardArt' } }
+              - if rank.upload?
+                = image_tag rank.icon, alt: ''
+              - else
+                = gh_glyph(rank.icon_glyph)
+            %p.gh-rules{ data: { rank_form_target: 'cardRules' } }= rank_reward_line(rank)
+
+  %section.gh-panel.gh-pv
+    %h3 Drabinka rang
+    -# Ascending in the DOM; .gh-ladder reverses it visually, so the highest
+    -# rung reads first exactly as it does on both list screens.
+    %ol.gh-ladder{ data: { rank_form_target: 'ladder' } }
+      - entries.each do |entry, draft|
+        %li.gh-lad{ class: ('gh-lad--new' if draft),
+                    data: { rank_id: (draft ? 'draft' : entry.id),
+                            min: entry.required_currency_value.to_i } }
+          = render 'rank_thumb', rank: entry,
+            inner_data: (draft ? { rank_form_target: 'draftArt' } : nil)
+          %span
+            %b
+              %span{ data: (draft ? { rank_form_target: 'draftName' } : {}) }
+                = entry.name.presence || 'Nowa ranga'
+              - if draft
+                %small (ta ranga)
+            %small{ data: (draft ? { rank_form_target: 'draftTerms' } : {}) }
+              = rank_ladder_terms(entry)
+          %span.gh-lad-v{ data: (draft ? { rank_form_target: 'draftValue' } : {}) }
+            = "od #{entry.required_currency_value.to_i}"
