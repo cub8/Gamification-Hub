@@ -1,0 +1,12 @@
+-# Unread badge on the header bell.
+-#
+-# .gh-dot-slot takes this out of .gh-iconbtn's grid flow — as an in-flow second
+-# child it created a second grid row and pushed the bell glyph off centre.
+-#
+-# turbo_permanent keeps it across Turbo navigations so a live broadcast that
+-# arrived between visits is not undone by a cached snapshot. Its own id, not
+-# the Bootstrap layout's `notification-dot-container`: the legacy broadcast
+-# injects Bootstrap-classed markup, which would render unstyled here.
+#gh-notification-dot.gh-dot-slot{ data: { turbo_permanent: true } }
+  - if count.positive?
+    %span.gh-count{ 'aria-hidden': 'true' }= count

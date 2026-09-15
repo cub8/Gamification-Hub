@@ -1,0 +1,12 @@
+-# The three art states of an item in one place, so no screen has to re-derive
+-# them: an uploaded image, one of the preset glyphs, or neither.
+-#
+-# Mirrors badges/_art. The fallback is the flask the notification rows have
+-# always shown for an item with no artwork — one default across the app, not
+-# one per screen.
+- if item.upload?
+  = image_tag item.icon, alt: ''
+- elsif (glyph = gh_glyph(item.icon_glyph))
+  = glyph
+- else
+  %i.fa-solid.fa-flask{ 'aria-hidden': 'true' }

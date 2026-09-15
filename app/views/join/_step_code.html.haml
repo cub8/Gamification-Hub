@@ -1,0 +1,47 @@
+-# Step 1: the invite code. Mockup: js-expanded/10-core.js `dlgJoin`.
+- error = local_assigns[:lookup]&.error
+- member_of = local_assigns[:lookup]&.member_of
+
+%p.gh-small.mb-1 Krok 1 z 2
+%h2#gh-join-title.gh-h2 Dołącz do grupy
+%p Wpisz 6-znakowy kod, który podał prowadzący.
+
+= form_with url: lookup_join_index_path, method: :get,
+  data: { controller: 'join-code', turbo_frame: (@in_modal ? 'modal' : nil) } do
+  -# The six boxes are display only; join_code_controller keeps this one field
+  -# in sync, so the form submits a single value and works the moment the
+  -# characters are pasted rather than typed.
+  = hidden_field_tag :code, code, data: { join_code_target: 'code' }
+
+  .gh-code{ role: 'group', 'aria-label': 'Kod zaproszenia' }
+    - StoryGroupInvite::CODE_LENGTH.times do |index|
+      %span.gh-slot
+        %input{ type: 'text',
+                maxlength: 2,
+                autocomplete: 'off',
+                autocapitalize: 'characters',
+                spellcheck: 'false',
+                value: code.to_s[index],
+                autofocus: index.zero?,
+                'aria-label': "Znak #{index + 1} z #{StoryGroupInvite::CODE_LENGTH}",
+                data: { join_code_target: 'slot', action: 'input->join-code#type keydown->join-code#key paste->join-code#paste' } }
+
+  - if member_of
+    -# Not an error: already belonging to the group is a dead end for the form
+    -# but good news for the person, so the mockup offers the way in instead.
+    %p.gh-hint
+      Już należysz do tej grupy.
+      = link_to 'Otwórz grupę', story_group_path(member_of), class: 'gh-linkbtn',
+        data: { turbo_frame: '_top' }
+  - elsif error
+    %p.gh-err{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  %p.gh-small.gh-hint-q
+    %i.fa-solid.fa-camera{ 'aria-hidden': 'true' }
+    Masz kod QR? Zeskanuj go aparatem telefonu, a kod wpisze się sam.
+
+  .gh-dlg-b
+    = render 'join/cancel'
+    %button.gh-btn{ type: 'submit', data: { join_code_target: 'submit' } } Dalej

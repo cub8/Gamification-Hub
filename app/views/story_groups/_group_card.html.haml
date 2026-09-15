@@ -1,0 +1,23 @@
+-# One group in the "Grupy" grid. The whole card is the link, as in the mockup
+-# where the <article> itself carries the click handler.
+- story_group = group.story_group
+
+%article.gh-card.gh-card--neutral.gh-ixc{ data: { group_search_target: 'card',
+                                                 group_search_name: story_group.name.to_s.downcase } }
+  = link_to story_group_path(story_group), class: 'gh-ixc-l' do
+    .gh-card-f
+      .gh-card-i
+        .gh-art{ class: ('gh-art--mono' unless story_group.icon.attached?) }
+          - if story_group.icon.attached?
+            = image_tag story_group.icon, alt: ''
+          - else
+            = gh_monogram(story_group.name)
+
+        .gh-card-top
+          %h2.gh-card-name= story_group.name
+
+        %span{ class: "gh-tag gh-roletag gh-tag--#{group.role}" }= group.role_label
+
+        %p.gh-ixmeta
+          %span= "#{group.students_count} #{gh_plural(group.students_count, 'student', 'studentów', 'studentów')}"
+          %span= group.meta

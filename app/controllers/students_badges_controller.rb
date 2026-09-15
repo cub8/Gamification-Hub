@@ -10,7 +10,7 @@ class StudentsBadgesController < ApplicationController
 
   def new
     @badge = @student.students_badges.build
-    @badges = Badge.where(story_group_id: @story_group.id)
+    @badges = Badge.where(story_group_id: @story_group.id).kept
   end
 
   def create
@@ -20,7 +20,7 @@ class StudentsBadgesController < ApplicationController
       redirect_to story_group_student_path(@story_group, @student),
                   notice: 'Odznaka została pomyślnie przyznana studentowi.'
     else
-      @badges = Badge.where(story_group_id: @story_group.id)
+      @badges = Badge.where(story_group_id: @story_group.id).kept
       render :new, status: :unprocessable_content
     end
   end

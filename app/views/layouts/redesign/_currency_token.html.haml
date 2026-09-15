@@ -1,0 +1,11 @@
+-# The group's currency as a coin: gold rim, cream face. Falls back to the
+-# first letter of the currency name when no icon is uploaded, so the token
+-# still reads as a coin rather than collapsing to an empty square.
+- size = local_assigns[:size] || 24
+
+%span.gh-tok{ style: "--gh-s: #{size}px", 'aria-hidden': 'true' }
+  %span
+    - if story_group.currency_icon.attached?
+      = image_tag story_group.currency_icon, alt: ''
+    - else
+      = story_group.currency_name.to_s.first&.upcase

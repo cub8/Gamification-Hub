@@ -17,8 +17,8 @@
         = link_to story_group_student_students_item_path(@story_group, @student, students_item), 
             data: { turbo_frame: "modal" }, 
             class: "d-flex align-items-stretch flex-grow-1 text-decoration-none overflow-hidden" do
-          - if students_item.item.image.attached?
-            = image_tag students_item.item.image, class: "dark-card-side-cover"
+          - if students_item.item.icon.attached?
+            = image_tag students_item.item.icon, class: "dark-card-side-cover"
           - else
             .dark-card-side-icon
               %i.fa-solid.fa-box.fa-2x.text-dimmed

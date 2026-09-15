@@ -1,7 +1,10 @@
-- content_for :title, "Edytuj zaproszenie"
+- content_for :title, "Edytuj zaproszenie #{@invite.code}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Edytuj zaproszenie
-      = render "form", invite: @invite, url: story_group_invite_path(@story_group, @invite)
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'form', form: @form
+- else
+  -# Rendered as a page it needs a surface of its own: these screens keep the app
+  -# shell, so unlike the join flow they never land inside .gh-acard.
+  %section.gh-panel.gh-dlg-page
+    = render 'form', form: @form

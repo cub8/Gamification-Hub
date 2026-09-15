@@ -1,0 +1,14 @@
+-# One item in the shop: items/_card with a student's answers in it.
+-#
+-# This partial exists for the two numbers only the :save state needs and for
+-# the buy button, which is the one part of the card that is a real control
+-# rather than a picture of one.
+- item  = offer.item
+- price = offer.price
+- need  = [price - @shop.balance, 0].max
+- buy   = render('shop/buy_button', item: item, price: price) if state == :afford
+
+= render 'items/card', item: item, card: offer.card, offer: offer, state: state,
+  price: price, need: need,
+  progress: (price.positive? ? @shop.balance.to_f / price : 1.0),
+  buy: buy

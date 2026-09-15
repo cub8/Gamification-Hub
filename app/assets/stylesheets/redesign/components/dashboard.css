@@ -1,0 +1,644 @@
+/* --------------------------------------------------------------------------
+   The two start screens.
+
+   Student start ported from design/mockup-src/css/27-isg.css (all 31 lines of
+   it) plus three fragments that live in files belonging to other screens and
+   are easy to miss: `.expl` (21-item.css:27), `.lv` (24-lists.css:30) and the
+   currency token (20-form.css:40, which is in card.css here because every card
+   screen needs it).
+
+   Teacher dashboard ported from 00-base.css:350-386 — it has no per-area file
+   of its own, the whole screen lives in the shared base sheet.
+
+   Breakpoints are plain media queries at the mockup's own values. The mockup
+   uses `@container app` only because it renders inside a scaled device frame;
+   HANDOFF.md says media queries are correct in the real app.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* ---- Shared page head ---- */
+
+  .gh-phead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 26px;
+  }
+
+  .gh-phead-t {
+    min-width: 0;
+  }
+
+  /* Small caps-ish label above a figure ("Czeka na ocenę"). */
+  .gh-k {
+    font: 650 13px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- Student start: the group cards ---- */
+
+  .gh-sgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px 18px;
+    margin-top: 22px;
+  }
+
+  .gh-gcard .gh-art {
+    aspect-ratio: 21 / 9;
+    margin: 10px 10px 0;
+  }
+
+  .gh-gcard .gh-card-i {
+    padding-bottom: 14px;
+  }
+
+  .gh-gcard .gh-card-top {
+    padding-bottom: 4px;
+  }
+
+  .gh-gcard .gh-card-name {
+    font-size: 19px;
+  }
+
+  .gh-gcard .gh-card-foot {
+    gap: 8px;
+    padding-top: 14px;
+  }
+
+  .gh-gstat {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    padding: 10px 14px 0;
+  }
+
+  .gh-gstat dt {
+    font-size: 12.5px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-gstat dd {
+    margin: 3px 0 0;
+    font: 780 18px/1.15 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .gh-gstat dd small {
+    font: 560 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* The rank row spans both columns and carries the progress bar. */
+  .gh-gstat .gh-full2 {
+    grid-column: 1 / -1;
+  }
+
+  .gh-gstat .gh-bar {
+    margin-top: 6px;
+  }
+
+  .gh-gstat .gh-rank-to {
+    font-size: 13px;
+    font-weight: 560;
+    color: var(--gh-ink-2);
+  }
+
+  /* Explanation block on a freshly-joined group (21-item.css:27). */
+  .gh-expl {
+    margin: 8px 14px 0;
+    padding: 12px 14px;
+    background: var(--gh-card-2);
+    font: 500 14.5px/1.5 var(--gh-f-ui);
+  }
+
+  /* Lives: one heart plus a number, never one heart per life (DECISIONS).
+     Fixed min-width so a row of them stays aligned (24-lists.css:30). */
+  .gh-lv {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 46px;
+    font: 780 16px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-lv i {
+    font-size: 17px;
+    color: var(--gh-heart);
+  }
+
+  /* Zero lives: hollow heart in the warning ink. */
+  .gh-lv--zero i {
+    color: var(--gh-heart-ink);
+    font-weight: 400;
+  }
+
+  /* Dashed "join a group" panel that closes the card grid. */
+  .gh-joinc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    min-height: 300px;
+  }
+
+  .gh-joinc::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 2px dashed var(--gh-line-2);
+    pointer-events: none;
+  }
+
+  /* ---- Student start: the cross-group activity feed ---- */
+
+  .gh-feed {
+    margin-top: 24px;
+    padding: 20px 22px;
+  }
+
+  .gh-led {
+    list-style: none;
+    margin: 12px 0 10px;
+    padding: 0;
+  }
+
+  .gh-led-r {
+    display: grid;
+    grid-template-columns: 12px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: start;
+    padding: 10px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-led-m {
+    --gh-c: 3px;
+    width: 10px;
+    height: 10px;
+    margin-top: 5px;
+    background: var(--gh-ink-3);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-led-m--earn { background: var(--gh-earn); }
+  .gh-led-m--spend { background: var(--gh-spend); }
+
+  .gh-led-t {
+    font: 520 14.5px/1.3 var(--gh-f-ui);
+  }
+
+  .gh-led-t small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+    margin-top: 2px;
+  }
+
+  .gh-led-a {
+    font: 800 17px/1.2 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-led-a--earn { color: var(--gh-earn); }
+  .gh-led-a--spend { color: var(--gh-spend); }
+
+  /* ---- Teacher dashboard ---- */
+
+  .gh-dash {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 344px;
+    gap: 22px;
+    align-items: start;
+    margin-top: 22px;
+  }
+
+  /* Both columns are grid items, and a grid item's default `min-width: auto`
+     lets its content push the track wider than the viewport. Every panel on
+     this screen has to be explicitly shrinkable or the page scrolls sideways
+     on a phone. */
+  .gh-dash-side {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+  }
+
+  .gh-purch {
+    padding: 20px 22px 12px;
+    min-width: 0;
+  }
+
+  .gh-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 14px 0 6px;
+  }
+
+  .gh-fchip {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    background: none;
+    padding: 6px 12px 6px 7px;
+    cursor: pointer;
+    font: 620 13.5px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+    text-decoration: none;
+  }
+
+  .gh-fchip:first-child {
+    padding-left: 12px;
+  }
+
+  .gh-fchip::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-fchip:hover::before {
+    background: var(--gh-card-3);
+  }
+
+  /* The chips are links (server-side filtering), so the pressed state is
+     aria-current rather than aria-pressed. */
+  .gh-fchip[aria-current="true"] {
+    color: var(--gh-card);
+  }
+
+  .gh-fchip[aria-current="true"]::before {
+    background: var(--gh-ink);
+  }
+
+  .gh-day {
+    font: 700 13.5px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-3);
+    margin: 20px 0 2px;
+  }
+
+  .gh-plist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gh-prow {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) minmax(0, 210px) auto 64px;
+    gap: 14px;
+    align-items: center;
+    padding: 11px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-day + .gh-plist .gh-prow:first-child {
+    border-top: 0;
+  }
+
+  .gh-p-main {
+    min-width: 0;
+  }
+
+  .gh-p-main b {
+    display: block;
+    font: 680 16px/1.2 var(--gh-f-ui);
+    font-stretch: 92%;
+  }
+
+  .gh-p-main > span {
+    display: block;
+    font-size: 14px;
+    color: var(--gh-ink-2);
+    margin-top: 2px;
+  }
+
+  /* The group chip appears in its own column on desktop and inside the main
+     column on phones; exactly one of the two is ever displayed. */
+  .gh-p-gm {
+    display: none;
+  }
+
+  .gh-p-g {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .gh-p-time {
+    font-size: 13px;
+    color: var(--gh-ink-3);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-gchip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font: 520 13.5px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .gh-gchip span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Mini entity card in a purchase row. */
+  .gh-mc {
+    --gh-cc: 7px;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    filter: drop-shadow(0 2px 0 var(--gh-frame-edge));
+  }
+
+  .gh-mc .gh-card-f {
+    padding: 3px;
+  }
+
+  .gh-mc .gh-card-i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--gh-frame) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-frame) 58%, var(--gh-ink));
+    overflow: hidden;
+  }
+
+  .gh-mc img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- Teacher dashboard: the side column ---- */
+
+  .gh-todo .gh-card-i {
+    padding: 16px;
+  }
+
+  .gh-todo-t {
+    font: 780 24px/1.1 var(--gh-f-ui);
+    font-stretch: 86%;
+    margin: 4px 0 8px;
+    overflow-wrap: anywhere;
+  }
+
+  .gh-todo .gh-small {
+    margin: 12px 0 16px;
+  }
+
+  .gh-mygroups {
+    padding: 20px 20px 18px;
+  }
+
+  .gh-gtl {
+    list-style: none;
+    margin: 12px 0 14px;
+    padding: 0;
+  }
+
+  .gh-gt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 6px;
+    text-decoration: none;
+    color: var(--gh-ink);
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-gtl li:first-child .gh-gt {
+    border-top: 0;
+  }
+
+  .gh-gt:hover {
+    background: var(--gh-card-2);
+  }
+
+  /* Flex item holding the group name; without min-width it cannot shrink and
+     a long name pushes the whole panel wide. */
+  .gh-gt > span {
+    min-width: 0;
+  }
+
+  .gh-gt b {
+    display: block;
+    font: 660 14.5px/1.2 var(--gh-f-ui);
+    font-stretch: 92%;
+    /* A single unbroken name would otherwise re-create the overflow on its own,
+       min-width or not. */
+    overflow-wrap: anywhere;
+  }
+
+  .gh-gt small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+    margin-top: 2px;
+  }
+
+  .gh-gt-new {
+    margin-left: auto;
+    font: 680 12px/1.2 var(--gh-f-ui);
+    color: var(--gh-spend);
+    text-align: right;
+    flex: 0 0 auto;
+  }
+
+  /* ---- Breakpoints ---- */
+
+  @media (max-width: 1080px) {
+    /* minmax(0, 1fr), never a bare 1fr: a 1fr track keeps `min-width: auto`
+       and refuses to shrink below its content. .gh-sgrid on the student screen
+       already got this right, which is why only the teacher screen overflowed. */
+    .gh-dash {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-prow {
+      grid-template-columns: 52px minmax(0, 1fr) minmax(0, 170px) auto 56px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    /* Title over its actions, not beside them (00-base.css:548). Without this
+       the flex row survives on a phone and the button cluster squeezes the
+       lead down to one word per line. Only shows up on a page head that HAS
+       actions, which is why the two start screens never revealed it. */
+    .gh-phead {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .gh-sgrid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-dash {
+      margin-top: 16px;
+      gap: 16px;
+    }
+
+    .gh-purch {
+      padding: 18px 14px 8px;
+    }
+
+    /* Chips scroll sideways rather than wrapping into a tall block. */
+    .gh-filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-right: -14px;
+    }
+
+    .gh-fchip {
+      flex: 0 0 auto;
+    }
+
+    .gh-prow {
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .gh-prow .gh-mc {
+      width: 44px;
+      height: 44px;
+    }
+
+    .gh-p-g,
+    .gh-p-time {
+      display: none;
+    }
+
+    .gh-p-gm {
+      display: flex;
+      margin-top: 6px;
+    }
+  }
+}
+
+@layer components {
+
+  /* ---- Notifications list (anchored panel) ----
+     Mockup: `.nlist` in 00-base.css plus the `.nrow` overrides in 90-core.css. */
+
+  .gh-nlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gh-nrow-l {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    padding: 10px 8px;
+    /* Negative margin so the hover highlight reaches the panel's padding edge
+       instead of stopping short of it. */
+    margin: 0 -8px;
+    text-decoration: none;
+    color: var(--gh-ink);
+  }
+
+  /* Every row, including the first of each section — the mockup's
+     `.nlist li { border-top }`. Combined with the negative margin above, the
+     rule spans the full panel width rather than stopping at the text. */
+  .gh-nrow-l {
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-nrow-l:hover {
+    background: var(--gh-card-2);
+  }
+
+  /* Unread rows carry the dot in a third column. */
+  .gh-nrow--unread .gh-nrow-l {
+    grid-template-columns: 44px minmax(0, 1fr) 10px;
+  }
+
+  .gh-nrow .gh-mc {
+    width: 44px;
+    height: 44px;
+  }
+
+  .gh-nrow-t {
+    min-width: 0;
+  }
+
+  .gh-nrow-t b {
+    display: block;
+    font: 680 14.5px/1.25 var(--gh-f-ui);
+  }
+
+  .gh-nrow-t > span {
+    display: block;
+    font-size: 14px;
+  }
+
+  .gh-nrow-t small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+    margin-top: 2px;
+  }
+
+  .gh-ndot {
+    --gh-c: 2px;
+    width: 8px;
+    height: 8px;
+    align-self: center;
+    background: var(--gh-item);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+}

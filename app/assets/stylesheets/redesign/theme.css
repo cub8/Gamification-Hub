@@ -1,0 +1,59 @@
+/* --------------------------------------------------------------------------
+   Tailwind theme mapping.
+
+   `inline` matters: it makes utilities emit `var(--gh-item)` directly, so a
+   single `bg-item` is correct in both themes with no `dark:` prefix anywhere.
+   -------------------------------------------------------------------------- */
+
+@theme inline {
+  --font-ui: var(--gh-f-ui);
+  --font-text: var(--gh-f-text);
+  --font-mono: var(--gh-f-mono);
+
+  --color-table: var(--gh-table);
+  --color-tint: var(--gh-tint);
+  --color-zone: var(--gh-zone);
+  --color-pat: var(--gh-pat);
+
+  --color-chrome: var(--gh-chrome);
+  --color-card: var(--gh-card);
+  --color-card-2: var(--gh-card-2);
+  --color-card-3: var(--gh-card-3);
+
+  --color-ink: var(--gh-ink);
+  --color-ink-2: var(--gh-ink-2);
+  --color-ink-3: var(--gh-ink-3);
+
+  --color-line: var(--gh-line);
+  --color-line-2: var(--gh-line-2);
+
+  --color-item: var(--gh-item);
+  --color-item-edge: var(--gh-item-edge);
+  --color-on-item: var(--gh-on-item);
+
+  --color-badge: var(--gh-badge);
+  --color-badge-edge: var(--gh-badge-edge);
+  --color-badge-ink: var(--gh-badge-ink);
+
+  --color-rank: var(--gh-rank);
+  --color-rank-edge: var(--gh-rank-edge);
+  --color-on-rank: var(--gh-on-rank);
+
+  --color-lock: var(--gh-lock);
+  --color-lock-edge: var(--gh-lock-edge);
+
+  --color-neutral: var(--gh-neutral);
+  --color-neutral-edge: var(--gh-neutral-edge);
+
+  --color-earn: var(--gh-earn);
+  --color-spend: var(--gh-spend);
+  --color-heart: var(--gh-heart);
+  --color-heart-ink: var(--gh-heart-ink);
+
+  --color-focus: var(--gh-focus);
+  --color-edge: var(--gh-edge);
+  --color-scrim: var(--gh-scrim);
+
+  /* The design system has no rounded corners anywhere. */
+  --radius-none: 0;
+}

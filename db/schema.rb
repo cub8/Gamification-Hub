@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -84,12 +84,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
 
   create_table "badges", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.text "didactic_description"
     t.integer "discount", default: 0
+    t.string "icon_glyph"
     t.string "name"
     t.text "story_description"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["story_group_id", "deleted_at"], name: "index_badges_on_story_group_id_and_deleted_at"
     t.index ["story_group_id"], name: "index_badges_on_story_group_id"
   end
 
@@ -110,7 +113,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
   create_table "items", force: :cascade do |t|
     t.boolean "can_buy_at_0_lives"
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.text "didactic_description"
+    t.string "icon_glyph"
     t.bigint "min_rank_for_discount_id"
     t.string "name"
     t.integer "price"
@@ -119,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
     t.bigint "unlock_rank_id"
     t.datetime "updated_at", null: false
     t.index ["min_rank_for_discount_id"], name: "index_items_on_min_rank_for_discount_id"
+    t.index ["story_group_id", "deleted_at"], name: "index_items_on_story_group_id_and_deleted_at"
     t.index ["story_group_id"], name: "index_items_on_story_group_id"
     t.index ["unlock_rank_id"], name: "index_items_on_unlock_rank_id"
   end
@@ -168,10 +174,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
   create_table "ranks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "discount"
+    t.string "icon_glyph"
     t.string "name"
     t.integer "required_currency_value"
     t.bigint "story_group_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["story_group_id", "required_currency_value"], name: "index_ranks_on_group_and_threshold", unique: true
     t.index ["story_group_id"], name: "index_ranks_on_story_group_id"
   end
 
@@ -190,10 +198,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_27_203608) do
     t.datetime "created_at", null: false
     t.integer "current_currency", default: 0
     t.integer "lives"
+    t.string "nickname"
     t.integer "story_group_id"
     t.integer "total_currency", default: 0
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.index "story_group_id, lower((nickname)::text)", name: "index_story_group_students_on_group_and_lower_nickname", unique: true, where: "(nickname IS NOT NULL)"
     t.index ["user_id", "story_group_id"], name: "index_story_group_students_on_user_id_and_story_group_id", unique: true
   end
 

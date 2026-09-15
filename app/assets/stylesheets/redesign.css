@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Gamification Hub — "Card Table" redesign stylesheet.
+
+   Entry point for the redesign layout ONLY. Bootstrap is never loaded on a
+   page that loads this file, so Tailwind's preflight is left ON.
+
+   Compiled by the Tailwind CLI (NOT Dart Sass — see design/AUDIT.md §6.1):
+     yarn build:css:redesign  ->  app/assets/builds/redesign.css
+
+   This file is the ENTRY ONLY: it declares the Tailwind import, the class-name
+   sources and the dark variant, then pulls in the partials under redesign/.
+   Put new rules in a partial, not here. Import order IS cascade order within
+   each layer, so keep system before components.
+
+   `@source` must stay in THIS file: an imported partial carries its own base
+   directory, so a relative @source inside one would resolve against that
+   partial's folder and silently change which files Tailwind scans.
+
+   Design source: design/mockup-src/css/00-base.css + design/tokens/tokens.css
+   Naming: everything the redesign introduces is namespaced `gh-` / `--gh-`.
+   ========================================================================== */
+
+/* Cascade layer order, declared FIRST so `vendor` can slot in below our own
+   component rules. A @layer statement is one of the few things allowed to
+   precede @import. Without this, Font Awesome ships unlayered and silently
+   outranks every .gh-* rule — see redesign/font-awesome.css. */
+@layer theme, base, vendor, components, utilities;
+
+@import "tailwindcss";
+
+/* Class-name sources. Paths are relative to this file. */
+@source "../../views";
+@source "../../components";
+@source "../../javascript";
+@source "../../helpers";
+
+/* Theme is attribute-driven (`data-gh-theme`), never Tailwind's media-query
+   dark mode. `dark:` stays available for the rare per-theme override. */
+@custom-variant dark (&:where([data-gh-theme="dark"], [data-gh-theme="dark"] *));
+
+/* ---- System ---- */
+@import "./redesign/font-awesome.css";
+@import "./redesign/fonts.css";
+@import "./redesign/tokens.css";
+@import "./redesign/theme.css";
+@import "./redesign/base.css";
+
+/* ---- Components ---- */
+@import "./redesign/components/shape.css";
+@import "./redesign/components/buttons.css";
+@import "./redesign/components/surfaces.css";
+@import "./redesign/components/dialog.css";
+@import "./redesign/components/toast.css";
+@import "./redesign/components/typography.css";
+@import "./redesign/components/icons.css";
+@import "./redesign/components/table.css";
+@import "./redesign/components/tag.css";
+@import "./redesign/components/chrome.css";
+@import "./redesign/components/card.css";
+@import "./redesign/components/form.css";
+@import "./redesign/components/auth.css";
+@import "./redesign/components/dashboard.css";
+@import "./redesign/components/groups.css";
+@import "./redesign/components/join.css";
+@import "./redesign/components/invites.css";
+@import "./redesign/components/ranks.css";
+@import "./redesign/components/badges.css";
+@import "./redesign/components/items.css";
+@import "./redesign/components/shop.css";

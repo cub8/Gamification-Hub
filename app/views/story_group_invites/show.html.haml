@@ -1,36 +1,10 @@
-- content_for :title, "Zaproszenie — #{@invite.code}"
+- content_for :title, "Zaproszenie #{@invite.code}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      .text-center.mb-4
-        %h1.page-title.mb-2 Zaproszenie
-        %code.fs-4= @invite.code
-
-      .d-flex.flex-column.align-items-center.gap-4.mb-4
-        .text-center
-          = invite_qr_code(@invite)
-
-        .w-100
-          .row.justify-content-center
-            .col-12.col-md-10
-              .d-flex.flex-column.gap-2
-                .d-flex.justify-content-between.align-items-center
-                  %span.text-dimmed Status
-                  - if @invite.usable?
-                    %span.badge.bg-success Aktywne
-                  - else
-                    %span.badge.bg-secondary Wygasłe
-                .d-flex.justify-content-between.align-items-center
-                  %span.text-dimmed Użycia
-                  %span= invite_uses_label(@invite)
-                - unless @invite.expires_at.nil?
-                  .d-flex.justify-content-between.align-items-center
-                    %span.text-dimmed Wygasa
-                    %span= @invite.expires_at.strftime("%d.%m.%Y %H:%M")
-
-      .d-flex.justify-content-end.align-items-center.gap-2
-        = link_to "Zamknij", story_group_invites_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: "_top", turbo_prefetch: true }
-        = link_to edit_story_group_invite_path(@story_group, @invite), class: "btn btn-primary", data: { turbo_prefetch: true } do
-          %i.fa-solid.fa-pen.me-1
-          Edytuj
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'code', invite: @invite
+- else
+  -# Rendered as a page it needs a surface of its own: these screens keep the app
+  -# shell, so unlike the join flow they never land inside .gh-acard.
+  %section.gh-panel.gh-dlg-page
+    = render 'code', invite: @invite

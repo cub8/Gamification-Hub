@@ -18,11 +18,12 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
                story_description:    'An achievement badge',
                didactic_description: 'A badge for achieving something',
                discount:             10,
+               icon_glyph:           'rabbit',
              },
            }
     end
 
-    assert_turbo_redirected_to story_group_badges_url(@story_group)
+    assert_redirected_to story_group_badges_url(@story_group)
   end
 
   test 'should not create badge for story group not owned by teacher' do
@@ -42,14 +43,17 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
-  test 'should destroy badge' do
+  # Soft, not gone (DECISIONS.md:54): the row survives so every students_badges
+  # pointing at it stays valid.
+  test 'should soft delete badge' do
     badge = FactoryBot.create(:badge, story_group: @story_group)
 
-    assert_difference('Badge.count', -1) do
+    assert_no_difference('Badge.count') do
       delete story_group_badge_url(@story_group, badge)
     end
 
-    assert_redirected_to story_group_badges_url(@story_group)
+    assert_predicate badge.reload, :deleted?
+    assert_turbo_redirected_to story_group_badges_url(@story_group)
   end
 
   test 'should not create badge without authentication' do
@@ -62,6 +66,7 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
                story_description:    'An achievement badge',
                didactic_description: 'A badge for achieving something',
                discount:             10,
+               icon_glyph:           'rabbit',
              },
            }
     end

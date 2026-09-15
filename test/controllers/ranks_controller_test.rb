@@ -17,11 +17,13 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
                name:                    'Gold',
                discount:                20,
                required_currency_value: 500,
+               icon_glyph:              'chev1',
              },
            }
     end
 
-    assert_turbo_redirected_to story_group_ranks_url(@story_group)
+    # A plain redirect: creating happens on a page now, not in a dialog.
+    assert_redirected_to story_group_ranks_url(@story_group)
   end
 
   test 'should not create rank for story group not owned by teacher' do
@@ -47,7 +49,8 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
       delete story_group_rank_url(@story_group, rank)
     end
 
-    assert_redirected_to story_group_ranks_url(@story_group)
+    # Deleting is confirmed in a dialog, so it has to break out of the frame.
+    assert_turbo_redirected_to story_group_ranks_url(@story_group)
   end
 
   test 'should not create rank without authentication' do
@@ -59,6 +62,7 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
                name:                    'Gold',
                discount:                20,
                required_currency_value: 500,
+               icon_glyph:              'chev1',
              },
            }
     end

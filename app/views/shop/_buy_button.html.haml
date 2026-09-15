@@ -1,0 +1,9 @@
+-# Opens the confirmation, never buys: money leaves the account on a POST from
+-# inside that dialog, so a stray click here costs nothing.
+-#
+-# One text node, not "Kup za" beside a number — .gh-btn is a flex row with an
+-# 8px gap, which would open a double space between them.
+= link_to confirm_buy_story_group_shop_path(@story_group, item),
+  class: 'gh-btn', data: { turbo_frame: 'modal' },
+  'aria-label': "Kup #{item.name} za #{price}" do
+  = "Kup za #{price}"
