@@ -21,7 +21,7 @@ class StoryGroupInvite < ApplicationRecord
   end
 
   def usable?
-    use_count_condition && expire_time_condition
+    use_count_condition && expire_time_condition && story_group.organization.join_condition
   end
 
   def use!

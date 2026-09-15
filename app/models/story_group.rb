@@ -22,6 +22,8 @@ class StoryGroup < ApplicationRecord
   validate :acceptable_currency_icon
   validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
+  delegate :organization, to: :owner
+
   def acceptable_icon
     return unless icon.attached?
 

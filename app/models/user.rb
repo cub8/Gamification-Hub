@@ -16,6 +16,8 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_one :login_token, dependent: :destroy
 
+  belongs_to :organization, optional: true
+
   normalizes :email, with: ->(email) { email.strip.downcase }
 
   validates :email, length: { maximum: 255 }, uniqueness: true, allow_nil: true
