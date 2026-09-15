@@ -1,0 +1,8 @@
+-# Mockup: tHist(), js-expanded/30-student.js:31-35. The same ledger the student
+-# reads on their own screen, with a summary line beside the filters.
+- path_for = ->(k) { story_group_student_path(@story_group, sheet.student, tab: 'hist', kind: k) }
+
+= render 'currency_transactions/ledger', ledger: sheet.ledger, kind: kind,
+  path_for: path_for,
+  summary: ledger_summary_sentence(sheet.ledger),
+  empty_message: 'Brak wpisów tego typu.'

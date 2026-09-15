@@ -36,8 +36,8 @@
             .gh-card-foot
               %span.gh-meta= badge_holders_line(slot.holders)
               .gh-card-acts
-                -# Przyznaj happens on the students list, one student at a time
-                -# — that screen is still on the Bootstrap layout.
+                -# Przyznaj happens one student at a time, so it sends the
+                -# teacher to the list to pick one.
                 = link_to 'Przyznaj', story_group_students_path(@story_group),
                   class: 'gh-btn gh-btn--sm'
                 = link_to edit_story_group_badge_path(@story_group, badge),

@@ -1,71 +1,63 @@
-- content_for :title, "Studenci"
+-# Studenci. Mockup: #/t/students, js-expanded/30-lists.js:45-48.
+- content_for :title, 'Studenci'
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Studenci
-    = link_to new_story_group_student_path(@story_group), class: "btn btn-primary", data: { turbo_prefetch: true, turbo_frame: 'modal' } do
-      %i.fa-solid.fa-plus.me-1
+%section.gh-panel.gh-phead
+  .gh-phead-t
+    %h1.gh-h1 Studenci
+    %p.gh-lead= student_list_lead(@list)
+
+  .gh-rowb
+    = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec' do
+      %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
+      Kody i zaproszenia
+    -# "Dodaj studenta" picks an existing account rather than inviting one, and
+    -# that screen is still on the Bootstrap layout — so it is a plain
+    -# navigation, not a dialog: its markup would not survive this one.
+    = link_to new_story_group_student_path(@story_group), class: 'gh-btn' do
+      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
       Dodaj studenta
 
-  - if @students.empty?
-    %p.text-dimmed Brak studentów.
-  - else
-    %table.table.table-sm.table-hover
-      %thead
-        %tr
-          %th Imię i nazwisko
-          %th Adres email
-          %th Życia
-          %th Obecna waluta
-          %th Łączna waluta
-          %th.text-end Akcje
-      %tbody
-        - @students.each do |student|
-          %tr.position-relative
-            %td
-              = link_to student.full_name, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
-            %td
-              = link_to student.email, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
-            %td.position-relative.z-2
-              .d-flex.align-items-center.gap-1
-                = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
-                  method: :post,
-                  form: { data: { turbo_confirm: "Czy na pewno chcesz odebrać życie studentowi #{student.full_name}?" } },
-                  class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
-                  %i.fa-solid.fa-minus
-                %span= student.lives
-                = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
-                  method: :post,
-                  form: { data: { turbo_confirm: "Czy na pewno chcesz dodać życie studentowi #{student.full_name}?" } },
-                  class: "btn btn-sm btn-secondary border-0 px-1 py-0" do
-                  %i.fa-solid.fa-plus
-            %td
-              = link_to student.current_currency, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
-            %td
-              = link_to student.total_currency, story_group_student_path(@story_group, student), class: "d-block text-decoration-none text-reset stretched-link", data: { turbo_frame: 'modal' }
-            %td.text-end
-              .d-flex.justify-content-end.gap-1
-                = link_to edit_story_group_student_path(@story_group, student), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Edytuj", data: { turbo_frame: "modal" } do
-                  %i.fa-solid.fa-pen
-                = link_to new_story_group_student_badge_path(@story_group, student), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Przydziel odznakę", data: { turbo_frame: "modal" } do
-                  %i.fa-solid.fa-award
-                = link_to new_story_group_student_currency_adjustment_path(@story_group, student), class: "btn btn-sm btn-secondary border-0 position-relative z-2", title: "Skoryguj walutę", data: { turbo_frame: "modal" } do
-                  %i.fa-solid.fa-money-bill-transfer
-                .dropdown
-                  %button.btn.btn-sm.btn-secondary.border-0.position-relative.z-2{ data: { bs_toggle: "dropdown" }, "aria-expanded": "false" }
-                    %i.fa-solid.fa-ellipsis-vertical
-                  %ul.dropdown-menu.z-3.px-2.text-start
-                    %li
-                      = button_to story_group_student_path(@story_group, student),
-                          method: :delete,
-                          form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć studenta #{student.full_name}?" } },
-                          class: 'dropdown-item text-danger rounded p-1' do
-                        %i.fa-solid.fa-trash.me-2
-                        Usuń
-          - if student.id == @failed_student_id && @student.errors.any?
-            %tr
-              %td{ colspan: 6 }
-                .form-errors.p-3.mb-3
-                  %ul
-                    - @student.errors.full_messages.each do |message|
-                      %li= message
+- if @list.any?
+  %div{ data: { controller: 'list-search',
+                list_search_total_value: @list.size,
+                list_search_of_value: 'z' } }
+    .gh-stbar
+      %label.gh-search
+        %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
+        %input{ type: 'search',
+                placeholder: 'Szukaj studenta',
+                'aria-label': 'Szukaj studenta',
+                data: { list_search_target: 'input', action: 'input->list-search#filter' } }
+      %span.gh-meta{ data: { list_search_target: 'count' } }
+        = "#{@list.size} z #{@list.size}"
+
+    %section.gh-panel.gh-st
+      %ul.gh-srows{ role: 'list' }
+        -# A header for the grid below, not a <thead>: hidden on a phone, where
+        -# each cell carries its own label instead.
+        %li.gh-srow.gh-srow--h{ 'aria-hidden': 'true' }
+          %span Student
+          %span Ranga
+          %span Życia
+          %span Do wydania
+          %span Zebrane
+          %span Odznaki
+          %span.gh-lrow-r Akcje
+
+        = render partial: 'students/row', collection: @list.rows, as: :row
+
+    -# Revealed by the controller when the query matches nobody on the page.
+    %section.gh-panel.gh-gm{ hidden: true, data: { list_search_target: 'empty' } }
+      %h2.gh-h2
+        Brak studentów o nazwie
+        %span{ data: { list_search_target: 'emptyQuery' } }
+      %p.gh-lead Wyczyść wyszukiwanie albo sprawdź pisownię.
+- else
+  -# The mockup has no empty state here. House rule: name the next action.
+  %section.gh-panel.gh-gm
+    %h2.gh-h2 Nie ma jeszcze nikogo w grupie
+    %p.gh-lead
+      Wyślij studentom kod albo zaproszenie — kiedy dołączą, pojawią się tutaj
+      razem z rangą, walutą i życiami.
+    .gh-rowb
+      = link_to 'Kody i zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'

@@ -68,11 +68,12 @@
         .d-flex.flex-column.gap-3
           - @students_items.each do |students_item|
             .dark-card.flex-row.align-items-stretch.p-0
-              = link_to story_group_student_students_item_path(@story_group, @student, students_item, back_path: 'story_group'),
-                  data: { turbo_frame: "modal" },
-                  class: "d-flex align-items-stretch flex-grow-1 text-decoration-none overflow-hidden" do
-                - if students_item.item.image.attached?
-                  = image_tag students_item.item.image, class: "dark-card-side-cover"
+              -# The per-purchase detail page is gone: the card carries the
+              -# price, the discount and the date, so there was nothing behind
+              -# the link. "Moje przedmioty" is the screen for these now.
+              .d-flex.align-items-stretch.flex-grow-1.overflow-hidden
+                - if students_item.item.icon.attached?
+                  = image_tag students_item.item.icon, class: "dark-card-side-cover"
                 - else
                   .dark-card-side-icon
                     %i.fa-solid.fa-box.fa-2x.text-dimmed

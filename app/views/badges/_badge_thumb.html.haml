@@ -1,7 +1,10 @@
 -# A badge as a mini entity card — the mockup's mini('badge', glyph)
 -# (30-lists.js:15). Teal, because a badge is teal in this design language
 -# (DECISIONS.md:22).
+-# `badges/art`, spelled out: a bare "art" resolves against the RENDERING
+-# controller's view path, and this thumb is rendered from the notification
+-# feed, the purchase rows and the badge picker as well as from badges/.
 %span.gh-card.gh-card--badge.gh-mc
   %span.gh-card-f
     %span.gh-card-i{ data: local_assigns[:inner_data] }
-      = render 'art', badge: badge
+      = render 'badges/art', badge: badge

@@ -49,6 +49,9 @@ Already covered screens:
 - badges index, new, edit - teacher and student perspective
 - items index, new, edit - teacher perspective
 - shop index, buy confirmation - student perspective
+- students index, show (3 tabs), edit, remove confirmation - teacher perspective
+- award badge, revoke badge, adjust currency - teacher perspective
+- currency history, my items - student perspective
 - invites index, show, new, edit
 - login screens
 

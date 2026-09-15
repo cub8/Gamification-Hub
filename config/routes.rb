@@ -43,11 +43,21 @@ Rails.application.routes.draw do
     resources :students do
       member do
         post :update_lives
+        # Removing a student destroys their badges, their purchases and their
+        # whole currency history. The confirmation carries those counts, which
+        # a browser confirm cannot hold, so it needs a URL to render into.
+        get :confirm_destroy
       end
       resource :currency_adjustment, only: %i[new create]
-      resources :students_badges, path: :badges, as: :badges, only: %i[new create destroy]
+      resources :students_badges, path: :badges, as: :badges, only: %i[new create destroy] do
+        # Same as everywhere else: the revoke confirmation names the discount
+        # the student loses and what stops being buyable.
+        get :confirm_destroy, on: :member
+      end
       resources :currency_transactions, only: :index
-      resources :students_items, path: :items, only: %i[index show]
+      # No :show — the card carries the price paid, the discount and the date,
+      # so nothing links to a detail page. Same reasoning as the shop.
+      resources :students_items, path: :items, only: %i[index]
     end
     # No :show — the shop card carries everything a detail page would, at every
     # width, so nothing links to one.

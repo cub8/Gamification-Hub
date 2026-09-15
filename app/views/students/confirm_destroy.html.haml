@@ -1,0 +1,11 @@
+-# The stacked confirmation. Opened into `modal2` from inside the edit dialog,
+-# so the two <dialog>s sit in the top layer one above the other; opened as a
+-# page it is an ordinary confirmation screen.
+- content_for :title, "Usuń z grupy — #{@student.display_name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal2' do
+    = render 'confirm_destroy', student: @student, sheet: @sheet
+- else
+  %section.gh-panel.gh-dlg-page
+    = render 'confirm_destroy', student: @student, sheet: @sheet

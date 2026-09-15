@@ -102,3 +102,18 @@
       .gh-dialog-body
         = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
                                            action: 'turbo:frame-load->dialog#open' }
+
+    -# The second one, for a confirmation raised FROM inside a dialog — today
+    -# only "Usuń z grupy", which lives in the edit dialog and is destructive
+    -# enough that it cannot act on one click. A native <dialog> opened while
+    -# another is already open joins the top layer above it with its own
+    -# backdrop, and Escape closes only the topmost, so the two stack correctly
+    -# without either of them knowing about the other.
+    -#
+    -# Never target this frame from the page itself: a confirmation with no
+    -# dialog underneath belongs in `modal`.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+      .gh-dialog-body
+        = turbo_frame_tag 'modal2', data: { dialog_target: 'frame',
+                                            action: 'turbo:frame-load->dialog#open' }
