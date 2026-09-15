@@ -11,7 +11,7 @@ class StoryGroupStudentDashboard
     @rank           = @student.rank
     @badges         = @student.badges.with_attached_icon
     @students_items = @student.students_items
-                              .includes(item: { image_attachment: :blob })
+                              .includes(item: { icon_attachment: :blob })
                               .order(created_at: :desc)
     self
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_14_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -113,7 +113,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_14_140000) do
   create_table "items", force: :cascade do |t|
     t.boolean "can_buy_at_0_lives"
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.text "didactic_description"
+    t.string "icon_glyph"
     t.bigint "min_rank_for_discount_id"
     t.string "name"
     t.integer "price"
@@ -122,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_14_140000) do
     t.bigint "unlock_rank_id"
     t.datetime "updated_at", null: false
     t.index ["min_rank_for_discount_id"], name: "index_items_on_min_rank_for_discount_id"
+    t.index ["story_group_id", "deleted_at"], name: "index_items_on_story_group_id_and_deleted_at"
     t.index ["story_group_id"], name: "index_items_on_story_group_id"
     t.index ["unlock_rank_id"], name: "index_items_on_unlock_rank_id"
   end

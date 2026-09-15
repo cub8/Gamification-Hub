@@ -38,6 +38,7 @@ class Badge < ApplicationRecord
                          allow_nil: true
 
   validate :acceptable_icon
+  validate :art_chosen
 
   # Soft delete (DECISIONS.md:28). NOT a default_scope: StudentsBadge#badge and
   # the discount and eligibility services have to go on resolving a deleted
@@ -55,6 +56,16 @@ class Badge < ApplicationRecord
     return if ACCEPTABLE_ICON_TYPES.include?(icon.content_type)
 
     errors.add(:icon, 'Grafika musi być plikiem GIF, JPG lub PNG.')
+  end
+
+  # Every entity card shows art, so "no art" is not a state the design has — a
+  # record without it falls through to a generic fallback icon that says
+  # nothing. The picker always has a tile selected, so in practice this only
+  # fires on a record that predates the rule or on a hand-built request.
+  def art_chosen
+    return if icon_glyph.present? || icon.attached?
+
+    errors.add(:icon_glyph, 'Wybierz gotową grafikę albo wgraj własną.')
   end
 
   def deleted? = deleted_at.present?

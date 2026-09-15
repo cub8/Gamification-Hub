@@ -17,6 +17,7 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
                name:                    'Gold',
                discount:                20,
                required_currency_value: 500,
+               icon_glyph:              'chev1',
              },
            }
     end
@@ -61,6 +62,7 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
                name:                    'Gold',
                discount:                20,
                required_currency_value: 500,
+               icon_glyph:              'chev1',
              },
            }
     end

@@ -18,6 +18,7 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
                story_description:    'An achievement badge',
                didactic_description: 'A badge for achieving something',
                discount:             10,
+               icon_glyph:           'rabbit',
              },
            }
     end
@@ -65,6 +66,7 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
                story_description:    'An achievement badge',
                didactic_description: 'A badge for achieving something',
                discount:             10,
+               icon_glyph:           'rabbit',
              },
            }
     end

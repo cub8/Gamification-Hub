@@ -9,8 +9,8 @@
         %h2.page-title.mb-0= @students_item.item.name
 
       .text-center.mb-4
-        - if @students_item.item.image.attached?
-          = image_tag @students_item.item.image, class: "img-fluid rounded"
+        - if @students_item.item.icon.attached?
+          = image_tag @students_item.item.icon, class: "img-fluid rounded"
         - else
           %i.fa-solid.fa-box.fa-4x.text-dimmed
 

@@ -35,6 +35,7 @@ class Rank < ApplicationRecord
                          allow_nil: true
 
   validate :acceptable_icon
+  validate :art_chosen
   validate :threshold_free_in_group
 
   # Ascending, which is the order every ladder is computed in. The screens
@@ -47,6 +48,16 @@ class Rank < ApplicationRecord
     return if ACCEPTABLE_ICON_TYPES.include?(icon.content_type)
 
     errors.add(:icon, 'Grafika musi być plikiem GIF, JPG lub PNG.')
+  end
+
+  # Every entity card shows art, so "no art" is not a state the design has — a
+  # record without it falls through to a generic fallback icon that says
+  # nothing. The picker always has a tile selected, so in practice this only
+  # fires on a record that predates the rule or on a hand-built request.
+  def art_chosen
+    return if icon_glyph.present? || icon.attached?
+
+    errors.add(:icon_glyph, 'Wybierz gotową grafikę albo wgraj własną.')
   end
 
   # Two rungs at the same threshold make "which rank do I hold" arbitrary, so

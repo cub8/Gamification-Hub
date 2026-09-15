@@ -409,44 +409,6 @@
     object-fit: cover;
   }
 
-  /* Gold price chip. The 2px bottom band is the same physical-edge idea as
-     the buttons, done as a gradient because this is a clipped surface. */
-  .gh-cost {
-    --gh-c: 5px;
-    position: relative;
-    isolation: isolate;
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 5px 5px 7px;
-    color: var(--gh-on-rank);
-    white-space: nowrap;
-  }
-
-  .gh-cost::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    background: linear-gradient(to top, var(--gh-rank-edge) 0 2px, var(--gh-rank) 2px);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
-  }
-
-  .gh-cost b {
-    font: 800 14px/1 var(--gh-f-ui);
-    font-variant-numeric: tabular-nums;
-  }
-
   /* ---- Teacher dashboard: the side column ---- */
 
   .gh-todo .gh-card-i {

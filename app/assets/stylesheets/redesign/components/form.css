@@ -564,13 +564,31 @@
     color: color-mix(in srgb, var(--gh-badge) 58%, var(--gh-ink));
   }
 
+  /* 21-item.css:9-11. The glyph sits larger in an item tile than in the other
+     two, because item art is a literal object rather than an emblem. */
+  .gh-pz--item {
+    --gh-frame: var(--gh-item);
+  }
+
+  .gh-pz--item i {
+    background: color-mix(in srgb, var(--gh-item) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-item) 58%, var(--gh-ink));
+  }
+
+  .gh-pz--item .gh-gph {
+    width: 56%;
+    max-height: 78%;
+  }
+
   @media (prefers-color-scheme: dark) {
     :root:not([data-gh-theme="light"]) .gh-pz--rank i { color: var(--gh-rank); }
     :root:not([data-gh-theme="light"]) .gh-pz--badge i { color: var(--gh-badge); }
+    :root:not([data-gh-theme="light"]) .gh-pz--item i { color: var(--gh-item); }
   }
 
   :root[data-gh-theme="dark"] .gh-pz--rank i { color: var(--gh-rank); }
   :root[data-gh-theme="dark"] .gh-pz--badge i { color: var(--gh-badge); }
+  :root[data-gh-theme="dark"] .gh-pz--item i { color: var(--gh-item); }
 
   /* ---- The image field: upload ---- */
 
@@ -756,6 +774,163 @@
     padding: 6px 12px 12px;
     font: 500 14px/1.45 var(--gh-f-ui);
     color: var(--gh-ink-2);
+  }
+
+  /* ---- Sentence rows: a setting written as a clause ----
+
+     Ported from 21-item.css:32-34. "Kupić może [ każdy student ▾ ]" reads as a
+     sentence because the control sits inside one, which is the whole reason the
+     item form does not use a stack of labelled fields here. */
+
+  .gh-sent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font: 600 15px var(--gh-f-ui);
+  }
+
+  .gh-sent > span:first-child {
+    min-width: 128px;
+  }
+
+  /* The octagon select shell (21-item.css:35-40). Same frame-plus-inset trick
+     as .gh-inp: a border would break at the cut corners. */
+  .gh-sel {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .gh-sel::before,
+  .gh-sel::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-sel::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-sel::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-sel:focus-within::before {
+    background: var(--gh-focus);
+  }
+
+  .gh-sel select {
+    appearance: none;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 10px 36px 10px 12px;
+    font: 620 14.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+  }
+
+  /* The dropdown list is painted by the OS, which does not inherit the page's
+     theme — so both colours have to be stated. */
+  .gh-sel select option {
+    background: var(--gh-card);
+    color: var(--gh-ink);
+  }
+
+  .gh-sel > i {
+    position: absolute;
+    right: 12px;
+    font-size: 12px;
+    pointer-events: none;
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- Chips: a multiselect you can read ----
+
+     Ported from 21-item.css:41-45. Every chip is a real checkbox in a label, so
+     the group works and posts with JavaScript off; chip_picker_controller hides
+     the unchosen ones and reveals the "Dodaj…" select beside them. */
+
+  .gh-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .gh-chip {
+    --gh-c: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: color-mix(in srgb, var(--gh-badge) 18%, var(--gh-card));
+    font: 620 13.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-chip:hover {
+    background: color-mix(in srgb, var(--gh-badge) 28%, var(--gh-card));
+  }
+
+  .gh-chip small {
+    color: var(--gh-badge-ink);
+    font-weight: 700;
+  }
+
+  .gh-chip > i {
+    font-size: 11px;
+    color: var(--gh-ink-2);
+  }
+
+  /* Unchosen chips are only ever visible with JavaScript off, and then the ×
+     would be a lie — there is nothing yet to remove. */
+  .gh-chip:not(:has(input:checked)) {
+    background: var(--gh-card-2);
+  }
+
+  .gh-chip:not(:has(input:checked)) > i {
+    display: none;
+  }
+
+  /* The checkbox is visually hidden, so the focus ring has to be drawn by the
+     chip around it. */
+  .gh-chip:has(input:focus-visible) {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
   }
 
   @media (max-width: 1080px) {

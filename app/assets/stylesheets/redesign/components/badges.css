@@ -249,6 +249,10 @@
      card faces. */
   .gh-seg2 {
     --gh-c: 7px;
+    /* The underline on the pressed tab. Defaults to the badge form's teal; the
+       item form sets it to orange, because a segmented control that switches
+       between states of an ITEM should be the item's colour (21-item.css:4). */
+    --gh-seg: var(--gh-badge);
     display: flex;
     gap: 3px;
     padding: 3px;
@@ -279,7 +283,15 @@
   .gh-seg2 button[aria-pressed="true"] {
     background: var(--gh-card);
     color: var(--gh-ink);
-    box-shadow: inset 0 -3px 0 var(--gh-badge);
+    box-shadow: inset 0 -3px 0 var(--gh-seg);
+  }
+
+  /* A state this entity cannot reach — an item with no requirements can never
+     be sealed (21-item.css:6). It has to LOOK unavailable: `disabled` alone
+     stops the click but leaves the tab reading as one more thing to press. */
+  .gh-seg2 button[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 
   /* Items whose discount counts this badge (22-br.css:7-8). */

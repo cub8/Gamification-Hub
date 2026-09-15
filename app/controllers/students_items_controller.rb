@@ -9,7 +9,7 @@ class StudentsItemsController < ApplicationController
   def index
     authorize @student, policy_class: StudentsItemPolicy
     @students_items = policy_scope(@student.students_items)
-                      .includes(item: { image_attachment: :blob })
+                      .includes(item: { icon_attachment: :blob })
                       .order(created_at: :desc)
   end
 

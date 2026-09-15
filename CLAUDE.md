@@ -47,6 +47,8 @@ Already covered screens:
 - story group index
 - ranks index, new, edit - teacher and student perspective
 - badges index, new, edit - teacher and student perspective
+- items index, new, edit - teacher perspective
+- shop index, buy confirmation - student perspective
 - invites index, show, new, edit
 - login screens
 

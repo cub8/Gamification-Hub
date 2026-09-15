@@ -12,6 +12,7 @@ class RankTest < ActiveSupport::TestCase
       name:                    'A' * 50,
       discount:                10,
       required_currency_value: 100,
+      icon_glyph:              'chev1',
     )
     assert_equal true, rank.invalid?
     assert_equal true, rank.errors[:name].any?
@@ -60,7 +61,7 @@ class RankTest < ActiveSupport::TestCase
   test 'the same threshold in another group is fine' do
     FactoryBot.create(:rank, story_group: @story_group, required_currency_value: 40)
     elsewhere = Rank.new(story_group: FactoryBot.create(:story_group), name: 'Adept',
-                         discount: 0, required_currency_value: 40,)
+                         discount: 0, required_currency_value: 40, icon_glyph: 'chev1',)
 
     assert_predicate elsewhere, :valid?
   end
@@ -96,18 +97,33 @@ class RankTest < ActiveSupport::TestCase
 
   # nil + attachment -> the upload; key + attachment -> the preset, upload kept.
   test 'art says which of the two images is in use' do
-    rank = FactoryBot.create(:rank, story_group: @story_group, icon_glyph: nil)
-
-    assert_nil rank.art
+    rank = FactoryBot.create(:rank, story_group: @story_group)
 
     rank.icon.attach(io: Rails.root.join('test/fixtures/files/rank_art.png').open,
                      filename: 'rank_art.png', content_type: 'image/png',)
+    rank.update!(icon_glyph: nil)
     assert_equal :upload, rank.art
     assert_predicate rank, :upload?
 
     rank.icon_glyph = 'crown'
     assert_equal 'crown', rank.art
     assert_not_predicate rank, :upload?
+
+    # Records saved before art was required still have to render.
+    rank.icon.purge
+    rank.update_column(:icon_glyph, nil)
+    assert_nil rank.reload.art
+  end
+
+  test 'a rank needs art: a preset or an upload, not neither' do
+    rank = FactoryBot.build(:rank, story_group: @story_group, icon_glyph: nil)
+
+    assert_not rank.valid?
+    assert_equal 'Wybierz gotową grafikę albo wgraj własną.', rank.errors[:icon_glyph].first
+
+    rank.icon.attach(io: Rails.root.join('test/fixtures/files/rank_art.png').open,
+                     filename: 'rank_art.png', content_type: 'image/png',)
+    assert_predicate rank, :valid?
   end
 
   test 'rank saves with valid attributes' do
@@ -116,6 +132,7 @@ class RankTest < ActiveSupport::TestCase
       name:                    'Silver',
       discount:                10,
       required_currency_value: 100,
+      icon_glyph:              'chev1',
     )
     assert_equal true, rank.valid?
     assert_equal true, rank.save

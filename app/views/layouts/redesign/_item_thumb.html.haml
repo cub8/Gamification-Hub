@@ -1,12 +1,16 @@
 -# An item as a mini entity card: the mockup's miniCard() (00-shared.js:173).
 -# Orange frame, because an item is orange in this design language.
 -#
--# `item` may be nil — a purchase whose Item was hard deleted. Soft delete (D1)
--# will make that impossible; until then the fallback glyph stands in.
+-# Lives in layouts/ rather than items/ because three of its four callers are
+-# not the items screen: the notification rows, the teacher dashboard's purchase
+-# feed and the badge form's "Uwzględniają ją" list.
+-#
+-# `item` may be nil — a purchase whose Item was hard deleted before soft delete
+-# existed. A soft-deleted item still resolves and still shows its own art.
 %span.gh-card.gh-mc
   %span.gh-card-f
-    %span.gh-card-i
-      - if item&.image&.attached?
-        = image_tag item.image, alt: ''
+    %span.gh-card-i{ data: local_assigns[:inner_data] }
+      - if item
+        = render 'items/art', item: item
       - else
         %i.fa-solid.fa-flask{ 'aria-hidden': 'true' }

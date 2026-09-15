@@ -15,7 +15,13 @@ Rails.application.routes.draw do
     resource :ranking, only: :show, controller: :ranking do
       post :change_status
     end
-    resources :items, except: :show
+    resources :items, except: :show do
+      # Like ranks and badges: the delete confirmation carries a consequence
+      # sentence and the number of copies students already own, so it needs the
+      # record. A GET route rather than a JS-built dialog, so it also works as a
+      # page when the turbo frame is not there.
+      get :confirm_destroy, on: :member
+    end
     resources :activity_group_templates
     resources :activity_groups, except: %i[show new] do
       post :create_bulk, on: :collection
@@ -43,8 +49,18 @@ Rails.application.routes.draw do
       resources :currency_transactions, only: :index
       resources :students_items, path: :items, only: %i[index show]
     end
-    resources :shop, only: %i[index show] do
-      post :buy, on: :member
+    # No :show — the shop card carries everything a detail page would, at every
+    # width, so nothing links to one.
+    resources :shop, only: :index do
+      member do
+        # The buy confirmation is a dialog holding the price, the discount and
+        # what will be left over, none of which fits in a browser confirm. A GET
+        # route like every other confirmation here, so it renders as a page when
+        # the turbo frame is not there — and so the server re-checks the offer
+        # before quoting a price.
+        get :confirm_buy
+        post :buy
+      end
     end
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
     resources :story_group_invites, path: :invites, as: :invites do

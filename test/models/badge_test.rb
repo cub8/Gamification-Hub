@@ -69,18 +69,34 @@ class BadgeTest < ActiveSupport::TestCase
   # The same three states as Rank#art: a key wins over an attachment, and the
   # attachment is kept so a teacher can switch back.
   test 'art names the preset, the upload, or neither' do
-    badge = FactoryBot.create(:badge, story_group: @story_group, icon_glyph: nil)
-    assert_nil badge.art
-    assert_not badge.upload?
+    badge = FactoryBot.create(:badge, story_group: @story_group)
 
     badge.icon.attach(io: Rails.root.join('test/fixtures/files/rank_art.png').open,
                       filename: 'art.png', content_type: 'image/png',)
+    badge.update!(icon_glyph: nil)
     assert_equal :upload, badge.art
     assert_predicate badge, :upload?
 
     badge.update!(icon_glyph: 'crown')
     assert_equal 'crown', badge.art
     assert_predicate badge.icon, :attached?
+
+    # Records saved before art was required still have to render.
+    badge.icon.purge
+    badge.update_column(:icon_glyph, nil)
+    assert_nil badge.reload.art
+    assert_not badge.upload?
+  end
+
+  test 'a badge needs art: a preset or an upload, not neither' do
+    badge = FactoryBot.build(:badge, story_group: @story_group, icon_glyph: nil)
+
+    assert_not badge.valid?
+    assert_equal 'Wybierz gotową grafikę albo wgraj własną.', badge.errors[:icon_glyph].first
+
+    badge.icon.attach(io: Rails.root.join('test/fixtures/files/rank_art.png').open,
+                      filename: 'art.png', content_type: 'image/png',)
+    assert_predicate badge, :valid?
   end
 
   test 'soft delete keeps the row and takes it off the kept scope' do
@@ -121,6 +137,7 @@ class BadgeTest < ActiveSupport::TestCase
       story_description:    'A starter badge',
       didactic_description: 'A didactic description for the starter badge',
       discount:             10,
+      icon_glyph:           'rabbit',
     )
     assert_equal true, badge.valid?
     assert_equal true, badge.save

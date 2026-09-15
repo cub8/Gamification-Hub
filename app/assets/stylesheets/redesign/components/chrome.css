@@ -95,6 +95,61 @@
     flex: 1;
   }
 
+  /* The student's purse (00-base.css:217-222). The background is a ::before
+     layer, not a background on the element: it is a clipped surface, and every
+     octagon in this design is painted that way so the cut corners stay cut. */
+  .gh-bal {
+    --gh-c: 9px;
+    position: relative;
+    isolation: isolate;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 5px;
+    border: 0;
+    background: none;
+    color: var(--gh-ink);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .gh-bal::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-bal:hover::before {
+    background: var(--gh-card-3);
+  }
+
+  .gh-bal b {
+    display: block;
+    font: 800 20px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-bal small {
+    display: block;
+    margin-top: 2px;
+    font: 500 12px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
   .gh-iconbtn {
     position: relative;
     width: 42px;
@@ -586,6 +641,25 @@
     }
 
     .gh-logo-word {
+      display: none;
+    }
+
+    /* The number survives; the label under it does not. At 58px of header
+       there is no room for two lines, and the coin already says what it is
+       (00-base.css:541-544). */
+    .gh-bal {
+      padding: 4px 9px 4px 4px;
+    }
+
+    .gh-bal .gh-tok {
+      --gh-s: 28px;
+    }
+
+    .gh-bal b {
+      font-size: 18px;
+    }
+
+    .gh-bal small {
       display: none;
     }
 

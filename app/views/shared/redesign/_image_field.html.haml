@@ -20,15 +20,23 @@
 -# `aspect` is the shape the upload is cut to, and it must be the shape of the
 -# hole it goes into: 1.6 is `.gh-art`'s `aspect-ratio: 16 / 10` (card.css).
 -# Change one and change the other, or uploads stop filling the card.
+-# The art is required on every entity that uses this field, so the error slot
+-# lives here rather than in three form templates. Both attributes land in it:
+-# `icon_glyph` carries "nothing chosen" and "unknown preset", `icon` carries a
+-# rejected file type.
 - field_id = ->(suffix) { "gh-#{kind}-art-#{suffix}" }
 - refresh  = local_assigns[:refresh_action]
+- art_error = record.errors[:icon_glyph].first || record.errors[:icon].first
+- error_id  = field_id.call('error')
 
 .gh-fld{ data: { controller: 'image-crop',
                  image_crop_aspect_value: local_assigns.fetch(:aspect, 1.6),
                  image_crop_width_value: 1024, } }
   %p.gh-lbl Grafika
 
-  .gh-pz-grid{ role: 'radiogroup', 'aria-label': 'Gotowe grafiki' }
+  .gh-pz-grid{ role: 'radiogroup', 'aria-label': 'Gotowe grafiki',
+               'aria-invalid': (art_error ? 'true' : nil),
+               'aria-describedby': (art_error ? error_id : nil) }
     - presets.each do |key|
       %label.gh-pz{ class: "gh-pz--#{kind}" }
         = form.radio_button :icon_glyph, key, class: 'sr-only',
@@ -55,6 +63,11 @@
         - preview = { alt: '', data: { image_crop_target: 'ownPreview' } }
         - preview[:src] = url_for(record.icon) if record.icon.attached?
         %img{ preview }
+
+  - if art_error
+    %p.gh-err{ id: error_id, role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= art_error
 
   .gh-drop
     %span.gh-drop-ic

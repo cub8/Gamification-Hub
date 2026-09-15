@@ -29,6 +29,13 @@ module Redesign
       rabbit rocket carrot compass starTrail wrench bolt crew crown shield heartPlus starPlus
     ].freeze
 
+    # 30-item.js:13. Deliberately the most literal set of the three: an item is
+    # a thing you buy and use, so its art names the mechanic (a retake, a
+    # deadline, a percentage) rather than a rank or a story beat.
+    ITEM = %w[
+      shield hourglass chat retake percent paperCheck heartPlus note clock papers3 starPlus flask
+    ].freeze
+
     # What each glyph shows, in Polish. The picker is a radio group and this is
     # its only text — the mockup labels its tiles with the raw key ("Grafika
     # chev1", 30-br.js:27), which tells a screen reader nothing.

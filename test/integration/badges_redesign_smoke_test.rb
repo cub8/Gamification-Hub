@@ -431,9 +431,11 @@ class BadgesRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-lgrid .gh-art img', false
   end
 
-  # Neither a preset nor an upload: a badge created before the picker existed.
+  # Neither a preset nor an upload. Art is required of new badges now, so this
+  # can only be a row saved before that rule existed — which still has to
+  # render rather than blow up the list.
   test 'a badge with no art at all falls back to an icon' do
-    badge(name: 'Bez grafiki', glyph: nil)
+    badge(name: 'Bez grafiki').update_column(:icon_glyph, nil)
 
     get story_group_badges_path(@story_group)
 
