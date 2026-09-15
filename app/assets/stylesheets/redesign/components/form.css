@@ -695,6 +695,29 @@
     color: var(--gh-ink);
   }
 
+  /* The discount box holds two sentences — an example student, then the
+     ceiling — where every other .gh-expl holds one. */
+  .gh-expl p {
+    margin: 0;
+  }
+
+  .gh-expl p + p {
+    margin-top: 8px;
+  }
+
+  /* No example to write (nothing in the group discounts anything a plausible
+     student could hold): the paragraph stays in the markup for the live preview
+     to write into, but an empty line must not open a gap. */
+  .gh-expl p:empty {
+    display: none;
+  }
+
+  /* The ceiling is a footnote to the example above it, not a second headline. */
+  .gh-expl-max {
+    color: var(--gh-ink-2);
+    font-size: 13.5px;
+  }
+
   .gh-warn,
   .gh-warn2 {
     display: flex;

@@ -37,6 +37,12 @@ class ItemsRedesignSmokeTest < ActionDispatch::IntegrationTest
     @oneup       = item(name: 'Dodatkowe życie', price: 20, can_buy_at_0_lives: true)
   end
 
+  # The discount box holds two sentences now, so an assertion has to name the
+  # one it means rather than the box.
+  EXAMPLE = '[data-item-form-target=discountText]'
+  MAXIMUM = '[data-item-form-target=discountMax]'
+  UNLOCK  = '[data-item-form-target=unlockText]'
+
   def rank(name:, threshold:, discount: 0)
     FactoryBot.create(:rank, story_group: @story_group, name: name,
                              required_currency_value: threshold, discount: discount,)
@@ -314,7 +320,7 @@ class ItemsRedesignSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_item_path(@story_group, @poprawa)
 
     assert_select '.gh-pvcard .gh-tag--disc[hidden]'
-    assert_select '.gh-expl', /\ABez zniżek\./
+    assert_select EXAMPLE, /\ABez zniżek\./
   end
 
   test 'the unlock sentence names the rank and the badge' do
@@ -324,8 +330,8 @@ class ItemsRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-expl', /Kupią tylko studenci z rangą Kapitan lub wyższą/
-    assert_select '.gh-expl', /którzy mają odznakę Nawigator, jeśli mają co najmniej 1 życie\./
+    assert_select UNLOCK, /Kupią tylko studenci z rangą Kapitan lub wyższą/
+    assert_select UNLOCK, /którzy mają odznakę Nawigator, jeśli mają co najmniej 1 życie\./
   end
 
   test 'a badge that both gates and discounts gets a note, not an error' do
@@ -355,7 +361,7 @@ class ItemsRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-expl',
+    assert_select EXAMPLE,
                   'Przykładowo: student z odznaką Mechanik Załogi zaoszczędzi 5% i zapłaci 29 zamiast 30.'
     assert_select '.gh-hint', /Wystarczy spełnić jeden z warunków/
   end
@@ -368,9 +374,237 @@ class ItemsRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-expl',
+    assert_select EXAMPLE,
                   'Przykładowo: student z rangą Kapitan oraz odznakami Mechanik i Nawigator ' \
                   'zaoszczędzi 30% i zapłaci 70 zamiast 100.'
+  end
+
+  # --- the ceiling mirrors the till, not the item's configuration ----------
+  #
+  # DiscountCalculatorService is more generous than an item's own settings look:
+  # an item naming no discount conditions discounts for EVERYONE, and the amount
+  # is the student's rank plus every badge they hold, listed here or not. These
+  # five pin the places the old, narrower reading was wrong.
+
+  test 'an item with no discount conditions still promises what the till will give' do
+    shop!
+    @poprawa.update!(price: 10)
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    badge(name: 'Nawigator', discount: 10)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select '.gh-pvcard .gh-tag--disc[hidden]', false
+    assert_select '.gh-tag--disc', 'Zniżki do −25%'
+    assert_select EXAMPLE,
+                  'Przykładowo: student z rangą Kapitan oraz odznaką Nawigator ' \
+                  'zaoszczędzi 25% i zapłaci 8 zamiast 10.'
+  end
+
+  test 'a badge the item does not list still counts toward the ceiling' do
+    shop!
+    @poprawa.update!(price: 100)
+    @poprawa.discount_badges << badge(name: 'Mechanik', discount: 5)
+    badge(name: 'Nawigator', discount: 10)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select '.gh-tag--disc', 'Zniżki do −15%'
+    assert_select EXAMPLE,
+                  'Przykładowo: student z odznakami Mechanik i Nawigator ' \
+                  'zaoszczędzi 15% i zapłaci 85 zamiast 100.'
+  end
+
+  # Holding a listed badge qualifies a student of ANY rank, so their own rank's
+  # discount rides along even though the item sets no floor.
+  test 'discount badges with no floor still reach the whole ladder' do
+    shop!
+    @poprawa.update!(price: 100)
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    @poprawa.discount_badges << badge(name: 'Nawigator', discount: 10)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select '.gh-tag--disc', 'Zniżki do −25%'
+  end
+
+  # The one configuration that DOES narrow the ladder: a floor with nothing
+  # beside it, where being at or above it is the only way in. Add a discount
+  # badge and the rungs below the floor come back into reach.
+  test 'a floor standing alone keeps the rungs below it out of the ceiling' do
+    shop!
+    @poprawa.update!(price: 100)
+    rank(name: 'Rekrut', threshold: 0, discount: 30)
+    kapitan = rank(name: 'Kapitan', threshold: 100, discount: 10)
+    @poprawa.update!(min_rank_for_discount: kapitan)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+    assert_select '.gh-tag--disc', 'Zniżki do −10%'
+
+    @poprawa.discount_badges << badge(name: 'Nawigator', discount: 10)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+    assert_select '.gh-tag--disc', 'Zniżki do −40%'
+  end
+
+  # "Does anybody pay less than the price on this card", not "did the teacher
+  # configure a discount" — a dark flag on an item selling below list price is
+  # the same lie in a smaller place.
+  test 'the grid flags a discount on an item that names no discount conditions' do
+    shop!
+    badge(name: 'Nawigator', discount: 10)
+
+    get story_group_items_path(@story_group)
+
+    assert_select '.gh-lgrid .gh-tag--disc', 3
+  end
+
+  # The ceiling's group-wide half crosses into TypeScript, so the form hands it
+  # over rather than letting the preview re-derive it. These four attributes are
+  # the whole of that contract.
+  test 'the form hands the preview the same group facts Redesign::ItemCard uses' do
+    shop!
+    rank(name: 'Rekrut', threshold: 0, discount: 5)
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    badge(name: 'Nawigator', discount: 10)
+    badge(name: 'Mechanik', discount: 5)
+    badge(name: 'Bez zniżki', discount: 0)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    form = css_select('form[data-controller=item-form]').first
+    card = Redesign::ItemCard.new(@poprawa.reload,
+                                  ranks:  @story_group.ranks.by_threshold.to_a,
+                                  badges: @story_group.badges.kept.by_name.to_a,)
+
+    assert_equal card.ladder_discount.to_s,   form['data-item-form-ladder-discount-value']
+    assert_equal 'Kapitan',                   form['data-item-form-ladder-rank-value']
+    assert_equal card.badges_discount.to_s,   form['data-item-form-badge-discount-value']
+    # Only the badges that actually add something, in gh_and_list order.
+    assert_equal '["Mechanik","Nawigator"]',  form['data-item-form-badge-names-value']
+  end
+
+  # --- the example student, the maximum, and the cap --------------------------
+
+  test 'the maximum line spells out the ceiling under the example' do
+    shop!
+    @poprawa.update!(price: 100)
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    badge(name: 'Nawigator', discount: 10)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select MAXIMUM, 'Maksymalnie: student z rangą Kapitan oraz odznaką Nawigator uzyska zniżkę 25%.'
+  end
+
+  # Naming every badge is exactly what the example above exists to avoid.
+  test 'the maximum summarises the badges instead of listing them' do
+    shop!
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    %w[Alfa Beta Gamma].each { |name| badge(name: name, discount: 5) }
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select MAXIMUM,
+                  'Maksymalnie: student z rangą Kapitan oraz wszystkimi odznakami uzyska zniżkę 30%.'
+  end
+
+  # Randomised, so this pins the rule rather than one pick: at most two badges,
+  # and the saving it quotes is the sum of exactly what it named.
+  test 'the example names at most two badges and its saving matches them' do
+    shop!
+    @poprawa.update!(price: 100)
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    discounts = { 'Alfa' => 3, 'Beta' => 4, 'Gamma' => 5, 'Delta' => 6, 'Epsilon' => 7 }
+    discounts.each { |name, value| badge(name: name, discount: value) }
+
+    5.times do
+      get edit_story_group_item_path(@story_group, @poprawa)
+
+      bolds = css_select("#{EXAMPLE} b").map { |bold| bold.text.strip }
+
+      assert_equal 'Kapitan', bolds.first
+
+      named = bolds.second.split(/,\s*|\s+i\s+/)
+      assert_operator named.size, :<=, Redesign::DiscountExample::MAX_BADGES
+      expected = named.sum { |name| discounts[name] } + 15
+
+      assert_equal expected, bolds.third.delete('%').to_i
+    end
+  end
+
+  # A rung below the floor qualifies for nothing, so the example must never
+  # stand a student there — however fat that rung's own discount looks.
+  test 'the example never stands on a rung the floor rules out' do
+    shop!
+    rank(name: 'Rekrut', threshold: 0, discount: 30)
+    kapitan = rank(name: 'Kapitan', threshold: 100, discount: 10)
+    @poprawa.update!(price: 100, min_rank_for_discount: kapitan)
+
+    5.times do
+      get edit_story_group_item_path(@story_group, @poprawa)
+
+      assert_select EXAMPLE, /z rangą Kapitan /
+      assert_select EXAMPLE, { text: /Rekrut/, count: 0 }
+    end
+  end
+
+  test 'discounts that overshoot the cap get a note saying so' do
+    shop!
+    rank(name: 'Kapitan', threshold: 100, discount: 40)
+    badge(name: 'Nawigator', discount: 40)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select '.gh-warn2 span',
+                  "Zniżki sumują się do 80%, a sklep odejmie najwyżej #{Discount::CAP_VALUE}%. " \
+                  'Nadwyżka przepada — rozważ niższe zniżki przy rangach i odznakach.'
+    assert_select MAXIMUM, /uzyska zniżkę #{Discount::CAP_VALUE}%\./
+  end
+
+  test 'discounts inside the cap get no note' do
+    shop!
+    rank(name: 'Kapitan', threshold: 100, discount: 20)
+    badge(name: 'Nawigator', discount: 20)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    assert_select '.gh-warn2 span', { text: /sumują się/, count: 0 }
+    assert_select MAXIMUM, /uzyska zniżkę 40%\./
+  end
+
+  # The preview needs both numbers off a rung: the ceiling it implies for the
+  # card's chip, and its own cut for an example student standing on it.
+  test 'each rank option carries its own cut as well as the ceiling it implies' do
+    shop!
+    rank(name: 'Rekrut', threshold: 0, discount: 5)
+    rank(name: 'Kapitan', threshold: 100, discount: 20)
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    options   = css_select('select#item_min_rank_for_discount_id option')
+    own       = options.map { |option| option['data-gh-own'] }
+    own_names = options.map { |option| option['data-gh-own-name'] }
+    ceiling   = options.map { |option| option['data-gh-discount'] }
+    reach     = options.map { |option| option['data-gh-name'] }
+
+    assert_equal %w[0 5 20],  own
+    assert_equal ['', 'Rekrut', 'Kapitan'], own_names
+    # The ceiling a floor implies is a DIFFERENT rung from the floor itself.
+    assert_equal %w[0 20 20], ceiling
+    assert_equal ['', 'Kapitan', 'Kapitan'], reach
+  end
+
+  test 'the form hands the preview the shuffle both sides sample from' do
+    shop!
+    rank(name: 'Kapitan', threshold: 100, discount: 15)
+    %w[Alfa Beta].each { |name| badge(name: name, discount: 5) }
+
+    get edit_story_group_item_path(@story_group, @poprawa)
+
+    form = css_select('form[data-controller=item-form]').first
+    assert_equal ['Kapitan'], JSON.parse(form['data-item-form-example-rank-order-value'])
+    assert_equal %w[Alfa Beta], JSON.parse(form['data-item-form-example-badge-order-value']).sort
   end
 
   # The one number this screen duplicates across languages, because the preview
@@ -435,7 +669,7 @@ class ItemsRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-seg2 button[value=sealed][disabled]'
     assert_select '.gh-hint', 'Bez wymagań przedmiot nigdy nie będzie zapieczętowany.'
-    assert_select '.gh-expl', /\AKażdy student może kupić ten przedmiot/
+    assert_select UNLOCK, /\AKażdy student może kupić ten przedmiot/
     assert_select '.gh-pvcard .gh-req li', false
   end
 

@@ -5,9 +5,12 @@
 -# reason: an item card has three states and they need the width.
 - editing = item.persisted?
 - error   = ->(attribute) { item.errors[attribute].first }
-- card    = Redesign::ItemCard.new(item, ranks: shelf.ranks)
-- bought  = editing ? shelf.bought_for(item) : 0
 - badges  = @story_group.badges.kept.by_name.to_a
+- card    = Redesign::ItemCard.new(item, ranks: shelf.ranks, badges: badges)
+-# Re-picked on every render, which is the point: it is AN example student, not
+-# the example. The shuffle below is what lets the browser re-pick the same way.
+- example = Redesign::DiscountExample.new(card)
+- bought  = editing ? shelf.bought_for(item) : 0
 
 %section.gh-panel.gh-phead.gh-phead--stack
   %p.gh-crumbs
@@ -21,7 +24,22 @@
 -# The crop event bubbles up from the image field, and #art re-reads the artwork
 -# out of the picker tile the cropper just redrew — so dragging the crop box
 -# moves the preview card and the thumbnail with it.
-- form_data = { controller: 'item-form', action: 'gh:image-crop->item-form#art' }
+-#
+-# The group-wide half of the ceiling, handed over rather than re-derived: the
+-# chips carry only each badge's own discount and the ladder's best is not any
+-# one select option, so item_form_controller has no way to work these out
+-# without a second copy of a rule Redesign::ItemCard already owns.
+-#
+-# The two `example_*_order` values are ONE shuffle, walked by both sides, so the
+-# server's example student and the browser's cannot come out different.
+- form_data = { controller: 'item-form',
+                action:     'gh:image-crop->item-form#art',
+                item_form_ladder_discount_value: card.ladder_discount,
+                item_form_ladder_rank_value:     card.ladder_discount_rank&.name.to_s,
+                item_form_badge_discount_value:  card.badges_discount,
+                item_form_badge_names_value:     card.discount_badges.map(&:name).to_json,
+                item_form_example_rank_order_value:  example.rank_order.to_json,
+                item_form_example_badge_order_value: example.badge_order.to_json, }
 
 = form_with model: [@story_group, item], data: form_data do |f|
 
@@ -140,9 +158,16 @@
 
       .gh-fsec
         %h2.gh-h3 Zniżki
+        -# The second sentence is the part that surprises everyone: the warunki
+        -# below decide WHO gets a discount, never how big it is. The size always
+        -# comes from the student's own rank and every badge they hold
+        -# (DiscountCalculatorService), which is why an item with no conditions
+        -# here still sells below its price.
         %p.gh-hint
           Zniżka z rangi to procent przypisany do rangi studenta. Zniżki z odznak
-          się sumują. Wystarczy spełnić jeden z warunków, żeby zniżka zadziałała.
+          się sumują. Wystarczy spełnić jeden z warunków, żeby zniżka zadziałała
+          — bez warunków dostaje ją każdy kupujący. Wysokość liczy się zawsze
+          z rangi i wszystkich odznak studenta, także tych niewybranych tutaj.
 
         .gh-sent
           %span Zniżka dla rang
@@ -162,12 +187,17 @@
           - else
             %span.gh-hint W tej grupie nie ma jeszcze odznak.
 
-        %p.gh-expl{ data: { item_form_target: 'discountText' } }= item_discount_sentence(item, card)
+        -# Two sentences in the one consequence box: a student you could actually
+        -# meet, then the ceiling behind the card's "Zniżki do −X%" chip. Separate
+        -# elements because writeSentence replaces a target's children whole.
+        .gh-expl
+          %p{ data: { item_form_target: 'discountText' } }= item_discount_sentence(item, card, example)
+          %p.gh-expl-max{ data: { item_form_target: 'discountMax' } }= item_discount_max_sentence(card)
 
         -# Not errors: a teacher may well mean an overlap. Rendered as notes, and
         -# the form saves either way.
         .gh-warns{ data: { item_form_target: 'warnings' } }
-          - item_overlap_warnings(item).each do |warning|
+          - item_overlap_warnings(item, card).each do |warning|
             %p.gh-warn2
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= warning

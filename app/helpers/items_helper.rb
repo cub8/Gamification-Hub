@@ -52,23 +52,49 @@ module ItemsHelper
   # "najwięcej zaoszczędzi…" would read as though all of them were needed. This
   # describes one student who happens to meet them all, which is where the
   # card's "Zniżki do −X%" ceiling comes from.
-  def item_discount_sentence(item, card)
+  #
+  # "Bez zniżek." now means what it says: the ceiling is zero only when nothing
+  # in the whole group discounts anything. An item that simply names no discount
+  # conditions still sells below list price to anyone with a rank or a badge,
+  # and used to claim otherwise.
+  def item_discount_sentence(item, card, example)
     price = item.price.to_i
     return safe_join(['Bez zniżek. Każdy kupujący zapłaci ', tag.b(price), '.']) if card.max_discount.zero?
+    # Nobody plausible to name — the maximum line below still says everything
+    # there is to say about this item's discounts.
+    return if example.none?
 
-    paid = PriceCalculatorService.new(price: price, discount: Discount.new(card.max_discount)).calculate
+    paid = PriceCalculatorService.new(price: price, discount: Discount.new(example.percent)).calculate
 
-    saving = tag.b("#{card.max_discount}%")
+    saving = tag.b("#{example.percent}%")
     tail   = [' zaoszczędzi ', saving, ' i zapłaci ', tag.b(paid), " zamiast #{price}."]
 
-    safe_join(['Przykładowo: student', *discount_holder_clause(card), *tail])
+    safe_join(['Przykładowo: student', *example_holder_clause(example), *tail])
+  end
+
+  # The line beneath the example: what the best-off student in this group gets,
+  # which is the number on the card's own "Zniżki do −X%" chip spelled out.
+  def item_discount_max_sentence(card)
+    return if card.max_discount.zero?
+
+    saving = tag.b("#{card.max_discount}%")
+
+    safe_join(['Maksymalnie: student', *max_holder_clause(card), ' uzyska zniżkę ', saving, '.'])
   end
 
   # Requirements that quietly cancel a discount out (30-item.js:33-36). Not
   # errors — the teacher may well mean it — so they render as notes, and the
   # form saves either way.
-  def item_overlap_warnings(item)
+  def item_overlap_warnings(item, card = nil)
     warnings = []
+
+    # Not an overlap but the same kind of note: discount a teacher has set up
+    # and no student will ever receive.
+    if card&.capped?
+      warnings << "Zniżki sumują się do #{card.raw_discount}%, a sklep odejmie najwyżej " \
+                  "#{Discount::CAP_VALUE}%. Nadwyżka przepada — rozważ niższe zniżki " \
+                  'przy rangach i odznakach.'
+    end
 
     if discount_rank_covers_everyone?(item)
       warnings << if item.unlock_rank.starting?
@@ -118,10 +144,22 @@ module ItemsHelper
       best  = above.max_by { |other| other.discount.to_i }
 
       label = "od #{rank.name} (−#{rank.discount.to_i}% i więcej)"
-      [label, rank.id, { data: { gh_discount: best&.discount.to_i, gh_name: best&.name.to_s } }]
+      # Two pairs, and they are not the same rung: `gh_discount`/`gh_name` are
+      # the CEILING this floor implies — the best rung at or above it — which is
+      # what the card's chip promises. `gh_own`/`gh_own_name` are the rung
+      # itself, which is what an example student standing on it actually gets.
+      data  = {
+        gh_discount: best&.discount.to_i,
+        gh_name:     best&.name.to_s,
+        gh_own:      rank.discount.to_i,
+        gh_own_name: rank.name.to_s,
+      }
+      [label, rank.id, { data: data }]
     end
 
-    options_for_select([['brak', '', { data: { gh_discount: 0, gh_name: '' } }]] + options, selected)
+    blank = ['brak', '', { data: { gh_discount: 0, gh_name: '', gh_own: 0, gh_own_name: '' } }]
+
+    options_for_select([blank] + options, selected)
   end
 
   private
@@ -145,17 +183,40 @@ module ItemsHelper
 
   # "z rangą X oraz odznakami A i B". `oraz` joins the two halves rather than
   # `i`, which gh_and_list already spends on the badge list itself.
-  def discount_holder_clause(card)
-    rank   = card.best_discount_rank
-    badges = card.item.discount_badges.map(&:name).sort
+  def example_holder_clause(example)
+    names = example.badges.map(&:name)
+    return holder_clause(example.rank&.name, nil) if names.empty?
 
+    noun = names.size > 1 ? 'odznakami ' : 'odznaką '
+
+    holder_clause(example.rank&.name, [noun, tag.b(gh_and_list(names))])
+  end
+
+  # The ceiling's holder. "wszystkimi odznakami" rather than a list: every badge
+  # in the group counts toward a discount (DiscountCalculatorService), and
+  # naming them all is exactly what the example above exists to avoid. With one
+  # badge in the group there is nothing to summarise, so it is named.
+  def max_holder_clause(card)
+    badges = card.discount_badges
+
+    phrase = case badges.size
+             when 0 then nil
+             when 1 then ['odznaką ', tag.b(badges.first.name)]
+             else        ['wszystkimi odznakami']
+             end
+
+    holder_clause(card.best_discount_rank&.name, phrase)
+  end
+
+  # Joins the two halves. `badge_phrase` arrives whole, because Polish puts
+  # "wszystkimi" BEFORE the noun and a name after it — one order does not serve
+  # both.
+  def holder_clause(rank_name, badge_phrase)
     clause = []
-    clause += [' z rangą ', tag.b(rank.name)] if rank
-    if badges.any?
-      noun = badges.size > 1 ? 'odznakami' : 'odznaką'
-      clause += [rank ? ' oraz ' : ' z ', "#{noun} ", tag.b(gh_and_list(badges))]
-    end
-    clause
+    clause += [' z rangą ', tag.b(rank_name)] if rank_name
+    return clause if badge_phrase.nil?
+
+    clause + [rank_name ? ' oraz ' : ' z ', *badge_phrase]
   end
 
   # The discount's floor is at or below the purchase requirement, so nobody who
