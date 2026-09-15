@@ -18,7 +18,7 @@ module Redesign
     #   earned    — this student holds it, so the card shows its front
     #   withdrawn — soft-deleted, but held: it is off every list except this
     #               student's own deck, where it stays as history
-    Slot = Struct.new(:badge, :holders, :earned, :withdrawn) do
+    Slot = Data.define(:badge, :holders, :earned, :withdrawn) do
       def earned?    = earned
       def withdrawn? = withdrawn
     end

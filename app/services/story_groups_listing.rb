@@ -26,12 +26,11 @@ class StoryGroupsListing
     'student' => ['Uczę się',  :lrn],
   }.freeze
 
-  Group = Struct.new(:story_group, :role, :students_count, :meta) do
+  Group = Data.define(:story_group, :role, :students_count, :meta) do
     def role_label = ROLE_LABELS[role]
   end
 
-  # `total`, not `count`: a Struct member named `count` shadows Struct#count.
-  Tab = Struct.new(:key, :label, :total)
+  Tab = Data.define(:key, :label, :total)
 
   attr_reader :groups, :tabs, :filter
 
