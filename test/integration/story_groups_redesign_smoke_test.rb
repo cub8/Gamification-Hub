@@ -50,7 +50,7 @@ class StoryGroupsRedesignSmokeTest < ActionDispatch::IntegrationTest
     story_group = FactoryBot.create(:story_group, owner: teacher)
 
     sign_in teacher
-    get story_group_path(story_group)
+    get edit_story_group_path(story_group)
 
     assert_response :success
     assert_select '.gh-shell', false

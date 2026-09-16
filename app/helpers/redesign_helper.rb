@@ -48,14 +48,7 @@ module RedesignHelper
   # Polish copy is written inline as everywhere else; this keeps the form right
   # when the number is dynamic. Mirrors the mockup's `pl()` (00-shared.js:4).
   def gh_plural(count, one, few, many)
-    n        = count.abs
-    last_two = n % 100
-    last_one = n % 10
-
-    return one if n == 1
-    return few if last_one.between?(2, 4) && !last_two.between?(12, 14)
-
-    many
+    Redesign::Plural.pick(count, one, few, many)
   end
 
   # "5 minut", "1 minuta", "3 minuty".

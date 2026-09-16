@@ -45,6 +45,7 @@ Already covered screens:
 - chrome, notifications
 - student and teacher dashboard
 - story group index
+- story group overview (Przegląd) - teacher and student perspectives
 - ranks index, new, edit - teacher and student perspective
 - badges index, new, edit - teacher and student perspective
 - items index, new, edit - teacher perspective

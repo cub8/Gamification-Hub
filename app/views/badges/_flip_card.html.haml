@@ -27,11 +27,11 @@
                              data: { badge_flip_target: 'front' } }
       .gh-card-f
         .gh-card-i
-          = render 'front', badge: badge, targets: targets,
+          = render 'badges/front', badge: badge, targets: targets,
             flipper: interactive, withdrawn: withdrawn
 
     .gh-face.gh-face--back{ 'aria-hidden': (earned ? 'true' : nil), inert: earned,
                             data: { badge_flip_target: 'back' } }
       .gh-card-f
         .gh-card-i.gh-back-i
-          = render 'back', badge: badge, targets: targets, flipper: interactive
+          = render 'badges/back', badge: badge, targets: targets, flipper: interactive

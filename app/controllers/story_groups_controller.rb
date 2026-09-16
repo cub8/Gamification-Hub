@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
-  # Only #index is converted to the "Card Table" redesign. #show, #new and
-  # #edit still render Bootstrap markup and so stay on the application layout.
+  # #index and #show are converted to the "Card Table" redesign; #new and #edit
+  # still render Bootstrap markup and so stay on the application layout.
   # RedesignLayout is all-or-nothing, hence its two lines inlined here instead
   # of `include RedesignLayout`.
-  layout 'redesign', only: :index
-  helper RedesignHelper
+  layout 'redesign', only: %i[index show]
+  # #show renders the same owned-item card and the same badge cards as the
+  # inventory and the badge deck; under `include_all_helpers = false` their
+  # helpers do not arrive on their own.
+  helper RedesignHelper, StudentsItemsHelper, BadgesHelper
 
   before_action :set_story_group, only: %i[show edit update destroy]
 
@@ -18,21 +21,20 @@ class StoryGroupsController < ApplicationController
   end
 
   # GET /story_groups/1
+  #
+  # Two screens, chosen by MEMBERSHIP rather than by role: a teacher enrolled in
+  # somebody else's group reads it as a student. This is the same question
+  # Redesign::GroupChrome#student? asks for the sidebar, so the page and the
+  # navigation beside it cannot disagree about who you are here.
   def show
     authorize @story_group
     @student = @story_group.student_memberships.find_by(user_id: @current_user.id)
 
-    if @student
-      dashboard       = StoryGroupStudentDashboard.new(student: @student).load
-      @rank           = dashboard.rank
-      @badges         = dashboard.badges
-      @students_items = dashboard.students_items
-    else
-      dashboard                = StoryGroupTeacherDashboard.new(story_group: @story_group).load
-      @recent_transactions     = dashboard.recent_transactions
-      @recent_activity_groups  = dashboard.recent_activity_groups
-      @activity_group_rankings = dashboard.activity_group_rankings
-    end
+    @overview = if @student
+                  Redesign::StudentOverview.new(student: @student).load
+                else
+                  Redesign::TeacherOverview.new(story_group: @story_group).load
+                end
   end
 
   # GET /story_groups/new
@@ -98,6 +100,7 @@ class StoryGroupsController < ApplicationController
         currency_name
         currency_icon
         default_lives
+        ranking_mode
       ],
     )
   end

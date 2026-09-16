@@ -343,24 +343,27 @@
   /* ---- narrow --------------------------------------------------------- */
 
   @media (max-width: 720px) {
-    /* The deck becomes a scroll-snapping strip rather than a tall single
-       column: eight badges stacked would bury everything under them
-       (00-base.css:576-579). */
+    /* One badge per row, scrolled with the page.
+
+       The mockup makes this a horizontal scroll-snapping strip
+       (00-base.css:576-579) and the port followed it, but at 390px a 158px card
+       leaves two half-visible slivers and hides the strip's own scrollbar
+       inside a page that already scrolls the other way. DECISIONS.md:50 is the
+       rule that wins here: card lists are single-column on phones, and only the
+       shop keeps two compact columns. */
     .gh-cards--b {
-      display: flex;
-      overflow-x: auto;
-      gap: 12px;
-      padding: 4px 2px 10px;
-      scroll-snap-type: x mandatory;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
     }
 
-    .gh-cards--b .gh-card {
-      flex: 0 0 158px;
-      scroll-snap-align: start;
-    }
-
-    .gh-cards--b .gh-back-i .gh-how {
-      font-size: 12px;
+    /* A full-width card would give a 16:10 band about 224px of a 390px screen,
+       so the art arrives before the name and pushes the rule off the fold. Cap
+       it, the way shop.css already caps art inside a zone. The glyph is sized
+       in percentages and the well clips, so this crops the hatching, not the
+       artwork. */
+    .gh-cards--b .gh-art,
+    .gh-cards--b .gh-back-art {
+      max-height: 190px;
     }
 
     .gh-lgrid {
@@ -379,10 +382,6 @@
 
     .gh-flip--just .gh-face--front {
       animation: none;
-    }
-
-    .gh-cards--b {
-      scroll-behavior: auto;
     }
   }
 }
