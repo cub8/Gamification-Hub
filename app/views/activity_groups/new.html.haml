@@ -1,0 +1,9 @@
+-# The "Utwórz arkusz" dialog. Mockup: js-expanded/30-ag.js:57-65.
+- content_for :title, "Nowy arkusz z szablonu #{@template.base_name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'new_form', template: @template, suggested_names: @suggested_names
+- else
+  %section.gh-panel.gh-dlg-page
+    = render 'new_form', template: @template, suggested_names: @suggested_names

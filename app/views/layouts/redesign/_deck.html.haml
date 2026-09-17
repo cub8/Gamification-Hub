@@ -8,12 +8,9 @@
 %section.gh-deck{ 'aria-label': "Grupa #{chrome.name}" }
   .gh-deck-f
     .gh-deck-i
-      %span.gh-deck-art{ class: ('gh-deck-art--mono' unless story_group.icon.attached?),
-                         'aria-hidden': 'true' }
-        - if story_group.icon.attached?
-          = image_tag story_group.icon, alt: ''
-        - else
-          = gh_monogram(story_group.name)
+      - cover = gh_group_cover(story_group)
+      %span.gh-deck-art{ class: ('gh-deck-art--mono' if cover.nil?), 'aria-hidden': 'true' }
+        = cover || gh_monogram(story_group.name)
 
       .gh-deck-head
         %h2.gh-deck-name= chrome.name

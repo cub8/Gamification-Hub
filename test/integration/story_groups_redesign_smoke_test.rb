@@ -45,12 +45,11 @@ class StoryGroupsRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_no_match(/data-bs-/, response.body)
   end
 
+  # #edit is converted now; creating a group is the last action here still on
+  # Bootstrap, and it stays that way until the creation wizard is done.
   test 'the unconverted actions stay on the Bootstrap layout' do
-    teacher = FactoryBot.create(:user, role: :teacher)
-    story_group = FactoryBot.create(:story_group, owner: teacher)
-
-    sign_in teacher
-    get edit_story_group_path(story_group)
+    sign_in FactoryBot.create(:user, role: :teacher)
+    get new_story_group_path
 
     assert_response :success
     assert_select '.gh-shell', false

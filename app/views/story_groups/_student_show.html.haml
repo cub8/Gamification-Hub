@@ -11,11 +11,7 @@
   %section.gh-card.gh-card--neutral.gh-lore
     .gh-card-f
       .gh-card-i
-        .gh-art{ class: ('gh-art--mono' unless story_group.icon.attached?) }
-          - if story_group.icon.attached?
-            = image_tag story_group.icon, alt: ''
-          - else
-            = gh_monogram(story_group.name)
+        = render 'layouts/redesign/group_art', story_group: story_group
 
         .gh-lore-b
           %h1.gh-h1= story_group.name

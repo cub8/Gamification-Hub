@@ -1,0 +1,25 @@
+-# One sheet. Mockup: 30-ag.js:26-28.
+-#
+-# The newest sheet's "Oceń" is the primary button and the rest are secondary:
+-# the sheet at the top is the one you just taught.
+- record = sheet.record
+
+%li.gh-ag{ class: ('gh-ag--fresh' if fresh) }
+  %span.gh-ag-n
+    %b= record.name
+    - if sheet.columns_modified?
+      %span.gh-tag.gh-tag--mod Zmienione kolumny
+
+  %span.gh-ag-s
+    - if sheet.graded?
+      = "Przyznano #{sheet.awards_count} #{gh_plural(sheet.awards_count, 'nagrodę', 'nagrody', 'nagród')}"
+    - else
+      Jeszcze nic nie przyznano
+
+  %span.gh-ag-a
+    = link_to 'Oceń',
+      edit_story_group_activity_group_students_activity_group_categories_path(@story_group, record),
+      class: "gh-btn gh-btn--sm#{' gh-btn--sec' unless primary}"
+    = link_to edit_story_group_activity_group_path(@story_group, record),
+      class: 'gh-iconbtn', title: 'Ustawienia arkusza', 'aria-label': "Ustawienia: #{record.name}" do
+      %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }

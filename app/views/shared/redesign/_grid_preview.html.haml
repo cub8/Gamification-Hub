@@ -1,0 +1,50 @@
+-# The editor's right-hand column: a miniature of the grading table's header,
+-# so you can see the columns you are describing. Mockup: 30-ag.js:52.
+-#
+-# Server-rendered from the saved record, then kept in step by sheet_form's
+-# clones of the two <template>s below — the same shape the item and rank forms
+-# use for their previews.
+- sample = local_assigns[:sample_names].presence || ['Adam Pawłowski', 'Barbara Kowalewska']
+
+%details.gh-pvd{ open: true }
+  %summary
+    Podgląd tabeli ocen
+    %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+
+  %section.gh-panel.gh-pv
+    %h3.gh-h3 Nagłówek tabeli ocen
+
+    .gh-gprev
+      %table.gh-grid
+        %thead
+          %tr{ data: { sheet_form_target: 'previewHead' } }
+            %th.gh-th-stu{ scope: 'col' } Student
+            - categories.each do |category|
+              %th{ scope: 'col' }
+                .gh-thc
+                  %span.gh-thn= category.didactic_description.presence || '…'
+                  %span.gh-cost
+                    %b= "+#{category.reward.to_i}"
+                    = render 'layouts/redesign/currency_token', story_group: @story_group, size: 16
+        %tbody
+          - sample.each do |name|
+            %tr{ data: { sheet_form_target: 'previewRow' } }
+              %th.gh-td-stu{ scope: 'row' }= name
+              - categories.each do
+                %td
+                  %span.gh-cell.gh-cell--sm
+
+    %span.gh-hint Najedź na nagłówek w prawdziwej tabeli, żeby zobaczyć opis fabularny.
+
+-# Clone sources. Kept out of the table so an empty preview has nothing to
+-# accidentally render.
+%template{ data: { sheet_form_target: 'previewHeadCell' } }
+  %th{ scope: 'col' }
+    .gh-thc
+      %span.gh-thn
+      %span.gh-cost
+        %b
+        = render 'layouts/redesign/currency_token', story_group: @story_group, size: 16
+%template{ data: { sheet_form_target: 'previewBodyCell' } }
+  %td
+    %span.gh-cell.gh-cell--sm

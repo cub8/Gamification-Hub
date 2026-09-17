@@ -1,0 +1,494 @@
+/* The grading table — "Ocenianie".
+   Lifted from design/mockup-src/css/00-base.css:388-455 (grid) and 456-470
+   (the review dialog's list). The mockup's `@container app` breakpoints are
+   plain media queries here, at the same 720px.
+
+   The cell is the only three-state control in the app: empty, marked now, and
+   awarded. The third is not a control at all — it is rendered without an input
+   because the award behind it cannot be taken back (DECISIONS.md:31). */
+
+@layer components {
+
+  /* ---- Page shell ---- */
+
+  .gh-gradeview {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+  }
+
+  .gh-ghead {
+    flex: 0 0 auto;
+    align-items: flex-end;
+  }
+
+  .gh-ghead-r {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .gh-legend {
+    display: flex;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font: 540 13px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-legend li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  /* ---- The table ---- */
+
+  .gh-board {
+    display: flex;
+    min-height: 0;
+    padding: 0;
+  }
+
+  /* The only scroll container on the page: the sticky student column and the
+     sticky "Razem" column are sticky against THIS, not the viewport. */
+  .gh-board-scroll {
+    flex: 1;
+    min-height: 0;
+    margin: 6px;
+    overflow: auto;
+  }
+
+  table.gh-grid {
+    min-width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .gh-grid th,
+  .gh-grid td {
+    padding: 5px 6px;
+    text-align: center;
+    background: var(--gh-card);
+    border-bottom: 1px solid var(--gh-line);
+  }
+
+  .gh-grid thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 12px 6px 10px;
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--gh-line-2);
+  }
+
+  .gh-grid .gh-th-stu,
+  .gh-grid .gh-td-stu {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 214px;
+    padding-left: 14px;
+    text-align: left;
+    border-right: 1px solid var(--gh-line-2);
+  }
+
+  /* Above both the sticky row header and the sticky column header, so the
+     top-left corner does not get painted over while scrolling diagonally. */
+  .gh-grid thead .gh-th-stu {
+    z-index: 3;
+    font: 680 13px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-grid tbody tr:hover > * {
+    background: var(--gh-card-2);
+  }
+
+  .gh-td-stu {
+    white-space: nowrap;
+  }
+
+  .gh-td-stu > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 620 14.5px/1.2 var(--gh-f-ui);
+  }
+
+  /* ---- Column header ---- */
+
+  .gh-thc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    width: 94px;
+    margin: 0 auto;
+  }
+
+  /* `cursor: help` because the column's story description is its title —
+     "Najedź na nagłówek, żeby zobaczyć opis fabularny". */
+  .gh-thn {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 3.54em;
+    font: 650 12.5px/1.18 var(--gh-f-ui);
+    font-stretch: 76%;
+    text-wrap: balance;
+    cursor: help;
+  }
+
+  .gh-colbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 6px;
+    border: 0;
+    background: none;
+    font: 600 11.5px/1 var(--gh-f-ui);
+    color: var(--gh-ink-3);
+    cursor: pointer;
+  }
+
+  .gh-colbtn:hover {
+    background: var(--gh-card-3);
+    color: var(--gh-ink);
+  }
+
+  .gh-colbtn i {
+    font-size: 11px;
+  }
+
+  /* ---- "Razem" column ---- */
+
+  .gh-grid .gh-th-sum,
+  .gh-grid .gh-td-sum {
+    position: sticky;
+    right: 0;
+    z-index: 1;
+    min-width: 92px;
+    padding-right: 16px;
+    text-align: right;
+    border-left: 1px solid var(--gh-line-2);
+  }
+
+  .gh-grid thead .gh-th-sum {
+    z-index: 3;
+    font: 680 13px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-td-sum {
+    font: 780 15px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* What this save would add, beside what the student already has. */
+  .gh-s-p {
+    margin-left: 5px;
+    color: var(--gh-spend);
+  }
+
+  /* ---- Cells ---- */
+
+  .gh-cell {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    background: none;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  .gh-cell::before,
+  .gh-cell::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-cell::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-cell::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-cell:hover::after {
+    background: color-mix(in srgb, var(--gh-item) 18%, var(--gh-card));
+  }
+
+  .gh-cell i {
+    font-size: 15px;
+  }
+
+  /* The checkbox is the control; the label is the cell. */
+  .gh-cell input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gh-cell:has(input:focus-visible) {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  /* "Marked now" is driven by :checked, not by a class, so a cell the teacher
+     ticked looks marked whether or not the controller ever ran. The class is
+     for the legend swatch, which has no input behind it. */
+  .gh-cell--pending,
+  .gh-cell:has(input:checked) {
+    color: var(--gh-on-item);
+  }
+
+  .gh-cell--pending::before,
+  .gh-cell:has(input:checked)::before {
+    background: var(--gh-item-edge);
+  }
+
+  .gh-cell--pending::after,
+  .gh-cell:has(input:checked)::after {
+    --gh-c: 7px;
+    inset: 0 0 3px;
+    background: var(--gh-item);
+  }
+
+  /* The tick belongs to the marked and awarded states only. */
+  .gh-cell > i {
+    visibility: hidden;
+  }
+
+  .gh-cell--pending > i,
+  .gh-cell--awarded > i,
+  .gh-cell:has(input:checked) > i {
+    visibility: visible;
+  }
+
+  .gh-cell--awarded {
+    color: var(--gh-on-rank);
+    cursor: default;
+  }
+
+  .gh-cell--awarded::before {
+    background: var(--gh-rank-edge);
+  }
+
+  .gh-cell--awarded::after {
+    --gh-c: 7px;
+    inset: 0 0 3px;
+    background: var(--gh-rank);
+  }
+
+  .gh-cell--awarded:hover::after {
+    background: var(--gh-rank);
+  }
+
+  /* The padlock corner, so "awarded" reads as locked and not merely as a
+     different colour of tick. */
+  .gh-cell .gh-lk {
+    position: absolute;
+    top: 3px;
+    right: 4px;
+    font-size: 9px;
+    opacity: 0.8;
+  }
+
+  /* Legend swatches and the template editor's preview grid. */
+  .gh-cell--sm {
+    width: 28px;
+    height: 22px;
+    cursor: default;
+  }
+
+  .gh-cell--sm i {
+    font-size: 11px;
+  }
+
+  /* Played once, staggered by --gh-d, over the cells the last save granted. */
+  .gh-cell--stamp {
+    animation: gh-stamp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: var(--gh-d, 0ms);
+  }
+
+  @keyframes gh-stamp {
+    0% {
+      transform: scale(1.55) rotate(-9deg);
+      opacity: 0;
+    }
+
+    55% {
+      transform: scale(0.9);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-cell--stamp {
+      animation: none;
+    }
+  }
+
+  /* ---- Award bar ---- */
+
+  .gh-abar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 18px 14px 22px;
+  }
+
+  .gh-abar-t {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font: 520 15px/1.35 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-abar-t b {
+    font-weight: 720;
+    color: var(--gh-ink);
+  }
+
+  .gh-abar-b {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 10px;
+  }
+
+  /* ---- Review dialog ---- */
+
+  .gh-dialog--review .gh-dialog-body {
+    width: min(700px, 100%);
+  }
+
+  .gh-rv {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh-rv li {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: start;
+    padding: 11px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-rv-n {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font: 640 14.5px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-rv-c {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .gh-rvchip {
+    padding: 4px 7px;
+    background: color-mix(in srgb, var(--gh-item) 16%, var(--gh-chrome));
+    font: 540 12.5px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-rvchip b {
+    margin-left: 3px;
+    font-weight: 760;
+  }
+
+  .gh-rv-s {
+    font: 800 16px/1.3 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    color: var(--gh-spend);
+  }
+
+  /* ---- Phone ---- */
+
+  /* The mockup refuses to render the table below 720px rather than shrinking
+     it: eleven columns and a dozen students do not survive a phone, and a
+     misread cell here grants currency that cannot be taken back. */
+  .gh-grade-mobile {
+    display: none;
+  }
+
+  /* Not .gh-gm — groups.css already owns that for the empty-state panel. */
+  .gh-gmob {
+    padding: 24px 20px;
+  }
+
+  .gh-gmob-ic {
+    --gh-c: 12px;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 14px;
+    background: var(--gh-card-2);
+  }
+
+  .gh-gmob-ic i {
+    font-size: 26px;
+  }
+
+  .gh-gmob p {
+    margin-top: 10px;
+  }
+
+  .gh-gmob .gh-btn {
+    margin-top: 18px;
+  }
+
+  @media (max-width: 720px) {
+    .gh-gradeview {
+      display: none;
+    }
+
+    .gh-grade-mobile {
+      display: block;
+    }
+  }
+}

@@ -1,8 +1,21 @@
 # frozen_string_literal: true
 
+# Grants the rewards a teacher marked on a grading sheet.
+#
+# The one rule this service exists to enforce: awards only ever go *on*. A pair
+# missing from the submitted set is not a revocation, it is simply not a new
+# award — which is what "nie można cofnąć" means on the grade screen and why
+# the review dialog in front of it matters.
 class ActivityGroupRewardGranter
+  # `total`, not `sum`: Struct members shadow Enumerable#sum.
+  Result = Struct.new(:pairs, :total, :students) do
+    def any? = pairs.any?
+  end
+
   def initialize(activity_group:, story_group:)
-    @categories       = activity_group.activity_group_categories.index_by(&:id)
+    # Hidden columns are out of the grading table, so they cannot take new
+    # awards either — otherwise a hand-built request could still pay one out.
+    @categories       = activity_group.activity_group_categories.reject(&:hidden?).index_by(&:id)
     @students         = story_group.student_memberships.index_by(&:id)
     @existing_rewards = StudentsActivityGroupCategory
                         .where(activity_group_category_id: @categories.keys)
@@ -19,15 +32,19 @@ class ActivityGroupRewardGranter
   private
 
   def grant_new(completed_pairs)
-    categories_to_add = completed_pairs - @existing_rewards
+    granted = []
+    sum     = 0
 
-    categories_to_add.each do |category_id, student_id|
+    (completed_pairs - @existing_rewards).each do |category_id, student_id|
       next unless valid_pair?(category_id, student_id)
 
       category = @categories[category_id]
-      student  = @students[student_id]
-      grant(category: category, student: student)
+      grant(category: category, student: @students[student_id])
+      granted << [category_id, student_id]
+      sum += category.reward.to_i
     end
+
+    Result.new(granted, sum, granted.map(&:last).uniq.size)
   end
 
   def valid_pair?(category_id, student_id)

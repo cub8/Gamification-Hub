@@ -12,6 +12,12 @@ Rails.application.routes.draw do
     end
   end
   resources :story_groups do
+    # Deleting a group takes its students, teachers, shop, ranking and every
+    # ledger row with it (DECISIONS.md:28). The confirmation carries those
+    # counts and a type-the-name gate, neither of which fits in a browser
+    # confirm, so it needs a URL to render into.
+    get :confirm_destroy, on: :member
+
     resource :ranking, only: :show, controller: :ranking do
       post :change_status
     end
@@ -22,9 +28,17 @@ Rails.application.routes.draw do
       # page when the turbo frame is not there.
       get :confirm_destroy, on: :member
     end
-    resources :activity_group_templates
-    resources :activity_groups, except: %i[show new] do
-      post :create_bulk, on: :collection
+    # "Arkusze ocen". Templates have no index of their own — they are listed
+    # inside activity_groups#index, one panel each — and no show: the template
+    # is only ever edited.
+    resources :activity_group_templates, except: %i[index show] do
+      get :confirm_destroy, on: :member
+    end
+    resources :activity_groups, except: :show do
+      # `new` is the "Utwórz arkusz" dialog, which needs the template it is
+      # stamping from. Creating one sheet and creating several is one form
+      # posting to #create with a count, so there is no separate bulk route.
+      get :confirm_destroy, on: :member
       resource :students_activity_group_categories, only: %i[edit update]
     end
     resources :ranks, except: :show do
@@ -73,6 +87,16 @@ Rails.application.routes.draw do
       end
     end
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
+
+    # "Ustawienia w grupie": a student's own settings HERE — their nickname,
+    # what the teacher can see, and the way out. Singular, because you have at
+    # most one membership per group and never address somebody else's.
+    resource :membership, only: %i[edit update destroy], controller: :story_group_memberships do
+      # Leaving destroys the membership, and with it the badges, the purchases
+      # and the whole currency history. The confirmation carries those counts,
+      # which a browser confirm cannot hold, so it needs a URL to render into.
+      get :confirm_leave
+    end
     resources :story_group_invites, path: :invites, as: :invites do
       # The delete confirmation is a dialog with a consequence sentence in it,
       # not a browser confirm, so it needs a URL of its own to render into.

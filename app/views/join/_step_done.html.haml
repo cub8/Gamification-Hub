@@ -1,9 +1,6 @@
 -# Step 3: you are in. Mockup: js-expanded/10-core.js `dlgJoined`.
 %span.gh-art.gh-joined-art{ 'aria-hidden': 'true' }
-  - if story_group.icon.attached?
-    = image_tag story_group.icon, alt: ''
-  - else
-    = gh_monogram(story_group.name)
+  = gh_group_cover(story_group) || gh_monogram(story_group.name)
 
 %h2#gh-join-title.gh-h2= "Dołączono do grupy #{story_group.name}"
 %p

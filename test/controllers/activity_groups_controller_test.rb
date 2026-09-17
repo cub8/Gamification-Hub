@@ -7,15 +7,16 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     @teacher = FactoryBot.create(:user, :teacher)
     @story_group = FactoryBot.create(:story_group, owner: @teacher)
     @template = FactoryBot.create(:activity_group_template, story_group: @story_group, base_name: 'Lab')
-    FactoryBot.create(:activity_group_template_category,
-                      activity_group_template: @template,
-                      didactic_description:    'Task 1',
-                      reward:                  10,
-                      position:                0,)
+    @template_category = FactoryBot.create(:activity_group_template_category,
+                                           activity_group_template: @template,
+                                           didactic_description:    'Task 1',
+                                           reward:                  10,
+                                           position:                0,)
     @activity_group = FactoryBot.create(:activity_group,
                                         story_group:             @story_group,
                                         activity_group_template: @template,
                                         name:                    'Lab 1',)
+    @category = FactoryBot.create(:activity_group_category, activity_group: @activity_group)
     sign_in @teacher
   end
 
@@ -27,6 +28,15 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
   test 'should get edit' do
     get edit_story_group_activity_group_url(@story_group, @activity_group)
     assert_response :success
+  end
+
+  # The "Utwórz arkusz" dialog. A GET now, where the Bootstrap screen rendered
+  # three modals into the index whether or not anyone opened them.
+  test 'should get the create dialog for a template' do
+    get new_story_group_activity_group_url(@story_group, template_id: @template.id)
+
+    assert_response :success
+    assert_select 'h2', 'Nowy arkusz z szablonu Lab'
   end
 
   test 'should create activity group with auto-generated name' do
@@ -48,6 +58,22 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Custom Name', ActivityGroup.last!.name
   end
 
+  # Bulk creation used to be a route of its own; it is the same form now, with
+  # the mode the dialog's segmented control posts.
+  test 'should create several groups when the dialog is in bulk mode' do
+    assert_difference('ActivityGroup.count', 3) do
+      post story_group_activity_groups_url(@story_group),
+           params: {
+             activity_group: { activity_group_template_id: @template.id, mode: 'many' },
+             count:          3,
+           }
+    end
+
+    assert_equal ['Lab 2', 'Lab 3', 'Lab 4'],
+                 ActivityGroup.where(activity_group_template: @template).order(:id).last(3).map(&:name)
+    assert_redirected_to story_group_activity_groups_url(@story_group)
+  end
+
   test 'should copy categories from template on create' do
     post story_group_activity_groups_url(@story_group),
          params: { activity_group: { activity_group_template_id: @template.id } }
@@ -66,21 +92,85 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to story_group_activity_groups_url(@story_group)
   end
 
-  test 'should destroy activity group' do
-    assert_difference('ActivityGroup.count', -1) do
+  test 'should refuse a sheet left without a single visible column' do
+    patch story_group_activity_group_url(@story_group, @activity_group),
+          params: {
+            activity_group: {
+              name:                                 'Lab 1',
+              activity_group_categories_attributes: {
+                '0' => { id: @category.id, _destroy: '1' },
+              },
+            },
+          }
+
+    assert_response :unprocessable_content
+    assert_predicate @category.reload, :persisted?
+  end
+
+  # The index's "Zmienione kolumny" tag: stamped when this sheet's own columns
+  # change, never when the template behind it does.
+  test 'should stamp columns_modified_at only when the columns change' do
+    patch story_group_activity_group_url(@story_group, @activity_group),
+          params: { activity_group: { name: 'Renamed' } }
+    assert_nil @activity_group.reload.columns_modified_at
+
+    patch story_group_activity_group_url(@story_group, @activity_group),
+          params: {
+            activity_group: {
+              activity_group_categories_attributes: {
+                '0' => { id: @category.id, didactic_description: 'Something else' },
+              },
+            },
+          }
+    assert_not_nil @activity_group.reload.columns_modified_at
+  end
+
+  # DECISIONS.md:31. The UI offers hide instead of delete for an awarded
+  # column; this is the rule behind it, because destroying the column would
+  # take its awards with it and leave the currency unaccounted for.
+  test 'should hide rather than destroy a column that has already been awarded' do
+    student = FactoryBot.create(:story_group_student, story_group: @story_group,
+                                                      user:        FactoryBot.create(:user),)
+    FactoryBot.create(:students_activity_group_category, student: student, activity_group_category: @category)
+    other = FactoryBot.create(:activity_group_category, activity_group: @activity_group, position: 1)
+
+    assert_no_difference('ActivityGroupCategory.count') do
+      patch story_group_activity_group_url(@story_group, @activity_group),
+            params: {
+              activity_group: {
+                activity_group_categories_attributes: {
+                  '0' => { id: @category.id, _destroy: '1' },
+                },
+              },
+            }
+    end
+
+    assert_predicate @category.reload, :hidden?
+    assert_not other.reload.hidden?
+  end
+
+  # Soft (DECISIONS.md:54): the sheet leaves the list, the currency it granted
+  # stays with the students.
+  test 'should soft delete activity group' do
+    assert_no_difference('ActivityGroup.count') do
       delete story_group_activity_group_url(@story_group, @activity_group)
     end
 
-    assert_redirected_to story_group_activity_groups_url(@story_group)
+    assert_predicate @activity_group.reload, :deleted?
+    assert_empty @story_group.activity_groups.kept
   end
 
-  test 'should create multiple groups via create_bulk' do
-    assert_difference('ActivityGroup.count', 3) do
-      post create_bulk_story_group_activity_groups_url(@story_group),
-           params: { template_id: @template.id, count: 3 }
-    end
+  test 'a deleted sheet is gone from the index and unreachable' do
+    @activity_group.soft_delete!
 
-    assert_redirected_to story_group_activity_groups_url(@story_group)
+    get story_group_activity_groups_url(@story_group)
+    assert_response :success
+    assert_select '.gh-ag-n b', false
+
+    # ApplicationController turns the RecordNotFound into the app's own
+    # "Nie znaleziono." rather than a bare 404.
+    get edit_story_group_activity_group_url(@story_group, @activity_group)
+    assert_redirected_to root_url
   end
 
   test 'should not access groups for story group not managed by teacher' do

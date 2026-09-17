@@ -1,60 +1,176 @@
+-# "Ocenianie" — the grading table. Mockup: #/t/grade,
+-# js-expanded/30-main.js:169-193.
+-#
+-# Columns are categories, rows are students, and a cell has three states:
+-# empty, marked now, and awarded. The third is not a control — it is rendered
+-# without an input, because the award behind it cannot be taken back
+-# (DECISIONS.md:31). That is also why the primary button opens a review
+-# dialog instead of saving straight away.
 - content_for :title, @activity_group.name
+- categories = @sheet.categories
+- students   = @sheet.students
+- template   = @activity_group.activity_group_template
 
-.dark-page{ data: { controller: 'table-search' } }
-  .d-flex.align-items-center.justify-content-between.mb-4
-    .d-flex.align-items-center.gap-3
-      = link_to story_group_activity_groups_path(@story_group), class: "btn btn-secondary" do
-        %i.fa-solid.fa-arrow-left
-      %h1.h3.mb-0= @activity_group.name
-    .field-group.mb-0
-      .input-group
-        = text_field_tag :search, nil, placeholder: 'Wyszukaj studenta', class: 'form-control',
-                         data: { action: 'input->table-search#filter', table_search_target: 'input' }
-        %span.input-group-text
-          %i.fa-solid.fa-magnifying-glass
+- grid_data = { controller: 'grading',
+                grading_cells_value: %w[pole pola pól].to_json,
+                grading_students_value: %w[studenta studentów studentów].to_json,
+                grading_recipients_value: %w[studentowi studentom studentom].to_json,
+                grading_states_value: %w[puste zaznaczone przyznane].to_json,
+                grading_currency_value: @story_group.currency_name.to_s,
+                grading_award_label_value: 'Przyznaj' }
 
-  - if @categories.empty?
-    %p.text-dimmed Brak kategorii zdefiniowanych dla tej grupy.
-  - elsif @students.empty?
-    %p.text-dimmed Brak studentów w tej grupie.
-  - else
-    = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch do |f|
-      .table-scroll-area
-        %table.table.align-middle.mb-0{ data: { controller: 'column-select', table_search_target: 'table' } }
-          %thead
-            %tr
-              %th.sticky-col
-                Zaznacz kolumnę
-              - @categories.each do |cat|
-                %th.p-0.text-center
-                  %label
-                    = check_box_tag "select_col_#{cat.id}", '1', false,
-                                    class: 'form-check-input',
-                                    data: { col_index: cat.id, action: 'change->column-select#toggleColumn' }
-            %tr
-              %th.sticky-col.text-left.align-middle
-                Opis Dydaktyczny
-              - @categories.each do |cat|
-                %th.text-center.align-middle
-                  = cat.didactic_description
-            %tr
-              %th.sticky-col Punkty
-              - @categories.each do |cat|
-                %th.text-center= cat.reward
-          %tbody
-            - @students.each do |student|
+.gh-gradeview{ data: grid_data }
+  %section.gh-panel.gh-phead.gh-ghead
+    .gh-phead-t
+      %p.gh-crumbs
+        = link_to 'Arkusze ocen', story_group_activity_groups_path(@story_group)
+        %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
+        %span= template.base_name
+      %h1.gh-h1= @activity_group.name
+      %p.gh-lead
+        = "#{categories.size} #{gh_plural(categories.size, 'kategoria', 'kategorie', 'kategorii')},"
+        = "#{students.size} #{gh_plural(students.size, 'student', 'studentów', 'studentów')}."
+        Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz.
+
+    .gh-ghead-r
+      %label.gh-search
+        %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
+        = search_field_tag :student_search, nil, placeholder: 'Szukaj studenta',
+          'aria-label': 'Szukaj studenta',
+          data: { grading_target: 'search', action: 'input->grading#filter' }
+
+      %ul.gh-legend{ 'aria-label': 'Legenda' }
+        %li
+          %span.gh-cell.gh-cell--sm{ 'aria-hidden': 'true' }
+          Puste
+        %li
+          %span.gh-cell.gh-cell--sm.gh-cell--pending{ 'aria-hidden': 'true' }
+            %i.fa-solid.fa-check
+          Zaznaczone teraz
+        %li
+          %span.gh-cell.gh-cell--sm.gh-cell--awarded{ 'aria-hidden': 'true' }
+            %i.fa-solid.fa-check
+          Przyznane, nie do cofnięcia
+
+  - if @sheet.gradeable?
+    = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch, id: 'gh-grade-form' do
+      %section.gh-panel.gh-board
+        .gh-board-scroll
+          %table.gh-grid
+            %thead
               %tr
-                %td.sticky-col= student.full_name
-                - @categories.each do |cat|
-                  - completed = @completed.include?([cat.id, student.id])
-                  %td.p-0
-                    %label
-                      = check_box_tag "completions[#{student.id}][#{cat.id}]", '1', completed,
-                                      disabled: completed,
-                                      class: 'form-check-input',
-                                      data: { col_index: cat.id }
+                %th.gh-th-stu{ scope: 'col' } Student
+                - categories.each do |category|
+                  %th{ scope: 'col' }
+                    .gh-thc
+                      -# The story description is the column's tooltip — the
+                      -# only place it appears on this screen.
+                      %span.gh-thn{ title: category.story_description.presence }
+                        = category.didactic_description
+                      %span.gh-cost
+                        %b= "+#{category.reward.to_i}"
+                        = render 'layouts/redesign/currency_token', story_group: @story_group, size: 16
+                      %button.gh-colbtn{ type: 'button', title: 'Zaznacz całą kolumnę',
+                                         data: { action: 'grading#toggleColumn',
+                                                 grading_column_param: category.id } }
+                        %i.fa-solid.fa-check-double{ 'aria-hidden': 'true' }
+                        Wszyscy
+                %th.gh-th-sum{ scope: 'col' } Razem
 
-      .d-flex.justify-content-end.pt-3.z-3.p
-        %button.btn.btn-primary{ type: 'submit' }
-          %i.fa-solid.fa-check.me-1
-          Zapisz
+            %tbody
+              - students.each do |student|
+                - name = student.display_name
+                - awarded_total = @sheet.awarded_total(student)
+                %tr{ data: { grading_target: 'row', gh_name: name.to_s.downcase, gh_student: student.id } }
+                  %th.gh-td-stu{ scope: 'row' }
+                    %span
+                      %span.gh-av.gh-av--sm{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+                        = gh_initials(name)
+                      = name
+
+                  - categories.each do |category|
+                    %td
+                      - if @sheet.awarded?(student, category)
+                        - fresh = @awarded_pairs.include?([category.id, student.id])
+                        %span.gh-cell.gh-cell--awarded{ class: ('gh-cell--stamp' if fresh),
+                                                        title: 'Przyznane, nie można cofnąć',
+                                                        role: 'img',
+                                                        'aria-label': "#{name}, #{category.didactic_description}: przyznane",
+                                                        data: { action: 'click->grading#locked' } }
+                          %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
+                          %i.fa-solid.fa-lock.gh-lk{ 'aria-hidden': 'true' }
+                      - else
+                        %label.gh-cell{ data: { grading_target: 'cell',
+                                                grading_reward: category.reward.to_i,
+                                                grading_column: category.id } }
+                          -# The label prefix travels as data so the controller
+                          -# rewrites only the state word after it.
+                          = check_box_tag "completions[#{student.id}][#{category.id}]", '1', false,
+                            id: nil,
+                            'aria-label': "#{name}, #{category.didactic_description}: puste",
+                            data: { action: 'grading#toggle',
+                                    gh_label: "#{name}, #{category.didactic_description}" }
+                          %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
+
+                  %td.gh-td-sum
+                    %span.gh-s-a= awarded_total
+                    %span.gh-s-p{ hidden: true, data: { grading_target: 'rowPending' } }
+
+      %section.gh-panel.gh-abar{ 'aria-live': 'polite' }
+        %p.gh-abar-t
+          %span{ data: { grading_target: 'barEmpty' } }
+            Nic nie jest zaznaczone. Kliknij pola studentów, którzy zdobyli nagrody.
+          %span{ hidden: true, data: { grading_target: 'barActive' } }
+            %b{ data: { grading_target: 'barCells' } }
+            %span{ data: { grading_target: 'barStudents' } }
+            %span.gh-cost
+              %b{ data: { grading_target: 'barSum' } }
+              = render 'layouts/redesign/currency_token', story_group: @story_group, size: 16
+
+        .gh-abar-b
+          -# Hidden until the controller is running: without JavaScript it has
+          -# nothing to clear that unticking a box would not clear better.
+          %button.gh-btn.gh-btn--sec{ type: 'button', hidden: true,
+                                      data: { grading_target: 'clear', action: 'grading#clear' } }
+            Wyczyść zaznaczenia
+          -# A real submit. The controller intercepts it to raise the review
+          -# dialog first; with JavaScript off it saves directly, which is what
+          -# the Bootstrap screen did.
+          %button.gh-btn{ type: 'submit',
+                          data: { grading_target: 'submit', action: 'grading#review' } }
+            Przejrzyj i przyznaj
+
+    = render 'review_dialog', categories: categories, students: students
+
+  - elsif categories.empty?
+    %section.gh-panel.gh-gm
+      %h2.gh-h2 Ten arkusz nie ma żadnej kolumny
+      %p.gh-lead
+        Dodaj kolumny w ustawieniach arkusza, żeby było za co nagradzać.
+      .gh-rowb
+        = link_to 'Ustawienia arkusza', edit_story_group_activity_group_path(@story_group, @activity_group),
+          class: 'gh-btn'
+  - else
+    %section.gh-panel.gh-gm
+      %h2.gh-h2 W tej grupie nie ma jeszcze studentów
+      %p.gh-lead
+        Zaproś studentów do grupy — arkusz czeka gotowy i nic w nim nie przepada.
+      .gh-rowb
+        = link_to 'Zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'
+
+-# Below 720px the table is not shrunk, it is refused: eleven columns and a
+-# dozen students do not survive a phone, and a cell misread here grants
+-# currency nobody can take back.
+.gh-grade-mobile
+  %section.gh-panel.gh-gmob
+    .gh-gmob-ic.gh-oct
+      %i.fa-solid.fa-desktop{ 'aria-hidden': 'true' }
+    %h1.gh-h2= @activity_group.name
+    %p.gh-lead
+      Ocenianie w tabeli działa na komputerze. Ta tabela ma
+      = "#{categories.size} #{gh_plural(categories.size, 'kategorię', 'kategorie', 'kategorii')}"
+      i
+      = "#{students.size} #{gh_plural(students.size, 'studenta', 'studentów', 'studentów')},"
+      więc na telefonie byłaby nieczytelna.
+    %p.gh-small Na telefonie sprawdzisz ostatnie zakupy i powiadomienia.
+    = link_to 'Wróć na start', root_path, class: 'gh-btn gh-btn--sec'

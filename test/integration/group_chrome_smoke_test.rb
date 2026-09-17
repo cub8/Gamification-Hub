@@ -126,7 +126,8 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
                   'Rangi',
                   'Odznaki',
                   'Historia waluty',
-                  'Ranking',],
+                  'Ranking',
+                  'Ustawienia w grupie',],
                  chrome.items.map(&:label)
 
     # The three student destinations that hang off the membership, not the group.

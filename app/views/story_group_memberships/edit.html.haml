@@ -1,0 +1,65 @@
+-# "Ustawienia w grupie". Mockup: js-expanded/30-gh.js `vSset` (:45-50).
+-#
+-# Everything here is per-group, which is the whole point of the screen: the
+-# nickname is scoped to one group (DECISIONS.md:38), and so is leaving. Account
+-# settings — name, e-mail, theme — are a different screen entirely.
+- content_for :title, "Ustawienia w grupie — #{@story_group.name}"
+- error = @membership.errors[:nickname].first
+
+%section.gh-panel.gh-phead
+  %p.gh-crumbs
+    = link_to @story_group.name, story_group_path(@story_group)
+    %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
+    %span Ustawienia w grupie
+  %h1.gh-h1 Ustawienia w grupie
+  %p.gh-lead= "Te ustawienia dotyczą tylko grupy #{@story_group.name}."
+
+%section.gh-panel.gh-setp
+  %h2.gh-h3 Pseudonim
+  %p.gh-hint Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
+
+  -# One field, so it saves by itself rather than through a page-wide save bar:
+  -# there is nothing else on this screen for "Zapisz zmiany" to mean.
+  = form_with model: @membership, url: story_group_membership_path(@story_group), method: :patch do |f|
+    .gh-fld
+      = f.label :nickname, 'Twój pseudonim'
+      .gh-namerow
+        .gh-inp{ class: ('gh-inp--bad' if error) }
+          = f.text_field :nickname, maxlength: 24, autocomplete: 'off',
+            'aria-invalid': (error ? 'true' : nil),
+            'aria-describedby': (error ? 'gh-nickname-error' : nil)
+        %button.gh-btn{ type: 'submit' } Zapisz
+      - if error
+        %p#gh-nickname-error.gh-err{ role: 'alert' }
+          %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+          %span= error
+      -# Ours is optional where the mockup's is required (DECISIONS.md:38): left
+      -# blank, the ranking shows your real name, which the join screen offers
+      -# in as many words. See StoryGroupStudent#display_name.
+      %span.gh-hint Do 24 znaków. Zostaw puste, żeby pokazywać imię i nazwisko.
+
+%section.gh-panel.gh-setp
+  %h2.gh-h3 Co widzi prowadzący
+  %p.gh-hint Pozostali studenci widzą tylko Twój pseudonim, i to tylko w rankingu.
+
+  %ul.gh-seeing
+    %li
+      %span Imię i nazwisko
+      %b= @membership.full_name
+    %li
+      %span E-mail
+      %b= @membership.email
+    %li
+      %span Numer indeksu
+      %b= @membership.university_number.presence || 'Brak'
+
+%section.gh-panel.gh-danger
+  %h2.gh-h3 Opuść grupę
+  %p.gh-small
+    Stracisz dostęp do grupy, a Twoja waluta, odznaki i przedmioty w niej
+    przepadną. Żeby wrócić, potrzebujesz nowego kodu od prowadzącego.
+  .gh-rowb
+    = link_to confirm_leave_story_group_membership_path(@story_group),
+      class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-right-from-bracket{ 'aria-hidden': 'true' }
+      Opuść grupę
