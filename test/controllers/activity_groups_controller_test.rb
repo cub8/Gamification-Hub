@@ -46,7 +46,29 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_equal 'Lab 2', ActivityGroup.last!.name
-    assert_redirected_to story_group_activity_groups_url(@story_group)
+    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
+  end
+
+  # The dialog posts inside the `modal` frame, and the index carries an empty
+  # frame of that name itself — so a plain redirect would swap the dialog for
+  # nothing and never move the page.
+  test 'creating leaves the dialog through a turbo-stream redirect' do
+    post story_group_activity_groups_url(@story_group),
+         params:  { activity_group: { activity_group_template_id: @template.id } },
+         headers: { 'Turbo-Frame' => 'modal' }
+
+    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
+  end
+
+  test 'a refused creation also leaves the dialog' do
+    @template_category.update_column(:didactic_description, nil)
+
+    post story_group_activity_groups_url(@story_group),
+         params:  { activity_group: { activity_group_template_id: @template.id } },
+         headers: { 'Turbo-Frame' => 'modal' }
+
+    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
+    assert_match(/Podaj, za co jest nagroda\./, flash[:alert])
   end
 
   test 'should create activity group with provided name' do
@@ -71,7 +93,7 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal ['Lab 2', 'Lab 3', 'Lab 4'],
                  ActivityGroup.where(activity_group_template: @template).order(:id).last(3).map(&:name)
-    assert_redirected_to story_group_activity_groups_url(@story_group)
+    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
   end
 
   test 'should copy categories from template on create' do

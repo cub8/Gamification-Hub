@@ -53,7 +53,7 @@
           Przyznane, nie do cofnięcia
 
   - if @sheet.gradeable?
-    = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch, id: 'gh-grade-form' do
+    = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch, id: 'gh-grade-form', class: 'gh-gform' do
       %section.gh-panel.gh-board
         .gh-board-scroll
           %table.gh-grid
@@ -113,8 +113,8 @@
                           %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
 
                   %td.gh-td-sum
-                    %span.gh-s-a= awarded_total
-                    %span.gh-s-p{ hidden: true, data: { grading_target: 'rowPending' } }
+                    %span.gh-sum-a= awarded_total
+                    %span.gh-sum-p{ hidden: true, data: { grading_target: 'rowPending' } }
 
       %section.gh-panel.gh-abar{ 'aria-live': 'polite' }
         %p.gh-abar-t

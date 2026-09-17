@@ -47,15 +47,22 @@ class ActivityGroupsController < ApplicationController
   end
 
   # POST /story_groups/:story_group_id/activity_groups
+  #
+  # Submitted from inside the dialog, so it leaves through the turbo_stream
+  # redirect action rather than a 302: a plain redirect would be resolved
+  # INSIDE the `modal` frame, and the index carries an empty frame of that name
+  # itself, so the dialog would be swapped for nothing and the page would never
+  # move. Same exit as CurrencyAdjustmentsController#create.
   def create
     template = @story_group.activity_group_templates.kept.find(create_params[:activity_group_template_id])
     sheets   = build_sheets(template)
 
+    # An ordinary flash write, so it survives to the visit the stream triggers.
     flash[:fresh_sheet_ids] = sheets.map(&:id)
-    redirect_to story_group_activity_groups_path(@story_group),
-                notice: created_notice(sheets), status: :see_other
+    redirect_outside_turbo_frame story_group_activity_groups_path(@story_group),
+                                 notice: created_notice(sheets)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to story_group_activity_groups_path(@story_group), alert: e.message, status: :see_other
+    redirect_outside_turbo_frame story_group_activity_groups_path(@story_group), alert: e.message
   end
 
   # PATCH/PUT /story_groups/:story_group_id/activity_groups/:id

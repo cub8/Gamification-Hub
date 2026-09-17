@@ -115,9 +115,9 @@ class GradingRedesignSmokeTest < ActionDispatch::IntegrationTest
     award!(@pomoc, @ada)
     get grade_path
 
-    assert_select 'tbody tr:first-child td.gh-td-sum .gh-s-a', '5'
-    assert_select 'tbody tr:last-child td.gh-td-sum .gh-s-a', '0'
-    assert_select '.gh-s-p[hidden]', 2
+    assert_select 'tbody tr:first-child td.gh-td-sum .gh-sum-a', '5'
+    assert_select 'tbody tr:last-child td.gh-td-sum .gh-sum-a', '0'
+    assert_select '.gh-sum-p[hidden]', 2
   end
 
   test 'a hidden column is out of the table entirely' do
@@ -126,6 +126,37 @@ class GradingRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     assert_equal(['Obecność'], css_select('.gh-thc .gh-thn').map { |th| th.text.strip })
     assert_select 'input[name=?]', "completions[#{@ada.id}][#{@pomoc.id}]", false
+  end
+
+  # The CSS gives the page its shape through this exact nesting: .gh-gradeview
+  # is a flex column, the form inside it carries the height down, and the three
+  # bands are its children. The form is easy to overlook as "just a wrapper" —
+  # it is a box in the height chain, and when it was left out of it the award
+  # bar was pushed off the bottom of the screen and grading could not be
+  # submitted at all.
+  test 'the three bands are laid out the way the stylesheet expects' do
+    get grade_path
+
+    assert_select '.gh-gradeview > section.gh-ghead'
+    assert_select '.gh-gradeview > form.gh-gform' do
+      assert_select '> section.gh-board > .gh-board-scroll > table.gh-grid'
+      assert_select '> section.gh-abar'
+    end
+
+    # Order matters: the bar is the last band, under the board.
+    bands = css_select('.gh-gform > section').map { |node| node['class'].split.last }
+    assert_equal %w[gh-board gh-abar], bands
+  end
+
+  # .gh-s-a belongs to student_list.css, where it is a flex row of buttons.
+  # Reusing the mockup's own class name here turned the two numbers into
+  # stacked blocks.
+  test 'the Razem column does not borrow the student list class names' do
+    get grade_path
+
+    assert_select 'td.gh-td-sum .gh-sum-a'
+    assert_select 'td.gh-td-sum .gh-s-a', false
+    assert_select 'td.gh-td-sum .gh-s-p', false
   end
 
   # --- the award bar --------------------------------------------------------

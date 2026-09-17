@@ -11,8 +11,25 @@
 
   /* ---- Page shell ---- */
 
+  /* The mockup puts .main-grade on <main> for this screen (00-base.css:389).
+     .gh-main is shared chrome, so the page claims it by what it contains
+     instead of by a class the layout would have to know about. The app already
+     requires :has support — `allow_browser versions: :modern` names it. */
+  @media (min-width: 721px) {
+    .gh-main:has(.gh-gradeview) {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+  }
+
+  /* Fills the main area rather than growing past it, so the page itself never
+     scrolls: the table scrolls inside .gh-board-scroll and the award bar stays
+     where the teacher left it. */
   .gh-gradeview {
     display: flex;
+    flex: 1;
+    min-height: 0;
     flex-direction: column;
     gap: 18px;
     width: 100%;
@@ -51,8 +68,21 @@
 
   /* ---- The table ---- */
 
+  /* The grading form wraps the board and the award bar, so it is a level in
+     the height chain, not a wrapper to look past: without this it is a block
+     box sized by its content, .gh-board's `flex: 1` resolves against nothing,
+     and the bar is pushed below the clipped edge of .gh-main. */
+  .gh-gform {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+    gap: 18px;
+  }
+
   .gh-board {
     display: flex;
+    flex: 1;
     min-height: 0;
     padding: 0;
   }
@@ -178,6 +208,13 @@
     min-width: 92px;
     padding-right: 16px;
     text-align: right;
+    /* "4 +3" reads as one figure, so it never breaks in two. The mockup gets
+       this for free by emitting the two spans with no whitespace between them
+       (30-main.js:162); HAML puts each on its own line, which is a break
+       opportunity. Unbreakable content also sets the column's minimum width
+       under automatic table layout, so the column grows to fit rather than
+       being squeezed. */
+    white-space: nowrap;
     border-left: 1px solid var(--gh-line-2);
   }
 
@@ -192,8 +229,16 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* --sum-a/--sum-p, not the mockup's own .s-a/.s-p: student_list.css already
+     owns .gh-s-a for the row-actions cell and makes it `display: flex`, which
+     turned this pair into two stacked blocks. */
+  .gh-sum-a {
+    display: inline;
+  }
+
   /* What this save would add, beside what the student already has. */
-  .gh-s-p {
+  .gh-sum-p {
+    display: inline;
     margin-left: 5px;
     color: var(--gh-spend);
   }

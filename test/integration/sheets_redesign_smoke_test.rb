@@ -199,7 +199,11 @@ class SheetsRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     post story_group_activity_groups_path(@story_group),
          params: { activity_group: { activity_group_template_id: template.id, mode: 'many' }, count: 2 }
-    follow_redirect!
+
+    # The dialog leaves through a turbo-stream redirect, so the index is
+    # fetched by hand; the flash is still there when it arrives.
+    assert_turbo_redirected_to story_group_activity_groups_path(@story_group)
+    get story_group_activity_groups_path(@story_group)
 
     assert_select 'li.gh-ag--fresh', 2
     assert_select '.gh-toasts template', /Utworzono: Laboratoria 1 – Laboratoria 2\./
