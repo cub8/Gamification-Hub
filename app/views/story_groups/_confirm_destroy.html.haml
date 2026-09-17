@@ -1,0 +1,51 @@
+-# Mockup: 30-isg.js `mDelG`. The only delete in the app that takes everything
+-# with it (DECISIONS.md:28) — so, unlike the other confirmations, this one is
+-# not just a sentence and two buttons: you have to type the name back.
+- students = story_group.students.count
+-# +1 for the owner: `teachers` is the SUPPORTING teachers (StoryGroupTeacher),
+-# and the owner is held separately (DECISIONS.md:40). Counting the list alone
+-# would tell the person reading this that nobody but the students loses
+-# anything, while they are the one about to lose the most.
+- teachers = story_group.teachers.count + 1
+
+%h2#gh-del-group-title.gh-h2 Usunąć grupę na zawsze?
+%p
+  = "#{students} #{gh_plural(students, 'student', 'studenci', 'studentów')}"
+  = "i #{teachers} #{gh_plural(teachers, 'nauczyciel', 'nauczycieli', 'nauczycieli')}"
+  = "#{gh_plural(students + teachers, 'straci', 'stracą', 'straci')} dostęp."
+  Historia, przedmioty i ranking znikną.
+
+= form_with url: story_group_path(story_group), method: :delete,
+  data: { controller: 'confirm-name',
+          confirm_name_expected_value: story_group.name,
+          turbo_frame: (@in_modal ? 'modal' : nil) } do
+
+  .gh-fld
+    = label_tag :confirm do
+      Wpisz nazwę grupy, żeby potwierdzić:
+      %b= story_group.name
+    -# Focus goes on the INPUT here, not on the safe button as it does in every
+    -# other confirmation. There is nothing dangerous to land on: the delete
+    -# button starts disabled, and this is the control you have to reach to get
+    -# anywhere at all.
+    .gh-inp{ class: ('gh-inp--bad' if @confirm_failed) }
+      = text_field_tag :confirm, nil, autocomplete: 'off', autofocus: true,
+        'aria-invalid': (@confirm_failed ? 'true' : nil),
+        'aria-describedby': (@confirm_failed ? 'gh-del-group-error' : nil),
+        data: { confirm_name_target: 'input', action: 'confirm-name#check' }
+    - if @confirm_failed
+      %p#gh-del-group-error.gh-err{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span Wpisana nazwa nie zgadza się z nazwą grupy. Grupa nie została usunięta.
+
+  .gh-dlg-b
+    - if @in_modal
+      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+    - else
+      = link_to 'Anuluj', edit_story_group_path(story_group), class: 'gh-btn gh-btn--sec'
+
+    -# Disabled until the name matches, and re-checked in the controller: this
+    -# button is the courtesy, the server comparison is the protection.
+    %button.gh-btn{ type: 'submit', disabled: true,
+                    data: { confirm_name_target: 'submit' } }
+      Usuń grupę

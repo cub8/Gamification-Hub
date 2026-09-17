@@ -1,0 +1,36 @@
+-# The group you are in: its art, its name, what you are to it, a way out, and
+-# its sections. Mockup: js-expanded/10-core.js:173-178.
+-#
+-# A partial rather than markup inside the sidebar because the mockup renders
+-# the same card standalone in the group-creation wizard preview (30-form.js:83).
+- story_group = chrome.story_group
+
+%section.gh-deck{ 'aria-label': "Grupa #{chrome.name}" }
+  .gh-deck-f
+    .gh-deck-i
+      - cover = gh_group_cover(story_group)
+      %span.gh-deck-art{ class: ('gh-deck-art--mono' if cover.nil?), 'aria-hidden': 'true' }
+        = cover || gh_monogram(story_group.name)
+
+      .gh-deck-head
+        %h2.gh-deck-name= chrome.name
+        %p.gh-deck-role= chrome.role_label
+
+      -# Outside .gh-deck-head on purpose: the mockup keeps it inside, and its
+      -# collapsed rule then hides the whole head — leaving a collapsed sidebar
+      -# with no way to change group at all, since the header switcher is
+      -# mobile-only. Here it survives as an icon-only button.
+      %button.gh-linkbtn.gh-deck-sw{ type: 'button',
+                                     title: 'Zmień grupę',
+                                     data: { action: 'menu#open',
+                                             menu_id_param: 'gh-group-switcher' } }
+        %i.fa-solid.fa-right-left{ 'aria-hidden': 'true' }
+        %span Zmień grupę
+
+      %nav.gh-nav{ 'aria-label': 'Sekcje grupy' }
+        - chrome.items.each do |item|
+          - on = item.current?(current_path)
+          = link_to item.path, class: "gh-nl #{'gh-nl--on' if on}",
+            title: item.label, 'aria-current': ('page' if on) do
+            %i.fa-solid{ class: item.icon }
+            %span= item.label

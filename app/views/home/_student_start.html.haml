@@ -1,0 +1,96 @@
+-# Mockup: #/s/start, design/mockup-src/js-expanded/30-isg.js `vStart`.
+- groups = @dashboard.groups
+
+%section.gh-panel.gh-phead
+  .gh-phead-t
+    %h1.gh-h1 Cześć, #{@current_user.full_name.to_s.split(' ').first}
+    %p.gh-lead
+      - if groups.any?
+        = "Należysz do #{groups.size} #{gh_plural(groups.size, 'grupy', 'grup', 'grup')}."
+        Waluta, rangi i odznaki są osobne w każdej z nich.
+      - else
+        Nie należysz jeszcze do żadnej grupy. Poproś prowadzącego o kod i dołącz poniżej.
+
+.gh-sgrid
+  - groups.each do |group|
+    - story_group = group.story_group
+    %article.gh-card.gh-card--neutral.gh-gcard
+      .gh-card-f
+        .gh-card-i
+          .gh-art
+            - cover = gh_group_cover(story_group)
+            = cover
+            - unless cover
+              %i.fa-solid.fa-book-open{ 'aria-hidden': 'true' }
+
+          .gh-card-top
+            %h2.gh-card-name= story_group.name
+
+          - if group.fresh?
+            %p.gh-expl
+              = "Dopiero zaczynasz. Pierwsze #{story_group.currency_name} zdobędziesz na zajęciach."
+
+          %dl.gh-gstat
+            %div
+              %dt Do wydania
+              %dd
+                = render 'layouts/redesign/currency_token', story_group: story_group
+                = group.balance
+                %small= story_group.currency_name
+
+            %div
+              %dt Życia
+              %dd
+                %span.gh-lv{ class: ('gh-lv--zero' if group.lives.zero?) }
+                  %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
+                  = group.lives
+
+            .gh-full2
+              %dt
+                Ranga:
+                %b= group.rank&.name || 'brak'
+              - if group.next_rank
+                %dd.gh-rank-to
+                  = "#{group.total} z #{group.next_threshold} do rangi #{group.next_rank.name}"
+              - else
+                %dd.gh-rank-to
+                  = "#{group.total} zebranych. To najwyższa ranga."
+              .gh-bar{ role: 'progressbar',
+                       'aria-valuemin': 0,
+                       'aria-valuemax': group.next_threshold.positive? ? group.next_threshold : group.total,
+                       'aria-valuenow': group.total,
+                       'aria-label': "Postęp do następnej rangi w grupie #{story_group.name}" }
+                %i{ style: "--gh-p: #{gh_percent(group.total, group.next_threshold)}%" }
+
+            %div
+              %dt Odznaki
+              %dd
+                = group.badges_earned
+                %small= "z #{group.badges_total}"
+
+          .gh-card-foot
+            = link_to 'Otwórz grupę', story_group_path(story_group), class: 'gh-btn'
+            = link_to story_group_shop_index_path(story_group), class: 'gh-btn gh-btn--sec' do
+              %i.fa-solid.fa-bag-shopping
+              Sklep
+
+  .gh-panel.gh-joinc
+    %h2.gh-h3 Masz kod od prowadzącego?
+    %p.gh-small Kod ma 6 znaków. Możesz też zeskanować kod QR aparatem telefonu.
+    = link_to new_join_path, class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-plus
+      Dołącz do grupy
+
+- if @dashboard.feed.any?
+  %section.gh-panel.gh-feed
+    %h2.gh-h2 Ostatnio we wszystkich grupach
+    %ul.gh-led
+      - @dashboard.feed.each do |entry|
+        - tone = entry.reward? ? 'earn' : (entry.purchase? ? 'spend' : nil)
+        %li.gh-led-r
+          %span{ class: "gh-led-m #{"gh-led-m--#{tone}" if tone}", 'aria-hidden': 'true' }
+          %span.gh-led-t
+            = gh_feed_title(entry)
+            %small= "#{entry.student.story_group.name}, #{gh_when(entry.created_at)}"
+          %span{ class: "gh-led-a #{"gh-led-a--#{tone}" if tone}" }
+            = entry.amount.positive? ? "+#{entry.amount}" : entry.amount

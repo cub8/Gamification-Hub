@@ -1,0 +1,14 @@
+%nav.gh-tabbar{ 'aria-label': 'Nawigacja' }
+  - items.each do |item|
+    - on = item.current?(current_path)
+    = link_to item.path, class: "gh-tab #{'gh-tab--on' if on}",
+      'aria-current': ('page' if on),
+      data: (item.frame ? { turbo_frame: item.frame } : {}) do
+      %i.fa-solid{ class: item.icon }
+      -# The tab bar has less room than the sidebar, so two labels shorten.
+      %span= item.tab_label
+
+  %button.gh-tab{ type: 'button',
+                  data: { action: 'menu#open', menu_id_param: 'gh-more-sheet' } }
+    %i.fa-solid.fa-ellipsis
+    %span Więcej

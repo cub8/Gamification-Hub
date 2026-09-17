@@ -2,6 +2,9 @@
 
 class LoginToken < ApplicationRecord
   TOKEN_BYTES = 24
+  # Single source of truth: the model's expiry AND the copy on the inbox screen
+  # ("Link działa przez N minut") both read this.
+  EXPIRES_IN = 5.minutes
 
   belongs_to :user
 
@@ -32,6 +35,6 @@ class LoginToken < ApplicationRecord
 
     @raw_token = raw_token
     self.token_digest = self.class.digest(raw_token)
-    self.expires_at = 5.minutes.from_now
+    self.expires_at = EXPIRES_IN.from_now
   end
 end

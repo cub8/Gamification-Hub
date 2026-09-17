@@ -1,0 +1,18 @@
+-# Step 3: you are in. Mockup: js-expanded/10-core.js `dlgJoined`.
+%span.gh-art.gh-joined-art{ 'aria-hidden': 'true' }
+  = gh_group_cover(story_group) || gh_monogram(story_group.name)
+
+%h2#gh-join-title.gh-h2= "Dołączono do grupy #{story_group.name}"
+%p
+  = "Prowadzi #{story_group.owner.full_name}."
+  -# succeed, so the full stop hugs the name instead of floating after it.
+  = succeed '.' do
+    Jesteś tam jako
+    %b= membership.display_name
+  = "Walutą w tej grupie są #{story_group.currency_name}."
+
+.gh-dlg-b
+  -# Leaves the dialog rather than closing it: the whole point of this step is
+  -# to land in the group you just joined.
+  = link_to 'Gotowe', story_group_path(story_group), class: 'gh-btn',
+    data: { turbo_frame: '_top' }

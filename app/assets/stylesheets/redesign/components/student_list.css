@@ -1,0 +1,203 @@
+/* --------------------------------------------------------------------------
+   The teacher's list of students.
+
+   Ported from design/mockup-src/css/24-lists.css:2, :15-26, :30-31, :36-37.
+
+   Like the invites list and the ledger this is a grid, not a <table>: below
+   720px each row folds into a two-column block where every cell carries its
+   own little label (.gh-lbl-m), which no table layout can do.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* Search on the left, "12 z 12" pushed to the far end. */
+  .gh-stbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+
+  .gh-stbar .gh-search {
+    width: 280px;
+  }
+
+  .gh-stbar .gh-meta {
+    margin-left: auto;
+  }
+
+  .gh-st {
+    margin-top: 12px;
+    padding: 6px 8px;
+  }
+
+  .gh-srows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Student | Ranga | Życia | Do wydania | Zebrane | Odznaki | Akcje.
+     The name column gives first and the rank second; the rest are fixed,
+     because a column of numbers that changes width as you type in the search
+     box reads as the page flinching. */
+  .gh-srow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) 150px 84px 84px 64px 128px;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-srow--h {
+    border-top: 0;
+    padding-top: 12px;
+    font: 680 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+
+  /* A red rail down the left of anyone at zero lives — the one state on this
+     screen a teacher scans for. */
+  .gh-srow--zero {
+    box-shadow: inset 4px 0 0 var(--gh-heart);
+  }
+
+  .gh-s-n {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .gh-s-link {
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .gh-s-link:hover b {
+    text-decoration: underline;
+  }
+
+  .gh-s-n b {
+    display: block;
+    font: 650 15px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-s-n small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .gh-s-r {
+    font: 600 14px var(--gh-f-ui);
+  }
+
+  .gh-num2 {
+    font: 780 17px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The stepper. Each button is its own <form> (button_to), so the row is a
+     flex line of three unrelated elements rather than one control. */
+  .gh-lives {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .gh-lives form {
+    display: contents;
+  }
+
+  .gh-lives-b {
+    --gh-c: 5px;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    cursor: pointer;
+    color: var(--gh-ink);
+    background: var(--gh-card-3);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-lives-b:hover:not([disabled]) {
+    background: var(--gh-line-2);
+  }
+
+  .gh-lives-b[disabled] {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .gh-s-a {
+    display: flex;
+    gap: 2px;
+    justify-content: flex-end;
+  }
+
+  .gh-s-a .gh-iconbtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Only on a phone, where the header row is gone and each value needs a name
+     of its own. */
+  .gh-lbl-m {
+    display: none;
+  }
+
+  /* ---- narrow --------------------------------------------------------- */
+
+  @media (max-width: 720px) {
+    .gh-srow {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+    }
+
+    .gh-srow--h {
+      display: none;
+    }
+
+    .gh-s-n,
+    .gh-s-a {
+      grid-column: 1 / -1;
+    }
+
+    .gh-s-a {
+      justify-content: flex-start;
+    }
+
+    .gh-lbl-m {
+      display: block;
+      font: 600 11.5px var(--gh-f-ui);
+      color: var(--gh-ink-3);
+      margin-bottom: 2px;
+    }
+
+    .gh-stbar .gh-search {
+      width: 100%;
+    }
+
+    .gh-stbar .gh-meta {
+      margin-left: 0;
+    }
+  }
+}

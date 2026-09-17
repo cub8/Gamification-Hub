@@ -1,0 +1,37 @@
+-# A badge as a two-sided card (00-base.css:180-197). `.gh-flip--down` turns it
+-# to the back, which is the resting state of a badge nobody has earned yet.
+-#
+-# Locals:
+-#   earned      — front side up
+-#   interactive — mount badge_flip_controller, so this card can be turned over.
+-#                 Only earned cards get it: an unearned one keeps its art hidden
+-#                 because the art is the reward.
+-#   withdrawn   — soft-deleted, but still on this student's deck
+-#   targets     — the form preview's data-badge-form-target map; empty elsewhere
+- earned      = local_assigns.fetch(:earned, true)
+- interactive = local_assigns.fetch(:interactive, false)
+- withdrawn   = local_assigns.fetch(:withdrawn, false)
+- targets     = local_assigns.fetch(:targets, {})
+
+- label = earned ? "Odznaka #{badge.name}" : "Odznaka #{badge.name}, jeszcze niezdobyta"
+- card_data = targets[:flip].to_h
+- card_data.merge!(controller: 'badge-flip', action: 'click->badge-flip#toggle') if interactive
+
+%article.gh-card.gh-card--badge.gh-flip{ class: ('gh-flip--down' unless earned),
+                                         'aria-label': label,
+                                         data: card_data }
+  .gh-flip-in
+    -# The turned-away face is `inert` as well as aria-hidden: backface-
+    -# visibility hides it from the eye, not from the tab order.
+    .gh-face.gh-face--front{ 'aria-hidden': (earned ? nil : 'true'), inert: !earned,
+                             data: { badge_flip_target: 'front' } }
+      .gh-card-f
+        .gh-card-i
+          = render 'badges/front', badge: badge, targets: targets,
+            flipper: interactive, withdrawn: withdrawn
+
+    .gh-face.gh-face--back{ 'aria-hidden': (earned ? 'true' : nil), inert: earned,
+                            data: { badge_flip_target: 'back' } }
+      .gh-card-f
+        .gh-card-i.gh-back-i
+          = render 'badges/back', badge: badge, targets: targets, flipper: interactive

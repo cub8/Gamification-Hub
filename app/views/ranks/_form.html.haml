@@ -1,47 +1,124 @@
-- if rank.errors.any?
-  .form-errors.p-3.mb-3
-    %h2 Proszę poprawić następujące błędy:
-    %ul
-      - rank.errors.full_messages.each do |message|
-        %li= message
+-# The rank form, shared by new and edit. Mockup: js-expanded/30-br.js:53-60
+-# (the fields) and :153-162 (the page around them).
+-#
+-# A PAGE, not a dialog (DECISIONS.md:26). The preview column beside it is the
+-# reason: it shows where this rung lands on the ladder and how many students
+-# move, which is the whole point of the screen and needs the width.
+- editing = rank.persisted?
+- error   = ->(attribute) { rank.errors[attribute].first }
 
-= form_with model: [@story_group, rank] do |f|
-  .form-section.p-4.mb-3
-    .section-title.mb-3 Podstawowe informacje
+%section.gh-panel.gh-phead.gh-phead--stack
+  %p.gh-crumbs
+    = link_to 'Rangi', story_group_ranks_path(@story_group)
+    %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
+    %span= editing ? (rank.name_was.presence || rank.name) : 'Nowa ranga'
+  %h1.gh-h1= editing ? 'Edytuj rangę' : 'Nowa ranga'
+  %p.gh-lead
+    Podgląd obok pokazuje, gdzie ranga trafi na drabince i ilu studentów obejmie.
 
-    .field-group.mb-3
-      = f.label :name, "Nazwa"
-      = f.text_field :name, class: "form-control"
+-# The saved ladder and every student's lifetime total, for the preview.
+-# Only numbers and names the teacher already sees on the screen behind this.
+- rungs_json = ladder.rungs.map { |rung| { id: rung.rank.id, name: rung.rank.name, min: rung.rank.required_currency_value.to_i, disc: rung.rank.discount.to_i } }.to_json
+-# The crop event bubbles up from the image field, and refresh re-reads the art
+-# out of the picker tile the cropper just redrew — so dragging the crop box
+-# moves the preview card and the drabinka thumbnail with it.
+- form_data = { controller: 'rank-form', action: 'gh:image-crop->rank-form#art', rank_form_rungs_value: rungs_json, rank_form_totals_value: ladder.student_totals.to_json, rank_form_editing_id_value: rank.id.to_i }
 
-    .field-group.mb-3
-      = f.label :required_currency_value, "Wymagana waluta"
-      = f.number_field :required_currency_value, min: 0, step: 1, class: "form-control"
+= form_with model: [@story_group, rank], data: form_data do |f|
 
-    .field-group.mb-3
-      = f.label :discount, "Zniżka (%)"
-      = f.number_field :discount, in: 0..100, step: 1, class: "form-control"
+  .gh-wiz
+    %section.gh-panel.gh-fcol
+      - holders = editing ? ladder.rungs.find { |rung| rung.rank == rank }&.holders.to_i : 0
+      - if holders.positive?
+        %p.gh-info
+          %i.fa-solid.fa-users{ 'aria-hidden': 'true' }
+          %span
+            %b
+              = "#{holders} #{gh_plural(holders, 'student ma', 'studentów ma', 'studentów ma')} tę rangę."
+            Zmiana progu może przesunąć studentów w górę lub w dół. Podgląd obok pokazuje skutki.
 
-  .form-section.p-4.mb-3
-    .section-title.mb-3 Ikona
+      .gh-fsec
+        %h2.gh-h3 Karta rangi
+        %p.gh-hint Tak ranga wygląda na stronie grupy i w rankingu.
 
-    .field-group.mb-3{ data: { controller: "file-upload" } }
-      - if rank.icon.attached?
-        .mb-2
-          = image_tag rank.icon, width: 60, height: 60, class: "object-fit-contain"
-      .file-upload
-        = f.label :icon, class: "file-btn px-3 py-2" do
-          %i.fa-solid.fa-upload
-          = rank.icon.attached? ? "Zmień ikonę" : "Wgraj ikonę"
-        = f.file_field :icon,
-            accept: "image/*",
-            class: "d-none",
-            data: { file_upload_target: "input", action: "change->file-upload#update" }
+        .gh-fld
+          = f.label :name, 'Nazwa'
+          .gh-inp{ class: ('gh-inp--bad' if error.call(:name)) }
+            = f.text_field :name, maxlength: 40, autocomplete: 'off',
+              placeholder: 'np. Admirał Floty',
+              'aria-invalid': (error.call(:name) ? 'true' : nil),
+              'aria-describedby': (error.call(:name) ? 'gh-rank-name-error' : nil),
+              data: { rank_form_target: 'name', action: 'rank-form#refresh' }
+          - if error.call(:name)
+            %p#gh-rank-name-error.gh-err{ role: 'alert' }
+              %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+              %span= error.call(:name)
 
-        %span.d-none.d-block{ data: { file_upload_target: "fileName" } }
-          %i.fa-solid.fa-image
-          %span.uploaded-file-name
-        %span.file-hint.mt-1 GIF, JPG lub PNG
+        = render 'shared/redesign/image_field', form: f, record: rank,
+          presets: Redesign::Glyphs::RANK, kind: 'rank',
+          refresh_action: 'rank-form#refresh'
 
-  .form-actions.gap-3.mt-4
-    = link_to "Anuluj", story_group_ranks_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true, turbo_frame: '_top' }
-    = f.submit "Zapisz", class: "btn-submit py-2 px-4"
+      .gh-fsec
+        %h2.gh-h3 Próg i nagroda
+        %p.gh-hint
+          Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi.
+
+        .gh-frow2
+          .gh-fld
+            = f.label :required_currency_value, 'Wymagane zebrane'
+            .gh-price-row
+              .gh-inp.gh-inp--num{ class: ('gh-inp--bad' if error.call(:required_currency_value)) }
+                = f.number_field :required_currency_value, min: 0, step: 1,
+                  'aria-invalid': (error.call(:required_currency_value) ? 'true' : nil),
+                  'aria-describedby': (error.call(:required_currency_value) ? 'gh-rank-min-error' : nil),
+                  data: { rank_form_target: 'threshold', action: 'rank-form#refresh' }
+              = render 'layouts/redesign/currency_token', story_group: @story_group, size: 32
+
+          .gh-fld
+            = f.label :discount, 'Zniżka w sklepie'
+            .gh-price-row
+              .gh-inp.gh-inp--num{ class: ('gh-inp--bad' if error.call(:discount)) }
+                = f.number_field :discount, min: 0, max: 100, step: 1,
+                  'aria-invalid': (error.call(:discount) ? 'true' : nil),
+                  'aria-describedby': (error.call(:discount) ? 'gh-rank-disc-error' : nil),
+                  data: { rank_form_target: 'discount', action: 'rank-form#refresh' }
+              %span.gh-unit %
+
+        - if error.call(:required_currency_value)
+          %p#gh-rank-min-error.gh-err{ role: 'alert' }
+            %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+            %span= error.call(:required_currency_value)
+        - if error.call(:discount)
+          %p#gh-rank-disc-error.gh-err{ role: 'alert' }
+            %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+            %span= error.call(:discount)
+
+        -# Filled in by rank_form_controller, and empty without JavaScript. The
+        -# ladder beside it is server-rendered and still tells the static truth;
+        -# only "what would change if you saved this" needs the live arithmetic,
+        -# and keeping its wording in one place beats duplicating it here.
+        %p.gh-expl{ data: { rank_form_target: 'impact' } }
+        %div{ data: { rank_form_target: 'warnings' } }
+
+      - if editing
+        .gh-fsec
+          %h2.gh-h3 Usuwanie
+          %p.gh-hint
+            Studenci z tą rangą spadną do rangi niżej. Przedmioty, które jej wymagają,
+            trzeba będzie najpierw przypisać do innej rangi.
+          .gh-rowb
+            = link_to confirm_destroy_story_group_rank_path(@story_group, rank),
+              class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+              %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
+              Usuń rangę
+
+    %aside.gh-pcol{ 'aria-label': 'Podgląd' }
+      = render 'preview', rank: rank, ladder: ladder, editing: editing
+
+  .gh-panel.gh-wbar
+    = link_to 'Anuluj', story_group_ranks_path(@story_group), class: 'gh-linkbtn'
+    %span.gh-wbar-sp
+    %button.gh-btn{ type: 'submit' }
+      - unless editing
+        %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+      = editing ? 'Zapisz zmiany' : 'Dodaj rangę'

@@ -1,0 +1,297 @@
+/* --------------------------------------------------------------------------
+   The Rangi screens.
+
+   Ported from design/mockup-src/css/24-lists.css:3-10 and :34 (the teacher's
+   ladder), css/30-sp.css:3-8 and :23 (the student's), css/22-br.css:9-14 (the
+   form's preview ladder) and css/26-rk.css:9 (the "Twoja ranga" chip — which
+   the mockup defines in its RANKING stylesheet and uses here, a cross-file
+   dependency worth not reproducing).
+
+   The layout the form itself uses lives in form.css: it is shared with every
+   other create/edit screen, and ranks are only the first to need it.
+
+   Breakpoints are plain media queries at the mockup's own values; its
+   `@container app` exists only because it renders inside a scaled device frame.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  .gh-lst {
+    margin-top: 22px;
+  }
+
+  /* ---- The teacher's ladder ---- */
+
+  .gh-rlad {
+    list-style: none;
+    margin: 0;
+    padding: 6px 20px 12px;
+  }
+
+  .gh-rl {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) minmax(0, 200px) auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-rl:first-child {
+    border-top: 0;
+  }
+
+  .gh-rl .gh-mc {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gh-rl b {
+    font: 760 19px/1.15 var(--gh-f-ui);
+    font-stretch: 88%;
+  }
+
+  .gh-rl small {
+    display: block;
+    margin-top: 3px;
+    font-size: 13.5px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-rl .gh-req2 {
+    font-size: 13px;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-rl-s {
+    font: 560 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-rl-s b {
+    margin-right: 4px;
+    font-size: 18px;
+    color: var(--gh-ink);
+  }
+
+  .gh-rl-s .gh-bar {
+    margin-top: 6px;
+  }
+
+  /* The distance between two rungs, printed in the space between them and
+     indented past the thumbnails so it reads as a gap rather than a row. */
+  .gh-rgap {
+    margin-left: 80px;
+    font: 560 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+
+  /* ---- The student's ladder ---- */
+
+  /* Top padding is the panel's corner radius, not the mockup's 8px: the current
+     rung bleeds to the panel's edges, and at 8px a student standing on the
+     HIGHEST rung would have that bleed overhang the cut corners. */
+  .gh-sl {
+    list-style: none;
+    margin-top: 22px;
+    padding: 14px 20px;
+  }
+
+  .gh-srk {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) minmax(0, 220px);
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-srk:first-child {
+    border-top: 0;
+  }
+
+  .gh-srk .gh-mc {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gh-srk b {
+    display: block;
+    font: 760 19px/1.15 var(--gh-f-ui);
+    font-stretch: 88%;
+  }
+
+  .gh-srk small {
+    display: block;
+    margin-top: 3px;
+    font-size: 13.5px;
+    color: var(--gh-ink-2);
+  }
+
+  /* The rung you are standing on. Bled to the panel's edges and marked with a
+     gold spine — a background alone would read as a hover state. */
+  .gh-srk--current {
+    margin: 0 -20px;
+    padding: 14px 20px;
+    background: color-mix(in srgb, var(--gh-rank) 16%, var(--gh-card));
+    box-shadow: inset 4px 0 0 var(--gh-rank);
+  }
+
+  /* Out of reach: dimmed, but never hidden — the point of the screen is seeing
+     what is ahead of you. `--next` is the first rung when you hold no rank at
+     all, so it keeps its full weight: it is the one you are working towards. */
+  .gh-srk--locked .gh-mc {
+    opacity: 0.45;
+  }
+
+  .gh-srk--locked b {
+    color: var(--gh-ink-2);
+  }
+
+  .gh-st3 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font: 620 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-st3--ok {
+    color: var(--gh-earn);
+  }
+
+  .gh-srk .gh-bar {
+    margin-top: 6px;
+  }
+
+  /* "Twoja ranga". The mockup paints this --item orange (26-rk.css:9) even
+     though it labels a gold row; kept, because it is the same chip that marks
+     "you" in the ranking table and it has to read the same in both. */
+  .gh-youtag {
+    --gh-c: 5px;
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 7px;
+    vertical-align: 2px;
+    font: 720 11.5px var(--gh-f-ui);
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* ---- The form's preview ---- */
+
+  /* Ascending in the DOM, reversed on screen, so the highest rung reads first
+     here exactly as it does on both list screens (22-br.css:9). */
+  .gh-ladder {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .gh-lad {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-lad .gh-mc {
+    width: 34px;
+    height: 34px;
+  }
+
+  .gh-lad b {
+    display: block;
+    font: 660 14.5px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-lad small {
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-lad-v {
+    font: 760 14px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* The rung being written. */
+  .gh-lad--new {
+    background: color-mix(in srgb, var(--gh-rank) 22%, var(--gh-card));
+  }
+
+  /* Two rungs at the same threshold. In the mockup this was decoration; here
+     it is a live preview of the error the server will return, because the
+     threshold is unique per group. */
+  .gh-lad--clash {
+    background: color-mix(in srgb, var(--gh-heart) 18%, var(--gh-card));
+  }
+
+  .gh-pvflip {
+    max-width: 230px;
+    margin: 16px auto 0;
+  }
+
+  .gh-pvflip .gh-art {
+    aspect-ratio: 16 / 10;
+  }
+
+  @media (max-width: 720px) {
+    .gh-rlad {
+      padding: 4px 14px 10px;
+    }
+
+    .gh-rl {
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 8px 12px;
+    }
+
+    .gh-rl .gh-mc {
+      width: 52px;
+      height: 52px;
+    }
+
+    .gh-rl-s,
+    .gh-rl > .gh-btn {
+      grid-column: 2;
+    }
+
+    .gh-rgap {
+      margin-left: 64px;
+    }
+
+    .gh-srk {
+      grid-template-columns: 52px minmax(0, 1fr);
+    }
+
+    .gh-srk .gh-mc {
+      width: 52px;
+      height: 52px;
+    }
+
+    .gh-srk > :last-child {
+      grid-column: 2;
+    }
+
+    .gh-srk--current {
+      margin: 0 -14px;
+      padding: 14px;
+    }
+  }
+}

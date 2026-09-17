@@ -43,6 +43,7 @@ group :development, :test do
   gem 'bundler-audit', '~> 0.9', require: false # Audits gems for known security defects
   gem 'debug', '~> 1.11', platforms: %i[mri windows] # Debugger
   gem 'factory_bot_rails', '~> 6.5' # For factories [https://github.com/thoughtbot/factory_bot_rails]
+  gem 'haml_lint', '~> 0.78.0' # Linter for haml
   gem 'rubocop', '~> 1.84' # Linter
   gem 'rubocop-espago', '~> 1.2', require: false # Linter rules from Espago
   gem 'ruby-lsp', '~> 0.26' # Ruby LSP

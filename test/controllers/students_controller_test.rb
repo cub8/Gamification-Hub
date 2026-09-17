@@ -53,7 +53,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
             },
           }
 
-    assert_turbo_redirected_to story_group_students_url(@story_group)
+    assert_turbo_redirected_to story_group_student_url(@story_group, @story_group_student)
   end
 
   test 'should destroy story_group_student' do
@@ -61,6 +61,8 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
       delete story_group_student_url(@story_group, @story_group_student)
     end
 
-    assert_redirected_to story_group_students_url(@story_group)
+    # Submitted from the stacked confirmation dialog, so it answers with the
+    # redirect stream that breaks out of the frame rather than a 302.
+    assert_turbo_redirected_to story_group_students_url(@story_group)
   end
 end

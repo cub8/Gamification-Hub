@@ -1,0 +1,41 @@
+-# The front of a badge card: what a student sees once it is theirs
+-# (30-sp.js:26, 30-lists.js:31). Shared by the student deck, the teacher grid
+-# and the form preview, so there is one copy of this face.
+-#
+-# `targets` carries the form preview's data-badge-form-target attributes and is
+-# empty everywhere else — the preview never regenerates markup, it rewrites the
+-# text in this one.
+- targets = local_assigns.fetch(:targets, {})
+- discount = badge_discount_label(badge)
+- flipper  = local_assigns.fetch(:flipper, false)
+
+.gh-card-top
+  %h3.gh-card-name{ class: ('gh-ph' if badge.name.blank?),
+                    data: targets[:name] }
+    = badge_name(badge)
+
+.gh-art{ data: targets[:art] }
+  = render 'badges/art', badge: badge
+
+- if local_assigns[:withdrawn]
+  .gh-tags
+    %span.gh-tag.gh-tag--del Usunięta z listy
+
+%p.gh-rules{ class: ('gh-ph' if badge.didactic_description.blank?), data: targets[:rules] }
+  = badge_rule(badge)
+
+-# Always in the markup even when empty, so the preview has somewhere to write
+-# a story the moment one is typed.
+%p.gh-flavor{ hidden: badge.story_description.blank?, data: targets[:flavor] }
+  = badge.story_description
+
+.gh-card-foot
+  %span.gh-tag.gh-tag--disc{ hidden: discount.nil?, data: targets[:tag] }= discount
+  - if flipper
+    -# No aria-expanded: this is not a disclosure, it is a toggle between two
+    -# views, and the turned-away face is inert — so the only button a screen
+    -# reader can reach is the one whose label says what pressing it will do.
+    %button.gh-flipbtn{ type: 'button',
+                        'aria-label': "Pokaż, jak zdobyć odznakę #{badge.name}" }
+      %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
+      Jak zdobyć

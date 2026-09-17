@@ -1,0 +1,166 @@
+/* --------------------------------------------------------------------------
+   The "Grupy" screen — the group index, shared by both personas.
+
+   Ported from design/mockup-src/css/29-gh.css:2-11 and :26 (the index half of
+   that file; the teacher group home and student group settings blocks in it
+   land with their own screens).
+
+   Breakpoints are plain media queries at the mockup's own values, for the
+   reason dashboard.css gives: `@container app` exists there only because the
+   mockup renders inside a scaled device frame.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* ---- Filter tabs ---- */
+
+  .gh-gtabs {
+    display: flex;
+    gap: 4px;
+    margin-top: 22px;
+    /* The strip's rule is a background, not a border-bottom (29-gh.css:2).
+       A border sits OUTSIDE the padding box, and the active tab's marker has
+       to overlap it — so with `overflow-x` making this a scroll container, the
+       marker counted as 2px of scrollable overflow and raised a vertical
+       scrollbar over nothing. Painted inside the padding box instead, both the
+       rule and the marker stay in bounds. */
+    padding-bottom: 2px;
+    background: linear-gradient(var(--gh-zone), var(--gh-zone)) no-repeat bottom / 100% 2px;
+    /* Horizontal only, so the tabs can still slide on a narrow phone. Stating
+       the other axis matters: left at `visible` it computes to `auto` the
+       moment one axis is not visible, which was the other half of the bug. */
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .gh-gt2 {
+    position: relative;
+    padding: 12px 16px;
+    background: color-mix(in srgb, var(--gh-card) 60%, transparent);
+    font: 680 15px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .gh-gt2[aria-current="true"] {
+    background: var(--gh-card);
+    color: var(--gh-ink);
+  }
+
+  /* Sits ON the strip's 2px border, not above it, so the active tab and the
+     rule below it read as one shape. */
+  .gh-gt2[aria-current="true"]::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    left: 0;
+    height: 3px;
+    background: var(--gh-item);
+  }
+
+  .gh-gt2 .gh-n {
+    margin-left: 4px;
+    font-weight: 560;
+    color: var(--gh-ink-3);
+  }
+
+  /* ---- Search bar ---- */
+
+  .gh-ixbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  .gh-ixbar .gh-search {
+    width: 300px;
+  }
+
+  /* ---- The grid ---- */
+
+  .gh-ixgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 24px 18px;
+    margin-top: 18px;
+  }
+
+  .gh-ixc {
+    transition: transform 0.15s;
+  }
+
+  .gh-ixc:hover {
+    transform: translateY(-3px);
+  }
+
+  /* The whole card is one link. It has to fill the grid cell for the card
+     frame's `height: 100%` to reach the bottom of a short card. */
+  .gh-ixc-l {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .gh-ixc .gh-art {
+    aspect-ratio: 21 / 9;
+    margin: 10px 10px 0;
+  }
+
+  .gh-ixc .gh-card-i {
+    padding-bottom: 14px;
+  }
+
+  .gh-ixc .gh-card-name {
+    font-size: 19px;
+  }
+
+  /* The mockup fills an artless card with `.nart`, a separate grey-striped
+     field. .gh-art already hatches in the frame colour, so the monogram only
+     needs type — one treatment for "no image", not two. */
+  .gh-art--mono {
+    font: 800 36px/1 var(--gh-f-ui);
+    font-stretch: 80%;
+    letter-spacing: 0.04em;
+  }
+
+  .gh-roletag {
+    align-self: flex-start;
+    margin: 0 14px;
+  }
+
+  .gh-ixmeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    padding: 4px 14px 0;
+    font: 540 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- Empty states ---- */
+
+  .gh-gm {
+    margin-top: 18px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .gh-gm .gh-lead {
+    margin: 8px auto 0;
+  }
+
+  @media (max-width: 720px) {
+    .gh-ixbar .gh-search {
+      width: 100%;
+    }
+
+    .gh-ixgrid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

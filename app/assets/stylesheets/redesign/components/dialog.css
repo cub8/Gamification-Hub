@@ -1,0 +1,346 @@
+@layer components {
+
+  /* ---- Dialog ---- */
+
+  .gh-dialog {
+    --gh-c: 14px;
+    border: 0;
+    padding: 0;
+    /* Tailwind's preflight zeroes `margin` on `*`, which destroys the UA
+       stylesheet's `margin: auto` on <dialog> — without this line a modal
+       dialog renders in the top-left corner instead of centred. */
+    margin: auto;
+    background: transparent;
+    color: var(--gh-ink);
+    /* A DEFINITE width, not just a cap. A <dialog> is width:fit-content, so
+       with only a max-width it shrink-wraps its content and jumps narrower the
+       moment a row is hidden — which the invite limits dialog does on every
+       switch. The mockup's .dlg has carried `width: min(540px, 100%)` all
+       along (00-base.css:454); this is the half that never got ported. */
+    width: min(92vw, 560px);
+    max-width: min(92vw, 560px);
+    max-height: 86vh;
+  }
+
+  .gh-dialog::backdrop {
+    background: var(--gh-scrim);
+  }
+
+  /* The code dialog is wider than the rest (27-isg.css:14, `.dlg-code`). The
+     <dialog> lives in the layout and the frame content cannot put a class on
+     it, so the content announces itself instead and :has() does the rest — no
+     JavaScript, and nothing for dialog_controller to know about. */
+  .gh-dialog:has(.gh-qrbox) {
+    width: min(92vw, 620px);
+    max-width: min(92vw, 620px);
+  }
+
+  /* The surface is painted on the SCROLLING element itself, exactly as the
+     mockup's .pop is (00-base.css). It must not be an absolutely positioned
+     ::before layer: an abspos child of a scroll container scrolls away with the
+     content, so a long list would scroll out from under its own background. A
+     background on a scroll container is painted against its padding box and
+     stays put, which is the whole point. */
+  .gh-dialog-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 86vh;
+    /* --chrome, not --card: deeper than the cards behind it, so the panel
+       separates from the page instead of blending into it. The mockup paints
+       --chrome on .dlg and .pop alike, and it is the header bar's colour. */
+    background: var(--gh-chrome);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+}
+
+@layer components {
+
+  /* ---- Menu dialogs: the avatar menu and the mobile "Więcej" sheet ----
+
+     Ported from 00-base.css:452-460 (.dlg / .grab) and 506-510 (.menu), plus
+     the 720px block that turns every dialog into a bottom sheet.
+
+     These are plain server-rendered <dialog>s driven by menu_controller, not
+     the shared turbo-frame modal — dialog_controller opens on
+     turbo:frame-load and must keep doing only that. */
+
+  .gh-dialog--menu {
+    width: min(92vw, 380px);
+    max-width: min(92vw, 380px);
+  }
+
+  /* Anchored panel: the account menu, the "Więcej" sheet and the notifications
+     list. Corner-pinned under the header, matching the mockup's
+     `.pop-w{top:64px;right:14px;width:370px}` — the mockup does not anchor to
+     the specific trigger either, and neither do we. */
+  .gh-dialog--anchored {
+    margin: 64px 14px auto auto;
+    width: min(92vw, 370px);
+    max-width: min(92vw, 370px);
+  }
+
+  /* The group switcher is anchored under the SIDEBAR, not under the header —
+     it belongs to the deck (00-base.css:492, `.pop-left`). On a phone the
+     720px block below turns it into a bottom sheet like every other dialog. */
+  .gh-dialog--switcher {
+    margin: 120px auto auto 14px;
+    width: min(92vw, 320px);
+    max-width: min(92vw, 320px);
+  }
+
+  /* "Tu jesteś" — the mockup marks the current group with a word rather than a
+     tick, which reads the same whether or not you can see the icon. */
+  .gh-cur {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+  }
+
+  /* Pinned to the bottom of the scrolling panel, with the rule that separates
+     it from the list (90-core.css:29). Sticky, not just spaced: it is the
+     answer to "what if I belong to twenty groups" — the list scrolls under it
+     and "Dołącz do grupy" never scrolls out of reach.
+
+     Sticky resolves against the nearest scrolling ancestor, which is
+     .gh-dialog-body — so this must stay a child of it, not a sibling. */
+  .gh-pop-f {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    margin-top: 2px;
+    padding: 12px 0 6px;
+    background: var(--gh-chrome);
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-pop-f .gh-btn {
+    flex: 1;
+  }
+
+  /* No scrim on desktop: the mockup's `.pop-ovl` has no background at all and
+     only gains `var(--scrim)` at ≤720px, where the panel becomes a sheet.
+     Written as a min-width rule so the base scrim needs no undo below it.
+
+     The dialog stays `showModal()` rather than `show()`, so the page behind is
+     inert while it is open. That is deliberate: a non-modal dialog is laid out
+     in normal flow, where `.gh-shell { overflow: hidden }` would clip it. The
+     top layer is what makes this robust. */
+  @media (min-width: 721px) {
+    .gh-dialog--anchored::backdrop,
+    .gh-dialog--switcher::backdrop {
+      background: transparent;
+    }
+
+    /* With no scrim behind it, the shadow is the only thing separating the
+       panel from the page — the mockup's two-part `.pop-w` filter
+       (00-base.css:491): a hard 3px edge under the cut corners, then a soft
+       cast. On the dialog, not the body, so it traces the body's clip-path
+       instead of its rectangle. */
+    .gh-dialog--anchored,
+    .gh-dialog--switcher {
+      filter: drop-shadow(0 3px 0 var(--gh-line-2)) drop-shadow(0 14px 26px rgb(0 0 0 / 22%));
+    }
+
+    .gh-dialog--anchored .gh-dialog-body {
+      max-height: 520px;
+    }
+
+    /* Capped against the viewport, not just at 520px: the panel starts 120px
+       down, so a long group list has to stop before the bottom edge rather
+       than run off it. The list then scrolls inside. */
+    .gh-dialog--switcher .gh-dialog-body {
+      max-height: min(520px, calc(100dvh - 140px));
+    }
+  }
+
+  .gh-menu {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  .gh-menu button,
+  .gh-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 8px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    color: var(--gh-ink);
+    font: 560 15px var(--gh-f-ui);
+  }
+
+  .gh-menu button:hover,
+  .gh-menu a:hover {
+    background: var(--gh-card-2);
+  }
+
+  /* A menu row is a picker, not a list item: the thumbnail is what you aim at
+     and recognise the group by, so it is bigger here than the 22px default
+     (00-base.css:509). Without this rule it falls back to that default and the
+     whole row reads a size too small.
+
+     The monogram steps up with it, matching `.gthumb.nart` (90-core.css:41). */
+  .gh-menu .gh-gthumb {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .gh-menu i {
+    width: 20px;
+    text-align: center;
+    color: var(--gh-ink-2);
+  }
+
+  /* Section label: "Nowe" / "Wcześniej" in the notifications panel, "Konto" in
+     the "Więcej" sheet. Lifted from the mockup's 90-core.css `.pop-sec`. */
+  /* The section list in the "Więcej" sheet marks where you are (90-core.css:38).
+     Attribute selector, not a class: aria-current is already on the link and
+     the two must not be able to drift apart. */
+  .gh-more-m a[aria-current] {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+    font-weight: 720;
+  }
+
+  .gh-pop-sec {
+    font: 680 11.5px/1.2 var(--gh-f-ui);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--gh-ink-3);
+    padding: 10px 0 4px;
+  }
+
+  /* Panel header: title left, a link-style action right. */
+  .gh-pop-h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  /* button_to wraps its button in a <form>; display:contents hands the flex
+     slot straight to the button so the form does not become a layout box. */
+  .gh-pop-h form {
+    display: contents;
+  }
+
+  .gh-pop-h .gh-linkbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+  }
+
+  /* Identity block at the top of the avatar menu. */
+  .gh-pop-me {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gh-line);
+  }
+
+  .gh-pop-me b {
+    display: block;
+    font: 720 15px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-pop-me small {
+    font-size: 13px;
+    color: var(--gh-ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  /* Drag handle: only meaningful once the dialog is a bottom sheet. */
+  .gh-grab {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    /* Every dialog becomes a bottom sheet: full width, pinned to the bottom
+       edge, and only the top corners cut — the bottom two would float above
+       the screen edge. */
+    .gh-dialog,
+    .gh-dialog--menu,
+    .gh-dialog--anchored {
+      margin: auto auto 0;
+      width: 100%;
+      max-width: 100%;
+      max-height: 92dvh;
+    }
+
+    /* Only the top corners are cut — the bottom two would float above the
+       screen edge. */
+    .gh-dialog-body {
+      max-height: 92dvh;
+      padding: 10px 16px 20px;
+      clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%, 0 18px);
+    }
+
+    .gh-grab {
+      display: block;
+      width: 44px;
+      height: 4px;
+      margin: 0 auto 14px;
+      background: var(--gh-line-2);
+    }
+  }
+
+  /* The same content rendered as a page instead of in the dialog (ctrl-click,
+     JavaScript off). Without a surface it sits straight on the table texture,
+     because these screens keep the app shell rather than the focused one the
+     join flow uses, and so never land inside .gh-acard.
+
+     Pair with .gh-panel, which paints the card and its shadow. The numbers are
+     the dialog's own: .dlg's width and .dlg-in's padding (00-base.css:454-456),
+     so the page version reads as the same object. */
+  .gh-dlg-page {
+    width: min(560px, 100%);
+    margin-top: 22px;
+    padding: 26px 28px 24px;
+  }
+
+  @media (max-width: 720px) {
+    .gh-dlg-page {
+      padding: 18px 16px;
+    }
+  }
+
+  /* A dialog's action row (00-base.css:458). Right-aligned on desktop; on a
+     phone, where every dialog is a bottom sheet, the buttons share the width
+     so both are thumb-sized. */
+  .gh-dlg-b {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  @media (max-width: 720px) {
+    .gh-dlg-b {
+      justify-content: stretch;
+    }
+
+    .gh-dlg-b .gh-btn {
+      flex: 1;
+    }
+  }
+}

@@ -1,0 +1,53 @@
+/* ---- mockup toolbar extras ---- */
+.tb-sel{background:#26262e;color:#f0f0f5;border:1px solid #444452;font:inherit;padding:5px 8px;max-width:230px}
+.tb-sel optgroup{background:#17171b}
+
+/* ---- account settings page ---- */
+.acc{margin-top:22px;padding:22px}
+.acc .h2{margin-bottom:14px}
+.acc-dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px 26px;margin:0}
+.acc-dl>div{min-width:0}
+.acc-dl dt{font:600 12.5px var(--f-ui);color:var(--ink-3);margin-bottom:3px}
+.acc-dl dd{margin:0;font:650 16px var(--f-ui);word-break:break-word}
+.acc .expl{margin-top:16px;display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+.acc .expl .ic{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
+.acc .seg3{max-width:340px}
+.acc .btn{margin-top:4px}
+
+/* ---- error / offline ---- */
+.err-p{max-width:560px;margin:40px auto;text-align:center;padding:30px 26px}
+.err-p .gm-ic{margin:0 auto 16px;background:var(--heart-bg,var(--card-3));color:var(--heart)}
+.err-p .lead{margin-bottom:10px}
+.err-p .dlg-b{margin-top:20px}
+
+/* ---- notifications popover ---- */
+.pop-sec{font:680 11.5px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding:10px 16px 4px}
+.nlist .nrow{cursor:pointer;padding-left:8px;padding-right:8px;margin:0 -8px}
+.nlist .nrow:hover{background:var(--card-2)}
+.nlist .nrow.un{grid-template-columns:44px minmax(0,1fr) 10px}
+.nlist .dot{--c:2px;width:8px;height:8px;background:var(--item);align-self:center;clip-path:polygon(var(--c) 0,calc(100% - var(--c)) 0,100% var(--c),100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,var(--c) 100%,0 calc(100% - var(--c)),0 var(--c))}
+.pop-f{position:sticky;bottom:0;background:var(--chrome);padding:12px 0 6px;margin-top:2px;border-top:1px solid var(--line)}
+.pop-f .btn{width:100%}
+.pop-h{padding-bottom:2px}
+.pop-h .linkbtn{display:inline-flex;align-items:center;gap:6px;line-height:1}
+.pop-h .linkbtn .ic{width:16px;height:16px;flex:0 0 auto}
+.pop-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+/* ---- "Więcej" sheet ---- */
+.more-m li button{width:100%}
+.more-m li button[aria-current]{background:var(--card-2)}
+
+/* ---- read-only group stub ---- */
+.gthumb.nart{display:grid;place-items:center;font:800 11px var(--f-ui);background:var(--card-3);color:var(--ink-2)}
+
+/* ---- dialogs must stay inside the app and scroll their body ----
+   .ovl is a grid; without a bounded row the dialog's max-height:100%
+   resolves against its own content, so tall dialogs ran off-screen. */
+.ovl{grid-template-rows:minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
+.ovl>.dlg{min-height:0}
+
+/* ---- dashboard columns must be allowed to shrink ----
+   grid items default to min-width:auto, so the scrollable filter rail
+   inside "Ostatnie zakupy" was forcing the whole dashboard wider than
+   the phone frame. */
+.dash>*,.dash-side>*{min-width:0}

@@ -1,0 +1,1008 @@
+/* Form fields. Lifted from design/mockup-src/css/20-form.css. */
+
+@layer components {
+
+  /* ---- Form fields ---- */
+
+  .gh-fld {
+    margin-top: 16px;
+  }
+
+  .gh-fld > label {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    margin-bottom: 8px;
+  }
+
+  .gh-inp {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+  }
+
+  .gh-inp::before,
+  .gh-inp::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-inp::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-inp::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-inp:focus-within::before {
+    background: var(--gh-focus);
+  }
+
+  .gh-inp--bad::before {
+    background: var(--gh-heart);
+  }
+
+  .gh-inp input,
+  .gh-inp textarea {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 12px 14px;
+    font: 500 15.5px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink);
+  }
+
+  /* Badges are the first screen in this bundle with a textarea; items and the
+     group wizard need the same one next.
+     
+     `rows` alone is not enough: two rows of text land flush against the well's
+     own 2px inset and the resize grip sits on top of the second line, which is
+     what the mockup's inline `min-height:72px` (30-br.js:47-48) is there to
+     stop. Resizing is vertical only — a textarea dragged wider escapes the
+     octagon well behind it, which is a painted layer and does not follow.
+     
+     The mockup also sets the "Jak zdobyć" field in Literata and leaves the
+     story field in the UI face. Not ported: it is the story that shows as
+     Literata on the finished card, so the two would have read swapped. */
+  .gh-inp textarea {
+    min-height: 72px;
+    resize: vertical;
+  }
+
+  .gh-err {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 7px;
+    color: var(--gh-heart-ink);
+    font: 620 13.5px var(--gh-f-ui);
+  }
+
+  /* Search field (00-base.css:396-400). Same octagon well as an input, but it
+     wraps the icon and the field together, so the shape lives on the label. */
+  .gh-search {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 260px;
+    height: 40px;
+    padding: 0 12px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-search::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-search:focus-within::before {
+    background: var(--gh-card-3);
+  }
+
+  .gh-search:focus-within {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  .gh-search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font: 500 14.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    outline: none;
+  }
+
+  /* Explanatory note under a field (20-form.css:19). Sits where .gh-err would,
+     and is replaced by it when the field goes bad. */
+  .gh-hint {
+    display: block;
+    margin-top: 7px;
+    font: 450 13px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* A bare count, sized to be read across a room (21-item.css:34). */
+  .gh-inp--num input {
+    width: 104px;
+    text-align: right;
+    font: 800 22px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- Switch (20-form.css:50-54) ----
+
+     The mockup uses <button role="switch"> because its dialog re-renders from
+     JS state on every toggle. Ours is a real checkbox with role="switch": it
+     posts its own value, toggles with Space, and needs no hidden field, so the
+     form still works with JavaScript off. The knob is ::after rather than the
+     mockup's child <i> — a replaced element like <input> cannot have children,
+     which is the whole reason the mockup reached for a <button>. */
+  .gh-swrow {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .gh-swrow b {
+    display: block;
+    font: 650 14.5px/1.3 var(--gh-f-ui);
+  }
+
+  .gh-sw {
+    --gh-c: 6px;
+    position: relative;
+    width: 54px;
+    height: 30px;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    appearance: none;
+    background: var(--gh-card-3);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-sw::after {
+    --gh-c: 5px;
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    background: var(--gh-ink-3);
+    transition: left 0.15s;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-sw:checked {
+    background: var(--gh-item);
+  }
+
+  .gh-sw:checked::after {
+    left: 28px;
+    background: var(--gh-on-item);
+  }
+
+  .gh-sw:focus-visible {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 3px;
+  }
+
+  /* The code, big enough to read from the back row (20-form.css:103). */
+  .gh-code-big {
+    --gh-c: 10px;
+    display: inline-block;
+    margin: 6px 0 12px;
+    padding: 14px 20px;
+    background: var(--gh-card-2);
+    font: 700 36px/1 var(--gh-f-mono);
+    letter-spacing: 0.16em;
+    color: var(--gh-ink);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The two-column form page.
+
+   Ported from design/mockup-src/css/20-form.css:11-15, :33-49, :68-70, :77-80
+   and :98-99, plus the shared one-offs the mockup keeps in 21-item.css:27-35.
+
+   Shared on purpose: this is the layout every create/edit screen uses
+   (DECISIONS.md:26, "Forms: pages (not modals) for create/edit"), and the image
+   field is the one DECISIONS.md:25 makes a rule for every image in the app.
+   Ranks are the first consumer; badges, items and story-group art are next.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* ---- Page head ---- */
+
+  /* .gh-phead is a space-between ROW; a form's head stacks instead, because the
+     breadcrumb, the title and the lead are one column with no action beside
+     them (30-br.js:159 sets display:block on it by hand).
+
+     Doubled up as `.gh-phead.gh-phead--stack` on purpose. .gh-phead lives in
+     dashboard.css, which is imported AFTER this file, so at equal specificity
+     its `display: flex` would win on order alone and the three lines would
+     spread across the bar. */
+  .gh-phead.gh-phead--stack {
+    display: block;
+  }
+
+  .gh-crumbs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    font: 560 13.5px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .gh-crumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .gh-crumbs i {
+    font-size: 11px;
+  }
+
+  /* ---- The grid ---- */
+
+  .gh-wiz {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 22px;
+    margin-top: 22px;
+    align-items: start;
+  }
+
+  .gh-fcol {
+    padding: 24px 28px 28px;
+  }
+
+  /* Sticky, so the preview stays beside the field you are editing however far
+     down the form you are. */
+  .gh-pcol {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .gh-pv {
+    padding: 18px 20px 20px;
+  }
+
+  .gh-pv h3 {
+    font: 700 14px/1.2 var(--gh-f-ui);
+    letter-spacing: 0.02em;
+    color: var(--gh-ink-2);
+  }
+
+  /* The preview is a <details> so it can collapse on a narrow screen, where it
+     sits under the form rather than beside it. Above 1080px there is nothing to
+     collapse, so the summary is hidden and it is simply always open. */
+  .gh-pvd > summary {
+    display: none;
+  }
+
+  /* ---- Sections ---- */
+
+  .gh-fsec + .gh-fsec {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-fsec > .gh-hint {
+    margin: 4px 0 12px;
+  }
+
+  /* A label for a group of controls, where there is no single input to point a
+     <label> at — the preset picker and the crop box. */
+  .gh-lbl {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    margin-bottom: 8px;
+  }
+
+  /* Two fields side by side; they drop under each other when there is no room
+     (22-br.css:6). Not .gh-row2 — invites.css already owns that name for the
+     switch rows, and this is a different shape. */
+  .gh-frow2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 28px;
+  }
+
+  .gh-frow2 .gh-fld {
+    margin-top: 16px;
+  }
+
+  /* A number and the thing it is measured in — a percent sign, a currency
+     token (21-item.css:33). */
+  .gh-price-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .gh-unit {
+    font: 680 16px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- Currency token ----
+
+     Gold rim, cream plate (20-form.css:77-80). The plate is deliberately light
+     in BOTH themes: an uploaded currency icon is drawn for a coin, and coins do
+     not invert. */
+  .gh-tok {
+    --gh-c: 29%;
+    --gh-s: 30px;
+    display: inline-grid;
+    flex: 0 0 auto;
+    width: var(--gh-s);
+    height: var(--gh-s);
+    padding: max(2px, calc(var(--gh-s) * 0.08));
+    background: var(--gh-rank);
+    vertical-align: middle;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-tok > span {
+    display: grid;
+    place-items: center;
+    background: #fff8e6;
+    color: #221a2b;
+    clip-path: inherit;
+  }
+
+  .gh-tok img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
+
+  .gh-tok i {
+    font-size: calc(var(--gh-s) * 0.42);
+  }
+
+  /* ---- The image field: presets ----
+
+     Ported from 20-form.css:33-41. The tiles are real radios in a label, not
+     the mockup's <button role="radio"> — a button posts nothing and does
+     nothing without JavaScript, and the native radio brings arrow-key
+     navigation with it. */
+
+  .gh-pz-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* A <label>, so it must be told to be a box: an inline element with only
+     absolutely positioned children ignores width and height entirely. (The
+     mockup gets this for free — its tiles are buttons.) */
+  .gh-pz {
+    --gh-c: 8px;
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+    width: 92px;
+    height: 58px;
+    cursor: pointer;
+  }
+
+  .gh-pz::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--gh-line-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-pz i {
+    --gh-c: 6px;
+    position: absolute;
+    inset: 3px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* `contain`, like every other place the art is shown: the tile is a preview
+     of the crop, so it must not reframe it. The tile is 92x58 and the crop is
+     16:10, so in practice they very nearly match anyway. */
+  .gh-pz img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .gh-pz .gh-gph {
+    width: 56%;
+    height: auto;
+    max-height: 76%;
+  }
+
+  /* The selected frame takes the ENTITY's colour. The mockup paints it
+     --item orange on every form (20-form.css:36), which on a gold rank form is
+     simply the wrong colour. */
+  .gh-pz:has(input:checked)::before {
+    background: var(--gh-frame, var(--gh-item));
+  }
+
+  .gh-pz:has(input:checked) i {
+    inset: 4px;
+  }
+
+  .gh-pz:has(input:focus-visible)::before {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  /* Colour roles, one per entity — the mockup's .pz.glp.k-rank / .k-badge
+     (22-br.css:2-4). `--gh-frame` is the same custom property .gh-card uses, so
+     a tile and the card it previews cannot drift apart. */
+  .gh-pz--rank {
+    --gh-frame: var(--gh-rank);
+  }
+
+  .gh-pz--rank i {
+    background: color-mix(in srgb, var(--gh-rank) 18%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-rank) 55%, var(--gh-ink));
+  }
+
+  .gh-pz--badge {
+    --gh-frame: var(--gh-badge);
+  }
+
+  .gh-pz--badge i {
+    background: color-mix(in srgb, var(--gh-badge) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-badge) 58%, var(--gh-ink));
+  }
+
+  /* 21-item.css:9-11. The glyph sits larger in an item tile than in the other
+     two, because item art is a literal object rather than an emblem. */
+  .gh-pz--item {
+    --gh-frame: var(--gh-item);
+  }
+
+  .gh-pz--item i {
+    background: color-mix(in srgb, var(--gh-item) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-item) 58%, var(--gh-ink));
+  }
+
+  .gh-pz--item .gh-gph {
+    width: 56%;
+    max-height: 78%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-gh-theme="light"]) .gh-pz--rank i { color: var(--gh-rank); }
+    :root:not([data-gh-theme="light"]) .gh-pz--badge i { color: var(--gh-badge); }
+    :root:not([data-gh-theme="light"]) .gh-pz--item i { color: var(--gh-item); }
+  }
+
+  :root[data-gh-theme="dark"] .gh-pz--rank i { color: var(--gh-rank); }
+  :root[data-gh-theme="dark"] .gh-pz--badge i { color: var(--gh-badge); }
+  :root[data-gh-theme="dark"] .gh-pz--item i { color: var(--gh-item); }
+
+  /* ---- The image field: upload ---- */
+
+  /* The one place a dashed border is right: it is the affordance, not a frame
+     around a clipped surface (20-form.css:42). */
+  .gh-drop {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+    padding: 14px 16px;
+    border: 2px dashed var(--gh-line-2);
+  }
+
+  .gh-drop-ic {
+    --gh-c: 8px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-drop > span:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gh-drop b {
+    display: block;
+    font: 650 14.5px var(--gh-f-ui);
+  }
+
+  .gh-drop small {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-drop label {
+    cursor: pointer;
+  }
+
+  /* ---- The image field: crop ----
+
+     A real crop, not the mockup's focal point: what gets stored is the square
+     the teacher chose. Cropper.js v2 draws itself into .gh-crop-box with its own
+     shadow-DOM styles, so there is nothing to theme here beyond the well. */
+
+  .gh-crop {
+    margin-top: 16px;
+  }
+
+  .gh-crop-box {
+    --gh-c: 10px;
+    position: relative;
+    max-width: 420px;
+    height: 300px;
+    background: var(--gh-card-3);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-crop-box cropper-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .gh-crop .gh-hint {
+    margin-top: 8px;
+  }
+
+  /* ---- Notes inside a form ----
+
+     Ported from 21-item.css:27-31. Three weights of aside: a neutral
+     explanation, a caution, and a fact about what already exists. */
+
+  .gh-fsec .gh-expl,
+  .gh-dlg-page .gh-expl {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    background: var(--gh-card-2);
+    font: 500 14.5px/1.5 var(--gh-f-ui);
+    color: var(--gh-ink);
+  }
+
+  /* The discount box holds two sentences — an example student, then the
+     ceiling — where every other .gh-expl holds one. */
+  .gh-expl p {
+    margin: 0;
+  }
+
+  .gh-expl p + p {
+    margin-top: 8px;
+  }
+
+  /* No example to write (nothing in the group discounts anything a plausible
+     student could hold): the paragraph stays in the markup for the live preview
+     to write into, but an empty line must not open a gap. */
+  .gh-expl p:empty {
+    display: none;
+  }
+
+  /* The ceiling is a footnote to the example above it, not a second headline. */
+  .gh-expl-max {
+    color: var(--gh-ink-2);
+    font-size: 13.5px;
+  }
+
+  .gh-warn,
+  .gh-warn2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 10px;
+    font: 560 14px/1.45 var(--gh-f-ui);
+  }
+
+  .gh-warn i,
+  .gh-warn2 i {
+    flex: 0 0 auto;
+    margin-top: 2px;
+    color: var(--gh-rank-edge);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-gh-theme="light"]) .gh-warn i,
+    :root:not([data-gh-theme="light"]) .gh-warn2 i { color: var(--gh-rank); }
+  }
+
+  :root[data-gh-theme="dark"] .gh-warn i,
+  :root[data-gh-theme="dark"] .gh-warn2 i { color: var(--gh-rank); }
+
+  .gh-info {
+    --gh-c: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 22px;
+    padding: 12px 14px;
+    background: color-mix(in srgb, var(--gh-badge) 14%, var(--gh-card));
+    font: 500 14.5px/1.45 var(--gh-f-ui);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-info i {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    color: var(--gh-badge-edge);
+  }
+
+  /* ---- The save bar ----
+
+     The mockup pins this to the bottom of the viewport (`position: sticky`,
+     20-form.css:98). Not ported: the form sits beside a preview column that is
+     itself sticky, so a floating bar spends the whole page overlapping the
+     drabinka instead of the empty space it assumes is there. It ends the page
+     instead, which is where you arrive once you have filled the form in. */
+  .gh-wbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 14px;
+    padding: 14px 18px;
+  }
+
+  .gh-wbar-sp {
+    flex: 1;
+  }
+
+  /* Placeholder text in a preview: this is what the field WILL say. */
+  .gh-ph {
+    color: var(--gh-ink-3);
+  }
+
+  .gh-rules {
+    padding: 6px 12px 12px;
+    font: 500 14px/1.45 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- Sentence rows: a setting written as a clause ----
+
+     Ported from 21-item.css:32-34. "Kupić może [ każdy student ▾ ]" reads as a
+     sentence because the control sits inside one, which is the whole reason the
+     item form does not use a stack of labelled fields here. */
+
+  .gh-sent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font: 600 15px var(--gh-f-ui);
+  }
+
+  .gh-sent > span:first-child {
+    min-width: 128px;
+  }
+
+  /* The octagon select shell (21-item.css:35-40). Same frame-plus-inset trick
+     as .gh-inp: a border would break at the cut corners. */
+  .gh-sel {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .gh-sel::before,
+  .gh-sel::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-sel::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-sel::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-sel:focus-within::before {
+    background: var(--gh-focus);
+  }
+
+  .gh-sel select {
+    appearance: none;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 10px 36px 10px 12px;
+    font: 620 14.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+  }
+
+  /* The dropdown list is painted by the OS, which does not inherit the page's
+     theme — so both colours have to be stated. */
+  .gh-sel select option {
+    background: var(--gh-card);
+    color: var(--gh-ink);
+  }
+
+  .gh-sel > i {
+    position: absolute;
+    right: 12px;
+    font-size: 12px;
+    pointer-events: none;
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- Chips: a multiselect you can read ----
+
+     Ported from 21-item.css:41-45. Every chip is a real checkbox in a label, so
+     the group works and posts with JavaScript off; chip_picker_controller hides
+     the unchosen ones and reveals the "Dodaj…" select beside them. */
+
+  .gh-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .gh-chip {
+    --gh-c: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: color-mix(in srgb, var(--gh-badge) 18%, var(--gh-card));
+    font: 620 13.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-chip:hover {
+    background: color-mix(in srgb, var(--gh-badge) 28%, var(--gh-card));
+  }
+
+  .gh-chip small {
+    color: var(--gh-badge-ink);
+    font-weight: 700;
+  }
+
+  .gh-chip > i {
+    font-size: 11px;
+    color: var(--gh-ink-2);
+  }
+
+  /* Unchosen chips are only ever visible with JavaScript off, and then the ×
+     would be a lie — there is nothing yet to remove. */
+  .gh-chip:not(:has(input:checked)) {
+    background: var(--gh-card-2);
+  }
+
+  .gh-chip:not(:has(input:checked)) > i {
+    display: none;
+  }
+
+  /* The checkbox is visually hidden, so the focus ring has to be drawn by the
+     chip around it. */
+  .gh-chip:has(input:focus-visible) {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 1080px) {
+    .gh-wiz {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-pcol {
+      position: static;
+    }
+
+    /* Below the form now, so it has to be collapsible. */
+    .gh-pvd > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 4px;
+      cursor: pointer;
+      font: 680 14px var(--gh-f-ui);
+      list-style: none;
+    }
+
+    .gh-pvd > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .gh-pvd[open] > summary i {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .gh-fcol {
+      padding: 18px 16px 20px;
+    }
+
+    .gh-wbar {
+      margin-top: 16px;
+      padding: 10px 12px;
+    }
+
+    .gh-drop {
+      flex-wrap: wrap;
+    }
+
+    .gh-pz {
+      width: 78px;
+      height: 52px;
+    }
+  }
+}

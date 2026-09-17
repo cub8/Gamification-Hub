@@ -1,0 +1,10 @@
+-# A rank as a mini entity card — the mockup's mini('gold', glyph)
+-# (30-lists.js:15). Gold, because rank and currency are gold in this design
+-# language (DECISIONS.md:22).
+-#
+-# The art itself is ranks/_art, so this chip and the group overview's rank card
+-# cannot end up disagreeing about what a rank looks like.
+%span.gh-card.gh-card--gold.gh-mc
+  %span.gh-card-f
+    %span.gh-card-i{ data: local_assigns[:inner_data] }
+      = render 'ranks/art', rank: rank

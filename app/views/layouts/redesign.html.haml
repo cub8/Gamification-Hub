@@ -1,0 +1,119 @@
+-# "Card Table" redesign layout.
+-#
+-# Opt a controller in with `layout "redesign"`. Loads redesign.css/redesign.js
+-# only — no Bootstrap, no legacy Stimulus controllers.
+-#
+-# Replaces BOTH old layouts: `chrome` is false for auth-style screens, which
+-# renders the centred single-column shell that `public` used to provide.
+-# Set it per controller with `@chrome = false` (or content_for :chrome).
+
+!!!
+%html{ lang: 'pl', data: { gh_theme: gh_theme } }
+  %head
+    %meta{ charset: 'utf-8' }/
+    %title= content_for(:title) || 'Gamification Hub'
+    %meta{ content: 'width=device-width,initial-scale=1', name: 'viewport' }/
+    %meta{ content: 'Gamification Hub', name: 'application-name' }/
+    %meta{ content: 'yes', name: 'mobile-web-app-capable' }/
+    %meta{ name: 'turbo-prefetch', content: 'false' }/
+    = csrf_meta_tags
+    = csp_meta_tag
+    = yield :head
+    %link{ href: '/icon.png', rel: 'icon', type: 'image/png' }/
+    %link{ href: '/icon.svg', rel: 'icon', type: 'image/svg+xml' }/
+    %link{ href: '/icon.png', rel: 'apple-touch-icon' }/
+    = stylesheet_link_tag :redesign, 'data-turbo-track': 'reload'
+    = javascript_include_tag 'redesign', 'data-turbo-track': 'reload', type: 'module'
+
+  %body.bg-table.text-ink.font-ui
+    - if @chrome == false
+      -# Focused shell: auth, wizard and other flows with no navigation.
+      -# Mirrors the mockup's .auth column (28-auth.css). The texture is a
+      -# fixed full-bleed layer here because there is no content well to
+      -# scope it to; content carries `relative z-10` to sit above it.
+      .gh-tpat{ 'aria-hidden': 'true' }
+
+      %main.gh-auth.relative.z-10
+        = link_to root_path, class: 'gh-brand no-underline' do
+          = image_tag 'logo.png', alt: '', class: 'h-[46px] w-[46px] object-contain'
+          %span Gamification Hub
+        %section.gh-panel.gh-acard
+          = render 'layouts/redesign/flash'
+          = yield
+        = render 'layouts/redesign/theme_toggle'
+    - else
+      -# App shell. One element owns the three chrome controllers so the
+      -# header, sidebar, tab bar and both menu dialogs can all reach them.
+      .gh-shell{ data: { controller: 'theme menu sidebar',
+                         theme_light_label_value: 'Jasny motyw',
+                         theme_dark_label_value: 'Ciemny motyw' } }
+        = render Shared::Redesign::HeaderComponent.new(user:         @current_user,
+                                                        group_chrome: gh_group_chrome)
+
+        .gh-body
+          = render Shared::Redesign::SidebarComponent.new(user:         @current_user,
+                                                          current_path: request.path,
+                                                          collapsed:    @sidebar_collapsed,
+                                                          group_chrome: gh_group_chrome)
+          .gh-tw
+            -# Scoped to the well, not the page: the header and sidebar sit on
+            -# flat --gh-chrome, exactly as .tpat does inside .tw in the mockup.
+            .gh-tpat.gh-tpat--well{ 'aria-hidden': 'true' }
+            %main#app-content.gh-main
+              = render 'layouts/redesign/flash'
+              = yield
+
+        = render Shared::Redesign::TabBarComponent.new(user:         @current_user,
+                                                       current_path: request.path,
+                                                       group_chrome: gh_group_chrome)
+
+        -# These MUST stay inside .gh-shell: it owns the theme/menu/sidebar
+        -# controllers, and a Stimulus action only reaches a controller on an
+        -# ancestor. As siblings they rendered fine but did nothing.
+        -# A closed <dialog> is display:none and an open modal one lives in the
+        -# top layer, so neither disturbs the shell's flex layout nor is clipped
+        -# by its overflow:hidden.
+        = render 'layouts/redesign/account_menu', user: @current_user
+        = render 'layouts/redesign/more_sheet', user: @current_user,
+          chrome: gh_group_chrome, current_path: request.path
+
+        -# Only in a group: out of one, "Grupy" in the primary nav is the picker.
+        - if gh_group_chrome
+          = render 'layouts/redesign/group_switcher', user: @current_user,
+            chrome: gh_group_chrome
+
+        -# Anchored panel: content that behaves like the mockup's popover
+        -# (notifications) rather than a centred modal. Links target it with
+        -# data: { turbo_frame: 'panel' }.
+        %dialog.gh-dialog.gh-dialog--anchored{ data: { controller: 'dialog',
+                                                       action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+          .gh-dialog-body
+            = turbo_frame_tag 'panel', data: { dialog_target: 'frame',
+                                               action: 'turbo:frame-load->dialog#open' }
+
+    -# Outside .gh-shell for the same reason the dialog is: its overflow:hidden
+    -# would clip a fixed layer pinned to the bottom of the viewport.
+    = render 'layouts/redesign/toasts'
+
+    -# One dialog for the whole page. Links target it with
+    -# data: { turbo_frame: 'modal' }, exactly as before.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+      .gh-dialog-body
+        = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
+                                           action: 'turbo:frame-load->dialog#open' }
+
+    -# The second one, for a confirmation raised FROM inside a dialog — today
+    -# only "Usuń z grupy", which lives in the edit dialog and is destructive
+    -# enough that it cannot act on one click. A native <dialog> opened while
+    -# another is already open joins the top layer above it with its own
+    -# backdrop, and Escape closes only the topmost, so the two stack correctly
+    -# without either of them knowing about the other.
+    -#
+    -# Never target this frame from the page itself: a confirmation with no
+    -# dialog underneath belongs in `modal`.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+      .gh-dialog-body
+        = turbo_frame_tag 'modal2', data: { dialog_target: 'frame',
+                                            action: 'turbo:frame-load->dialog#open' }

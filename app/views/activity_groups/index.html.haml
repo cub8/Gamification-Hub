@@ -1,80 +1,29 @@
-- content_for :title, "Grupy aktywności"
+-# "Arkusze ocen". Mockup: #/t/sheets, js-expanded/30-ag.js:31 (the page) and
+-# :23-29 (one template panel).
+-#
+-# Flat, as the mockup is: every template shows its sheets. The Bootstrap
+-# version collapsed them behind an accordion and remembered the open one in a
+-# cookie, which hid the thing the screen exists to show.
+- content_for :title, 'Arkusze ocen'
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Grupy Aktywności
-    = link_to new_story_group_activity_group_template_path(@story_group), class: "btn btn-primary", data: { turbo_frame: 'modal' } do
-      %i.fa-solid.fa-plus.me-1
-      Utwórz nowy szablon
+%section.gh-panel.gh-phead
+  .gh-phead-t
+    %h1.gh-h1 Arkusze ocen
+    %p.gh-lead Arkusze pogrupowane według szablonów. Najnowsze są na górze.
 
-  - if @activity_group_templates.empty?
-    %p.text-dimmed Brak szablonów.
-  - else
-    .d-flex.flex-column.gap-3{ data: { controller: 'collapse-memory', collapse_memory_key_value: "activity_groups_#{@story_group.id}" } }
-      - @activity_group_templates.each do |template|
-        - collapse_id        = "template-groups-#{template.id}"
-        - delete_template_id = "delete-template-#{template.id}"
+  .gh-rowb
+    = link_to new_story_group_activity_group_template_path(@story_group), class: 'gh-btn gh-btn--sec' do
+      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+      Nowy szablon
 
-        .dark-panel-base.p-0.h-auto
-          .d-flex.align-items-center.justify-content-between.px-3.py-3
-            .d-flex.align-items-center.gap-3.cursor-pointer.flex-grow-1{ data: { bs_toggle: 'collapse', bs_target: "##{collapse_id}" } }
-              %i.fa-solid.fa-layer-group.text-dimmed
-              %span.fw-semibold= template.base_name
-            .d-flex.align-items-center.gap-2
-              = link_to edit_story_group_activity_group_template_path(@story_group, template), class: "btn btn-sm btn-secondary border-0", data: { turbo_frame: 'modal' } do
-                %i.fa-solid.fa-gears.me-1
-                Edytuj
-              .dropdown
-                %button.btn.btn-sm.btn-secondary.border-0{ type: 'button', data: { bs_toggle: 'dropdown', bs_strategy: 'fixed' }, 'aria-expanded': 'false' }
-                  %i.fa-solid.fa-ellipsis-vertical
-                %ul.dropdown-menu.dropdown-menu-end
-                  %li
-                    %button.btn.btn-flat-danger.border-0.w-100.text-start.px-3.py-2.rounded{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_template_id}" } }
-                      %i.fa-solid.fa-trash.me-2
-                      Usuń
-
-          .collapse{ id: collapse_id, class: @open_collapse_id == collapse_id ? 'show' : nil }
-            - if template.activity_groups.empty?
-              %p.text-center.text-dimmed.py-3.mb-0 Brak grup aktywności.
-            - else
-              - template.activity_groups.each do |group|
-                - delete_group_id = "delete-group-#{group.id}"
-
-                .d-flex.align-items-center.justify-content-between.px-3.py-2.border-top.border-secondary.btn-flat.group-row
-                  = link_to group.name, edit_story_group_activity_group_students_activity_group_categories_path(@story_group, group), class: "flex-grow-1 text-reset text-decoration-none py-1"
-                  .d-flex.align-items-center.gap-2
-                    = link_to edit_story_group_activity_group_path(@story_group, group), class: "btn btn-sm btn-secondary border-0", data: { turbo_frame: 'modal' } do
-                      %i.fa-solid.fa-gears.me-1
-                      Edytuj
-                    .dropdown
-                      %button.btn.btn-sm.btn-secondary.border-0{ type: 'button', data: { bs_toggle: 'dropdown', bs_strategy: 'fixed' }, 'aria-expanded': 'false' }
-                        %i.fa-solid.fa-ellipsis-vertical
-                      %ul.dropdown-menu.dropdown-menu-end
-                        %li
-                          %button.btn.btn-flat-danger.border-0.w-100.text-start.px-3.py-2.rounded{ type: 'button', data: { bs_toggle: 'modal', bs_target: "##{delete_group_id}" } }
-                            %i.fa-solid.fa-trash.me-2
-                            Usuń
-
-                = render 'confirm_delete_modal',
-                  modal_id:    delete_group_id,
-                  title:       'Usuń Grupę Aktywności',
-                  message:     "Czy na pewno chcesz usunąć grupę #{group.name}?",
-                  delete_path: story_group_activity_group_path(@story_group, group)
-
-            .row.g-0.border-top.border-secondary
-              .col-6.border-end.border-secondary
-                %button.btn.btn-flat.w-100.border-0.py-3.d-flex.flex-column.align-items-center.justify-content-center.rounded-bottom-3{ type: 'button', data: { bs_toggle: 'modal', bs_target: "#name-modal-#{template.id}" } }
-                  %i.fa-solid.fa-plus.mb-1
-                  %small Stwórz nową grupę
-              .col-6
-                %button.btn.btn-flat.w-100.border-0.py-3.d-flex.flex-column.align-items-center.justify-content-center.rounded-bottom-3{ type: 'button', data: { bs_toggle: 'modal', bs_target: "#bulk-modal-#{template.id}" } }
-                  %i.fa-solid.fa-plus.mb-1
-                  %small Stwórz wiele grup
-
-        = render 'name_modal', story_group: @story_group, template: template
-        = render 'bulk_create_modal', story_group: @story_group, template: template
-        = render 'confirm_delete_modal',
-          modal_id:    delete_template_id,
-          title:       'Usuń Szablon Grupy Aktywności',
-          message:     "Czy na pewno chcesz usunąć szablon #{template.base_name}?",
-          delete_path: story_group_activity_group_template_path(@story_group, template)
+- if @index.any?
+  - @index.templates.each do |template|
+    = render 'template_panel', template: template, fresh_sheet_ids: @fresh_sheet_ids
+- else
+  -# The mockup has no empty state for this screen. House rule: name the next
+  -# action rather than only reporting the absence.
+  %section.gh-panel.gh-gm
+    %h2.gh-h2 Nie masz jeszcze żadnego szablonu
+    %p.gh-lead
+      Szablon to zestaw kategorii, za które nagradzasz studentów. Z jednego
+      szablonu tworzysz potem kolejne arkusze — po jednym na zajęcia.

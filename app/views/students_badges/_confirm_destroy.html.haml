@@ -1,0 +1,20 @@
+-# Mockup: mRevoke(), js-expanded/30-student.js:56-57. A dialog rather than a
+-# browser confirm, because the point of it is the consequence — the discount
+-# and, when the badge is a key, what stops being buyable.
+- badge = students_badge.badge
+
+%h2#gh-revoke-title.gh-h2= "Odebrać odznakę „#{badge.name}”?"
+%p= badge_revoke_sentence(@student, badge)
+
+.gh-dlg-b
+  -# Anuluj first and focused: the safe button is the one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--sec'
+
+  = button_to 'Odbierz odznakę',
+    story_group_student_badge_path(@story_group, @student, students_badge),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

@@ -1,103 +1,110 @@
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0= @story_group.name
-    .d-flex.align-items-center.gap-2
-      - if policy(@story_group).update? || policy(@story_group).destroy?
-        .dropdown
-          %button.btn.btn-secondary.border-0{ type: "button", data: { bs_toggle: "dropdown" }, "aria-expanded": false }
-            %i.fa-solid.fa-ellipsis-vertical
-          .dropdown-menu.dropdown-menu-end
-            - if policy(@story_group).update?
-              = link_to edit_story_group_path(@story_group), class: "btn btn-flat border-0 text-start w-100 rounded", data: { turbo_frame: "modal" } do
-                %i.fa-solid.fa-pen.me-2
-                Edytuj grupę
-            - if policy(@story_group).destroy?
-              = button_to @story_group, method: :delete,
-                  form: { data: { turbo_confirm: "Czy na pewno chcesz usunąć grupę \"#{@story_group.name}\"?" } },
-                  class: "btn btn-flat text-danger border-0 text-start w-100 rounded" do
-                %i.fa-solid.fa-trash.me-1
-                Usuń grupę
+-# Grupa: przegląd, teacher side. Mockup: #/t/home, js-expanded/30-gh.js:33-44,
+-# styles 29-gh.css.
+-#
+-# Four questions in reading order: what is this group, how is it doing, what
+-# just happened, what needs me. The three hero buttons are the three things a
+-# teacher opens this page to start.
+- story_group = overview.story_group
 
-  .row.g-3.mb-4
-    .col-12.col-md-6
-      .dark-panel
-        .section-title.mb-3 Informacje o Grupie
-        .d-flex.flex-column.gap-3
-          .d-flex.justify-content-between.align-items-center
-            %span.text-dimmed Właściciel
-            %span= @story_group.owner.full_name
-          .d-flex.justify-content-between.align-items-center
-            %span.text-dimmed Waluta
-            .d-flex.align-items-center.gap-2
-              - if @story_group.currency_icon.attached?
-                = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
-              %span= @story_group.currency_name
-          .d-flex.justify-content-between.align-items-center
-            %span.text-dimmed Domyślna ilość żyć
-            %span= @story_group.default_lives
-          .d-flex.justify-content-between.align-items-center
-            %span.text-dimmed Ranking
-            - if @story_group.ranking_enabled?
-              %span.badge.bg-success Włączony
+%section.gh-card.gh-card--neutral.gh-hero
+  .gh-card-f
+    .gh-card-i
+      = render 'layouts/redesign/group_art', story_group: story_group
+
+      .gh-hero-b
+        %h1.gh-h1= story_group.name
+        %p.gh-lore-t= overview_teacher_lead(story_group, overview.students_count)
+
+        .gh-rowb
+          = link_to story_group_invites_path(story_group), class: 'gh-btn' do
+            %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
+            Pokaż kod dla studentów
+          = link_to story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--sec' do
+            %i.fa-solid.fa-table{ 'aria-hidden': 'true' }
+            Utwórz arkusz
+          - if policy(story_group).update?
+            -# A page now, not a dialog (DECISIONS.md:26) — so no turbo_frame
+            -# here, or settings would render inside the modal.
+            = link_to edit_story_group_path(story_group), class: 'gh-btn gh-btn--sec' do
+              %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }
+              Ustawienia grupy
+
+%section.gh-panel.gh-kpis{ 'aria-label': 'Podsumowanie grupy' }
+  %dl
+    - overview.kpis.each do |kpi|
+      .gh-kpi
+        %dt= kpi.label
+        %dd
+          = kpi.value
+          - if kpi.note
+            %small= kpi.note
+
+.gh-hgrid
+  %section.gh-panel.gh-hp{ 'aria-labelledby': 'gh-purchases-title' }
+    %h2#gh-purchases-title.gh-h2 Ostatnie zakupy
+
+    - if overview.purchases.any?
+      -# gh-prow--group: four columns, not the Start screen's five. In a group
+      -# there is no group chip to show, and the row has to say so — a .gh-prow
+      -# with four children would auto-place the price chip into the chip's
+      -# 210px track and stretch it into a bar.
+      %ul.gh-plist
+        - overview.purchases.each do |purchase|
+          %li.gh-prow.gh-prow--group
+            = render 'layouts/redesign/item_thumb', item: purchase.item
+            %span.gh-p-main
+              %b= purchase.item&.name || 'Przedmiot usunięty z oferty'
+              %span= purchase.student_name
+            %span.gh-cost
+              %b= purchase.price
+              = render 'layouts/redesign/currency_token', story_group: story_group, size: 16
+            %span.gh-p-time= gh_when(purchase.time)
+
+      -# The teacher Start screen already filters every purchase by group, so
+      -# "wszystkie zakupy w tej grupie" is that screen with this group picked.
+      = link_to 'Wszystkie zakupy w grupie', home_path(group: story_group.id), class: 'gh-linkbtn'
+    - else
+      %p.gh-expl
+        Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same, gdy
+        studenci zaczną wydawać walutę w sklepie.
+
+  .gh-hcol
+    - if overview.attention.any?
+      %section.gh-panel.gh-hp{ 'aria-labelledby': 'gh-attention-title' }
+        %h2#gh-attention-title.gh-h2 Wymaga uwagi
+        %ul.gh-att
+          - overview.attention.each do |row|
+            %li
+              %span.gh-att-ic{ class: ("gh-att-ic--#{row.tone}" if row.tone) }
+                %i.fa-solid{ class: row.icon, 'aria-hidden': 'true' }
+              %span
+                %b= row.title
+                %small= row.detail
+              = link_to row.action_label, row.action_path,
+                        class: (row.emphasised? ? 'gh-btn gh-btn--sm' : 'gh-linkbtn')
+
+    - if overview.recent_sheets.any?
+      %section.gh-panel.gh-hp{ 'aria-labelledby': 'gh-sheets-title' }
+        %h2#gh-sheets-title.gh-h2 Ostatnie arkusze
+        - overview.recent_sheets.each do |sheet|
+          .gh-sheet2
+            %div
+              %b= sheet.activity_group.name
+              = link_to 'Otwórz', story_group_activity_groups_path(story_group), class: 'gh-linkbtn'
+            - if sheet.podium.any?
+              %ol.gh-top3
+                - sheet.podium.each_with_index do |place, index|
+                  %li
+                    %span.gh-pos{ class: "gh-pos--#{index + 1}" }= index + 1
+                    = place.student.display_name
+                    %span.gh-sc +#{place.points}
+              %p.gh-small= ranking_visibility_note(story_group)
             - else
-              %span.badge.bg-secondary Wyłączony
-          .d-flex.justify-content-between.align-items-center
-            %span.text-dimmed Studenci
-            %span.fw-semibold= @story_group.students.count
-          .d-flex.justify-content-between.align-items-center
-            %span.text-dimmed Nauczyciele wspomagający
-            %span.fw-semibold= @story_group.teachers.count
-
-    .col-12.col-md-6
-      .dark-panel
-        .section-title.mb-3 Opis
-        - if @story_group.description.present?
-          %p.mb-0= @story_group.description
-        - else
-          %p.text-dimmed.mb-0 Brak opisu.
-
-  .row.g-3
-    .col-12.col-md-6
-      .dark-panel
-        .section-title.mb-3 Ostatnie Transakcje
-        - if @recent_transactions.empty?
-          %p.text-dimmed.mb-0 Brak transakcji.
-        - else
-          .d-flex.flex-column.gap-3
-            - @recent_transactions.each do |transaction|
-              .dark-card.flex-row.align-items-stretch.p-0
-                - if transaction.transactionable.is_a?(Item) && transaction.transactionable.image.attached?
-                  = image_tag transaction.transactionable.image, class: "dark-card-side-cover"
-                - else
-                  .dark-card-side-icon
-                    %i.fa-solid.fa-coins.fa-xl.text-dimmed
-                .d-flex.flex-column.justify-content-center.gap-1.p-3.flex-grow-1
-                  %span.small= transaction_description(transaction, @story_group)
-                  %span.text-dimmed.small= transaction.created_at.strftime("%d.%m.%Y %H:%M")
-
-    .col-12.col-md-6
-      .dark-panel
-        .section-title.mb-3 Ostatnie Grupy Aktywności
-        - if @recent_activity_groups.empty?
-          %p.text-dimmed.mb-0 Brak grup aktywności.
-        - else
-          .d-flex.flex-column.gap-3
-            - @recent_activity_groups.each do |ag|
-              .dark-panel
-                .fw-semibold.mb-2= ag.name
-                - rankings = @activity_group_rankings[ag.id] || []
-                - if rankings.empty?
-                  %span.text-dimmed.small Brak zaliczonych aktywności.
-                - else
-                  .d-flex.flex-column.gap-2
-                    - rankings.each_with_index do |(student, points), i|
-                      .d-flex.align-items-center.justify-content-between
-                        .d-flex.align-items-center.gap-2
-                          - if i == 0
-                            %i.fa-solid.fa-crown.text-warning
-                          - elsif i == 1
-                            %i.fa-solid.fa-trophy.text-secondary
-                          - else
-                            %i.fa-solid.fa-medal.text-bronze
-                          %span.small= student.full_name
-                        %span.badge.bg-secondary= points
+              %p.gh-small Nikt nie ma jeszcze nagród z tego arkusza.
+    - else
+      %section.gh-panel.gh-hp
+        %h2.gh-h2 Nie masz jeszcze arkuszy ocen
+        %p.gh-expl
+          Arkusz to jedne zajęcia: kolumny z nagrodami i lista studentów.
+          Utwórz pierwszy, żeby zacząć przyznawać walutę.
+        = link_to 'Utwórz arkusz', story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--sec'

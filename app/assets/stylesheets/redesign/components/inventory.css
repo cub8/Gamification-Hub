@@ -1,0 +1,72 @@
+/* --------------------------------------------------------------------------
+   "Moje przedmioty" — what a student already owns.
+
+   Ported from design/mockup-src/css/30-sp.css:2, :16-17, :23 and
+   00-base.css:337-339 (the dashed slot).
+
+   One column on a phone (DECISIONS.md): an owned item carries a description and
+   a purchase line, and two of those side by side at 390px is unreadable. The
+   shop keeps its two-column compact cards; this is not the shop.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  .gh-pgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 24px 18px;
+    margin-top: 22px;
+  }
+
+  /* Off the shelf, still owned. The art dims; the "Usunięty z oferty" tag says
+     why. Never hidden — soft delete keeps history (DECISIONS.md:28). */
+  .gh-card--gone .gh-art .gh-gph,
+  .gh-card--gone .gh-art img {
+    opacity: 0.4;
+  }
+
+  /* The slot that closes the grid: a dashed frame inviting the student back to
+     the shop. A panel rather than a card, because it is not an item. */
+  .gh-slot-e {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    min-height: 250px;
+    padding: 18px;
+    text-align: left;
+  }
+
+  /* The dash is drawn inside the octagon rather than as a border: a border on a
+     clipped surface breaks at the corners. */
+  .gh-slot-e::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 2px dashed var(--gh-line-2);
+    pointer-events: none;
+  }
+
+  .gh-slot-e p {
+    margin: 0;
+    font: 560 15px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-slot-e .gh-btn {
+    align-self: flex-start;
+  }
+
+  /* ---- narrow --------------------------------------------------------- */
+
+  @media (max-width: 720px) {
+    .gh-pgrid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-slot-e {
+      min-height: 0;
+    }
+  }
+}

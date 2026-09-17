@@ -1,0 +1,18 @@
+-# Toast host. Mockup: `.toasts` (00-base.css:511) + `toast()` (10-core.js:352).
+-#
+-# Rendered ONCE per page and outside .gh-shell, whose overflow:hidden would
+-# otherwise clip it. `popover` puts it in the top layer so a toast raised from
+-# inside an open <dialog> lands above that dialog rather than behind it.
+-#
+-# Only notices arrive here. Alerts stay inline in _flash, where they keep
+-# still until dismissed — see the note there.
+- messages = [flash[:notice] || notice].compact
+
+#gh-toasts.gh-toasts{ popover: 'manual',
+                      'aria-live': 'polite',
+                      data: { controller: 'toast' } }
+  -# Seeds, drained and discarded by the controller on connect. A <template>
+  -# rather than a data attribute so the message needs no escaping dance and
+  -# more than one can be handed over.
+  - messages.each do |message|
+    %template{ data: { toast_target: 'seed' } }= message
