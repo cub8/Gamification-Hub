@@ -16,7 +16,11 @@ module Redesign
     # `match`  — path prefix for "still current on a child page", the mockup's
     #            `sec:`. nil means exact match only.
     # `frame`  — turbo frame this destination opens into, if any.
-    Item = Struct.new(:label, :path, :icon, :short, :match, :frame) do
+    Item = Data.define(:label, :path, :icon, :short, :match, :frame) do
+      def initialize(label:, path:, icon:, short: nil, match: nil, frame: nil)
+        super
+      end
+
       def tab_label = short || label
 
       # Exact for an item with no `match`, prefix otherwise. Przegląd is the

@@ -16,7 +16,7 @@ module Redesign
     include RequirementPhrasing
 
     # How far this student is toward the rank that blocks them.
-    RankProgress = Struct.new(:collected, :target, :rank_name)
+    RankProgress = Data.define(:collected, :target, :rank_name)
 
     class << self
       # No student, so nothing is missing and nothing is discounted: the card

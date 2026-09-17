@@ -13,15 +13,15 @@ class TeacherStartDashboard
   DAYS = %w[Dziś Wczoraj Wcześniej].freeze
   RECENT_DAYS = DAYS.first(2).freeze
 
-  Purchase = Struct.new(:transaction, :student, :story_group, :item, :day) do
+  Purchase = Data.define(:transaction, :student, :story_group, :item, :day) do
     def price = transaction.amount.abs
     def time = transaction.created_at.strftime('%H:%M')
     def student_name = student.full_name
   end
 
-  Group = Struct.new(:story_group, :role, :students_count, :new_purchases)
+  Group = Data.define(:story_group, :role, :students_count, :new_purchases)
 
-  Pending = Struct.new(:activity_group, :story_group, :categories_count, :students_count)
+  Pending = Data.define(:activity_group, :story_group, :categories_count, :students_count)
 
   attr_reader :purchases, :groups, :pending, :filter
 

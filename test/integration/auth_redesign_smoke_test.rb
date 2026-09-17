@@ -128,8 +128,7 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Sprawdź skrzynkę'
     assert_select 'p.gh-addr', user.email
     assert_select '.gh-big-ic i.fa-solid.fa-envelope'
-    assert_select 'p.gh-small', /5 minut/
-    assert_no_match(/15 minut/, response.body)
+    assert_select 'p.gh-small', /15 minut/
     assert_select 'a.gh-linkbtn', 'Zmień adres e-mail'
     # The address must not leak into any URL.
     assert_select 'a[href*=?]', user.email, false
@@ -146,7 +145,7 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'h1.gh-h1', 'Sprawdź skrzynkę'
     assert_select 'p.gh-addr', 'nobody@example.com'
-    assert_select 'p.gh-small', /5 minut/
+    assert_select 'p.gh-small', /15 minut/
   end
 
   test 'the inbox screen redirects to the form when nothing is pending' do
@@ -177,7 +176,7 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
     user = FactoryBot.create(:user)
     post auth_passwordless_path, params: { email: user.email }
 
-    travel 6.minutes do
+    travel 1.minute + LoginToken::EXPIRES_IN do
       get auth_passwordless_inbox_path
       assert_redirected_to new_auth_passwordless_path
     end

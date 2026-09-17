@@ -21,8 +21,8 @@ module Redesign
     #              its student always holds something), but a group need not
     #              define a rank at 0, and then progress has nowhere else to go.
     #   :locked  — still out of reach
-    Rung = Struct.new(:rank, :holders, :gap_to_next, :next_threshold, :state, :progress,
-                      :remaining,) do
+    Rung = Data.define(:rank, :holders, :gap_to_next, :next_threshold, :state, :progress,
+                       :remaining,) do
       def done?    = state == :done
       def current? = state == :current
       def locked?  = state == :locked

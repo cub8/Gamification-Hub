@@ -14,7 +14,7 @@ module Redesign
     # a draft of anything.
     DEFAULT_PRICE = 15
 
-    Slot = Struct.new(:item, :bought)
+    Slot = Data.define(:item, :bought)
 
     def initialize(story_group:)
       @story_group = story_group

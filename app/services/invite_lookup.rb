@@ -20,7 +20,11 @@ class InviteLookup
   # `member_of` is deliberately not an error: already belonging to the group is
   # a dead end for the form but good news for the user, so the mockup shows it
   # as a hint with a link into the group rather than as a red field error.
-  Result = Struct.new(:invite, :reason, :member_of) do
+  Result = Data.define(:invite, :reason, :member_of) do
+    def initialize(invite: nil, reason: nil, member_of: nil)
+      super
+    end
+
     def ok? = reason.nil? && member_of.nil?
     def error = reason && MESSAGES[reason]
     def story_group = invite&.story_group
