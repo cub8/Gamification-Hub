@@ -154,6 +154,12 @@
     margin: 8px auto 0;
   }
 
+  /* .gh-gm centres its contents with text-align, which a flex row ignores —
+     so the action under an empty state has to be centred on its own axis. */
+  .gh-gm .gh-rowb {
+    justify-content: center;
+  }
+
   @media (max-width: 720px) {
     .gh-ixbar .gh-search {
       width: 100%;

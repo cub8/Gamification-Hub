@@ -16,8 +16,10 @@
     = link_to new_join_path, class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus
       Dołącz do grupy
+    -# A page, not the dialog it used to be: creation is a four-step wizard now
+    -# and DECISIONS.md:26 puts steps on a page.
     - if policy(:story_group).create?
-      = link_to new_story_group_path, class: 'gh-btn', data: { turbo_frame: 'modal' } do
+      = link_to new_story_group_path, class: 'gh-btn' do
         %i.fa-solid.fa-plus
         Utwórz grupę
 

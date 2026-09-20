@@ -35,3 +35,41 @@
     position: absolute;
   }
 }
+
+/* --------------------------------------------------------------------------
+   The group's own artwork as the table under the page.
+
+   Ported from design/mockup-src/css/00-base.css:274-276 (`.tbg` / `.ttint`),
+   where the router puts these inside `.tw` on every in-group route. Two
+   stacked layers, both siblings of .gh-main inside the content well:
+
+     .gh-tbg    the cover, blurred past recognition — it is a surface, not a
+                picture, and nothing on it should read as a subject
+     .gh-ttint  a scrim in --gh-tint so text keeps its contrast over whatever
+                the teacher happened to upload
+
+   A group with no artwork keeps .gh-tpat--well instead, which is why this is
+   additive rather than a replacement.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* inset:-24px, not 0: a blur samples past its own edge, so a layer flush
+     with the well fades out along all four sides. Bleeding it under the
+     overflow:hidden on .gh-tw is what keeps the blur edge-to-edge. */
+  .gh-tbg {
+    position: absolute;
+    inset: -24px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(7px) saturate(0.85);
+    pointer-events: none;
+  }
+
+  .gh-ttint {
+    position: absolute;
+    inset: 0;
+    background: var(--gh-tint);
+    pointer-events: none;
+  }
+}

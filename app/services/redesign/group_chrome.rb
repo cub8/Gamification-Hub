@@ -24,6 +24,11 @@ module Redesign
       # the rule.
       def for(user:, story_group:)
         return if user.nil? || story_group.nil?
+        # An UNSAVED group is not a group you are in. StoryGroupsController
+        # builds one for the creation wizard and re-renders it on a validation
+        # failure, with owner_id already assigned — so `member?` would say yes
+        # and every nav link would then ask for a path to a record with no id.
+        return unless story_group.persisted?
 
         chrome = new(user: user, story_group: story_group)
 

@@ -54,6 +54,10 @@ Already covered screens:
 - award badge, revoke badge, adjust currency - teacher perspective
 - currency history, my items - student perspective
 - invites index, show, new, edit
+- new story group wizard + success screen - teacher perspective
 - login screens
+
+Every in-group screen now carries the group's cover as a blurred table
+background (`.gh-tbg` + `.gh-ttint`), from one branch in the redesign layout.
 
 

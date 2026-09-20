@@ -18,6 +18,16 @@ Rails.application.routes.draw do
     # confirm, so it needs a URL to render into.
     get :confirm_destroy, on: :member
 
+    # The creation wizard's last step. Nothing exists yet at this point, so it
+    # is a collection route reading `pack` and `classes` off the query and
+    # answering with the rows for the frame inside the form.
+    get :preset_preview, on: :collection
+
+    # The wizard's success screen. Its own page rather than a flash on the
+    # group: it lists what was created and what to do next, and a teacher who
+    # reloads should see it again rather than a bare redirect.
+    get :created, on: :member
+
     resource :ranking, only: :show, controller: :ranking do
       post :change_status
     end

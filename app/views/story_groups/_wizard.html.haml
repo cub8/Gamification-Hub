@@ -1,0 +1,370 @@
+-# "Nowa grupa" — the creation wizard. Mockup: js-expanded/30-form.js
+-# (`stepper` :48, `step0`-`step3` :49-81, `preview` :82-86), styles in
+-# css/20-form.css.
+-#
+-# The ONE stepped flow in the app (DECISIONS.md:26). Four steps in a single
+-# multipart form: nothing is written until the last submit, so abandoning the
+-# wizard halfway leaves no draft group behind. Steps are sections toggled by
+-# the `group-wizard` controller; only step 4's quick-start table comes from the
+-# server, through the frame below, which keeps the starter-pack arithmetic in
+-# Ruby (Redesign::StarterPack) instead of duplicating it in TypeScript.
+-#
+-# Three deliberate departures from the mockup:
+-#   * ONE currency name, not its three Polish declensions — the schema has one
+-#     `currency_name`, as story_groups/_settings.html.haml:73-76 already notes.
+-#   * ranking STARTS OFF. The mockup's switch defaults on; `ranking_enabled`
+-#     defaults to false and that wins. Turning it on reveals the mode picker,
+-#     which "Podium i własne miejsce" leads per DECISIONS.md:36.
+-#   * the art field crops (DECISIONS.md:25) instead of storing the mockup's
+-#     focal-point percentage, so `.focal`/`.mk` are not ported.
+- error  = ->(attribute) { story_group.errors[attribute].first }
+- packs  = Redesign::StarterPack
+
+- steps = ['Grupa i opowieść', 'Waluta i zasady', 'Jak zaczynasz', 'Podsumowanie']
+
+.gh-wizard{ data: { controller: 'group-wizard',
+                    action: 'gh:image-crop->group-wizard#art',
+                    group_wizard_preset_url_value: preset_preview_story_groups_path } }
+
+  %section.gh-panel.gh-phead.gh-phead--stack
+    %p.gh-crumbs
+      = link_to 'Grupy', story_groups_path
+      %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
+      %span Nowa grupa
+    %h1.gh-h1 Nowa grupa
+    %p.gh-lead
+      Zajmie to kilka minut. Wszystko zmienisz później w ustawieniach grupy.
+
+    -# Visited steps stay reachable, unvisited ones are disabled — the mockup's
+    -# `S.max` high-water mark (30-form.js:48).
+    %nav.gh-stepper{ 'aria-label': 'Kroki' }
+      - steps.each_with_index do |label, index|
+        %button.gh-stp{ type: 'button', disabled: index.positive?,
+                        'aria-current': (index.zero? ? 'step' : nil),
+                        class: ('gh-stp--on' if index.zero?),
+                        data: { group_wizard_target: 'stepTab',
+                                group_wizard_index_param: index,
+                                action: 'group-wizard#goto' } }
+          %span.gh-stp-n
+            %span{ data: { group_wizard_target: 'stepNum' } }= index + 1
+            %i.fa-solid.fa-check{ 'aria-hidden': 'true', hidden: true,
+                                  data: { group_wizard_target: 'stepTick' } }
+          %span{ data: { group_wizard_target: 'stepLabel' } }= label
+
+  -# `keydown` is load-bearing, not a nicety: this is one form for all four
+  -# steps, so Enter in any field would otherwise submit it and create a group
+  -# from a half-filled wizard.
+  = form_with model: story_group, data: { group_wizard_target: 'form',
+                                          action: 'keydown->group-wizard#keydown' } do |f|
+
+    - if story_group.errors[:base].any?
+      %p.gh-err{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= story_group.errors[:base].first
+
+    .gh-wiz{ data: { group_wizard_target: 'grid' } }
+      %section.gh-panel.gh-fcol
+
+        -# ---- Step 1: name, story, artwork --------------------------------
+        %section{ data: { group_wizard_target: 'panel' } }
+          %h2.sr-only Grupa i opowieść
+
+          .gh-fsec.gh-fsec--first
+            %h2.gh-h3 Nazwa i opowieść
+            %p.gh-hint Studenci zobaczą je na liście grup i na stronie grupy.
+
+            .gh-fld
+              = f.label :name, 'Nazwa grupy'
+              .gh-inp{ class: ('gh-inp--bad' if error.call(:name)) }
+                = f.text_field :name, maxlength: 40, autocomplete: 'off',
+                  placeholder: 'np. Zakon Algorytmów',
+                  'aria-invalid': (error.call(:name) ? 'true' : nil),
+                  'aria-describedby': (error.call(:name) ? 'gh-wiz-name-error' : nil),
+                  data: { group_wizard_target: 'name', action: 'group-wizard#refresh' }
+              %p#gh-wiz-name-error.gh-err{ role: 'alert', hidden: error.call(:name).blank?,
+                                           data: { group_wizard_target: 'nameError' } }
+                %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+                %span= error.call(:name) || 'Podaj nazwę grupy.'
+
+            -# "Opowieść" in the UI, `description` in the schema — deliberately
+            -# different (CLAUDE.md), so do not "fix" either to match.
+            .gh-fld
+              = f.label :description do
+                Opowieść
+                %small (opcjonalnie)
+              .gh-inp{ class: ('gh-inp--bad' if error.call(:description)) }
+                = f.text_area :description, rows: 4, maxlength: 1024,
+                  placeholder: 'Dawno, dawno temu…'
+              - if error.call(:description)
+                %p.gh-err{ role: 'alert' }
+                  %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+                  %span= error.call(:description)
+              %span.gh-hint Krótki wstęp fabularny. Zmienisz go w każdej chwili.
+
+          .gh-fsec
+            %h2.gh-h3 Grafika grupy
+            %p.gh-hint
+              Pojawia się na karcie grupy, w panelu bocznym i jako tło grupy.
+
+            = render 'shared/redesign/image_field', form: f, record: story_group,
+              presets: Redesign::GroupArt::KEYS, registry: Redesign::GroupArt,
+              kind: 'group', tile: :art, refresh_action: 'group-wizard#art',
+              copy: { label: 'Grafika grupy',
+                      hint: 'JPG lub PNG, najlepiej co najmniej 1200 px szerokości.' }
+
+        -# ---- Step 2: currency, lives, ranking ----------------------------
+        %section{ data: { group_wizard_target: 'panel' }, hidden: true }
+          %h2.sr-only Waluta i zasady
+
+          .gh-fsec.gh-fsec--first
+            %h2.gh-h3 Nazwa waluty
+            %p.gh-hint
+              Czytamy ją po każdej liczbie, więc podaj formę, która pasuje do
+              liczby mnogiej — np. „Marchewek”.
+
+            .gh-fld
+              = f.label :currency_name, 'Nazwa waluty'
+              .gh-inp{ class: ('gh-inp--bad' if error.call(:currency_name)) }
+                = f.text_field :currency_name, maxlength: 40, autocomplete: 'off',
+                  placeholder: 'np. Złotych Monet',
+                  'aria-invalid': (error.call(:currency_name) ? 'true' : nil),
+                  'aria-describedby': (error.call(:currency_name) ? 'gh-wiz-currency-error' : nil),
+                  data: { group_wizard_target: 'currency', action: 'group-wizard#refresh' }
+              %p#gh-wiz-currency-error.gh-err{ role: 'alert',
+                                               hidden: error.call(:currency_name).blank?,
+                                               data: { group_wizard_target: 'currencyError' } }
+                %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+                %span= error.call(:currency_name) || 'Podaj nazwę waluty.'
+
+            -# `aspect: 1` — this upload goes into the square coin face, not the
+            -# 16:10 card frame the group graphic above is cut to.
+            = render 'shared/redesign/image_field', form: f, record: story_group,
+              attribute: :currency_icon, glyph_attribute: :currency_icon_glyph,
+              presets: Redesign::CurrencyIcons::KEYS, registry: Redesign::CurrencyIcons,
+              kind: 'currency', tile: :currency, aspect: 1,
+              refresh_action: 'group-wizard#refresh',
+              copy: { label: 'Ikona waluty', presets: 'Gotowe ikony',
+                      own: 'Twoja ikona', upload: 'Albo wgraj własną ikonę',
+                      hint: 'Najlepiej PNG z przezroczystym tłem, co najmniej 128 px.',
+                      crop: 'Przytnij ikonę',
+                      cropped: 'Przesuń i przeskaluj zaznaczenie. Zapisujemy kwadratowy kadr, bo ikona siada na okrągłym liczmanie.' }
+
+          .gh-fsec
+            %h2.gh-h3 Życia
+            .gh-fld{ data: { controller: 'lives-stepper', lives_stepper_max_value: 10 } }
+              %p#gh-wiz-lives-label.gh-lbl Życia na start
+              .gh-nstep{ role: 'group', 'aria-labelledby': 'gh-wiz-lives-label' }
+                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Mniej żyć',
+                                    disabled: story_group.default_lives.to_i.zero?,
+                                    data: { lives_stepper_target: 'down',
+                                            action: 'lives-stepper#down' } }
+                  %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
+                %output{ 'aria-live': 'polite',
+                         data: { lives_stepper_target: 'output' } }= story_group.default_lives
+                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Więcej żyć',
+                                    disabled: story_group.default_lives.to_i >= 10,
+                                    data: { lives_stepper_target: 'up',
+                                            action: 'lives-stepper#up' } }
+                  %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+
+              = f.hidden_field :default_lives, data: { lives_stepper_target: 'field' }
+
+              - if error.call(:default_lives)
+                %p.gh-err{ role: 'alert' }
+                  %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+                  %span= error.call(:default_lives)
+
+              %span.gh-hint
+                Przy 0 życiach student kupi tylko przedmioty oznaczone jako
+                dostępne przy 0 życiach.
+
+          .gh-fsec
+            %h2.gh-h3 Ranking
+
+            .gh-swrow
+              -# f.check_box writes its own hidden companion, which is what
+              -# makes "off" arrive at all: an unchecked box posts nothing.
+              = f.check_box :ranking_enabled, class: 'gh-sw', role: 'switch',
+                'aria-labelledby': 'gh-wiz-ranking-label',
+                data: { group_wizard_target: 'ranking',
+                        action: 'change->group-wizard#refresh' }
+              %span
+                %b#gh-wiz-ranking-label Pokazuj ranking studentom
+                %span.gh-hint
+                  Domyślnie wyłączony. Możesz go włączyć w każdej chwili
+                  w zakładce Ranking.
+
+            .gh-fld{ hidden: !story_group.ranking_enabled?,
+                     data: { group_wizard_target: 'rankingMode' } }
+              = f.label :ranking_mode, 'Co widzą studenci'
+              -# .gh-sel, not .gh-inp: the latter is the text-input shell and
+              -# stretches a native select to the full width of the form.
+              %span.gh-sel
+                = f.select :ranking_mode,
+                  StoryGroup.ranking_modes.keys.map { |mode| [StoryGroup::RANKING_MODE_LABELS[mode], mode] },
+                  {}, data: { action: 'group-wizard#refresh' }
+                %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+              %span.gh-hint
+                „Podium i własne miejsce” pokazuje tylko najlepszą trójkę
+                i miejsce studenta. „Pełny ranking” pokazuje całą listę.
+
+        -# ---- Step 3: how to start ----------------------------------------
+        %section{ data: { group_wizard_target: 'panel' }, hidden: true }
+          %h2.sr-only Jak zaczynasz
+
+          .gh-fsec.gh-fsec--first
+            %h2.gh-h3 Jak chcesz zacząć?
+            %p.gh-hint Obie drogi dają pełną grupę. Wszystko zmienisz później.
+
+            .gh-opts{ role: 'radiogroup', 'aria-label': 'Sposób startu' }
+              %label.gh-opt
+                = radio_button_tag 'setup[path]', 'quick', false, class: 'sr-only',
+                  id: 'gh-wiz-path-quick',
+                  data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
+                %span.gh-tag.gh-tag--disc Polecane na pierwszą grupę
+                %b Szybki start
+                %span
+                  Gotowe rangi, odznaki, przedmioty i kategorie zajęć.
+                  Przejrzysz je i poprawisz przed utworzeniem grupy.
+              %label.gh-opt
+                = radio_button_tag 'setup[path]', 'manual', false, class: 'sr-only',
+                  id: 'gh-wiz-path-manual',
+                  data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
+                %b Od zera
+                %span
+                  Pusta grupa. Rangi, odznaki i przedmioty dodasz później,
+                  krok po kroku.
+
+            %p.gh-err{ role: 'alert', hidden: true,
+                       data: { group_wizard_target: 'pathError' } }
+              %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+              %span Wybierz, jak chcesz zacząć.
+
+          .gh-fsec{ hidden: true, data: { group_wizard_target: 'quickOnly' } }
+            %h2.gh-h3 Klimat zestawu
+            %p.gh-hint
+              Zmienia tylko nazwy rang i odznak. Zasady są wszędzie takie same.
+
+            .gh-opts{ role: 'radiogroup', 'aria-label': 'Klimat' }
+              - packs::KEYS.each_with_index do |key, index|
+                %label.gh-opt
+                  = radio_button_tag 'setup[pack]', key, index.zero?, class: 'sr-only',
+                    id: "gh-wiz-pack-#{key}",
+                    data: { group_wizard_target: 'pack', action: 'group-wizard#refresh' }
+                  %b= packs.label_for(key)
+                  %span= packs.description_for(key)
+                  %em= "#{packs::RANK_NAMES.fetch(key).first(3).join(' → ')} → …"
+
+          .gh-fsec{ hidden: true, data: { group_wizard_target: 'quickOnly' } }
+            %h2.gh-h3 Ile zajęć planujesz?
+            %p.gh-hint
+              Dopasujemy progi rang i ceny tak, żeby najwyższa ranga była
+              osiągalna w semestrze.
+
+            -# Driven by group-wizard, not by lives-stepper: this one has a
+            -# floor of 4 rather than 0, and changing it has to re-fetch the
+            -# starter pack, which lives-stepper has no way to announce.
+            .gh-fld
+              .gh-nstep{ role: 'group', 'aria-label': 'Liczba zajęć' }
+                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Mniej zajęć',
+                                    data: { group_wizard_target: 'classesDown',
+                                            action: 'group-wizard#classesDown' } }
+                  %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
+                %output{ 'aria-live': 'polite',
+                         data: { group_wizard_target: 'classesOutput' } }= packs::DEFAULT_CLASSES
+                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Więcej zajęć',
+                                    data: { group_wizard_target: 'classesUp',
+                                            action: 'group-wizard#classesUp' } }
+                  %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+
+              = hidden_field_tag 'setup[classes]', packs::DEFAULT_CLASSES, id: 'gh-wiz-classes',
+                data: { group_wizard_target: 'classes' }
+
+        -# ---- Step 4: summary / set review --------------------------------
+        %section{ data: { group_wizard_target: 'panel' }, hidden: true }
+          %h2.sr-only Podsumowanie
+
+          .gh-fsec.gh-fsec--first{ hidden: true, data: { group_wizard_target: 'manualSummary' } }
+            %h2.gh-h3 Podsumowanie
+            %p.gh-hint
+              Grupa powstanie pusta. Po utworzeniu zobaczysz listę kroków do
+              uzupełnienia.
+
+            %dl.gh-sumt
+              %dt Nazwa
+              %dd{ data: { group_wizard_target: 'sumName' } }
+              %dt Waluta
+              %dd{ data: { group_wizard_target: 'sumCurrency' } }
+              %dt Życia na start
+              %dd{ data: { group_wizard_target: 'sumLives' } }
+              %dt Ranking
+              %dd{ data: { group_wizard_target: 'sumRanking' } }
+
+          -# Rendered by StoryGroupsController#preset_preview. Inside the form
+          -# on purpose: its number fields and "keep" checkboxes post with
+          -# everything else, so the teacher's edits survive without any of the
+          -# arithmetic leaving Ruby.
+          -# `turbo:frame-load->refresh` is what fills the coin in each row: the
+          -# frame arrives after the icon was picked, so its tokens are empty
+          -# until the controller clones the chosen mark into them.
+          = turbo_frame_tag 'starter_pack',
+            data: { group_wizard_target: 'presetFrame',
+                    action: 'turbo:frame-load->group-wizard#refresh' },
+            hidden: true
+
+      %aside.gh-pcol{ 'aria-label': 'Podgląd', data: { group_wizard_target: 'preview' } }
+
+        %section.gh-panel.gh-pv{ data: { group_wizard_target: 'previewGroup' } }
+          %h3 Karta na liście grup
+          %article.gh-card.gh-card--neutral.gh-ixc
+            .gh-card-f
+              .gh-card-i
+                -# Filled by cloning whatever the checked picker tile shows —
+                -# the same trick rank_form_controller uses, so the preview and
+                -# the picker have nowhere to disagree and nothing here builds
+                -# markup in JavaScript.
+                .gh-art.gh-art--mono{ data: { group_wizard_target: 'artBox' } }
+                  %span{ data: { group_wizard_target: 'artMono' } }
+                .gh-card-top
+                  %h2.gh-card-name.gh-ph{ data: { group_wizard_target: 'nameEcho' } }
+                    Nazwa grupy
+                %p.gh-ixmeta
+                  %span Prowadzisz tę grupę
+
+          %span.gh-hint
+            Tło za formularzem pokazuje, jak grafika wygląda jako tło grupy.
+
+        -# The four places a student actually meets the currency, shown in both
+        -# themes at once (mockup 30-form.js:84). Composed from the real
+        -# components — .gh-bal, .gh-tok, .gh-cost — so this preview cannot
+        -# drift from the screens it is previewing. Both halves come from one
+        -# partial; `.gh-theme--*` gives each its own token set.
+        %section.gh-panel.gh-pv{ hidden: true, data: { group_wizard_target: 'previewCurrency' } }
+          %h3 Tak zobaczą walutę studenci
+          .gh-cprev
+            - %w[light dark].each do |theme|
+              = render 'currency_mini', theme: theme
+
+    .gh-panel.gh-wbar
+      = link_to 'Anuluj', story_groups_path, class: 'gh-btn gh-btn--sec',
+        data: { group_wizard_target: 'cancel' }
+      -# The label is hidden by CSS below 720px, leaving the chevron alone, so
+      -# the breakpoint stays in the stylesheet rather than being duplicated in
+      -# TypeScript. aria-label carries the name either way.
+      %button.gh-btn.gh-btn--sec{ type: 'button', hidden: true, 'aria-label': 'Wstecz',
+                                  data: { group_wizard_target: 'back',
+                                          action: 'group-wizard#back' } }
+        %i.fa-solid.fa-chevron-left{ 'aria-hidden': 'true' }
+        %span.gh-wbar-lbl Wstecz
+      %span.gh-wbar-sp
+      %span.gh-k{ data: { group_wizard_target: 'counter' } } Krok 1 z 4
+      -# Two labels, one shown per breakpoint: the long one does not fit beside
+      -# the chevron on a phone, and the 720px rule lives in the stylesheet.
+      %button.gh-btn{ type: 'button', data: { group_wizard_target: 'next',
+                                              action: 'group-wizard#next' } }
+        %span.gh-wbar-lbl{ data: { group_wizard_target: 'nextLabel' } } Dalej
+        %span.gh-wbar-lbl--sm{ data: { group_wizard_target: 'nextLabelShort' } } Dalej
+        %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true',
+                                      data: { group_wizard_target: 'nextIcon' } }
+      = f.submit 'Utwórz grupę', class: 'gh-btn', hidden: true,
+        data: { group_wizard_target: 'submit' }

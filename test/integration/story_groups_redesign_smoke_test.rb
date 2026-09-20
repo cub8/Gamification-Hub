@@ -45,15 +45,17 @@ class StoryGroupsRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_no_match(/data-bs-/, response.body)
   end
 
-  # #edit is converted now; creating a group is the last action here still on
-  # Bootstrap, and it stays that way until the creation wizard is done.
-  test 'the unconverted actions stay on the Bootstrap layout' do
+  # The creation wizard was the last action here on Bootstrap. Nothing in this
+  # controller loads the old bundle any more, which is what this now guards.
+  test 'the creation wizard renders inside the redesign chrome' do
     sign_in FactoryBot.create(:user, role: :teacher)
     get new_story_group_path
 
     assert_response :success
-    assert_select '.gh-shell', false
-    assert_select 'link[href*=application]'
+    assert_select '.gh-shell header.gh-hd'
+    assert_select 'link[href*=redesign]'
+    assert_select 'link[href*=application]', false
+    assert_no_match(/data-bs-/, response.body)
   end
 
   test 'the sidebar marks Grupy as the current destination' do

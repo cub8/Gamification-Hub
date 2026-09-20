@@ -179,6 +179,21 @@ module RedesignHelper
     gh_group_art(story_group.icon_glyph)
   end
 
+  # The same cover, as a bare URL rather than an <img>.
+  #
+  # The blurred table layer (.gh-tbg) is a CSS background, and a background
+  # cannot take an <img>. Everything else about the rule is gh_group_cover's:
+  # an upload wins, a preset key resolves through GroupArt, and an unknown or
+  # missing key is nil, which is how the layout knows to keep the octagon
+  # texture instead.
+  def gh_group_cover_url(story_group)
+    return if story_group.nil?
+    return url_for(story_group.icon) if story_group.art == :upload
+    return unless Redesign::GroupArt.include?(story_group.icon_glyph)
+
+    asset_path(Redesign::GroupArt.asset_for(story_group.icon_glyph))
+  end
+
   # The same question for the currency mark. nil means the token falls back to
   # the first letter of the currency name.
   def gh_currency_mark(story_group)

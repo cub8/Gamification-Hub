@@ -50,11 +50,17 @@
     overflow: hidden;
   }
 
+  /* The mockup caps its content at 1320px (00-base.css:281, `.page`). That cap
+     lives in the PADDING here rather than a max-width, because this element is
+     the scroll container itself — a max-width on it would stop it filling the
+     well and drag the scrollbar in from the edge with it. The `max()` keeps the
+     ordinary 30px gutter until the well is wider than the cap. */
   .gh-main {
     position: absolute;
     inset: 0;
     overflow: auto;
     padding: 26px 30px 40px;
+    padding-inline: max(30px, (100% - 1320px) / 2);
     scrollbar-gutter: stable;
   }
 
