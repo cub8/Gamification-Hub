@@ -149,6 +149,13 @@
     margin-top: 6px;
   }
 
+  /* ---- The "no active invites" CTA in the quick dialog ---- */
+
+  .gh-quick-cta {
+    justify-content: center;
+    margin-top: 14px;
+  }
+
   /* ---- The create / edit dialog ---- */
 
   .gh-presets {

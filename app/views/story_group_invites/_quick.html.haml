@@ -28,7 +28,7 @@
         = render 'qr_stat', invite: invite
 - else
   %p.gh-expl Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.
-  .gh-rowb
+  .gh-rowb.gh-quick-cta
     = link_to new_story_group_invite_path(@story_group), class: 'gh-btn',
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
