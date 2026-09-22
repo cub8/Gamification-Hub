@@ -46,7 +46,16 @@ class StoryGroupPolicy < ApplicationPolicy
     owner? || admin?
   end
 
+  # May OPEN the ranking screen. A student may always: with the ranking off they
+  # get the panel that says so, which is a screen, not a refusal (mockup `vRS`).
   def view_ranking?
+    admin? || owner? || assistant? || student?
+  end
+
+  # May see other people's places. This is the one that honours the teacher's
+  # switch, and it is what the board and the overview's place line hang on —
+  # #view_ranking? only decides whether the door opens.
+  def see_ranking_standings?
     admin? || owner? || assistant? || (student? && record.ranking_enabled?)
   end
 

@@ -79,7 +79,10 @@
 
             %tbody
               - students.each do |student|
-                - name = student.display_name
+                -# The REAL name, never the nickname: grading is the teacher naming a
+                -# person, and a pseudonym in this column is the one thing that could
+                -# make them award the wrong row. The mockup prints `s.name` here too.
+                - name = student.full_name
                 - awarded_total = @sheet.awarded_total(student)
                 %tr{ data: { grading_target: 'row', gh_name: name.to_s.downcase, gh_student: student.id } }
                   %th.gh-td-stu{ scope: 'row' }

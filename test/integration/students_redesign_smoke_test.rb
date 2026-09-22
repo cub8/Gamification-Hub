@@ -101,13 +101,15 @@ class StudentsRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-srow--zero', 1
   end
 
-  test 'the nickname is the name, with the real one beside it' do
+  # The other way round from the ranking, which is the only screen where a
+  # nickname stands in for a person.
+  test 'the real name is the name, with the nickname beside it' do
     student(name: 'Sebastian Alejandro', nickname: 'Kapitan Marchewka')
 
     visit_list
 
-    assert_equal ['Kapitan Marchewka'], names
-    assert_select '.gh-s-n small', /\ASebastian Alejandro · /
+    assert_equal ['Sebastian Alejandro'], names
+    assert_select '.gh-s-n small', /\A„Kapitan Marchewka” · /
   end
 
   test 'a student without a nickname does not repeat their own name' do
@@ -182,6 +184,27 @@ class StudentsRedesignSmokeTest < ActionDispatch::IntegrationTest
   end
 
   # ---- the sheet -------------------------------------------------------
+
+  # The nickname is shown but does not take the headline: a teacher on this page
+  # is looking at a person, and the pseudonym is one more fact about them.
+  test 'the sheet leads with the real name and carries the nickname beside it' do
+    member = student(name: 'Sebastian Alejandro', nickname: 'Kapitan Marchewka')
+
+    visit_sheet(member)
+
+    assert_select '.gh-sheet h1.gh-h1', 'Sebastian Alejandro'
+    assert_select '.gh-crumbs span', 'Sebastian Alejandro'
+    assert_select '.gh-sh-sub', /\APseudonim: Kapitan Marchewka, /
+  end
+
+  test 'a student with no nickname gets no pseudonym fragment' do
+    member = student(name: 'Anna Kowalska')
+
+    visit_sheet(member)
+
+    assert_select '.gh-sheet h1.gh-h1', 'Anna Kowalska'
+    assert_no_match(/Pseudonim:/, response.body)
+  end
 
   test 'the sheet is a page with a head, stats and three tabs' do
     rank(name: 'Rekrut', threshold: 0)

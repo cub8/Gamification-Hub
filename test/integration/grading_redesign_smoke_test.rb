@@ -80,6 +80,30 @@ class GradingRedesignSmokeTest < ActionDispatch::IntegrationTest
                  css_select('tbody th.gh-td-stu').map { |th| th.text.split("\n").map(&:strip).last },)
   end
 
+  # Never the nickname: the sheet is the teacher naming a person before an award
+  # they cannot take back, so a pseudonym in this column is the one thing that
+  # could put a reward on the wrong row.
+  test 'the sheet and its review dialog name students by their real name' do
+    @ada.update!(nickname: 'Kapitan Marchewka')
+
+    get grade_path
+
+    assert_equal(['Ada Kowalska', 'Bartek Nowak'],
+                 css_select('tbody th.gh-td-stu').map { |th| th.text.split("\n").map(&:strip).last },)
+    assert_select '.gh-rv .gh-rv-n', /Ada Kowalska/
+    assert_no_match(/Kapitan Marchewka/, response.body)
+  end
+
+  # Sorted by the real name too, or the order would not match what is printed.
+  test 'a nickname does not move a row in the sheet order' do
+    @bartek.update!(nickname: 'Admirał')
+
+    get grade_path
+
+    assert_equal(['Ada Kowalska', 'Bartek Nowak'],
+                 css_select('tbody th.gh-td-stu').map { |th| th.text.split("\n").map(&:strip).last },)
+  end
+
   test 'the story description is the column tooltip and appears nowhere else' do
     get grade_path
 

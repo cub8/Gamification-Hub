@@ -50,8 +50,10 @@ module Redesign
                          .to_set
     end
 
+    # By the real name, which is what the sheet prints: a teacher scanning for
+    # somebody looks for the name they know.
     def sort_key(student)
-      name = student.display_name.to_s
+      name = student.full_name.to_s
       [ActiveSupport::Inflector.transliterate(name).downcase, name, student.id]
     end
   end

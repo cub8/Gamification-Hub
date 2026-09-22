@@ -270,17 +270,34 @@
     );
   }
 
-  .gh-seg2 button {
+  /* `a` and `span` as well as `button`: the ranking screen's mode pair are
+     links, because pressing one opens a confirmation rather than switching
+     anything on the spot, and the mode already in force is a plain span so it
+     cannot be pressed at all. */
+  .gh-seg2 :is(button, a, span) {
     flex: 1;
+    /* A native <button> centres its content box for free; a blockified <a> or
+       <span> flex item does not, so a one-word tab sat at the TOP of a row
+       whose height came from a tab that wrapped to two lines. text-align stays
+       for that wrapped second line — place-items centres the anonymous item,
+       not the text inside it. */
+    display: grid;
+    place-items: center;
     border: 0;
     padding: 8px 6px;
     background: none;
     color: var(--gh-ink-2);
     font: 620 13px/1.1 var(--gh-f-ui);
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
   }
 
-  .gh-seg2 button[aria-pressed="true"] {
+  .gh-seg2 span[aria-pressed] {
+    cursor: default;
+  }
+
+  .gh-seg2 :is(button, a, span)[aria-pressed="true"] {
     background: var(--gh-card);
     color: var(--gh-ink);
     box-shadow: inset 0 -3px 0 var(--gh-seg);

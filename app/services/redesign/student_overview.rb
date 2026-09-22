@@ -89,7 +89,7 @@ module Redesign
     def ranking_place
       return @ranking_place if defined?(@ranking_place)
 
-      @ranking_place = if StoryGroupPolicy.new(student.user, story_group).view_ranking?
+      @ranking_place = if StoryGroupPolicy.new(student.user, story_group).see_ranking_standings?
                          totals = story_group.student_memberships.pluck(:total_currency).map(&:to_i)
                          totals.sort.reverse.index(total) + 1
                        end

@@ -23,9 +23,11 @@ class Redesign::StudentListTest < ActiveSupport::TestCase
 
   def list = Redesign::StudentList.new(story_group: @story_group)
 
-  def display_names = list.rows.map { |row| row.student.display_name }
+  # The real name, because that is what the list prints and sorts by — the
+  # nickname only reaches the sub-line.
+  def full_names = list.rows.map { |row| row.student.full_name }
 
-  def given_names = display_names.map { |name| name.split.first }
+  def given_names = full_names.map { |name| name.split.first }
 
   def rank_names = list.rows.map { |row| row.rank&.name }
 
@@ -43,11 +45,11 @@ class Redesign::StudentListTest < ActiveSupport::TestCase
     assert_equal %w[Anna Łukasz Zofia], given_names
   end
 
-  test 'sorts by the nickname when there is one, because that is what is shown' do
+  test 'sorts by the real name even when there is a nickname, because that is what is shown' do
     student(name: 'Anna', nickname: 'Zorro')
     student(name: 'Zofia', nickname: 'Albatros')
 
-    assert_equal %w[Albatros Zorro], display_names
+    assert_equal %w[Anna Zofia], given_names
   end
 
   test 'gives each student the highest rung they have reached' do

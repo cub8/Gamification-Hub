@@ -67,7 +67,10 @@ module Redesign
 
     # The mockup shows Ranking unconditionally; ours honours the same rule the
     # ranking screen itself enforces, rather than re-deriving `ranking_enabled`
-    # the way the Bootstrap sidebar does.
+    # the way the Bootstrap sidebar does. Since #view_ranking? became "may open
+    # the screen", that now means the entry stays put for a student while the
+    # teacher has the board hidden — which is the point: behind it is the panel
+    # explaining that it is hidden, not a dead end.
     def ranking?
       return @ranking unless @ranking.nil?
 

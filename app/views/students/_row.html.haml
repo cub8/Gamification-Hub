@@ -7,7 +7,9 @@
 -# lives stepper and three actions, and a stretched link would swallow them.
 -# The name is the link; the rest of the row is read, not pressed.
 - student = row.student
-- name    = student.display_name
+-# The real name, as the mockup has it (sRow, 30-lists.js:40). The nickname is
+-# the sub-line's job: this list is how a teacher finds a particular person.
+- name    = student.full_name
 - lives   = student.lives.to_i
 
 %li.gh-srow{ class: ('gh-srow--zero' if row.zero_lives?),

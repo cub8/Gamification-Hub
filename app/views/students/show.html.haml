@@ -2,8 +2,12 @@
 -#
 -# A PAGE, not a dialog — the mockup's own shape, and the three tabs need the
 -# width. The quick actions on it (przyznaj, koryguj, edytuj) are the dialogs.
-- content_for :title, @student.display_name
-- name = @student.display_name
+-# The real name in the title, the avatar, the breadcrumb and the h1 — the
+-# mockup's own choice (30-student.js:20). The nickname is not dropped, it moves
+-# to the sub-line, so a teacher can see what this student calls themselves in
+-# the ranking without it standing in for who they are.
+- content_for :title, @student.full_name
+- name = @student.full_name
 
 %section.gh-panel.gh-sheet
   .gh-sh-top

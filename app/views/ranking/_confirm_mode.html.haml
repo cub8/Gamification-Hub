@@ -1,0 +1,33 @@
+-# Mockup: 30-rk.js `mFull` (:61-62), which confirms only the switch TO the full
+-# ranking. Both directions are confirmed here: widening the board exposes the
+-# bottom of the list, and narrowing it takes places away from people who could
+-# see them a moment ago. Either way a student's view changes without them
+-# touching anything, which is what is worth a sentence.
+- full = mode == 'full'
+
+- if full
+  %h2#gh-rk-title.gh-h2 Pokazać pełny ranking?
+  %p
+    Każdy student zobaczy miejsca i pseudonimy wszystkich, także osób na końcu
+    listy.
+- else
+  %h2#gh-rk-title.gh-h2 Ograniczyć ranking do podium?
+  %p
+    Studentom zostaną pierwsze 3 miejsca i ich własne. Nikt nie zobaczy, kto
+    jest na końcu listy.
+
+.gh-dlg-b
+  -# The safe button is the one that keeps the current setting, and it is the
+  -# one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      = full ? 'Zostaw podium' : 'Anuluj'
+  - else
+    = link_to (full ? 'Zostaw podium' : 'Anuluj'), story_group_ranking_path(story_group),
+      class: 'gh-btn gh-btn--sec'
+
+  = button_to (full ? 'Pokaż pełny ranking' : 'Pokaż tylko podium'),
+    story_group_ranking_path(story_group),
+    method: :patch, class: 'gh-btn',
+    params: { story_group: { ranking_mode: mode } },
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

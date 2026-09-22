@@ -35,16 +35,30 @@ class StoryGroupMembershipsController < ApplicationController
     authorize @membership, :edit_own?
   end
 
+  # GET /story_groups/:story_group_id/membership/nickname
+  #
+  # The same field as #edit, as a dialog. The ranking screen is the only place
+  # the nickname is shown to anyone else, so it is also where a student is most
+  # likely to want it changed — and sending them to the settings page and back
+  # would lose their place on the board.
+  def nickname
+    authorize @membership, :edit_own?
+  end
+
   # PATCH /story_groups/:story_group_id/membership
   def update
     authorize @membership, :update_own?
 
-    if @membership.update(membership_params)
-      redirect_to edit_story_group_membership_path(@story_group),
-                  notice: "Twój pseudonim w tej grupie: #{@membership.display_name}."
-    else
-      render :edit, status: :unprocessable_content
+    unless @membership.update(membership_params)
+      return render(from_dialog? ? :nickname : :edit, status: :unprocessable_content)
     end
+
+    notice = "Twój pseudonim w tej grupie: #{@membership.display_name}."
+    # Out of the dialog and back to the board the nickname is printed on;
+    # otherwise the settings page it was edited on, which is where it stays.
+    return redirect_to(edit_story_group_membership_path(@story_group), notice: notice) unless from_dialog?
+
+    redirect_outside_turbo_frame story_group_ranking_path(@story_group), notice: notice
   end
 
   # GET /story_groups/:story_group_id/membership/confirm_leave
@@ -87,5 +101,12 @@ class StoryGroupMembershipsController < ApplicationController
   # teacher's screens; this form must not be able to reach them.
   def membership_params
     params.expect(story_group_student: [:nickname])
+  end
+
+  # Where this save came from, as a FLAG rather than a path: the form hands over
+  # one known word and the controller decides what it means, so a caller can
+  # never post its own redirect target here.
+  def from_dialog?
+    params[:return_to] == 'ranking'
   end
 end

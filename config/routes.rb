@@ -28,8 +28,15 @@ Rails.application.routes.draw do
     # reloads should see it again rather than a bare redirect.
     get :created, on: :member
 
-    resource :ranking, only: :show, controller: :ranking do
-      post :change_status
+    resource :ranking, only: %i[show update], controller: :ranking do
+      # Every change to what students see is confirmed first: showing the board
+      # exposes places, hiding it takes them away, and the mode decides how much
+      # of the list they get (DECISIONS.md:36, widened here to all four
+      # transitions). GET routes rendering into the dialog frame, like every
+      # other confirmation in this file — a browser confirm cannot hold the
+      # sentence that explains what each one does to the student's view.
+      get :confirm_visibility
+      get :confirm_mode
     end
     resources :items, except: :show do
       # Like ranks and badges: the delete confirmation carries a consequence
@@ -106,6 +113,12 @@ Rails.application.routes.draw do
       # and the whole currency history. The confirmation carries those counts,
       # which a browser confirm cannot hold, so it needs a URL to render into.
       get :confirm_leave
+
+      # The same field as #edit, as a dialog. The ranking screen is where a
+      # student is most likely to want their nickname changed — it is the only
+      # place it is shown to anyone else — so "Zmień" there opens this rather
+      # than sending them to the settings page and back.
+      get :nickname
     end
     resources :story_group_invites, path: :invites, as: :invites do
       # The delete confirmation is a dialog with a consequence sentence in it,

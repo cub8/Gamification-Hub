@@ -68,8 +68,10 @@ module Redesign
                                 .count
     end
 
+    # By the real name, which is what the list prints. The nickname sits in the
+    # sub-line and is not what anyone scans this column for.
     def sort_key(student)
-      name = student.display_name.to_s
+      name = student.full_name.to_s
       [ActiveSupport::Inflector.transliterate(name).downcase, name, student.id]
     end
   end

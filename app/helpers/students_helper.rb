@@ -21,23 +21,27 @@ module StudentsHelper
 
   # The smaller line under a name in the list.
   #
-  # The mockup shows the e-mail alone (30-lists.js:40), but a group runs on
-  # nicknames — DECISIONS.md says the teacher sees nickname AND name — so when
-  # the two differ the real name comes first and the e-mail after it. Without a
-  # nickname the bold line above is already the real name, and repeating it here
-  # would say nothing.
+  # The mockup shows the e-mail alone (30-lists.js:40). The bold line above is
+  # the real name, so this carries the NICKNAME when there is one — DECISIONS.md
+  # says the teacher sees nickname and name both, and the ranking is the only
+  # screen where the nickname outranks the name. Without one there is nothing to
+  # add and the e-mail stands alone.
   def student_list_subtitle(student)
     parts = []
-    parts << student.full_name if student.nickname.present?
+    parts << "„#{student.nickname}”" if student.nickname.present?
     parts << student.email
 
     parts.join(' · ')
   end
 
-  # "Sebastian Alejandro, indeks s123456" — the sheet's sub-line. A student who
-  # joined without an index number simply does not get that half.
+  # "Pseudonim: Nova, s.alejandro@example.com, indeks s123456" — the detail
+  # page's sub-line. The nickname is labelled rather than bare because here it is
+  # a fact about the person, not the name they are going by on this screen. A
+  # student who joined without an index number simply does not get that half.
   def student_sheet_subtitle(student)
-    parts = [student.email]
+    parts = []
+    parts << "Pseudonim: #{student.nickname}" if student.nickname.present?
+    parts << student.email
     parts << "indeks #{student.university_number}" if student.university_number.present?
 
     parts.join(', ')

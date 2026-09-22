@@ -20,7 +20,10 @@
 
     %ul.gh-rv
       - students.each do |student|
-        - name = student.display_name
+        -# The REAL name, never the nickname: grading is the teacher naming a
+        -# person, and a pseudonym in this column is the one thing that could
+        -# make them award the wrong row. The mockup prints `s.name` here too.
+        - name = student.full_name
         - open_categories = categories.reject { |category| @sheet.awarded?(student, category) }
         - next if open_categories.empty?
         %li{ hidden: true, data: { grading_target: 'reviewRow', gh_student: student.id } }

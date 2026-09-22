@@ -150,13 +150,17 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     assert_not_includes chrome.items.map(&:label), 'Zaproszenia'
   end
 
+  # The entry stays put for everyone who may open the screen, and a student
+  # always may: behind it with the ranking off is the panel saying so, which is
+  # a screen and not a dead end. What the switch decides is what is ON that
+  # screen, not whether the navigation admits it exists.
   test 'ranking follows the policy that guards the ranking screen' do
     student = FactoryBot.create(:user, role: :student)
     FactoryBot.create(:story_group_student, story_group: @story_group, user: student)
 
     @story_group.update!(ranking_enabled: false)
-    assert_not_includes Redesign::GroupChrome.for(user: student, story_group: @story_group)
-                                             .items.map(&:label), 'Ranking'
+    assert_includes Redesign::GroupChrome.for(user: student, story_group: @story_group)
+                                         .items.map(&:label), 'Ranking'
     # The teacher sees it either way — it is their switch to flip.
     assert_includes deck_labels_for(@owner), 'Ranking'
 

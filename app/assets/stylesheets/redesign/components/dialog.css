@@ -60,6 +60,42 @@
       0 var(--gh-c)
     );
   }
+
+  /* A centred MODAL, not a popover. The mockup keeps the two apart — `.dlg-in`
+     is roomy at 26/28/24 (00-base.css:456) while `.pop` and `.menu` are tight —
+     but .gh-dialog-body serves both here, so the modals ask for the difference
+     by name.
+
+     The negations are the popovers: the avatar menu and the "Więcej" sheet
+     (--menu), the notifications panel (--anchored), and the group switcher
+     (--menu --switcher, so --menu already covers it). What is left is every
+     centred dialog: the layout's `modal` and `modal2` frames, the grading
+     review and the sheet-form discard.
+
+     The page fallback .gh-dlg-page has carried these numbers all along, so
+     until now the same partial was spaced two different ways depending on
+     whether it landed in the frame or on a page. */
+  .gh-dialog:not(.gh-dialog--menu, .gh-dialog--anchored) .gh-dialog-body {
+    padding: 26px 28px 24px;
+  }
+
+  /* The sentence under a dialog's question (00-base.css:459, `.dlg-in > p`).
+     Never ported, so preflight left it flush against the heading at full size
+     and full contrast.
+
+     `p:not([class])` rather than a child combinator: the layout puts a
+     <turbo-frame> — and often a <form> — between the body and the content, so
+     the paragraph is a grandchild and `>` cannot reach it. A classless <p> is
+     exactly the set the mockup meant. Every dialog's own sentence is one,
+     while .gh-warn, .gh-info, .gh-err and .gh-hint bring their own size,
+     colour and margins; a bare descendant selector would out-specify all four
+     and restyle them. */
+  .gh-dialog-body p:not([class]),
+  .gh-dlg-page p:not([class]) {
+    margin-top: 8px;
+    font-size: 15px;
+    color: var(--gh-ink-2);
+  }
 }
 
 @layer components {
