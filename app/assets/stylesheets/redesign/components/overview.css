@@ -234,7 +234,7 @@
   /* Place markers, ported from 26-rk.css:6-7. Gold, silver and bronze are the
      only three literal colours in this design — they are the medals, not a
      palette. */
-  .gh-pos {
+  .gh-top3 .gh-pos {
     --gh-c: 9px;
     display: grid;
     place-items: center;
@@ -255,17 +255,17 @@
     );
   }
 
-  .gh-pos--1 {
+  .gh-top3 .gh-pos--1 {
     background: var(--gh-rank);
     color: var(--gh-on-rank);
   }
 
-  .gh-pos--2 {
+  .gh-top3 .gh-pos--2 {
     background: #CDD3DC;
     color: #221A2B;
   }
 
-  .gh-pos--3 {
+  .gh-top3 .gh-pos--3 {
     background: #D99E63;
     color: #221A2B;
   }
