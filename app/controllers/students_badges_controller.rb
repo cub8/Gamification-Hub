@@ -2,11 +2,9 @@
 
 class StudentsBadgesController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # Both screens are dialogs — awarding and revoking are quick actions on the
   # student sheet (DECISIONS.md:26) — each with the usual page fallback.
-  layout -> { @in_modal ? false : 'redesign' }
 
   # The picker renders the badge art partial.
   helper BadgesHelper

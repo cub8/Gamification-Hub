@@ -6,10 +6,10 @@
 - editing = item.persisted?
 - error   = ->(attribute) { item.errors[attribute].first }
 - badges  = @story_group.badges.kept.by_name.to_a
-- card    = Redesign::ItemCard.new(item, ranks: shelf.ranks, badges: badges)
+- card    = ItemCard.new(item, ranks: shelf.ranks, badges: badges)
 -# Re-picked on every render, which is the point: it is AN example student, not
 -# the example. The shuffle below is what lets the browser re-pick the same way.
-- example = Redesign::DiscountExample.new(card)
+- example = DiscountExample.new(card)
 - bought  = editing ? shelf.bought_for(item) : 0
 
 %section.gh-panel.gh-phead.gh-phead--stack
@@ -28,7 +28,7 @@
 -# The group-wide half of the ceiling, handed over rather than re-derived: the
 -# chips carry only each badge's own discount and the ladder's best is not any
 -# one select option, so item_form_controller has no way to work these out
--# without a second copy of a rule Redesign::ItemCard already owns.
+-# without a second copy of a rule ItemCard already owns.
 -#
 -# The two `example_*_order` values are ONE shuffle, walked by both sides, so the
 -# server's example student and the browser's cannot come out different.
@@ -99,8 +99,8 @@
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:story_description)
 
-        = render 'shared/redesign/image_field', form: f, record: item,
-          presets: Redesign::Glyphs::ITEM, kind: 'item',
+        = render 'shared/image_field', form: f, record: item,
+          presets: Glyphs::ITEM, kind: 'item',
           refresh_action: 'item-form#refresh'
 
       .gh-fsec
@@ -114,7 +114,7 @@
                 'aria-invalid': (error.call(:price) ? 'true' : nil),
                 'aria-describedby': (error.call(:price) ? 'gh-item-price-error' : nil),
                 data: { item_form_target: 'price', action: 'item-form#refresh' }
-            = render 'layouts/redesign/currency_token', story_group: @story_group, size: 32
+            = render 'layouts/currency_token', story_group: @story_group, size: 32
             %span.gh-k= @story_group.currency_name
 
         - if error.call(:price)

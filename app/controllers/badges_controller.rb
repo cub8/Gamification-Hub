@@ -2,12 +2,10 @@
 
 class BadgesController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # Only the delete confirmation is a dialog. Creating and editing are PAGES
   # (DECISIONS.md:26, "Forms: pages (not modals) for create/edit") — the form
   # carries a live preview column beside it, which no dialog is wide enough for.
-  layout -> { @in_modal ? false : 'redesign' }
 
   before_action :set_story_group
   before_action :authorize_story_group_read!,   only: :index
@@ -22,14 +20,14 @@ class BadgesController < ApplicationController
   # same object the navigation chrome uses, so the page and the deck beside it
   # cannot disagree about who you are here.
   def index
-    @shelf = Redesign::BadgeShelf.new(story_group: @story_group,
-                                      membership:  gh_group_chrome&.student_membership,)
+    @shelf = BadgeShelf.new(story_group: @story_group,
+                            membership:  gh_group_chrome&.student_membership,)
   end
 
   # GET /story_groups/:story_group_id/badges/new
   def new
     @badge = @story_group.badges.build(discount:   0,
-                                       icon_glyph: Redesign::Glyphs::BADGE.first,)
+                                       icon_glyph: Glyphs::BADGE.first,)
     set_shelf
   end
 
@@ -98,14 +96,14 @@ class BadgesController < ApplicationController
   # badge. Built here rather than in the view so a re-render after a validation
   # error gets it too.
   def set_shelf
-    @shelf = Redesign::BadgeShelf.new(story_group: @story_group)
+    @shelf = BadgeShelf.new(story_group: @story_group)
   end
 
-  # Assigns RedesignHelper's own memo, so the layout's chrome and this action
+  # Assigns ApplicationHelper's own memo, so the layout's chrome and this action
   # resolve the membership once between them rather than twice.
   def gh_group_chrome
-    @gh_group_chrome ||= Redesign::GroupChrome.for(user:        @current_user,
-                                                   story_group: @story_group,)
+    @gh_group_chrome ||= GroupChrome.for(user:        @current_user,
+                                         story_group: @story_group,)
   end
 
   def badge_params

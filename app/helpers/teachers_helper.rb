@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Polish for the "Nauczyciele" screen only. Anything a second screen needs
-# belongs in RedesignHelper instead — same rule as StudentsHelper.
+# belongs in ApplicationHelper instead — same rule as StudentsHelper.
 module TeachersHelper
   # The mockup's lead names group deletion as the one owner-only thing, which
   # stopped being true when managing the list became owner-only too. A

@@ -1,29 +1,67 @@
-%header.w-100.px-3.py-1.d-flex.align-items-center
+%header.gh-hd
+  = link_to home_path, class: 'gh-logo', 'aria-label': 'Gamification Hub, start' do
+    = image_tag 'logo.png', alt: ''
+    %span.gh-logo-word Gamification Hub
 
-  %a.d-flex.align-items-center.text-decoration-none.h-100{href: home_path}
-    = image_tag 'logo.png', alt: 'App logo', class: 'h-100'
+  -# Mobile only: below 720px the sidebar and its deck are gone, so this is the
+  -# only thing naming the group you are in. chrome.css keeps it display:none
+  -# on desktop, where the deck says it better.
+  - if group_chrome
+    %button.gh-gsw{ type: 'button',
+                    data: { action: 'menu#open', menu_id_param: 'gh-group-switcher' },
+                    'aria-label': "Grupa #{group_chrome.name}, zmień grupę" }
+      = render 'layouts/group_thumb', story_group: group_chrome.story_group, size: nil
+      %span.gh-gsw-name= group_chrome.name
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
-  .ms-auto.d-flex.align-items-center.gap-1
-    = link_to new_join_path, class: 'btn btn-flat fs-5', data: { turbo_frame: 'modal', turbo_prefetch: true } do
-      Dołącz do grupy
+  %span.gh-sp
 
-    #header-actions.d-block.h-100.d-flex.justify-content-between.align-items-center.ms-2.gap-4
-      - if @current_user.teacher?
-        = helpers.turbo_stream_from @current_user, :notifications, class: 'position-absolute'
+  -# The student's purse. The mockup gates it on `role === 'student'`
+  -# (10-core.js:162); ours gates it on MEMBERSHIP of THIS group, which is what
+  -# decides whether there is a balance to show at all — a teacher enrolled in
+  -# the group gets one, the owner who is not enrolled does not.
+  -#
+  -# Both numbers are in the title because they answer different questions: one
+  -# is spendable, the other decides your rank and never goes down.
+  - if group_chrome&.student?
+    - purse = group_chrome.student_membership
+    = link_to story_group_student_currency_transactions_path(group_chrome.story_group, purse),
+      class: 'gh-bal',
+      title: "#{purse.current_currency} do wydania, #{purse.total_currency} zebrane łącznie",
+      'aria-label': "Masz #{purse.current_currency} do wydania, pokaż historię waluty" do
+      = render 'layouts/currency_token', story_group: group_chrome.story_group, size: 32
+      %span
+        %b= purse.current_currency
+        %small do wydania
 
-        .dropdown{ data: { controller: 'notifications', notifications_url_value: mark_as_read_notifications_path, action: 'shown.bs.dropdown->notifications#handleShown hidden.bs.dropdown->notifications#handleHidden' } }
-          .notification-wrapper.position-relative.d-flex.align-items-center.justify-content-center{ data: { bs_toggle: 'dropdown', bs_auto_close: 'outside' }, role: 'button' }
-            %i.fa-solid.fa-fw.fa-bell.fs-3.cursor-pointer.notification-bell
-            #notification-dot-container{ data: { turbo_permanent: true } }
-              - if @current_user.notifications.unread.exists?
-                .notification-dot.rounded-circle.position-absolute{ id: 'notification-dot' }
+  -# The mockup gates this on `role === 'student'` (10-core.js:162) because its
+  -# teacher persona is never also a student. Ours can be, and the groups index
+  -# already lists their "Uczę się" groups, so everyone gets it.
+  = link_to new_join_path, class: 'gh-btn gh-btn--sec gh-btn--sm gh-hd-join',
+    data: { turbo_frame: 'modal' } do
+    %i.fa-solid.fa-plus
+    %span Dołącz do grupy
 
-          .dropdown-menu.dropdown-menu-end.notifications-dropdown.p-0.shadow-lg
-            = helpers.turbo_frame_tag 'notifications_list', src: notifications_path, data: { notifications_target: 'frame' } do
-              .p-3.text-center
-                .spinner-border.spinner-border-sm.text-primary{ role: 'status' }
-                  %span.visually-hidden Ładowanie...
+  -# Both glyphs ship; chrome.css shows the one for the theme you would switch
+  -# TO. With no cookie set the server cannot know how prefers-color-scheme
+  -# resolves, so this cannot be a single server-rendered icon.
+  %button.gh-iconbtn.gh-hd-theme{ type: 'button',
+                                  data: { action: 'theme#toggle' },
+                                  'aria-label': 'Przełącz motyw' }
+    %i.fa-solid.fa-moon.gh-ic-moon
+    %i.fa-solid.fa-sun.gh-ic-sun
 
-      .dropdown
-        = image_tag 'default_user.jpg', alt: 'User icon', class: 'h-100 user-icon rounded-circle cursor-pointer', data: { bs_toggle: 'dropdown', bs_auto_close: 'outside' }
-        = render Shared::UserDropdownComponent.new(user: @current_user)
+  - if user.teacher?
+    = helpers.turbo_stream_from user, :notifications
+    -# The panel frame, not the modal one: notifications are a popover in the
+    -# mockup — corner-pinned and unscrimmed on desktop — not a centred dialog.
+    = link_to notifications_path, class: 'gh-iconbtn',
+      data: { turbo_frame: 'panel' }, 'aria-label': bell_label do
+      %i.fa-solid.fa-bell
+      = render 'layouts/notification_dot', count: unread_count
+
+  %button.gh-avbtn{ type: 'button',
+                    data: { action: 'menu#open', menu_id_param: 'gh-account-menu' },
+                    'aria-label': "Konto: #{user.full_name}" }
+    %span.gh-av{ 'data-gh-h': helpers.gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
+      = helpers.gh_initials(user.full_name)

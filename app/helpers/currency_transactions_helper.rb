@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Screen-specific labels live in the screen's own helper, not in RedesignHelper.
+# Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 #
 # The ledger is rendered by two screens — the student's own "Historia waluty"
 # and the third tab of the teacher's student sheet — from one partial, so every
@@ -24,7 +24,7 @@ module CurrencyTransactionsHelper
   # keyed on aria-current and because a filter that survives a refresh and can
   # be pasted to someone is worth a query parameter.
   def ledger_filter_chips(ledger, selected, path_for:)
-    safe_join(Redesign::CurrencyLedger::KINDS.map do |kind, label|
+    safe_join(CurrencyLedger::KINDS.map do |kind, label|
       current = kind == selected
 
       link_to path_for.call(kind), class: 'gh-fchip', 'aria-current': current.to_s do

@@ -8,8 +8,8 @@
 -#
 -# Locals:
 -#   item      — the Item
--#   card      — Redesign::ItemCard, built by the caller so a list builds it once
--#   offer     — Redesign::ItemOffer: what THIS viewer pays and what blocks them.
+-#   card      — ItemCard, built by the caller so a list builds it once
+-#   offer     — ItemOffer: what THIS viewer pays and what blocks them.
 -#               Defaults to a preview over `card`, which is the teacher's case:
 -#               list price, the discount ceiling, every requirement the item
 -#               carries. The shop hands in a student's.
@@ -21,7 +21,7 @@
 -#   all_feet  — render all three feet, two hidden, so the form's segmented
 -#               control can switch between them without generating markup.
 -#               A real shop card renders only the foot that applies.
-- offer    = local_assigns.fetch(:offer, nil) || Redesign::ItemOffer.preview(card)
+- offer    = local_assigns.fetch(:offer, nil) || ItemOffer.preview(card)
 - state    = local_assigns.fetch(:state, :afford)
 - price    = local_assigns.fetch(:price, nil) || offer.price
 - need     = local_assigns.fetch(:need, 0).to_i

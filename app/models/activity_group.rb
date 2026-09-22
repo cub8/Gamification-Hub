@@ -19,7 +19,7 @@ class ActivityGroup < ApplicationRecord
   # columns, which is not what the rule is for.
   validate :at_least_one_visible_category, on: :settings
 
-  # Soft delete (DECISIONS.md:54). NOT a default_scope: Redesign::CurrencyLedger
+  # Soft delete (DECISIONS.md:54). NOT a default_scope: CurrencyLedger
   # has to go on naming the column a deleted sheet's award came from, because
   # the student keeps the currency and keeps the history entry.
   scope :kept,    -> { where(deleted_at: nil) }

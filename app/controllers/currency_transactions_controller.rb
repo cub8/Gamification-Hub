@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class CurrencyTransactionsController < ApplicationController
-  include RedesignLayout
-
   before_action :set_story_group
   before_action :set_student
 
@@ -14,7 +12,7 @@ class CurrencyTransactionsController < ApplicationController
   def index
     skip_policy_scope
 
-    @ledger = Redesign::CurrencyLedger.new(student: @student)
+    @ledger = CurrencyLedger.new(student: @student)
     @kind   = ledger_kind
   end
 
@@ -33,7 +31,7 @@ class CurrencyTransactionsController < ApplicationController
   end
 
   def ledger_kind
-    kinds = Redesign::CurrencyLedger::KINDS.map(&:first).compact
+    kinds = CurrencyLedger::KINDS.map(&:first).compact
     kinds.include?(params[:kind]) ? params[:kind] : nil
   end
 end

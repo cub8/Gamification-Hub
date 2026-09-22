@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Screen-specific labels live in the screen's own helper, not in RedesignHelper.
+# Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 module StudentsBadgesHelper
   # "Sebastian ma 2 z 8 odznak." — the assign dialog's sub-line.
   def badge_assign_lead(student, held, total)

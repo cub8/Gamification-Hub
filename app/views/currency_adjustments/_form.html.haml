@@ -51,7 +51,7 @@
           'aria-invalid': (error ? 'true' : nil),
           'aria-describedby': (error ? 'gh-adjust-error' : nil),
           data: { currency_adjust_target: 'amount', action: 'currency-adjust#refresh' }
-      = render 'layouts/redesign/currency_token', story_group: @story_group, size: 30
+      = render 'layouts/currency_token', story_group: @story_group, size: 30
 
     -# Always in the markup, hidden until there is something to say, so the
     -# controller writes text rather than building an element.

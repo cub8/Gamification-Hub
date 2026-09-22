@@ -65,7 +65,7 @@
 -# student list's history icon can point straight at one and the choice survives
 -# a refresh. Same shape as the group index's tabs.
 %nav.gh-gtabs{ 'aria-label': 'Sekcje studenta' }
-  - Redesign::StudentSheet::TABS.each do |key, label|
+  - StudentSheet::TABS.each do |key, label|
     = link_to story_group_student_path(@story_group, @student, tab: key), class: 'gh-gt2',
       'aria-current': (@tab == key).to_s do
       = label

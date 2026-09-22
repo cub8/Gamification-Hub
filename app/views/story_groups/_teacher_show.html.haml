@@ -9,7 +9,7 @@
 %section.gh-card.gh-card--neutral.gh-hero
   .gh-card-f
     .gh-card-i
-      = render 'layouts/redesign/group_art', story_group: story_group
+      = render 'layouts/group_art', story_group: story_group
 
       .gh-hero-b
         %h1.gh-h1= story_group.name
@@ -51,13 +51,13 @@
       %ul.gh-plist
         - overview.purchases.each do |purchase|
           %li.gh-prow.gh-prow--group
-            = render 'layouts/redesign/item_thumb', item: purchase.item
+            = render 'layouts/item_thumb', item: purchase.item
             %span.gh-p-main
               %b= purchase.item&.name || 'Przedmiot usunięty z oferty'
               %span= purchase.student_name
             %span.gh-cost
               %b= purchase.price
-              = render 'layouts/redesign/currency_token', story_group: story_group, size: 16
+              = render 'layouts/currency_token', story_group: story_group, size: 16
             %span.gh-p-time= gh_when(purchase.time)
 
       -# The teacher Start screen already filters every purchase by group, so

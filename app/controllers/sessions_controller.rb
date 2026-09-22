@@ -2,7 +2,6 @@
 
 class SessionsController < ApplicationController
   include LoggedUserRedirector
-  include RedesignLayout
 
   skip_before_action :authenticate!, only: :new
   before_action :redirect_logged_user, only: :new

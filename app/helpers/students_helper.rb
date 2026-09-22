@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Screen-specific labels live in the screen's own helper, not in RedesignHelper.
+# Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 module StudentsHelper
   # The list's own sentence. The second half only appears when somebody is
   # actually at zero — a line about a state nobody is in is noise.
@@ -75,19 +75,5 @@ module StudentsHelper
     losses << "całą historię waluty (#{entries} #{gh_plural(entries, 'wpis', 'wpisy', 'wpisów')})" if entries.positive?
 
     losses
-  end
-
-  # The user picker on the Bootstrap "Dodaj studenta" screen, which is not part
-  # of the redesign yet. Left alone deliberately.
-  def student_map(students)
-    students.map do |u|
-      {
-        value:             u.id,
-        text:              u.email,
-        name:              u.full_name,
-        email:             u.email,
-        university_number: u.university_number,
-      }
-    end
   end
 end

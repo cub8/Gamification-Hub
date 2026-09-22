@@ -16,14 +16,9 @@ class StoryGroupMembershipsController < ApplicationController
   include StoryGroupAuthorization
 
   # Editing is a page; only the leave confirmation is a dialog, and inside the
-  # dialog only the frame is used — the redesign layout already carries a
+  # dialog only the frame is used — the layout already carries a
   # <turbo-frame id="modal"> and two with one id let Turbo pick whichever came
   # first.
-  layout -> { @in_modal ? false : 'redesign' }
-  # RedesignLayout is all-or-nothing and this controller needs its own layout
-  # lambda, so its second line is inlined here: under
-  # `include_all_helpers = false` the gh_* helpers do not arrive on their own.
-  helper RedesignHelper
 
   before_action :set_presentation
   before_action :set_story_group

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Screen-specific labels live in the screen's own helper, not in RedesignHelper.
+# Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 module StudentsItemsHelper
   # "3 przedmioty. Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach."
   def inventory_lead(count)

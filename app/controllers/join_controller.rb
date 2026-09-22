@@ -11,13 +11,9 @@
 # Every step renders either into the shared `modal` frame or as a focused page,
 # decided once in `set_presentation`.
 class JoinController < ApplicationController
-  include RedesignLayout
-
-  # Inside the dialog only the frame is used, and the redesign layout already
-  # carries a <turbo-frame id="modal"> of its own. Rendering it too would put
-  # two frames with the same id in one response and let Turbo pick whichever
-  # came first.
-  layout -> { @in_modal ? false : 'redesign' }
+  # Inside the dialog only the frame is used, and the layout already carries a
+  # <turbo-frame id="modal"> of its own. Rendering it too would put two frames
+  # with the same id in one response and let Turbo pick whichever came first.
 
   before_action :set_presentation
 

@@ -2,10 +2,8 @@
 
 class ShopController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # Only the buy confirmation is a dialog; the shop itself is a page.
-  layout -> { @in_modal ? false : 'redesign' }
 
   # The shop renders items/_card, which is the item screens' partial. With
   # `include_all_helpers = false` that helper does not arrive on its own.
@@ -77,6 +75,6 @@ class ShopController < ApplicationController
   end
 
   def shop
-    @shop ||= Redesign::Shop.new(story_group: @story_group, student: @student)
+    @shop ||= Shop.new(story_group: @story_group, student: @student)
   end
 end

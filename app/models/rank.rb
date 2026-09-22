@@ -2,7 +2,7 @@
 
 class Rank < ApplicationRecord
   # The art is one of two things, never both: an uploaded image, or a preset
-  # glyph named by `icon_glyph` (a key into Redesign::Glyphs, whose files live
+  # glyph named by `icon_glyph` (a key into Glyphs, whose files live
   # in app/assets/images — nothing is ever copied into the database). Keeping
   # the attachment when a preset is chosen is deliberate: it lets a teacher
   # switch back without re-uploading.
@@ -29,9 +29,9 @@ class Rank < ApplicationRecord
             }
 
   # The picker's own set, not every glyph on disk: a rank should carry rank art.
-  # Rendering is looser on purpose (RedesignHelper#gh_glyph accepts anything in
+  # Rendering is looser on purpose (ApplicationHelper#gh_glyph accepts anything in
   # the directory), so a record whose key is later retired still shows it.
-  validates :icon_glyph, inclusion: { in: Redesign::Glyphs::RANK, message: 'Nieznana grafika.' },
+  validates :icon_glyph, inclusion: { in: Glyphs::RANK, message: 'Nieznana grafika.' },
                          allow_nil: true
 
   validate :acceptable_icon

@@ -49,8 +49,8 @@
             %span= error.call(:description)
         %span.gh-hint Widzą ją wszyscy w grupie, na stronie głównej grupy.
 
-      = render 'shared/redesign/image_field', form: f, record: story_group,
-        presets: Redesign::GroupArt::KEYS, registry: Redesign::GroupArt,
+      = render 'shared/image_field', form: f, record: story_group,
+        presets: GroupArt::KEYS, registry: GroupArt,
         kind: 'group', tile: :art,
         copy: { label: 'Grafika grupy',
                 hint: 'JPG lub PNG, najlepiej co najmniej 1200 px szerokości.' }
@@ -77,9 +77,9 @@
 
       -# `aspect: 1` — this upload goes into the square coin face, not the 16:10
       -# card frame the group graphic above is cut to.
-      = render 'shared/redesign/image_field', form: f, record: story_group,
+      = render 'shared/image_field', form: f, record: story_group,
         attribute: :currency_icon, glyph_attribute: :currency_icon_glyph,
-        presets: Redesign::CurrencyIcons::KEYS, registry: Redesign::CurrencyIcons,
+        presets: CurrencyIcons::KEYS, registry: CurrencyIcons,
         kind: 'currency', tile: :currency, aspect: 1,
         copy: { label: 'Ikona waluty', presets: 'Gotowe ikony',
                 own: 'Twoja ikona', upload: 'Albo wgraj własną ikonę',

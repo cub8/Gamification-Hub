@@ -16,9 +16,6 @@
       ],
       "@utils/*": [
         "app/javascript/utils/*"
-      ],
-      "@redesign/*": [
-        "app/javascript/redesign/*"
       ]
     }
   },

@@ -1,0 +1,99 @@
+-# One category row in the template editor and in sheet settings.
+-# Mockup: js-expanded/30-ag.js:33-41.
+-#
+-# Locals: f (the fields_for builder), category, number (1-based, for the aria
+-# labels), sheet (true in sheet settings, where a column can be locked).
+-#
+-# Two deliberate departures from the mockup, both so the row works with
+-# JavaScript off: the story description is a <details> rather than a link that
+-# reveals a textarea, and remove/hide are checkboxes wearing the icon button's
+-# clothes rather than buttons a controller has to interpret. Reordering is the
+-# one thing here that genuinely needs JavaScript.
+- locked = sheet && category.locked?
+- error  = ->(attribute) { category.errors[attribute].first }
+- row_id = "gh-cat-#{f.index}"
+
+%li.gh-cat{ id: row_id,
+            class: [('gh-cat--hidden' if sheet && category.hidden?)],
+            data: { sheet_form_target: 'row', gh_locked: locked.to_s } }
+  = f.hidden_field :position, data: { sheet_form_target: 'position' }
+
+  %span.gh-handle{ title: 'Przeciągnij, aby zmienić kolejność', 'aria-hidden': 'true' }
+    %i.fa-solid.fa-grip-vertical
+
+  .gh-cat-b
+    .gh-inp{ class: ('gh-inp--bad' if error.call(:didactic_description)) }
+      = f.text_field :didactic_description, autocomplete: 'off',
+        placeholder: 'Za co, np. Pomoc innym',
+        'aria-label': "Kategoria #{number}: za co",
+        'aria-invalid': (error.call(:didactic_description) ? 'true' : nil),
+        data: { sheet_form_target: 'name', action: 'sheet-form#refresh' }
+    - if error.call(:didactic_description)
+      %p.gh-err{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= error.call(:didactic_description)
+
+    %details.gh-story{ open: category.story_description.present? }
+      %summary.gh-story-add.gh-linkbtn
+        %i.fa-solid.fa-align-left{ 'aria-hidden': 'true' }
+        Dodaj opis fabularny
+      .gh-inp.gh-story-t
+        = f.text_area :story_description, rows: 1,
+          placeholder: 'Opis fabularny, np. Holowanie uszkodzonego statku',
+          'aria-label': "Opis fabularny kategorii #{number}"
+
+    - if sheet && category.persisted? && category.sheet_only?
+      %span.gh-tag.gh-tag--only Tylko w tym arkuszu
+    -# Always present, shown when the column is hidden: the controller toggles
+    -# `hidden` rather than building a tag.
+    - if sheet
+      %span.gh-tag.gh-tag--hidden{ hidden: !category.hidden?,
+                                   data: { sheet_form_target: 'hiddenTag' } }
+        Ukryta w tabeli ocen
+
+    - if locked
+      - awards = category.awards_count
+      %p.gh-lockn
+        %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+        %span
+          = "Przyznano #{awards} #{gh_plural(awards, 'nagrodę', 'nagrody', 'nagród')}."
+          Kolumny nie można usunąć, można ją ukryć.
+          -# Only once the number in the field differs from what paid out, so
+          -# the sentence appears exactly when it is telling you something.
+          %span{ hidden: (category.reward == category.reward_was), data: { sheet_form_target: 'rewardNote' } }
+            Nowa wartość obejmie tylko przyszłe nagrody.
+
+  .gh-cat-p
+    .gh-inp.gh-inp--num{ class: ('gh-inp--bad' if error.call(:reward)) }
+      = f.number_field :reward, min: 1, step: 1,
+        'aria-label': "Nagroda za kategorię #{number}",
+        'aria-invalid': (error.call(:reward) ? 'true' : nil),
+        data: { sheet_form_target: 'reward', action: 'sheet-form#refresh',
+                gh_awarded: (locked ? category.reward_was : nil) }
+    = render 'layouts/currency_token', story_group: @story_group, size: 26
+    - if error.call(:reward)
+      %p.gh-err{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= error.call(:reward)
+
+  .gh-cat-a
+    %button.gh-iconbtn{ type: 'button', 'aria-label': 'Przesuń wyżej',
+                        data: { action: 'sheet-form#moveUp', sheet_form_target: 'up' } }
+      %i.fa-solid.fa-chevron-up{ 'aria-hidden': 'true' }
+    %button.gh-iconbtn{ type: 'button', 'aria-label': 'Przesuń niżej',
+                        data: { action: 'sheet-form#moveDown', sheet_form_target: 'down' } }
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+
+    - if locked
+      -# DECISIONS.md:31. The awards, and the currency behind them, hang off
+      -# this column — so it goes out of the table, not out of the database.
+      %label.gh-iconbtn.gh-toggle{ title: (category.hidden? ? 'Pokaż' : 'Ukryj') + ' w tabeli ocen' }
+        = f.check_box :hidden, { data: { sheet_form_target: 'hide', action: 'sheet-form#refresh' },
+                                 'aria-label': (category.hidden? ? 'Pokaż w tabeli ocen' : 'Ukryj w tabeli ocen') }
+        %i.fa-solid{ class: (category.hidden? ? 'fa-eye' : 'fa-eye-slash'), 'aria-hidden': 'true',
+                     data: { sheet_form_target: 'hideIcon' } }
+    - else
+      %label.gh-iconbtn.gh-toggle{ title: 'Usuń' }
+        = f.check_box :_destroy, { data: { sheet_form_target: 'destroy', action: 'sheet-form#remove' },
+                                   'aria-label': "Usuń kategorię #{number}" }
+        %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }

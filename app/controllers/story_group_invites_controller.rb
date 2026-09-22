@@ -2,17 +2,10 @@
 
 class StoryGroupInvitesController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
-  # Inside the dialog only the frame is used, and the redesign layout already
-  # carries a <turbo-frame id="modal"> of its own. Rendering it too would put
-  # two frames with the same id in one response and let Turbo pick whichever
-  # came first.
-  #
   # Unlike JoinController this never sets `@chrome = false`: joining is a
   # focused flow, while these are in-app screens that keep the shell when they
   # are opened as pages rather than dialogs.
-  layout -> { @in_modal ? false : 'redesign' }
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!

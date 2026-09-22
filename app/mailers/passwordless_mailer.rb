@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PasswordlessMailer < ApplicationMailer
-  helper RedesignHelper
+  helper ApplicationHelper
 
   def token_email
     @token_link          = params[:token_link]

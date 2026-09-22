@@ -64,7 +64,7 @@
   %section.gh-panel.gh-pv
     %h3 Miniatura w powiadomieniach
     .gh-thumbrow
-      = render 'layouts/redesign/item_thumb', item: item,
+      = render 'layouts/item_thumb', item: item,
         inner_data: { item_form_target: 'thumbArt' }
       %span
         %b{ data: { item_form_target: 'thumbName' } }= item_name(item)

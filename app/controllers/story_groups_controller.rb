@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
-  # Fully converted to the "Card Table" redesign, #new included — it is the
-  # four-step creation wizard now, the last screen to leave Bootstrap.
-  # RedesignLayout is all-or-nothing (it cannot drop the layout for the modal
-  # confirmations), hence its two lines inlined here.
-  layout -> { @in_modal ? false : 'redesign' }
   # #show renders the same owned-item card and the same badge cards as the
   # inventory and the badge deck; under `include_all_helpers = false` their
   # helpers do not arrive on their own.
-  helper RedesignHelper, StudentsItemsHelper, BadgesHelper
+  helper StudentsItemsHelper, BadgesHelper
 
   before_action :set_presentation, only: %i[confirm_destroy destroy]
   before_action :set_story_group, only: %i[show edit update destroy confirm_destroy created]
@@ -25,16 +20,16 @@ class StoryGroupsController < ApplicationController
   #
   # Two screens, chosen by MEMBERSHIP rather than by role: a teacher enrolled in
   # somebody else's group reads it as a student. This is the same question
-  # Redesign::GroupChrome#student? asks for the sidebar, so the page and the
+  # GroupChrome#student? asks for the sidebar, so the page and the
   # navigation beside it cannot disagree about who you are here.
   def show
     authorize @story_group
     @student = @story_group.student_memberships.find_by(user_id: @current_user.id)
 
     @overview = if @student
-                  Redesign::StudentOverview.new(student: @student).load
+                  StudentOverview.new(student: @student).load
                 else
-                  Redesign::TeacherOverview.new(story_group: @story_group).load
+                  TeacherOverview.new(story_group: @story_group).load
                 end
   end
 
@@ -59,7 +54,7 @@ class StoryGroupsController < ApplicationController
   def preset_preview
     authorize StoryGroup, :new?
 
-    @preset = Redesign::StarterPack.for(pack: params[:pack], classes: params[:classes])
+    @preset = StarterPack.for(pack: params[:pack], classes: params[:classes])
     @currency_name = params[:currency_name]
 
     render partial: 'preset_review', layout: false

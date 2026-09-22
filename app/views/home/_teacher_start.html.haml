@@ -28,7 +28,7 @@
         - groups.each do |group|
           = link_to home_path(group: group.story_group.id), class: 'gh-fchip',
             'aria-current': (@dashboard.filter == group.story_group.id).to_s do
-            = render 'layouts/redesign/group_thumb', story_group: group.story_group
+            = render 'layouts/group_thumb', story_group: group.story_group
             = group.story_group.name
 
     - if @dashboard.purchases.any?
@@ -39,17 +39,17 @@
         %ul.gh-plist
           - rows.each do |purchase|
             %li.gh-prow
-              = render 'layouts/redesign/item_thumb', item: purchase.item
+              = render 'layouts/item_thumb', item: purchase.item
               %span.gh-p-main
                 %b= purchase.item&.name || 'Przedmiot usunięty z oferty'
                 %span= purchase.student_name
                 %span.gh-p-gm
-                  = render 'layouts/redesign/group_chip', story_group: purchase.story_group
+                  = render 'layouts/group_chip', story_group: purchase.story_group
               %span.gh-p-g
-                = render 'layouts/redesign/group_chip', story_group: purchase.story_group
+                = render 'layouts/group_chip', story_group: purchase.story_group
               %span.gh-cost
                 %b= purchase.price
-                = render 'layouts/redesign/currency_token', story_group: purchase.story_group, size: 16
+                = render 'layouts/currency_token', story_group: purchase.story_group, size: 16
               %span.gh-p-time= purchase.time
     - else
       %p.gh-small.mt-4
@@ -66,7 +66,7 @@
           .gh-card-i
             %p.gh-k Czeka na ocenę
             %h2.gh-todo-t= pending.activity_group.name
-            = render 'layouts/redesign/group_chip', story_group: pending.story_group
+            = render 'layouts/group_chip', story_group: pending.story_group
             %p.gh-small
               = "Zostało #{pending.categories_count} #{gh_plural(pending.categories_count, 'kategoria', 'kategorie', 'kategorii')}"
               = "dla #{pending.students_count} #{gh_plural(pending.students_count, 'studenta', 'studentów', 'studentów')}."
@@ -81,7 +81,7 @@
           - groups.each do |group|
             %li
               = link_to story_group_path(group.story_group), class: 'gh-gt' do
-                = render 'layouts/redesign/group_thumb', story_group: group.story_group, size: :lg
+                = render 'layouts/group_thumb', story_group: group.story_group, size: :lg
                 %span
                   %b= group.story_group.name
                   %small

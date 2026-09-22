@@ -77,7 +77,7 @@ Rails.application.routes.draw do
       # render into.
       get :confirm_destroy, on: :member
     end
-    resources :students do
+    resources :students, except: %i[new create] do
       member do
         post :update_lives
         # Removing a student destroys their badges, their purchases and their
@@ -109,8 +109,6 @@ Rails.application.routes.draw do
         post :buy
       end
     end
-    resources :students_profile, path: :profile, as: :profile, only: %i[index]
-
     # "Ustawienia w grupie": a student's own settings HERE — their nickname,
     # what the teacher can see, and the way out. Singular, because you have at
     # most one membership per group and never address somebody else's.

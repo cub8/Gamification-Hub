@@ -2,13 +2,10 @@
 
 class TeachersController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
-  # Inside the dialog only the frame is used, and the redesign layout already
-  # carries a <turbo-frame id="modal"> of its own. Rendering it too would put
-  # two frames with the same id in one response and let Turbo pick whichever
-  # came first.
-  layout -> { @in_modal ? false : 'redesign' }
+  # Inside the dialog only the frame is used, and the layout already carries a
+  # <turbo-frame id="modal"> of its own. Rendering it too would put two frames
+  # with the same id in one response and let Turbo pick whichever came first.
 
   before_action :set_story_group
   # Reaching the screen is "do you help run this group"; changing who is on it
@@ -20,8 +17,8 @@ class TeachersController < ApplicationController
   before_action :set_teacher, only: %i[destroy confirm_destroy]
 
   def index
-    @list = Redesign::TeacherList.new(story_group: @story_group,
-                                      memberships: policy_scope(@story_group.teacher_memberships),)
+    @list = TeacherList.new(story_group: @story_group,
+                            memberships: policy_scope(@story_group.teacher_memberships),)
   end
 
   def new
@@ -35,7 +32,7 @@ class TeachersController < ApplicationController
     @teacher = @story_group.teacher_memberships.build(teacher_params)
 
     if @teacher.save
-      # Named, like every other confirmation in the redesign — and the mockup's
+      # Named, like every other confirmation in the app — and the mockup's
       # own wording (30-rk.js `doAddT`).
       redirect_outside_turbo_frame story_group_teachers_path(@story_group),
                                    notice: "Dodano: #{@teacher.full_name}."
@@ -70,7 +67,7 @@ class TeachersController < ApplicationController
   end
 
   def set_pool
-    @pool = Redesign::TeacherPool.new(story_group: @story_group, viewer: @current_user)
+    @pool = TeacherPool.new(story_group: @story_group, viewer: @current_user)
   end
 
   def teacher_params

@@ -25,8 +25,7 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     css_select('.gh-deck .gh-nl').map { |link| link.text.strip }
   end
 
-  # Zaproszenia is the only group screen on the redesign layout so far, so it
-  # is the only place the chrome can actually be seen end to end.
+  # Zaproszenia is as good a group screen as any to see the chrome end to end.
   def visit_group_screen
     get story_group_invites_path(@story_group)
   end
@@ -49,7 +48,7 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-deck', false
     assert_select '.gh-glist a.gh-gl', 2
-    # The count start_redesign_smoke_test pins: the section nav must not leak
+    # The count start_smoke_test pins: the section nav must not leak
     # out of a group.
     assert_select 'aside.gh-sb a.gh-nl', 2
   end
@@ -106,15 +105,15 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
 
   # --- the student variant --------------------------------------------------
   #
-  # No student-visible group screen is on the redesign layout yet — invites
-  # requires `update?` — so the student nav is exercised through the object
-  # that builds it rather than through a request.
+  # visit_group_screen hits invites, which requires `update?` and so is
+  # teacher-only — the student nav is exercised through the object that
+  # builds it rather than through a request.
 
   test 'the student deck lists the sections a student actually has' do
     @story_group.update!(ranking_enabled: true)
     student = FactoryBot.create(:user, role: :student)
     membership = FactoryBot.create(:story_group_student, story_group: @story_group, user: student)
-    chrome = Redesign::GroupChrome.for(user: student, story_group: @story_group)
+    chrome = GroupChrome.for(user: student, story_group: @story_group)
 
     assert_predicate chrome, :student?
     assert_equal 'Jesteś uczestnikiem', chrome.role_label
@@ -144,7 +143,7 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     # nav branches the same way.
     teacher = FactoryBot.create(:user, role: :teacher)
     FactoryBot.create(:story_group_student, story_group: @story_group, user: teacher)
-    chrome = Redesign::GroupChrome.for(user: teacher, story_group: @story_group)
+    chrome = GroupChrome.for(user: teacher, story_group: @story_group)
 
     assert_predicate chrome, :student?
     assert_not_includes chrome.items.map(&:label), 'Zaproszenia'
@@ -159,14 +158,14 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:story_group_student, story_group: @story_group, user: student)
 
     @story_group.update!(ranking_enabled: false)
-    assert_includes Redesign::GroupChrome.for(user: student, story_group: @story_group)
-                                         .items.map(&:label), 'Ranking'
+    assert_includes GroupChrome.for(user: student, story_group: @story_group)
+                               .items.map(&:label), 'Ranking'
     # The teacher sees it either way — it is their switch to flip.
     assert_includes deck_labels_for(@owner), 'Ranking'
 
     @story_group.update!(ranking_enabled: true)
-    assert_includes Redesign::GroupChrome.for(user: student, story_group: @story_group)
-                                         .items.map(&:label), 'Ranking'
+    assert_includes GroupChrome.for(user: student, story_group: @story_group)
+                               .items.map(&:label), 'Ranking'
   end
 
   # --- who gets chrome at all ----------------------------------------------
@@ -174,7 +173,7 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
   test 'a non-member gets no chrome even when a group is in scope' do
     outsider = FactoryBot.create(:user, role: :teacher)
 
-    assert_nil Redesign::GroupChrome.for(user: outsider, story_group: @story_group)
+    assert_nil GroupChrome.for(user: outsider, story_group: @story_group)
   end
 
   # JoinController sets @story_group from an invite lookup for somebody who is
@@ -242,6 +241,6 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
   private
 
   def deck_labels_for(user)
-    Redesign::GroupChrome.for(user: user, story_group: @story_group).items.map(&:label)
+    GroupChrome.for(user: user, story_group: @story_group).items.map(&:label)
   end
 end

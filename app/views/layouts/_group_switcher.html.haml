@@ -1,0 +1,37 @@
+-# "Zmień grupę". Mockup: js-expanded/10-core.js:271-276.
+-#
+-# A third plain <dialog> beside the account menu and the "Więcej" sheet, opened
+-# by menu#open from the deck and from the mobile header switcher. No new
+-# JavaScript — menu_controller already does all of this.
+- groups = user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
+
+%dialog#gh-group-switcher.gh-dialog.gh-dialog--menu.gh-dialog--switcher{ data: { action: 'click->menu#closeOnBackdrop' },
+                                                                         'aria-labelledby': 'gh-switch-title' }
+  .gh-dialog-body
+    %span.gh-grab{ 'aria-hidden': 'true' }
+    .gh-pop-h
+      %h2#gh-switch-title.gh-h3 Zmień grupę
+
+    %ul.gh-menu
+      - groups.each do |story_group|
+        - here = chrome && chrome.story_group.id == story_group.id
+        %li
+          = link_to story_group_path(story_group), 'aria-current': ('page' if here) do
+            = render 'layouts/group_thumb', story_group: story_group, size: nil
+            %span= story_group.name
+            -# A label, not a checkmark: the mockup says where you are in words.
+            - if here
+              %span.gh-cur Tu jesteś
+
+    -# Sticky, so it stays reachable however long the list gets (90-core.css:29).
+    -#
+    -# The mockup shows it only to its student persona (10-core.js:275). Ours
+    -# shows it to everyone, for the same reason the header's join button is
+    -# ungated: a teacher can be a student in someone else's group. And on a
+    -# phone the header collapses that button to an icon, so this is the one
+    -# place the action is spelled out.
+    .gh-pop-f
+      = link_to new_join_path, class: 'gh-btn gh-btn--sec',
+        data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-plus
+        Dołącz do grupy

@@ -2,12 +2,10 @@
 
 class ActivityGroupsController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # "Utwórz arkusz" and the two delete confirmations are dialogs. Sheet
   # settings is a PAGE (DECISIONS.md:26) — it carries the grading-table preview
   # beside the column list, which no dialog is wide enough for.
-  layout -> { @in_modal ? false : 'redesign' }
 
   # Bulk creation used to be capped at 50. The dialog's stepper is the only way
   # in now and the mockup stops it at 20, which is already more sheets than a
@@ -21,7 +19,7 @@ class ActivityGroupsController < ApplicationController
 
   # GET /story_groups/:story_group_id/activity_groups
   def index
-    @index = Redesign::SheetIndex.new(@story_group)
+    @index = SheetIndex.new(@story_group)
 
     # Sheets created by the last request get the highlight animation, so a bulk
     # run of eight shows you which eight are new.

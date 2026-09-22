@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Copy for the rank screens. Screen-specific labels live in the screen's own
-# helper, not in RedesignHelper.
+# helper, not in ApplicationHelper.
 module RanksHelper
   # The line under a rank's name on the teacher's ladder (30-lists.js:28).
   #

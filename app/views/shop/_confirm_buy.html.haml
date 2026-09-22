@@ -9,18 +9,18 @@
 %h2#gh-buy-title.gh-h2= "Kupić „#{item.name}”?"
 
 .gh-buy
-  = render 'layouts/redesign/item_thumb', item: item
+  = render 'layouts/item_thumb', item: item
   %dl.gh-buy-dl
     %dt Cena
     %dd
       - if offer.discounted?
         %s= offer.list_price
       %span.gh-buy-v= price
-      = render 'layouts/redesign/currency_token', story_group: @story_group, size: 22
+      = render 'layouts/currency_token', story_group: @story_group, size: 22
     %dt Zostanie Ci
     %dd
       %span.gh-buy-v= left
-      = render 'layouts/redesign/currency_token', story_group: @story_group, size: 22
+      = render 'layouts/currency_token', story_group: @story_group, size: 22
 
 - if offer.discounted?
   %p.gh-small.gh-note= "Zniżka #{offer.discount_label}."

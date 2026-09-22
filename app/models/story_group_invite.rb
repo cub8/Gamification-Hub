@@ -3,7 +3,7 @@
 class StoryGroupInvite < ApplicationRecord
   # gh_plural only, for the two validation messages that count people. Touches
   # no view context, exactly as StoryGroupsListing does.
-  include RedesignHelper
+  include ApplicationHelper
 
   CODE_LENGTH = 6
 

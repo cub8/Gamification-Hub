@@ -1,0 +1,122 @@
+-# "Grafika": presets + upload, the field DECISIONS.md:25 makes a rule for every
+-# image in the app. Ported from the mockup's imageField() (30-br.js:27-29) and
+-# shared by ranks, badges, items and now both of a story group's images.
+-#
+-# Required locals: `form`, `record`, `presets` (the subset this entity offers,
+-# in picker order) and `kind` (tints the tiles with the entity's own colour and
+-# namespaces the field ids, so two of these can sit on one page).
+-#
+-# Optional:
+-#   `attribute` / `glyph_attribute` — which pair of the record's this field
+-#     edits. Defaults to #icon / #icon_glyph; the group's currency passes
+-#     :currency_icon / :currency_icon_glyph.
+-#   `registry`  — the preset set (Glyphs, GroupArt, CurrencyIcons), for the
+-#     Polish tile names.
+-#   `tile`      — how a preset draws: :glyph (inline, currentColor), :art (an
+-#     <img> scene) or :currency (an inline mark on the coin face).
+-#   `copy`      — overrides for the field's wording; the defaults below are the
+-#     glyph field's, which three of the five callers want verbatim.
+-#   `aspect`    — the shape the upload is cut to, and it MUST be the shape of
+-#     the hole it goes into: 1.6 is `.gh-art`'s `aspect-ratio: 16 / 10`
+-#     (card.css), 1 is the square coin face. Change one and change the other,
+-#     or uploads stop filling the frame.
+-#   `refresh_action` — lets the screen's own controller hear the picker without
+-#     this partial knowing its name; ranks pass "rank-form#refresh".
+-#
+-# Two mockup defects deliberately not ported:
+-#   * its tiles are <button role="radio">, which cannot post and do nothing
+-#     without JavaScript. These are real radios, so the picker works with the
+-#     keyboard and with JS off, and Stimulus only listens for the change.
+-#   * its selected tile is framed in --item orange even on a rank form
+-#     (20-form.css:36). Here the frame follows `kind`.
+-# It also labels every tile with the raw key ("Grafika castle", 30-isg.js:53),
+-# which tells a screen reader nothing; the registry's Polish name goes in.
+-#
+-# The art is required on every entity that uses this field, so the error slot
+-# lives here rather than in four form templates. Both attributes land in it:
+-# the glyph key carries "nothing chosen" and "unknown preset", the attachment
+-# carries a rejected file type.
+- attribute       = local_assigns.fetch(:attribute, :icon)
+- glyph_attribute = local_assigns.fetch(:glyph_attribute, :icon_glyph)
+- registry        = local_assigns.fetch(:registry, Glyphs)
+- tile            = local_assigns.fetch(:tile, :glyph)
+- defaults        = { label: 'Grafika',
+                      presets: 'Gotowe grafiki',
+                      own: 'Twoja grafika',
+                      upload: 'Albo wgraj własną grafikę',
+                      hint: 'JPG lub PNG, najlepiej co najmniej 400 px.',
+                      crop: 'Przytnij grafikę',
+                      cropped: 'Przesuń i przeskaluj zaznaczenie — podgląd obok zmienia się na bieżąco. Zapisujemy kadr w kształcie karty, więc wypełni ją w całości. Na listach zobaczysz go w kwadratowej miniaturze, też w całości.', }
+- copy            = defaults.merge(local_assigns.fetch(:copy, {}))
+
+- field_id  = ->(suffix) { "gh-#{kind}-art-#{suffix}" }
+- refresh   = local_assigns[:refresh_action]
+- attachment = record.public_send(attribute)
+- art_error = record.errors[glyph_attribute].first || record.errors[attribute].first
+- error_id  = field_id.call('error')
+
+.gh-fld{ data: { controller: 'image-crop',
+                 image_crop_aspect_value: local_assigns.fetch(:aspect, 1.6),
+                 image_crop_width_value: 1024, } }
+  %p.gh-lbl= copy[:label]
+
+  .gh-pz-grid{ class: "gh-pz-grid--#{kind}", role: 'radiogroup', 'aria-label': copy[:presets],
+               'aria-invalid': (art_error ? 'true' : nil),
+               'aria-describedby': (art_error ? error_id : nil) }
+    - presets.each do |key|
+      %label.gh-pz{ class: "gh-pz--#{kind}" }
+        = form.radio_button glyph_attribute, key, class: 'sr-only',
+          id: field_id.call(key),
+          'aria-label': "#{copy[:label]}: #{registry.label_for(key)}",
+          data: { action: ['image-crop#pickPreset', refresh].compact.join(' ') }
+        %i
+          - case tile
+          - when :art
+            = gh_group_art(key)
+          - when :currency
+            = gh_currency_icon(key)
+          - else
+            = gh_glyph(key)
+
+    -# The last tile: your own art. Always in the markup, hidden until there
+    -# is something to show — image_crop_controller reveals and selects it the
+    -# moment a file is chosen, so the picker never disagrees with what will be
+    -# saved. An empty key is how the record says "the upload is the art".
+    %label.gh-pz.gh-pz--own{ hidden: !attachment.attached? }
+      = form.radio_button glyph_attribute, '', class: 'sr-only',
+        id: field_id.call('own'), 'aria-label': copy[:own],
+        checked: attachment.attached? && record.public_send(glyph_attribute).blank?,
+        data: { image_crop_target: 'ownRadio',
+                action: ['image-crop#pickOwn', refresh].compact.join(' ') }
+      %i
+        -# `src` is omitted, not blank, when there is nothing yet: an empty src
+        -# resolves against the page URL, so the browser would re-request this
+        -# very page for an image it cannot even see.
+        - preview = { alt: '', data: { image_crop_target: 'ownPreview' } }
+        - preview[:src] = url_for(attachment) if attachment.attached?
+        %img{ preview }
+
+  - if art_error
+    %p.gh-err{ id: error_id, role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= art_error
+
+  .gh-drop
+    %span.gh-drop-ic
+      %i.fa-solid.fa-upload{ 'aria-hidden': 'true' }
+    %span
+      %b= copy[:upload]
+      %small= copy[:hint]
+    %label.gh-btn.gh-btn--sec.gh-btn--sm
+      Wybierz plik
+      = form.file_field attribute, class: 'sr-only',
+        accept: 'image/png,image/jpeg,image/gif',
+        data: { image_crop_target: 'input', action: 'image-crop#choose' }
+
+  -# Populated by image_crop_controller once a file is chosen, and hidden until
+  -# then. Without JavaScript it stays hidden and the file posts uncropped — a
+  -# worse frame, but a working form.
+  .gh-crop{ data: { image_crop_target: 'editor' }, hidden: true }
+    %p.gh-lbl= copy[:crop]
+    .gh-crop-box{ data: { image_crop_target: 'box' } }
+    %span.gh-hint= copy[:cropped]

@@ -54,8 +54,8 @@
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:name)
 
-        = render 'shared/redesign/image_field', form: f, record: rank,
-          presets: Redesign::Glyphs::RANK, kind: 'rank',
+        = render 'shared/image_field', form: f, record: rank,
+          presets: Glyphs::RANK, kind: 'rank',
           refresh_action: 'rank-form#refresh'
 
       .gh-fsec
@@ -72,7 +72,7 @@
                   'aria-invalid': (error.call(:required_currency_value) ? 'true' : nil),
                   'aria-describedby': (error.call(:required_currency_value) ? 'gh-rank-min-error' : nil),
                   data: { rank_form_target: 'threshold', action: 'rank-form#refresh' }
-              = render 'layouts/redesign/currency_token', story_group: @story_group, size: 32
+              = render 'layouts/currency_token', story_group: @story_group, size: 32
 
           .gh-fld
             = f.label :discount, 'Zniżka w sklepie'

@@ -5,8 +5,8 @@ require 'test_helper'
 # The group's artwork as the table behind every in-group screen
 # (mockup 10-core.js:342 — `.tbg` + `.ttint` inside the content well).
 #
-# One branch in layouts/redesign.html.haml covers every nested controller, so
-# this tests the branch rather than each screen.
+# One branch in layouts/application.html.haml covers every nested controller,
+# so this tests the branch rather than each screen.
 class GroupBackgroundTest < ActionDispatch::IntegrationTest
   PNG = Base64.decode64(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',

@@ -1,0 +1,81 @@
+/* ==========================================================================
+   Gamification Hub — "Card Table" stylesheet.
+
+   Entry point for the app's one layout. Compiled by the Tailwind CLI:
+     yarn build:css  ->  app/assets/builds/application.css
+
+   This file is the ENTRY ONLY: it declares the Tailwind import, the class-name
+   sources and the dark variant, then pulls in the partials. Put new rules in
+   a partial, not here. Import order IS cascade order within each layer, so
+   keep system before components.
+
+   `@source` must stay in THIS file: an imported partial carries its own base
+   directory, so a relative @source inside one would resolve against that
+   partial's folder and silently change which files Tailwind scans.
+
+   Naming: everything here is namespaced `gh-` / `--gh-`.
+   ========================================================================== */
+
+/* Cascade layer order, declared FIRST so `vendor` can slot in below our own
+   component rules. A @layer statement is one of the few things allowed to
+   precede @import. Without this, Font Awesome ships unlayered and silently
+   outranks every .gh-* rule — see font-awesome.css. */
+@layer theme, base, vendor, components, utilities;
+
+@import "tailwindcss";
+
+/* Class-name sources. Paths are relative to this file. */
+@source "../../views";
+@source "../../components";
+@source "../../javascript";
+@source "../../helpers";
+
+/* Theme is attribute-driven (`data-gh-theme`), never Tailwind's media-query
+   dark mode. `dark:` stays available for the rare per-theme override. */
+@custom-variant dark (&:where([data-gh-theme="dark"], [data-gh-theme="dark"] *));
+
+/* ---- System ---- */
+@import "./font-awesome.css";
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./theme.css";
+@import "./base.css";
+
+/* ---- Components ---- */
+@import "./components/shape.css";
+@import "./components/buttons.css";
+@import "./components/surfaces.css";
+@import "./components/dialog.css";
+@import "./components/toast.css";
+@import "./components/typography.css";
+@import "./components/icons.css";
+@import "./components/table.css";
+@import "./components/tag.css";
+@import "./components/chrome.css";
+@import "./components/card.css";
+@import "./components/form.css";
+@import "./components/auth.css";
+@import "./components/dashboard.css";
+@import "./components/groups.css";
+@import "./components/overview.css";
+@import "./components/join.css";
+@import "./components/invites.css";
+@import "./components/ranks.css";
+@import "./components/ranking.css";
+@import "./components/teachers.css";
+@import "./components/badges.css";
+@import "./components/items.css";
+@import "./components/shop.css";
+@import "./components/ledger.css";
+@import "./components/student_list.css";
+@import "./components/student.css";
+@import "./components/inventory.css";
+@import "./components/settings.css";
+@import "./components/grading.css";
+@import "./components/sheets.css";
+
+/* LAST on purpose. The creation wizard reuses form.css's shell and has to
+   override it: `.gh-wiz--full` and `.gh-wiz` are both one class, so only
+   source order decides which wins. Imported before form.css it lost, and
+   steps 3 and 4 kept a 380px column they do not use. */
+@import "./components/wizard.css";

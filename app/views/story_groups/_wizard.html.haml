@@ -7,7 +7,7 @@
 -# wizard halfway leaves no draft group behind. Steps are sections toggled by
 -# the `group-wizard` controller; only step 4's quick-start table comes from the
 -# server, through the frame below, which keeps the starter-pack arithmetic in
--# Ruby (Redesign::StarterPack) instead of duplicating it in TypeScript.
+-# Ruby (StarterPack) instead of duplicating it in TypeScript.
 -#
 -# Three deliberate departures from the mockup:
 -#   * ONE currency name, not its three Polish declensions — the schema has one
@@ -18,7 +18,7 @@
 -#   * the art field crops (DECISIONS.md:25) instead of storing the mockup's
 -#     focal-point percentage, so `.focal`/`.mk` are not ported.
 - error  = ->(attribute) { story_group.errors[attribute].first }
-- packs  = Redesign::StarterPack
+- packs  = StarterPack
 
 - steps = ['Grupa i opowieść', 'Waluta i zasady', 'Jak zaczynasz', 'Podsumowanie']
 
@@ -106,8 +106,8 @@
             %p.gh-hint
               Pojawia się na karcie grupy, w panelu bocznym i jako tło grupy.
 
-            = render 'shared/redesign/image_field', form: f, record: story_group,
-              presets: Redesign::GroupArt::KEYS, registry: Redesign::GroupArt,
+            = render 'shared/image_field', form: f, record: story_group,
+              presets: GroupArt::KEYS, registry: GroupArt,
               kind: 'group', tile: :art, refresh_action: 'group-wizard#art',
               copy: { label: 'Grafika grupy',
                       hint: 'JPG lub PNG, najlepiej co najmniej 1200 px szerokości.' }
@@ -138,9 +138,9 @@
 
             -# `aspect: 1` — this upload goes into the square coin face, not the
             -# 16:10 card frame the group graphic above is cut to.
-            = render 'shared/redesign/image_field', form: f, record: story_group,
+            = render 'shared/image_field', form: f, record: story_group,
               attribute: :currency_icon, glyph_attribute: :currency_icon_glyph,
-              presets: Redesign::CurrencyIcons::KEYS, registry: Redesign::CurrencyIcons,
+              presets: CurrencyIcons::KEYS, registry: CurrencyIcons,
               kind: 'currency', tile: :currency, aspect: 1,
               refresh_action: 'group-wizard#refresh',
               copy: { label: 'Ikona waluty', presets: 'Gotowe ikony',

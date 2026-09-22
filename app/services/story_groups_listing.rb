@@ -10,7 +10,7 @@ class StoryGroupsListing
   # gh_plural only formats a number; it touches no view context. Including the
   # helper keeps the Polish plural rule in one place instead of giving the view
   # a `case` on role just to assemble a string the service already knows.
-  include RedesignHelper
+  include ApplicationHelper
 
   # Role -> the tag printed on the card. Owner-first: owning implies teaching,
   # so a group you own is never "Wspierasz".

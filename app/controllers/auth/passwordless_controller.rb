@@ -2,7 +2,6 @@
 
 class Auth::PasswordlessController < ApplicationController
   include LoggedUserRedirector
-  include RedesignLayout
 
   # How long the "Wyślij ponownie" button stays disabled on the inbox screen.
   # Presentational only — the real limit is the Rack::Attack throttle on

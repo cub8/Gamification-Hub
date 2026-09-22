@@ -14,11 +14,9 @@
 # opposite things.
 class RankingController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # Only the confirmations are dialogs, and inside a dialog only the frame is
-  # used — the redesign layout already carries a <turbo-frame id="modal">.
-  layout -> { @in_modal ? false : 'redesign' }
+  # used — the layout already carries a <turbo-frame id="modal">.
 
   before_action :set_story_group
   before_action :set_presentation,              only: %i[confirm_visibility confirm_mode]
@@ -29,8 +27,8 @@ class RankingController < ApplicationController
     authorize @story_group, :view_ranking?
     skip_policy_scope
 
-    @board = Redesign::RankingBoard.new(story_group: @story_group,
-                                        membership:  gh_group_chrome&.student_membership,)
+    @board = RankingBoard.new(story_group: @story_group,
+                              membership:  gh_group_chrome&.student_membership,)
   end
 
   # GET /story_groups/:story_group_id/ranking/confirm_visibility?enabled=true
@@ -85,9 +83,9 @@ class RankingController < ApplicationController
     'Ranking widoczny: podium i własne miejsce.'
   end
 
-  # Assigns RedesignHelper's own memo, so the layout's chrome and this action
+  # Assigns ApplicationHelper's own memo, so the layout's chrome and this action
   # resolve the membership once between them rather than twice.
   def gh_group_chrome
-    @gh_group_chrome ||= Redesign::GroupChrome.for(user: @current_user, story_group: @story_group)
+    @gh_group_chrome ||= GroupChrome.for(user: @current_user, story_group: @story_group)
   end
 end

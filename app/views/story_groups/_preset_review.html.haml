@@ -3,7 +3,7 @@
 -#
 -# Rendered into the frame INSIDE the wizard's form, so every control here
 -# posts with the rest of it. That is the whole point of fetching it rather
--# than building it in TypeScript: Redesign::StarterPack stays the one place
+-# than building it in TypeScript: StarterPack stays the one place
 -# thresholds and prices are worked out, and StarterPackBuilder reads the same
 -# indices straight back out of `setup[...]`.
 -#
@@ -73,7 +73,7 @@
       %section.gh-rz
         %h3.gh-h3
           Kategorie zajęć
-          %small.gh-k= "(szablon „#{Redesign::StarterPack::TEMPLATE_NAME}”)"
+          %small.gh-k= "(szablon „#{StarterPack::TEMPLATE_NAME}”)"
           %span.gh-zone-n= preset.categories.size
         - preset.categories.each do |category|
           = render layout: 'preset_row', locals: { zone: 'cats', index: category.index, icon: 'fa-table-cells',

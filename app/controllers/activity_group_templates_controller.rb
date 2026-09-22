@@ -2,11 +2,9 @@
 
 class ActivityGroupTemplatesController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # Same split as ranks and sheets: the delete confirmation is a dialog,
   # creating and editing are pages carrying a preview column.
-  layout -> { @in_modal ? false : 'redesign' }
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!

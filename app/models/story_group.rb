@@ -22,8 +22,8 @@ class StoryGroup < ApplicationRecord
   has_many :students, through: :student_memberships, source: :user
   has_many :teachers, through: :teacher_memberships, source: :user
   # Each image is one of two things, never both: an uploaded file, or a preset
-  # named by its `*_glyph` key (into Redesign::GroupArt and
-  # Redesign::CurrencyIcons, whose files live in app/assets/images — nothing is
+  # named by its `*_glyph` key (into GroupArt and
+  # CurrencyIcons, whose files live in app/assets/images — nothing is
   # ever copied into the database). Keeping the attachment when a preset is
   # chosen is deliberate: it lets a teacher switch back without re-uploading.
   #
@@ -50,12 +50,12 @@ class StoryGroup < ApplicationRecord
   validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   # The pickers' own sets, not every file on disk. Rendering is looser on
-  # purpose (RedesignHelper accepts anything in the directory), so a group whose
+  # purpose (ApplicationHelper accepts anything in the directory), so a group whose
   # preset is later retired still shows it.
-  validates :icon_glyph, inclusion: { in: Redesign::GroupArt::KEYS, message: 'Nieznana grafika.' },
+  validates :icon_glyph, inclusion: { in: GroupArt::KEYS, message: 'Nieznana grafika.' },
                          allow_nil: true
   validates :currency_icon_glyph,
-            inclusion: { in: Redesign::CurrencyIcons::KEYS, message: 'Nieznana ikona.' },
+            inclusion: { in: CurrencyIcons::KEYS, message: 'Nieznana ikona.' },
             allow_nil: true
 
   # "Wyłączony" / "Podium i własne miejsce" / "Pełny ranking" — one sentence for

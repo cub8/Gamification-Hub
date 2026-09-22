@@ -9,7 +9,7 @@
 #
 # It acts on data rather than merely describing it, so it lives in services.
 class InviteForm
-  include RedesignHelper # gh_plural, for the summary sentence
+  include ApplicationHelper # gh_plural, for the summary sentence
 
   PERMITTED = %i[limit_enabled max_uses expiry_enabled expires_on expires_time].freeze
 

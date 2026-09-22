@@ -4,7 +4,6 @@
 # and nothing here can take an award back.
 class StudentsActivityGroupCategoriesController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!
@@ -12,7 +11,7 @@ class StudentsActivityGroupCategoriesController < ApplicationController
 
   # GET .../activity_groups/:activity_group_id/students_activity_group_categories/edit
   def edit
-    @sheet = Redesign::GradeSheet.new(@activity_group)
+    @sheet = GradeSheet.new(@activity_group)
 
     # Cells granted by the request that just redirected here, so they can play
     # the stamp animation instead of simply being locked on arrival.

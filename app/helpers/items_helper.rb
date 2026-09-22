@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Copy for the item screens. Screen-specific labels live in the screen's own
-# helper, not in RedesignHelper.
+# helper, not in ApplicationHelper.
 #
 # The three consequence sentences here (unlock / discount / warnings) are
 # rendered on the server so the form is correct before a keystroke and with
@@ -29,7 +29,7 @@ module ItemsHelper
   # "Kupią tylko studenci z rangą X lub wyższą, którzy mają odznakę Y, jeśli
   # mają co najmniej 1 życie." (30-item.js:27-29).
   #
-  # A rank at threshold 0 is skipped, the same way Redesign::ItemCard skips it:
+  # A rank at threshold 0 is skipped, the same way ItemCard skips it:
   # everyone holds it, so naming it would describe a gate that stops nobody and
   # the sentence would contradict the card beside it.
   def item_unlock_sentence(item)

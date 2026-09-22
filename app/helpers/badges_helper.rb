@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Copy for the badge screens. Screen-specific labels live in the screen's own
-# helper, not in RedesignHelper.
+# helper, not in ApplicationHelper.
 module BadgesHelper
   # The line in the foot of a teacher's badge card (30-lists.js:32).
   def badge_holders_line(count)

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class StudentsItemsController < ApplicationController
-  include RedesignLayout
-
   # The inventory renders the item card's art partial, and with
   # `include_all_helpers = false` that helper does not arrive on its own.
   helper ItemsHelper
@@ -25,7 +23,7 @@ class StudentsItemsController < ApplicationController
 
     # Only for the student's own screen: the closing slot invites them back to
     # the shop, which means nothing when a teacher is reading.
-    @shop = Redesign::Shop.new(story_group: @story_group, student: @student) if @own_items
+    @shop = Shop.new(story_group: @story_group, student: @student) if @own_items
   end
 
   private

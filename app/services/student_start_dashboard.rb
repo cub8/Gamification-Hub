@@ -2,7 +2,7 @@
 
 # The student landing screen (mockup `#/s/start`).
 #
-# The cross-group counterpart to Redesign::StudentOverview, which is scoped to
+# The cross-group counterpart to StudentOverview, which is scoped to
 # a single group. Currency, ranks and badges are separate in every group, so
 # this loads one summary per membership rather than one total.
 class StudentStartDashboard

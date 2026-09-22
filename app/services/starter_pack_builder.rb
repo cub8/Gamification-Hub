@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Turns a Redesign::StarterPack into real records for a freshly created group.
+# Turns a StarterPack into real records for a freshly created group.
 #
 # The wizard's step 4 renders the same pack and lets the teacher drop rows and
 # retype numbers before anything exists, so this takes those edits as
@@ -28,7 +28,7 @@ class StarterPackBuilder
 
   def initialize(story_group:, pack:, classes:, selection: {})
     @story_group = story_group
-    @preset      = Redesign::StarterPack.for(pack: pack, classes: classes)
+    @preset      = StarterPack.for(pack: pack, classes: classes)
     @selection   = selection || {}
   end
 
@@ -104,7 +104,7 @@ class StarterPackBuilder
   # sheets created later — so creating them up front would freeze the preset in
   # place before the teacher has read it.
   def create_template
-    template = story_group.activity_group_templates.new(base_name: Redesign::StarterPack::TEMPLATE_NAME)
+    template = story_group.activity_group_templates.new(base_name: StarterPack::TEMPLATE_NAME)
 
     kept(:cats, preset.categories).each_with_index do |category, position|
       template.categories.new(didactic_description: category.didactic_description,

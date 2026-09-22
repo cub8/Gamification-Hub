@@ -2,12 +2,6 @@
 
 class StudentsController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
-
-  # The list and the sheet are pages; editing and the removal confirmation are
-  # dialogs. `new` is the exception: "Dodaj studenta" is still the Bootstrap
-  # screen, so it keeps the Bootstrap layout until its own conversion.
-  layout -> { layout_for_action }
 
   # The sheet renders the item, badge and ledger partials, and with
   # `include_all_helpers = false` none of those helpers arrive on their own.
@@ -22,22 +16,14 @@ class StudentsController < ApplicationController
 
   # GET /story_groups/:story_group_id/students
   def index
-    @list = Redesign::StudentList.new(story_group: @story_group)
+    @list = StudentList.new(story_group: @story_group)
   end
 
   # GET /story_groups/:story_group_id/students/:id
   def show
-    @tab   = Redesign::StudentSheet.tab_for(params[:tab])
+    @tab   = StudentSheet.tab_for(params[:tab])
     @sheet = sheet
     @kind  = ledger_kind
-  end
-
-  # GET /story_groups/:story_group_id/students/new
-  #
-  # Still Bootstrap. Left untouched on purpose — see `layout_for_action`.
-  def new
-    @student = @story_group.student_memberships.build
-    set_students_for_select
   end
 
   # GET /story_groups/:story_group_id/students/:id/edit
@@ -49,19 +35,6 @@ class StudentsController < ApplicationController
   # purchases and the whole ledger, so the dialog needs those counts.
   def confirm_destroy
     @sheet = sheet
-  end
-
-  # POST /story_groups/:story_group_id/students
-  def create
-    @student = @story_group.student_memberships.build(create_student_params)
-
-    if @student.save
-      redirect_outside_turbo_frame story_group_students_path(@story_group),
-                                   notice: 'Pomyślnie dodano studenta do grupy.'
-    else
-      set_students_for_select
-      render :new, status: :unprocessable_content
-    end
   end
 
   # PATCH/PUT /story_groups/:story_group_id/students/:id
@@ -119,20 +92,12 @@ class StudentsController < ApplicationController
   end
 
   def sheet
-    @sheet ||= Redesign::StudentSheet.new(student: @student)
-  end
-
-  # `new` is the one action still rendering a Bootstrap view; everything else is
-  # either a redesign page or a fragment for the dialog frame.
-  def layout_for_action
-    return 'application' if %w[new create].include?(action_name)
-
-    @in_modal ? false : 'redesign'
+    @sheet ||= StudentSheet.new(student: @student)
   end
 
   # The ledger tab's filter, as a kind or nil for "Wszystkie".
   def ledger_kind
-    kinds = Redesign::CurrencyLedger::KINDS.map(&:first).compact
+    kinds = CurrencyLedger::KINDS.map(&:first).compact
     kinds.include?(params[:kind]) ? params[:kind] : nil
   end
 
@@ -143,19 +108,6 @@ class StudentsController < ApplicationController
     lives = @student.lives.to_i
 
     "#{@student.display_name} ma teraz #{lives} #{helpers.gh_plural(lives, 'życie', 'życia', 'żyć')}."
-  end
-
-  def set_students_for_select
-    @students =
-      if @current_user.global_admin?
-        User.all
-      else
-        User.where(university_name: @current_user.university_name)
-      end
-  end
-
-  def create_student_params
-    params.expect(story_group_student: %i[user_id])
   end
 
   def update_student_params

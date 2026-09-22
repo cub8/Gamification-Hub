@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module StoryGroupInvitesHelper
-  # Framework-neutral and deliberately untouched by the redesign (AUDIT.md:202).
-  # It encodes join_url(code:), which JoinController#show serves as the QR
+  # Framework-neutral and deliberately untouched by any layout change. It
+  # encodes join_url(code:), which JoinController#show serves as the QR
   # landing page — so the codes on every printout already point at the right
   # screen.
   def invite_qr_code(invite)

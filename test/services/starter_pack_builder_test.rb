@@ -20,7 +20,7 @@ class StarterPackBuilderTest < ActiveSupport::TestCase
     assert_equal 7, @story_group.items.count
     assert_equal 1, @story_group.activity_group_templates.count
     assert_equal 8, @story_group.activity_group_templates.first.categories.count
-    assert_equal Redesign::StarterPack::TEMPLATE_NAME,
+    assert_equal StarterPack::TEMPLATE_NAME,
                  @story_group.activity_group_templates.first.base_name
     assert_equal 5, result.ranks.size
   end
@@ -34,7 +34,7 @@ class StarterPackBuilderTest < ActiveSupport::TestCase
   test 'categories keep the preset order' do
     build
 
-    assert_equal Redesign::StarterPack::CATEGORIES.map(&:first),
+    assert_equal StarterPack::CATEGORIES.map(&:first),
                  @story_group.activity_group_templates.first.categories.map(&:didactic_description)
   end
 

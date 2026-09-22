@@ -2,12 +2,10 @@
 
 class ItemsController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # Only the delete confirmation is a dialog. Creating and editing are PAGES
   # (DECISIONS.md:26) — the form carries a live preview column beside it, which
   # no dialog is wide enough for.
-  layout -> { @in_modal ? false : 'redesign' }
 
   before_action :set_story_group
 
@@ -20,13 +18,13 @@ class ItemsController < ApplicationController
 
   # GET /story_groups/:story_group_id/items
   def index
-    @shelf = Redesign::ItemShelf.new(story_group: @story_group)
+    @shelf = ItemShelf.new(story_group: @story_group)
   end
 
   # GET /story_groups/:story_group_id/items/new
   def new
-    @item = @story_group.items.build(price:      Redesign::ItemShelf::DEFAULT_PRICE,
-                                     icon_glyph: Redesign::Glyphs::ITEM.first,)
+    @item = @story_group.items.build(price:      ItemShelf::DEFAULT_PRICE,
+                                     icon_glyph: Glyphs::ITEM.first,)
     set_shelf
   end
 
@@ -37,7 +35,7 @@ class ItemsController < ApplicationController
 
   # GET /story_groups/:story_group_id/items/:id/confirm_destroy
   def confirm_destroy
-    @bought = Redesign::ItemShelf.new(story_group: @story_group).bought_for(@item)
+    @bought = ItemShelf.new(story_group: @story_group).bought_for(@item)
   end
 
   # POST /story_groups/:story_group_id/items
@@ -97,7 +95,7 @@ class ItemsController < ApplicationController
   # and the purchase count. Built here rather than in the view so a re-render
   # after a validation error gets it too.
   def set_shelf
-    @shelf = Redesign::ItemShelf.new(story_group: @story_group)
+    @shelf = ItemShelf.new(story_group: @story_group)
   end
 
   def item_params

@@ -10,12 +10,6 @@
     = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec' do
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
       Kody i zaproszenia
-    -# "Dodaj studenta" picks an existing account rather than inviting one, and
-    -# that screen is still on the Bootstrap layout — so it is a plain
-    -# navigation, not a dialog: its markup would not survive this one.
-    = link_to new_story_group_student_path(@story_group), class: 'gh-btn' do
-      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      Dodaj studenta
 
 - if @list.any?
   %div{ data: { controller: 'list-search',

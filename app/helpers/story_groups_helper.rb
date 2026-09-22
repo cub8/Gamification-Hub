@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Screen-specific labels live in the screen's own helper, not in RedesignHelper.
+# Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 # Everything here belongs to "Grupa: przegląd" (#/t/home and #/s/home).
 module StoryGroupsHelper
   # The teacher's lead, under the group's name in the hero. The description is

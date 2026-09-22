@@ -2,11 +2,9 @@
 
 class CurrencyAdjustmentsController < ApplicationController
   include StoryGroupAuthorization
-  include RedesignLayout
 
   # A quick action, so a dialog (DECISIONS.md:26) — with the page fallback every
   # other dialog here has.
-  layout -> { @in_modal ? false : 'redesign' }
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!

@@ -69,7 +69,7 @@
                         = category.didactic_description
                       %span.gh-cost
                         %b= "+#{category.reward.to_i}"
-                        = render 'layouts/redesign/currency_token', story_group: @story_group, size: 16
+                        = render 'layouts/currency_token', story_group: @story_group, size: 16
                       %button.gh-colbtn{ type: 'button', title: 'Zaznacz całą kolumnę',
                                          data: { action: 'grading#toggleColumn',
                                                  grading_column_param: category.id } }
@@ -128,7 +128,7 @@
             %span{ data: { grading_target: 'barStudents' } }
             %span.gh-cost
               %b{ data: { grading_target: 'barSum' } }
-              = render 'layouts/redesign/currency_token', story_group: @story_group, size: 16
+              = render 'layouts/currency_token', story_group: @story_group, size: 16
 
         .gh-abar-b
           -# Hidden until the controller is running: without JavaScript it has
