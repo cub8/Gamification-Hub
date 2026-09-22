@@ -5,14 +5,7 @@
 %h2#gh-code-title.gh-h2= "Dołącz do grupy #{@story_group.name}"
 %p Wpisz kod w aplikacji („Dołącz do grupy”) albo zeskanuj kod QR.
 
-.gh-qrbox
-  .gh-qr= invite_qr_code(invite)
-  %div
-    -# Spelled out character by character so a screen reader does not try to
-    -# pronounce the code as a word.
-    .gh-code-big{ 'aria-label': invite_code_aria_label(invite) }= invite.code
-    %p.gh-small= invite_stat_sentence(invite)
-    = render 'copy_button', invite: invite
+= render 'qr_stat', invite: invite
 
 .gh-dlg-b
   - if @in_modal

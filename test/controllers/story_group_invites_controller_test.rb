@@ -59,6 +59,11 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should get quick' do
+    get quick_story_group_invites_url(@story_group)
+    assert_response :success
+  end
+
   test 'should get the delete confirmation' do
     get confirm_destroy_story_group_invite_url(@story_group, @invite)
 

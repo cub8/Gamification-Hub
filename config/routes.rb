@@ -68,6 +68,10 @@ Rails.application.routes.draw do
 
     resources :story_group_invites, path: :invites, as: :invites do
       get :confirm_destroy, on: :member
+      # The lightweight sibling of the index: today's active code(s)
+      # projected large, no id in the URL because it's never about one
+      # particular invite.
+      get :quick, on: :collection
     end
   end
 

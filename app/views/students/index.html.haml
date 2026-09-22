@@ -10,6 +10,10 @@
     = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec' do
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
       Kody i zaproszenia
+    = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn',
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
+      Pokaż kod dla studentów
 
 - if @list.any?
   %div{ data: { controller: 'list-search',
@@ -55,3 +59,7 @@
       razem z rangą, walutą i życiami.
     .gh-rowb
       = link_to 'Kody i zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'
+      = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec',
+        data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
+        Pokaż kod dla studentów

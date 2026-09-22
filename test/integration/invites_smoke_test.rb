@@ -3,7 +3,8 @@
 require 'test_helper'
 
 # The invite codes screen: the list that groups by whether a code still works,
-# and the four dialogs hanging off it (mockup #/t/invites, 30-isg.js:17-45).
+# the dialogs hanging off it (mockup #/t/invites, 30-isg.js:17-45), and the
+# quick multi-invite dialog reachable from students#index.
 class InvitesSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -283,6 +284,69 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_select "[data-controller='clipboard'][data-clipboard-text-value=?]", existing.code
   end
 
+  # --- the quick dialog -------------------------------------------------------
+
+  test 'the quick dialog is addressed to the student, like the show dialog' do
+    existing = invite
+
+    get quick_story_group_invites_path(@story_group), headers: MODAL
+
+    assert_select '#gh-quick-title', 'Dołącz do grupy Zakon Algorytmów'
+    assert_select '.gh-qr img[src^=?]', 'data:image/png;base64,'
+    assert_select '.gh-code-big', existing.code
+  end
+
+  test 'the select lists only active invites, newest first, with a compact label' do
+    first  = invite
+    invite(expires_at: 1.hour.ago)
+    second = invite(uses: 3, max_uses: 30, expires_at: Time.zone.parse('2026-09-30 23:59'))
+
+    get quick_story_group_invites_path(@story_group), headers: MODAL
+
+    labels = css_select('#gh-quick-select option').map(&:text)
+    assert_equal ["#{second.code} – 3 z 30, ważne do 30.09, 23:59",
+                  "#{first.code} – bez limitu, bezterminowo",], labels
+  end
+
+  test 'each active invite gets its own block, only the newest starts visible' do
+    first = invite
+    second = invite(uses: 1)
+
+    get quick_story_group_invites_path(@story_group), headers: MODAL
+
+    assert_select '.gh-quick-block', 2
+    assert_select ".gh-quick-block[data-invite-picker-for='#{second.id}']:not([hidden])"
+    assert_select ".gh-quick-block[data-invite-picker-for='#{first.id}'][hidden]"
+  end
+
+  test 'zero active invites shows the empty message and links straight to a new one' do
+    invite(expires_at: 1.hour.ago)
+
+    get quick_story_group_invites_path(@story_group), headers: MODAL
+
+    assert_select '.gh-expl', 'Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.'
+    assert_select 'a[href=?][data-turbo-frame=modal]', new_story_group_invite_path(@story_group)
+    assert_select 'select', false
+  end
+
+  test 'managing invites breaks out of the dialog frame' do
+    invite
+
+    get quick_story_group_invites_path(@story_group), headers: MODAL
+
+    assert_select 'a[href=?][data-turbo-frame=_top]', story_group_invites_path(@story_group)
+  end
+
+  test 'a student cannot reach the quick dialog either' do
+    student = FactoryBot.create(:user, role: :student)
+    FactoryBot.create(:story_group_student, story_group: @story_group, user: student)
+    sign_in_as student
+
+    get quick_story_group_invites_path(@story_group)
+
+    assert_redirected_to root_path
+  end
+
   # --- deleting -------------------------------------------------------------
 
   test 'the delete dialog says who stays in the group' do
@@ -319,7 +383,8 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     paths = [new_story_group_invite_path(@story_group),
              edit_story_group_invite_path(@story_group, existing),
              story_group_invite_path(@story_group, existing),
-             confirm_destroy_story_group_invite_path(@story_group, existing),]
+             confirm_destroy_story_group_invite_path(@story_group, existing),
+             quick_story_group_invites_path(@story_group),]
 
     paths.each do |path|
       get path, headers: MODAL
@@ -338,7 +403,8 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     paths = [new_story_group_invite_path(@story_group),
              edit_story_group_invite_path(@story_group, existing),
              story_group_invite_path(@story_group, existing),
-             confirm_destroy_story_group_invite_path(@story_group, existing),]
+             confirm_destroy_story_group_invite_path(@story_group, existing),
+             quick_story_group_invites_path(@story_group),]
 
     paths.each do |path|
       get path

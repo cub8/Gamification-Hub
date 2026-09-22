@@ -90,6 +90,16 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal %w[10 10 0 10 60 1], column('.gh-num2')
   end
 
+  test 'the header offers both Kody i zaproszenia and the quick invite dialog' do
+    student(name: 'Anna Kowalska')
+
+    visit_list
+
+    assert_select ".gh-phead a[href='#{story_group_invites_path(@story_group)}']", 'Kody i zaproszenia'
+    assert_select ".gh-phead a[href='#{quick_story_group_invites_path(@story_group)}']" \
+                  '[data-turbo-frame=modal]', 'Pokaż kod dla studentów'
+  end
+
   test 'the lead only mentions zero lives when somebody is at zero' do
     student(name: 'Anna Kowalska', lives: 3)
     visit_list
@@ -147,6 +157,8 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-gm .gh-h2', 'Nie ma jeszcze nikogo w grupie'
     assert_select '.gh-srow', false
     assert_select ".gh-gm a[href='#{story_group_invites_path(@story_group)}']", 'Kody i zaproszenia'
+    assert_select ".gh-gm a[href='#{quick_story_group_invites_path(@story_group)}']" \
+                  '[data-turbo-frame=modal]', 'Pokaż kod dla studentów'
   end
 
   test 'each row links to the sheet and straight to the two quick actions' do

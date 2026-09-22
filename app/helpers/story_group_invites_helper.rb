@@ -57,4 +57,15 @@ module StoryGroupInvitesHelper
   def invite_code_aria_label(invite)
     "Kod: #{invite.code.chars.join(' ')}"
   end
+
+  # The compact line inside a <select> option on the quick-invite dialog:
+  # "K7RB2Q – bez limitu, bezterminowo". Deliberately terser than
+  # invite_uses_label/invite_expiry_label: an option has to read on one line,
+  # and nobody is comparing use counts here.
+  def invite_option_label(invite)
+    uses     = invite.max_uses.nil? ? 'bez limitu' : "#{invite.uses} z #{invite.max_uses}"
+    validity = invite.expires_at.nil? ? 'bezterminowo' : "ważne do #{gh_stamp(invite.expires_at)}"
+
+    "#{invite.code} – #{uses}, #{validity}"
+  end
 end

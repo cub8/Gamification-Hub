@@ -23,6 +23,14 @@ class StoryGroupInvitesController < ApplicationController
 
   def show; end
 
+  # "Pokaż kod dla studentów" (students#index). Not scoped to one invite —
+  # every active one, newest first, so the teacher can flip between them
+  # without leaving the dialog.
+  def quick
+    invites = policy_scope(@story_group.invites).order(created_at: :desc)
+    @active = invites.select(&:active?)
+  end
+
   def confirm_destroy; end
 
   def new
