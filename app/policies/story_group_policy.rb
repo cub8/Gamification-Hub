@@ -46,6 +46,13 @@ class StoryGroupPolicy < ApplicationPolicy
     owner? || admin?
   end
 
+  # Who may add and remove supporting teachers. The owner's own call, like
+  # deleting the group — a supporting teacher may use everything in a group
+  # they were let into, but not decide who else gets in.
+  def manage_teachers?
+    owner? || admin?
+  end
+
   # May OPEN the ranking screen. A student may always: with the ranking off they
   # get the panel that says so, which is a screen, not a refusal (mockup `vRS`).
   def view_ranking?

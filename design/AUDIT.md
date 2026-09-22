@@ -72,7 +72,7 @@ migration work, and each is flagged against the affected screens in sections 3�
 | D7 | Ranking: enabling requires confirmation; modes "Podium i własne miejsce" (default for new groups) and "Pełny ranking" (confirm when switching to full). Ties share place. | Per-group setting + confirmation dialogs. |
 | D8 | Leaving a group is possible and **rejoining restores old data** (currency, badges, items). The leave dialog must say so. | Soft membership, not destroy. |
 | D9 | Invites: 6-char codes excluding O, 0, I, 1, L. Limit and expiry each optional via explicit switches. Edit keeps the code; limit must be ≥ uses. | Code generator alphabet + validation. |
-| D10 | Supporting teachers may do everything except delete the group. Owner shown separately, cannot be removed. | Authorisation change; contradicts mockup text "Tylko właściciel zmienia te ustawienia", which is out of date. |
+| D10 | Supporting teachers may do everything except delete the group and manage the teacher list — adding and removing teachers is owner-only, though they still read the list. Owner shown separately, cannot be removed. | Authorisation change; contradicts mockup text "Tylko właściciel zmienia te ustawienia", which is out of date for group settings but holds for this list. |
 | D11 | Wizard success screen must **not** show the join code. | Remove from the success step. |
 | D12 | Account settings are **read-only** user data (name, e-mail, university, index, USOS ID) plus theme and logout. | Not an edit form. |
 
@@ -753,11 +753,12 @@ code; limit must be ≥ uses; and the code modal becomes a **dropdown of active
 invites** (newest default, inactive hidden, a new invite not auto-shown).
 
 **`#/t/teachers` — M.** Today a plain table with a delete button per row. D10
-requires the **owner shown separately and not removable**, supporting teachers
-able to do everything except delete the group (a Pundit policy change), and
-**search-first adding** (≥2 chars, diacritics-insensitive, max 8 results, per-row
-"Dodaj"). `tom_select_user` exists but is a select widget, not the search-first
-result list the mockup specifies.
+requires the **owner shown separately and not removable**, adding and removing
+teachers restricted to the owner while a supporting teacher still reads the
+list (a Pundit policy change), and **search-first adding** (≥2 chars,
+diacritics-insensitive, max 8 results, per-row "Dodaj"). `tom_select_user`
+exists but is a select widget, not the search-first result list the mockup
+specifies.
 
 **`#/t/group-settings` — M.** `story_groups/edit` + `_form` (70 lines). Two
 corrections land here: the mockup's "Tylko właściciel zmienia te ustawienia"

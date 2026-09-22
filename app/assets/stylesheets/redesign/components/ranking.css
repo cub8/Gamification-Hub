@@ -2,8 +2,9 @@
    The Ranking screens (teacher and student).
 
    Ported from design/mockup-src/css/26-rk.css, the ranking half only: the
-   file's `.tch`/`.trow`, `.tres`/`.tr` and `.np`/`.nrow` blocks belong to the
-   Nauczyciele and Powiadomienia screens, which are not converted yet.
+   file's `.tch`/`.trow` and `.tres`/`.tr` blocks belong to the Nauczyciele
+   screen and live in teachers.css, and its `.np`/`.nrow` blocks belong to
+   Powiadomienia, which is not converted yet.
 
    26-rk.css is not self-sufficient — the screens also use `.panel`, `.phead`,
    `.info`, `.swrow`/`.sw`, `.seg3`, `.opts`/`.opt`, `.linkbtn` and the

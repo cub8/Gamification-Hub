@@ -54,6 +54,7 @@ Already covered screens:
 - award badge, revoke badge, adjust currency - teacher perspective
 - currency history, my items - student perspective
 - invites index, show, new, edit
+- teachers index, add teacher, remove confirmation - teacher perspective
 - new story group wizard + success screen - teacher perspective
 - login screens
 

@@ -1,29 +1,13 @@
-- content_for :title, "Dodaj nauczyciela"
+-# Either the layout's shared `modal` frame or a page — never both. A page
+-# carrying its own <turbo-frame id="modal"> would collide with the one the
+-# layout already has inside the dialog.
+- content_for :title, 'Dodaj nauczyciela'
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Dodaj nauczyciela
-
-      - if @teacher.errors.any?
-        .form-errors.p-3.mb-3
-          %h2 Proszę poprawić następujące błędy:
-          %ul
-            - @teacher.errors.full_messages.each do |message|
-              %li= message
-
-      = form_with model: @teacher, url: story_group_teachers_path(@story_group) do |f|
-        .form-section.p-4.mb-3
-          .section-title.mb-3 Podstawowe informacje
-
-          .field-group.mb-3
-            = f.label :user_id, "Wybierz nauczyciela"
-            = f.select :user_id,
-                options_from_collection_for_select(@teachers, :id, :email, @teacher.user_id),
-                { prompt: "Wybierz użytkownika" },
-                { class: "form-control",
-                  data: { controller: "tom-select-user", tom_select_options_value: teacher_map(@teachers).to_json } }
-
-        .form-actions.gap-3.mt-4
-          = link_to "Anuluj", story_group_teachers_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top', turbo_prefetch: true }
-          = f.submit "Dodaj nauczyciela", class: "btn-submit py-2 px-4"
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'form', teacher: @teacher, pool: @pool
+- else
+  -# Rendered as a page it needs a surface of its own: these screens keep the app
+  -# shell, so unlike the join flow they never land inside .gh-acard.
+  %section.gh-panel.gh-dlg-page
+    = render 'form', teacher: @teacher, pool: @pool

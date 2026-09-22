@@ -70,7 +70,13 @@ Rails.application.routes.draw do
       # buyable — neither of which fits in a browser confirm.
       get :confirm_destroy, on: :member
     end
-    resources :teachers, only: %i[new index create destroy]
+    resources :teachers, only: %i[new index create destroy] do
+      # Same as ranks, badges and invites: the removal dialog carries a
+      # consequence sentence — what happens to the rewards that teacher already
+      # awarded — which a browser confirm cannot hold, so it needs a URL to
+      # render into.
+      get :confirm_destroy, on: :member
+    end
     resources :students do
       member do
         post :update_lives
