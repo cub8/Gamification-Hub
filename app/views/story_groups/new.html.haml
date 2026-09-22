@@ -1,7 +1,3 @@
-- content_for :title, "Nowa grupa"
+- content_for :title, 'Nowa grupa'
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Nowa grupa
-      = render "form", story_group: @story_group, cancel_path: story_groups_path, submit_label: "Create"
+= render 'wizard', story_group: @story_group

@@ -308,6 +308,28 @@
     object-fit: contain;
   }
 
+  /* A preset mark (Redesign::CurrencyIcons) instead of an upload. Drawn in
+     currentColor, which `.gh-tok > span` has already set to the dark ink of the
+     cream face — so one file works on the coin in both themes. The translucent
+     `.f` layer is the mockup's own treatment (20-form.css:40): a ghost fill
+     under the outline, so the mark reads as a struck coin rather than a
+     line drawing. Not scoped to .gh-tok on purpose — the picker tile
+     (.gh-pz--cur) wants exactly the same thing. */
+  .gh-cmark {
+    width: 62%;
+    height: 62%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: square;
+  }
+
+  .gh-cmark .f {
+    fill: currentColor;
+    fill-opacity: 0.28;
+    stroke: none;
+  }
+
   /* Gold price chip. The 2px bottom band is the same physical-edge idea as
      the buttons, done as a gradient because this is a clipped surface. */
   .gh-cost {

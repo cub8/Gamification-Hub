@@ -46,6 +46,11 @@ module Redesign
 
     def size = items.size
 
+    # How many items this student could buy right now. The inventory screen
+    # closes its grid with a slot saying so, which is the only reason that
+    # screen knows the shop exists.
+    def affordable = offers.count { |offer| state_of(offer.item) == :afford }
+
     def balance = student.current_currency.to_i
 
     def total = student.total_currency.to_i

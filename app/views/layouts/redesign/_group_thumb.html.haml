@@ -3,7 +3,4 @@
 - size = local_assigns[:size]
 
 %span{ class: "gh-gthumb #{'gh-gthumb--lg' if size == :lg}", 'aria-hidden': 'true' }
-  - if story_group.icon.attached?
-    = image_tag story_group.icon, alt: ''
-  - else
-    = gh_initials(story_group.name)
+  = gh_group_cover(story_group) || gh_initials(story_group.name)

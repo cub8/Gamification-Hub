@@ -48,14 +48,7 @@ module RedesignHelper
   # Polish copy is written inline as everywhere else; this keeps the form right
   # when the number is dynamic. Mirrors the mockup's `pl()` (00-shared.js:4).
   def gh_plural(count, one, few, many)
-    n        = count.abs
-    last_two = n % 100
-    last_one = n % 10
-
-    return one if n == 1
-    return few if last_one.between?(2, 4) && !last_two.between?(12, 14)
-
-    many
+    Redesign::Plural.pick(count, one, few, many)
   end
 
   # "5 minut", "1 minuta", "3 minuty".
@@ -157,5 +150,70 @@ module RedesignHelper
     return if markup.nil?
 
     tag.svg(markup.html_safe, class: css_class, viewBox: '0 0 64 64', 'aria-hidden': 'true')
+  end
+
+  # One of the preset group covers (Redesign::GroupArt).
+  #
+  # An <img>, NOT inlined — the opposite of gh_glyph, and for the opposite
+  # reason. These are 160x90 scenes carrying their own palette, so there is
+  # nothing for `currentColor` to tint; inlining five of them into every card on
+  # the group index would only make the page bigger. They go into `.gh-art`,
+  # which crops them to the card, so the file's own `slice` does the rest.
+  #
+  # Returns nil for an unknown key so a group whose preset has been retired
+  # renders its monogram rather than a broken image.
+  def gh_group_art(key)
+    return unless Redesign::GroupArt.include?(key)
+
+    image_tag Redesign::GroupArt.asset_for(key), alt: ''
+  end
+
+  # The group's cover, whichever of the two it is — resolved once so the four
+  # boxes that show it (card, hero, lore, deck) each write one branch instead of
+  # three. nil means "this group has no art", which is a legitimate state here
+  # and is what the monogram fallbacks are for. A retired preset key lands on
+  # nil too, so it falls back rather than rendering an empty frame.
+  def gh_group_cover(story_group)
+    return image_tag(story_group.icon, alt: '') if story_group.art == :upload
+
+    gh_group_art(story_group.icon_glyph)
+  end
+
+  # The same cover, as a bare URL rather than an <img>.
+  #
+  # The blurred table layer (.gh-tbg) is a CSS background, and a background
+  # cannot take an <img>. Everything else about the rule is gh_group_cover's:
+  # an upload wins, a preset key resolves through GroupArt, and an unknown or
+  # missing key is nil, which is how the layout knows to keep the octagon
+  # texture instead.
+  def gh_group_cover_url(story_group)
+    return if story_group.nil?
+    return url_for(story_group.icon) if story_group.art == :upload
+    return unless Redesign::GroupArt.include?(story_group.icon_glyph)
+
+    asset_path(Redesign::GroupArt.asset_for(story_group.icon_glyph))
+  end
+
+  # The same question for the currency mark. nil means the token falls back to
+  # the first letter of the currency name.
+  def gh_currency_mark(story_group)
+    return image_tag(story_group.currency_icon, alt: '') if story_group.currency_art == :upload
+
+    gh_currency_icon(story_group.currency_icon_glyph)
+  end
+
+  # One of the preset currency marks (Redesign::CurrencyIcons).
+  #
+  # Inlined, like gh_glyph and for the same reason: the mark is drawn in
+  # `currentColor`, and inside `.gh-tok > span` that resolves to the dark ink of
+  # the cream coin face in both themes. An <img> could not inherit it.
+  #
+  # Returns nil for an unknown key so a group whose icon has been retired falls
+  # through to the initial rather than raising.
+  def gh_currency_icon(key, css_class: 'gh-cmark')
+    markup = Redesign::CurrencyIcons.markup(key)
+    return if markup.nil?
+
+    tag.svg(markup.html_safe, class: css_class, viewBox: '0 0 24 24', 'aria-hidden': 'true')
   end
 end

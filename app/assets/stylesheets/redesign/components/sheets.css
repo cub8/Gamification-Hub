@@ -1,0 +1,351 @@
+/* "Arkusze ocen" — the sheet index and the template / sheet-settings editor.
+   Lifted from design/mockup-src/css/23-ag.css, with the mockup's
+   `@container app (max-width:720px)` block as a plain media query.
+
+   The editor shell itself (.gh-wiz, .gh-fcol, .gh-pcol, .gh-fsec, .gh-inp) is
+   the shared form system in form.css; only the category row and the preview
+   grid are specific to this screen. */
+
+@layer components {
+
+  /* ---- One template panel on the index ---- */
+
+  .gh-tpl {
+    margin-top: 22px;
+    padding: 20px 22px 14px;
+  }
+
+  .gh-tpl-h {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .gh-tpl-h h2 {
+    font: 780 24px/1.1 var(--gh-f-ui);
+    font-stretch: 86%;
+  }
+
+  .gh-tpl-sp {
+    flex: 1;
+  }
+
+  .gh-tpl-meta {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--gh-ink-2);
+  }
+
+  /* ---- The sheets under it ---- */
+
+  .gh-agl {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh-ag {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 220px) auto;
+    gap: 18px;
+    align-items: center;
+    padding: 12px 4px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  /* Reuses the keyframes invites.css defines for the row it just created. */
+  .gh-ag--fresh {
+    animation: gh-fresh 2.4s ease-out 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-ag--fresh {
+      animation: none;
+      background: color-mix(in srgb, var(--gh-item) 12%, transparent);
+    }
+  }
+
+  .gh-ag-n b {
+    font: 680 16px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-ag-n .gh-tag {
+    margin-left: 8px;
+    vertical-align: 1px;
+  }
+
+  .gh-ag-s {
+    font: 540 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-ag-a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ---- The three tags these screens add ---- */
+
+  /* "Zmienione kolumny" — this sheet's columns were edited after it was made. */
+  .gh-tag--mod {
+    color: var(--gh-ink);
+  }
+
+  .gh-tag--mod::before {
+    background: color-mix(in srgb, var(--gh-rank) 26%, var(--gh-card));
+  }
+
+  /* "Tylko w tym arkuszu" — a column with no template category behind it. */
+  .gh-tag--only {
+    color: var(--gh-spend);
+  }
+
+  .gh-tag--only::before {
+    background: color-mix(in srgb, var(--gh-item) 16%, var(--gh-card));
+  }
+
+  /* "Ukryta w tabeli ocen". */
+  .gh-tag--hidden::before {
+    background: var(--gh-card-3);
+  }
+
+  /* ---- Category rows in the editor ---- */
+
+  .gh-cats {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh-cat {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr) auto auto;
+    gap: 10px;
+    align-items: start;
+    padding: 12px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-cat--dragging {
+    opacity: 0.4;
+  }
+
+  .gh-cat--over {
+    box-shadow: inset 0 3px 0 var(--gh-item);
+  }
+
+  .gh-cat--hidden .gh-cat-b > .gh-inp:first-child {
+    opacity: 0.55;
+  }
+
+  .gh-handle {
+    padding-top: 11px;
+    color: var(--gh-ink-3);
+    cursor: grab;
+  }
+
+  .gh-cat-b {
+    min-width: 0;
+  }
+
+  .gh-cat-b .gh-inp input {
+    font-weight: 620;
+  }
+
+  .gh-cat-b .gh-tag {
+    margin-top: 8px;
+  }
+
+  .gh-story-t {
+    margin-top: 8px;
+  }
+
+  .gh-story-t textarea {
+    min-height: 68px;
+  }
+
+  .gh-story-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+
+  .gh-cat-p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 4px;
+  }
+
+  .gh-cat-a {
+    display: flex;
+    gap: 2px;
+    padding-top: 2px;
+  }
+
+  .gh-cat-a .gh-iconbtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .gh-cat-a .gh-iconbtn[disabled] {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  /* "Przyznano N nagród. Kolumny nie można usunąć, można ją ukryć." */
+  .gh-lockn {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 8px;
+    font: 540 13px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-lockn i {
+    flex: 0 0 auto;
+    margin-top: 2px;
+  }
+
+  .gh-addcat {
+    margin-top: 14px;
+  }
+
+  /* ---- The preview panel's miniature grading table ---- */
+
+  .gh-gprev {
+    margin: 0 -4px;
+    overflow-x: auto;
+  }
+
+  .gh-gprev table.gh-grid {
+    min-width: 0;
+  }
+
+  .gh-gprev .gh-thc {
+    width: 66px;
+  }
+
+  .gh-gprev .gh-thn {
+    min-height: 3.6em;
+    font-size: 11px;
+    cursor: default;
+  }
+
+  .gh-gprev .gh-th-stu,
+  .gh-gprev .gh-td-stu {
+    min-width: 112px;
+    font-size: 13px;
+  }
+
+  .gh-gprev .gh-grid th,
+  .gh-gprev .gh-grid td {
+    padding: 4px;
+  }
+
+  .gh-gprev .gh-cell--sm {
+    width: 30px;
+    height: 24px;
+  }
+
+  /* ---- "Utwórz arkusz" dialog ---- */
+
+  /* The names the sheets about to be created will get. Every candidate is
+     rendered; the stepper only changes how many of them are shown. */
+  .gh-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .gh-names span {
+    --gh-c: 4px;
+    padding: 5px 9px;
+    background: var(--gh-card-2);
+    font: 600 13.5px var(--gh-f-ui);
+  }
+
+  /* ---- Phone ---- */
+
+  @media (max-width: 720px) {
+    .gh-tpl {
+      padding: 16px 14px 10px;
+    }
+
+    .gh-tpl-h h2 {
+      font-size: 21px;
+    }
+
+    .gh-ag {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+
+    .gh-ag-a {
+      justify-content: flex-start;
+    }
+
+    .gh-cat {
+      grid-template-columns: 22px minmax(0, 1fr);
+    }
+
+    .gh-cat-p,
+    .gh-cat-a {
+      grid-column: 2;
+    }
+
+    .gh-cat-p {
+      padding-top: 0;
+    }
+  }
+}
+
+@layer components {
+
+  /* An icon button that is really a checkbox — remove a category, hide a
+     column. The state has to survive to the server whether or not JavaScript
+     ran, and a checkbox is the only control that does that. */
+  .gh-toggle {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .gh-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gh-toggle:has(input:focus-visible) {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  /* The story description, folded away until asked for. <details> rather than
+     the mockup's reveal-on-click link, so it opens without JavaScript. */
+  .gh-story > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 13px;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .gh-story > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .gh-story[open] > summary {
+    display: none;
+  }
+}

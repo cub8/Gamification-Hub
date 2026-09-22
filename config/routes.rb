@@ -12,8 +12,31 @@ Rails.application.routes.draw do
     end
   end
   resources :story_groups do
-    resource :ranking, only: :show, controller: :ranking do
-      post :change_status
+    # Deleting a group takes its students, teachers, shop, ranking and every
+    # ledger row with it (DECISIONS.md:28). The confirmation carries those
+    # counts and a type-the-name gate, neither of which fits in a browser
+    # confirm, so it needs a URL to render into.
+    get :confirm_destroy, on: :member
+
+    # The creation wizard's last step. Nothing exists yet at this point, so it
+    # is a collection route reading `pack` and `classes` off the query and
+    # answering with the rows for the frame inside the form.
+    get :preset_preview, on: :collection
+
+    # The wizard's success screen. Its own page rather than a flash on the
+    # group: it lists what was created and what to do next, and a teacher who
+    # reloads should see it again rather than a bare redirect.
+    get :created, on: :member
+
+    resource :ranking, only: %i[show update], controller: :ranking do
+      # Every change to what students see is confirmed first: showing the board
+      # exposes places, hiding it takes them away, and the mode decides how much
+      # of the list they get (DECISIONS.md:36, widened here to all four
+      # transitions). GET routes rendering into the dialog frame, like every
+      # other confirmation in this file — a browser confirm cannot hold the
+      # sentence that explains what each one does to the student's view.
+      get :confirm_visibility
+      get :confirm_mode
     end
     resources :items, except: :show do
       # Like ranks and badges: the delete confirmation carries a consequence
@@ -22,9 +45,17 @@ Rails.application.routes.draw do
       # page when the turbo frame is not there.
       get :confirm_destroy, on: :member
     end
-    resources :activity_group_templates
-    resources :activity_groups, except: %i[show new] do
-      post :create_bulk, on: :collection
+    # "Arkusze ocen". Templates have no index of their own — they are listed
+    # inside activity_groups#index, one panel each — and no show: the template
+    # is only ever edited.
+    resources :activity_group_templates, except: %i[index show] do
+      get :confirm_destroy, on: :member
+    end
+    resources :activity_groups, except: :show do
+      # `new` is the "Utwórz arkusz" dialog, which needs the template it is
+      # stamping from. Creating one sheet and creating several is one form
+      # posting to #create with a count, so there is no separate bulk route.
+      get :confirm_destroy, on: :member
       resource :students_activity_group_categories, only: %i[edit update]
     end
     resources :ranks, except: :show do
@@ -39,15 +70,31 @@ Rails.application.routes.draw do
       # buyable — neither of which fits in a browser confirm.
       get :confirm_destroy, on: :member
     end
-    resources :teachers, only: %i[new index create destroy]
+    resources :teachers, only: %i[new index create destroy] do
+      # Same as ranks, badges and invites: the removal dialog carries a
+      # consequence sentence — what happens to the rewards that teacher already
+      # awarded — which a browser confirm cannot hold, so it needs a URL to
+      # render into.
+      get :confirm_destroy, on: :member
+    end
     resources :students do
       member do
         post :update_lives
+        # Removing a student destroys their badges, their purchases and their
+        # whole currency history. The confirmation carries those counts, which
+        # a browser confirm cannot hold, so it needs a URL to render into.
+        get :confirm_destroy
       end
       resource :currency_adjustment, only: %i[new create]
-      resources :students_badges, path: :badges, as: :badges, only: %i[new create destroy]
+      resources :students_badges, path: :badges, as: :badges, only: %i[new create destroy] do
+        # Same as everywhere else: the revoke confirmation names the discount
+        # the student loses and what stops being buyable.
+        get :confirm_destroy, on: :member
+      end
       resources :currency_transactions, only: :index
-      resources :students_items, path: :items, only: %i[index show]
+      # No :show — the card carries the price paid, the discount and the date,
+      # so nothing links to a detail page. Same reasoning as the shop.
+      resources :students_items, path: :items, only: %i[index]
     end
     # No :show — the shop card carries everything a detail page would, at every
     # width, so nothing links to one.
@@ -63,6 +110,22 @@ Rails.application.routes.draw do
       end
     end
     resources :students_profile, path: :profile, as: :profile, only: %i[index]
+
+    # "Ustawienia w grupie": a student's own settings HERE — their nickname,
+    # what the teacher can see, and the way out. Singular, because you have at
+    # most one membership per group and never address somebody else's.
+    resource :membership, only: %i[edit update destroy], controller: :story_group_memberships do
+      # Leaving destroys the membership, and with it the badges, the purchases
+      # and the whole currency history. The confirmation carries those counts,
+      # which a browser confirm cannot hold, so it needs a URL to render into.
+      get :confirm_leave
+
+      # The same field as #edit, as a dialog. The ranking screen is where a
+      # student is most likely to want their nickname changed — it is the only
+      # place it is shown to anyone else — so "Zmień" there opens this rather
+      # than sending them to the settings page and back.
+      get :nickname
+    end
     resources :story_group_invites, path: :invites, as: :invites do
       # The delete confirmation is a dialog with a consequence sentence in it,
       # not a browser confirm, so it needs a URL of its own to render into.

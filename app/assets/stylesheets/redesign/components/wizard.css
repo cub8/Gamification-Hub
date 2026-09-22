@@ -1,0 +1,512 @@
+/* --------------------------------------------------------------------------
+   The story-group creation wizard.
+
+   Ported from design/mockup-src/css/20-form.css — the classes the rest of the
+   redesign never needed, because this is the one stepped flow in the app
+   (DECISIONS.md:26). Everything the wizard shares with the other forms
+   (.gh-wiz, .gh-fcol, .gh-pcol, .gh-fsec, .gh-inp, .gh-nstep, .gh-sw,
+   .gh-wbar, .gh-pz*, .gh-crop*) already lives in form.css and is NOT repeated.
+
+   Two of the mockup's blocks are deliberately absent:
+     * `.focal` / `.mk`, its focal-point picker — superseded by the real crop
+       in .gh-crop (DECISIONS.md:25);
+     * `.row3`, the three currency declensions — the schema has one name.
+
+   Frames are a ::before/::after pair with an inset background, never a border
+   or a box-shadow: both break at a cut corner.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  /* Steps 3 and 4 have no preview beside them, so the form takes the whole
+     width (mockup `.wiz.full`, 20-form.css:12). group_wizard_controller
+     toggles this class; without the rule the 380px preview column stayed
+     behind as dead space. */
+  .gh-wiz--full {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* ---- The stepper (20-form.css:5-11) ---- */
+
+  .gh-stepper {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .gh-stp {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 4px 2px;
+    border: 0;
+    border-top: 3px solid var(--gh-line);
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    color: var(--gh-ink-3);
+    font: 620 14px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-stp[disabled] {
+    cursor: default;
+  }
+
+  .gh-stp-n {
+    --gh-c: 6px;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    background: var(--gh-card-3);
+    color: var(--gh-ink-2);
+    font: 780 13px var(--gh-f-ui);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* The step you are on: orange, like every other "acting now" affordance. */
+  .gh-stp--on {
+    color: var(--gh-ink);
+    border-top-color: var(--gh-item);
+  }
+
+  .gh-stp--on .gh-stp-n {
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+  }
+
+  /* A step already passed: gold, the colour of something earned. */
+  .gh-stp--ok {
+    color: var(--gh-ink-2);
+    border-top-color: var(--gh-rank);
+  }
+
+  .gh-stp--ok .gh-stp-n {
+    background: var(--gh-rank);
+    color: var(--gh-on-rank);
+  }
+
+  .gh-stp-n .fa-check {
+    font-size: 13px;
+  }
+
+  /* ---- Big radio cards: "Szybki start" / "Od zera", and the packs
+          (20-form.css:59-67) ---- */
+
+  .gh-opts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px;
+  }
+
+  .gh-opt {
+    --gh-c: 12px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 18px 20px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .gh-opt::before,
+  .gh-opt::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-opt::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-opt::after {
+    --gh-c: 11px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-opt:hover::after {
+    background: var(--gh-card-2);
+  }
+
+  /* :has, so the frame follows the REAL radio inside rather than a class the
+     controller would have to keep in sync. */
+  .gh-opt:has(input:checked)::before {
+    background: var(--gh-item);
+  }
+
+  .gh-opt:has(input:checked)::after {
+    inset: 3px;
+    background: color-mix(in srgb, var(--gh-item) 9%, var(--gh-card));
+  }
+
+  .gh-opt:has(input:focus-visible) {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  .gh-opt b {
+    font: 750 18px/1.2 var(--gh-f-ui);
+    font-stretch: 90%;
+  }
+
+  .gh-opt > span:not(.gh-tag) {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-opt .gh-tag {
+    align-self: flex-start;
+  }
+
+  .gh-opt em {
+    font: italic 400 13.5px/1.4 var(--gh-f-text);
+    color: var(--gh-ink);
+  }
+
+  /* ---- Step 4: the starter-pack review (20-form.css:87-95) ---- */
+
+  .gh-rgrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 36px;
+  }
+
+  .gh-rz {
+    margin-top: 18px;
+  }
+
+  .gh-rz > h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .gh-rrow {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr) auto 38px;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-rrow > .fa-solid {
+    color: var(--gh-ink-3);
+    justify-self: center;
+  }
+
+  .gh-rn b {
+    display: block;
+    font: 640 14.5px/1.25 var(--gh-f-ui);
+  }
+
+  .gh-rn small {
+    display: block;
+    margin-top: 2px;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-rv2 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font: 560 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* A row the teacher has dropped. It stays in the form — the checkbox is what
+     posts the decision — so it is greyed rather than removed. */
+  .gh-rrow--x {
+    opacity: 0.5;
+  }
+
+  .gh-rrow--x .gh-rn b {
+    text-decoration: line-through;
+  }
+
+  .gh-rrow-x {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-rrow-x:hover {
+    color: var(--gh-ink);
+  }
+
+  .gh-rrow-x:has(input:focus-visible) {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  /* The number beside a row. Narrow and right-aligned: these are quantities to
+     compare down a column, not prose. */
+  .gh-inp--sm {
+    --gh-c: 5px;
+  }
+
+  /* Wide enough for three digits AND the spinner beside them. The widest value
+     the presets generate is a 250 threshold at 30 classes, and at 68px the
+     spinner was clipping it — the fix for that is room, not taking the arrows
+     away. The right padding is trimmed because the spinner already sits in it. */
+  .gh-inp--sm input {
+    width: 88px;
+    padding: 7px 4px 7px 9px;
+    font-size: 14.5px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---- The "Od zera" summary, and the currency sentences (20-form.css:96) ---- */
+
+  .gh-sumt {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 24px;
+    margin: 14px 0 0;
+  }
+
+  .gh-sumt dt {
+    color: var(--gh-ink-2);
+    font-size: 14px;
+  }
+
+  .gh-sumt dd {
+    margin: 0;
+    font: 620 15px var(--gh-f-ui);
+  }
+
+  .gh-cprev {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* A scrap of the app's own table, so the coin is judged against the surface
+     it will actually sit on. `.gh-theme--light` / `--dark` on this element
+     carries the whole token set (tokens.css), which is what lets one page show
+     both themes at once. */
+  .gh-cmini {
+    display: flex;
+    /* A column, centred: the preview column is narrow and a wrapped row left
+       the four chips ragged. Each one is a separate screen being previewed,
+       so they read as a list rather than a toolbar. */
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 14px;
+    background: var(--gh-table);
+    color: var(--gh-ink);
+  }
+
+  .gh-cmini .gh-bal {
+    cursor: default;
+  }
+
+  .gh-cmini .gh-bal b {
+    display: block;
+    font: 800 20px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-cmini .gh-bal small {
+    display: block;
+    font: 500 12px/1 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  /* "Historia waluty": the balance as the headline (20-form.css:83).
+
+     NOT `.gh-purse` — that name already belongs to the student's gold purse
+     card (story_groups/_student_show.html.haml, overview.css:340). This file
+     loads last, so reusing it would restyle that card. */
+  .gh-cmini-purse {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gh-cmini-purse b {
+    font: 800 38px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The price inside the buy dialog (20-form.css:84). */
+  .gh-dlgt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font: 800 19px/1 var(--gh-f-ui);
+  }
+
+  /* ---- The success screen (20-form.css:100-107) ---- */
+
+  .gh-okv {
+    max-width: 760px;
+    margin: 8px auto 0;
+    padding: 30px 34px 32px;
+  }
+
+  /* .gh-expl's base rule is `margin: 8px 14px 0` (dashboard.css:113), written
+     for the inside of a card — on this panel it reads as inset and cramped.
+     The mockup spaces both of these itself (30-form.js:92-93). */
+  .gh-okv .gh-expl {
+    margin: 22px 0 0;
+  }
+
+  .gh-okv .gh-h3 {
+    margin-top: 28px;
+  }
+
+  .gh-ok-ic {
+    --gh-c: 14px;
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 16px;
+    background: var(--gh-rank);
+    color: var(--gh-on-rank);
+    font-size: 30px;
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  /* Numbered by counter, not by <ol>'s own marker: the marker cannot take the
+     octagon. */
+  .gh-todo-l {
+    list-style: none;
+    margin: 10px 0 22px;
+    padding: 0;
+    counter-reset: gh-todo;
+  }
+
+  .gh-todo-l li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--gh-line);
+    font: 560 15px/1.35 var(--gh-f-ui);
+    counter-increment: gh-todo;
+  }
+
+  .gh-todo-l li::before {
+    content: counter(gh-todo);
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    background: var(--gh-card-3);
+    font: 760 13px var(--gh-f-ui);
+    clip-path: polygon(
+      6px 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% calc(100% - 6px),
+      calc(100% - 6px) 100%,
+      6px 100%,
+      0 calc(100% - 6px),
+      0 6px
+    );
+  }
+
+  /* Two labels on the submit button, one shown per breakpoint. Which one is a
+     question of available width, so the stylesheet answers it and the 720px
+     number is never repeated in TypeScript. */
+  .gh-wbar-lbl--sm {
+    display: none;
+  }
+
+  /* ---- Narrow (20-form.css:108-116) ---- */
+
+  @media (max-width: 720px) {
+    /* Only the step you are on keeps its name, so four of them still fit. */
+    .gh-stp > span:last-child {
+      display: none;
+    }
+
+    .gh-stp--on > span:last-child {
+      display: inline;
+    }
+
+    .gh-stp {
+      justify-content: center;
+    }
+
+    .gh-stp--on {
+      flex: 3;
+      justify-content: flex-start;
+    }
+
+    .gh-rgrid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-okv {
+      padding: 22px 18px;
+    }
+
+    /* The bottom bar has to hold back, a step count and a create button, and
+       "Utwórz grupę z zestawem" alone is wider than a phone. The mockup drops
+       the counter (`.wbar .k`); the back button keeps only its chevron and the
+       submit button swaps to its short label, so the bar stays one row. */
+    .gh-wbar .gh-k {
+      display: none;
+    }
+
+    .gh-wbar-lbl {
+      display: none;
+    }
+
+    .gh-wbar-lbl--sm {
+      display: inline;
+    }
+
+    /* Nothing may push the create button off the edge. */
+    .gh-wbar .gh-btn {
+      min-width: 0;
+    }
+  }
+}

@@ -58,14 +58,34 @@
           .gh-tw
             -# Scoped to the well, not the page: the header and sidebar sit on
             -# flat --gh-chrome, exactly as .tpat does inside .tw in the mockup.
-            .gh-tpat.gh-tpat--well{ 'aria-hidden': 'true' }
+            -#
+            -# Inside a group the group's own cover is the table, blurred and
+            -# tinted (mockup 10-core.js:342, which gives every in-group route
+            -# `.tbg` + `.ttint`). One branch here covers every screen in every
+            -# group, because gh_group_chrome memoises the @story_group that the
+            -# nested controllers already set.
+            -#
+            -# @group_art_layer lets a screen ask for the layer while it is
+            -# still choosing the art — the wizard renders it empty and fills it
+            -# from Stimulus as the teacher clicks a tile.
+            - group_art = gh_group_cover_url(gh_group_chrome&.story_group)
+            - if group_art || @group_art_layer
+              .gh-tbg{ 'aria-hidden': 'true', hidden: group_art.nil?,
+                       style: (group_art ? "background-image:url(#{group_art})" : nil),
+                       data: { group_art_layer: '' } }
+              .gh-ttint{ 'aria-hidden': 'true' }
+            - else
+              .gh-tpat.gh-tpat--well{ 'aria-hidden': 'true' }
             %main#app-content.gh-main
               = render 'layouts/redesign/flash'
               = yield
 
-        = render Shared::Redesign::TabBarComponent.new(user:         @current_user,
-                                                       current_path: request.path,
-                                                       group_chrome: gh_group_chrome)
+        -# Hidden in focused flows (DECISIONS.md:50) — today only the creation
+        -# wizard, which owns its own bottom bar and must not stack two.
+        - unless @focused
+          = render Shared::Redesign::TabBarComponent.new(user:         @current_user,
+                                                         current_path: request.path,
+                                                         group_chrome: gh_group_chrome)
 
         -# These MUST stay inside .gh-shell: it owns the theme/menu/sidebar
         -# controllers, and a Stimulus action only reaches a controller on an
@@ -102,3 +122,18 @@
       .gh-dialog-body
         = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
                                            action: 'turbo:frame-load->dialog#open' }
+
+    -# The second one, for a confirmation raised FROM inside a dialog — today
+    -# only "Usuń z grupy", which lives in the edit dialog and is destructive
+    -# enough that it cannot act on one click. A native <dialog> opened while
+    -# another is already open joins the top layer above it with its own
+    -# backdrop, and Escape closes only the topmost, so the two stack correctly
+    -# without either of them knowing about the other.
+    -#
+    -# Never target this frame from the page itself: a confirmation with no
+    -# dialog underneath belongs in `modal`.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+      .gh-dialog-body
+        = turbo_frame_tag 'modal2', data: { dialog_target: 'frame',
+                                            action: 'turbo:frame-load->dialog#open' }

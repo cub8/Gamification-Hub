@@ -1,36 +1,33 @@
 # frozen_string_literal: true
 
+# Screen-specific labels live in the screen's own helper, not in RedesignHelper.
 module StudentsItemsHelper
-  def go_back_from_show_link(own_items, story_group:, student:, &block)
-    path = if params[:back_path] == 'story_group'
-             story_group_path(story_group)
-           elsif own_items
-             story_group_student_students_items_path(story_group, student)
-           else
-             story_group_student_path(story_group, student)
-           end
-
-    link_to path,
-            class: 'btn btn-secondary',
-            title: 'Wstecz',
-            data:  { turbo_frame: '_top', turbo_prefetch: true }, &block
+  # "3 przedmioty. Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach."
+  def inventory_lead(count)
+    "#{count} #{gh_plural(count, 'przedmiot', 'przedmioty', 'przedmiotów')}. " \
+      'Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach.'
   end
 
-  def close_show_link(own_items, story_group:, student:)
-    if params[:back_path] == 'story_group'
-      close_path = story_group_path(story_group)
-      redirect_to_modal = '_top'
-    elsif own_items
-      close_path = story_group_student_students_items_path(story_group, student)
-      redirect_to_modal = '_top'
-    else
-      close_path = story_group_student_path(story_group, student)
-      redirect_to_modal = 'modal'
-    end
+  # The student's own card foot: "Kupione 12.06, 10:21, za 15".
+  def purchase_line(purchase)
+    "Kupione #{gh_when(purchase.created_at)}, za #{purchase.price_paid}"
+  end
 
-    link_to 'Zamknij',
-            close_path,
-            class: 'btn btn-secondary',
-            data:  { turbo_frame: redirect_to_modal, turbo_prefetch: true }
+  # The teacher's, on the sheet's Przedmioty tab. The price paid is in the cost
+  # chip there, so this names the discount instead — what the item costs anyone
+  # else is the part the teacher cannot see from the number alone.
+  def purchase_teacher_line(purchase)
+    line = "Kupione #{gh_when(purchase.created_at)}"
+    list = purchase.item&.price.to_i
+
+    return line if purchase.price_paid.to_i >= list
+
+    "#{line}, ze zniżką z #{list}"
+  end
+
+  # "Stać cię teraz na 3 przedmioty w sklepie." — the dashed slot that closes
+  # the grid, which is the whole reason this screen links to the shop at all.
+  def inventory_shop_line(count)
+    "Stać cię teraz na #{count} #{gh_plural(count, 'przedmiot', 'przedmioty', 'przedmiotów')} w sklepie."
   end
 end

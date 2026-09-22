@@ -1,43 +1,31 @@
-- content_for :title, "Transakcje — #{@student.full_name}"
+-# Historia waluty, the student's own. Mockup: #/s/history, js-expanded/30-sp.js:29-33.
+-#
+-# Reached from the balance chip in the header — the number there is the answer
+-# to "how much can I spend", and this screen is the answer to "where did it go".
+- content_for :title, 'Historia waluty'
+- path_for = ->(kind) { story_group_student_currency_transactions_path(@story_group, @student, kind: kind) }
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3.dark-page
-    .modal-card.p-4.h-100.d-flex.flex-column
-      .d-flex.align-items-center.justify-content-between.mb-4
-        .d-flex.align-items-center.gap-3
-          - if @student.user == @current_user
-            = link_to story_group_profile_index_path(@story_group), class: "btn btn-secondary" do
-              %i.fa-solid.fa-arrow-left
-          - else
-            = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
-              %i.fa-solid.fa-arrow-left
-          %div
-            %h1.h3.mb-0 Transakcje walutowe
-            %small.text-dimmed= @student.full_name
-        %span.text-dimmed
-          Saldo:
-          %strong.text-main= @student.current_currency
+%section.gh-panel.gh-phead
+  .gh-phead-t
+    %h1.gh-h1 Historia waluty
+    %p.gh-lead= ledger_balance_sentence(@ledger)
 
-      - if @transactions.empty?
-        %p.text-dimmed Brak transakcji.
-      - else
-        .table-responsive.flex-grow-1.overflow-auto
-          %table.table.table-sm.table-hover
-            %thead
-              %tr
-                %th Kwota
-                %th Typ
-                %th Źródło
-                %th.text-end Data
-            %tbody.overflow-scroll
-              - @transactions.each do |transaction|
-                %tr
-                  %td
-                    - if transaction.amount >= 0
-                      %span.text-success= "+#{transaction.amount}"
-                    - else
-                      %span.text-danger= transaction.amount
-                  %td
-                    = transaction_kind_badge(transaction)
-                  %td.text-dimmed= transaction_source(transaction)
-                  %td.text-end.text-dimmed= transaction.created_at.strftime("%Y-%m-%d %H:%M")
+  .gh-rowb
+    = link_to story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--sec' do
+      %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
+      Przejdź do sklepu
+
+- if @ledger.any?
+  %section.gh-panel.gh-tabpanel
+    = render 'currency_transactions/ledger', ledger: @ledger, kind: @kind,
+      path_for: path_for,
+      empty_message: 'Nie masz jeszcze wpisów tego typu.'
+- else
+  -# Not the filter-relative sentence: an empty ledger is not "nothing of this
+  -# type", it is a student who has not been to a class yet. The mockup has no
+  -# state for this; the tone is its own states gallery (30-sp.js:43).
+  %section.gh-panel.gh-gm
+    %h2.gh-h2 Pierwsze wpisy pojawią się po zajęciach
+    %p.gh-lead
+      Prowadzący przyznaje walutę za obecność, punktualność i aktywność.
+      Wszystko, co zdobędziesz i wydasz, zapisze się tutaj.

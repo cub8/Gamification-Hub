@@ -37,7 +37,8 @@ Build in parts (css + js modules) concatenated by a build script, verify with Pl
   Students see nicknames only; teacher sees nickname + name. Ties share place. Per-sheet top-3 widget respects ranking visibility/mode.
 - Nicknames: per group, required at join (step 2 of join), editable in "Ustawienia w grupie", unique per group (case-insensitive).
 - Notifications: teachers only (purchases). Dropdown with Nowe/Wcześniej, mark all read.
-- Supporting teachers: everything except deleting the group. Owner shown separately, cannot be removed.
+- Supporting teachers: everything except deleting the group and managing the teacher list — adding and
+  removing teachers is the owner's (they still read the list). Owner shown separately, cannot be removed.
 - Add teacher: search-first (>=2 chars, diacritics-insensitive), max 8 results, per-row "Dodaj".
 - Invites: 6-char codes without O,0,I,1,L. Limit and expiry each optional via explicit switches + summary sentence. Edit keeps code; limit >= uses.
   Code modal: dropdown of ACTIVE invites (newest default); inactive hidden. New invite is not auto-shown.

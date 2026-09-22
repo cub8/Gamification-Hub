@@ -45,11 +45,20 @@ Already covered screens:
 - chrome, notifications
 - student and teacher dashboard
 - story group index
+- story group overview (Przegląd) - teacher and student perspectives
 - ranks index, new, edit - teacher and student perspective
 - badges index, new, edit - teacher and student perspective
 - items index, new, edit - teacher perspective
 - shop index, buy confirmation - student perspective
+- students index, show (3 tabs), edit, remove confirmation - teacher perspective
+- award badge, revoke badge, adjust currency - teacher perspective
+- currency history, my items - student perspective
 - invites index, show, new, edit
+- teachers index, add teacher, remove confirmation - teacher perspective
+- new story group wizard + success screen - teacher perspective
 - login screens
+
+Every in-group screen now carries the group's cover as a blurred table
+background (`.gh-tbg` + `.gh-ttint`), from one branch in the redesign layout.
 
 

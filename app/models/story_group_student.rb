@@ -15,6 +15,8 @@ class StoryGroupStudent < ApplicationRecord
 
   before_validation :set_default_lives_from_group, on: :create
 
+  normalizes :nickname, with: ->(nickname) { nickname&.strip.presence }
+
   validates :user_id, uniqueness: { scope: :story_group_id }
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
@@ -22,17 +24,24 @@ class StoryGroupStudent < ApplicationRecord
   # join screen offers explicitly. The mockup makes a nickname mandatory; we do
   # not. Unique per group and case-insensitively so two people cannot be told
   # apart only by capitals — backed by a partial functional index.
-  validates :nickname, length: { in: 2..24 }, allow_blank: true
   validates :nickname,
-            uniqueness:  { scope: :story_group_id, case_sensitive: false },
+            length:      { in: 2..24, message: 'Pseudonim musi mieć od 2 do 24 znaków.' },
+            allow_blank: true
+  # The mockup's own sentence (30-gh.js:60). Written out rather than left as
+  # Rails' default because it surfaces in two places — the join dialog and
+  # "Ustawienia w grupie" — and both are Polish.
+  validates :nickname,
+            uniqueness:  {
+              scope:          :story_group_id,
+              case_sensitive: false,
+              message:        'Ten pseudonim jest już zajęty w tej grupie.',
+            },
             allow_blank: true
 
   def set_default_lives_from_group
     self.lives ||= story_group.default_lives
   end
 
-  # What everyone else in the group sees: the ranking, the teacher's lists, the
-  # confirmation after joining. Never blank.
   def display_name
     nickname.presence || full_name
   end
@@ -43,15 +52,11 @@ class StoryGroupStudent < ApplicationRecord
     update(lives: new_lives)
   end
 
-  # Memoised against total_currency, because that value is the whole of the
-  # answer. The shop asks once per item it renders, and a fresh query per card
-  # is a query per card. Keyed on the total rather than computed once, so a
-  # student whose total changes inside the same request still gets the right
-  # rung — and `reload` is not needed to clear it.
   def rank
     unless @rank_at == total_currency
       @rank_at = total_currency
-      @rank    = story_group.ranks.where('required_currency_value <= ?', total_currency)
+      @rank    = story_group.ranks
+                            .where('required_currency_value <= ?', total_currency)
                             .order(required_currency_value: :desc)
                             .first
     end

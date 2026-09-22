@@ -1,0 +1,68 @@
+-# Przyznaj odznakę. Mockup: mAssign(), js-expanded/30-student.js:43-48.
+-#
+-# Real radios behind the rows, not the mockup's <button role="radio">: they
+-# post their own value and the arrow keys move between them, so the dialog
+-# works with JavaScript off. badge_picker_controller only filters the list and
+-# reveals the matching effect sentence — both of which are already in the page.
+- error = students_badge.errors[:badge_id].first
+- held  = @held.size
+
+= form_with url: story_group_student_badges_path(@story_group, @student),
+  method: :post, scope: :students_badge,
+  data: { controller: 'badge-picker',
+          turbo_frame: (@in_modal ? 'modal' : nil),
+          badge_picker_pick_value: 'Przyznaj',
+          badge_picker_blank_value: 'Wybierz odznakę', } do |f|
+
+  %h2#gh-assign-title.gh-h2 Przyznaj odznakę
+  %p= badge_assign_lead(@student, held, @badges.size)
+
+  - if @badges.any?
+    %label.gh-search.gh-search--full
+      %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
+      %input{ type: 'search', placeholder: 'Szukaj odznaki', 'aria-label': 'Szukaj odznaki',
+              data: { badge_picker_target: 'input', action: 'input->badge-picker#filter' } }
+
+    %ul.gh-bpick
+      - @badges.each do |badge|
+        - owned = @held.include?(badge.id)
+        %li{ data: { badge_picker_target: 'row', badge_picker_name: badge.name.downcase } }
+          %label.gh-bp{ class: ('gh-bp--owned' if owned) }
+            = f.radio_button :badge_id, badge.id, disabled: owned,
+              data: { badge_picker_target: 'radio',
+                      badge_picker_label: badge.name,
+                      action: 'change->badge-picker#pick' }
+            = render 'badges/badge_thumb', badge: badge
+            %span
+              %b= badge.name
+              %small= badge.didactic_description
+            %span.gh-st2= badge_pick_status(badge, owned)
+
+    -# One sentence per badge, all rendered, all hidden but at most one: the
+    -# controller reveals the matching one rather than writing markup.
+    - @badges.each do |badge|
+      %p.gh-expl.gh-effect{ hidden: true,
+                            data: { badge_picker_target: 'effect',
+                                    badge_picker_for: badge.id } }
+        = badge_effect_sentence(badge)
+
+    %p.gh-expl{ hidden: true, data: { badge_picker_target: 'empty' } }
+      Brak odznak o tej nazwie.
+  - else
+    %p.gh-expl
+      W tej grupie nie ma jeszcze odznak. Dodaj je w zakładce Odznaki, a potem
+      wróć tutaj.
+
+  - if error
+    %p.gh-err{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  .gh-dlg-b
+    - if @in_modal
+      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+    - else
+      = link_to 'Anuluj', story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--sec'
+    %button.gh-btn{ type: 'submit', disabled: @badges.empty?,
+                    data: { badge_picker_target: 'submit' } }
+      Wybierz odznakę

@@ -37,7 +37,14 @@ module Redesign
       @ranks ||= story_group.ranks.by_threshold.to_a
     end
 
-    def card_for(item) = ItemCard.new(item, ranks: ranks)
+    # The group's badges, for ItemCard#max_discount. Every badge counts toward
+    # a discount, whatever an item lists (DiscountCalculatorService), so this is
+    # the whole set rather than any one item's — loaded once for the grid.
+    def badges
+      @badges ||= story_group.badges.kept.by_name.to_a
+    end
+
+    def card_for(item) = ItemCard.new(item, ranks: ranks, badges: badges)
 
     def bought_for(item) = bought_by_item_id[item.id].to_i
 

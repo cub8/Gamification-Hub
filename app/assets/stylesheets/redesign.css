@@ -61,9 +61,25 @@
 @import "./redesign/components/auth.css";
 @import "./redesign/components/dashboard.css";
 @import "./redesign/components/groups.css";
+@import "./redesign/components/overview.css";
 @import "./redesign/components/join.css";
 @import "./redesign/components/invites.css";
 @import "./redesign/components/ranks.css";
+@import "./redesign/components/ranking.css";
+@import "./redesign/components/teachers.css";
 @import "./redesign/components/badges.css";
 @import "./redesign/components/items.css";
 @import "./redesign/components/shop.css";
+@import "./redesign/components/ledger.css";
+@import "./redesign/components/student_list.css";
+@import "./redesign/components/student.css";
+@import "./redesign/components/inventory.css";
+@import "./redesign/components/settings.css";
+@import "./redesign/components/grading.css";
+@import "./redesign/components/sheets.css";
+
+/* LAST on purpose. The creation wizard reuses form.css's shell and has to
+   override it: `.gh-wiz--full` and `.gh-wiz` are both one class, so only
+   source order decides which wins. Imported before form.css it lost, and
+   steps 3 and 4 kept a 380px column they do not use. */
+@import "./redesign/components/wizard.css";

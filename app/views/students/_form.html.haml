@@ -1,0 +1,68 @@
+-# Edytuj studenta. Mockup: mEdit(), js-expanded/30-student.js:38-41.
+-#
+-# A dialog rather than a page: the only thing a teacher can change here is the
+-# number of lives, which is a quick action (DECISIONS.md:26). Name, e-mail and
+-# nickname belong to the student.
+- lives = student.lives.to_i
+- error = student.errors[:lives].first
+
+= form_with model: student, url: story_group_student_path(@story_group, student),
+  method: :patch,
+  data: { controller: 'lives-stepper',
+          turbo_frame: (@in_modal ? 'modal' : nil),
+          lives_stepper_start_value: lives } do |f|
+
+  %h2#gh-student-title.gh-h2 Edytuj studenta
+  %p
+    = "#{student.display_name}."
+    Imię, nazwisko i e-mail pochodzą z konta studenta.
+
+  .gh-fld
+    %p#gh-lives-label.gh-lbl Życia
+    -# A stepper over a hidden field rather than a number input: the mockup's
+    -# shape, and it keeps the value inside 0..∞ without a spinner nobody on a
+    -# phone can hit. The field is what posts; the <output> is what is read.
+    .gh-nstep{ role: 'group', 'aria-labelledby': 'gh-lives-label' }
+      %button.gh-nstep-b{ type: 'button', 'aria-label': 'Odbierz życie',
+                          disabled: lives.zero?,
+                          data: { lives_stepper_target: 'down',
+                                  action: 'lives-stepper#down' } }
+        %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
+      %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= lives
+      %button.gh-nstep-b{ type: 'button', 'aria-label': 'Dodaj życie',
+                          data: { lives_stepper_target: 'up',
+                                  action: 'lives-stepper#up' } }
+        %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+
+    = f.hidden_field :lives, value: lives, data: { lives_stepper_target: 'field' }
+
+    %span.gh-hint
+      Życie odbierasz za nieusprawiedliwioną nieobecność. Przy 0 życiach
+      student kupi tylko przedmioty dostępne przy 0 życiach.
+
+  - if error
+    %p.gh-err{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  .gh-fsec.gh-fsec--sep
+    %p.gh-lbl Usuń z grupy
+    %p.gh-small
+      Student straci dostęp do grupy, a jego odznaki, przedmioty i historia
+      waluty przepadną. Dołączy ponownie tylko z nowym kodem.
+    -# Opens a SECOND dialog over this one — removing a membership is a hard
+    -# delete and one click is not enough to ask for it.
+    = link_to confirm_destroy_story_group_student_path(@story_group, student),
+      class: 'gh-btn gh-btn--sec gh-btn--sm gh-kick',
+      data: { turbo_frame: 'modal2' } do
+      %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
+      Usuń z grupy
+
+  .gh-dlg-b
+    -# The mockup focuses "Zapisz", which starts disabled — a button a keyboard
+    -# user lands on and cannot press. Focus goes to the stepper instead.
+    - if @in_modal
+      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+    - else
+      = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--sec'
+    %button.gh-btn{ type: 'submit', data: { lives_stepper_target: 'submit' } } Zapisz

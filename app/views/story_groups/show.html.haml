@@ -1,6 +1,11 @@
+-# Grupa: przegląd. One controller action, two screens: the teacher's group
+-# front page (#/t/home, js-expanded/30-gh.js:33-44) and the student's own
+-# (#/s/home, js-expanded/30-main.js:99-131).
+-#
+-# The branch is on membership, not role — see StoryGroupsController#show.
 - content_for :title, @story_group.name
 
 - if @student
-  = render 'student_show'
+  = render 'student_show', overview: @overview
 - else
-  = render 'teacher_show'
+  = render 'teacher_show', overview: @overview

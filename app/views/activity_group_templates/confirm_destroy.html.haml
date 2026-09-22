@@ -1,0 +1,9 @@
+-# Either the layout's shared `modal` frame or a page — never both.
+- content_for :title, "Usuń szablon #{@activity_group_template.base_name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_destroy', template: @activity_group_template, sheet_names: @sheet_names
+- else
+  %section.gh-panel.gh-dlg-page
+    = render 'confirm_destroy', template: @activity_group_template, sheet_names: @sheet_names

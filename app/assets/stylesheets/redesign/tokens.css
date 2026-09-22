@@ -11,7 +11,15 @@
    spend), not palette names.
    -------------------------------------------------------------------------- */
 
-:root {
+/* `.gh-theme--light` / `.gh-theme--dark` put a token set on a NESTED element,
+   which is what lets one page show both themes at once — the wizard's currency
+   preview is the only caller today. They ride along on the existing blocks
+   rather than duplicating forty custom properties.
+
+   The prefers-color-scheme block below stays `:root`-only on purpose: it must
+   not reach inside a `.gh-theme--light` island on a dark page. */
+:root,
+.gh-theme--light {
   color-scheme: light;
 
   --gh-f-ui: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
@@ -113,7 +121,8 @@
   }
 }
 
-:root[data-gh-theme="dark"] {
+:root[data-gh-theme="dark"],
+.gh-theme--dark {
   color-scheme: dark;
 
   --gh-table: #1B1224;

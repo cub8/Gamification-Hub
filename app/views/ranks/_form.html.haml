@@ -72,7 +72,7 @@
                   'aria-invalid': (error.call(:required_currency_value) ? 'true' : nil),
                   'aria-describedby': (error.call(:required_currency_value) ? 'gh-rank-min-error' : nil),
                   data: { rank_form_target: 'threshold', action: 'rank-form#refresh' }
-              = render 'currency_token'
+              = render 'layouts/redesign/currency_token', story_group: @story_group, size: 32
 
           .gh-fld
             = f.label :discount, 'Zniżka w sklepie'

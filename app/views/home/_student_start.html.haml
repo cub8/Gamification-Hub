@@ -18,9 +18,9 @@
       .gh-card-f
         .gh-card-i
           .gh-art
-            - if story_group.icon.attached?
-              = image_tag story_group.icon, alt: ''
-            - else
+            - cover = gh_group_cover(story_group)
+            = cover
+            - unless cover
               %i.fa-solid.fa-book-open{ 'aria-hidden': 'true' }
 
           .gh-card-top

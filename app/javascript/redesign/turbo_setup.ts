@@ -18,9 +18,10 @@ document.addEventListener("turbo:before-cache", () => {
     dialog.close()
   })
 
-  const frame = document.getElementById("modal")
-
-  if (frame) {
+  // Both dialog frames: "modal2" is the stacked confirmation raised from
+  // inside "modal", and a cached snapshot holding either would come back on
+  // Back as a dialog nobody opened.
+  document.querySelectorAll("#modal, #modal2").forEach((frame) => {
     frame.innerHTML = ""
-  }
+  })
 })

@@ -1,0 +1,398 @@
+/* --------------------------------------------------------------------------
+   The teacher's sheet for one student, and the two dialogs it raises.
+
+   Ported from design/mockup-src/css/25-student.css (the sheet, the stat strip,
+   the two tab grids, the badge picker and the correction preview),
+   20-form.css:55-58 (the lives stepper) and 23-ag.css:30-32 (the Dodaj/Odejmij
+   control) — SCREENS.md's one-file-per-screen mapping is a convenience, not a
+   dependency graph.
+
+   The mockup's tabs (.tabs/.tab2) are NOT ported: ours navigate, so they are
+   the app's existing .gh-gtabs links carrying aria-current. Only the panel
+   under them is new.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+
+  .gh-sheet {
+    padding: 22px 24px;
+  }
+
+  .gh-sh-top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .gh-sh-top .gh-av {
+    --gh-c: 14px;
+    width: 64px;
+    height: 64px;
+    font-size: 22px;
+  }
+
+  .gh-sh-top .gh-crumbs {
+    margin-bottom: 4px;
+  }
+
+  .gh-sh-top .gh-h1 {
+    font-size: 32px;
+  }
+
+  .gh-sh-sub {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--gh-ink-2);
+  }
+
+  /* The actions sit at the far end of the head on a desktop and take the whole
+     width below it. */
+  .gh-sh-top .gh-rowb {
+    margin-left: auto;
+  }
+
+  /* Ranga | Do wydania | Zebrane łącznie | Życia. The rank gets the room
+     because it carries a sentence and a bar under its number. */
+  .gh-stats {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 0;
+    margin-top: 20px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-stat {
+    padding: 14px 18px 4px 0;
+  }
+
+  .gh-stat + .gh-stat {
+    padding-left: 18px;
+    border-left: 1px solid var(--gh-line);
+  }
+
+  .gh-stat dt {
+    font: 620 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-stat dd {
+    margin: 6px 0 0;
+    font: 800 26px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gh-stat dd small {
+    font: 560 13px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-stat .gh-bar {
+    margin-top: 10px;
+  }
+
+  /* The panel under the tabs. Named for what it is rather than the mockup's
+     two-letter `.tp`, which would collide with anything. */
+  .gh-tabpanel {
+    padding: 20px 22px;
+    margin-top: 22px;
+  }
+
+  .gh-tab-intro {
+    margin-bottom: 14px;
+  }
+
+  /* Badges on the sheet read fine narrow — no price row, no buttons but one
+     link — so the cells are tighter than a shop grid's. */
+  .gh-bgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 22px 16px;
+    margin-top: 4px;
+  }
+
+  .gh-bgrid .gh-card-foot {
+    justify-content: space-between;
+    min-height: 0;
+  }
+
+  .gh-ilist {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 22px 16px;
+  }
+
+  /* ---- the lives stepper (in the edit dialog) -------------------------- */
+
+  .gh-nstep {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .gh-nstep output {
+    min-width: 46px;
+    text-align: center;
+    font: 800 20px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-nstep-b {
+    --gh-c: 6px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    cursor: pointer;
+    color: var(--gh-ink);
+    background: var(--gh-card-3);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-nstep-b:hover:not([disabled]) {
+    background: var(--gh-line-2);
+  }
+
+  .gh-nstep-b[disabled] {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  /* The destructive section at the foot of the edit dialog. `.gh-fsec` only
+     styles a section that follows another one, and this is the first. */
+  .gh-fsec--sep {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-kick {
+    margin-top: 10px;
+  }
+
+  /* ---- Dodaj / Odejmij ------------------------------------------------- */
+
+  /* Two real radios wearing a segmented control. The inputs are hidden from
+     sight but not from the keyboard: they still take focus and the arrow keys
+     still move between them, and the focus ring is drawn on the label. */
+  .gh-seg3 {
+    --gh-c: 7px;
+    display: flex;
+    gap: 3px;
+    padding: 3px;
+    margin-top: 12px;
+    background: var(--gh-card-2);
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
+  }
+
+  .gh-seg3-o {
+    flex: 1;
+  }
+
+  .gh-seg3-o input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gh-seg3-o span {
+    display: block;
+    padding: 8px 6px;
+    text-align: center;
+    color: var(--gh-ink-2);
+    font: 620 13px/1.1 var(--gh-f-ui);
+    cursor: pointer;
+  }
+
+  .gh-seg3-o input:checked + span {
+    background: var(--gh-card);
+    color: var(--gh-ink);
+    box-shadow: inset 0 -3px 0 var(--gh-rank);
+  }
+
+  .gh-seg3-o input:focus-visible + span {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: -2px;
+  }
+
+  /* ---- the correction preview ------------------------------------------ */
+
+  .gh-cprev2 {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 18px;
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    background: var(--gh-card-2);
+  }
+
+  .gh-cprev2 dt {
+    font-size: 14px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-cprev2 dd {
+    margin: 0;
+    font: 700 15px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-cprev2-note {
+    margin-top: 8px;
+  }
+
+  /* ---- the badge picker ------------------------------------------------ */
+
+  .gh-search--full {
+    width: 100%;
+    margin-top: 14px;
+  }
+
+  .gh-bpick {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    max-height: 340px;
+    overflow: auto;
+  }
+
+  .gh-bp {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    padding: 10px 8px;
+    border-top: 1px solid var(--gh-line);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .gh-bp input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gh-bp:hover {
+    background: var(--gh-card-2);
+  }
+
+  .gh-bp:has(input:checked) {
+    background: color-mix(in srgb, var(--gh-badge) 16%, var(--gh-chrome));
+    box-shadow: inset 4px 0 0 var(--gh-badge);
+  }
+
+  .gh-bp:has(input:focus-visible) {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: -2px;
+  }
+
+  /* Already held: still readable, no longer choosable. */
+  .gh-bp--owned {
+    cursor: default;
+    opacity: 0.55;
+  }
+
+  .gh-bp--owned:hover {
+    background: none;
+  }
+
+  .gh-bp .gh-mc {
+    width: 46px;
+    height: 46px;
+  }
+
+  .gh-bp b {
+    display: block;
+    font: 680 15px var(--gh-f-ui);
+  }
+
+  .gh-bp small {
+    display: block;
+    font-size: 13px;
+    color: var(--gh-ink-2);
+    margin-top: 2px;
+  }
+
+  .gh-st2 {
+    font: 620 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+    white-space: nowrap;
+  }
+
+  .gh-effect {
+    margin-top: 12px;
+  }
+
+  /* ---- narrow --------------------------------------------------------- */
+
+  @media (max-width: 720px) {
+    .gh-sheet {
+      padding: 18px 16px;
+    }
+
+    .gh-sh-top .gh-rowb {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .gh-sh-top .gh-h1 {
+      font-size: 26px;
+    }
+
+    /* Two columns, with the rank across the top: it is the one stat that
+       carries a sentence and a bar. */
+    .gh-stats {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .gh-stat {
+      padding: 12px 12px 8px 0;
+      border-left: 0;
+      border-top: 1px solid var(--gh-line);
+    }
+
+    .gh-stat + .gh-stat {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .gh-stat:first-child {
+      grid-column: 1 / -1;
+      border-top: 0;
+    }
+
+    .gh-tabpanel {
+      padding: 16px 14px;
+    }
+
+    .gh-bgrid,
+    .gh-ilist {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

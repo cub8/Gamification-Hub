@@ -2,7 +2,7 @@
 
 # The teacher landing screen (mockup `#/t/dash`).
 #
-# The cross-group counterpart to StoryGroupTeacherDashboard, which is scoped to
+# The cross-group counterpart to Redesign::TeacherOverview, which is scoped to
 # a single group: recent purchases across every group the teacher owns or
 # supports, the groups themselves, and the sheet most in need of grading.
 class TeacherStartDashboard

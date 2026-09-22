@@ -1,0 +1,24 @@
+-# Soft delete (DECISIONS.md:54). The sentence below is the whole reason this
+-# is a dialog: what the teacher is about to remove is the sheet, not the
+-# currency it handed out, and there is no way to take that back anyway.
+%h2#gh-del-title.gh-h2= "Usunąć arkusz „#{activity_group.name}”?"
+%p Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii.
+
+- if awards_count.positive?
+  %p.gh-info
+    %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+    %span
+      = "Przyznano z niego #{awards_count} #{gh_plural(awards_count, 'nagrodę', 'nagrody', 'nagród')}."
+      Usunięcie arkusza niczego nie cofa.
+
+.gh-dlg-b
+  - if @in_modal
+    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', edit_story_group_activity_group_path(@story_group, activity_group),
+      class: 'gh-btn gh-btn--sec'
+
+  = button_to 'Usuń arkusz', story_group_activity_group_path(@story_group, activity_group),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

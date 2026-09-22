@@ -1,9 +1,9 @@
 -# The three art states of a badge in one place, so no screen has to re-derive
 -# them: an uploaded image, one of the preset glyphs, or neither.
 -#
--# Mirrors the same branch in ranks/_rank_thumb, kept as its own partial here
--# because a badge shows its art in four places (card front, mini card, form
--# preview, award row) instead of two.
+-# Mirrors ranks/_art and items/_art. A badge shows its art in four places
+-# (card front, mini card, form preview, award row), so the branch has never
+-# belonged to any one of them.
 - if badge.upload?
   = image_tag badge.icon, alt: ''
 - elsif (glyph = gh_glyph(badge.icon_glyph))

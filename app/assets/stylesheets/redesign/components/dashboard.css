@@ -201,6 +201,11 @@
   .gh-led-m--earn { background: var(--gh-earn); }
   .gh-led-m--spend { background: var(--gh-spend); }
 
+  /* A correction is neither: it can go either way, and the sign already says
+     which (00-base.css:343). The cross-group feed leaves the modifier off
+     entirely, so this only shows up on the group overview. */
+  .gh-led-m--corr { background: var(--gh-ink-3); }
+
   .gh-led-t {
     font: 520 14.5px/1.3 var(--gh-f-ui);
   }
@@ -219,6 +224,7 @@
 
   .gh-led-a--earn { color: var(--gh-earn); }
   .gh-led-a--spend { color: var(--gh-spend); }
+  .gh-led-a--corr { color: var(--gh-ink); }
 
   /* ---- Teacher dashboard ---- */
 

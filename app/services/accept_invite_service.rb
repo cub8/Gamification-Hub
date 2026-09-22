@@ -15,7 +15,10 @@ class AcceptInviteService
     @current_user = user
     @invite = invite
     @story_group = invite.story_group
-    @nickname = nickname.to_s.strip.presence
+    # Not normalised here any more: StoryGroupStudent#normalise_nickname owns
+    # the blank-means-NULL rule, because the settings screen writes this column
+    # too and the partial unique index depends on it.
+    @nickname = nickname
   end
 
   def call

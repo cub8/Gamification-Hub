@@ -1,0 +1,82 @@
+-# One student in the list. Mockup: sRow(), js-expanded/30-lists.js:40-44.
+-#
+-# A grid row rather than a <tr>: below 720px it reflows into a two-column
+-# stack, which a table cannot do. Same shape as the invites list.
+-#
+-# Not a stretched link over the whole row either — the row also carries the
+-# lives stepper and three actions, and a stretched link would swallow them.
+-# The name is the link; the rest of the row is read, not pressed.
+- student = row.student
+-# The real name, as the mockup has it (sRow, 30-lists.js:40). The nickname is
+-# the sub-line's job: this list is how a teacher finds a particular person.
+- name    = student.full_name
+- lives   = student.lives.to_i
+
+%li.gh-srow{ class: ('gh-srow--zero' if row.zero_lives?),
+             data: { list_search_target: 'row',
+                     list_search_name: name.downcase } }
+  %span.gh-s-n
+    %span.gh-av.gh-av--sm{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+      = gh_initials(name)
+    = link_to story_group_student_path(@story_group, student), class: 'gh-s-link' do
+      %b= name
+      %small= student_list_subtitle(student)
+
+  %span
+    %span.gh-lbl-m Ranga
+    %span.gh-s-r= row.rank&.name || '—'
+
+  %span
+    %span.gh-lbl-m Życia
+    .gh-lives
+      -# Each step is its own POST. The minus disappears at zero rather than
+      -# failing there, so the only way to reach the controller's guard is a
+      -# hand-built request.
+      = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
+        method: :post, class: 'gh-lives-b',
+        disabled: lives.zero?,
+        form: { 'aria-label': "Odbierz życie: #{name}" },
+        'aria-label': "Odbierz życie: #{name}" do
+        %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
+
+      -# One heart and a number, never one heart per life (DECISIONS.md:35).
+      %span.gh-lv{ class: ('gh-lv--zero' if lives.zero?) }
+        %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
+        %b= lives
+
+      = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
+        method: :post, class: 'gh-lives-b',
+        form: { 'aria-label': "Dodaj życie: #{name}" },
+        'aria-label': "Dodaj życie: #{name}" do
+        %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+
+  %span
+    %span.gh-lbl-m Do wydania
+    %span.gh-num2= student.current_currency.to_i
+  %span
+    %span.gh-lbl-m Zebrane
+    %span.gh-num2= student.total_currency.to_i
+  %span
+    %span.gh-lbl-m Odznaki
+    %span.gh-num2= row.badge_count
+
+  .gh-s-a
+    -# The mockup carries a tab name on each of these and opens the sheet;
+    -# these go straight to the thing, which is one click less and a URL that
+    -# can be shared.
+    = link_to new_story_group_student_badge_path(@story_group, student),
+      class: 'gh-iconbtn', title: 'Przyznaj odznakę',
+      'aria-label': "Przyznaj odznakę: #{name}",
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
+
+    = link_to new_story_group_student_currency_adjustment_path(@story_group, student),
+      class: 'gh-iconbtn', title: 'Koryguj walutę',
+      'aria-label': "Koryguj walutę: #{name}",
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-coins{ 'aria-hidden': 'true' }
+
+    = link_to story_group_student_path(@story_group, student, tab: 'hist'),
+      class: 'gh-iconbtn', title: 'Historia transakcji',
+      'aria-label': "Historia: #{name}" do
+      %i.fa-solid.fa-clock-rotate-left{ 'aria-hidden': 'true' }

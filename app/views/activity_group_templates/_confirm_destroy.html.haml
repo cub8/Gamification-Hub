@@ -1,0 +1,26 @@
+-# A dialog rather than data-turbo-confirm, because the point of it is what the
+-# delete does NOT take with it: the sheets already stamped from this template
+-# keep their own copies of the columns and go on working.
+%h2#gh-del-title.gh-h2= "Usunąć szablon „#{template.base_name}”?"
+%p Szablon zniknie z listy, a utworzone z niego arkusze zostają.
+
+- if sheet_names.any?
+  %p.gh-info
+    %i.fa-solid.fa-table{ 'aria-hidden': 'true' }
+    %span
+      = "#{sheet_names.size} #{gh_plural(sheet_names.size, 'arkusz', 'arkusze', 'arkuszy')}"
+      = "#{gh_plural(sheet_names.size, 'zostaje', 'zostają', 'zostaje')} bez zmian:"
+      = gh_and_list(sheet_names)
+
+.gh-dlg-b
+  -# Anuluj first and focused: the safe button is the one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', edit_story_group_activity_group_template_path(@story_group, template),
+      class: 'gh-btn gh-btn--sec'
+
+  = button_to 'Usuń szablon', story_group_activity_group_template_path(@story_group, template),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

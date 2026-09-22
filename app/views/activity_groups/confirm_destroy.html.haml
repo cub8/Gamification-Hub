@@ -1,0 +1,8 @@
+- content_for :title, "Usuń arkusz #{@activity_group.name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_destroy', activity_group: @activity_group, awards_count: @awards_count
+- else
+  %section.gh-panel.gh-dlg-page
+    = render 'confirm_destroy', activity_group: @activity_group, awards_count: @awards_count

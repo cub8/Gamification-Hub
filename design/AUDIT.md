@@ -61,20 +61,20 @@ reaches for a border has gone wrong.
 These are **not** styling changes. Each one implies controller, model, route or
 migration work, and each is flagged against the affected screens in sections 3–5.
 
-| #   | Decision                                                                                                                                                                                  | Implication                                                                                                                                 |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| D1  | **Soft delete everywhere**, no archiving. Deleted entities are hidden from shop/lists/pickers but kept in history and shown as "Usunięty z oferty". Only deleting a story group cascades. | Replaces the current archive concept. Needs `deleted_at` + scopes on items/badges/ranks/sheets, and every list/picker query revisited.      |
-| D2  | **"Arkusze ocen"**, not "Grupy aktywności". Also "Szablon arkusza", actions "Utwórz arkusz" / "Oceń".                                                                                     | UI copy only — the models stay `ActivityGroup` / `ActivityGroupTemplate` per `CLAUDE.md`. Do not rename code.                               |
-| D3  | **Nickname required at join** (step 2 of join), per group, editable in "Ustawienia w grupie", unique per group case-insensitively.                                                        | New required field + uniqueness validation + a step in the join flow. Students see only nicknames in ranking; teachers see nickname + name. |
-| D4  | **Negative currency corrections lower only the spendable balance**, never total collected (which drives rank); cannot go below 0. Only positive corrections raise the total.              | Two separate quantities must exist. If the app currently derives balance from a single sum, this is a model change.                         |
-| D5  | Template edits affect only sheets created afterwards; columns with awards can be hidden, not removed.                                                                                     | Versioning/soft-hide semantics on sheet columns.                                                                                            |
-| D6  | Discounts: student qualifies on **ANY** condition (rank OR any listed badge); amount = rank discount + **sum** of held listed badge discounts.                                            | Pricing rule; verify against current implementation.                                                                                        |
-| D7  | Ranking: enabling requires confirmation; modes "Podium i własne miejsce" (default for new groups) and "Pełny ranking" (confirm when switching to full). Ties share place.                 | Per-group setting + confirmation dialogs.                                                                                                   |
-| D8  | Leaving a group is possible and **rejoining restores old data** (currency, badges, items). The leave dialog must say so.                                                                  | Soft membership, not destroy.                                                                                                               |
-| D9  | Invites: 6-char codes excluding O, 0, I, 1, L. Limit and expiry each optional via explicit switches. Edit keeps the code; limit must be ≥ uses.                                           | Code generator alphabet + validation.                                                                                                       |
-| D10 | Supporting teachers may do everything except delete the group. Owner shown separately, cannot be removed.                                                                                 | Authorisation change; contradicts mockup text "Tylko właściciel zmienia te ustawienia", which is out of date.                               |
-| D11 | Wizard success screen must **not** show the join code.                                                                                                                                    | Remove from the success step.                                                                                                               |
-| D12 | Account settings are **read-only** user data (name, e-mail, university, index, USOS ID) plus theme and logout.                                                                            | Not an edit form.                                                                                                                           |
+| # | Decision | Implication |
+| --- | --- | --- |
+| D1 | **Soft delete everywhere**, no archiving. Deleted entities are hidden from shop/lists/pickers but kept in history and shown as "Usunięty z oferty". Only deleting a story group cascades. | Replaces the current archive concept. Needs `deleted_at` + scopes on items/badges/ranks/sheets, and every list/picker query revisited. |
+| D2 | **"Arkusze ocen"**, not "Grupy aktywności". Also "Szablon arkusza", actions "Utwórz arkusz" / "Oceń". | UI copy only — the models stay `ActivityGroup` / `ActivityGroupTemplate` per `CLAUDE.md`. Do not rename code. |
+| D3 | **Nickname required at join** (step 2 of join), per group, editable in "Ustawienia w grupie", unique per group case-insensitively. | New required field + uniqueness validation + a step in the join flow. Students see only nicknames in ranking; teachers see nickname + name. |
+| D4 | **Negative currency corrections lower only the spendable balance**, never total collected (which drives rank); cannot go below 0. Only positive corrections raise the total. | Two separate quantities must exist. If the app currently derives balance from a single sum, this is a model change. |
+| D5 | Template edits affect only sheets created afterwards; columns with awards can be hidden, not removed. | Versioning/soft-hide semantics on sheet columns. |
+| D6 | Discounts: student qualifies on **ANY** condition (rank OR any listed badge); amount = rank discount + **sum** of held listed badge discounts. | Pricing rule; verify against current implementation. |
+| D7 | Ranking: enabling requires confirmation; modes "Podium i własne miejsce" (default for new groups) and "Pełny ranking" (confirm when switching to full). Ties share place. | Per-group setting + confirmation dialogs. |
+| D8 | Leaving a group is possible and **rejoining restores old data** (currency, badges, items). The leave dialog must say so. | Soft membership, not destroy. |
+| D9 | Invites: 6-char codes excluding O, 0, I, 1, L. Limit and expiry each optional via explicit switches. Edit keeps the code; limit must be ≥ uses. | Code generator alphabet + validation. |
+| D10 | Supporting teachers may do everything except delete the group and manage the teacher list — adding and removing teachers is owner-only, though they still read the list. Owner shown separately, cannot be removed. | Authorisation change; contradicts mockup text "Tylko właściciel zmienia te ustawienia", which is out of date for group settings but holds for this list. |
+| D11 | Wizard success screen must **not** show the join code. | Remove from the success step. |
+| D12 | Account settings are **read-only** user data (name, e-mail, university, index, USOS ID) plus theme and logout. | Not an edit form. |
 
 `DECISIONS.md` also lists parts of the mockup that are themselves out of date —
 archive buttons, "Grupy aktywności" labels, the wizard showing the join code, the
@@ -753,11 +753,12 @@ code; limit must be ≥ uses; and the code modal becomes a **dropdown of active
 invites** (newest default, inactive hidden, a new invite not auto-shown).
 
 **`#/t/teachers` — M.** Today a plain table with a delete button per row. D10
-requires the **owner shown separately and not removable**, supporting teachers
-able to do everything except delete the group (a Pundit policy change), and
-**search-first adding** (≥2 chars, diacritics-insensitive, max 8 results, per-row
-"Dodaj"). `tom_select_user` exists but is a select widget, not the search-first
-result list the mockup specifies.
+requires the **owner shown separately and not removable**, adding and removing
+teachers restricted to the owner while a supporting teacher still reads the
+list (a Pundit policy change), and **search-first adding** (≥2 chars,
+diacritics-insensitive, max 8 results, per-row "Dodaj"). `tom_select_user`
+exists but is a select widget, not the search-first result list the mockup
+specifies.
 
 **`#/t/group-settings` — M.** `story_groups/edit` + `_form` (70 lines). Two
 corrections land here: the mockup's "Tylko właściciel zmienia te ustawienia"

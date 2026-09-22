@@ -97,9 +97,9 @@ module Redesign
       ]
     end
 
-    # Seven, not the mockup's eight: "Ustawienia w grupie" has no screen, and
-    # students_profile#index is "Mój profil", not settings. Pointing the label
-    # at it would be a lie, so it waits for the screen DECISIONS.md promises.
+    # The mockup's eight (10-core.js:141-146). "Ustawienia w grupie" is last,
+    # after Ranking — the group's own settings sit at the bottom of the group's
+    # own list, the same place "Ustawienia grupy" sits in the teacher's.
     def student_items(chrome)
       group = chrome.story_group
       membership = chrome.student_membership
@@ -115,6 +115,7 @@ module Redesign
                 story_group_student_currency_transactions_path(group, membership),
                 'fa-clock-rotate-left',),
         ranking_item(chrome),
+        section('Ustawienia w grupie', edit_story_group_membership_path(group), 'fa-gear'),
       ]
     end
 

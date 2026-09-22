@@ -1,0 +1,13 @@
+-# Either the layout's shared `modal` frame or a page — never both. A page
+-# carrying its own <turbo-frame id="modal"> would collide with the one the
+-# layout already has inside the dialog.
+- content_for :title, "Pseudonim w grupie #{@story_group.name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'nickname', membership: @membership
+- else
+  -# As a page it needs a surface of its own: this screen keeps the app shell,
+  -# so unlike the join flow it never lands inside .gh-acard.
+  %section.gh-panel.gh-dlg-page
+    = render 'nickname', membership: @membership

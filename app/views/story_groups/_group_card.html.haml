@@ -7,11 +7,7 @@
   = link_to story_group_path(story_group), class: 'gh-ixc-l' do
     .gh-card-f
       .gh-card-i
-        .gh-art{ class: ('gh-art--mono' unless story_group.icon.attached?) }
-          - if story_group.icon.attached?
-            = image_tag story_group.icon, alt: ''
-          - else
-            = gh_monogram(story_group.name)
+        = render 'layouts/redesign/group_art', story_group: story_group
 
         .gh-card-top
           %h2.gh-card-name= story_group.name

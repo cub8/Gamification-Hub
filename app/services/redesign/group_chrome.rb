@@ -24,6 +24,11 @@ module Redesign
       # the rule.
       def for(user:, story_group:)
         return if user.nil? || story_group.nil?
+        # An UNSAVED group is not a group you are in. StoryGroupsController
+        # builds one for the creation wizard and re-renders it on a validation
+        # failure, with owner_id already assigned — so `member?` would say yes
+        # and every nav link would then ask for a path to a record with no id.
+        return unless story_group.persisted?
 
         chrome = new(user: user, story_group: story_group)
 
@@ -62,7 +67,10 @@ module Redesign
 
     # The mockup shows Ranking unconditionally; ours honours the same rule the
     # ranking screen itself enforces, rather than re-deriving `ranking_enabled`
-    # the way the Bootstrap sidebar does.
+    # the way the Bootstrap sidebar does. Since #view_ranking? became "may open
+    # the screen", that now means the entry stays put for a student while the
+    # teacher has the board hidden — which is the point: behind it is the panel
+    # explaining that it is hidden, not a dead end.
     def ranking?
       return @ranking unless @ranking.nil?
 

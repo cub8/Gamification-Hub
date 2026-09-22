@@ -5,6 +5,9 @@ import { Controller } from "@hotwired/stimulus"
  *  card must never promise more. */
 const DISCOUNT_CAP = 50
 
+/** Mirrors Redesign::DiscountExample::MAX_BADGES. */
+const EXAMPLE_BADGES = 2
+
 type Part = string | { b: string }
 
 /**
@@ -29,9 +32,34 @@ class ItemFormController extends Controller<HTMLFormElement> {
     "footAfford", "footSave", "footSealed", "buyLabel", "need", "bar", "reqList",
     "state", "sealHint",
     "reqRank", "reqBadge", "warnTemplate",
-    "unlockText", "discountText", "warnings",
+    "unlockText", "discountText", "discountMax", "warnings",
     "thumbArt", "thumbName",
   ]
+
+  /**
+   * The group-wide half of the discount ceiling, handed over by the server
+   * (items/_form.html.haml) because neither number is readable off the form:
+   * a chip carries only its own badge's discount, and the ladder's best belongs
+   * to no single select option. Redesign::ItemCard owns the rule; this only
+   * recombines the two halves as the teacher types.
+   */
+  static values = {
+    ladderDiscount: Number,
+    ladderRank: String,
+    badgeDiscount: Number,
+    badgeNames: Array,
+    exampleRankOrder: Array,
+    exampleBadgeOrder: Array,
+  }
+
+  declare readonly ladderDiscountValue: number
+  declare readonly ladderRankValue: string
+  declare readonly badgeDiscountValue: number
+  declare readonly badgeNamesValue: string[]
+  /** One shuffle, shared with Redesign::DiscountExample so both sides pick the
+   *  same student out of the same pools. */
+  declare readonly exampleRankOrderValue: string[]
+  declare readonly exampleBadgeOrderValue: string[]
 
   declare readonly nameTarget: HTMLInputElement
   declare readonly rulesTarget: HTMLTextAreaElement
@@ -66,6 +94,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
   declare readonly warnTemplateTarget: HTMLTemplateElement
   declare readonly unlockTextTarget: HTMLElement
   declare readonly discountTextTarget: HTMLElement
+  declare readonly discountMaxTarget: HTMLElement
   declare readonly warningsTarget: HTMLElement
   declare readonly thumbArtTarget: HTMLElement
   declare readonly thumbNameTarget: HTMLElement
@@ -148,6 +177,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
   private renderSentences() {
     this.writeSentence(this.unlockTextTarget, this.unlockParts())
     this.writeSentence(this.discountTextTarget, this.discountParts())
+    this.writeSentence(this.discountMaxTarget, this.maxParts())
 
     const notes = this.warnings.map((text) => {
       const note = this.warnTemplateTarget.content.cloneNode(true) as DocumentFragment
@@ -212,12 +242,32 @@ class ItemFormController extends Controller<HTMLFormElement> {
     ]
   }
 
-  private get maxDiscount(): number {
-    const fromRank = this.selectedDiscount(this.discountRankTarget)
-    const fromBadges = this.chosen(this.discountBadgeTargets)
-      .reduce((total, { discount }) => total + discount, 0)
+  /**
+   * Mirrors Redesign::ItemCard#max_discount, which mirrors the till.
+   *
+   * The badge half is ALWAYS the whole group: DiscountCalculatorService counts
+   * every badge a student holds, so the chips below decide who qualifies, never
+   * how much they save. The rank half is narrowed only by a floor standing on
+   * its own — once a discount badge is chosen, holding it qualifies a student of
+   * any rank, so the whole ladder is back in reach.
+   */
+  private get rankDiscountReach(): { discount: number; name: string } {
+    const floor = this.discountRankTarget.selectedIndex > 0
+    const alone = this.chosen(this.discountBadgeTargets).length === 0
 
-    return Math.min(DISCOUNT_CAP, fromRank + fromBadges)
+    if (floor && alone) {
+      // The option's own data is already "the best at or above this rung".
+      return {
+        discount: this.selectedDiscount(this.discountRankTarget),
+        name: this.selectedName(this.discountRankTarget),
+      }
+    }
+
+    return { discount: this.ladderDiscountValue, name: this.ladderRankValue }
+  }
+
+  private get maxDiscount(): number {
+    return Math.min(DISCOUNT_CAP, this.rankDiscountReach.discount + this.badgeDiscountValue)
   }
 
   private get warnings(): string[] {
@@ -238,6 +288,14 @@ class ItemFormController extends Controller<HTMLFormElement> {
         gates
           ? `Kupić mogą tylko studenci od rangi ${gate}, więc zniżka dla rang obejmie każdego kupującego.`
           : "Zniżka dla rang obejmie każdego kupującego.",
+      )
+    }
+
+    const raw = this.rankDiscountReach.discount + this.badgeDiscountValue
+    if (raw > DISCOUNT_CAP) {
+      notes.push(
+        `Zniżki sumują się do ${raw}%, a sklep odejmie najwyżej ${DISCOUNT_CAP}%. ` +
+          "Nadwyżka przepada — rozważ niższe zniżki przy rangach i odznakach.",
       )
     }
 
@@ -280,31 +338,30 @@ class ItemFormController extends Controller<HTMLFormElement> {
   }
 
   /**
-   * An EXAMPLE, not a superlative: a student qualifies for a discount by
-   * meeting ANY one of the conditions, so "najwięcej zaoszczędzi…" would read
-   * as though all of them were needed. Mirrors ItemsHelper#item_discount_sentence
-   * word for word — a smoke test pins the server's copy of this string.
+   * One plausible student, re-picked live. Mirrors Redesign::DiscountExample
+   * word for word — a smoke test pins the server's copy of this string and the
+   * browser pass pins this one against it.
+   *
+   * THE PICK MUST QUALIFY, which is why this is re-derived on every edit rather
+   * than handed over once: setting a rank floor above the sampled rung would
+   * otherwise leave a student standing there who saves nothing.
    */
   private discountParts(): Part[] {
-    const percent = this.maxDiscount
-    if (percent === 0) {
+    if (this.maxDiscount === 0) {
       return ["Bez zniżek. Każdy kupujący zapłaci ", { b: String(this.price) }, "."]
     }
 
+    const { rank, badges, percent } = this.example
+    // Nobody plausible to name; the maximum line below still says it all.
+    if (percent === 0) return []
+
     // Mirrors PriceCalculatorService: the shop rounds a discounted price UP.
     const paid = Math.ceil((this.price * (100 - percent)) / 100)
-    const rankName = this.selectedName(this.discountRankTarget)
-    const badges = this.chosen(this.discountBadgeTargets).map(({ name }) => name)
 
-    const parts: Part[] = ["Przykładowo: student"]
-    if (rankName) parts.push(" z rangą ", { b: rankName })
-    if (badges.length > 0) {
-      parts.push(
-        rankName ? " oraz " : " z ",
-        `${badges.length > 1 ? "odznakami" : "odznaką"} `,
-        { b: andList(badges) },
-      )
-    }
+    const names = badges.map((badge) => badge.name)
+    const phrase: Part[] | null =
+      names.length === 0 ? null : [names.length > 1 ? "odznakami " : "odznaką ", { b: andList(names) }]
+    const parts: Part[] = ["Przykładowo: student", ...holderClause(rank, phrase)]
     parts.push(
       " zaoszczędzi ",
       { b: `${percent}%` },
@@ -313,6 +370,94 @@ class ItemFormController extends Controller<HTMLFormElement> {
       ` zamiast ${this.price}.`,
     )
     return parts
+  }
+
+  /** The ceiling behind the card's "Zniżki do −X%" chip, spelled out. */
+  private maxParts(): Part[] {
+    const percent = this.maxDiscount
+    if (percent === 0) return []
+
+    const reach = this.rankDiscountReach
+    const badges = this.badgeNamesValue
+    // "wszystkimi" rather than a list: naming every badge is exactly what the
+    // example above exists to avoid. One badge has nothing to summarise.
+    const phrase: Part[] | null =
+      badges.length === 0 ? null : badges.length === 1 ? ["odznaką ", { b: badges[0] }] : ["wszystkimi odznakami"]
+    const clause = holderClause(reach.discount > 0 ? reach.name : "", phrase)
+
+    return ["Maksymalnie: student", ...clause, " uzyska zniżkę ", { b: `${percent}%` }, "."]
+  }
+
+  /**
+   * Walks the shuffle the server passed and takes the first entries that
+   * qualify — same order, same rule, same student as Redesign::DiscountExample.
+   */
+  private get example(): { rank: string; badges: { name: string; discount: number }[]; percent: number } {
+    const rank = this.exampleRank
+    const badges = this.exampleBadges
+    const total = (rank?.discount ?? 0) + badges.reduce((sum, b) => sum + b.discount, 0)
+
+    return { rank: rank?.name ?? "", badges, percent: Math.min(DISCOUNT_CAP, total) }
+  }
+
+  /**
+   * From the rungs at or above the floor — standing there is one of the two
+   * ways to qualify, and the only one when the item lists no discount badges.
+   * The select lists the ladder in ascending order after its "brak" row, so
+   * selectedIndex is the floor's position in it.
+   *
+   * `ghOwnName`/`ghOwn`, NOT `ghName`/`ghDiscount`: the latter pair describes
+   * the best rung at or above this one, which is the ceiling rather than the
+   * rung an example student is standing on.
+   */
+  private get exampleRank(): { name: string; discount: number } | null {
+    const floorIndex = this.discountRankTarget.selectedIndex
+    const ladder = [...this.discountRankTarget.options].slice(1)
+    const pool = floorIndex > 0 ? ladder.slice(floorIndex - 1) : ladder
+
+    const earning = new Map(
+      pool
+        .map(
+          (option) =>
+            [option.dataset.ghOwnName ?? "", parseInt(option.dataset.ghOwn ?? "0", 10) || 0] as const,
+        )
+        .filter(([, own]) => own > 0),
+    )
+
+    const name = this.exampleRankOrderValue.find((candidate) => earning.has(candidate))
+    return name ? { name, discount: earning.get(name)! } : null
+  }
+
+  private get exampleBadges(): { name: string; discount: number }[] {
+    const all = new Map(this.allBadges.map((badge) => [badge.name, badge.discount]))
+    const picked: string[] = []
+
+    // With no floor, holding a listed badge is the only way in.
+    if (this.discountRankTarget.selectedIndex === 0) {
+      const listed = new Set(this.chosen(this.discountBadgeTargets).map(({ name }) => name))
+      if (listed.size > 0) {
+        const earning = this.exampleBadgeOrderValue.filter((n) => listed.has(n) && (all.get(n) ?? 0) > 0)
+        const forced = earning[0] ?? this.exampleBadgeOrderValue.find((n) => listed.has(n))
+        if (forced) picked.push(forced)
+      }
+    }
+
+    for (const name of this.exampleBadgeOrderValue) {
+      if (picked.length >= EXAMPLE_BADGES) break
+      if (!picked.includes(name) && (all.get(name) ?? 0) > 0) picked.push(name)
+    }
+
+    return picked
+      .sort((a, b) => a.localeCompare(b, "pl"))
+      .map((name) => ({ name, discount: all.get(name) ?? 0 }))
+  }
+
+  /** Every badge in the group, from the discount chip set. */
+  private get allBadges(): { name: string; discount: number }[] {
+    return this.discountBadgeTargets.map((chip) => ({
+      name: chip.dataset.ghName ?? "",
+      discount: parseInt(chip.dataset.ghDiscount ?? "0", 10) || 0,
+    }))
   }
 
   /** Text nodes and <b> elements, never an HTML string. */
@@ -370,6 +515,20 @@ class ItemFormController extends Controller<HTMLFormElement> {
     element.textContent = value || fallback
     element.classList.toggle("gh-ph", value === "")
   }
+}
+
+/**
+ * " z rangą X oraz odznakami A i B" — ItemsHelper#holder_clause.
+ *
+ * `badgePhrase` arrives whole, because Polish puts "wszystkimi" BEFORE the noun
+ * and a name after it — one order does not serve both.
+ */
+function holderClause(rankName: string, badgePhrase: Part[] | null): Part[] {
+  const clause: Part[] = []
+  if (rankName) clause.push(" z rangą ", { b: rankName })
+  if (badgePhrase === null) return clause
+
+  return [...clause, rankName ? " oraz " : " z ", ...badgePhrase]
 }
 
 /** "a, b i c" — the Polish list RedesignHelper#gh_and_list builds server-side. */
