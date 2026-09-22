@@ -128,7 +128,7 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Sprawdź skrzynkę'
     assert_select 'p.gh-addr', user.email
     assert_select '.gh-big-ic i.fa-solid.fa-envelope'
-    assert_select 'p.gh-small', /15 minut/
+    assert_select 'p.gh-small', /5 minut/
     assert_select 'a.gh-linkbtn', 'Zmień adres e-mail'
     # The address must not leak into any URL.
     assert_select 'a[href*=?]', user.email, false
@@ -145,7 +145,7 @@ class AuthRedesignSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'h1.gh-h1', 'Sprawdź skrzynkę'
     assert_select 'p.gh-addr', 'nobody@example.com'
-    assert_select 'p.gh-small', /15 minut/
+    assert_select 'p.gh-small', /5 minut/
   end
 
   test 'the inbox screen redirects to the form when nothing is pending' do
