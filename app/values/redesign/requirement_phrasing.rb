@@ -11,7 +11,7 @@ module Redesign
   module RequirementPhrasing
     # A requirement as a card needs it: what kind of thing it is and what it is
     # called. `name` is nil for :lives, which names no record.
-    Requirement = Struct.new(:kind, :name) do
+    Requirement = Data.define(:kind, :name) do
       def rank?  = kind == :rank
       def badge? = kind == :badge
       def lives? = kind == :lives

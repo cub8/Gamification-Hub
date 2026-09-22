@@ -2,8 +2,6 @@
 
 class LoginToken < ApplicationRecord
   TOKEN_BYTES = 24
-  # Single source of truth: the model's expiry AND the copy on the inbox screen
-  # ("Link działa przez N minut") both read this.
   EXPIRES_IN = 5.minutes
 
   belongs_to :user

@@ -9,7 +9,7 @@ class StudentStartDashboard
   # How many rows the "Ostatnio we wszystkich grupach" feed shows.
   FEED_LIMIT = 8
 
-  Group = Struct.new(
+  Group = Data.define(
     :membership, :story_group, :rank, :next_rank, :badges_earned, :badges_total,
   ) do
     def balance = membership.current_currency.to_i

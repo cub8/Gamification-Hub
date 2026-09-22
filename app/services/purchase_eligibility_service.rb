@@ -8,7 +8,7 @@ class PurchaseEligibilityService
   # out of Polish. The shop card reads these; the till still reads `errors`.
   #
   # kind: :lives (record nil), :rank (the Rank), :badge (the Badge).
-  Reason = Struct.new(:kind, :record)
+  Reason = Data.define(:kind, :record)
 
   class Result
     attr_reader :errors, :reasons

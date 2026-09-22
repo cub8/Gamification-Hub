@@ -45,12 +45,12 @@ numbers match).
 
 ### The design system in four points
 
-| Primitive | What it is | Why it matters for conversion |
-| --- | --- | --- |
-| **One shape** | Every surface is the same 45° cut-corner octagon via `clip-path: polygon(...)` driven by a `--c` variable. **No `border-radius` anywhere.** | Bootstrap applies `border-radius` to nearly every component. This is a system-wide collision, not a per-screen one. |
-| **Physical button edge** | `::before` with a two-stop linear gradient (edge colour for the bottom 3px, fill above); `:active` shifts down 2px. | This is the whole "card table" feel. It cannot be expressed as Tailwind utilities; it belongs in `@layer components`. |
-| **Semantic colour roles** | `--item` (orange), `--badge` (teal), `--rank` (gold), `--lock`, `--heart`, `--earn`, `--spend`, each with an `-edge` variant. Light/dark are two token sets on `[data-theme]`. | Roles, not palette names. Theming is `[data-theme]` attribute-driven, **not** Tailwind's `dark:` variant. |
-| **Three fonts** | Bricolage Grotesque (UI), Literata (flavour/story text), JetBrains Mono (codes). | Self-hosted woff2 subsets (Latin + Polish) already exist in the bundle. |
+| Primitive                 | What it is                                                                                                                                                                     | Why it matters for conversion                                                                                         |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| **One shape**             | Every surface is the same 45° cut-corner octagon via `clip-path: polygon(...)` driven by a `--c` variable. **No `border-radius` anywhere.**                                    | Bootstrap applies `border-radius` to nearly every component. This is a system-wide collision, not a per-screen one.   |
+| **Physical button edge**  | `::before` with a two-stop linear gradient (edge colour for the bottom 3px, fill above); `:active` shifts down 2px.                                                            | This is the whole "card table" feel. It cannot be expressed as Tailwind utilities; it belongs in `@layer components`. |
+| **Semantic colour roles** | `--item` (orange), `--badge` (teal), `--rank` (gold), `--lock`, `--heart`, `--earn`, `--spend`, each with an `-edge` variant. Light/dark are two token sets on `[data-theme]`. | Roles, not palette names. Theming is `[data-theme]` attribute-driven, **not** Tailwind's `dark:` variant.             |
+| **Three fonts**           | Bricolage Grotesque (UI), Literata (flavour/story text), JetBrains Mono (codes).                                                                                               | Self-hosted woff2 subsets (Latin + Polish) already exist in the bundle.                                               |
 
 Borders on cut-corner surfaces must use a frame layer plus inset background —
 `border` and `box-shadow` break at the clipped corners. Any conversion that
@@ -124,32 +124,32 @@ they come first:
 28 controller files (25 concrete controllers + `ApplicationController` +
 3 concerns). Layout column: blank = `application` (the default).
 
-| Controller | HTML actions | Layout | Notes |
-| --- | --- | --- | --- |
-| `RootController` | — (redirect only) | — | `/` → `home` or `login` |
-| `HomeController` | `index` | application | dashboard |
-| `SessionsController` | `new` | **public** | login screen |
-| `Auth::PasswordlessController` | `new` | **public** | magic-link request; `verify`/`create` redirect |
-| `Auth::UsosController` | — (redirect only) | — | OAuth callback — **has no views at all**; failures are redirect + flash |
-| `JoinController` | `show`, `new` | application | `create` re-renders `new` on failure |
-| `StoryGroupsController` | `index`, `show`, `new`, `edit` | application | `show` branches student/teacher |
-| `StudentsController` | `index`, `show`, `new`, `edit` | application | `update_lives` re-renders `index` |
-| `StudentsProfileController` | `index` | application | student's own profile |
-| `StudentsItemsController` | `index`, `show` | application | |
-| `StudentsBadgesController` | `new` | application | modal |
-| `CurrencyAdjustmentsController` | `new` | application | modal |
-| `CurrencyTransactionsController` | `index` | application | currency history |
-| `ItemsController` | `index`, `new`, `edit` | application | no `show` |
-| `BadgesController` | `index`, `show`, `new`, `edit` | application | |
-| `RanksController` | `index`, `show`, `new`, `edit` | application | |
-| `ShopController` | `index`, `show` | application | `show` is the buy modal |
-| `RankingController` | `show` | application | `change_status` redirects |
-| `StoryGroupInvitesController` | `index`, `show`, `new`, `edit` | application | |
-| `TeachersController` | `index`, `new` | application | |
-| `ActivityGroupsController` | `index`, `edit` | application | `create_bulk`, `destroy` redirect |
-| `ActivityGroupTemplatesController` | `index`, `new`, `edit` | application | **`show` renders JSON**, not HTML |
-| `StudentsActivityGroupCategoriesController` | `edit` | application | the grading screen |
-| `NotificationsController` | `index` | application | `mark_as_read` → turbo_stream |
+| Controller                                  | HTML actions                   | Layout      | Notes                                                                   |
+| ------------------------------------------- | ------------------------------ | ----------- | ----------------------------------------------------------------------- |
+| `RootController`                            | — (redirect only)              | —           | `/` → `home` or `login`                                                 |
+| `HomeController`                            | `index`                        | application | dashboard                                                               |
+| `SessionsController`                        | `new`                          | **public**  | login screen                                                            |
+| `Auth::PasswordlessController`              | `new`                          | **public**  | magic-link request; `verify`/`create` redirect                          |
+| `Auth::UsosController`                      | — (redirect only)              | —           | OAuth callback — **has no views at all**; failures are redirect + flash |
+| `JoinController`                            | `show`, `new`                  | application | `create` re-renders `new` on failure                                    |
+| `StoryGroupsController`                     | `index`, `show`, `new`, `edit` | application | `show` branches student/teacher                                         |
+| `StudentsController`                        | `index`, `show`, `new`, `edit` | application | `update_lives` re-renders `index`                                       |
+| `StudentsProfileController`                 | `index`                        | application | student's own profile                                                   |
+| `StudentsItemsController`                   | `index`, `show`                | application |                                                                         |
+| `StudentsBadgesController`                  | `new`                          | application | modal                                                                   |
+| `CurrencyAdjustmentsController`             | `new`                          | application | modal                                                                   |
+| `CurrencyTransactionsController`            | `index`                        | application | currency history                                                        |
+| `ItemsController`                           | `index`, `new`, `edit`         | application | no `show`                                                               |
+| `BadgesController`                          | `index`, `show`, `new`, `edit` | application |                                                                         |
+| `RanksController`                           | `index`, `show`, `new`, `edit` | application |                                                                         |
+| `ShopController`                            | `index`, `show`                | application | `show` is the buy modal                                                 |
+| `RankingController`                         | `show`                         | application | `change_status` redirects                                               |
+| `StoryGroupInvitesController`               | `index`, `show`, `new`, `edit` | application |                                                                         |
+| `TeachersController`                        | `index`, `new`                 | application |                                                                         |
+| `ActivityGroupsController`                  | `index`, `edit`                | application | `create_bulk`, `destroy` redirect                                       |
+| `ActivityGroupTemplatesController`          | `index`, `new`, `edit`         | application | **`show` renders JSON**, not HTML                                       |
+| `StudentsActivityGroupCategoriesController` | `edit`                         | application | the grading screen                                                      |
+| `NotificationsController`                   | `index`                        | application | `mark_as_read` → turbo_stream                                           |
 
 Non-HTML actions worth noting: `ActivityGroupTemplates#show` (JSON, consumed by
 the template picker), `Notifications#mark_as_read` (turbo_stream removing
@@ -159,11 +159,11 @@ frame — the redesign's dialog replacement must preserve this).
 
 ### 2.2 Layouts
 
-| Layout | Bundle | Chrome |
-| --- | --- | --- |
-| `application.html.haml` | `application.css` | `Shared::HeaderComponent`, two `Shared::MainSidebarComponent` renders (full + collapsed, toggled by the `desktop-sidebar` Stimulus controller via `d-none`), `MessagesComponent`, `#app-content`, and a bare `turbo_frame_tag 'modal'` |
-| `public.html.haml` | `public.css` | centred `.public-panel`, logo, an inline `.alert-success` with a Bootstrap `btn-close`, no nav |
-| `mailer.html.haml` / `mailer.text.haml` | — | out of redesign scope |
+| Layout                                  | Bundle            | Chrome                                                                                                                                                                                                                                 |
+| --------------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `application.html.haml`                 | `application.css` | `Shared::HeaderComponent`, two `Shared::MainSidebarComponent` renders (full + collapsed, toggled by the `desktop-sidebar` Stimulus controller via `d-none`), `MessagesComponent`, `#app-content`, and a bare `turbo_frame_tag 'modal'` |
+| `public.html.haml`                      | `public.css`      | centred `.public-panel`, logo, an inline `.alert-success` with a Bootstrap `btn-close`, no nav                                                                                                                                         |
+| `mailer.html.haml` / `mailer.text.haml` | —                 | out of redesign scope                                                                                                                                                                                                                  |
 
 Both HTML layouts hardcode Bootstrap utilities on `<body>`
 (`vh-100 d-flex flex-column overflow-hidden`) and both pull the Google Fonts
@@ -176,16 +176,16 @@ collapse toggle. The mockup's mobile tab bar and "Więcej" sheet are net-new.
 
 ### 2.3 Global chrome and shared UI
 
-| Concern | Implementation | Redesign impact |
-| --- | --- | --- |
-| Header | `Shared::HeaderComponent` + `_header.scss` | Full rebuild; hosts the notification dropdown and user dropdown |
-| Sidebar | `Shared::MainSidebarComponent` + `Shared::SidebarButtonComponent` + `_sidebar.scss` | Full rebuild. **Nav labels live in Ruby**, not views — `primary_buttons` / `story_group_buttons` return hashes with `text:`/`icon:`/`path:`. The "Grupy aktywności" → "Arkusze ocen" rename (D2) is a one-line change here. |
-| Flash | `MessagesComponent` | Bootstrap `.alert` + `btn-close` with `data-bs-dismiss` |
-| Modals | **Two separate mechanisms** (see 2.5) | The main structural risk |
-| Pagination | **None found** — no kaminari, no pagy, no custom paginator | Lists render full collections. If any list is expected to grow, pagination is net-new work the mockup does not specify. |
-| Form builder | **None** — plain `form_with` + hand-written Bootstrap classes | No abstraction layer to swap. **17 files hand-type `form-control` / `form-select` / `btn` on every field.** This is the highest-volume manual work in the whole conversion; a redesign FormBuilder or field component would pay for itself across the mockup's 5 form screens. Nested category fields use the `rondo_form` gem. |
-| Icons | Font Awesome 7 **and** Bootstrap Icons, both bundled | The mockup has its own icon set ("real icon set later" is still open per DECISIONS) |
-| Authorization | Pundit (`authorize` calls + `story_group_*_authorization` concerns) | Unaffected by styling, but D10 (supporting teachers) is a policy change |
+| Concern       | Implementation                                                                      | Redesign impact                                                                                                                                                                                                                                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Header        | `Shared::HeaderComponent` + `_header.scss`                                          | Full rebuild; hosts the notification dropdown and user dropdown                                                                                                                                                                                                                                                                 |
+| Sidebar       | `Shared::MainSidebarComponent` + `Shared::SidebarButtonComponent` + `_sidebar.scss` | Full rebuild. **Nav labels live in Ruby**, not views — `primary_buttons` / `story_group_buttons` return hashes with `text:`/`icon:`/`path:`. The "Grupy aktywności" → "Arkusze ocen" rename (D2) is a one-line change here.                                                                                                     |
+| Flash         | `MessagesComponent`                                                                 | Bootstrap `.alert` + `btn-close` with `data-bs-dismiss`                                                                                                                                                                                                                                                                         |
+| Modals        | **Two separate mechanisms** (see 2.5)                                               | The main structural risk                                                                                                                                                                                                                                                                                                        |
+| Pagination    | **None found** — no kaminari, no pagy, no custom paginator                          | Lists render full collections. If any list is expected to grow, pagination is net-new work the mockup does not specify.                                                                                                                                                                                                         |
+| Form builder  | **None** — plain `form_with` + hand-written Bootstrap classes                       | No abstraction layer to swap. **17 files hand-type `form-control` / `form-select` / `btn` on every field.** This is the highest-volume manual work in the whole conversion; a redesign FormBuilder or field component would pay for itself across the mockup's 5 form screens. Nested category fields use the `rondo_form` gem. |
+| Icons         | Font Awesome 7 **and** Bootstrap Icons, both bundled                                | The mockup has its own icon set ("real icon set later" is still open per DECISIONS)                                                                                                                                                                                                                                             |
+| Authorization | Pundit (`authorize` calls + `story_group_*_authorization` concerns)                 | Unaffected by styling, but D10 (supporting teachers) is a policy change                                                                                                                                                                                                                                                         |
 
 ### 2.4 Helpers
 
@@ -195,11 +195,11 @@ collapse toggle. The mockup's mobile tab bar and "Więcej" sheet are net-new.
 holds only a string builder). Helpers are *not* a significant Bootstrap-coupling
 hotspot here. The three that emit markup:
 
-| Helper | Method | Concern |
-| --- | --- | --- |
-| `CurrencyTransactionsHelper` | `transaction_kind_badge` | `content_tag(:span, …, class: "badge bg-primary\|bg-info\|bg-secondary")` — **the only hardcoded Bootstrap colour classes in a helper.** Maps directly onto the mockup's semantic roles (`--earn` / `--spend` / gold), so this is a clean rewrite. |
-| `StudentsItemsHelper` | `go_back_from_show_link`, `close_show_link` | Both emit `class: 'btn btn-secondary'` and both encode modal-vs-page navigation logic in `data: { turbo_frame: … }`. Coupled to the turbo-frame modal pattern, so they change when modals change. |
-| `StoryGroupInvitesHelper` | `invite_qr_code` | Generates a base64 PNG QR via RQRCode. Framework-neutral — keep as is. |
+| Helper                       | Method                                      | Concern                                                                                                                                                                                                                                            |
+| ---------------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CurrencyTransactionsHelper` | `transaction_kind_badge`                    | `content_tag(:span, …, class: "badge bg-primary\|bg-info\|bg-secondary")` — **the only hardcoded Bootstrap colour classes in a helper.** Maps directly onto the mockup's semantic roles (`--earn` / `--spend` / gold), so this is a clean rewrite. |
+| `StudentsItemsHelper`        | `go_back_from_show_link`, `close_show_link` | Both emit `class: 'btn btn-secondary'` and both encode modal-vs-page navigation logic in `data: { turbo_frame: … }`. Coupled to the turbo-frame modal pattern, so they change when modals change.                                                  |
+| `StoryGroupInvitesHelper`    | `invite_qr_code`                            | Generates a base64 PNG QR via RQRCode. Framework-neutral — keep as is.                                                                                                                                                                             |
 
 Pure data helpers with no markup: `student_map`, `teacher_map` (TomSelect
 option payloads), `invite_uses_label`, `exp_time_label`, `discount_label`,
@@ -227,29 +227,29 @@ Components, by contrast, do have real fan-in: `MessagesComponent` 4 sites,
 `ActivityGroup::CategoryFormComponent` 4 sites, `Shared::SidebarButtonComponent`
 3 sites.
 
-| Partial | Rendered by | Notes |
-| --- | --- | --- |
-| `items/_form` | `items/new`, `items/edit` | 2 |
-| `badges/_form` | `badges/new`, `badges/edit` | 2 |
-| `ranks/_form` | `ranks/new`, `ranks/edit` | 2 |
-| `story_groups/_form` | `story_groups/new`, `story_groups/edit` | 2, takes `cancel_path` + `submit_label` |
-| `story_group_invites/_form` | `invites/new`, `invites/edit` | 2, takes `url` |
-| `activity_groups/_form` | `activity_groups/edit` | 1 |
-| `activity_group_templates/_form` | `templates/new`, `templates/edit` | 2 |
-| `activity_groups/_category_form` | via `ActivityGroup::CategoryFormComponent` | wrapper |
-| `activity_group_templates/_category_form` | via same component | wrapper |
-| `activity_groups/_name_modal` | `activity_groups/index` | Bootstrap modal |
-| `activity_groups/_bulk_create_modal` | `activity_groups/index` | Bootstrap modal |
-| `activity_groups/_confirm_delete_modal` | `activity_groups/index` (×2 call sites) | Bootstrap modal |
-| `story_groups/_student_show` | `story_groups/show` | role branch |
-| `story_groups/_teacher_show` | `story_groups/show` | role branch |
-| `shop/_item` | `shop/index` (×2: eligible + locked) | collection render, `locked:` local |
-| `notifications/_notification` | `notifications/index` (×2: unread + read) | collection render |
-| `students/_badges` | `students/show` | |
-| `students_items/_index` | `students_items/index` (×2 branches) | |
-| `badges/_badge` | — | **no render site found** |
-| `ranks/_rank` | — | **no render site found** |
-| `story_groups/_story_group` | — | **no render site found** |
+| Partial                                   | Rendered by                                | Notes                                   |
+| ----------------------------------------- | ------------------------------------------ | --------------------------------------- |
+| `items/_form`                             | `items/new`, `items/edit`                  | 2                                       |
+| `badges/_form`                            | `badges/new`, `badges/edit`                | 2                                       |
+| `ranks/_form`                             | `ranks/new`, `ranks/edit`                  | 2                                       |
+| `story_groups/_form`                      | `story_groups/new`, `story_groups/edit`    | 2, takes `cancel_path` + `submit_label` |
+| `story_group_invites/_form`               | `invites/new`, `invites/edit`              | 2, takes `url`                          |
+| `activity_groups/_form`                   | `activity_groups/edit`                     | 1                                       |
+| `activity_group_templates/_form`          | `templates/new`, `templates/edit`          | 2                                       |
+| `activity_groups/_category_form`          | via `ActivityGroup::CategoryFormComponent` | wrapper                                 |
+| `activity_group_templates/_category_form` | via same component                         | wrapper                                 |
+| `activity_groups/_name_modal`             | `activity_groups/index`                    | Bootstrap modal                         |
+| `activity_groups/_bulk_create_modal`      | `activity_groups/index`                    | Bootstrap modal                         |
+| `activity_groups/_confirm_delete_modal`   | `activity_groups/index` (×2 call sites)    | Bootstrap modal                         |
+| `story_groups/_student_show`              | `story_groups/show`                        | role branch                             |
+| `story_groups/_teacher_show`              | `story_groups/show`                        | role branch                             |
+| `shop/_item`                              | `shop/index` (×2: eligible + locked)       | collection render, `locked:` local      |
+| `notifications/_notification`             | `notifications/index` (×2: unread + read)  | collection render                       |
+| `students/_badges`                        | `students/show`                            |                                         |
+| `students_items/_index`                   | `students_items/index` (×2 branches)       |                                         |
+| `badges/_badge`                           | —                                          | **no render site found**                |
+| `ranks/_rank`                             | —                                          | **no render site found**                |
+| `story_groups/_story_group`               | —                                          | **no render site found**                |
 
 **Three partials are dead** — `badges/_badge`, `ranks/_rank` and
 `story_groups/_story_group` have zero render sites after checking collection
@@ -301,21 +301,21 @@ off by one.) There is no auto-registration: each file self-registers and
 `controllers/index.ts` imports all 12, so adding a redesign controller means
 editing that index.
 
-| Controller | Purpose | Bootstrap-dependent? |
-| --- | --- | --- |
-| `desktop-sidebar` | toggles full/collapsed sidebar by adding `d-none` | Yes — uses the `d-none` utility class |
-| `notifications` | fetches/marks notifications, drives the header dropdown | Yes — lives inside a `data-bs-toggle="dropdown"` |
-| `collapse-memory` | remembers open/closed state of collapsible sections | Yes — wraps Bootstrap Collapse |
-| `table-search` | client-side row filter | No |
-| `column-select` | column picker in grading | No |
-| `badge-selector` | badge picking UI | No |
-| `nested-rondo` | nested dynamic form fields | No |
-| `sortable-form` | drag-reorder via SortableJS | No |
-| `file-upload` | file input preview (5 view usages) | No |
-| `flatpickr` | date picker via stimulus-flatpickr | No |
-| `tom-select-basic` | select enhancement (4 usages) | No — but ships Bootstrap 5 theme CSS |
-| `tom-select-user` | user search select (2 usages) | Same |
-| `application` / `index` | Stimulus bootstrapping | — |
+| Controller              | Purpose                                                 | Bootstrap-dependent?                             |
+| ----------------------- | ------------------------------------------------------- | ------------------------------------------------ |
+| `desktop-sidebar`       | toggles full/collapsed sidebar by adding `d-none`       | Yes — uses the `d-none` utility class            |
+| `notifications`         | fetches/marks notifications, drives the header dropdown | Yes — lives inside a `data-bs-toggle="dropdown"` |
+| `collapse-memory`       | remembers open/closed state of collapsible sections     | Yes — wraps Bootstrap Collapse                   |
+| `table-search`          | client-side row filter                                  | No                                               |
+| `column-select`         | column picker in grading                                | No                                               |
+| `badge-selector`        | badge picking UI                                        | No                                               |
+| `nested-rondo`          | nested dynamic form fields                              | No                                               |
+| `sortable-form`         | drag-reorder via SortableJS                             | No                                               |
+| `file-upload`           | file input preview (5 view usages)                      | No                                               |
+| `flatpickr`             | date picker via stimulus-flatpickr                      | No                                               |
+| `tom-select-basic`      | select enhancement (4 usages)                           | No — but ships Bootstrap 5 theme CSS             |
+| `tom-select-user`       | user search select (2 usages)                           | Same                                             |
+| `application` / `index` | Stimulus bootstrapping                                  | —                                                |
 
 **Bootstrap JS — the replacement list.** Bootstrap's JS is imported wholesale
 (`import "bootstrap"` in `application.ts`) plus an explicit
@@ -327,13 +327,13 @@ behavioural usage is modest and concentrated:
 > `data: { bs_toggle: …, bs_target: …, bs_dismiss: … }`. Search for `bs_` , not
 > `data-bs-`.
 
-| Component | Occurrences | Where | Replacement |
-| --- | --- | --- | --- |
-| Dropdown | 6 | header (bell + avatar), `story_groups/_teacher_show`, `students/index`, `activity_groups/index` ×2 | Stimulus + popover or `<details>`. Two need `auto_close: 'outside'` and two need Popper `strategy: 'fixed'` — and the `notifications` controller listens for the dropdown's **show event**, so either keep that event contract or rewrite it alongside. |
-| Modal | 4 triggers / 3 dialogs | `activity_groups/index` and its three `_*_modal` partials only | native `<dialog>` + Stimulus — confined to one screen |
-| Collapse | 2 | `activity_groups/index`, `activity_group/category_form_component` | rewrite together with `collapse-memory`, which wraps it |
-| Alert dismiss | 3 | `MessagesComponent`, `layouts/public` | trivial Stimulus |
-| Tooltip | 1 (applies to every collapsed sidebar button) | `SidebarButtonComponent#tooltip_attributes`; `bootstrap_setup.ts` scans `[data-bs-toggle="tooltip"]` once at load | Stimulus or CSS. **Note it is already broken after Turbo navigation** — the scan never re-runs — so this is a bug fix, not just a port. |
+| Component     | Occurrences                                   | Where                                                                                                             | Replacement                                                                                                                                                                                                                                             |
+| ------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dropdown      | 6                                             | header (bell + avatar), `story_groups/_teacher_show`, `students/index`, `activity_groups/index` ×2                | Stimulus + popover or `<details>`. Two need `auto_close: 'outside'` and two need Popper `strategy: 'fixed'` — and the `notifications` controller listens for the dropdown's **show event**, so either keep that event contract or rewrite it alongside. |
+| Modal         | 4 triggers / 3 dialogs                        | `activity_groups/index` and its three `_*_modal` partials only                                                    | native `<dialog>` + Stimulus — confined to one screen                                                                                                                                                                                                   |
+| Collapse      | 2                                             | `activity_groups/index`, `activity_group/category_form_component`                                                 | rewrite together with `collapse-memory`, which wraps it                                                                                                                                                                                                 |
+| Alert dismiss | 3                                             | `MessagesComponent`, `layouts/public`                                                                             | trivial Stimulus                                                                                                                                                                                                                                        |
+| Tooltip       | 1 (applies to every collapsed sidebar button) | `SidebarButtonComponent#tooltip_attributes`; `bootstrap_setup.ts` scans `[data-bs-toggle="tooltip"]` once at load | Stimulus or CSS. **Note it is already broken after Turbo navigation** — the scan never re-runs — so this is a bug fix, not just a port.                                                                                                                 |
 
 No offcanvas, tabs, toasts, carousel, scrollspy or popovers. `@popperjs/core` is
 a dependency only because Bootstrap's dropdowns and tooltips need it — both go
@@ -418,17 +418,17 @@ purchases route**, and **no error-page route**.
 
 ### 2.8 DECISIONS.md items checked against the code
 
-| # | Decision | Current state |
-| --- | --- | --- |
-| D1 | Soft delete everywhere | **Not implemented.** No `deleted_at` column on any table, no `discard`/`acts_as_paranoid` gem, and no "archive" concept either — every `destroy` is a hard delete. This is a migration + scope change across items, badges, ranks, sheets and memberships. |
-| D2 | "Arkusze ocen" | Not applied. Sidebar still says "Grupy aktywności" (`main_sidebar_component.rb`). |
-| D3 | Nickname required at join | **Not implemented.** No `nickname` column anywhere; the join flow is a single step. |
-| D4 | Negative corrections don't lower total | **Already correct.** `story_group_students` has separate `current_currency` and `total_currency` columns, and `CurrencyAdjusterService` increments `total_currency` only `if amount.positive?`. However **the "cannot go below 0" clamp is missing** — `increment!(:current_currency, amount)` is unguarded, so a large negative correction drives the spendable balance negative. That is a live bug against D4, independent of the redesign. |
-| D6 | Discount = rank OR any badge, amounts summed | `DiscountCalculatorService` exists and computes `meets_rank` against `total_currency`; needs a read against the D6 wording (not verified in depth). |
-| D7 | Ranking modes | Only a boolean `ranking_enabled` + `change_status`. The two modes ("Podium i własne miejsce" / "Pełny ranking") do not exist. |
-| D8 | Leaving restores data on rejoin | No leave action exists at all; membership `has_many … dependent: :destroy` would hard-delete on removal. |
-| D9 | Invite codes excluding O/0/I/1/L | Not verified — see Low confidence. |
-| D12 | Account settings read-only | No account screen exists. |
+| #   | Decision                                     | Current state                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| --- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D1  | Soft delete everywhere                       | **Not implemented.** No `deleted_at` column on any table, no `discard`/`acts_as_paranoid` gem, and no "archive" concept either — every `destroy` is a hard delete. This is a migration + scope change across items, badges, ranks, sheets and memberships.                                                                                                                                                                                     |
+| D2  | "Arkusze ocen"                               | Not applied. Sidebar still says "Grupy aktywności" (`main_sidebar_component.rb`).                                                                                                                                                                                                                                                                                                                                                              |
+| D3  | Nickname required at join                    | **Not implemented.** No `nickname` column anywhere; the join flow is a single step.                                                                                                                                                                                                                                                                                                                                                            |
+| D4  | Negative corrections don't lower total       | **Already correct.** `story_group_students` has separate `current_currency` and `total_currency` columns, and `CurrencyAdjusterService` increments `total_currency` only `if amount.positive?`. However **the "cannot go below 0" clamp is missing** — `increment!(:current_currency, amount)` is unguarded, so a large negative correction drives the spendable balance negative. That is a live bug against D4, independent of the redesign. |
+| D6  | Discount = rank OR any badge, amounts summed | `DiscountCalculatorService` exists and computes `meets_rank` against `total_currency`; needs a read against the D6 wording (not verified in depth).                                                                                                                                                                                                                                                                                            |
+| D7  | Ranking modes                                | Only a boolean `ranking_enabled` + `change_status`. The two modes ("Podium i własne miejsce" / "Pełny ranking") do not exist.                                                                                                                                                                                                                                                                                                                  |
+| D8  | Leaving restores data on rejoin              | No leave action exists at all; membership `has_many … dependent: :destroy` would hard-delete on removal.                                                                                                                                                                                                                                                                                                                                       |
+| D9  | Invite codes excluding O/0/I/1/L             | Not verified — see Low confidence.                                                                                                                                                                                                                                                                                                                                                                                                             |
+| D12 | Account settings read-only                   | No account screen exists.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 
 ---
@@ -446,10 +446,10 @@ for the design system; it is the wrong place to expect a small total.
 
 ### Bucket A — exists here and in the mockup
 
-| Mockup | Ours | View | Effort | Driver |
-| --- | --- | --- | --- | --- |
-| `#/out/login` | `SessionsController#new` (layout `public`) | `sessions/new.html.haml` | **M** | markup + route |
-| `#/out/login-mail` | `Auth::PasswordlessController#new` (layout `public`) | `auth/passwordless/new.html.haml` | **M** | markup + controller/Stimulus |
+| Mockup             | Ours                                                 | View                              | Effort | Driver                       |
+| ------------------ | ---------------------------------------------------- | --------------------------------- | ------ | ---------------------------- |
+| `#/out/login`      | `SessionsController#new` (layout `public`)           | `sessions/new.html.haml`          | **M**  | markup + route               |
+| `#/out/login-mail` | `Auth::PasswordlessController#new` (layout `public`) | `auth/passwordless/new.html.haml` | **M**  | markup + controller/Stimulus |
 
 **`#/out/login` — M.** The markup is small (two buttons, an "albo" divider, a
 footer link), but this is the screen that must first stand up the whole redesign
@@ -469,40 +469,40 @@ top "Inne sposoby logowania" link instead of our bottom "Cofnij" button.
 
 ### Bucket B — exists here, no mockup screen
 
-| Ours | Note |
-| --- | --- |
+| Ours                                                  | Note                                                                                                                                                                                                                                                    |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `passwordless_mailer/token_email` (`.html` + `.text`) | The magic-link e-mail. The mockup never shows an e-mail. Currently near-unstyled. Restyling is worthwhile but out of mockup scope — and mailer HTML cannot rely on `clip-path`/token CSS across mail clients, so it needs its own simplified treatment. |
-| `SessionsController#destroy` (`/logout`) | Redirect only; appears in the mockup as an avatar-menu item, not a screen. |
-| `BypassLoginService` dev login bypass | Not in the mockup — see the flag below. |
+| `SessionsController#destroy` (`/logout`)              | Redirect only; appears in the mockup as an avatar-menu item, not a screen.                                                                                                                                                                              |
+| `BypassLoginService` dev login bypass                 | Not in the mockup — see the flag below.                                                                                                                                                                                                                 |
 
 `layouts/public.html.haml` is bucket B in spirit: the mockup's auth shell
 replaces it wholesale rather than mapping onto it.
 
 ### Bucket C — mockup screen with no counterpart here (7)
 
-| Mockup | Screen | Effort | What must be built |
-| --- | --- | --- | --- |
-| `#/out/inbox` | Sprawdź skrzynkę | **M** | Route + action + view. The submitted e-mail must survive to the screen (session or signed param). Resend posting back to `passwordless#create`, a 60 s cooldown (server throttle **and** a Stimulus countdown), and a "Zmień adres e-mail" link. |
-| `#/out/link` | Magic-link landing | **L** | **Security-relevant — see B1.** Split `verify` into a side-effect-free GET that renders, plus a POST that consumes. Dual copy variant (login vs finish-registration). |
-| `#/out/link-expired` | Link wygasł | **S** | Route + view + the failure branch of `verify` rendering it instead of a flash redirect. Static copy, two buttons. |
-| `#/out/register` | Rejestracja | **M** | Route + controller + view mirroring `login`. **No registration controller exists at all.** |
-| `#/out/register-mail` | Rejestracja e-mailem | **L** | Largest auth item. Form: invite code, first name, last name, e-mail, terms checkbox. The code field has a **live preview** resolving the code to a group + organisation with a thumbnail — an async validation endpoint plus Stimulus, not markup. Creating a user *from* an invite does not exist: `AcceptInviteService` requires an already-authenticated `user`. |
-| `#/out/usos` | Przekierowanie do USOS | **S** | Route + view. Pure interstitial (spinner, copy, manual-open fallback). Only meaningful if the redirect is routed through the app. |
-| `#/out/usos-error` | Błąd USOS | **M** | Route + view with two variants — user cancelled/refused consent vs USOS unavailable. Today `InvalidProviderError` and `Providers::InvalidAuthError` both collapse to `redirect_to root_path` with one generic flash, so the error taxonomy must widen. |
+| Mockup                | Screen                 | Effort | What must be built                                                                                                                                                                                                                                                                                                                                                  |
+| --------------------- | ---------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#/out/inbox`         | Sprawdź skrzynkę       | **M**  | Route + action + view. The submitted e-mail must survive to the screen (session or signed param). Resend posting back to `passwordless#create`, a 60 s cooldown (server throttle **and** a Stimulus countdown), and a "Zmień adres e-mail" link.                                                                                                                    |
+| `#/out/link`          | Magic-link landing     | **L**  | **Security-relevant — see B1.** Split `verify` into a side-effect-free GET that renders, plus a POST that consumes. Dual copy variant (login vs finish-registration).                                                                                                                                                                                               |
+| `#/out/link-expired`  | Link wygasł            | **S**  | Route + view + the failure branch of `verify` rendering it instead of a flash redirect. Static copy, two buttons.                                                                                                                                                                                                                                                   |
+| `#/out/register`      | Rejestracja            | **M**  | Route + controller + view mirroring `login`. **No registration controller exists at all.**                                                                                                                                                                                                                                                                          |
+| `#/out/register-mail` | Rejestracja e-mailem   | **L**  | Largest auth item. Form: invite code, first name, last name, e-mail, terms checkbox. The code field has a **live preview** resolving the code to a group + organisation with a thumbnail — an async validation endpoint plus Stimulus, not markup. Creating a user *from* an invite does not exist: `AcceptInviteService` requires an already-authenticated `user`. |
+| `#/out/usos`          | Przekierowanie do USOS | **S**  | Route + view. Pure interstitial (spinner, copy, manual-open fallback). Only meaningful if the redirect is routed through the app.                                                                                                                                                                                                                                   |
+| `#/out/usos-error`    | Błąd USOS              | **M**  | Route + view with two variants — user cancelled/refused consent vs USOS unavailable. Today `InvalidProviderError` and `Providers::InvalidAuthError` both collapse to `redirect_to root_path` with one generic flash, so the error taxonomy must widen.                                                                                                              |
 
 ### Behaviour changes — not styling
 
-| # | Change | Current state | Impact |
-| --- | --- | --- | --- |
-| B1 | **Anti-scanner landing page**: token consumed only on an explicit button press | `passwordless#verify` (GET) consumes the token and logs in in one request | Controller split; the GET must become side-effect-free. The current design lets a mail scanner's link prefetch burn the token — this is a real bug the redesign fixes. |
-| B2 | **Token TTL 15 minutes** (DECISIONS + mockup copy "Link działa przez 15 minut") | **`LoginToken#generate_token!` sets `expires_at = 5.minutes.from_now`** | **Direct contradiction — verified in code.** Either the model goes to 15 minutes or the mockup copy changes. A decision, not an assumption. |
-| B3 | **60 s resend cooldown** | Nothing — `create` can be POSTed repeatedly, each call destroying the old token and mailing a new one | Needs a server-side throttle *and* the Stimulus countdown. Without the server half the timer is decoration. |
-| B4 | **E-mail registration for school students** | No registration path exists; users come from `SessionUserBuilder` (USOS) or an admin | New controller, view, and a create-user-from-invite service. Note `User` already declares `validates_presence_of :email, :full_name, on: :account_setup` — an existing validation context no current flow uses, which looks intended for exactly this. |
-| B5 | **Terms + privacy acceptance** | No documents, no acceptance column | DECISIONS lists the documents as **open (client)**; links are placeholders. Persisting acceptance (timestamp/version) is a migration. Blocked on client content. |
-| B6 | **Pending QR join remembered across login/registration** | Not implemented — `JoinController#create` calls `AcceptInviteService.new(user: @current_user, …)`, so joining requires being logged in; nothing stashes a code for an anonymous visitor | Session/cookie stash, a banner on all four form screens, and consumption in **three** places: magic-link confirm, registration, and USOS return. |
-| B7 | **USOS error taxonomy** | Two rescues, both → one generic flash | Widen handling; two copy variants. |
-| B8 | **Theme toggle on auth screens** | No theming mechanism anywhere in the app | `[data-theme]` token sets + cookie persistence. **System-level work auth is merely the first consumer of** — it belongs in the shared-primitives stage (section 6), not in an auth screen estimate. |
-| B9 | Dead link: `link_to 'Zarejestruj się', ''` in `sessions/new` | Renders an anchor to the current page | A live bug today; fixed once a register route exists. |
+| #   | Change                                                                         | Current state                                                                                                                                                                           | Impact                                                                                                                                                                                                                                                 |
+| --- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| B1  | **Anti-scanner landing page**: token consumed only on an explicit button press | `passwordless#verify` (GET) consumes the token and logs in in one request                                                                                                               | Controller split; the GET must become side-effect-free. The current design lets a mail scanner's link prefetch burn the token — this is a real bug the redesign fixes.                                                                                 |
+| B2  | **Token TTL 5 minutes** (DECISIONS + mockup copy "Link działa przez 5 minut")  | **`LoginToken#generate_token!` sets `expires_at = 5.minutes.from_now`**                                                                                                                 | **Direct contradiction — verified in code.** Either the model goes to 5 minutes or the mockup copy changes. A decision, not an assumption.                                                                                                             |
+| B3  | **60 s resend cooldown**                                                       | Nothing — `create` can be POSTed repeatedly, each call destroying the old token and mailing a new one                                                                                   | Needs a server-side throttle *and* the Stimulus countdown. Without the server half the timer is decoration.                                                                                                                                            |
+| B4  | **E-mail registration for school students**                                    | No registration path exists; users come from `SessionUserBuilder` (USOS) or an admin                                                                                                    | New controller, view, and a create-user-from-invite service. Note `User` already declares `validates_presence_of :email, :full_name, on: :account_setup` — an existing validation context no current flow uses, which looks intended for exactly this. |
+| B5  | **Terms + privacy acceptance**                                                 | No documents, no acceptance column                                                                                                                                                      | DECISIONS lists the documents as **open (client)**; links are placeholders. Persisting acceptance (timestamp/version) is a migration. Blocked on client content.                                                                                       |
+| B6  | **Pending QR join remembered across login/registration**                       | Not implemented — `JoinController#create` calls `AcceptInviteService.new(user: @current_user, …)`, so joining requires being logged in; nothing stashes a code for an anonymous visitor | Session/cookie stash, a banner on all four form screens, and consumption in **three** places: magic-link confirm, registration, and USOS return.                                                                                                       |
+| B7  | **USOS error taxonomy**                                                        | Two rescues, both → one generic flash                                                                                                                                                   | Widen handling; two copy variants.                                                                                                                                                                                                                     |
+| B8  | **Theme toggle on auth screens**                                               | No theming mechanism anywhere in the app                                                                                                                                                | `[data-theme]` token sets + cookie persistence. **System-level work auth is merely the first consumer of** — it belongs in the shared-primitives stage (section 6), not in an auth screen estimate.                                                    |
+| B9  | Dead link: `link_to 'Zarejestruj się', ''` in `sessions/new`                   | Renders an anchor to the current page                                                                                                                                                   | A live bug today; fixed once a register route exists.                                                                                                                                                                                                  |
 
 ### ⚠️ Found during the audit, unrelated to the redesign
 
@@ -558,17 +558,17 @@ map onto one shared action, and two are dev/skeleton screens rather than routes.
 
 ### Bucket A — exists here and in the mockup
 
-| Mockup | Ours | View | Effort | Driver |
-| --- | --- | --- | --- | --- |
-| `#/s/groups` Moje grupy | `StoryGroupsController#index` | `story_groups/index.html.haml` | **M** | markup only |
-| `#/s/home` Grupa: przegląd | `StoryGroupsController#show` | `story_groups/_student_show.html.haml` | **L** | markup + IA |
-| `#/s/shop` Sklep | `ShopController#index` | `shop/index.html.haml` + `shop/_item` | **M** | markup + Stimulus |
-| (shop buy dialog) | `ShopController#show` / `#buy` | `shop/show.html.haml` | **M** | markup + modal mechanism |
-| `#/s/my-items` Moje przedmioty | `StudentsItemsController#index` / `#show` | `students_items/index` + `_index` + `show` | **M** | markup + modal mechanism |
-| `#/s/ranks` Rangi | `RanksController#index` / `#show` | `ranks/index`, `ranks/show` | **S** | markup only |
-| `#/s/badges` Odznaki | `BadgesController#index` / `#show` | `badges/index`, `badges/show` | **S** | markup only |
-| `#/s/history` Historia waluty | `CurrencyTransactionsController#index` | `currency_transactions/index.html.haml` | **M** | markup + soft-delete display |
-| `#/s/ranking` Ranking | `RankingController#show` | `ranking/show.html.haml` | **L** | markup + model/controller |
+| Mockup                         | Ours                                      | View                                       | Effort | Driver                       |
+| ------------------------------ | ----------------------------------------- | ------------------------------------------ | ------ | ---------------------------- |
+| `#/s/groups` Moje grupy        | `StoryGroupsController#index`             | `story_groups/index.html.haml`             | **M**  | markup only                  |
+| `#/s/home` Grupa: przegląd     | `StoryGroupsController#show`              | `story_groups/_student_show.html.haml`     | **L**  | markup + IA                  |
+| `#/s/shop` Sklep               | `ShopController#index`                    | `shop/index.html.haml` + `shop/_item`      | **M**  | markup + Stimulus            |
+| (shop buy dialog)              | `ShopController#show` / `#buy`            | `shop/show.html.haml`                      | **M**  | markup + modal mechanism     |
+| `#/s/my-items` Moje przedmioty | `StudentsItemsController#index` / `#show` | `students_items/index` + `_index` + `show` | **M**  | markup + modal mechanism     |
+| `#/s/ranks` Rangi              | `RanksController#index` / `#show`         | `ranks/index`, `ranks/show`                | **S**  | markup only                  |
+| `#/s/badges` Odznaki           | `BadgesController#index` / `#show`        | `badges/index`, `badges/show`              | **S**  | markup only                  |
+| `#/s/history` Historia waluty  | `CurrencyTransactionsController#index`    | `currency_transactions/index.html.haml`    | **M**  | markup + soft-delete display |
+| `#/s/ranking` Ranking          | `RankingController#show`                  | `ranking/show.html.haml`                   | **L**  | markup + model/controller    |
 
 **`#/s/groups` — M.** A card grid already exists, with filter tabs
 (Wszystkie / Moje / Uczę się / Nauczam) built as a Bootstrap `.nav`. Straight
@@ -625,34 +625,34 @@ visible in the markup.
 
 ### Bucket B — exists here, no mockup screen
 
-| Ours | Note |
-| --- | --- |
+| Ours                                           | Note                                                                                                                                                                                                                                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `StudentsProfileController#index` (`/profile`) | "Mój profil" — 21 lines of bare `%h1`/`%h3` with plain links, no styling at all. The mockup has no counterpart because its content is split between the group overview and account settings. **Recommend deleting rather than converting**; confirm nothing links to it. |
-| `JoinController#show` (`/join/:code`) | The QR/code landing for an invite. The mockup's join flow is a modal with a nickname step, not a standalone screen, so there is no SCREENS.md row — but the screen must survive because QR codes point at it. |
-| `JoinController#new` + `#create` | The "enter a code" form, currently a modal. Must gain the **required nickname step** (D3). |
+| `JoinController#show` (`/join/:code`)          | The QR/code landing for an invite. The mockup's join flow is a modal with a nickname step, not a standalone screen, so there is no SCREENS.md row — but the screen must survive because QR codes point at it.                                                            |
+| `JoinController#new` + `#create`               | The "enter a code" form, currently a modal. Must gain the **required nickname step** (D3).                                                                                                                                                                               |
 
 ### Bucket C — mockup screen with no counterpart here
 
-| Mockup | Screen | Effort | What must be built |
-| --- | --- | --- | --- |
-| `#/s/start` | Start studenta | **L** | A real student landing page. `HomeController#index` exists but renders only "Witaj, {name}" plus a read-only profile card — it is a stub, not a dashboard. Needs a query layer (the student's groups, recent currency, pending items) and a view. `StoryGroupStudentDashboard` exists but is scoped to one group and used by `story_groups#show`. |
-| `#/s/group-settings` | Ustawienia w grupie | **L** | Route + controller + view. Contents per DECISIONS: **edit nickname** (new column, unique per group case-insensitive) and **leave the group**, with a dialog stating that rejoining restores currency, badges and items. Leaving does not exist at all today, and memberships are `dependent: :destroy`, so "rejoining restores data" is **impossible without making membership soft** — this is the deepest model change in the student slice. |
-| `#/s/account` | Ustawienia konta | **S–M** | Route + controller + view — but **the content already exists**: `home/index` renders exactly the read-only fields D12 asks for (e-mail, university, index number, USOS ID). This is largely a move plus the theme toggle and logout. Cheap, and it frees `home#index` to become the real dashboard. |
-| `#/s/error` | Błąd serwera / offline | **S** | A styled 500/offline page. Rails' default `public/500.html` is static and outside the asset pipeline, so it cannot use the token CSS unless inlined. |
-| `#/s/loading` | Ładowanie (szkielety) | **S** | Not a route — a **skeleton component set**. DECISIONS requires skeletons with identical dimensions to the content (no layout shift). Build as part of the primitives (section 6), not as a screen. |
-| `#/s/states` | Galeria stanów (dev) | **skip** | A development gallery of empty/error/loading states. No route needed. Optionally reproduce as a Lookbook/preview page if ViewComponent previews are adopted. |
+| Mockup               | Screen                 | Effort   | What must be built                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------------- | ---------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#/s/start`          | Start studenta         | **L**    | A real student landing page. `HomeController#index` exists but renders only "Witaj, {name}" plus a read-only profile card — it is a stub, not a dashboard. Needs a query layer (the student's groups, recent currency, pending items) and a view. `StoryGroupStudentDashboard` exists but is scoped to one group and used by `story_groups#show`.                                                                                              |
+| `#/s/group-settings` | Ustawienia w grupie    | **L**    | Route + controller + view. Contents per DECISIONS: **edit nickname** (new column, unique per group case-insensitive) and **leave the group**, with a dialog stating that rejoining restores currency, badges and items. Leaving does not exist at all today, and memberships are `dependent: :destroy`, so "rejoining restores data" is **impossible without making membership soft** — this is the deepest model change in the student slice. |
+| `#/s/account`        | Ustawienia konta       | **S–M**  | Route + controller + view — but **the content already exists**: `home/index` renders exactly the read-only fields D12 asks for (e-mail, university, index number, USOS ID). This is largely a move plus the theme toggle and logout. Cheap, and it frees `home#index` to become the real dashboard.                                                                                                                                            |
+| `#/s/error`          | Błąd serwera / offline | **S**    | A styled 500/offline page. Rails' default `public/500.html` is static and outside the asset pipeline, so it cannot use the token CSS unless inlined.                                                                                                                                                                                                                                                                                           |
+| `#/s/loading`        | Ładowanie (szkielety)  | **S**    | Not a route — a **skeleton component set**. DECISIONS requires skeletons with identical dimensions to the content (no layout shift). Build as part of the primitives (section 6), not as a screen.                                                                                                                                                                                                                                             |
+| `#/s/states`         | Galeria stanów (dev)   | **skip** | A development gallery of empty/error/loading states. No route needed. Optionally reproduce as a Lookbook/preview page if ViewComponent previews are adopted.                                                                                                                                                                                                                                                                                   |
 
 ### Behaviour changes landing on the student slice
 
-| Change | Screens affected | Note |
-| --- | --- | --- |
-| **Nicknames (D3)** | join, group-settings, ranking, teacher student list | No `nickname` column exists. Required at join, unique per group case-insensitively, students see only nicknames in ranking, teacher sees nickname + name. Migration + validation + backfill for existing memberships. |
-| **Soft delete (D1)** | history, my-items, shop | Deleted items must still appear in history as "Usunięty z oferty". No `deleted_at` exists anywhere. |
-| **Leave / rejoin restores data (D8)** | group-settings | Requires soft membership; today's `dependent: :destroy` makes it impossible. |
-| **Ranking modes (D7)** | ranking | Two modes + confirmations + shared places for ties. |
-| **Read-only account (D12)** | account | Display only — not an edit form. |
-| **Lives as heart + number** | group overview | Already rendered as an icon + number, not one heart per life — compliant today. |
-| **Mobile tab bar + "Więcej" sheet** | all | Net-new; no mobile navigation exists. Shared work, section 6. |
+| Change                                | Screens affected                                    | Note                                                                                                                                                                                                                  |
+| ------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nicknames (D3)**                    | join, group-settings, ranking, teacher student list | No `nickname` column exists. Required at join, unique per group case-insensitively, students see only nicknames in ranking, teacher sees nickname + name. Migration + validation + backfill for existing memberships. |
+| **Soft delete (D1)**                  | history, my-items, shop                             | Deleted items must still appear in history as "Usunięty z oferty". No `deleted_at` exists anywhere.                                                                                                                   |
+| **Leave / rejoin restores data (D8)** | group-settings                                      | Requires soft membership; today's `dependent: :destroy` makes it impossible.                                                                                                                                          |
+| **Ranking modes (D7)**                | ranking                                             | Two modes + confirmations + shared places for ties.                                                                                                                                                                   |
+| **Read-only account (D12)**           | account                                             | Display only — not an edit form.                                                                                                                                                                                      |
+| **Lives as heart + number**           | group overview                                      | Already rendered as an icon + number, not one heart per life — compliant today.                                                                                                                                       |
+| **Mobile tab bar + "Więcej" sheet**   | all                                                 | Net-new; no mobile navigation exists. Shared work, section 6.                                                                                                                                                         |
 
 
 ---
@@ -666,26 +666,26 @@ visible in the markup.
 
 ### Bucket A — exists here and in the mockup
 
-| Mockup | Ours | View | Effort | Driver |
-| --- | --- | --- | --- | --- |
-| `#/t/groups` Wszystkie grupy | `StoryGroupsController#index` | `story_groups/index` | **M** | markup only (shared with `#/s/groups`) |
-| `#/t/home` Grupa: przegląd | `StoryGroupsController#show` | `story_groups/_teacher_show` | **L** | markup + IA |
-| `#/t/students` Studenci | `StudentsController#index` | `students/index` | **L** | markup + Stimulus + IA |
-| `#/t/student` Student: szczegóły | `StudentsController#show` | `students/show` | **L** | markup + modal→page + behaviour |
-| `#/t/sheets` Arkusze ocen | `ActivityGroupsController#index` | `activity_groups/index` | **L** | markup + Bootstrap JS + naming + soft delete |
-| `#/t/sheet-template-new` Nowy szablon | `ActivityGroupTemplatesController#new` | `activity_group_templates/new` + `_form` | **M** | markup + modal→page |
-| `#/t/sheet-template-edit` Edycja szablonu | `ActivityGroupTemplatesController#edit` | `activity_group_templates/edit` + `_form` | **L** | markup + versioning behaviour |
-| `#/t/sheet-settings` Ustawienia arkusza | `ActivityGroupsController#edit` | `activity_groups/edit` + `_form` | **M** | markup + hidden-not-removed columns |
-| `#/t/grade` Ocenianie | `StudentsActivityGroupCategoriesController#edit` | `students_activity_group_categories/edit` | **L** | markup + behaviour + Stimulus |
-| `#/t/items` Przedmioty | `ItemsController#index` | `items/index` | **M** | markup + soft delete |
-| `#/t/item-new` Nowy przedmiot | `ItemsController#new` | `items/new` + `_form` | **L** | markup + modal→page + uploads |
-| `#/t/item-edit` Edycja przedmiotu | `ItemsController#edit` | `items/edit` + `_form` | **L** | same form, same drivers |
-| `#/t/ranks` Rangi | `RanksController#index` | `ranks/index` | **S** | markup only |
-| `#/t/badges` Odznaki | `BadgesController#index` | `badges/index` | **S** | markup only |
-| `#/t/invites` Zaproszenia | `StoryGroupInvitesController#index` | `story_group_invites/index` | **M** | markup + invite rules |
-| `#/t/teachers` Nauczyciele | `TeachersController#index` | `teachers/index` | **M** | markup + IA + permissions |
-| `#/t/ranking` Ranking | `RankingController#show` | `ranking/show` | **L** | shared with `#/s/ranking` |
-| `#/t/group-settings` Ustawienia grupy | `StoryGroupsController#edit` | `story_groups/edit` + `_form` | **M** | markup + modal→page + permissions |
+| Mockup                                    | Ours                                             | View                                      | Effort | Driver                                       |
+| ----------------------------------------- | ------------------------------------------------ | ----------------------------------------- | ------ | -------------------------------------------- |
+| `#/t/groups` Wszystkie grupy              | `StoryGroupsController#index`                    | `story_groups/index`                      | **M**  | markup only (shared with `#/s/groups`)       |
+| `#/t/home` Grupa: przegląd                | `StoryGroupsController#show`                     | `story_groups/_teacher_show`              | **L**  | markup + IA                                  |
+| `#/t/students` Studenci                   | `StudentsController#index`                       | `students/index`                          | **L**  | markup + Stimulus + IA                       |
+| `#/t/student` Student: szczegóły          | `StudentsController#show`                        | `students/show`                           | **L**  | markup + modal→page + behaviour              |
+| `#/t/sheets` Arkusze ocen                 | `ActivityGroupsController#index`                 | `activity_groups/index`                   | **L**  | markup + Bootstrap JS + naming + soft delete |
+| `#/t/sheet-template-new` Nowy szablon     | `ActivityGroupTemplatesController#new`           | `activity_group_templates/new` + `_form`  | **M**  | markup + modal→page                          |
+| `#/t/sheet-template-edit` Edycja szablonu | `ActivityGroupTemplatesController#edit`          | `activity_group_templates/edit` + `_form` | **L**  | markup + versioning behaviour                |
+| `#/t/sheet-settings` Ustawienia arkusza   | `ActivityGroupsController#edit`                  | `activity_groups/edit` + `_form`          | **M**  | markup + hidden-not-removed columns          |
+| `#/t/grade` Ocenianie                     | `StudentsActivityGroupCategoriesController#edit` | `students_activity_group_categories/edit` | **L**  | markup + behaviour + Stimulus                |
+| `#/t/items` Przedmioty                    | `ItemsController#index`                          | `items/index`                             | **M**  | markup + soft delete                         |
+| `#/t/item-new` Nowy przedmiot             | `ItemsController#new`                            | `items/new` + `_form`                     | **L**  | markup + modal→page + uploads                |
+| `#/t/item-edit` Edycja przedmiotu         | `ItemsController#edit`                           | `items/edit` + `_form`                    | **L**  | same form, same drivers                      |
+| `#/t/ranks` Rangi                         | `RanksController#index`                          | `ranks/index`                             | **S**  | markup only                                  |
+| `#/t/badges` Odznaki                      | `BadgesController#index`                         | `badges/index`                            | **S**  | markup only                                  |
+| `#/t/invites` Zaproszenia                 | `StoryGroupInvitesController#index`              | `story_group_invites/index`               | **M**  | markup + invite rules                        |
+| `#/t/teachers` Nauczyciele                | `TeachersController#index`                       | `teachers/index`                          | **M**  | markup + IA + permissions                    |
+| `#/t/ranking` Ranking                     | `RankingController#show`                         | `ranking/show`                            | **L**  | shared with `#/s/ranking`                    |
+| `#/t/group-settings` Ustawienia grupy     | `StoryGroupsController#edit`                     | `story_groups/edit` + `_form`             | **M**  | markup + modal→page + permissions            |
 
 **`#/t/home` — L.** `_teacher_show` is the **single most Bootstrap-dense file in
 the app** (103 lines, 44 class markers) and includes a Bootstrap dropdown. It is
@@ -768,23 +768,23 @@ owner-only), and `_form` is currently passed **English** `submit_label` values
 
 ### Bucket B — exists here, no mockup screen
 
-| Ours | Note |
-| --- | --- |
-| `NotificationsController#index` | A full-page notification list. The mockup only ever shows notifications as a header **dropdown** (Nowe / Wcześniej, mark all read). Decide whether the full page survives as a mobile fallback or is dropped. |
-| `ActivityGroupTemplatesController#show` | Renders **JSON**, not HTML — the template picker's data source. Not a screen; must keep working. |
-| `ActivityGroupsController#create_bulk` | "Stwórz wiele grup" bulk creation, driven by `_bulk_create_modal`. No mockup screen covers bulk creation — **confirm it is still wanted** before dropping the Bootstrap modal it lives in. |
-| `StudentsController#new` / `#edit`, `StudentsBadgesController#new`, `CurrencyAdjustmentsController#new` | Quick-action modals with no dedicated mockup row; they appear inside the student detail flow. |
+| Ours                                                                                                    | Note                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NotificationsController#index`                                                                         | A full-page notification list. The mockup only ever shows notifications as a header **dropdown** (Nowe / Wcześniej, mark all read). Decide whether the full page survives as a mobile fallback or is dropped. |
+| `ActivityGroupTemplatesController#show`                                                                 | Renders **JSON**, not HTML — the template picker's data source. Not a screen; must keep working.                                                                                                              |
+| `ActivityGroupsController#create_bulk`                                                                  | "Stwórz wiele grup" bulk creation, driven by `_bulk_create_modal`. No mockup screen covers bulk creation — **confirm it is still wanted** before dropping the Bootstrap modal it lives in.                    |
+| `StudentsController#new` / `#edit`, `StudentsBadgesController#new`, `CurrencyAdjustmentsController#new` | Quick-action modals with no dedicated mockup row; they appear inside the student detail flow.                                                                                                                 |
 
 ### Bucket C — mockup screen with no counterpart here
 
-| Mockup | Screen | Effort | What must be built |
-| --- | --- | --- | --- |
-| `#/t/dash` | Start nauczyciela | **L** | A real teacher dashboard. `home#index` is a stub ("Witaj" + read-only profile card). Needs cross-group queries (recent purchases, notifications, groups taught) and a view. |
-| `#/t/new-group` | Nowa grupa (kreator) | **XL** | The biggest single bucket-C item. Today group creation is **one form** in a modal (`story_groups/new` + `_form`). The mockup is a multi-step wizard with **Quick setup** — content packs (neutral / fantasy / sci-fi) *scaled by the planned number of classes* — or manual. Needs multi-step routing/state, the seed-pack content itself (ranks, badges, items per theme, which is a content authoring task, not just code), and a success screen that **must not show the join code** (D11). |
-| `#/t/purchases` | Wszystkie zakupy w grupie | **M** | Route + controller + view. A group-filtered purchase list. The data exists (`CurrencyTransaction` with `kind: :purchase`); `StoryGroupTeacherDashboard` already queries recent transactions, so this is largely a full, filterable version of that. |
-| `#/t/account` | Ustawienia konta | **S–M** | Same screen as `#/s/account` — build once. Content already exists in `home/index`. |
-| `#/t/uploads` | Test uploadów (dev) | **skip** | A development stress-test page for the upload frames. Not a product route. Useful to reproduce while building the upload primitives, then discard. |
-| (implied) mobile "Więcej" sheet | — | **M** | Listed in DECISIONS as a gap. No mobile nav exists at all. Shared work — section 6. |
+| Mockup                          | Screen                    | Effort   | What must be built                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------- | ------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#/t/dash`                      | Start nauczyciela         | **L**    | A real teacher dashboard. `home#index` is a stub ("Witaj" + read-only profile card). Needs cross-group queries (recent purchases, notifications, groups taught) and a view.                                                                                                                                                                                                                                                                                                                    |
+| `#/t/new-group`                 | Nowa grupa (kreator)      | **XL**   | The biggest single bucket-C item. Today group creation is **one form** in a modal (`story_groups/new` + `_form`). The mockup is a multi-step wizard with **Quick setup** — content packs (neutral / fantasy / sci-fi) *scaled by the planned number of classes* — or manual. Needs multi-step routing/state, the seed-pack content itself (ranks, badges, items per theme, which is a content authoring task, not just code), and a success screen that **must not show the join code** (D11). |
+| `#/t/purchases`                 | Wszystkie zakupy w grupie | **M**    | Route + controller + view. A group-filtered purchase list. The data exists (`CurrencyTransaction` with `kind: :purchase`); `StoryGroupTeacherDashboard` already queries recent transactions, so this is largely a full, filterable version of that.                                                                                                                                                                                                                                            |
+| `#/t/account`                   | Ustawienia konta          | **S–M**  | Same screen as `#/s/account` — build once. Content already exists in `home/index`.                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `#/t/uploads`                   | Test uploadów (dev)       | **skip** | A development stress-test page for the upload frames. Not a product route. Useful to reproduce while building the upload primitives, then discard.                                                                                                                                                                                                                                                                                                                                             |
+| (implied) mobile "Więcej" sheet | —                         | **M**    | Listed in DECISIONS as a gap. No mobile nav exists at all. Shared work — section 6.                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 ### The single most expensive teacher screen
 
@@ -808,13 +808,13 @@ with what the audit adds to it.
 These were open when the audit was written. They have since been decided by the
 project owner and are recorded here so the rest of the document reads correctly.
 
-| # | Decision | Outcome |
-| --- | --- | --- |
-| **D-a** | Template language for redesigned views | **HAML.** The project standardises on `.html.haml`; no mixed-templating exception. Every screen conversion therefore includes an HTML→HAML translation step from the mockup's raw markup — a real per-screen cost, accepted deliberately. |
-| **D-b** | Tailwind delivery | **Tailwind is being added to the project** as step 1 of the migration, with a new layout and new JS/CSS entry points kept separate from the existing ones. |
-| **D-c** | How much Tailwind | **Tailwind for layout, spacing and colour utilities; hand-written CSS for the primitives.** Measured against the mockup's own CSS: of 1004 rule blocks, roughly 85% are ordinary layout/colour/spacing that utilities express directly, and roughly 15% (22 `clip-path`, 85 `::before`/`::after`, 12 gradients, 15 `@container`, 9 `@keyframes`, 78 `--c` corner declarations) need real CSS in `@layer components`. |
-| **D-d** | Layout structure | **The `public` / `application` layout split is dropped.** One redesign layout, with the header/sidebar chrome suppressed on auth screens. |
-| **D-e** | Naming and namespacing | **Everything the redesign introduces is namespaced.** See below — this replaces the mockup's generic `.app` / `data-theme` / bare token names. |
+| #       | Decision                               | Outcome                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **D-a** | Template language for redesigned views | **HAML.** The project standardises on `.html.haml`; no mixed-templating exception. Every screen conversion therefore includes an HTML→HAML translation step from the mockup's raw markup — a real per-screen cost, accepted deliberately.                                                                                                                                                                            |
+| **D-b** | Tailwind delivery                      | **Tailwind is being added to the project** as step 1 of the migration, with a new layout and new JS/CSS entry points kept separate from the existing ones.                                                                                                                                                                                                                                                           |
+| **D-c** | How much Tailwind                      | **Tailwind for layout, spacing and colour utilities; hand-written CSS for the primitives.** Measured against the mockup's own CSS: of 1004 rule blocks, roughly 85% are ordinary layout/colour/spacing that utilities express directly, and roughly 15% (22 `clip-path`, 85 `::before`/`::after`, 12 gradients, 15 `@container`, 9 `@keyframes`, 78 `--c` corner declarations) need real CSS in `@layer components`. |
+| **D-d** | Layout structure                       | **The `public` / `application` layout split is dropped.** One redesign layout, with the header/sidebar chrome suppressed on auth screens.                                                                                                                                                                                                                                                                            |
+| **D-e** | Naming and namespacing                 | **Everything the redesign introduces is namespaced.** See below — this replaces the mockup's generic `.app` / `data-theme` / bare token names.                                                                                                                                                                                                                                                                       |
 
 #### D-e: namespacing rules
 
@@ -824,12 +824,12 @@ are collision-prone while Bootstrap is still loaded, and generic enough to be
 confused with other frameworks' conventions later. Bootstrap itself namespaces to
 `data-bs-theme` for exactly this reason. The redesign adopts:
 
-| Mockup | Use instead | Why |
-| --- | --- | --- |
-| `data-theme="dark"` | **`data-gh-theme="dark"`** | A bare `data-theme` is also used by other CSS frameworks; namespacing removes any chance of two systems reading the same attribute during the migration. |
-| `.app` as token scope | **`:root`** (tokens), `.gh-app` only if a scope is genuinely needed | Custom properties do not collide destructively — defining `--gh-card` on `:root` restyles nothing in Bootstrap. Only *class names* collide, so the wrapper is not needed for safety. |
-| `--card`, `--item`, `--ink`, … | **`--gh-card`, `--gh-item`, `--gh-ink`, …** | 36 tokens per theme, many with very generic names. Prefixing makes every reference self-identifying. |
-| `.btn`, `.card`, `.badge`, `.nav` | **`.gh-btn`, `.gh-card`, …** | These collide with Bootstrap head-on. This is the concrete form of the risk in section 7. |
+| Mockup                            | Use instead                                                         | Why                                                                                                                                                                                  |
+| --------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `data-theme="dark"`               | **`data-gh-theme="dark"`**                                          | A bare `data-theme` is also used by other CSS frameworks; namespacing removes any chance of two systems reading the same attribute during the migration.                             |
+| `.app` as token scope             | **`:root`** (tokens), `.gh-app` only if a scope is genuinely needed | Custom properties do not collide destructively — defining `--gh-card` on `:root` restyles nothing in Bootstrap. Only *class names* collide, so the wrapper is not needed for safety. |
+| `--card`, `--item`, `--ink`, …    | **`--gh-card`, `--gh-item`, `--gh-ink`, …**                         | 36 tokens per theme, many with very generic names. Prefixing makes every reference self-identifying.                                                                                 |
+| `.btn`, `.card`, `.badge`, `.nav` | **`.gh-btn`, `.gh-card`, …**                                        | These collide with Bootstrap head-on. This is the concrete form of the risk in section 7.                                                                                            |
 
 **Light/dark stays attribute-driven and must NOT become Tailwind's `dark:`
 variant.** The design system redefines semantic roles per theme (`--gh-item` is
@@ -910,13 +910,13 @@ onto custom properties once, and let the utilities resolve through them —
 
 Not UI, but several screens cannot be finished without it:
 
-| Change | Blocks |
-| --- | --- |
-| **Soft delete** (`deleted_at` + scopes on items, badges, ranks, sheets, memberships) | items, badges, ranks, sheets, shop, history, student detail |
-| **Nicknames** (column, per-group case-insensitive uniqueness, backfill, required at join) | join, student group settings, ranking, teacher student list |
-| **Ranking modes** (mode column, tie handling, confirmations) | both ranking screens, the per-sheet top-3 widget |
-| **Soft membership** (leave without destroying; rejoin restores) | student group settings |
-| **Template versioning + hideable columns** (D5) | sheet template edit, sheet settings |
+| Change                                                                                                                                                                            | Blocks                                                                                                                         |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Soft delete** (`deleted_at` + scopes on items, badges, ranks, sheets, memberships)                                                                                              | items, badges, ranks, sheets, shop, history, student detail                                                                    |
+| **Nicknames** (column, per-group case-insensitive uniqueness, backfill, required at join)                                                                                         | join, student group settings, ranking, teacher student list                                                                    |
+| **Ranking modes** (mode column, tie handling, confirmations)                                                                                                                      | both ranking screens, the per-sheet top-3 widget                                                                               |
+| **Soft membership** (leave without destroying; rejoin restores)                                                                                                                   | student group settings                                                                                                         |
+| **Template versioning + hideable columns** (D5)                                                                                                                                   | sheet template edit, sheet settings                                                                                            |
 | **Currency clamp** — `CurrencyAdjusterService` increments `current_currency` unguarded, so a negative correction can drive the spendable balance **below zero**, which D4 forbids | student detail, history. **Deferred by decision**: to be picked up when test coverage is written, not as part of the redesign. |
 
 ---
@@ -1004,38 +1004,38 @@ codebase**, assuming decisions D-a/D-b/D-c are settled first. They cover markup,
 styles, components and the behaviour changes named per screen, but **exclude**
 the bucket-C feature work called out separately.
 
-| # | Stage | Contents | Effort |
-| --- | --- | --- | --- |
-| 0 | ~~Decisions~~ | **Settled — see 6.1.** HAML; Tailwind added as step 1; utilities + hand-written primitives; one layout; `gh-` namespacing | done |
-| 1 | **Design system** | tokens, fonts, theme switching + persistence, third bundle, `redesign` layout, primitives, first ViewComponents | 5–8 d |
-| 2 | **Dialog mechanism** | native `<dialog>` + Stimulus for both modal systems, proven on one quick action; page-vs-dialog decision list | 3–5 d |
-| 3 | **Auth (the 2 that exist)** | `login`, `login-mail` + the shared auth shell | 2–3 d |
-| 4 | **Chrome** | header, sidebar, **mobile tab bar + "Więcej" sheet**, notifications dropdown, D2 rename, missing student nav entries | 5–8 d |
-| 5 | **Bootstrap JS removal** | dropdown, collapse, alert, tooltip replacements | 2–3 d |
-| 6 | **Cheap read-only lists** | ranks, badges (both roles at once), account settings screen | 3–4 d |
-| 7 | **Student screens** | groups, group overview, shop + buy dialog, my items, history | 6–9 d |
-| 8 | **Form field components** | FormBuilder/`Field`, upload field with focal-point crop | 4–6 d |
-| 9 | **Teacher lists** | students, items, invites, teachers, group settings | 7–10 d |
-| 10 | **Forms** | item, badge, rank, group settings, sheet template — all share one layout | 5–7 d |
-| 11 | **Sheets** | sheets index (3 Bootstrap components at once), sheet settings, template edit | 5–7 d |
-| 12 | **Ranking** | both roles + modes + confirmations | 3–4 d |
-| 13 | **Grading sheet** | 3 cell states, review dialog, top-3 widget | 5–8 d |
-| 14 | **Bootstrap removal** | delete Bootstrap + Popper + icon sets, preflight back on, bundle cleanup | 1–2 d |
+| #   | Stage                       | Contents                                                                                                                  | Effort |
+| --- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 0   | ~~Decisions~~               | **Settled — see 6.1.** HAML; Tailwind added as step 1; utilities + hand-written primitives; one layout; `gh-` namespacing | done   |
+| 1   | **Design system**           | tokens, fonts, theme switching + persistence, third bundle, `redesign` layout, primitives, first ViewComponents           | 5–8 d  |
+| 2   | **Dialog mechanism**        | native `<dialog>` + Stimulus for both modal systems, proven on one quick action; page-vs-dialog decision list             | 3–5 d  |
+| 3   | **Auth (the 2 that exist)** | `login`, `login-mail` + the shared auth shell                                                                             | 2–3 d  |
+| 4   | **Chrome**                  | header, sidebar, **mobile tab bar + "Więcej" sheet**, notifications dropdown, D2 rename, missing student nav entries      | 5–8 d  |
+| 5   | **Bootstrap JS removal**    | dropdown, collapse, alert, tooltip replacements                                                                           | 2–3 d  |
+| 6   | **Cheap read-only lists**   | ranks, badges (both roles at once), account settings screen                                                               | 3–4 d  |
+| 7   | **Student screens**         | groups, group overview, shop + buy dialog, my items, history                                                              | 6–9 d  |
+| 8   | **Form field components**   | FormBuilder/`Field`, upload field with focal-point crop                                                                   | 4–6 d  |
+| 9   | **Teacher lists**           | students, items, invites, teachers, group settings                                                                        | 7–10 d |
+| 10  | **Forms**                   | item, badge, rank, group settings, sheet template — all share one layout                                                  | 5–7 d  |
+| 11  | **Sheets**                  | sheets index (3 Bootstrap components at once), sheet settings, template edit                                              | 5–7 d  |
+| 12  | **Ranking**                 | both roles + modes + confirmations                                                                                        | 3–4 d  |
+| 13  | **Grading sheet**           | 3 cell states, review dialog, top-3 widget                                                                                | 5–8 d  |
+| 14  | **Bootstrap removal**       | delete Bootstrap + Popper + icon sets, preflight back on, bundle cleanup                                                  | 1–2 d  |
 
 **Redesign subtotal: roughly 57–85 engineer-days (≈ 11–17 weeks solo).**
 
 Tracked separately, because these are features rather than restyling:
 
-| Feature work | Effort |
-| --- | --- |
+| Feature work                                                                                                                | Effort |
+| --------------------------------------------------------------------------------------------------------------------------- | ------ |
 | Model/migration prerequisites (soft delete, nicknames, ranking modes, soft membership, template versioning, currency clamp) | 8–12 d |
-| Registration flow (`register`, `register-mail`, invite-code preview endpoint, create-user-from-invite, terms) | 6–9 d |
-| Magic-link landing + inbox + expired + resend throttle | 4–6 d |
-| USOS interstitial + error taxonomy | 2–3 d |
-| Teacher dashboard + student start page (real content) | 4–6 d |
-| Group creation wizard + content packs (**content authoring not included**) | 8–12 d |
-| Group purchases screen | 2–3 d |
-| Error/offline page, skeleton set | 2–3 d |
+| Registration flow (`register`, `register-mail`, invite-code preview endpoint, create-user-from-invite, terms)               | 6–9 d  |
+| Magic-link landing + inbox + expired + resend throttle                                                                      | 4–6 d  |
+| USOS interstitial + error taxonomy                                                                                          | 2–3 d  |
+| Teacher dashboard + student start page (real content)                                                                       | 4–6 d  |
+| Group creation wizard + content packs (**content authoring not included**)                                                  | 8–12 d |
+| Group purchases screen                                                                                                      | 2–3 d  |
+| Error/offline page, skeleton set                                                                                            | 2–3 d  |
 
 **Feature subtotal: roughly 36–54 engineer-days.**
 
@@ -1095,7 +1095,7 @@ None of these were filled in silently.
   value. The register-mail copy promises the invite code adds you to the right
   *school* and group. Either the copy overstates it or a model is missing.
 - ~~Token TTL: 5 minutes in code vs 15 in DECISIONS.~~ **Resolved: 5 minutes
-  stands.** The mockup copy ("Link działa przez 15 minut") is what changes.
+  stands.** The mockup copy ("Link działa przez 5 minut") is what changes.
 - **The wizard's content packs have no source.** Nothing in `design/` supplies
   the neutral/fantasy/sci-fi ranks, badges, items, copy or art.
 

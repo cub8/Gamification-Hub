@@ -23,7 +23,7 @@ module Redesign
       [:sealed, 'Zapieczętowane'],
     ].freeze
 
-    Zone = Struct.new(:key, :label, :offers)
+    Zone = Data.define(:key, :label, :offers)
 
     def initialize(story_group:, student:)
       @story_group = story_group
