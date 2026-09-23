@@ -12,6 +12,17 @@ class SessionUserBuilder
     user = find_or_initialize_user
 
     if user.new_record? || user.first_login?
+      # organization = Organization.find_by(
+      #  university_name: @provider.university_name,
+      # )
+      # organization.with_lock do
+      #  if organization.join_condition
+      #    user.assign_attributes(user_params)
+      #    user.organization = organization
+      #    user.first_login = false
+      #    user.save!(context: :account_setup)
+      #  end
+      # end
       user.assign_attributes(user_params)
       user.first_login = false
       user.save!(context: :account_setup)

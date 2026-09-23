@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :organization do
-    name { "MyString" }
+    name { 'MyString' }
     max_members { 1 }
   end
 end

@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     post :mark_as_read, on: :collection
   end
 
+  resources :organizations
+
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback
     resource :passwordless, only: %i[new create], controller: 'passwordless'

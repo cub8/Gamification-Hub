@@ -1,0 +1,19 @@
+- content_for :title, "Organizacje"
+
+.dark-page
+  - if @organizations.empty?
+    %p.text-dimmed Brak organizacji.
+  - else
+    .row.g-3
+      - @organizations.each do |organization|
+        .col-12.col-sm-6.col-md-4.col-xl-3
+          = link_to organization_path(organization), class: "text-decoration-none d-block h-100" do
+            .dark-card.cursor-pointer
+
+              .dark-card-body
+                .dark-card-title= organization.name
+
+  - if policy(:organization).create?
+    = link_to new_organization_path, class: "btn btn-primary position-fixed bottom-0 end-0 mb-4 me-4", data: { turbo_frame: "modal" } do
+      %i.fa-solid.fa-plus.me-2
+      Utwórz organizację

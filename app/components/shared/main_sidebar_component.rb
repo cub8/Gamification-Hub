@@ -44,7 +44,12 @@ class Shared::MainSidebarComponent < ViewComponent::Base
     [
       { text: 'Strona główna', path: helpers.home_path, icon: 'fa-house' },
       { text: 'Grupy Fabularne', path: helpers.story_groups_path, icon: 'fa-book' },
-    ]
+      (if user.global_admin?
+         {
+           text: 'Organizacje', path: helpers.organizations_path, icon: 'fa-briefcase',
+         }
+       end),
+    ].compact
   end
 
   def story_group_buttons

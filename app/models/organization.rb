@@ -2,7 +2,7 @@
 
 class Organization < ApplicationRecord
 
-  has_many :users, foreign_key: 'university_id', dependent: :destroy
+  has_many :users, dependent: :destroy
 
   validates :name, length: { maximum: 100 }
 
