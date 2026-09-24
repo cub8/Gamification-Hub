@@ -1,4 +1,3 @@
--# Studenci. Mockup: #/t/students, js-expanded/30-lists.js:45-48.
 - content_for :title, 'Studenci'
 
 %section.gh-panel.gh-phead
@@ -11,28 +10,26 @@
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
       Kody i zaproszenia
     = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn',
-      data: { turbo_frame: 'modal' } do
+                                                            data:  { turbo_frame: 'modal' } do
       %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
       Pokaż kod dla studentów
 
 - if @list.any?
-  %div{ data: { controller: 'list-search',
-                list_search_total_value: @list.size,
-                list_search_of_value: 'z' } }
+  %div{data: { controller:              'list-search',
+               list_search_total_value: @list.size,
+               list_search_of_value:    'z',  }}
     .gh-stbar
       %label.gh-search
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
-        %input{ type: 'search',
-                placeholder: 'Szukaj studenta',
-                'aria-label': 'Szukaj studenta',
-                data: { list_search_target: 'input', action: 'input->list-search#filter' } }
+        %input{type:         'search',
+               placeholder:  'Szukaj studenta',
+               'aria-label': 'Szukaj studenta',
+               data:         { list_search_target: 'input', action: 'input->list-search#filter' },}
       %span.gh-meta{ data: { list_search_target: 'count' } }
         = "#{@list.size} z #{@list.size}"
 
     %section.gh-panel.gh-st
       %ul.gh-srows{ role: 'list' }
-        -# A header for the grid below, not a <thead>: hidden on a phone, where
-        -# each cell carries its own label instead.
         %li.gh-srow.gh-srow--h{ 'aria-hidden': 'true' }
           %span Student
           %span Ranga
@@ -60,6 +57,6 @@
     .gh-rowb
       = link_to 'Kody i zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'
       = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec',
-        data: { turbo_frame: 'modal' } do
+                                                              data:  { turbo_frame: 'modal' } do
         %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
         Pokaż kod dla studentów
