@@ -1,50 +1,9 @@
-- content_for :title, "Przydziel odznakę — #{@student.full_name}"
+-# Either the layout's shared `modal` frame or a page — never both.
+- content_for :title, "Przyznaj odznakę — #{@student.display_name}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      .d-flex.align-items-center.gap-3.mb-3
-        = link_to story_group_student_path(@story_group, @student), class: "btn btn-secondary", title: 'Do studenta', data: { turbo_prefetch: true } do
-          %i.fa-solid.fa-arrow-left
-        .d-flex.align-items-center
-          %h1.page-title.mb-0 Przydziel odznakę
-
-      - if @badge.errors.any?
-        .form-errors.p-3.mb-3
-          %h2 Popraw poniższe błędy:
-          %ul
-            - @badge.errors.full_messages.each do |message|
-              %li= message
-
-      = form_with url: story_group_student_badges_path(@story_group, @student), method: :post, scope: :students_badge, data: { controller: 'badge-selector' } do |f|
-        .p-4.mb-3
-          .section-title.mb-3
-            = @student.full_name
-            %small.text-dimmed.fw-normal.ms-2= @student.email
-          %div
-            .d-flex.justify-content-end.mb-3
-              .field-group.w-100
-                .search-box.input-group
-                  = text_field_tag :search,
-                                  nil,
-                                  placeholder: 'Wyszukaj odznakę',
-                                  class: 'form-control',
-                                  data: { action: 'input->badge-selector#filter', badge_selector_target: 'input' }
-                  %span.input-group-text
-                    %i.fa-solid.fa-magnifying-glass
-
-            .d-flex.flex-column.gap-2
-              - @badges.each do |badge|
-                .form-selectable-item{ data: { action: 'click->badge-selector#select', badge_selector_target: 'badge', badge_id: badge.id, badge_name: badge.name } }
-                  .d-flex
-                    .icon-container.d-flex.justify-content-center.align-items-center
-                      %i.fa-solid.fa-award.fa-3x
-                    .content-container
-                      .fw-bold= badge.name
-                      %p.text-dimmed.small.fst-italic.mb-1= truncate(badge.story_description, length: 80)
-                      %p.text-dimmed.small.mb-0= truncate(badge.didactic_description, length: 80)
-
-            = f.collection_select :badge_id, @badges, :id, :name, { prompt: '' }, class: 'd-none', data: { badge_selector_target: 'select' }
-        .form-actions.gap-3.mt-4
-          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_prefetch: true, turbo_frame: '_top' }
-          = f.submit "Zapisz", class: "btn-submit py-2 px-4"
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'form', students_badge: @students_badge
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'form', students_badge: @students_badge

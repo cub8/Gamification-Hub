@@ -1,0 +1,56 @@
+-# The wizard's success screen. Mockup: js-expanded/30-form.js `success()`
+-# (:87-94).
+-#
+-# It deliberately does NOT show a join code. The mockup's version did, and
+-# DECISIONS.md:57 lists that as out of date: codes are made in "Zaproszenia",
+-# when one is actually wanted, and can carry a limit or an expiry.
+-#
+-# Its own page rather than a flash on the group, so reloading shows it again
+-# and the "co dalej" list survives a teacher who opens a link in a new tab.
+- content_for :title, "Grupa #{@story_group.name} jest gotowa"
+- quick = @counts.values.any?(&:positive?)
+- created_list = [gh_plural(@counts[:ranks], 'rangę', 'rangi', 'rang'),
+                  gh_plural(@counts[:badges], 'odznakę', 'odznaki', 'odznak'),
+                  gh_plural(@counts[:items], 'przedmiot', 'przedmioty', 'przedmiotów'),
+                  gh_plural(@counts[:categories], 'kategorię', 'kategorie', 'kategorii')]
+- created_parts = %i[ranks badges items categories].each_with_index.map { |key, i| "#{@counts[key]} #{created_list[i]}" }
+- created_parts[3] = "#{created_parts[3]} w szablonie arkusza"
+
+%section.gh-panel.gh-wizard-success-panel
+  .gh-wizard-success-icon.gh-octagon-clip
+    %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
+
+  %h1.gh-h1= "Grupa „#{@story_group.name}” jest gotowa"
+
+  %p.gh-lead
+    - if quick
+      = "Utworzono #{gh_and_list(created_parts)}."
+    - else
+      Grupa jest pusta. Poniżej znajdziesz kolejne kroki.
+
+  %p.gh-explainer-note
+    %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
+    %span
+      Kod do dołączenia utworzysz w zakładce
+      %b Zaproszenia
+      \, kiedy będziesz go potrzebować. Możesz mieć kilka kodów naraz,
+      z limitem osób albo datą ważności.
+
+  %h2.gh-h3 Co dalej
+  %ol.gh-next-steps-list
+    - if quick
+      %li Zaproś studentów: pokaż im kod albo kod QR.
+      %li Po pierwszych zajęciach utwórz arkusz ocen i oceń studentów.
+      %li Zajrzyj do sklepu i dopasuj opisy przedmiotów do swojej opowieści.
+    - else
+      %li Dodaj rangi, żeby studenci widzieli, do czego dążą.
+      %li Dodaj przedmioty do sklepu.
+      %li Dodaj odznaki za szczególne osiągnięcia.
+      %li Utwórz szablon arkusza ocen.
+      %li Zaproś studentów: pokaż im kod albo kod QR.
+
+  .gh-button-row
+    = link_to 'Przejdź do grupy', story_group_path(@story_group), class: 'gh-btn'
+    = link_to new_story_group_invite_path(@story_group), class: 'gh-btn gh-btn--secondary' do
+      %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
+      Utwórz zaproszenie

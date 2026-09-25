@@ -1,0 +1,87 @@
+@layer components {
+  .gh-settings-section {
+    margin-top: 22px;
+    padding: 24px 28px;
+  }
+
+  .gh-danger-zone {
+    margin-top: 22px;
+    padding: 22px 28px;
+  }
+
+  .gh-settings-section .gh-form-section--first {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .gh-visible-fields-list {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gh-visible-fields-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-top: 1px solid var(--gh-line);
+    font-size: 14.5px;
+  }
+
+  .gh-visible-fields-list li span {
+    color: var(--gh-ink-2);
+  }
+
+  .gh-visible-fields-list li b {
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .gh-nickname-field-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .gh-nickname-field-row .gh-text-input {
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .gh-art-preset-tile--group,
+  .gh-art-preset-tile--currency {
+    --gh-frame: var(--gh-rank);
+  }
+
+  .gh-art-preset-tile--group img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gh-art-preset-grid--currency .gh-art-preset-tile {
+    width: 58px;
+  }
+
+  .gh-art-preset-tile--currency i {
+    background: var(--gh-coin-face);
+    color: var(--gh-coin-ink);
+  }
+
+  .gh-art-preset-tile--currency img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+
+    .gh-settings-section,
+    .gh-danger-zone {
+      padding: 18px 16px;
+    }
+  }
+}

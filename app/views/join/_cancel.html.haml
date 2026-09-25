@@ -1,0 +1,6 @@
+-# In the dialog, cancelling means closing it. On the QR landing page there is
+-# no dialog to close, so it is a way back out instead.
+- if @in_modal
+  %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+- else
+  = link_to 'Anuluj', home_path, class: 'gh-btn gh-btn--secondary'

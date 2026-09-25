@@ -1,8 +1,5 @@
-- content_for :title, "Edytuj grupę — #{@activity_group.name}"
+-# Sheet settings. Mockup: #/t/sheet-settings, js-expanded/30-ag.js (view `group`).
+- content_for :title, "Ustawienia arkusza #{@activity_group.name}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      = render MessagesComponent.new(id: 'modal-messages', flash: flash, notice: notice, alert: alert)
-      %h2.page-title.mb-4 Edytuj Grupę Aktywności
-      = render 'form'
+= render 'shared/sheet_form', record: @activity_group, variant: :sheet,
+  awards_count: @activity_group.activity_group_categories.sum(&:awards_count)

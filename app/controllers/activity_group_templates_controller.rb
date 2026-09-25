@@ -3,80 +3,99 @@
 class ActivityGroupTemplatesController < ApplicationController
   include StoryGroupAuthorization
 
+  # Same split as ranks and sheets: the delete confirmation is a dialog,
+  # creating and editing are pages carrying a preview column.
+
   before_action :set_story_group
   before_action :authorize_story_group_manage!
+  before_action :set_presentation, only: :confirm_destroy
+  before_action :set_template, only: %i[edit update destroy confirm_destroy]
 
-  def index
-    @activity_group_templates = policy_scope(@story_group.activity_group_templates)
-  end
-
-  def show
-    @activity_group_template = @story_group.activity_group_templates.find(params[:id])
-    render json: {
-      id:         @activity_group_template.id,
-      base_name:  @activity_group_template.base_name,
-      categories: @activity_group_template.categories.order(:position).map do |c|
-        {
-          story_description:    c.story_description,
-          didactic_description: c.didactic_description,
-          reward:               c.reward,
-          position:             c.position,
-        }
-      end,
-    }
-  end
-
+  # GET /story_groups/:story_group_id/activity_group_templates/new
   def new
     @activity_group_template = @story_group.activity_group_templates.build
-    @activity_group_template.categories.build
+
+    # The mockup opens with two rows, the first already filled in: a template
+    # with one category is not a grading table, and an empty first row gives
+    # nothing to copy the shape from.
+    @activity_group_template.categories.build(didactic_description: 'Obecność', reward: 2, position: 0)
+    @activity_group_template.categories.build(reward: 1, position: 1)
   end
 
+  # GET /story_groups/:story_group_id/activity_group_templates/:id/edit
   def edit
-    @activity_group_template = @story_group.activity_group_templates.find(params[:id])
+    @sheet_names = sheet_names_for(@activity_group_template)
   end
 
-  def create
-    @activity_group_template = @story_group.activity_group_templates.build(activity_group_template_params)
+  # GET /story_groups/:story_group_id/activity_group_templates/:id/confirm_destroy
+  def confirm_destroy
+    @sheet_names = sheet_names_for(@activity_group_template)
+  end
 
-    if @activity_group_template.save
+  # POST /story_groups/:story_group_id/activity_group_templates
+  def create
+    @activity_group_template = @story_group.activity_group_templates.build(template_params)
+
+    if @activity_group_template.save(context: :settings)
       redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Pomyślnie utworzono szablon grupy aktywności.', status: :see_other
+                  notice: "Utworzono szablon „#{@activity_group_template.base_name}”.", status: :see_other
     else
       render :new, status: :unprocessable_content
     end
   end
 
+  # PATCH/PUT /story_groups/:story_group_id/activity_group_templates/:id
+  #
+  # Nothing here reaches into sheets that already exist (DECISIONS.md:30) —
+  # they hold their own copies of the columns. This only changes what the next
+  # "Utwórz arkusz" stamps out.
   def update
-    @activity_group_template = @story_group.activity_group_templates.find(params[:id])
+    @activity_group_template.assign_attributes(template_params)
 
-    if @activity_group_template.update(activity_group_template_params)
-      if params[:partial_save].present?
-        redirect_to edit_story_group_activity_group_template_path(@story_group, @activity_group_template),
-                    status: :see_other
-      else
-        redirect_to story_group_activity_groups_path(@story_group),
-                    notice: 'Pomyślnie zaktualizowano szablon grupy aktywności.', status: :see_other
-      end
+    if @activity_group_template.save(context: :settings)
+      redirect_to story_group_activity_groups_path(@story_group),
+                  notice: 'Zapisano szablon. Nowe arkusze dostaną te kategorie.', status: :see_other
     else
+      @sheet_names = sheet_names_for(@activity_group_template)
       render :edit, status: :unprocessable_content
     end
   end
 
+  # DELETE /story_groups/:story_group_id/activity_group_templates/:id
+  #
+  # Soft, and it stops at the template: the sheets made from it stay on the
+  # index under no heading of their own only because they keep their own
+  # template_id, so they simply stop being listed here. That is what the
+  # confirmation promises — "utworzone z niego arkusze zostają".
   def destroy
-    @activity_group_template = @story_group.activity_group_templates.find(params[:id])
-    @activity_group_template.destroy!
+    name = @activity_group_template.base_name
+    @activity_group_template.soft_delete!
 
-    redirect_to story_group_activity_groups_path(@story_group),
-                notice: 'Pomyślnie usunięto szablon grupy aktywności.', status: :see_other
+    redirect_outside_turbo_frame story_group_activity_groups_path(@story_group),
+                                 notice: "Usunięto szablon „#{name}”. Utworzone z niego arkusze zostają."
   end
 
   private
 
   def set_story_group
-    @story_group = StoryGroup.find(params[:story_group_id])
+    @story_group = StoryGroup.find(params.expect(:story_group_id))
   end
 
-  def activity_group_template_params
+  def set_template
+    @activity_group_template = @story_group.activity_group_templates.kept.find(params.expect(:id))
+  end
+
+  def set_presentation
+    @in_modal = turbo_frame_request_id == 'modal'
+  end
+
+  # Named in the edit screen's info banner ("Laboratoria 1–5 zostają bez
+  # zmian"), so the teacher can see exactly what the edit is NOT touching.
+  def sheet_names_for(template)
+    template.activity_groups.kept.order(:id).pluck(:name)
+  end
+
+  def template_params
     params.expect(
       activity_group_template: [
         :base_name,

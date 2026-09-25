@@ -1,0 +1,93 @@
+@layer components {
+
+  .gh-join-code-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+    margin: 22px 0 12px;
+  }
+
+  .gh-join-code-slot {
+    --gh-c: 9px;
+    position: relative;
+    isolation: isolate;
+    width: 54px;
+    height: 64px;
+  }
+
+  .gh-join-code-slot::before,
+  .gh-join-code-slot::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-join-code-slot::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-join-code-slot::after {
+    --gh-c: 8px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-join-code-slot:focus-within::before {
+    background: var(--gh-item);
+  }
+
+  .gh-join-code-slot input {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    text-align: center;
+    text-transform: uppercase;
+    font: 700 28px/1 var(--gh-f-mono);
+    color: var(--gh-ink);
+    caret-color: var(--gh-item);
+  }
+
+  .gh-join-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .gh-joined-group-art {
+    --gh-c: 10px;
+    aspect-ratio: 21 / 9;
+    margin: 0 0 16px;
+    font: 800 36px/1 var(--gh-f-ui);
+    font-stretch: 80%;
+    letter-spacing: 0.04em;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-join-code-inputs {
+      gap: 7px;
+    }
+
+    .gh-join-code-slot {
+      width: 44px;
+      height: 56px;
+    }
+
+    .gh-join-code-slot input {
+      font-size: 24px;
+    }
+  }
+}

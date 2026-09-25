@@ -1,0 +1,820 @@
+@layer components {
+
+  .gh-form-field {
+    margin-top: 16px;
+  }
+
+  .gh-form-field>label {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    margin-bottom: 8px;
+  }
+
+  .gh-text-input {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+  }
+
+  .gh-text-input::before,
+  .gh-text-input::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-text-input::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-text-input::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-text-input:focus-within::before {
+    background: var(--gh-focus);
+  }
+
+  .gh-text-input--invalid::before {
+    background: var(--gh-heart);
+  }
+
+  .gh-text-input input,
+  .gh-text-input textarea {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 12px 14px;
+    font: 500 15.5px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink);
+  }
+
+  .gh-text-input textarea {
+    min-height: 72px;
+    resize: vertical;
+  }
+
+  .gh-field-error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 7px;
+    color: var(--gh-heart-ink);
+    font: 620 13.5px var(--gh-f-ui);
+  }
+
+  .gh-search-input {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 260px;
+    height: 40px;
+    padding: 0 12px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-search-input--wide {
+    width: 300px;
+  }
+
+  .gh-search-input::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-2);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-search-input:focus-within::before {
+    background: var(--gh-card-3);
+  }
+
+  .gh-search-input:focus-within {
+    outline: 3px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  .gh-search-input input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font: 500 14.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    outline: none;
+  }
+
+  .gh-field-hint {
+    display: block;
+    margin-top: 7px;
+    font: 450 13px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-text-input--numeric input {
+    width: 104px;
+    text-align: right;
+    font: 800 22px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-toggle-switch-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .gh-toggle-switch-row b {
+    display: block;
+    font: 650 14.5px/1.3 var(--gh-f-ui);
+  }
+
+  .gh-toggle-switch {
+    --gh-c: 6px;
+    position: relative;
+    width: 54px;
+    height: 30px;
+    flex: 0 0 auto;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    appearance: none;
+    background: var(--gh-card-3);
+  }
+
+  .gh-toggle-switch::after {
+    --gh-c: 5px;
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 22px;
+    height: 22px;
+    background: var(--gh-ink-3);
+    transition: left 0.15s;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-toggle-switch:checked {
+    background: var(--gh-item);
+  }
+
+  .gh-toggle-switch:checked::after {
+    left: 28px;
+    background: var(--gh-on-item);
+  }
+
+  .gh-toggle-switch:focus-visible {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 3px;
+  }
+
+  .gh-invite-code-display {
+    --gh-c: 10px;
+    display: inline-block;
+    margin: 6px 0 12px;
+    padding: 14px 20px;
+    background: var(--gh-card-2);
+    font: 700 36px/1 var(--gh-f-mono);
+    letter-spacing: 0.16em;
+    color: var(--gh-ink);
+  }
+}
+
+@layer components {
+  .gh-page-header.gh-page-header--stacked {
+    display: block;
+  }
+
+  .gh-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    font: 560 13.5px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-breadcrumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .gh-breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+
+  .gh-breadcrumbs i {
+    font-size: 11px;
+  }
+
+  .gh-form-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 22px;
+    margin-top: 22px;
+    align-items: start;
+  }
+
+  .gh-form-column {
+    padding: 24px 28px 28px;
+  }
+
+  .gh-preview-column {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .gh-preview-panel {
+    padding: 18px 20px 20px;
+  }
+
+  .gh-preview-panel h3 {
+    font: 700 14px/1.2 var(--gh-f-ui);
+    letter-spacing: 0.02em;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-preview-details>summary {
+    display: none;
+  }
+
+  .gh-form-section+.gh-form-section {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-form-section>.gh-field-hint {
+    margin: 4px 0 12px;
+  }
+
+  .gh-form-label {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    margin-bottom: 8px;
+  }
+
+  .gh-form-row-2col {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 28px;
+  }
+
+  .gh-form-row-2col .gh-form-field {
+    margin-top: 16px;
+  }
+
+  .gh-price-field-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .gh-price-unit-label {
+    font: 680 16px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-currency-token {
+    --gh-c: 29%;
+    display: inline-grid;
+    flex: 0 0 auto;
+    width: var(--gh-s);
+    height: var(--gh-s);
+    padding: max(2px, calc(var(--gh-s) * 0.08));
+    background: var(--gh-rank);
+    vertical-align: middle;
+  }
+
+  .gh-currency-token>span {
+    display: grid;
+    place-items: center;
+    background: var(--gh-coin-face);
+    color: var(--gh-coin-ink);
+    clip-path: inherit;
+  }
+
+  .gh-currency-token img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
+
+  .gh-currency-token i {
+    font-size: calc(var(--gh-s) * 0.42);
+  }
+
+  .gh-art-preset-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .gh-art-preset-tile {
+    --gh-c: 8px;
+    position: relative;
+    display: inline-block;
+    isolation: isolate;
+    width: 92px;
+    height: 58px;
+    cursor: pointer;
+  }
+
+  .gh-art-preset-tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--gh-line-2);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-art-preset-tile i {
+    --gh-c: 6px;
+    position: absolute;
+    inset: 3px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--gh-card-2);
+  }
+
+  .gh-art-preset-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .gh-art-preset-tile .gh-card-art-glyph {
+    width: 56%;
+    height: auto;
+    max-height: 76%;
+  }
+
+  .gh-art-preset-tile:has(input:checked)::before {
+    background: var(--gh-frame, var(--gh-item));
+  }
+
+  .gh-art-preset-tile:has(input:checked) i {
+    inset: 4px;
+  }
+
+  .gh-art-preset-tile:has(input:focus-visible)::before {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  .gh-art-preset-tile--rank {
+    --gh-frame: var(--gh-rank);
+  }
+
+  .gh-art-preset-tile--rank i {
+    background: color-mix(in srgb, var(--gh-rank) 18%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-rank) 55%, var(--gh-ink));
+  }
+
+  .gh-art-preset-tile--badge {
+    --gh-frame: var(--gh-badge);
+  }
+
+  .gh-art-preset-tile--badge i {
+    background: color-mix(in srgb, var(--gh-badge) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-badge) 58%, var(--gh-ink));
+  }
+
+  .gh-art-preset-tile--item {
+    --gh-frame: var(--gh-item);
+  }
+
+  .gh-art-preset-tile--item i {
+    background: color-mix(in srgb, var(--gh-item) 15%, var(--gh-card));
+    color: color-mix(in srgb, var(--gh-item) 58%, var(--gh-ink));
+  }
+
+  .gh-art-preset-tile--item .gh-card-art-glyph {
+    width: 56%;
+    max-height: 78%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-gh-theme="light"]) .gh-art-preset-tile--rank i {
+      color: var(--gh-rank);
+    }
+
+    :root:not([data-gh-theme="light"]) .gh-art-preset-tile--badge i {
+      color: var(--gh-badge);
+    }
+
+    :root:not([data-gh-theme="light"]) .gh-art-preset-tile--item i {
+      color: var(--gh-item);
+    }
+  }
+
+  :root[data-gh-theme="dark"] .gh-art-preset-tile--rank i {
+    color: var(--gh-rank);
+  }
+
+  :root[data-gh-theme="dark"] .gh-art-preset-tile--badge i {
+    color: var(--gh-badge);
+  }
+
+  :root[data-gh-theme="dark"] .gh-art-preset-tile--item i {
+    color: var(--gh-item);
+  }
+
+  .gh-file-dropzone {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+    padding: 14px 16px;
+    border: 2px dashed var(--gh-line-2);
+  }
+
+  .gh-file-dropzone-icon {
+    --gh-c: 8px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    background: var(--gh-card-2);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-file-dropzone>span:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gh-file-dropzone b {
+    display: block;
+    font: 650 14.5px var(--gh-f-ui);
+  }
+
+  .gh-file-dropzone small {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-file-dropzone label {
+    cursor: pointer;
+  }
+
+  .gh-image-cropper {
+    margin-top: 16px;
+  }
+
+  .gh-image-cropper-box {
+    --gh-c: 10px;
+    position: relative;
+    max-width: 420px;
+    height: 300px;
+    background: var(--gh-card-3);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-image-cropper-box cropper-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .gh-image-cropper .gh-field-hint {
+    margin-top: 8px;
+  }
+
+  .gh-form-section .gh-explainer-note,
+  .gh-dialog-page-panel .gh-explainer-note {
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    background: var(--gh-card-2);
+    font: 500 14.5px/1.5 var(--gh-f-ui);
+    color: var(--gh-ink);
+  }
+
+  .gh-explainer-note p {
+    margin: 0;
+  }
+
+  .gh-explainer-note p+p {
+    margin-top: 8px;
+  }
+
+  .gh-explainer-note p:empty {
+    display: none;
+  }
+
+  .gh-warning-note,
+  .gh-warning-note--alt {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 10px;
+    font: 560 14px/1.45 var(--gh-f-ui);
+  }
+
+  .gh-warning-note i,
+  .gh-warning-note--alt i {
+    flex: 0 0 auto;
+    margin-top: 2px;
+    color: var(--gh-rank-edge);
+  }
+
+  @media (prefers-color-scheme: dark) {
+
+    :root:not([data-gh-theme="light"]) .gh-warning-note i,
+    :root:not([data-gh-theme="light"]) .gh-warning-note--alt i {
+      color: var(--gh-rank);
+    }
+  }
+
+  :root[data-gh-theme="dark"] .gh-warning-note i,
+  :root[data-gh-theme="dark"] .gh-warning-note--alt i {
+    color: var(--gh-rank);
+  }
+
+  .gh-info-banner {
+    --gh-c: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 22px;
+    padding: 12px 14px;
+    background: color-mix(in srgb, var(--gh-badge) 14%, var(--gh-card));
+    font: 500 14.5px/1.45 var(--gh-f-ui);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-info-banner i {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    color: var(--gh-badge-edge);
+  }
+
+  .gh-form-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 22px 0 14px;
+    padding: 14px 18px;
+  }
+
+  .gh-form-actions-spacer {
+    flex: 1;
+  }
+
+  .gh-placeholder-text {
+    color: var(--gh-ink-3);
+  }
+
+  .gh-rule-text {
+    padding: 6px 12px 12px;
+    font: 500 14px/1.45 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-sentence-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    font: 600 15px var(--gh-f-ui);
+  }
+
+  .gh-sentence-row>span:first-child {
+    min-width: 128px;
+  }
+
+  .gh-select-input {
+    --gh-c: 7px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .gh-select-input::before,
+  .gh-select-input::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-select-input::before {
+    inset: 0;
+    background: var(--gh-line-2);
+  }
+
+  .gh-select-input::after {
+    --gh-c: 6px;
+    inset: 2px;
+    background: var(--gh-card);
+  }
+
+  .gh-select-input:focus-within::before {
+    background: var(--gh-focus);
+  }
+
+  .gh-select-input select {
+    appearance: none;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 10px 36px 10px 12px;
+    font: 620 14.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+  }
+
+  .gh-select-input select option {
+    background: var(--gh-card);
+    color: var(--gh-ink);
+  }
+
+  .gh-select-input>i {
+    position: absolute;
+    right: 12px;
+    font-size: 12px;
+    pointer-events: none;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-chip-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .gh-choice-chip {
+    --gh-c: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: color-mix(in srgb, var(--gh-badge) 18%, var(--gh-card));
+    font: 620 13.5px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+  }
+
+  .gh-choice-chip:hover {
+    background: color-mix(in srgb, var(--gh-badge) 28%, var(--gh-card));
+  }
+
+  .gh-choice-chip small {
+    color: var(--gh-badge-ink);
+    font-weight: 700;
+  }
+
+  .gh-choice-chip>i {
+    font-size: 11px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-choice-chip:not(:has(input:checked)) {
+    background: var(--gh-card-2);
+  }
+
+  .gh-choice-chip:not(:has(input:checked))>i {
+    display: none;
+  }
+
+  .gh-choice-chip:has(input:focus-visible) {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  @media (width <= theme(--breakpoint-tablet)) {
+    .gh-form-shell {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-preview-column {
+      position: static;
+    }
+
+    .gh-preview-details>summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 4px;
+      cursor: pointer;
+      font: 680 14px var(--gh-f-ui);
+      list-style: none;
+    }
+
+    .gh-preview-details>summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .gh-preview-details[open]>summary i {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-search-input--wide {
+      width: 100%;
+    }
+
+    .gh-form-column {
+      padding: 18px 16px 20px;
+    }
+
+    .gh-form-actions-bar {
+      margin-top: 16px;
+      padding: 10px 12px;
+    }
+
+    .gh-file-dropzone {
+      flex-wrap: wrap;
+    }
+
+    .gh-art-preset-tile {
+      width: 78px;
+      height: 52px;
+    }
+  }
+}

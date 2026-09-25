@@ -1,0 +1,20 @@
+-# The back of a badge card: what a student sees before it is theirs
+-# (30-sp.js:27). Grey frame, the house mark instead of the art, and the rule —
+-# the art is the reward, so it is not shown until the badge is earned.
+- targets = local_assigns.fetch(:targets, {})
+- flipper = local_assigns.fetch(:flipper, false)
+
+.gh-flip-card-back-mark.gh-octagon-clip
+  = render 'badges/badge_mark'
+
+%h3.gh-card-name{ class: ('gh-placeholder-text' if badge.name.blank?), data: targets[:back_name] }
+  = badge_name(badge)
+
+%p.gh-badge-rule-text
+  %span Jak zdobyć
+  %span{ data: targets[:how] }= badge_rule(badge)
+
+- if flipper
+  %button.gh-card-flip-btn{ type: 'button', 'aria-label': "Pokaż odznakę #{badge.name}" }
+    %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
+    Pokaż odznakę

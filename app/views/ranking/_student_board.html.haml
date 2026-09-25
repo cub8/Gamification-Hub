@@ -1,0 +1,47 @@
+-# Mockup: #/s/ranking, js-expanded/30-rk.js `vRS` (:40-43).
+-#
+-# Three states on one screen: hidden, podium, full. The strip under the head is
+-# in all three, because the total and the nickname are the student's own and
+-# stay theirs whatever the teacher has switched on.
+- story_group = board.story_group
+
+%section.gh-panel.gh-page-header.gh-page-header--stacked
+  %h1.gh-h1 Ranking
+  %p.gh-lead
+    - if !board.visible?
+      Prowadzący ukrył ranking na razie.
+    - elsif story_group.ranking_podium_and_own?
+      Prowadzący pokazuje tylko podium. Swoje miejsce widzisz tylko Ty.
+    - else
+      = "Kolejność według łącznie zebranej waluty (#{story_group.currency_name})."
+
+  .gh-my-ranking-stats
+    -# No place while the board is hidden: RankingBoard#own_place returns nil,
+    -# so the number is never computed, let alone printed.
+    - if board.own_place
+      %div
+        %b= "#{board.own_place}."
+        %small= "Twoje miejsce z #{board.participants_count}"
+
+    %div
+      %b= board.own_row.student.total_currency
+      %small Zebrane łącznie
+
+    .gh-nickname-row
+      Twój pseudonim w tej grupie:
+      %b= board.membership.nickname.presence || 'brak'
+      = link_to nickname_story_group_membership_path(story_group),
+        class: 'gh-link-button', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
+        Zmień
+
+- if board.visible?
+  = render 'board', board: board, reveal_names: false
+- else
+  %section.gh-panel.gh-empty-state
+    .gh-empty-state-icon.gh-octagon-clip
+      %i.fa-solid.fa-eye-slash{ 'aria-hidden': 'true' }
+    %h2.gh-h2 Ranking jest teraz ukryty
+    %p.gh-lead
+      Zbieraj dalej walutę. Gdy prowadzący włączy ranking, zobaczysz tu swoje
+      miejsce.

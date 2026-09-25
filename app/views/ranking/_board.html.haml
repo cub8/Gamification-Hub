@@ -1,0 +1,50 @@
+-# The board itself, shared by both personas. Mockup: `table()` + `rows()`,
+-# js-expanded/30-rk.js:29-34.
+-#
+-# Divs carrying table roles rather than a real <table>, as the mockup has it:
+-# below 720px the four columns reflow into a three-column grid with the rank
+-# wrapped under the name and the score spanning two rows, which no <table> can
+-# do. Divs-plus-roles or a real table — never half of each.
+-#
+-# reveal_names: the teacher's second line. Students see pseudonyms and nothing
+-# else, which is the whole promise of the nickname (DECISIONS.md:36-38).
+%section.gh-panel.gh-ranking-table{ role: 'table', 'aria-label': 'Ranking' }
+  .gh-ranking-row.gh-ranking-row--header{ role: 'row' }
+    %span{ role: 'columnheader' } Miejsce
+    %span{ role: 'columnheader' }= reveal_names ? 'Pseudonim i student' : 'Pseudonim'
+    %span{ role: 'columnheader' } Ranga
+    %span.gh-ranking-score{ role: 'columnheader' } Zebrane
+
+  - board.visible_rows.each do |row|
+    - if row.gap?
+      -# Two cells in a four-column grid, on purpose: the row stands for the
+      -# places nobody is allowed to see, so it shows nothing but that.
+      .gh-ranking-row.gh-ranking-row--hidden-gap{ role: 'row' }
+        %span.gh-ranking-gap-label{ role: 'cell' } …
+        %span.gh-ranking-name{ role: 'cell' }
+          %span.gh-empty-note Pozostałe miejsca są ukryte
+    - else
+      .gh-ranking-row{ class: ('gh-ranking-row--me' if row.mine), role: 'row' }
+        %span{ role: 'cell' }
+          %span.gh-position-badge.gh-octagon-clip{ class: ("gh-position-badge--p#{row.place}" if row.place <= 3),
+                        'aria-label': "Miejsce #{row.place}" }= row.place
+
+        %span.gh-ranking-name{ role: 'cell' }
+          %b
+            = row.student.display_name
+            -# The mockup tags the viewer's own row; the teacher's board has no
+            -# row of their own, so this only ever appears for a student.
+            - if row.mine
+              %span.gh-you-badge.gh-octagon-clip Ty
+          - if reveal_names
+            -# Ours diverges from the mockup here, which makes a nickname
+            -# mandatory. A blank one already falls back to the real name
+            -# (StoryGroupStudent#display_name), so repeating it below would
+            -# print the same string twice; the marker says why instead.
+            - if row.student.nickname.present?
+              %small= row.student.full_name
+            - else
+              %small.gh-empty-note Bez pseudonimu
+
+        %span.gh-ranking-rank-cell{ role: 'cell' }= row.rank&.name || '—'
+        %span.gh-ranking-score{ role: 'cell' }= row.student.total_currency

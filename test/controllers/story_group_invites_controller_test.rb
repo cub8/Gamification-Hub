@@ -10,6 +10,20 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
     @invite = FactoryBot.create(:story_group_invite, story_group: @story_group)
   end
 
+  # The form posts switches and a split date/time, not the columns themselves —
+  # InviteForm is what turns them back into max_uses and expires_at.
+  def form_params(limit: true, max_uses: 10, expiry: true, on: Time.zone.tomorrow, at: '23:59')
+    {
+      story_group_invite: {
+        limit_enabled:  limit ? '1' : '0',
+        max_uses:       max_uses,
+        expiry_enabled: expiry ? '1' : '0',
+        expires_on:     on.to_fs(:iso8601),
+        expires_time:   at,
+      },
+    }
+  end
+
   test 'should get index' do
     get story_group_invites_url(@story_group)
     assert_response :success
@@ -22,13 +36,7 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create invite' do
     assert_difference('StoryGroupInvite.count') do
-      post story_group_invites_url(@story_group),
-           params: {
-             story_group_invite: {
-               max_uses:   10,
-               expires_at: 24.hours.from_now,
-             },
-           }
+      post story_group_invites_url(@story_group), params: form_params
     end
 
     assert_turbo_redirected_to story_group_invites_url(@story_group)
@@ -41,12 +49,7 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should update invite' do
     patch story_group_invite_url(@story_group, @invite),
-          params: {
-            story_group_invite: {
-              max_uses:   @invite.max_uses + 1,
-              expires_at: 24.hours.from_now,
-            },
-          }
+          params: form_params(max_uses: @invite.max_uses + 1)
 
     assert_turbo_redirected_to story_group_invites_url(@story_group)
   end
@@ -56,11 +59,24 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'should get quick' do
+    get quick_story_group_invites_url(@story_group)
+    assert_response :success
+  end
+
+  test 'should get the delete confirmation' do
+    get confirm_destroy_story_group_invite_url(@story_group, @invite)
+
+    assert_response :success
+  end
+
+  # Submitted from inside the dialog, so it breaks out of the frame with the
+  # turbo_stream redirect action rather than a plain 302.
   test 'should destroy invite' do
     assert_difference('StoryGroupInvite.count', -1) do
       delete story_group_invite_url(@story_group, @invite)
     end
 
-    assert_redirected_to story_group_invites_url(@story_group)
+    assert_turbo_redirected_to story_group_invites_url(@story_group)
   end
 end

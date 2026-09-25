@@ -1,26 +1,19 @@
+-# One purchase notification. Mockup: the `row()` closure inside popNotif()
+-# (js-expanded/10-core.js:252).
+-#
+-# The thumbnail is the purchased ITEM, not the group — the group is named in
+-# the caption line underneath instead.
 - student = notification.story_group_student
-- user = student.user
-- item = notification.item
 - story_group = notification.story_group
+- unread = notification.read_at.nil?
 
-= link_to story_group_student_students_items_path(story_group, student), class: "notification-item d-flex align-items-start gap-2 px-3 py-2 text-decoration-none #{'unread' if notification.read_at.nil?}", data: { turbo_frame: '_top' } do
-  .notification-avatar-wrapper.flex-shrink-0
-    - if story_group.icon.attached?
-      = image_tag story_group.icon, class: 'notification-avatar rounded-circle'
-    - else
-      .notification-avatar.rounded-circle.d-flex.align-items-center.justify-content-center.bg-secondary.text-white
-        %i.fa-solid.fa-users-gear.fa-xs
-
-  .notification-body.flex-grow-1
-    .notification-text
-      Student
-      %span.fw-bold= user.full_name
-      zakupił
-      %span.fw-bold= item.name
-      w grupie
-      %span.text-orange= story_group.name
-      !
-
-    .notification-time.text-muted.small
-      = time_ago_in_words(notification.created_at)
-      temu
+%li.gh-notification-row{ class: ('gh-notification-row--unread' if unread) }
+  = link_to story_group_student_students_items_path(story_group, student),
+    class: 'gh-notification-row-link', data: { turbo_frame: '_top' } do
+    = render 'layouts/item_thumb', item: notification.item
+    %span.gh-notification-row-text
+      %b= student.full_name
+      %span= "Zakup: #{notification.item.name}"
+      %small= "#{story_group.name}, #{gh_when(notification.created_at)}"
+    - if unread
+      %span.gh-notification-unread-dot.gh-octagon-clip{ 'aria-label': 'nowe' }

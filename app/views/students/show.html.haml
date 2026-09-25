@@ -1,59 +1,81 @@
+-# Student: szczegóły. Mockup: #/t/student, js-expanded/30-student.js:19-35.
+-#
+-# A PAGE, not a dialog — the mockup's own shape, and the three tabs need the
+-# width. The quick actions on it (przyznaj, koryguj, edytuj) are the dialogs.
+-# The real name in the title, the avatar, the breadcrumb and the h1 — the
+-# mockup's own choice (30-student.js:20). The nickname is not dropped, it moves
+-# to the sub-line, so a teacher can see what this student calls themselves in
+-# the ranking without it standing in for who they are.
 - content_for :title, @student.full_name
+- name = @student.full_name
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3.dark-page
-    .modal-card.p-4.h-auto
-      = render MessagesComponent.new(id: 'modal-messages', flash: flash, notice: notice, alert: alert)
-      .d-flex.align-items-center.justify-content-between.mb-4
-        .d-flex.align-items-center.gap-3
-          = link_to story_group_students_path(@story_group), class: "btn btn-secondary", data: { turbo_frame: '_top', turbo_prefetch: true } do
-            %i.fa-solid.fa-arrow-left
-          %div
-            %h1.h3.mb-0= @student.full_name
-            %small.text-dimmed= @student.email
+%section.gh-panel.gh-student-page
+  .gh-student-page-header
+    %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }= gh_initials(name)
+    %div
+      %p.gh-breadcrumbs
+        = link_to 'Studenci', story_group_students_path(@story_group)
+        %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
+        %span= name
+      %h1.gh-h1= name
+      %p.gh-student-page-subtitle= student_sheet_subtitle(@student)
 
-      .row.g-3.mb-3
-        .col-12.col-md-6
-          .dark-panel.p-4.mb-3
-            .section-title.mb-3 Podstawowe dane
-            .d-flex.flex-column.gap-2
-              .d-flex.justify-content-between
-                %span.text-dimmed Indeks
-                %span.text-main= @student.university_number || "—"
-              .d-flex.justify-content-between
-                %span.text-dimmed Email
-                %span.text-main= @student.email
+    .gh-button-row
+      = link_to new_story_group_student_badge_path(@story_group, @student), class: 'gh-btn',
+        data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
+        Przyznaj odznakę
+      = link_to new_story_group_student_currency_adjustment_path(@story_group, @student),
+        class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-coins{ 'aria-hidden': 'true' }
+        Koryguj walutę
+      = link_to edit_story_group_student_path(@story_group, @student),
+        class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
+        Edytuj
 
-        .col-12.col-md-6
-          .dark-panel.p-4.mb-3
-            .section-title.mb-3 Waluta i życia
-            .d-flex.flex-column.gap-2
-              .d-flex.justify-content-between
-                %span.text-dimmed Życia
-                %span.text-main= @student.lives
-              .d-flex.justify-content-between
-                %span.text-dimmed Obecna waluta
-                %span.text-main= @student.current_currency
-              .d-flex.justify-content-between
-                %span.text-dimmed Łączna waluta
-                %span.text-main= @student.total_currency
+  %dl.gh-student-stats
+    .gh-student-stat
+      %dt Ranga
+      %dd
+        = @sheet.rank&.name || '—'
+        - if (line = student_rank_progress_line(@sheet))
+          %small= line
+      - if (progress = @sheet.rank_progress)
+        .gh-progress-bar.gh-octagon-clip{ role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100,
+                 'aria-valuenow': progress,
+                 'aria-label': "Postęp do rangi #{@sheet.next_rank.name}" }
+          %i.gh-octagon-clip{ style: "--gh-p: #{progress}%" }
 
-      .row
-        .col-12
-          = render 'badges', badges: @badges
+    .gh-student-stat
+      %dt Do wydania
+      %dd= @sheet.balance
+    .gh-student-stat
+      %dt Zebrane łącznie
+      %dd= @sheet.total
+    .gh-student-stat
+      %dt Życia
+      %dd
+        -# One heart and a number (DECISIONS.md:35).
+        %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if @sheet.lives.zero?) }
+          %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
+        = @sheet.lives
 
-      .d-flex.gap-2.mt-3
-        = link_to story_group_student_currency_transactions_path(@story_group, @student), class: "btn btn-secondary", data: { turbo_prefetch: true } do
-          %i.fa-solid.fa-clock-rotate-left.me-1
-          Historia transakcji
-        = link_to new_story_group_student_currency_adjustment_path(@story_group, @student), class: "btn btn-secondary", data: { turbo_prefetch: true } do
-          %i.fa-solid.fa-money-bill-transfer.me-1
-          Skoryguj walutę
-        = link_to story_group_student_students_items_path(@story_group, @student), class: "btn btn-secondary", data: { turbo_prefetch: true } do
-          %i.fa-solid.fa-flask.me-1
-          Przedmioty
-        .ms-auto
-        - if policy(@student).update?
-          = link_to new_story_group_student_badge_path(@story_group, @student), class: "btn btn-primary", data: { turbo_prefetch: true } do
-            %i.fa-solid.fa-plus.me-1
-            Przydziel odznakę
+-# Links carrying aria-current, not role="tab" buttons: these navigate, so the
+-# student list's history icon can point straight at one and the choice survives
+-# a refresh. Same shape as the group index's tabs.
+%nav.gh-group-tabs{ 'aria-label': 'Sekcje studenta' }
+  - StudentSheet::TABS.each do |key, label|
+    = link_to story_group_student_path(@story_group, @student, tab: key), class: 'gh-group-tab',
+      'aria-current': (@tab == key).to_s do
+      = label
+      %span.gh-count-label= @sheet.count_for(key)
+
+%section.gh-panel.gh-tab-panel
+  - case @tab
+  - when 'items'
+    = render 'students/tab_items', sheet: @sheet
+  - when 'hist'
+    = render 'students/tab_history', sheet: @sheet, kind: @kind
+  - else
+    = render 'students/tab_badges', sheet: @sheet

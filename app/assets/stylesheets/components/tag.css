@@ -1,0 +1,102 @@
+@layer components {
+
+  .gh-tag {
+    --gh-c: 5px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    font: 650 12.5px/1.15 var(--gh-f-ui);
+  }
+
+  .gh-tag::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-3);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  /* Role tags on the group cards (29-gh.css:10-11). `lrn` keeps the neutral
+     default: being a student in a group is the unmarked case. */
+  .gh-tag--own {
+    color: var(--gh-spend);
+  }
+
+  .gh-tag--own::before {
+    background: color-mix(in srgb, var(--gh-item) 20%, var(--gh-card));
+  }
+
+  .gh-tag--sup {
+    color: var(--gh-badge-ink);
+  }
+
+  .gh-tag--sup::before {
+    background: color-mix(in srgb, var(--gh-badge) 20%, var(--gh-card));
+  }
+
+  .gh-tag--discount {
+    color: var(--gh-badge-ink);
+  }
+
+  .gh-tag--discount::before {
+    background: color-mix(in srgb, var(--gh-badge) 20%, var(--gh-card));
+  }
+
+  /* An item that works with no lives left (00-base.css:132-134). The heart is
+     filled rather than outlined — it is a state, not an action. */
+  .gh-tag--no-lives {
+    color: var(--gh-heart-ink);
+  }
+
+  .gh-tag--no-lives::before {
+    background: color-mix(in srgb, var(--gh-heart) 16%, var(--gh-card));
+  }
+
+  /* What gates an item on the teacher's list (24-lists.css:14). The only
+     inverted chip in the set: a requirement is the one thing on that card you
+     must not skim past. */
+  .gh-tag--locked {
+    color: var(--gh-card);
+  }
+
+  .gh-tag--locked::before {
+    background: var(--gh-ink);
+  }
+
+  /* Soft-deleted, but still on someone's shelf. Grey, and it says so in
+     words — the card behind it is otherwise unchanged, because the student
+     still owns what it shows. */
+  .gh-tag--removed {
+    color: var(--gh-ink-2);
+  }
+
+  .gh-tag--removed::before {
+    background: var(--gh-card-3);
+  }
+
+  /* "Twoja ranga" / "Ty". The mockup paints this --item orange (26-rk.css:9)
+     even though it labels a gold row; kept, because it is the same chip that
+     marks "you" in both the ranking table and the rank ladder, and it has to
+     read the same in both. */
+  .gh-you-badge {
+    --gh-c: 5px;
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 7px;
+    font: 720 11.5px var(--gh-f-ui);
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+    vertical-align: 2px;
+  }
+}

@@ -9,7 +9,7 @@ class BadgeTest < ActiveSupport::TestCase
 
   test 'badge name validation' do
     badge = Badge.new(
-      name:                 'A' * 50,
+      name:                 'A' * 51,
       story_description:    'Too long name',
       didactic_description: 'Too long didactic description',
       discount:             10,
@@ -51,6 +51,85 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal true, badge.errors[:discount].any?
   end
 
+  test 'a badge needs a name and a rule, in Polish' do
+    badge = Badge.new(story_group: @story_group, discount: 0)
+
+    assert_predicate badge, :invalid?
+    assert_equal 'Podaj nazwę odznaki.', badge.errors[:name].first
+    assert_equal 'Napisz, jak zdobyć tę odznakę.', badge.errors[:didactic_description].first
+  end
+
+  test 'a glyph outside the badge presets is refused' do
+    badge = FactoryBot.build(:badge, story_group: @story_group, icon_glyph: 'chev1')
+
+    assert_predicate badge, :invalid?
+    assert_equal 'Nieznana grafika.', badge.errors[:icon_glyph].first
+  end
+
+  # The same three states as Rank#art: a key wins over an attachment, and the
+  # attachment is kept so a teacher can switch back.
+  test 'art names the preset, the upload, or neither' do
+    badge = FactoryBot.create(:badge, story_group: @story_group)
+
+    badge.icon.attach(io: Rails.root.join('test/fixtures/files/rank_art.png').open,
+                      filename: 'art.png', content_type: 'image/png',)
+    badge.update!(icon_glyph: nil)
+    assert_equal :upload, badge.art
+    assert_predicate badge, :upload?
+
+    badge.update!(icon_glyph: 'crown')
+    assert_equal 'crown', badge.art
+    assert_predicate badge.icon, :attached?
+
+    # Records saved before art was required still have to render.
+    badge.icon.purge
+    badge.update_column(:icon_glyph, nil)
+    assert_nil badge.reload.art
+    assert_not badge.upload?
+  end
+
+  test 'a badge needs art: a preset or an upload, not neither' do
+    badge = FactoryBot.build(:badge, story_group: @story_group, icon_glyph: nil)
+
+    assert_not badge.valid?
+    assert_equal 'Wybierz gotową grafikę albo wgraj własną.', badge.errors[:icon_glyph].first
+
+    badge.icon.attach(io: Rails.root.join('test/fixtures/files/rank_art.png').open,
+                      filename: 'art.png', content_type: 'image/png',)
+    assert_predicate badge, :valid?
+  end
+
+  test 'soft delete keeps the row and takes it off the kept scope' do
+    badge = FactoryBot.create(:badge, story_group: @story_group)
+
+    assert_no_difference('Badge.count') { badge.soft_delete! }
+
+    assert_predicate badge.reload, :deleted?
+    assert_empty @story_group.badges.kept
+    assert_equal [badge], @story_group.badges.deleted.to_a
+  end
+
+  # A badge written before the rule became required must still be deletable.
+  test 'soft delete does not run validations' do
+    badge = FactoryBot.build(:badge, story_group: @story_group)
+    badge.save!(validate: false)
+    badge.update_column(:didactic_description, nil)
+
+    assert_nothing_raised { badge.soft_delete! }
+    assert_predicate badge.reload, :deleted?
+  end
+
+  test 'dependent items finds both sides, unlocking_items only one' do
+    badge = FactoryBot.create(:badge, story_group: @story_group)
+    unlocks = FactoryBot.create(:item, story_group: @story_group, name: 'Poprawa',
+                                       unlock_badges: [badge],)
+    discounts = FactoryBot.create(:item, story_group: @story_group, name: 'Zaliczenie',
+                                         discount_badges: [badge],)
+
+    assert_equal [unlocks, discounts].sort_by(&:id), badge.dependent_items.order(:id).to_a
+    assert_equal [unlocks], badge.unlocking_items.to_a
+  end
+
   test 'badge saves with valid attributes' do
     badge = Badge.new(
       story_group:          @story_group,
@@ -58,6 +137,7 @@ class BadgeTest < ActiveSupport::TestCase
       story_description:    'A starter badge',
       didactic_description: 'A didactic description for the starter badge',
       discount:             10,
+      icon_glyph:           'rabbit',
     )
     assert_equal true, badge.valid?
     assert_equal true, badge.save

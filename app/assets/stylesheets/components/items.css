@@ -1,0 +1,119 @@
+@layer components {
+
+  .gh-card--sealed .gh-card-inset {
+    background: var(--gh-card-2);
+  }
+
+  .gh-card--sealed .gh-card-art .gh-card-art-glyph,
+  .gh-card--sealed .gh-card-art img {
+    opacity: 0.28;
+  }
+
+  .gh-card--sealed .gh-card-art img {
+    filter: grayscale(1);
+  }
+
+  .gh-card--sealed .gh-card-art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--gh-lock);
+    opacity: 0.5;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M10 2h8l8 8v8l-8 8h-8l-8-8v-8z' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 0 0 / 28px 28px;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M10 2h8l8 8v8l-8 8h-8l-8-8v-8z' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 0 0 / 28px 28px;
+  }
+
+  .gh-card--sealed .gh-card-flavor {
+    opacity: 0.75;
+  }
+
+  .gh-lock-seal {
+    --gh-c: 7px;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    max-width: 88%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 11px;
+    background: var(--gh-ink);
+    color: var(--gh-card);
+    font: 650 12.5px/1.2 var(--gh-f-ui);
+    text-align: left;
+  }
+
+  .gh-lock-seal i {
+    flex: 0 0 auto;
+    font-size: 13px;
+  }
+
+  .gh-art-slot-wrapper {
+    display: contents;
+  }
+
+  .gh-card-footer>.gh-auth-footer {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gh-auth-footer .gh-btn {
+    width: 100%;
+  }
+
+  .gh-requirement-block {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gh-requirement-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    font: 620 14px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-requirement-title b {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-requirement-list {
+    flex: 1;
+    min-width: 0;
+    font: 560 13px/1.45 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-requirement-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gh-requirement-list b {
+    font-weight: 720;
+    color: var(--gh-ink);
+  }
+
+  .gh-preview-panel .gh-segmented-toggle-2 {
+    --gh-seg: var(--gh-item);
+  }
+
+  .gh-item-preview-card {
+    max-width: 250px;
+    margin: 16px auto 0;
+  }
+
+  .gh-item-preview-card .gh-card-footer .gh-btn {
+    pointer-events: none;
+  }
+
+  .gh-card-tags:not(:has(> :not([hidden]))) {
+    display: none;
+  }
+}

@@ -1,25 +1,41 @@
-- content_for :title, "Sklep"
+-# Sklep, the student's shop. Mockup: #/s/shop, js-expanded/30-main.js:87-98.
+-#
+-# Three zones on the table, in reading order: what you can have, what you are
+-# working toward, what is still shut. An empty zone is not rendered — a dashed
+-# frame around nothing reads as a fault, not as an absence.
+- content_for :title, 'Sklep'
 
-.dark-page
-  .d-flex.align-items-center.justify-content-between.mb-4
-    %h1.h3.mb-0 Sklep
-    .d-flex.align-items-center.gap-2
-      - if @story_group.currency_icon.attached?
-        = image_tag @story_group.currency_icon, width: 20, height: 20, class: "object-fit-contain"
-      %span.fw-semibold= @student.current_currency
-      %span.text-dimmed= @story_group.currency_name
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1 Sklep
+    %p.gh-lead
+      = shop_balance_sentence(@shop.balance)
+      = shop_discount_sentence(@shop.discount_badges)
 
-  - if @items.empty?
-    %p.text-dimmed Brak przedmiotów w sklepie.
-  - else
-    - if @eligible_items.any?
-      .d-flex.flex-column.gap-3
-        = render partial: 'item', collection: @eligible_items, locals: { locked: false }
+  -# Both numbers, because they answer different questions: one is what you can
+  -# spend today, the other is what decides your rank and never goes down.
+  .gh-wallet-summary
+    = render 'layouts/currency_token', story_group: @story_group, size: 32
+    %div
+      %b= @shop.balance
+      %small do wydania
+    %span.gh-wallet-divider{ 'aria-hidden': 'true' }
+    %div
+      %b= @shop.total
+      %small zebrane łącznie
 
-    - if @locked_items.any?
-      - if @eligible_items.any?
-        .my-4
-          %hr.border-secondary
-          %p.text-dimmed.small.mt-2.mb-0 Zablokowane
-      .d-flex.flex-column.gap-3
-        = render partial: 'item', collection: @locked_items, locals: { locked: true }
+- if @shop.any?
+  - @shop.zones.each do |zone|
+    %section.gh-showcase-zone
+      %h2.gh-showcase-zone-label
+        %span= zone.label
+        %span.gh-showcase-zone-count.gh-octagon-clip= zone.offers.size
+      .gh-card-grid
+        - zone.offers.each do |offer|
+          = render 'shop/card', offer: offer, state: zone.key
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2 Sklep jest jeszcze pusty
+    %p.gh-lead
+      Prowadzący nie dodał jeszcze przedmiotów. Zbieraj walutę — przyda się,
+      kiedy sklep się otworzy.

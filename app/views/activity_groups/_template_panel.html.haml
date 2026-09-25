@@ -1,0 +1,27 @@
+-# One template and the sheets stamped from it. Mockup: 30-ag.js:23-29.
+- record = template.record
+- count  = template.category_count
+
+%section.gh-panel.gh-template-panel{ 'aria-labelledby': "gh-tpl-#{record.id}" }
+  .gh-template-panel-header
+    %div
+      %h2.gh-h2{ id: "gh-tpl-#{record.id}" }= record.base_name
+      %p.gh-template-panel-meta
+        = "Szablon: #{count} #{gh_plural(count, 'kategoria', 'kategorie', 'kategorii')},"
+        = "do #{template.max_reward} #{@story_group.currency_name} na studenta za arkusz."
+    %span.gh-template-panel-spacer
+
+    = link_to 'Edytuj szablon', edit_story_group_activity_group_template_path(@story_group, record),
+      class: 'gh-btn gh-btn--secondary gh-btn--small'
+    = link_to new_story_group_activity_group_path(@story_group, template_id: record.id),
+      class: 'gh-btn gh-btn--small', data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+      Utwórz arkusz
+
+  - if template.any_sheets?
+    %ul.gh-sheet-list
+      - template.sheets.each_with_index do |sheet, index|
+        = render 'sheet_row', sheet: sheet, primary: index.zero?,
+          fresh: fresh_sheet_ids.include?(sheet.record.id)
+  - else
+    %p.gh-explainer-note Z tego szablonu nie utworzono jeszcze arkuszy.

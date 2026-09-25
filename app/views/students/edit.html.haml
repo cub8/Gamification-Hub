@@ -1,27 +1,11 @@
-- content_for :title, "Edytuj — #{@student.full_name}"
+-# Either the layout's shared `modal` frame or a page — never both. A page
+-# carrying its own <turbo-frame id="modal"> would collide with the one the
+-# layout already has inside the dialog.
+- content_for :title, "Edytuj studenta — #{@student.display_name}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3.dark-page
-    .form-card.p-4.h-auto
-      %h1.page-title.mb-4 Edytuj studenta
-
-      - if @student.errors.any?
-        .form-errors.p-3.mb-3
-          %h2 Popraw poniższe błędy:
-          %ul
-            - @student.errors.full_messages.each do |message|
-              %li= message
-
-      = form_with model: @student, url: story_group_student_path(@story_group, @student), method: :patch do |f|
-        .form-section.p-4.mb-3
-          .section-title.mb-3
-            = @student.full_name
-            %small.text-dimmed.fw-normal.ms-2= @student.email
-
-          .field-group.mb-3
-            = f.label :lives, "Życia"
-            = f.number_field :lives, class: "form-control", min: 0
-
-        .form-actions.gap-3.mt-4
-          = link_to "Anuluj", story_group_students_path(@story_group), class: "btn-cancel py-2 px-3", data: { turbo_frame: '_top' }
-          = f.submit "Aktualizuj", class: "btn-submit py-2 px-4"
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'form', student: @student
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'form', student: @student

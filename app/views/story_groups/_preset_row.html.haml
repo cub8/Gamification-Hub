@@ -1,0 +1,29 @@
+-# One row of the starter-pack review. Mockup: js-expanded/30-form.js `rrow`
+-# (:72).
+-#
+-# "Remove" is a checkbox, not a button: the mockup toggles a JS-only exclusion
+-# set, but this row has to survive a submit, so the state IS the posted value.
+-# Checked means keep. `preset-row` only crosses the row out and swaps the
+-# label; with JavaScript off the box still reads as what it is.
+- row_id = "gh-preset-#{zone}-#{index}"
+
+.gh-preset-row{ data: { controller: 'preset-row' } }
+  %i.fa-solid{ class: icon, 'aria-hidden': 'true' }
+
+  %span.gh-preset-row-name
+    %b= name
+    - if note.present?
+      %small= note
+
+  = yield
+
+  -# The hidden companion is load-bearing: an unchecked box posts NOTHING, so
+  -# without it a removed row would look identical to an untouched one and
+  -# StarterPackBuilder would keep it.
+  = hidden_field_tag "setup[#{zone}][#{index}][keep]", '0', id: nil
+
+  %label.gh-preset-row-remove{ for: row_id }
+    = check_box_tag "setup[#{zone}][#{index}][keep]", '1', true, id: row_id,
+      class: 'sr-only', data: { preset_row_target: 'keep', action: 'preset-row#toggle' }
+    %span.sr-only{ data: { preset_row_target: 'label' } }= "Usuń: #{name}"
+    %i.fa-solid.fa-xmark{ 'aria-hidden': 'true', data: { preset_row_target: 'icon' } }

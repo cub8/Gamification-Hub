@@ -1,0 +1,72 @@
+@layer components {
+
+  .gh-panel {
+    --gh-c: 14px;
+    position: relative;
+    isolation: isolate;
+    filter: drop-shadow(0 3px 0 var(--gh-edge));
+  }
+
+  .gh-panel::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+    background: var(--gh-card);
+  }
+
+  .gh-danger-zone::before {
+    background: var(--gh-heart);
+  }
+
+  .gh-danger-zone::after {
+    --gh-c: 13px;
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 2px;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+    background: var(--gh-card);
+  }
+
+  .gh-danger-zone>h2 {
+    color: var(--gh-heart-ink);
+  }
+
+  .gh-inset-plate {
+    --gh-c: 8px;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .gh-inset-plate::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+    background: var(--gh-chrome);
+  }
+}

@@ -1,0 +1,47 @@
+-# Mockup: dlgBuy(), js-expanded/30-main.js:200-207.
+-#
+-# A dialog rather than data-turbo-confirm, because the point of it is the two
+-# numbers: what this costs you after your discounts, and what you have left
+-# afterwards. A browser confirm can hold neither.
+- price = offer.price
+- left  = @student.current_currency.to_i - price
+
+%h2#gh-buy-title.gh-h2= "Kupić „#{item.name}”?"
+
+.gh-purchase-summary
+  = render 'layouts/item_thumb', item: item
+  %dl.gh-purchase-details
+    %dt Cena
+    %dd
+      - if offer.discounted?
+        %s= offer.list_price
+      %span.gh-buy-v= price
+      = render 'layouts/currency_token', story_group: @story_group, size: 22
+    %dt Zostanie Ci
+    %dd
+      %span.gh-buy-v= left
+      = render 'layouts/currency_token', story_group: @story_group, size: 22
+
+- if offer.discounted?
+  %p.gh-small.gh-note-row= "Zniżka #{offer.discount_label}."
+
+-# True, not decoration: ItemPurchaseService#notify_teachers! sends one to the
+-# owner and every supporting teacher.
+%p.gh-small.gh-note-row
+  %i.fa-solid.fa-bell{ 'aria-hidden': 'true' }
+  %span Prowadzący dostanie powiadomienie o zakupie.
+
+.gh-dialog-button-row
+  -# Anuluj first and focused: the safe button is the one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary'
+
+  -# `_top`, unlike the delete confirmations: a purchase changes the header
+  -# balance and moves the item into another zone, so the whole page has to come
+  -# back rather than just the frame this dialog lives in.
+  = button_to "Kup za #{price}", buy_story_group_shop_path(@story_group, item),
+    method: :post, class: 'gh-btn',
+    form: { data: { turbo_frame: '_top' } }

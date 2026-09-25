@@ -29,7 +29,7 @@ class StudentsBadgesControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_redirected_to story_group_student_url(@story_group, @story_group_student)
+    assert_turbo_redirected_to story_group_student_url(@story_group, @story_group_student)
   end
 
   test 'should destroy students_badge' do
@@ -37,6 +37,6 @@ class StudentsBadgesControllerTest < ActionDispatch::IntegrationTest
       delete story_group_student_badge_url(@story_group, @story_group_student, @students_badge)
     end
 
-    assert_redirected_to story_group_student_url(@story_group, @story_group_student)
+    assert_turbo_redirected_to story_group_student_url(@story_group, @story_group_student)
   end
 end

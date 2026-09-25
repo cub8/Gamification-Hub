@@ -1,0 +1,19 @@
+-# Inline flash. ALERTS ONLY, see below.
+-#
+-# ALERTS ONLY. Notices rise as toasts instead (layouts/_toasts), the
+-# way the mockup shows every confirmation. An error is the one thing that must
+-# not fade on a timer, so it stays here, at the top of the content, until it is
+-# dismissed or the page changes.
+- message = flash[:alert] || alert
+
+- if message
+  #flash-messages.flex.flex-col.gap-2.mb-4{ data: { controller: 'flash' } }
+    %div{ class: 'gh-inset-plate relative flex items-center justify-center px-10 py-3 text-center text-heart-ink',
+          role: 'alert',
+          data: { flash_target: 'message' } }
+      %span= message
+      %button{ class: 'gh-close absolute right-1 top-1/2 -translate-y-1/2',
+               type: 'button',
+               data: { action: 'flash#dismiss' },
+               'aria-label': 'Zamknij' }
+        %i.fa-solid.fa-xmark

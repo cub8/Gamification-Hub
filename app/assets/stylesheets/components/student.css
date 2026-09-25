@@ -1,0 +1,338 @@
+@layer components {
+
+  .gh-student-page {
+    padding: 22px 24px;
+  }
+
+  .gh-student-page-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .gh-student-page-header .gh-avatar {
+    --gh-c: 14px;
+    width: 64px;
+    height: 64px;
+    font-size: 22px;
+  }
+
+  .gh-student-page-header .gh-breadcrumbs {
+    margin-bottom: 4px;
+  }
+
+  .gh-student-page-header .gh-h1 {
+    font-size: 32px;
+  }
+
+  .gh-student-page-subtitle {
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-student-page-header .gh-button-row {
+    margin-left: auto;
+  }
+
+  .gh-student-stats {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 0;
+    margin-top: 20px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-student-stat {
+    padding: 14px 18px 4px 0;
+  }
+
+  .gh-student-stat+.gh-student-stat {
+    padding-left: 18px;
+    border-left: 1px solid var(--gh-line);
+  }
+
+  .gh-student-stat dt {
+    font: 620 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-student-stat dd {
+    margin: 6px 0 0;
+    font: 800 26px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gh-student-stat dd small {
+    font: 560 13px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-student-stat .gh-progress-bar {
+    margin-top: 10px;
+  }
+
+  .gh-tab-panel {
+    padding: 20px 22px;
+    margin-top: 22px;
+  }
+
+  .gh-tab-panel-intro {
+    margin-bottom: 14px;
+  }
+
+  .gh-badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 22px 16px;
+    margin-top: 4px;
+  }
+
+  .gh-badge-grid .gh-card-footer {
+    justify-content: space-between;
+    min-height: 0;
+  }
+
+  .gh-item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 22px 16px;
+  }
+
+  .gh-number-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .gh-number-stepper output {
+    min-width: 46px;
+    text-align: center;
+    font: 800 20px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-number-stepper-button {
+    --gh-c: 6px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    cursor: pointer;
+    color: var(--gh-ink);
+    background: var(--gh-card-3);
+  }
+
+  .gh-number-stepper-button:hover:not([disabled]) {
+    background: var(--gh-line-2);
+  }
+
+  .gh-number-stepper-button[disabled] {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .gh-form-section--divider {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-remove-student-btn {
+    margin-top: 10px;
+  }
+
+  .gh-segmented-toggle-3 {
+    --gh-c: 7px;
+    display: flex;
+    gap: 3px;
+    padding: 3px;
+    margin-top: 12px;
+    background: var(--gh-card-2);
+  }
+
+  .gh-segmented-toggle-3-option {
+    flex: 1;
+  }
+
+  .gh-segmented-toggle-3-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gh-segmented-toggle-3-option span {
+    display: block;
+    padding: 8px 6px;
+    text-align: center;
+    color: var(--gh-ink-2);
+    font: 620 13px/1.1 var(--gh-f-ui);
+    cursor: pointer;
+  }
+
+  .gh-segmented-toggle-3-option input:checked+span {
+    background: var(--gh-card);
+    color: var(--gh-ink);
+    box-shadow: inset 0 -3px 0 var(--gh-rank);
+  }
+
+  .gh-segmented-toggle-3-option input:focus-visible+span {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: -2px;
+  }
+
+  .gh-adjustment-preview {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 18px;
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    background: var(--gh-card-2);
+  }
+
+  .gh-adjustment-preview dt {
+    font-size: 14px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-adjustment-preview dd {
+    margin: 0;
+    font: 700 15px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-adjustment-preview-note {
+    margin-top: 8px;
+  }
+
+  .gh-search--full-width {
+    width: 100%;
+    margin-top: 14px;
+  }
+
+  .gh-badge-picker-list {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    max-height: 340px;
+    overflow: auto;
+  }
+
+  .gh-badge-picker-row {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    padding: 10px 8px;
+    border-top: 1px solid var(--gh-line);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .gh-badge-picker-row input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gh-badge-picker-row:hover {
+    background: var(--gh-card-2);
+  }
+
+  .gh-badge-picker-row:has(input:checked) {
+    background: color-mix(in srgb, var(--gh-badge) 16%, var(--gh-chrome));
+    box-shadow: inset 4px 0 0 var(--gh-badge);
+  }
+
+  .gh-badge-picker-row:has(input:focus-visible) {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: -2px;
+  }
+
+  .gh-badge-picker-row--owned {
+    cursor: default;
+    opacity: 0.55;
+  }
+
+  .gh-badge-picker-row--owned:hover {
+    background: none;
+  }
+
+  .gh-badge-picker-row .gh-mini-thumb {
+    width: 46px;
+    height: 46px;
+  }
+
+  .gh-badge-picker-row b {
+    display: block;
+    font: 680 15px var(--gh-f-ui);
+  }
+
+  .gh-badge-picker-row small {
+    display: block;
+    font-size: 13px;
+    color: var(--gh-ink-2);
+    margin-top: 2px;
+  }
+
+  .gh-badge-picker-status {
+    font: 620 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+    white-space: nowrap;
+  }
+
+  .gh-badge-effect-note {
+    margin-top: 12px;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-student-page {
+      padding: 18px 16px;
+    }
+
+    .gh-student-page-header .gh-button-row {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .gh-student-page-header .gh-h1 {
+      font-size: 26px;
+    }
+
+    .gh-student-stats {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .gh-student-stat {
+      padding: 12px 12px 8px 0;
+      border-left: 0;
+      border-top: 1px solid var(--gh-line);
+    }
+
+    .gh-student-stat+.gh-student-stat {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .gh-student-stat:first-child {
+      grid-column: 1 / -1;
+      border-top: 0;
+    }
+
+    .gh-tab-panel {
+      padding: 16px 14px;
+    }
+
+    .gh-badge-grid,
+    .gh-item-list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

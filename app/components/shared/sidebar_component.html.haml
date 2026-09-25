@@ -1,0 +1,29 @@
+%aside.gh-sidebar{ class: ('gh-sidebar--collapsed' if collapsed),
+              data: { sidebar_target: 'sidebar' } }
+  %nav.gh-sidebar-nav.gh-sidebar-nav--primary{ 'aria-label': 'Główna' }
+    - nav_items.each do |item|
+      = link_to item.path, class: "gh-sidebar-link #{'gh-sidebar-link--active' if current?(item.path)}",
+        title: item.label, 'aria-current': ('page' if current?(item.path)) do
+        %i.fa-solid{ class: item.icon }
+        %span= item.label
+
+  -# In a group the deck takes this slot; the group list does not survive
+  -# alongside it (10-core.js:171-183). You leave through "Zmień grupę".
+  - if group_chrome
+    = render 'layouts/deck', chrome: group_chrome, current_path: current_path
+  - elsif groups.any?
+    %p.gh-sidebar-section-label Twoje grupy
+    .gh-sidebar-group-list
+      - groups.each do |story_group|
+        = link_to story_group_path(story_group), class: 'gh-sidebar-group-list-item', title: story_group.name do
+          = render 'layouts/group_thumb', story_group: story_group, size: nil
+          %span.gh-sidebar-group-list-item-text
+            %b= story_group.name
+            %small= role_label(story_group)
+
+  .gh-sidebar-footer
+    %button.gh-sidebar-collapse-toggle{ type: 'button',
+                       data: { action: 'sidebar#toggle' },
+                       'aria-expanded': (!collapsed).to_s }
+      %i.fa-solid{ class: toggle_icon, data: { sidebar_target: 'icon' } }
+      %span{ data: { sidebar_target: 'label' } }= toggle_label

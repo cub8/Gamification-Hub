@@ -1,0 +1,24 @@
+-# Mockup: 30-rk.js `mNick` (:53-56). The same field as "Ustawienia w grupie",
+-# opened from the ranking screen because that is the only place the nickname is
+-# shown to anyone else.
+%h2#gh-nick-title.gh-h2= "Pseudonim w grupie #{membership.story_group.name}"
+%p
+  Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
+  Prowadzący widzi też Twoje imię i nazwisko.
+
+= form_with model: membership, url: story_group_membership_path(membership.story_group),
+  method: :patch, data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |f|
+  -# A name, not a path: the controller decides what it means, so this cannot
+  -# be turned into an open redirect. See #from_dialog?.
+  = hidden_field_tag :return_to, 'ranking'
+  -# No submit button inside the row here — the dialog's own footer carries it.
+  = render 'nickname_field', f: f, membership: membership, submit_label: nil, autofocus: true
+
+  .gh-dialog-button-row
+    - if @in_modal
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+    - else
+      = link_to 'Anuluj', story_group_ranking_path(membership.story_group),
+        class: 'gh-btn gh-btn--secondary'
+
+    %button.gh-btn{ type: 'submit' } Zapisz pseudonim

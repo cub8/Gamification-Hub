@@ -1,11 +1,50 @@
-- content_for :title, @own_items ? "Moje przedmioty" : "Przedmioty studenta"
+-# Moje przedmioty. Mockup: #/s/my-items, js-expanded/30-sp.js:19-20.
+-#
+-# The same rows a teacher reads on the Przedmioty tab of the student sheet, so
+-# `@own_items` decides the wording — this screen is written for the student and
+-# falls back to the teacher's phrasing when they follow the URL here.
+- title = @own_items ? 'Moje przedmioty' : "Przedmioty — #{@student.display_name}"
+- content_for :title, title
+- count = @purchases.size
 
-- if turbo_frame_request_id == 'modal'
-  = turbo_frame_tag 'modal' do
-    .modal-overlay.py-5.px-3.dark-page
-      .modal-card.p-4.h-auto
-        = render 'index'
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1= title
+    %p.gh-lead
+      - if @own_items
+        = inventory_lead(count)
+      - else
+        = "#{count} #{gh_plural(count, 'przedmiot', 'przedmioty', 'przedmiotów')}."
+        Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach.
+
+  - if @own_items
+    .gh-button-row
+      = link_to story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary' do
+        %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
+        Przejdź do sklepu
+
+- if @purchases.any?
+  .gh-inventory-grid
+    - @purchases.each do |purchase|
+      = render 'students_items/card', purchase: purchase, cost: !@own_items,
+        foot: (@own_items ? purchase_line(purchase) : purchase_teacher_line(purchase))
+
+    -# Closes the grid rather than sitting under it, exactly as in the mockup:
+    -# the inventory's job is to send you back for more.
+    - if @shop
+      .gh-panel.gh-empty-slot-panel
+        %p= inventory_shop_line(@shop.affordable)
+        = link_to 'Zobacz sklep', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary'
 - else
-  .dark-page
-    .row.justify-content-center
-      = render 'index'
+  %section.gh-panel.gh-empty-state
+    - if @own_items
+      %h2.gh-h2 Nie masz jeszcze żadnego przedmiotu
+      %p.gh-lead
+        Zbieraj walutę na zajęciach i wydaj ją w sklepie — kupione przedmioty
+        zostaną tutaj razem z datą zakupu.
+      .gh-button-row
+        = link_to 'Przejdź do sklepu', story_group_shop_index_path(@story_group), class: 'gh-btn'
+    - else
+      %h2.gh-h2 Student nic jeszcze nie kupił
+      %p.gh-lead
+        Przedmioty pojawią się tu razem z ceną, jaką zapłacił, i datą zakupu.

@@ -1,8 +1,5 @@
-- content_for :title, "Edytuj szablon — #{@activity_group_template.base_name}"
+-# Mockup: #/t/sheet-template-edit, js-expanded/30-ag.js (view `edittpl`).
+- content_for :title, "Edytuj szablon #{@activity_group_template.base_name}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      = render MessagesComponent.new(id: 'modal-messages', flash: flash, notice: notice, alert: alert)
-      %h2.page-title.mb-4 Edytuj Szablon Grupy Aktywności
-      = render 'form'
+= render 'shared/sheet_form', record: @activity_group_template, variant: :template_edit,
+  sheet_names: @sheet_names

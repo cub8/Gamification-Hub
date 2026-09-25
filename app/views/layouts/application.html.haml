@@ -1,30 +1,136 @@
+-# "Card Table" application layout — the app's one and only layout.
+-#
+-# `chrome` is false for auth-style screens, which renders the centred
+-# single-column shell. Set it per controller with `@chrome = false` (or
+-# content_for :chrome).
+
 !!!
-%html
+%html{ lang: 'pl', data: { gh_theme: gh_theme } }
   %head
-    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title= content_for(:title) || "Gamification Hub"
-    %meta{content: "width=device-width,initial-scale=1", name: "viewport"}/
-    %meta{content: "yes", name: "apple-mobile-web-app-capable"}/
-    %meta{content: "Gamification Hub", name: "application-name"}/
-    %meta{content: "yes", name: "mobile-web-app-capable"}/
-    %meta{name: 'turbo-prefetch', content: 'false'}
+    %meta{ charset: 'utf-8' }/
+    %title= content_for(:title) || 'Gamification Hub'
+    %meta{ content: 'width=device-width,initial-scale=1', name: 'viewport' }/
+    %meta{ content: 'Gamification Hub', name: 'application-name' }/
+    %meta{ content: 'yes', name: 'mobile-web-app-capable' }/
+    %meta{ name: 'turbo-prefetch', content: 'false' }/
     = csrf_meta_tags
     = csp_meta_tag
     = yield :head
-    %link{href: "/icon.png", rel: "icon", type: "image/png"}/
-    %link{href: "/icon.svg", rel: "icon", type: "image/svg+xml"}/
-    %link{href: "/icon.png", rel: "apple-touch-icon"}/
-    = stylesheet_link_tag :application, "data-turbo-track": "reload"
-    = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
-  %body.vh-100.d-flex.flex-column.overflow-hidden
-    = render Shared::HeaderComponent.new(current_user: @current_user)
+    %link{ href: '/icon.png', rel: 'icon', type: 'image/png' }/
+    %link{ href: '/icon.svg', rel: 'icon', type: 'image/svg+xml' }/
+    %link{ href: '/icon.png', rel: 'apple-touch-icon' }/
+    = stylesheet_link_tag :application, 'data-turbo-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbo-track': 'reload', type: 'module'
 
-    %main.d-flex.flex-grow-1.overflow-hidden.p-2.gap-2{ data: { controller: 'desktop-sidebar' } }
-      %div{ class: ('d-none' if @sidebar_collapsed), data: { desktop_sidebar_target: 'full' } }
-        = render Shared::MainSidebarComponent.new(current_path: url_for, user: @current_user, story_group: @story_group, collapsed: false)
-      %div{ class: ('d-none' unless @sidebar_collapsed), data: { desktop_sidebar_target: 'collapsed' } }
-        = render Shared::MainSidebarComponent.new(current_path: url_for, user: @current_user, story_group: @story_group, collapsed: true)
-      #app-content.flex-grow-1.overflow-auto
-        = render MessagesComponent.new(id: 'flash-messages', flash: flash, notice: notice, alert: alert)
-        = yield
-        = turbo_frame_tag 'modal'
+  %body.bg-table.text-ink.font-ui
+    - if @chrome == false
+      -# Focused shell: auth, wizard and other flows with no navigation.
+      -# Mirrors the mockup's .auth column (28-auth.css). The texture is a
+      -# fixed full-bleed layer here because there is no content well to
+      -# scope it to; content carries `relative z-10` to sit above it.
+      .gh-cover-pattern{ 'aria-hidden': 'true' }
+
+      %main.gh-auth-page.relative.z-10
+        = link_to root_path, class: 'gh-brand-lockup no-underline' do
+          = image_tag 'logo.png', alt: '', class: 'h-[46px] w-[46px] object-contain'
+          %span Gamification Hub
+        %section.gh-panel.gh-auth-card
+          = render 'layouts/flash'
+          = yield
+        = render 'layouts/theme_toggle'
+    - else
+      -# App shell. One element owns the three chrome controllers so the
+      -# header, sidebar, tab bar and both menu dialogs can all reach them.
+      .gh-app-shell{ data: { controller: 'theme menu sidebar',
+                         theme_light_label_value: 'Jasny motyw',
+                         theme_dark_label_value: 'Ciemny motyw' } }
+        = render Shared::HeaderComponent.new(user:         @current_user,
+                                                        group_chrome: gh_group_chrome)
+
+        .gh-app-body
+          = render Shared::SidebarComponent.new(user:         @current_user,
+                                                          current_path: request.path,
+                                                          collapsed:    @sidebar_collapsed,
+                                                          group_chrome: gh_group_chrome)
+          .gh-content-well
+            -# Scoped to the well, not the page: the header and sidebar sit on
+            -# flat --gh-chrome, exactly as .tpat does inside .tw in the mockup.
+            -#
+            -# Inside a group the group's own cover is the table, blurred and
+            -# tinted (mockup 10-core.js:342, which gives every in-group route
+            -# `.tbg` + `.ttint`). One branch here covers every screen in every
+            -# group, because gh_group_chrome memoises the @story_group that the
+            -# nested controllers already set.
+            -#
+            -# @group_art_layer lets a screen ask for the layer while it is
+            -# still choosing the art — the wizard renders it empty and fills it
+            -# from Stimulus as the teacher clicks a tile.
+            - group_art = gh_group_cover_url(gh_group_chrome&.story_group)
+            - if group_art || @group_art_layer
+              .gh-group-cover-bg{ 'aria-hidden': 'true', hidden: group_art.nil?,
+                       style: (group_art ? "background-image:url(#{group_art})" : nil),
+                       data: { group_art_layer: '' } }
+              .gh-group-cover-tint{ 'aria-hidden': 'true' }
+            - else
+              .gh-cover-pattern.gh-cover-pattern--inset{ 'aria-hidden': 'true' }
+            %main#app-content.gh-main-content
+              = render 'layouts/flash'
+              = yield
+
+        -# Hidden in focused flows (DECISIONS.md:50) — today only the creation
+        -# wizard, which owns its own bottom bar and must not stack two.
+        - unless @focused
+          = render Shared::TabBarComponent.new(user:         @current_user,
+                                                         current_path: request.path,
+                                                         group_chrome: gh_group_chrome)
+
+        -# These MUST stay inside .gh-app-shell: it owns the theme/menu/sidebar
+        -# controllers, and a Stimulus action only reaches a controller on an
+        -# ancestor. As siblings they rendered fine but did nothing.
+        -# A closed <dialog> is display:none and an open modal one lives in the
+        -# top layer, so neither disturbs the shell's flex layout nor is clipped
+        -# by its overflow:hidden.
+        = render 'layouts/account_menu', user: @current_user
+        = render 'layouts/more_sheet', user: @current_user,
+          chrome: gh_group_chrome, current_path: request.path
+
+        -# Only in a group: out of one, "Grupy" in the primary nav is the picker.
+        - if gh_group_chrome
+          = render 'layouts/group_switcher', user: @current_user,
+            chrome: gh_group_chrome
+
+        -# Anchored panel: content that behaves like the mockup's popover
+        -# (notifications) rather than a centred modal. Links target it with
+        -# data: { turbo_frame: 'panel' }.
+        %dialog.gh-dialog.gh-dialog--anchored{ data: { controller: 'dialog',
+                                                       action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+          .gh-dialog-body.gh-octagon-clip
+            = turbo_frame_tag 'panel', data: { dialog_target: 'frame',
+                                               action: 'turbo:frame-load->dialog#open' }
+
+    -# Outside .gh-app-shell for the same reason the dialog is: its overflow:hidden
+    -# would clip a fixed layer pinned to the bottom of the viewport.
+    = render 'layouts/toasts'
+
+    -# One dialog for the whole page. Links target it with
+    -# data: { turbo_frame: 'modal' }, exactly as before.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+      .gh-dialog-body.gh-octagon-clip
+        = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
+                                           action: 'turbo:frame-load->dialog#open' }
+
+    -# The second one, for a confirmation raised FROM inside a dialog — today
+    -# only "Usuń z grupy", which lives in the edit dialog and is destructive
+    -# enough that it cannot act on one click. A native <dialog> opened while
+    -# another is already open joins the top layer above it with its own
+    -# backdrop, and Escape closes only the topmost, so the two stack correctly
+    -# without either of them knowing about the other.
+    -#
+    -# Never target this frame from the page itself: a confirmation with no
+    -# dialog underneath belongs in `modal`.
+    %dialog.gh-dialog{ data: { controller: 'dialog',
+                               action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
+      .gh-dialog-body.gh-octagon-clip
+        = turbo_frame_tag 'modal2', data: { dialog_target: 'frame',
+                                            action: 'turbo:frame-load->dialog#open' }

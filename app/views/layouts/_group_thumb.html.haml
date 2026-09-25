@@ -1,0 +1,6 @@
+-# Octagon group thumbnail. Falls back to initials when no icon is uploaded,
+-# so a group without art still has a stable, recognisable mark.
+- size = local_assigns[:size]
+
+%span{ class: "gh-group-thumb gh-octagon-clip #{'gh-group-thumb--lg' if size == :lg}", 'aria-hidden': 'true' }
+  = gh_group_cover(story_group) || gh_initials(story_group.name)

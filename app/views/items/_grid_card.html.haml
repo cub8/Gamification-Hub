@@ -1,0 +1,40 @@
+-# One item on the teacher's list. Mockup: 30-lists.js:35-36.
+-#
+-# Deliberately NOT items/_card: that card answers "what would I pay and can I
+-# buy it", which are a student's questions. This one answers "what is this item
+-# and what gates it" — so requirements read as locks, the discount is a flag
+-# rather than a number, and the foot carries the purchase count and the pen.
+%article.gh-card
+  .gh-card-frame
+    .gh-card-inset
+      .gh-card-header
+        %h3.gh-card-name= item.name
+        %span.gh-price-badge.gh-price-badge--lg
+          %b= item.price
+
+      .gh-card-art
+        = render 'items/art', item: item
+
+      - if card.requires? || card.discounts? || card.zero_lives?
+        .gh-card-tags
+          - card.lock_labels.each do |label|
+            %span.gh-tag.gh-tag--locked
+              %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+              = label
+          - if card.discounts?
+            %span.gh-tag.gh-tag--discount Zniżka
+          - if card.zero_lives?
+            %span.gh-tag.gh-tag--no-lives
+              %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
+              Przy 0 życiach
+
+      %p.gh-rule-text= item.didactic_description
+      - if item.story_description.present?
+        %p.gh-card-flavor= item.story_description
+
+      .gh-card-footer
+        %span.gh-card-meta= item_bought_line(bought)
+        .gh-card-actions
+          = link_to edit_story_group_item_path(@story_group, item),
+            class: 'gh-icon-button', 'aria-label': "Edytuj przedmiot #{item.name}" do
+            %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }

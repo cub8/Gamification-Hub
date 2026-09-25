@@ -1,0 +1,186 @@
+@layer components {
+
+  .gh-showcase-zone {
+    position: relative;
+    margin-top: 40px;
+    padding: 34px 18px 22px;
+    border: 2px dashed var(--gh-zone);
+  }
+
+  .gh-showcase-zone-label {
+    --gh-c: 8px;
+    position: absolute;
+    top: 0;
+    left: 14px;
+    transform: translateY(-50%);
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 8px 7px 14px;
+    font: 740 16px/1.1 var(--gh-f-ui);
+    font-stretch: 90%;
+  }
+
+  .gh-showcase-zone-label::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-chrome);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-showcase-zone-count {
+    --gh-c: 5px;
+    display: inline-grid;
+    place-items: center;
+    min-width: 26px;
+    height: 24px;
+    padding: 0 7px;
+    background: var(--gh-ink);
+    color: var(--gh-card);
+    font: 760 13px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-showcase-zone .gh-card-grid {
+    margin-top: 0;
+  }
+
+  .gh-card.gh-card--affordable {
+    transition: transform 0.15s ease;
+  }
+
+  .gh-card.gh-card--affordable:hover {
+    transform: translateY(-3px);
+  }
+
+  .gh-wallet-summary {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .gh-wallet-summary b {
+    display: block;
+    font: 800 26px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-wallet-summary small {
+    display: block;
+    margin-top: 3px;
+    font-size: 13px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-wallet-summary .gh-wallet-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--gh-line);
+  }
+
+  .gh-purchase-summary {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 16px;
+  }
+
+  .gh-purchase-summary .gh-mini-thumb {
+    flex: 0 0 auto;
+    width: 92px;
+    height: 92px;
+  }
+
+  .gh-purchase-details {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 6px 18px;
+    margin: 0;
+  }
+
+  .gh-purchase-details dt {
+    font-size: 14px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-purchase-details dd {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font: 800 20px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-purchase-details dd s {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-note-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .gh-note-row i {
+    color: var(--gh-ink-2);
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+
+    .gh-showcase-zone .gh-card-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .gh-showcase-zone .gh-card-art {
+      max-height: 190px;
+    }
+
+    .gh-showcase-zone {
+      margin-top: 32px;
+      padding: 28px 10px 14px;
+    }
+
+    .gh-showcase-zone-label {
+      left: 10px;
+      font-size: 15px;
+    }
+
+    .gh-wallet-summary {
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--gh-line);
+    }
+
+    .gh-purchase-summary .gh-mini-thumb {
+      width: 72px;
+      height: 72px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-card.gh-card--affordable {
+      transition: none;
+    }
+
+    .gh-card.gh-card--affordable:hover {
+      transform: none;
+    }
+  }
+}

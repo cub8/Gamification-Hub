@@ -1,0 +1,140 @@
+-# "Ustawienia grupy". Mockup: js-expanded/30-isg.js `vSet` (:48-59).
+-#
+-# A PAGE, not the dialog this screen used to be (DECISIONS.md:26). Its own
+-# partial rather than the `_form` shared with #new: that one is still Bootstrap
+-# and stays that way until the creation wizard is converted, and a partial
+-# cannot be two layouts at once.
+-#
+-# Two corrections to the mockup, both from DECISIONS.md:
+-#   * its lead says "Tylko właściciel zmienia te ustawienia"; supporting
+-#     teachers may change everything here, and only deleting is owner-only
+-#     (:58, and StoryGroupPolicy already says exactly this).
+-#   * its "Waluta" section asks for three Polish declensions. One name for now.
+- error = ->(attribute) { story_group.errors[attribute].first }
+
+%section.gh-panel.gh-page-header
+  %h1.gh-h1 Ustawienia grupy
+  %p.gh-lead
+    Zmienią je wszyscy prowadzący tę grupę. Tylko właściciel może usunąć grupę.
+    Ranking ustawiasz w zakładce Ranking.
+
+= form_with model: story_group do |f|
+  %section.gh-panel.gh-settings-section
+    .gh-form-section.gh-form-section--first
+      %h2.gh-h3 Grupa i opowieść
+
+      .gh-form-field
+        = f.label :name, 'Nazwa grupy'
+        .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:name)) }
+          = f.text_field :name, maxlength: 40, autocomplete: 'off',
+            placeholder: 'np. Kosmiczne króliki',
+            'aria-invalid': (error.call(:name) ? 'true' : nil),
+            'aria-describedby': (error.call(:name) ? 'gh-group-name-error' : nil)
+        - if error.call(:name)
+          %p#gh-group-name-error.gh-field-error{ role: 'alert' }
+            %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+            %span= error.call(:name)
+
+      -# "Opowieść" in the UI, `description` in the schema — the two are
+      -# deliberately different (CLAUDE.md), so do not "fix" either to match.
+      .gh-form-field
+        = f.label :description, 'Opowieść'
+        .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:description)) }
+          = f.text_area :description, rows: 3, maxlength: 1024,
+            'aria-invalid': (error.call(:description) ? 'true' : nil),
+            'aria-describedby': (error.call(:description) ? 'gh-group-story-error' : nil)
+        - if error.call(:description)
+          %p#gh-group-story-error.gh-field-error{ role: 'alert' }
+            %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+            %span= error.call(:description)
+        %span.gh-field-hint Widzą ją wszyscy w grupie, na stronie głównej grupy.
+
+      = render 'shared/image_field', form: f, record: story_group,
+        presets: GroupArt::KEYS, registry: GroupArt,
+        kind: 'group', tile: :art,
+        copy: { label: 'Grafika grupy',
+                hint: 'JPG lub PNG, najlepiej co najmniej 1200 px szerokości.' }
+
+    .gh-form-section
+      %h2.gh-h3 Waluta
+      %p.gh-field-hint Nowa nazwa pojawi się wszędzie, także w historii studentów.
+
+      .gh-form-field
+        = f.label :currency_name, 'Nazwa waluty'
+        .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:currency_name)) }
+          = f.text_field :currency_name, maxlength: 40, autocomplete: 'off',
+            placeholder: 'np. Marchewek',
+            'aria-invalid': (error.call(:currency_name) ? 'true' : nil),
+            'aria-describedby': (error.call(:currency_name) ? 'gh-group-currency-error' : nil)
+        - if error.call(:currency_name)
+          %p#gh-group-currency-error.gh-field-error{ role: 'alert' }
+            %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+            %span= error.call(:currency_name)
+        -# The mockup asks for three forms ("Złota Marchewka / Złote Marchewki /
+        -# Złotych Marchewek") so amounts decline. One name for now, so it is
+        -# written in the form every count reads with: "12 Marchewek".
+        %span.gh-field-hint Podaj ją w formie, która pasuje do liczby — np. „Marchewek”.
+
+      -# `aspect: 1` — this upload goes into the square coin face, not the 16:10
+      -# card frame the group graphic above is cut to.
+      = render 'shared/image_field', form: f, record: story_group,
+        attribute: :currency_icon, glyph_attribute: :currency_icon_glyph,
+        presets: CurrencyIcons::KEYS, registry: CurrencyIcons,
+        kind: 'currency', tile: :currency, aspect: 1,
+        copy: { label: 'Ikona waluty', presets: 'Gotowe ikony',
+                own: 'Twoja ikona', upload: 'Albo wgraj własną ikonę',
+                hint: 'Najlepiej PNG z przezroczystym tłem, co najmniej 128 px.',
+                crop: 'Przytnij ikonę',
+                cropped: 'Przesuń i przeskaluj zaznaczenie. Zapisujemy kwadratowy kadr, bo ikona siada na okrągłym liczmanie.' }
+
+    .gh-form-section
+      -# `max: 10` and no `submit` target: the stepper is one field of six here,
+      -# so it must not disable "Zapisz zmiany" the way it does in the student
+      -# dialog, where it is the only control.
+      %h2.gh-h3 Życia
+      .gh-form-field{ data: { controller: 'lives-stepper', lives_stepper_max_value: 10 } }
+        %p#gh-default-lives-label.gh-form-label Życia na start
+        .gh-number-stepper{ role: 'group', 'aria-labelledby': 'gh-default-lives-label' }
+          %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Mniej',
+                              disabled: story_group.default_lives.to_i.zero?,
+                              data: { lives_stepper_target: 'down',
+                                      action: 'lives-stepper#down' } }
+            %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
+          %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= story_group.default_lives
+          %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Więcej',
+                              disabled: story_group.default_lives.to_i >= 10,
+                              data: { lives_stepper_target: 'up',
+                                      action: 'lives-stepper#up' } }
+            %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+
+        = f.hidden_field :default_lives, data: { lives_stepper_target: 'field' }
+
+        - if error.call(:default_lives)
+          %p.gh-field-error{ role: 'alert' }
+            %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+            %span= error.call(:default_lives)
+
+        %span.gh-field-hint
+          Dotyczy tylko studentów, którzy dołączą od teraz. Obecnym zmieniasz
+          życia na liście studentów.
+
+  .gh-panel.gh-form-actions-bar
+    = link_to 'Wróć do grupy', story_group_path(story_group), class: 'gh-link-button'
+    %span.gh-form-actions-spacer
+    %button.gh-btn{ type: 'submit' } Zapisz zmiany
+
+-# Outside the form on purpose: a <form> inside a <form> is not valid HTML, and
+-# this panel's button posts nothing anyway — it opens the confirmation.
+-# Owner-only, which is the ONE thing a supporting teacher may not do
+-# (DECISIONS.md:40). The policy is the authority; this just hides the door.
+- if policy(story_group).destroy?
+  %section.gh-panel.gh-danger-zone
+    %h2.gh-h3 Usuń grupę
+    %p.gh-small
+      Usunięcie zabiera wszystkim dostęp do grupy, jej sklepu, rankingu
+      i historii. Tego nie da się cofnąć.
+    .gh-button-row
+      = link_to confirm_destroy_story_group_path(story_group),
+        class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
+        Usuń grupę

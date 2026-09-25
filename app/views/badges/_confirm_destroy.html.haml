@@ -1,0 +1,31 @@
+-# Mockup: 30-br.js:78-83. A dialog rather than data-turbo-confirm, because the
+-# point of it is the consequence — what happens to the students who already
+-# have the badge, and which items stop being buyable.
+%h2#gh-del-title.gh-h2= "Usunąć odznakę „#{badge.name}”?"
+%p
+  Studenci, którzy mają tę odznakę, zachowają ją w historii, ale nikt nowy jej
+  nie dostanie.
+
+- if unlocking_items.any?
+  - one = unlocking_items.one?
+  -# Not in the mockup, and NOT a blocker: a soft delete breaks no foreign key.
+  -# But an item that unlocks on this badge becomes unbuyable for everyone who
+  -# does not already hold it, and that is worth hearing before confirming.
+  %p.gh-warning-note{ role: 'alert' }
+    %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+    %span
+      = "#{one ? 'Przedmiot' : 'Przedmioty'} #{gh_and_list(unlocking_items.map(&:name))}"
+      = one ? 'odblokowuje się tą odznaką' : 'odblokowują się tą odznaką'
+      = "i po usunięciu #{one ? 'kupi go' : 'kupią je'} tylko ci, którzy już ją mają."
+
+.gh-dialog-button-row
+  -# Anuluj first and focused: the safe button is the one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', edit_story_group_badge_path(@story_group, badge), class: 'gh-btn gh-btn--secondary'
+
+  = button_to 'Usuń odznakę', story_group_badge_path(@story_group, badge),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

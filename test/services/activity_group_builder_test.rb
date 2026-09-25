@@ -73,4 +73,32 @@ class ActivityGroupBuilderTest < ActiveSupport::TestCase
       assert_equal 2, group.activity_group_categories.count
     end
   end
+
+  # The link back to the template column is what tells "Tylko w tym arkuszu"
+  # apart from a column that was copied.
+  test 'build records which template category each column came from' do
+    @builder.build(name: 'Lab 1')
+    group = ActivityGroup.last!
+
+    assert_equal @template.categories.order(:position).map(&:id),
+                 group.activity_group_categories.map(&:source_category_id)
+    assert_not group.activity_group_categories.first.sheet_only?
+  end
+
+  test 'a column added afterwards has no template category behind it' do
+    group = @builder.build(name: 'Lab 1')
+    added = group.activity_group_categories.create!(didactic_description: 'Extra', reward: 1, position: 2)
+
+    assert_predicate added, :sheet_only?
+  end
+
+  # A run that failed halfway used to leave the sheets before it behind, with
+  # no way to tell how far it got.
+  test 'build_many rolls the whole run back when one sheet fails' do
+    @template.categories.first.update_column(:didactic_description, nil)
+
+    assert_no_difference('ActivityGroup.count') do
+      assert_raises(ActiveRecord::RecordInvalid) { @builder.build_many(count: 3) }
+    end
+  end
 end

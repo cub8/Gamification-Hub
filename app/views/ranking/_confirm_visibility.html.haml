@@ -1,0 +1,56 @@
+-# Mockup: 30-rk.js `mEnable` (:57-60). Showing the board and hiding it are one
+-# switch and two different warnings, so this partial is both dialogs.
+-#
+-# Turning it ON asks for the mode in the same breath, because "show the
+-# ranking" is not one decision: the teacher is also choosing how much of it
+-# students get, and asking later would mean a second dialog for the same act.
+
+- if enabled
+  %h2#gh-rk-title.gh-h2 Pokazać ranking studentom?
+  %p Studenci zobaczą ranking od razu. Wybierz, ile mają widzieć.
+
+  = form_with model: story_group, url: story_group_ranking_path(story_group), method: :patch,
+    data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |f|
+    = f.hidden_field :ranking_enabled, value: true
+
+    .gh-choice-grid.gh-ranking-mode-options{ role: 'radiogroup', 'aria-label': 'Co widzą studenci' }
+      %label.gh-choice-card
+        = f.radio_button :ranking_mode, 'podium_and_own', checked: mode == 'podium_and_own',
+          class: 'sr-only'
+        %b= StoryGroup::RANKING_MODE_LABELS.fetch('podium_and_own')
+        %span
+          Wszyscy widzą pierwsze 3 miejsca. Każdy widzi też swoje miejsce, ale
+          nie cudze.
+      %label.gh-choice-card
+        = f.radio_button :ranking_mode, 'full', checked: mode == 'full', class: 'sr-only'
+        %b= StoryGroup::RANKING_MODE_LABELS.fetch('full')
+        %span
+          Wszyscy widzą miejsca i pseudonimy wszystkich, także na końcu listy.
+
+    .gh-dialog-button-row
+      - if @in_modal
+        %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      - else
+        = link_to 'Anuluj', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
+
+      -# Focus on the primary here, unlike the other three: showing the ranking
+      -# is the benign direction and is undone by the same switch.
+      %button.gh-btn{ type: 'submit', autofocus: true } Pokaż ranking
+- else
+  %h2#gh-rk-title.gh-h2 Ukryć ranking przed studentami?
+  %p
+    Studenci przestaną widzieć miejsca i pseudonimy. Ty nadal widzisz cały
+    ranking, a zebrana waluta i rangi nie zmieniają się.
+
+  .gh-dialog-button-row
+    -# The safe button first and focused, as everywhere else.
+    - if @in_modal
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+        Zostaw widoczny
+    - else
+      = link_to 'Zostaw widoczny', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
+
+    = button_to 'Ukryj ranking', story_group_ranking_path(story_group),
+      method: :patch, class: 'gh-btn',
+      params: { story_group: { ranking_enabled: false } },
+      form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

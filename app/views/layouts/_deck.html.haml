@@ -1,0 +1,36 @@
+-# The group you are in: its art, its name, what you are to it, a way out, and
+-# its sections. Mockup: js-expanded/10-core.js:173-178.
+-#
+-# A partial rather than markup inside the sidebar because the mockup renders
+-# the same card standalone in the group-creation wizard preview (30-form.js:83).
+- story_group = chrome.story_group
+
+%section.gh-current-group-card{ 'aria-label': "Grupa #{chrome.name}" }
+  .gh-current-group-card-frame.gh-octagon-clip
+    .gh-current-group-card-inner.gh-octagon-clip
+      - cover = gh_group_cover(story_group)
+      %span.gh-current-group-card-cover.gh-octagon-clip{ class: ('gh-current-group-card-cover--fallback' if cover.nil?), 'aria-hidden': 'true' }
+        = cover || gh_monogram(story_group.name)
+
+      .gh-current-group-card-header
+        %h2.gh-current-group-card-name= chrome.name
+        %p.gh-current-group-card-role= chrome.role_label
+
+      -# Outside .gh-current-group-card-header on purpose: the mockup keeps it inside, and its
+      -# collapsed rule then hides the whole head — leaving a collapsed sidebar
+      -# with no way to change group at all, since the header switcher is
+      -# mobile-only. Here it survives as an icon-only button.
+      %button.gh-link-button.gh-current-group-card-switch-trigger{ type: 'button',
+                                     title: 'Zmień grupę',
+                                     data: { action: 'menu#open',
+                                             menu_id_param: 'gh-group-switcher' } }
+        %i.fa-solid.fa-right-left{ 'aria-hidden': 'true' }
+        %span Zmień grupę
+
+      %nav.gh-sidebar-nav{ 'aria-label': 'Sekcje grupy' }
+        - chrome.items.each do |item|
+          - on = item.current?(current_path)
+          = link_to item.path, class: "gh-sidebar-link #{'gh-sidebar-link--active' if on}",
+            title: item.label, 'aria-current': ('page' if on) do
+            %i.fa-solid{ class: item.icon }
+            %span= item.label

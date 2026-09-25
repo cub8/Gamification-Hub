@@ -1,0 +1,50 @@
+-# The badge multiselect. Mockup: chips(), js-expanded/30-item.js:25-26.
+-#
+-# The mockup's chip is a <span> with a remove <button>, and its only real
+-# control is the <select> — so with JavaScript off it selects nothing and posts
+-# nothing. Here every badge is a REAL CHECKBOX inside its chip: the control is
+-# the thing, its accessible name is the badge name, and its state is announced.
+-# chip_picker_controller then hides the unchecked chips and reveals the
+-# "Dodaj odznakę…" select, which is what makes it look like the mockup. With
+-# JavaScript off nothing is hidden and you get a plain, working chip grid.
+-#
+-# Locals: f, field, badges, legend, placeholder, form_target, show_discount
+- show_discount = local_assigns.fetch(:show_discount, false)
+
+%fieldset.gh-chip-group{ data: { controller: 'chip-picker' } }
+  %legend.sr-only= legend
+
+  -# Clearing every chip has to post something, or `unlock_badge_ids` would keep
+  -# its old value on update. This is what collection_check_boxes emits, and the
+  -# reason each check_box below passes nil as its unchecked value.
+  = hidden_field_tag "#{f.object_name}[#{field}][]", '', id: nil
+
+  - badges.each do |badge|
+    %label.gh-choice-chip.gh-octagon-clip{ data: { chip_picker_target: 'chip',
+                            item_form_target:   form_target,
+                            gh_name:            badge.name,
+                            gh_discount:        badge.discount.to_i } }
+      -# `change->` is written out rather than left to Stimulus's default. The
+      -# default event for an <input> is `input`, and the adder select below
+      -# toggles a box in script — where `change` is the event that carries the
+      -# meaning "this box now has a different value".
+      = f.check_box field, { multiple:  true,
+                             class:     'sr-only',
+                             data:      { chip_picker_target: 'box',
+                                          action: 'change->chip-picker#sync change->item-form#refresh' } },
+        badge.id, nil
+      %span= badge.name
+      - if show_discount
+        %small= "−#{badge.discount.to_i}%"
+      -# Decorative: the checkbox is what removes the chip, and clicking
+      -# anywhere on the label toggles it.
+      %i.fa-solid.fa-xmark{ 'aria-hidden': 'true' }
+
+  - if badges.any?
+    %span.gh-select-input{ data: { chip_picker_target: 'adder' }, hidden: true }
+      %select{ 'aria-label': legend, data: { chip_picker_target: 'select', action: 'chip-picker#add' } }
+        %option{ value: '' }= placeholder
+        - badges.each do |badge|
+          %option{ value: badge.id, data: { chip_picker_target: 'option' } }
+            = show_discount ? "#{badge.name} (−#{badge.discount.to_i}%)" : badge.name
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }

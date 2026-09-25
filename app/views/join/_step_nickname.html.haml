@@ -1,0 +1,38 @@
+-# Step 2: how you want to be seen in this group.
+-# Mockup: js-expanded/10-core.js `dlgJoinNick`, with one deliberate change —
+-# there the nickname is mandatory and blocks the button; here it is optional
+-# and blank means "use my real name".
+- nickname_error = local_assigns[:result]&.nickname_error
+
+%p.gh-small.mb-1 Krok 2 z 2
+%h2#gh-join-title.gh-h2= "Dołączasz do grupy #{story_group.name}"
+%p
+  W tej grupie inni zobaczą Cię pod pseudonimem — także w rankingu.
+  Możesz go później zmienić w ustawieniach w grupie.
+
+= form_with url: join_index_path, method: :post,
+  data: { turbo_frame: (@in_modal ? 'modal' : nil) } do
+  = hidden_field_tag :code, code
+
+  .gh-form-field
+    = label_tag :nickname, 'Pseudonim w tej grupie'
+    .gh-text-input{ class: ('gh-text-input--invalid' if nickname_error) }
+      = text_field_tag :nickname, params[:nickname],
+        maxlength: 24,
+        autocomplete: 'off',
+        autofocus: true,
+        'aria-invalid': nickname_error ? 'true' : nil,
+        'aria-describedby': 'gh-nick-note'
+
+    - if nickname_error
+      %p#gh-nick-note.gh-field-error{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= nickname_error
+    - else
+      %span#gh-nick-note.gh-field-hint
+        Zostaw puste, jeśli chcesz używać imienia i nazwiska.
+        Pseudonim możesz ustawić później.
+
+  .gh-dialog-button-row
+    = render 'join/cancel'
+    %button.gh-btn{ type: 'submit' } Dołącz do grupy

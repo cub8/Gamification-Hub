@@ -1,7 +1,4 @@
-- content_for :title, "Nowy szablon"
+-# Mockup: #/t/sheet-template-new, js-expanded/30-ag.js (view `newtpl`).
+- content_for :title, 'Nowy szablon arkusza'
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h2.page-title.mb-4 Nowy Szablon Grupy Aktywności
-      = render 'form'
+= render 'shared/sheet_form', record: @activity_group_template, variant: :template_new

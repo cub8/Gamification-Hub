@@ -1,0 +1,30 @@
+-# Account menu, opened from the header avatar.
+-# Mockup: js-expanded/10-core.js `popAvatar()`.
+%dialog#gh-account-menu.gh-dialog.gh-dialog--menu.gh-dialog--anchored{ data: { action: 'click->menu#closeOnBackdrop' },
+                                                                       'aria-label': 'Konto' }
+  .gh-dialog-body.gh-octagon-clip
+    %span.gh-sheet-drag-handle{ 'aria-hidden': 'true' }
+
+    .gh-popover-identity
+      %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
+        = gh_initials(user.full_name)
+      %span
+        %b= user.full_name
+        %small= user.email
+
+    %ul.gh-menu-list
+      %li
+        -# Inert until #/s/account exists: a button, never a dead href.
+        %button{ type: 'button' }
+          %i.fa-solid.fa-gear
+          %span Ustawienia konta
+      %li
+        %button{ type: 'button', data: { action: 'theme#toggle' } }
+          %i.fa-solid.fa-moon.gh-theme-icon-moon
+          %i.fa-solid.fa-sun.gh-theme-icon-sun
+          %span{ data: { theme_target: 'label' } }
+            = gh_theme == 'dark' ? 'Jasny motyw' : 'Ciemny motyw'
+      %li
+        = link_to logout_path, data: { turbo_method: :delete } do
+          %i.fa-solid.fa-arrow-right-from-bracket
+          %span Wyloguj się

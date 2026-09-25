@@ -1,0 +1,18 @@
+-# Mockup: 30-rk.js `mRmT`. A dialog rather than data-turbo-confirm, because
+-# the point of it is the consequence sentence, which a browser confirm cannot
+-# carry.
+- name = teacher.full_name
+
+%h2#gh-del-title.gh-h2= "Usunąć #{name} z grupy?"
+%p Straci dostęp do grupy. Nagrody, które przyznał, zostają u studentów.
+
+.gh-dialog-button-row
+  -# Anuluj first and focused: the safe button is the one you land on.
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Anuluj
+  - else
+    = link_to 'Anuluj', story_group_teachers_path(@story_group), class: 'gh-btn gh-btn--secondary'
+
+  = button_to 'Usuń z grupy', story_group_teacher_path(@story_group, teacher),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

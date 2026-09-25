@@ -1,0 +1,94 @@
+-# Dodaj nauczyciela. Mockup: 30-rk.js `mAddT` + `resHtml`.
+-#
+-# Search-first, and every candidate is server-rendered hidden: full_name and
+-# email are `encrypts deterministic: true`, so there is no SQL LIKE to search
+-# with and the pool has to be matched in Ruby or in the browser either way.
+-# teacher_picker_controller only unhides the matches — it never writes markup,
+-# like badge_picker.
+-#
+-# ONE form around the whole list, not a button_to per row: a form per
+-# candidate would be hundreds of forms for one click. Each "Dodaj" is a submit
+-# carrying its own user_id, so the dialog also works with JavaScript off —
+-# without the filtering, but with every candidate on screen.
+- error = teacher.errors[:user_id].first || teacher.errors[:user].first
+
+= form_with url: story_group_teachers_path(@story_group), method: :post,
+  data: { controller: 'teacher-picker',
+          turbo_frame: (@in_modal ? 'modal' : nil),
+          teacher_picker_min_value: 2,
+          teacher_picker_max_value: 8,
+          teacher_picker_one_value: 'wynik',
+          teacher_picker_few_value: 'wyniki',
+          teacher_picker_many_value: 'wyników',
+          teacher_picker_overflow_value: ', pokazujemy 8 pierwszych', } do
+
+  %h2#gh-add-teacher-title.gh-h2 Dodaj nauczyciela
+  %p Nauczyciel dostanie dostęp do grupy od razu po dodaniu.
+
+  -# One column under the heading, so the hint, the count and the results all
+  -# start where the search field does. .gh-explainer-note is inset 14px by default,
+  -# which left the hint visibly narrower than the field it explains.
+  .gh-teacher-picker
+    - if pool.addable?
+      %label.gh-search-input.gh-search--full-width
+        %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
+        %input{ type: 'search', placeholder: 'Imię, nazwisko albo e-mail',
+                'aria-label': 'Szukaj nauczyciela', autocomplete: 'off', autofocus: true,
+                data: { teacher_picker_target: 'input',
+                        action: 'input->teacher-picker#filter keydown.enter->teacher-picker#noSubmit', } }
+
+      -# One live region around all four states, so a screen reader hears the
+      -# result of typing and not four separate elements appearing.
+      %div{ 'aria-live': 'polite' }
+        %p.gh-explainer-note{ data: { teacher_picker_target: 'hint' } }= teacher_pool_hint(pool.size)
+
+        %p.gh-card-meta{ hidden: true, data: { teacher_picker_target: 'count' } }
+
+        %ul.gh-teacher-results-list{ hidden: true, data: { teacher_picker_target: 'results' } }
+          - pool.candidates.each do |candidate|
+            %li.gh-teacher-result-row{ hidden: true,
+                       data: { teacher_picker_target: 'row',
+                               teacher_picker_key: candidate.search_key } }
+              %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(candidate.name), 'aria-hidden': 'true' }
+                = gh_initials(candidate.name)
+              %span.gh-teacher-result-name
+                %b{ data: { teacher_picker_target: 'name' } }= candidate.name
+                %small= teacher_candidate_subtitle(candidate, cross_university: pool.cross_university?)
+
+              -# Already in the group — the owner included. Shown rather than
+              -# filtered out: somebody searching for a name wants to be told
+              -# they are already here, not handed an empty result.
+              - if candidate.in_group?
+                %span.gh-badge-picker-status Już w grupie
+              - else
+                %button.gh-btn.gh-btn--secondary.gh-btn--small{ type: 'submit',
+                                                       name: 'story_group_teacher[user_id]',
+                                                       value: candidate.person.id,
+                                                       'aria-label': "Dodaj #{candidate.name}" }
+                  %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+                  Dodaj
+
+        %p.gh-small{ hidden: true, data: { teacher_picker_target: 'overflow' } }
+          Nie widzisz tej osoby? Wpisz więcej liter albo e-mail.
+
+        -# The controller writes the quoted query AND its full stop into the span,
+        -# so the sentence closes without a stray gap before the period.
+        %p.gh-explainer-note{ hidden: true, data: { teacher_picker_target: 'empty' } }
+          Brak wyników dla
+          %span{ data: { teacher_picker_target: 'emptyQuery' } }
+          Sprawdź pisownię albo wpisz e-mail.
+    - else
+      %p.gh-explainer-note
+        Nie ma kogo dodać: w Twojej uczelni nie ma jeszcze innych kont
+        nauczycieli.
+
+  - if error
+    %p.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  .gh-dialog-button-row
+    - if @in_modal
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Zamknij
+    - else
+      = link_to 'Zamknij', story_group_teachers_path(@story_group), class: 'gh-btn gh-btn--secondary'

@@ -1,0 +1,9 @@
+-# The group's currency as a coin: gold rim, cream face, and inside it either
+-# the teacher's upload or a preset from CurrencyIcons. Falls back to
+-# the first letter of the currency name when the group has picked neither, so
+-# the token still reads as a coin rather than collapsing to an empty square.
+- size = local_assigns[:size] || 24
+
+%span.gh-currency-token.gh-octagon-clip{ style: "--gh-s: #{size}px", 'aria-hidden': 'true' }
+  %span.gh-octagon-clip
+    = gh_currency_mark(story_group) || story_group.currency_name.to_s.first&.upcase

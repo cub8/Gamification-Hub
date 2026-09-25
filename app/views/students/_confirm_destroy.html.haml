@@ -1,0 +1,35 @@
+-# Removing a membership is the one hard delete on these screens: it cascades
+-# through the badges, the purchases and the whole currency ledger. Nothing here
+-# is recoverable, so the dialog counts what goes rather than saying "na pewno?".
+- losses = student_removal_losses(sheet)
+
+%h2#gh-kick-title.gh-h2 Usunąć studenta z grupy?
+%p
+  = "#{student.display_name} straci dostęp do grupy"
+  i zniknie z list, rankingu i arkuszy ocen.
+
+- if losses.any?
+  %p.gh-warning-note{ role: 'alert' }
+    %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+    %span
+      = "Przepadną: #{gh_and_list(losses)}."
+      Tego nie da się cofnąć.
+- else
+  %p.gh-explainer-note Ten student nie ma jeszcze odznak, przedmiotów ani historii waluty.
+
+%p.gh-small
+  Jeśli wróci do grupy, dostanie nowe konto uczestnika i zacznie od zera.
+
+.gh-dialog-button-row
+  -# Anuluj first and focused: the safe button is the one you land on. In the
+  -# stacked dialog closing means going back to the edit dialog underneath,
+  -# which is still open.
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
+
+  = button_to 'Usuń z grupy', story_group_student_path(@story_group, student),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal2' : nil) } }

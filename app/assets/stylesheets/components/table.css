@@ -1,0 +1,36 @@
+@layer components {
+
+  .gh-cover-pattern {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--gh-pat);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M20 6h16l14 14v16L36 50H20L6 36V20z' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 0 0/56px 56px;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M20 6h16l14 14v16L36 50H20L6 36V20z' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E") 0 0/56px 56px;
+  }
+}
+
+@layer components {
+  .gh-cover-pattern--inset {
+    position: absolute;
+  }
+}
+
+@layer components {
+  .gh-group-cover-bg {
+    position: absolute;
+    inset: -24px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(7px) saturate(0.85);
+    pointer-events: none;
+  }
+
+  .gh-group-cover-tint {
+    position: absolute;
+    inset: 0;
+    background: var(--gh-tint);
+    pointer-events: none;
+  }
+}

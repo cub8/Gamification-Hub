@@ -1,0 +1,6 @@
+-# In the dialog, cancelling means closing it. Opened as a page there is no
+-# dialog to close, so it is a way back to the list instead.
+- if @in_modal
+  %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+- else
+  = link_to 'Anuluj', story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary'

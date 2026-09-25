@@ -1,0 +1,262 @@
+@layer components {
+
+  .gh-dialog {
+    --gh-c: 14px;
+    border: 0;
+    padding: 0;
+    margin: auto;
+    background: transparent;
+    color: var(--gh-ink);
+    width: min(92vw, 560px);
+    max-width: min(92vw, 560px);
+    max-height: 86vh;
+  }
+
+  .gh-dialog::backdrop {
+    background: var(--gh-scrim);
+  }
+
+  .gh-dialog:has(.gh-invite-qr-box) {
+    width: min(92vw, 620px);
+    max-width: min(92vw, 620px);
+  }
+
+  .gh-dialog-body {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 86vh;
+    background: var(--gh-chrome);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-dialog:not(.gh-dialog--menu, .gh-dialog--anchored) .gh-dialog-body {
+    padding: 26px 28px 24px;
+  }
+
+  .gh-dialog-body p:not([class]),
+  .gh-dialog-page-panel p:not([class]) {
+    margin-top: 8px;
+    font-size: 15px;
+    color: var(--gh-ink-2);
+  }
+}
+
+@layer components {
+
+  .gh-dialog--menu {
+    width: min(92vw, 380px);
+    max-width: min(92vw, 380px);
+  }
+
+  .gh-dialog--anchored {
+    margin: 64px 14px auto auto;
+    width: min(92vw, 370px);
+    max-width: min(92vw, 370px);
+  }
+
+  .gh-dialog--group-switcher {
+    margin: 120px auto auto 14px;
+    width: min(92vw, 320px);
+    max-width: min(92vw, 320px);
+  }
+
+  .gh-current-badge {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-popover-footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    margin-top: 2px;
+    padding: 12px 0 6px;
+    background: var(--gh-chrome);
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-popover-footer .gh-btn {
+    flex: 1;
+  }
+
+  @media (width > theme(--breakpoint-mobile)) {
+
+    .gh-dialog--anchored::backdrop,
+    .gh-dialog--group-switcher::backdrop {
+      background: transparent;
+    }
+
+    .gh-dialog--anchored,
+    .gh-dialog--group-switcher {
+      filter: drop-shadow(0 3px 0 var(--gh-line-2)) drop-shadow(0 14px 26px var(--gh-shadow));
+    }
+
+    .gh-dialog--anchored .gh-dialog-body {
+      max-height: 520px;
+    }
+
+    .gh-dialog--group-switcher .gh-dialog-body {
+      max-height: min(520px, calc(100dvh - 140px));
+    }
+  }
+
+  .gh-menu-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  .gh-menu-list button,
+  .gh-menu-list a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 8px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    color: var(--gh-ink);
+    font: 560 15px var(--gh-f-ui);
+  }
+
+  .gh-menu-list button:hover,
+  .gh-menu-list a:hover {
+    background: var(--gh-card-2);
+  }
+
+  .gh-menu-list .gh-group-thumb {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .gh-menu-list i {
+    width: 20px;
+    text-align: center;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-menu-list--nav a[aria-current] {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+    font-weight: 720;
+  }
+
+  .gh-popover-section-label {
+    font: 680 11.5px/1.2 var(--gh-f-ui);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--gh-ink-3);
+    padding: 10px 0 4px;
+  }
+
+  .gh-popover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .gh-popover-header form {
+    display: contents;
+  }
+
+  .gh-popover-header .gh-link-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+  }
+
+  .gh-popover-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gh-line);
+  }
+
+  .gh-popover-identity b {
+    display: block;
+    font: 720 15px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-popover-identity small {
+    font-size: 13px;
+    color: var(--gh-ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  .gh-sheet-drag-handle {
+    display: none;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+
+    .gh-dialog,
+    .gh-dialog--menu,
+    .gh-dialog--anchored {
+      margin: auto auto 0;
+      width: 100%;
+      max-width: 100%;
+      max-height: 92dvh;
+    }
+
+    .gh-dialog-body {
+      --gh-c: 18px;
+      max-height: 92dvh;
+      padding: 10px 16px 20px;
+      clip-path: polygon(var(--gh-c) 0, calc(100% - var(--gh-c)) 0, 100% var(--gh-c), 100% 100%, 0 100%, 0 var(--gh-c));
+    }
+
+    .gh-sheet-drag-handle {
+      display: block;
+      width: 44px;
+      height: 4px;
+      margin: 0 auto 14px;
+      background: var(--gh-line-2);
+    }
+  }
+
+  .gh-dialog-page-panel {
+    width: min(560px, 100%);
+    margin-top: 22px;
+    padding: 26px 28px 24px;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-dialog-page-panel {
+      padding: 18px 16px;
+    }
+  }
+
+  .gh-dialog-button-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-dialog-button-row {
+      justify-content: stretch;
+    }
+
+    .gh-dialog-button-row .gh-btn {
+      flex: 1;
+    }
+  }
+}

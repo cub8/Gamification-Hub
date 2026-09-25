@@ -1,0 +1,138 @@
+-# An item as a full card. Mockup: pvCard(), js-expanded/30-item.js:58-64.
+-#
+-# THE reusable one: the teacher's form preview and the shop both render this
+-# partial rather than growing a second copy of these three states. That is why
+-# the state is a local and not derived here — on the form it is whichever tab
+-# was pressed, in the shop it comes from PurchaseEligibilityService, and those
+-# are different questions.
+-#
+-# Locals:
+-#   item      — the Item
+-#   card      — ItemCard, built by the caller so a list builds it once
+-#   offer     — ItemOffer: what THIS viewer pays and what blocks them.
+-#               Defaults to a preview over `card`, which is the teacher's case:
+-#               list price, the discount ceiling, every requirement the item
+-#               carries. The shop hands in a student's.
+-#   state     — :afford (can buy now) | :save (short of currency) | :sealed
+-#   price     — what this viewer would pay; defaults to the offer's
+-#   need      — how much more to collect, only read in :save
+-#   progress  — 0.0..1.0 for the meter, only read in :save
+-#   targets   — data-item-form-target attributes; empty outside the form preview
+-#   all_feet  — render all three feet, two hidden, so the form's segmented
+-#               control can switch between them without generating markup.
+-#               A real shop card renders only the foot that applies.
+- offer    = local_assigns.fetch(:offer, nil) || ItemOffer.preview(card)
+- state    = local_assigns.fetch(:state, :afford)
+- price    = local_assigns.fetch(:price, nil) || offer.price
+- need     = local_assigns.fetch(:need, 0).to_i
+- progress = local_assigns.fetch(:progress, 0).to_f
+- targets  = local_assigns.fetch(:targets, {})
+- all_feet = local_assigns.fetch(:all_feet, false)
+-# Only the form renders all three feet; there, every foot but the current
+-# one is hidden rather than absent.
+- hide     = ->(foot) { all_feet && state != foot }
+
+-# --afford only when the card carries a REAL buy button: the modifier drives a
+-# hover lift, and lifting the teacher's preview would promise a click that does
+-# nothing there.
+- modifier = 'gh-card--sealed' if state == :sealed
+- modifier = 'gh-card--affordable' if state == :afford && local_assigns[:buy]
+
+%article.gh-card{ class: modifier, data: targets[:card] }
+  .gh-card-frame
+    .gh-card-inset
+      .gh-card-header
+        %h3.gh-card-name{ class: ('gh-placeholder-text' if item.name.blank?), data: targets[:name] }
+          = item_name(item)
+        %span.gh-price-badge.gh-price-badge--lg
+          -# The list price, struck, only when this viewer is actually paying
+          -# less than it. The teacher's preview never is.
+          - if offer.discounted?
+            %s= offer.list_price
+          %b{ data: targets[:cost] }= price
+
+      .gh-card-art{ data: targets[:art_well] }
+        -# `.gh-art-slot-wrapper` is `display: contents`, so the artwork itself stays the
+        -# grid item of the well. Without that, .gh-card-art-glyph's percentage width and
+        -# height would resolve against this span's indefinite width and the
+        -# glyph would fall back to its intrinsic size, off-centre. The span
+        -# still has to exist: item_form_controller replaces its children when
+        -# the art changes, and .gh-lock-seal below is its sibling in the same well.
+        %span.gh-art-slot-wrapper{ data: targets[:art] }
+          = render 'items/art', item: item
+
+        -# Stamped across the artwork, naming the first requirement. The foot
+        -# below lists them all; this is what you read at a glance in a grid.
+        %span.gh-lock-seal.gh-octagon-clip{ hidden: state != :sealed, data: targets[:seal] }
+          %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+          %span{ data: targets[:seal_label] }= offer.seal_label
+
+      -# Always in the markup, each chip hidden until it has something to say,
+      -# so the preview has somewhere to write without building elements.
+      .gh-card-tags{ data: targets[:tags] }
+        %span.gh-tag.gh-tag--discount{ hidden: offer.discount_label.nil?, data: targets[:tag_disc] }
+          = offer.discount_label
+        %span.gh-tag.gh-tag--no-lives{ hidden: !offer.zero_lives?, data: targets[:tag_life] }
+          %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
+          Działa przy 0 życiach
+
+      %p.gh-rule-text{ class: ('gh-placeholder-text' if item.didactic_description.blank?), data: targets[:rules] }
+        = item_rules(item)
+
+      %p.gh-card-flavor{ hidden: item.story_description.blank?, data: targets[:flavor] }
+        = item.story_description
+
+      .gh-card-footer
+        -# Three feet, one state. In the shop only the applicable one is
+        -# rendered; on the form all three are, two of them hidden, because the
+        -# segmented control has to switch between them and item_form_controller
+        -# never writes markup.
+        - if all_feet || state == :afford
+          %span.gh-auth-footer{ hidden: hide.call(:afford), data: targets[:foot_afford] }
+            - if local_assigns[:buy]
+              = buy
+            - else
+              -# A picture of the offer, not the offer. Deliberately NOT
+              -# `disabled`, which would grey it out and misrepresent the button
+              -# a student will actually see — the whole point of the preview.
+              -# tabindex -1 keeps it out of the teacher's tab order and
+              -# `.gh-item-preview-card .gh-card-footer .gh-btn { pointer-events: none }`
+              -# keeps it unclickable, so it is inert without looking it.
+              -#
+              -# One text node, not "Kup za" beside a <span>: .gh-btn is a flex
+              -# row with an 8px gap, which would open a double space between
+              -# the words and the number.
+              %button.gh-btn{ type: 'button', tabindex: -1 }
+                %span{ data: targets[:buy_label] }= "Kup za #{price}"
+
+        - if all_feet || state == :save
+          .gh-requirement-block{ hidden: hide.call(:save), data: targets[:foot_save] }
+            .gh-requirement-title
+              Zbierz jeszcze
+              %b{ data: targets[:need] }= need
+            -# No progressbar role here, unlike the sealed foot below: the live
+            -# preview rewrites only the fill's width, so an aria-valuenow on
+            -# this wrapper would go stale as the teacher types. The line above
+            -# already says the number out loud.
+            .gh-progress-bar.gh-octagon-clip
+              %i.gh-octagon-clip{ style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%", data: targets[:bar] }
+
+        - if all_feet || state == :sealed
+          .gh-requirement-list{ hidden: hide.call(:sealed), data: targets[:foot_sealed] }
+            %ul{ data: targets[:req_list] }
+              - offer.requirement_lines.each do |lead, name|
+                %li
+                  = lead
+                  -# No name on a "masz 0 żyć" line: the whole line is the lead.
+                  - if name
+                    %b= name
+
+            -# Only when a rank is what stands in the way, and only in the shop:
+            -# the teacher's preview has no student to measure.
+            - if (rp = offer.rank_progress)
+              .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
+                       'aria-valuemin': 0,
+                       'aria-valuemax': rp.target,
+                       'aria-valuenow': rp.collected,
+                       'aria-label': "Postęp do rangi #{rp.rank_name}" }
+                %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(rp.collected, rp.target)}%" }

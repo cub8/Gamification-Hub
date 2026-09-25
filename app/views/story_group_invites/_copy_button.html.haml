@@ -1,0 +1,23 @@
+-# Not in the mockup: its copy handler (30-lists.js:64) is bound to no button.
+-# Added so a code can reach a chat or a slide without being retyped.
+-#
+-# `labelled` is false in the list, where the row already has three buttons and
+-# a fourth word would not fit, and true beside the big code in the dialog. The
+-# icon swaps to a tick either way, so the icon-only one still acknowledges the
+-# click without waiting for the eye to reach the toast.
+- labelled = local_assigns.fetch(:labelled, true)
+- title = "Kopiuj kod #{invite.code}"
+
+%button{ type: 'button',
+         class: labelled ? 'gh-btn gh-btn--secondary gh-copy-action' : 'gh-icon-button',
+         title: title,
+         'aria-label': title,
+         data: { controller: 'clipboard',
+                 action: 'clipboard#copy',
+                 clipboard_title: title,
+                 clipboard_text_value: invite.code,
+                 clipboard_done_value: 'Skopiowano',
+                 clipboard_message_value: "Skopiowano kod #{invite.code}." } }
+  %i.fa-solid.fa-copy{ 'aria-hidden': 'true', data: { clipboard_target: 'icon' } }
+  - if labelled
+    %span{ data: { clipboard_target: 'label' } } Kopiuj kod

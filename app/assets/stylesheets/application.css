@@ -1,0 +1,54 @@
+@layer theme, base, vendor, components, utilities;
+
+@import "tailwindcss";
+
+@source "../../views";
+@source "../../components";
+@source "../../javascript";
+@source "../../helpers";
+
+@custom-variant dark (&:where([data-gh-theme="dark"], [data-gh-theme="dark"] *));
+
+@import "./font-awesome.css";
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./theme.css";
+@import "./base.css";
+
+@import "./components/shape.css";
+@import "./components/buttons.css";
+@import "./components/surfaces.css";
+@import "./components/dialog.css";
+@import "./components/toast.css";
+@import "./components/typography.css";
+@import "./components/icons.css";
+@import "./components/table.css";
+@import "./components/tag.css";
+@import "./components/chrome.css";
+@import "./components/card.css";
+@import "./components/form.css";
+@import "./components/auth.css";
+@import "./components/dashboard.css";
+@import "./components/groups.css";
+@import "./components/overview.css";
+@import "./components/join.css";
+@import "./components/invites.css";
+@import "./components/ranks.css";
+@import "./components/ranking.css";
+@import "./components/teachers.css";
+@import "./components/badges.css";
+@import "./components/items.css";
+@import "./components/shop.css";
+@import "./components/ledger.css";
+@import "./components/student_list.css";
+@import "./components/student.css";
+@import "./components/inventory.css";
+@import "./components/settings.css";
+@import "./components/grading.css";
+@import "./components/sheets.css";
+
+/* LAST on purpose. The creation wizard reuses form.css's shell and has to
+   override it: `.gh-form-shell--full` and `.gh-form-shell` are both one class, so only
+   source order decides which wins. Imported before form.css it lost, and
+   steps 3 and 4 kept a 380px column they do not use. */
+@import "./components/wizard.css";

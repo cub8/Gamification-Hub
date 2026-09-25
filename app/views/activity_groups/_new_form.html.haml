@@ -1,0 +1,62 @@
+-# One form for both modes. The radio decides which the server reads, so with
+-# JavaScript off both halves are on screen and both still work — the stepper
+-# simply does not step, and three is what you get.
+- count   = ActivityGroupsController::BULK_RANGE.min + 1
+- columns = template.categories.size
+
+%h2#gh-new-sheet-title.gh-h2= "Nowy arkusz z szablonu #{template.base_name}"
+%p
+  = "Każdy arkusz dostanie #{columns} #{gh_plural(columns, 'kategorię', 'kategorie', 'kategorii')} z szablonu."
+  Kolumny zmienisz później w ustawieniach arkusza.
+
+-# The plural forms for the submit label, for the same reason the editor passes
+-# its own: the count changes under the teacher's finger, the grammar does not
+-# survive string concatenation in JavaScript.
+- form_data = { controller: 'sheet-create',
+                sheet_create_sheets_value: %w[arkusz arkusze arkuszy].to_json,
+                turbo_frame: (@in_modal ? 'modal' : nil) }
+
+= form_with url: story_group_activity_groups_path(@story_group), method: :post, data: form_data do |f|
+  = hidden_field_tag 'activity_group[activity_group_template_id]', template.id
+
+  .gh-segmented-toggle-3.gh-octagon-clip{ role: 'radiogroup', 'aria-label': 'Ile arkuszy' }
+    - [%w[one Jeden\ arkusz], %w[many Kilka\ naraz]].each do |value, label|
+      %label.gh-segmented-toggle-3-option
+        = radio_button_tag 'activity_group[mode]', value, value == 'one',
+          data: { sheet_create_target: 'mode', action: 'sheet-create#refresh' }
+        %span= label
+
+  .gh-form-field{ data: { sheet_create_target: 'onePane' } }
+    = label_tag 'gh-sheet-name', 'Nazwa'
+    .gh-text-input
+      = text_field_tag 'activity_group[name]', suggested_names.first, id: 'gh-sheet-name',
+        autocomplete: 'off', autofocus: true
+    %span.gh-field-hint= "Możesz dopisać datę, np. #{suggested_names.first} (14.10)."
+
+  .gh-form-field{ data: { sheet_create_target: 'manyPane' } }
+    %p#gh-sheet-count-label.gh-form-label Ile arkuszy utworzyć
+    .gh-number-stepper{ role: 'group', 'aria-labelledby': 'gh-sheet-count-label' }
+      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Mniej',
+                          data: { sheet_create_target: 'down', action: 'sheet-create#down' } }
+        %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
+      %output{ 'aria-live': 'polite', data: { sheet_create_target: 'output' } }= count
+      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Więcej',
+                          data: { sheet_create_target: 'up', action: 'sheet-create#up' } }
+        %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+    = hidden_field_tag :count, count, data: { sheet_create_target: 'count' }
+
+    -# Every name the stepper can reach is rendered; stepping only changes how
+    -# many are shown. They come from the same call that will name the records,
+    -# so the preview cannot promise a name the save does not use.
+    .gh-sample-name-chips{ 'aria-label': 'Nazwy' }
+      - suggested_names.each_with_index do |name, index|
+        %span.gh-octagon-clip{ hidden: index >= count, data: { sheet_create_target: 'name' } }= name
+
+  .gh-dialog-button-row
+    - if @in_modal
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+    - else
+      = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'gh-btn gh-btn--secondary'
+    %button.gh-btn{ type: 'submit', data: { sheet_create_target: 'submit' } }
+      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+      %span{ data: { sheet_create_target: 'submitLabel' } } Utwórz arkusz

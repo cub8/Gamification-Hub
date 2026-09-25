@@ -1,0 +1,54 @@
+-# Mockup: #/s/ranks, js-expanded/30-sp.js:21-24.
+-#
+-# Four states, not the mockup's three. Its rankIdx() falls back to index 0, so
+-# its student always stands on some rung; ours may stand below the whole ladder
+-# when the group defines no rank at 0, and then the progress has to live on the
+-# lowest rung instead (:next).
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1 Rangi
+    %p.gh-lead
+      Ranga rośnie razem z łącznie zebraną walutą. Wydawanie jej nie obniża rangi.
+
+- if ladder.any?
+  %ol.gh-panel.gh-student-ladder-list
+    - ladder.descending.each do |rung|
+      %li.gh-student-rank-row{ class: ["gh-student-rank-row--#{rung.state}"] }
+        = render 'rank_thumb', rank: rung.rank
+        %div
+          %b
+            = rung.rank.name
+            - if rung.current?
+              %span.gh-you-badge.gh-octagon-clip Twoja ranga
+          %small.gh-small= rank_summary_sentences(rung.rank)
+
+        %div
+          - if rung.done?
+            %span.gh-rank-status.gh-rank-status--achieved
+              %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
+              Zdobyta
+          - elsif rung.progressing?
+            - collected, needed = rung.progress
+            %span.gh-rank-status
+              - if rung.next?
+                = "#{collected} z #{needed} do pierwszej rangi"
+              - else
+                = "#{ladder.collected} z #{rung.next_threshold} do następnej"
+            .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
+                     'aria-valuemin': 0,
+                     'aria-valuemax': needed,
+                     'aria-valuenow': collected,
+                     'aria-label': "Postęp do rangi wyżej niż #{rung.rank.name}" }
+              %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(collected, needed)}%" }
+          - elsif rung.current?
+            %span.gh-rank-status.gh-rank-status--achieved Najwyższa ranga
+          - else
+            %span.gh-rank-status
+              %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+              = "Brakuje #{rung.remaining}"
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2 W tej grupie nie ma jeszcze rang
+    %p.gh-lead
+      Prowadzący ich nie dodał. Zbieraj walutę — kiedy rangi się pojawią, zaliczy
+      się wszystko, co zebrałeś do tej pory.

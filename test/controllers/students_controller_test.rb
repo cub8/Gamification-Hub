@@ -8,17 +8,11 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     sign_in @current_user
     @story_group = FactoryBot.create(:story_group, owner: @current_user)
     @student1 = FactoryBot.create(:user, role: :student)
-    @student2 = FactoryBot.create(:user, role: :student)
     @story_group_student = FactoryBot.create(:story_group_student, user: @student1, story_group: @story_group)
   end
 
   test 'should get index' do
     get story_group_students_url(@story_group)
-    assert_response :success
-  end
-
-  test 'should get new' do
-    get new_story_group_student_url(@story_group)
     assert_response :success
   end
 
@@ -32,19 +26,6 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should create story_group_student' do
-    assert_difference('StoryGroupStudent.count') do
-      post story_group_students_url(@story_group),
-           params: {
-             story_group_student: {
-               user_id: @student2.id,
-             },
-           }
-    end
-
-    assert_turbo_redirected_to story_group_students_url(@story_group)
-  end
-
   test 'should update story_group_student' do
     patch story_group_student_url(@story_group, @story_group_student),
           params: {
@@ -53,7 +34,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
             },
           }
 
-    assert_turbo_redirected_to story_group_students_url(@story_group)
+    assert_turbo_redirected_to story_group_student_url(@story_group, @story_group_student)
   end
 
   test 'should destroy story_group_student' do
@@ -61,6 +42,8 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
       delete story_group_student_url(@story_group, @story_group_student)
     end
 
-    assert_redirected_to story_group_students_url(@story_group)
+    # Submitted from the stacked confirmation dialog, so it answers with the
+    # redirect stream that breaks out of the frame rather than a 302.
+    assert_turbo_redirected_to story_group_students_url(@story_group)
   end
 end

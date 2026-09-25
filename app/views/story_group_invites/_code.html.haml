@@ -1,0 +1,14 @@
+-# The projection dialog. Mockup: 30-isg.js `mShow`.
+-#
+-# Framed as the student's instruction, not as "invite details": this is what
+-# goes on the lecture screen.
+%h2#gh-code-title.gh-h2= "Dołącz do grupy #{@story_group.name}"
+%p Wpisz kod w aplikacji („Dołącz do grupy”) albo zeskanuj kod QR.
+
+= render 'qr_stat', invite: invite
+
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Zamknij
+  - else
+    = link_to 'Zamknij', story_group_invites_path(@story_group), class: 'gh-btn'

@@ -1,0 +1,613 @@
+@layer components {
+
+  .gh-app-shell {
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .gh-app-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  .gh-content-well {
+    flex: 1;
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .gh-main-content {
+    position: absolute;
+    inset: 0;
+    overflow: auto;
+    padding: 26px 30px 40px;
+    padding-inline: max(30px, (100% - 1320px) / 2);
+    scrollbar-gutter: stable;
+  }
+
+  .gh-topbar {
+    flex: 0 0 auto;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px 0 14px;
+    background: var(--gh-chrome);
+    border-bottom: 1px solid var(--gh-line);
+    position: relative;
+    z-index: 6;
+  }
+
+  .gh-topbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--gh-ink);
+    font: 800 19px/1 var(--gh-f-ui);
+    font-stretch: 86%;
+    letter-spacing: -0.01em;
+  }
+
+  .gh-topbar-logo img {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    object-fit: contain;
+  }
+
+  .gh-topbar-spacer {
+    flex: 1;
+  }
+
+  .gh-balance-button {
+    --gh-c: 9px;
+    position: relative;
+    isolation: isolate;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px 5px 5px;
+    border: 0;
+    background: none;
+    color: var(--gh-ink);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .gh-balance-button::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-card-2);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-balance-button:hover::before {
+    background: var(--gh-card-3);
+  }
+
+  .gh-balance-button b {
+    display: block;
+    font: 800 20px/1 var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh-balance-button small {
+    display: block;
+    margin-top: 2px;
+    font: 500 12px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-icon-button {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    color: var(--gh-ink-2);
+    text-decoration: none;
+  }
+
+  .gh-icon-button:hover {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+  }
+
+  .gh-icon-button-badge-slot {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .gh-notification-count {
+    --gh-c: 5px;
+    position: absolute;
+    top: 3px;
+    right: 2px;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 4px;
+    display: grid;
+    place-items: center;
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+    font: 780 11px/1 var(--gh-f-ui);
+  }
+
+  .gh-theme-icon-sun {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-gh-theme="light"]) .gh-theme-icon-sun {
+      display: block;
+    }
+
+    :root:not([data-gh-theme="light"]) .gh-theme-icon-moon {
+      display: none;
+    }
+  }
+
+  :root[data-gh-theme="dark"] .gh-theme-icon-sun {
+    display: block;
+  }
+
+  :root[data-gh-theme="dark"] .gh-theme-icon-moon {
+    display: none;
+  }
+
+  .gh-group-switcher {
+    display: none;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: 9px;
+    border: 0;
+    background: none;
+    padding: 4px 4px 4px 0;
+    cursor: pointer;
+    text-align: left;
+    color: var(--gh-ink);
+  }
+
+  .gh-group-switcher .gh-group-thumb {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .gh-group-switcher-name {
+    font: 760 15px/1.12 var(--gh-f-ui);
+    font-stretch: 84%;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .gh-group-switcher i {
+    font-size: 13px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-avatar {
+    --gh-c: 8px;
+    --gh-h: var(--gh-item);
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    font: 760 14px/1 var(--gh-f-ui);
+    color: var(--gh-ink);
+    background: color-mix(in srgb, var(--gh-h) 34%, var(--gh-card));
+  }
+
+  .gh-avatar--sm {
+    --gh-c: 5px;
+    width: 28px;
+    height: 28px;
+    font-size: 11.5px;
+  }
+
+  .gh-avatar[data-gh-h="0"] {
+    --gh-h: var(--gh-item);
+  }
+
+  .gh-avatar[data-gh-h="1"] {
+    --gh-h: var(--gh-badge);
+  }
+
+  .gh-avatar[data-gh-h="2"] {
+    --gh-h: var(--gh-rank);
+  }
+
+  .gh-avatar[data-gh-h="3"] {
+    --gh-h: var(--gh-focus);
+  }
+
+  .gh-avatar[data-gh-h="4"] {
+    --gh-h: var(--gh-heart);
+  }
+
+  .gh-avatar-button {
+    border: 0;
+    background: none;
+    padding: 2px;
+    cursor: pointer;
+  }
+
+  .gh-group-thumb {
+    --gh-c: 6px;
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    overflow: hidden;
+    background-color: var(--gh-card-3);
+    color: var(--gh-ink-2);
+    font: 720 10px/1 var(--gh-f-ui);
+  }
+
+  .gh-group-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gh-group-thumb--lg {
+    --gh-c: 8px;
+    width: 46px;
+    height: 46px;
+    font-size: 15px;
+  }
+
+  .gh-sidebar {
+    width: 276px;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--gh-chrome);
+    border-right: 1px solid var(--gh-line);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 10px;
+    transition: width 0.18s;
+  }
+
+  .gh-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .gh-sidebar-nav--primary {
+    padding: 0 10px;
+  }
+
+  .gh-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    color: var(--gh-ink-2);
+    text-decoration: none;
+    font: 560 15px/1.2 var(--gh-f-ui);
+    white-space: nowrap;
+  }
+
+  .gh-sidebar-link:hover {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+  }
+
+  .gh-sidebar-link--active {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+    font-weight: 720;
+    box-shadow: inset 4px 0 0 var(--gh-item);
+  }
+
+  .gh-sidebar-section-label {
+    font: 680 13px/1.2 var(--gh-f-ui);
+    color: var(--gh-ink-3);
+    padding: 18px 22px 8px;
+  }
+
+  .gh-current-group-card {
+    margin: 14px 12px 12px;
+    filter: drop-shadow(0 3px 0 var(--gh-line-2));
+  }
+
+  .gh-current-group-card-frame {
+    --gh-c: 12px;
+    padding: 2px;
+    background: var(--gh-line-2);
+  }
+
+  .gh-current-group-card-inner {
+    --gh-c: 11px;
+    background: var(--gh-card);
+    padding-bottom: 8px;
+  }
+
+  .gh-current-group-card-cover {
+    --gh-c: 9px;
+    display: block;
+    margin: 8px 8px 0;
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    background-color: var(--gh-card-3);
+  }
+
+  .gh-current-group-card-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gh-current-group-card-cover--fallback {
+    display: grid;
+    place-items: center;
+    font: 800 20px/1 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-current-group-card-header {
+    padding: 12px 12px 4px;
+  }
+
+  .gh-current-group-card-name {
+    font: 780 21px/1.1 var(--gh-f-ui);
+    font-stretch: 84%;
+    text-wrap: balance;
+  }
+
+  .gh-current-group-card-role {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-current-group-card-switch-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 12px 10px;
+  }
+
+  .gh-current-group-card .gh-sidebar-nav {
+    margin: 0 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-current-group-card .gh-sidebar-link {
+    padding: 8px 10px;
+  }
+
+  .gh-sidebar-group-list {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    gap: 2px;
+  }
+
+  .gh-sidebar-group-list-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 7px 10px;
+    text-decoration: none;
+    color: var(--gh-ink);
+  }
+
+  .gh-sidebar-group-list-item:hover {
+    background: var(--gh-card-2);
+  }
+
+  .gh-sidebar-group-list-item .gh-group-thumb {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+
+  .gh-sidebar-group-list-item-text {
+    min-width: 0;
+  }
+
+  .gh-sidebar-group-list-item-text b {
+    display: block;
+    font: 650 14px/1.2 var(--gh-f-ui);
+    font-stretch: 90%;
+  }
+
+  .gh-sidebar-group-list-item-text small {
+    display: block;
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+    margin-top: 1px;
+  }
+
+  .gh-sidebar-footer {
+    margin-top: auto;
+    padding: 10px;
+  }
+
+  .gh-sidebar-collapse-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    border: 0;
+    background: none;
+    padding: 9px 12px;
+    cursor: pointer;
+    font: 560 14px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+
+  .gh-sidebar-collapse-toggle:hover {
+    background: var(--gh-card-2);
+    color: var(--gh-ink);
+  }
+
+  .gh-sidebar--collapsed {
+    width: 82px;
+  }
+
+  .gh-sidebar--collapsed .gh-sidebar-link>span,
+  .gh-sidebar--collapsed .gh-sidebar-collapse-toggle>span,
+  .gh-sidebar--collapsed .gh-sidebar-section-label,
+  .gh-sidebar--collapsed .gh-sidebar-group-list-item-text,
+  .gh-sidebar--collapsed .gh-current-group-card-header,
+  .gh-sidebar--collapsed .gh-current-group-card-switch-trigger>span {
+    display: none;
+  }
+
+  .gh-sidebar--collapsed .gh-current-group-card {
+    margin: 12px 9px;
+  }
+
+  .gh-sidebar--collapsed .gh-current-group-card-cover {
+    aspect-ratio: 1;
+    margin: 6px;
+  }
+
+  .gh-sidebar--collapsed .gh-current-group-card-switch-trigger {
+    justify-content: center;
+    margin: 6px 0 8px;
+    width: 100%;
+  }
+
+  .gh-sidebar--collapsed .gh-sidebar-link,
+  .gh-sidebar--collapsed .gh-sidebar-collapse-toggle,
+  .gh-sidebar--collapsed .gh-sidebar-group-list-item {
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .gh-mobile-tabbar {
+    display: none;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-sidebar {
+      display: none;
+    }
+
+    .gh-topbar {
+      height: 58px;
+      padding: 0 8px 0 10px;
+      gap: 6px;
+    }
+
+    .gh-topbar-logo-word {
+      display: none;
+    }
+
+    .gh-balance-button {
+      padding: 4px 9px 4px 4px;
+    }
+
+    .gh-balance-button .gh-currency-token {
+      --gh-s: 28px;
+    }
+
+    .gh-balance-button b {
+      font-size: 18px;
+    }
+
+    .gh-balance-button small {
+      display: none;
+    }
+
+    .gh-group-switcher {
+      display: flex;
+    }
+
+    .gh-topbar:has(.gh-group-switcher) .gh-topbar-logo,
+    .gh-topbar:has(.gh-group-switcher) .gh-topbar-spacer {
+      display: none;
+    }
+
+    .gh-topbar-join-link span {
+      display: none;
+    }
+
+    .gh-topbar-theme-toggle {
+      display: none;
+    }
+
+    .gh-avatar {
+      width: 34px;
+      height: 34px;
+    }
+
+    .gh-main-content {
+      padding: 16px 12px 28px;
+      scrollbar-gutter: auto;
+    }
+
+    .gh-mobile-tabbar {
+      flex: 0 0 auto;
+      display: flex;
+      height: 66px;
+      background: var(--gh-chrome);
+      border-top: 1px solid var(--gh-line);
+      position: relative;
+      z-index: 6;
+    }
+
+    .gh-mobile-tab {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+      font: 620 11.5px/1 var(--gh-f-ui);
+      color: var(--gh-ink-3);
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .gh-mobile-tab--active {
+      color: var(--gh-ink);
+    }
+
+    .gh-mobile-tab--active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 22%;
+      right: 22%;
+      height: 3px;
+      background: var(--gh-item);
+    }
+  }
+}

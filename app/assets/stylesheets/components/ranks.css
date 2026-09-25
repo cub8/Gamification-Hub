@@ -1,0 +1,241 @@
+@layer components {
+
+  .gh-list-panel {
+    margin-top: 22px;
+  }
+
+  .gh-rank-ladder-list {
+    list-style: none;
+    margin: 0;
+    padding: 6px 20px 12px;
+  }
+
+  .gh-rank-row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) minmax(0, 200px) auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-rank-row:first-child {
+    border-top: 0;
+  }
+
+  .gh-rank-row .gh-mini-thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gh-rank-row b {
+    font: 760 19px/1.15 var(--gh-f-ui);
+    font-stretch: 88%;
+  }
+
+  .gh-rank-row small {
+    display: block;
+    margin-top: 3px;
+  }
+
+  .gh-rank-row .gh-rank-row-requirement {
+    font-size: 13px;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-rank-row-stats {
+    font: 560 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-rank-row-stats b {
+    margin-right: 4px;
+    font-size: 18px;
+    color: var(--gh-ink);
+  }
+
+  .gh-rank-row-stats .gh-progress-bar {
+    margin-top: 6px;
+  }
+
+  .gh-rank-gap {
+    margin-left: 80px;
+    font: 560 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+
+  .gh-student-ladder-list {
+    list-style: none;
+    margin-top: 22px;
+    padding: 14px 20px;
+  }
+
+  .gh-student-rank-row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) minmax(0, 220px);
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-student-rank-row:first-child {
+    border-top: 0;
+  }
+
+  .gh-student-rank-row .gh-mini-thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .gh-student-rank-row b {
+    display: block;
+    font: 760 19px/1.15 var(--gh-f-ui);
+    font-stretch: 88%;
+  }
+
+  .gh-student-rank-row small {
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* The rung you are standing on. Bled to the panel's edges and marked with a
+     gold spine — a background alone would read as a hover state. */
+  .gh-student-rank-row--current {
+    margin: 0 -20px;
+    padding: 14px 20px;
+    background: color-mix(in srgb, var(--gh-rank) 16%, var(--gh-card));
+    box-shadow: inset 4px 0 0 var(--gh-rank);
+  }
+
+  /* Out of reach: dimmed, but never hidden — the point of the screen is seeing
+     what is ahead of you. `--next` is the first rung when you hold no rank at
+     all, so it keeps its full weight: it is the one you are working towards. */
+  .gh-student-rank-row--locked .gh-mini-thumb {
+    opacity: 0.45;
+  }
+
+  .gh-student-rank-row--locked b {
+    color: var(--gh-ink-2);
+  }
+
+  .gh-rank-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font: 620 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-rank-status--achieved {
+    color: var(--gh-earn);
+  }
+
+  .gh-student-rank-row .gh-progress-bar {
+    margin-top: 6px;
+  }
+
+  /* Ascending in the DOM, reversed on screen, so the highest rung reads first
+     here exactly as it does on both list screens (22-br.css:9). */
+  .gh-rank-form-ladder {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .gh-rank-form-rung {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-rank-form-rung .gh-mini-thumb {
+    width: 34px;
+    height: 34px;
+  }
+
+  .gh-rank-form-rung b {
+    display: block;
+    font: 660 14.5px/1.2 var(--gh-f-ui);
+  }
+
+  .gh-rank-form-rung small {
+    font-size: 12.5px;
+    color: var(--gh-ink-3);
+  }
+
+  .gh-rank-form-rung-value {
+    font: 760 14px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .gh-rank-form-rung--draft {
+    background: color-mix(in srgb, var(--gh-rank) 22%, var(--gh-card));
+  }
+
+  /* Two rungs at the same threshold. In the mockup this was decoration; here
+     it is a live preview of the error the server will return, because the
+     threshold is unique per group. */
+  .gh-rank-form-rung--clash {
+    background: color-mix(in srgb, var(--gh-heart) 18%, var(--gh-card));
+  }
+
+  .gh-preview-flip-card {
+    max-width: 230px;
+    margin: 16px auto 0;
+  }
+
+  .gh-preview-flip-card .gh-card-art {
+    aspect-ratio: 16 / 10;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-rank-ladder-list {
+      padding: 4px 14px 10px;
+    }
+
+    .gh-rank-row {
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 8px 12px;
+    }
+
+    .gh-rank-row .gh-mini-thumb {
+      width: 52px;
+      height: 52px;
+    }
+
+    .gh-rank-row-stats,
+    .gh-rank-row>.gh-btn {
+      grid-column: 2;
+    }
+
+    .gh-rank-gap {
+      margin-left: 64px;
+    }
+
+    .gh-student-rank-row {
+      grid-template-columns: 52px minmax(0, 1fr);
+    }
+
+    .gh-student-rank-row .gh-mini-thumb {
+      width: 52px;
+      height: 52px;
+    }
+
+    .gh-student-rank-row> :last-child {
+      grid-column: 2;
+    }
+
+    .gh-student-rank-row--current {
+      margin: 0 -14px;
+      padding: 14px;
+    }
+  }
+}

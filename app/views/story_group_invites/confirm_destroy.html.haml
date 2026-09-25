@@ -1,0 +1,10 @@
+- content_for :title, "Usunąć zaproszenie #{@invite.code}?"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_destroy', invite: @invite
+- else
+  -# Rendered as a page it needs a surface of its own: these screens keep the app
+  -# shell, so unlike the join flow they never land inside .gh-auth-card.
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_destroy', invite: @invite
