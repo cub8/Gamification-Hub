@@ -86,7 +86,7 @@
     margin: 0;
   }
 
-  @media (width <= theme(--breakpoint-mobile)) {
+  @media (width <=theme(--breakpoint-mobile)) {
     .gh-auth-page {
       justify-content: flex-start;
       padding-top: 24px;

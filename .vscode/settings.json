@@ -17,4 +17,5 @@
     "scrollbar.shadow": "#00000000"
   },
   "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "tailwindCSS.experimental.configFile": "app/assets/stylesheets/application.css"
 }
