@@ -1,25 +1,4 @@
-/* --------------------------------------------------------------------------
-   Grupa: przegląd — the group's front page, both perspectives.
-
-   Ported from design/mockup-src/css/29-gh.css:12-21 (the teacher's hero, KPI
-   strip, two-column body, "Wymaga uwagi" and the per-sheet podium) and
-   00-base.css:299-348 (the student's twelve-column board: lore, purse, rank
-   card, the fanned hand and the short ledger).
-
-   The zones, the cards, the ledger rows and the purchase rows are already
-   components — shop.css, card.css, dashboard.css, inventory.css. This file
-   only lays them out and adds the three things that exist nowhere else: the
-   hero split, the KPI strip and the hand.
-   -------------------------------------------------------------------------- */
-
 @layer components {
-
-  /* ====================================================================
-     Teacher
-     ==================================================================== */
-
-  /* Art beside the text rather than above it: the teacher's hero carries three
-     buttons, and a 21/9 band on top would push them below the fold. */
   .gh-hero .gh-card-i {
     display: grid;
     grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
@@ -49,11 +28,6 @@
     margin-top: 16px;
   }
 
-  /* ---- KPI strip ------------------------------------------------------ */
-
-  /* The panel is the grid, so the <dl> that carries the semantics steps out of
-     the way. Four figures on one line is the point: they are read across, not
-     down. */
   .gh-kpis {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -69,8 +43,7 @@
     padding: 14px 16px;
   }
 
-  /* A rule between, not around: the panel already has an edge. */
-  .gh-kpi + .gh-kpi {
+  .gh-kpi+.gh-kpi {
     border-left: 1px solid var(--gh-line);
   }
 
@@ -85,8 +58,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* The ranking tile's value is a phrase, not a number, and 26px of it wraps
-     the tile. It is the one KPI that says a word rather than a figure. */
   .gh-kpis .gh-kpi:last-child dd {
     font-size: 17px;
     line-height: 1.25;
@@ -97,8 +68,6 @@
     font: 560 13px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
-
-  /* ---- body ----------------------------------------------------------- */
 
   .gh-hgrid {
     display: grid;
@@ -129,29 +98,13 @@
     margin: 10px 0 6px;
   }
 
-  /* ---- purchase rows, four columns ------------------------------------ */
-
-  /* .gh-prow is written for the Start screen, which shows WHICH group each
-     purchase came from and so emits five children. In a group that column is
-     meaningless, and a four-child row auto-places the price chip into the
-     group chip's minmax(0, 210px) track, where a grid item's default
-     justify-self: stretch paints it as a 210px gold bar — with the trailing
-     64px track left empty on the right.
-
-     The mockup hits the same case and overrides the grid inline
-     (30-gh.js:38); this is that override, as a class. */
   .gh-prow--group {
     grid-template-columns: 52px minmax(0, 1fr) auto 90px;
   }
 
-  /* The chip hugs the right of its auto track, and the date's track is a fixed
-     90px, so every chip's right edge lands on the same x however long the date
-     reads ("dziś 13:11" vs "wczoraj 12:28"). */
   .gh-prow--group .gh-cost {
     justify-self: end;
   }
-
-  /* ---- Wymaga uwagi --------------------------------------------------- */
 
   .gh-att {
     margin: 0;
@@ -175,8 +128,6 @@
     color: var(--gh-ink-2);
   }
 
-  /* The one row that is about somebody being stuck reads in the heart ink,
-     the same colour the lives stepper uses at zero. */
   .gh-att-ic--zero {
     color: var(--gh-heart);
   }
@@ -193,14 +144,12 @@
     color: var(--gh-ink-2);
   }
 
-  /* ---- per-sheet podium ------------------------------------------------ */
-
   .gh-sheet2 {
     padding: 10px 0;
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-sheet2 > div {
+  .gh-sheet2>div {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -231,9 +180,6 @@
     font: 560 14px var(--gh-f-ui);
   }
 
-  /* Place markers, ported from 26-rk.css:6-7. Gold, silver and bronze are the
-     only three literal colours in this design — they are the medals, not a
-     palette. */
   .gh-top3 .gh-pos {
     --gh-c: 9px;
     display: grid;
@@ -243,46 +189,14 @@
     background: var(--gh-card-3);
     color: var(--gh-ink);
     font: 800 13px var(--gh-f-ui);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  .gh-top3 .gh-pos--1 {
-    background: var(--gh-rank);
-    color: var(--gh-on-rank);
-  }
-
-  .gh-top3 .gh-pos--2 {
-    background: #CDD3DC;
-    color: #221A2B;
-  }
-
-  .gh-top3 .gh-pos--3 {
-    background: #D99E63;
-    color: #221A2B;
-  }
-
-  .gh-sc {
+  .gh-podium-score {
     margin-left: auto;
     font-size: 15px;
     font-variant-numeric: tabular-nums;
   }
 
-  /* ====================================================================
-     Student
-     ==================================================================== */
-
-  /* Twelve columns, because the three cards on the first row are 6/3/3 and no
-     simpler grid gives that split and still lets the zones below run full
-     width. */
   .gh-home {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -290,26 +204,35 @@
     align-items: stretch;
   }
 
-  .gh-home > .gh-lore { grid-column: span 6; }
-  .gh-home > .gh-purse { grid-column: span 3; }
-  .gh-home > .gh-rankc { grid-column: span 3; }
-  .gh-home > .gh-zone--badges { grid-column: 1 / -1; }
-  .gh-home > .gh-zone--hand { grid-column: span 7; }
+  .gh-home>.gh-lore {
+    grid-column: span 6;
+  }
 
-  .gh-home > .gh-ledger {
+  .gh-home>.gh-purse {
+    grid-column: span 3;
+  }
+
+  .gh-home>.gh-rankc {
+    grid-column: span 3;
+  }
+
+  .gh-home>.gh-zone--badges {
+    grid-column: 1 / -1;
+  }
+
+  .gh-home>.gh-zone--hand {
+    grid-column: span 7;
+  }
+
+  .gh-home>.gh-ledger {
     grid-column: span 5;
     align-self: start;
     margin-top: 40px;
   }
 
-  /* The zone's own margin-top is what lifts its straddling label clear of the
-     card above; inside this grid the gap does that instead, except on the row
-     where a zone sits beside a panel. */
   .gh-home .gh-zone {
     margin-top: 40px;
   }
-
-  /* ---- lore card ------------------------------------------------------- */
 
   .gh-lore .gh-art {
     aspect-ratio: 21 / 9;
@@ -320,8 +243,6 @@
     padding: 16px 16px 18px;
   }
 
-  /* The group's own words, set in the text face — this is the only place in
-     the app where a teacher's prose is quoted rather than labelled. */
   .gh-lore-t {
     max-width: 60ch;
     margin-top: 10px;
@@ -331,11 +252,7 @@
 
   .gh-lore-a {
     margin-top: 12px;
-    font-size: 13.5px;
-    color: var(--gh-ink-2);
   }
-
-  /* ---- purse ----------------------------------------------------------- */
 
   .gh-purse .gh-card-i,
   .gh-rankc .gh-card-i {
@@ -349,8 +266,6 @@
     margin-top: 10px;
   }
 
-  /* Deliberately enormous. "How much can I spend" is the one question this
-     card answers, and the answer should be readable across a lecture hall. */
   .gh-big .gh-num {
     font: 800 68px/0.9 var(--gh-f-ui);
     font-stretch: 88%;
@@ -362,8 +277,6 @@
     font: 620 15px/1.2 var(--gh-f-ui);
   }
 
-  /* Not .gh-stats: that is the student sheet's four-column strip, and this is
-     two figures under a rule. */
   .gh-purse-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -390,13 +303,9 @@
     font: inherit;
   }
 
-  /* Pinned to the bottom so the purse and the rank card end on the same line
-     however long the rank's name runs. */
   .gh-purse .gh-btn {
     margin-top: auto;
   }
-
-  /* ---- rank card ------------------------------------------------------- */
 
   .gh-rank-name {
     margin-top: 4px;
@@ -426,8 +335,6 @@
     margin-top: 9px;
   }
 
-  /* The place line sits on the card's floor, under whatever the progress block
-     leaves behind. */
   .gh-rk {
     display: flex;
     align-items: center;
@@ -446,31 +353,11 @@
     color: var(--gh-rank);
   }
 
-  /* ---- the hand -------------------------------------------------------- */
-
-  /* Cards overlap and splay, the way a hand of cards does. This is the one
-     place in the app where the card-table metaphor is literal, and it is why
-     the overview shows the newest few rather than the whole inventory —
-     "Moje przedmioty" is the grid. */
   .gh-hand {
     display: flex;
-    /* Stretch, not flex-start. Every other card container in the app gets
-       uniform heights from grid stretch; this is the one flex row, and without
-       it each card is sized by its own description — a deck whose cards are
-       different heights is not a deck. */
     align-items: stretch;
-    /* The slot drops to a second line rather than pushing the fan out of the
-       zone. Three cards are 416px and the slot another 224px, which fits side
-       by side only on a wide screen; wrapping is what makes the same markup
-       work at 1920px and at 1280px without a scrollbar. */
     flex-wrap: wrap;
-    /* Only between wrapped lines: the cards overlap by a NEGATIVE margin, so a
-       column-gap here would prise the fan apart. */
     row-gap: 20px;
-    /* Headroom for the rotation. A transform does not affect layout, so the
-       rotated box would otherwise cross the dashed border. The pivot sits BELOW
-       the card, so the reach is mostly SIDEWAYS — about (1.2 × height) ×
-       sin(angle), ~29px a side at the outermost 4° — and only a few px upward. */
     padding: 40px 32px 28px;
   }
 
@@ -482,19 +369,14 @@
     transition: transform 0.18s;
   }
 
-  /* .gh-hc is a wrapper around the <article>, because students_items/_card owns
-     that element — the mockup puts `hc` on the card itself. So the stretch has
-     to be handed down one level. */
-  .gh-hc > .gh-card {
+  .gh-hc>.gh-card {
     height: 100%;
   }
 
-  .gh-hc + .gh-hc {
+  .gh-hc+.gh-hc {
     margin-left: -86px;
   }
 
-  /* Lift the card you are pointing at clear of its neighbours, so the fan can
-     be read one card at a time. */
   .gh-hc:hover,
   .gh-hc:focus-within {
     z-index: 2;
@@ -507,8 +389,6 @@
     }
   }
 
-  /* A card in the fan is narrow, so it drops the flavour line and keeps the
-     rule — what the thing does is what you need at a glance. */
   .gh-hc .gh-flavor {
     display: none;
   }
@@ -523,8 +403,6 @@
     margin-left: 28px;
   }
 
-  /* ---- ledger ---------------------------------------------------------- */
-
   .gh-ledger {
     padding: 20px 20px 16px;
   }
@@ -533,20 +411,22 @@
     margin-bottom: 10px;
   }
 
-  /* ====================================================================
-     Narrow
-     ==================================================================== */
-
-  /* 1199: the student's board folds to two columns and then to one; the
-     ledger loses the margin that separated it from the zone beside it. */
   @media (max-width: 1199px) {
-    .gh-home > .gh-lore { grid-column: 1 / -1; }
-    .gh-home > .gh-purse,
-    .gh-home > .gh-rankc { grid-column: span 6; }
-    .gh-home > .gh-zone--hand,
-    .gh-home > .gh-ledger { grid-column: 1 / -1; }
+    .gh-home>.gh-lore {
+      grid-column: 1 / -1;
+    }
 
-    .gh-home > .gh-ledger {
+    .gh-home>.gh-purse,
+    .gh-home>.gh-rankc {
+      grid-column: span 6;
+    }
+
+    .gh-home>.gh-zone--hand,
+    .gh-home>.gh-ledger {
+      grid-column: 1 / -1;
+    }
+
+    .gh-home>.gh-ledger {
       margin-top: 0;
     }
 
@@ -567,8 +447,6 @@
       grid-template-columns: minmax(0, 1fr);
     }
 
-    /* dashboard.css narrows .gh-prow here; the modifier has equal specificity
-       and lands later in the cascade, so it has to narrow itself. */
     .gh-prow--group {
       grid-template-columns: 52px minmax(0, 1fr) auto 76px;
     }
@@ -605,23 +483,15 @@
       gap: 18px;
     }
 
-    .gh-home > .gh-purse,
-    .gh-home > .gh-rankc {
+    .gh-home>.gh-purse,
+    .gh-home>.gh-rankc {
       grid-column: 1 / -1;
     }
 
-    /* Three tracks and no date, exactly as dashboard.css does for .gh-prow —
-       restated because the modifier outranks it by cascade order. */
     .gh-prow--group {
       grid-template-columns: 44px minmax(0, 1fr) auto;
     }
 
-    /* Full width with a 16:10 art band on top spends most of a phone screen on
-       a hatched rectangle. The mockup turns the rank card sideways instead
-       (00-base.css:572-575): the art becomes a square panel beside the name.
-
-       Guarded by :has(), because a group with no ranks renders no art at all,
-       and a second track there would be an empty 112px column plus its gap. */
     .gh-rankc .gh-card-i:has(> .gh-art) {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 112px;
@@ -629,21 +499,19 @@
       align-content: start;
     }
 
-    .gh-rankc .gh-card-i:has(> .gh-art) > .gh-rk-top {
+    .gh-rankc .gh-card-i:has(> .gh-art)>.gh-rk-top {
       grid-column: 1;
       grid-row: 1;
     }
 
-    .gh-rankc .gh-card-i:has(> .gh-art) > .gh-art {
+    .gh-rankc .gh-card-i:has(> .gh-art)>.gh-art {
       grid-column: 2;
       grid-row: 1 / span 2;
       aspect-ratio: 1;
       margin: 0;
     }
 
-    /* Everything below the name — the progress block, the "highest rung"
-       sentence, the ranking place — runs the full width under both columns. */
-    .gh-rankc .gh-card-i:has(> .gh-art) > :not(.gh-rk-top):not(.gh-art) {
+    .gh-rankc .gh-card-i:has(> .gh-art)> :not(.gh-rk-top):not(.gh-art) {
       grid-column: 1 / -1;
     }
 
@@ -661,36 +529,22 @@
       margin: 10px 10px 0;
     }
 
-    /* The fan does not survive a 390px screen: overlapping cards there leave
-       nothing readable. It becomes a stack of full-width cards — the same shape
-       the badge deck above it takes, so the two zones read alike on a phone.
-
-       A grid, not a column flex: the base rule sets flex-wrap and row-gap for
-       the fan, and both mean something else once the main axis turns. This also
-       makes it the same construction as .gh-cards--b and .gh-pgrid. */
     .gh-hand {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       gap: 18px;
-      /* The 32px sides existed to catch the rotation's sideways reach. Without
-         rotation they are just width taken away from the cards; the zone's own
-         10px is the only inset left. */
       padding: 4px 0 10px;
     }
 
-    /* The missing piece. 196px is the fan's card width, and leaving it here is
-       what kept the items a narrow sideways strip while the badges beside them
-       were already full width. */
     .gh-hc {
       width: auto;
       transform: none;
     }
 
-    .gh-hc + .gh-hc {
+    .gh-hc+.gh-hc {
       margin-left: 0;
     }
 
-    /* A card in a stack has no neighbours to rise above. */
     .gh-hc:hover,
     .gh-hc:focus-within {
       transform: none;

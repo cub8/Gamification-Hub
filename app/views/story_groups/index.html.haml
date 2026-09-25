@@ -37,8 +37,8 @@
 
 %div{ data: { controller: 'group-search' } }
   - if @listing.groups.any?
-    .gh-ixbar
-      %label.gh-search
+    .flex.flex-wrap.gap-3.items-center.mt-4
+      %label.gh-search.gh-search--wide
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
         %input{ type: 'search',
                 placeholder: 'Szukaj grupy',

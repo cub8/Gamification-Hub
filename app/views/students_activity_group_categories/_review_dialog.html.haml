@@ -7,7 +7,7 @@
 %dialog.gh-dialog.gh-dialog--review{ 'aria-labelledby': 'gh-review-title',
                                      data: { grading_target: 'dialog',
                                              action: 'close->grading#closeReview click->grading#closeOnBackdrop' } }
-  .gh-dialog-body
+  .gh-dialog-body.gh-oct
     %h2#gh-review-title.gh-h2
       Przyznajesz
       %span{ data: { grading_target: 'reviewSum' } }
@@ -28,7 +28,7 @@
         - next if open_categories.empty?
         %li{ hidden: true, data: { grading_target: 'reviewRow', gh_student: student.id } }
           %span.gh-rv-n
-            %span.gh-av.gh-av--sm{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+            %span.gh-av.gh-av--sm.gh-oct{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
               = gh_initials(name)
             = name
           %span.gh-rv-c

@@ -1,23 +1,10 @@
-/* --------------------------------------------------------------------------
-   The invite codes screen (#/t/invites).
-
-   Ported from design/mockup-src/css/27-isg.css:2-14 and its 720px block at
-   :28-31. The mockup scopes its breakpoint to `@container app`; the real app
-   has no device frame, so these are plain media queries like everywhere else
-   in this bundle.
-   -------------------------------------------------------------------------- */
-
 @layer components {
-
-  /* ---- The list ---- */
 
   .gh-ivl {
     margin-top: 22px;
     padding: 6px 8px;
   }
 
-  /* Not a <table>: the row has to reflow into a two-column stack on a phone,
-     and a table cannot. The header row is a sibling with the same grid. */
   .gh-iv {
     display: grid;
     grid-template-columns: 130px 110px minmax(0, 1fr) minmax(0, 1fr) auto;
@@ -33,7 +20,6 @@
     color: var(--gh-ink-3);
   }
 
-  /* The row just created, highlighted once and then left alone. */
   .gh-iv--fresh {
     animation: gh-fresh 2.4s ease-out 1;
   }
@@ -85,26 +71,11 @@
     height: 38px;
   }
 
-  /* ---- Status chip ----
-
-     Its own octagon rather than .gh-tag: this one is smaller (--gh-c: 5px) and
-     its two states are semantic colours, not the item/badge tints .gh-tag
-     carries. */
   .gh-stt {
     --gh-c: 5px;
     display: inline-block;
     padding: 4px 8px;
     font: 680 12px var(--gh-f-ui);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-stt--on {
@@ -117,15 +88,11 @@
     color: var(--gh-ink-2);
   }
 
-  /* ---- The collapsed "Nieaktywne" group ----
-
-     The native disclosure triangle is suppressed and redrawn, because the UA
-     marker cannot be coloured or spaced to match the rest of the type. */
   .gh-inact {
     margin-top: 14px;
   }
 
-  .gh-inact > summary {
+  .gh-inact>summary {
     cursor: pointer;
     font: 680 14px var(--gh-f-ui);
     color: var(--gh-ink-2);
@@ -133,15 +100,15 @@
     list-style: none;
   }
 
-  .gh-inact > summary::-webkit-details-marker {
+  .gh-inact>summary::-webkit-details-marker {
     display: none;
   }
 
-  .gh-inact > summary::before {
+  .gh-inact>summary::before {
     content: "▸ ";
   }
 
-  .gh-inact[open] > summary::before {
+  .gh-inact[open]>summary::before {
     content: "▾ ";
   }
 
@@ -149,14 +116,10 @@
     margin-top: 6px;
   }
 
-  /* ---- The "no active invites" CTA in the quick dialog ---- */
-
   .gh-quick-cta {
     justify-content: center;
     margin-top: 14px;
   }
-
-  /* ---- The create / edit dialog ---- */
 
   .gh-presets {
     display: flex;
@@ -165,8 +128,6 @@
     margin-top: 12px;
   }
 
-  /* One limit and its switch. The rule above separates it from the previous
-     block, which is why the first one still gets a top border. */
   .gh-lim {
     margin-top: 14px;
     padding-top: 14px;
@@ -177,11 +138,6 @@
     margin-top: 0;
   }
 
-  /* The disclosure is CSS, not JavaScript: a switch that is off hides its own
-     fields. Done in JS this would either flash the row on every render or, if
-     the row were hidden server-side, leave someone without JavaScript able to
-     turn a limit on but never to set it. Where :has() is unsupported both rows
-     simply stay visible, which is the same harmless state. */
   .gh-lim:has(.gh-sw:not(:checked)) .gh-row2 {
     display: none;
   }
@@ -203,8 +159,6 @@
     font: 600 15px var(--gh-f-ui);
   }
 
-  /* ---- The projection dialog ---- */
-
   .gh-qrbox {
     display: flex;
     gap: 26px;
@@ -213,8 +167,6 @@
     margin-top: 18px;
   }
 
-  /* An explicit white plate, not a transparent one: the QR is rendered black
-     on white and would vanish into the card in the dark theme. */
   .gh-qr {
     width: 190px;
     height: 190px;
@@ -238,8 +190,6 @@
   }
 
   @media (max-width: 720px) {
-    /* Two columns: everything readable on the left, the actions stacked in a
-       column on the right, and the status chip pulled up beside the code. */
     .gh-iv {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 6px 12px;
@@ -249,20 +199,14 @@
       display: none;
     }
 
-    /* 2x2 rather than the mockup's single column: we have a fourth button it
-       does not (copy), and stacked they would make the actions taller than the
-       three rows of content they sit beside. */
     .gh-iv-acts {
       grid-column: 2;
-      /* Three content rows on a phone: code+status, uses, expiry. */
       grid-row: 1 / 4;
       display: grid;
       grid-template-columns: repeat(2, auto);
       align-content: start;
     }
 
-    /* Shares row 1 with the code rather than taking a row of its own: the
-       code is short and the chip is small, so they read as one line. */
     .gh-iv-st {
       grid-row: 1;
       grid-column: 1;

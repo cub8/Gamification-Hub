@@ -1,14 +1,3 @@
-/* --------------------------------------------------------------------------
-   The tag primitive.
-
-   Ported from design/mockup-src/css/00-base.css:128-134. A small octagon chip
-   that labels the surface it sits on: the role you hold in a group here, a
-   discount or a life cost on item cards later.
-
-   The tinted background is a ::before layer rather than `background`, because
-   the chip is clipped and a painted background would square off at the cuts.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
   .gh-tag {
@@ -28,16 +17,14 @@
     z-index: -1;
     inset: 0;
     background: var(--gh-card-3);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   /* Role tags on the group cards (29-gh.css:10-11). `lrn` keeps the neutral
@@ -58,7 +45,6 @@
     background: color-mix(in srgb, var(--gh-badge) 20%, var(--gh-card));
   }
 
-  /* A discount a badge or a rank gives in the shop (00-base.css:130-131). */
   .gh-tag--disc {
     color: var(--gh-badge-ink);
   }
@@ -88,14 +74,29 @@
     background: var(--gh-ink);
   }
 
-  /* Soft-deleted, but still on someone's shelf (DECISIONS.md:28). Grey, and it
-     says so in words — the card behind it is otherwise unchanged, because the
-     student still owns what it shows. */
+  /* Soft-deleted, but still on someone's shelf. Grey, and it says so in
+     words — the card behind it is otherwise unchanged, because the student
+     still owns what it shows. */
   .gh-tag--del {
     color: var(--gh-ink-2);
   }
 
   .gh-tag--del::before {
     background: var(--gh-card-3);
+  }
+
+  /* "Twoja ranga" / "Ty". The mockup paints this --item orange (26-rk.css:9)
+     even though it labels a gold row; kept, because it is the same chip that
+     marks "you" in both the ranking table and the rank ladder, and it has to
+     read the same in both. */
+  .gh-youtag {
+    --gh-c: 5px;
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 7px;
+    font: 720 11.5px var(--gh-f-ui);
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+    vertical-align: 2px;
   }
 }

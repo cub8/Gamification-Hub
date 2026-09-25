@@ -1,25 +1,5 @@
-/* --------------------------------------------------------------------------
-   The Odznaki screens.
-
-   Ported from design/mockup-src/css/00-base.css:180-197 (the flip card),
-   :290 and :327-331 (the student deck), 24-lists.css:11-13 (the teacher grid),
-   22-br.css (the form's "Uwzględniają ją" list and preview frame) and
-   21-item.css:2-6,36 (the segmented control and the award row).
-
-   THE FLIP IS THE SCREEN. A badge has two sides: the front is the art and the
-   reward, the back is the rule you have not met yet. The mockup fixes that
-   state per card — unearned cards are simply turned over and stay that way.
-   Here an EARNED card can also be turned by hand (badge_flip_controller), so
-   a student can re-read how they won it; an unearned one still cannot, because
-   the art is the reward and peeking would spend it.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
-  /* ---- grids ---------------------------------------------------------- */
-
-  /* The student's deck. Narrower cells than a shop grid: a badge card carries
-     no price row and no buttons, so it reads fine small (00-base.css:290,327). */
   .gh-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
@@ -50,10 +30,6 @@
     padding: 10px 12px 12px;
   }
 
-  /* A deck cell is ~168px wide, which is not enough for a discount chip and a
-     "Jak zdobyć" beside it — left alone they both wrap to two lines and the
-     foot turns to mush. Wrapping the FOOT instead drops the button onto its
-     own line, whole. */
   .gh-card-foot {
     flex-wrap: wrap;
     row-gap: 8px;
@@ -64,8 +40,6 @@
     white-space: nowrap;
   }
 
-  /* The teacher's grid (24-lists.css:11-12). Wider cells than the deck: these
-     cards carry a foot with a holder count and two controls. */
   .gh-lgrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
@@ -79,11 +53,6 @@
     flex-wrap: wrap;
   }
 
-  /* ---- the flip card -------------------------------------------------- */
-
-  /* `filter: none` overrides .gh-card's drop-shadow: the shadow has to sit on
-     each FACE instead, or it would be drawn once for a box that is rotating in
-     three dimensions and would smear across the turn. */
   .gh-flip {
     perspective: 1000px;
     filter: none;
@@ -96,8 +65,6 @@
     transform-style: preserve-3d;
   }
 
-  /* Both faces occupy the same grid cell, so the card is as tall as the taller
-     of the two and neither can shift the layout when it turns. */
   .gh-face {
     grid-area: 1 / 1;
     backface-visibility: hidden;
@@ -105,7 +72,6 @@
     filter: drop-shadow(0 3px 0 var(--gh-frame-edge));
   }
 
-  /* Grey, not teal: the back of a badge is what you have not earned. */
   .gh-face--back {
     --gh-frame: var(--gh-lock);
     --gh-frame-edge: var(--gh-lock-edge);
@@ -124,14 +90,10 @@
     background: color-mix(in srgb, var(--gh-badge) 10%, var(--gh-card-2));
   }
 
-  /* The name on the back does not stretch: .gh-card-i is a column flexbox and
-     the mark above it already fills the width. */
   .gh-back-i .gh-card-name {
     flex: 0 0 auto;
   }
 
-  /* Where the artwork would be, if you had earned it. A field of small
-     octagons — the app's one shape, tiled — with the house mark on top. */
   .gh-back-art {
     --gh-c: 8px;
     position: relative;
@@ -140,16 +102,6 @@
     width: 100%;
     aspect-ratio: 16 / 10;
     background: color-mix(in srgb, var(--gh-badge) 26%, var(--gh-card-2));
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-back-art::after {
@@ -169,8 +121,6 @@
     height: auto;
   }
 
-  /* The letters are punched out of the octagon in the card's own background,
-     so one mark works in both themes with no second asset. */
   .gh-mark-t {
     font: 800 15px var(--gh-f-ui);
     fill: var(--gh-card);
@@ -181,17 +131,13 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-how > span:first-child {
+  .gh-how>span:first-child {
     display: block;
     font: 680 12.5px/1.2 var(--gh-f-ui);
     color: var(--gh-badge-ink);
     margin-bottom: 3px;
   }
 
-  /* Turning the card by hand. Not in the mockup, where the state is fixed —
-     but a card that moves on click has to say so, and a keyboard user needs a
-     real control. The button is the control; the click listener on the card is
-     the convenience, and this click bubbles up to it. */
   .gh-flipbtn {
     display: inline-flex;
     align-items: center;
@@ -208,8 +154,6 @@
     color: var(--gh-ink);
   }
 
-  /* Pushed to the far end of the foot, whether it shares a line with the
-     discount chip or has wrapped onto one of its own. */
   .gh-card-foot .gh-flipbtn {
     margin-left: auto;
   }
@@ -222,8 +166,6 @@
     cursor: pointer;
   }
 
-  /* A badge just awarded. Fires after the turn has finished (0.55s of the
-     0.7s), so the glow lands on a card that has stopped moving. */
   .gh-flip--just .gh-face--front {
     animation: gh-glow 1.6s ease-out 0.55s 1;
   }
@@ -242,45 +184,18 @@
     }
   }
 
-  /* ---- the form ------------------------------------------------------- */
-
-  /* "Zdobyta / Jeszcze niezdobyta" (21-item.css:2-6). Two buttons, not a
-     radiogroup: nothing is submitted, it only decides which way the preview
-     card faces. */
   .gh-seg2 {
     --gh-c: 7px;
-    /* The underline on the pressed tab. Defaults to the badge form's teal; the
-       item form sets it to orange, because a segmented control that switches
-       between states of an ITEM should be the item's colour (21-item.css:4). */
     --gh-seg: var(--gh-badge);
     display: flex;
     gap: 3px;
     padding: 3px;
     margin-top: 12px;
     background: var(--gh-card-2);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* `a` and `span` as well as `button`: the ranking screen's mode pair are
-     links, because pressing one opens a confirmation rather than switching
-     anything on the spot, and the mode already in force is a plain span so it
-     cannot be pressed at all. */
   .gh-seg2 :is(button, a, span) {
     flex: 1;
-    /* A native <button> centres its content box for free; a blockified <a> or
-       <span> flex item does not, so a one-word tab sat at the TOP of a row
-       whose height came from a tab that wrapped to two lines. text-align stays
-       for that wrapped second line — place-items centres the anonymous item,
-       not the text inside it. */
     display: grid;
     place-items: center;
     border: 0;
@@ -303,15 +218,11 @@
     box-shadow: inset 0 -3px 0 var(--gh-seg);
   }
 
-  /* A state this entity cannot reach — an item with no requirements can never
-     be sealed (21-item.css:6). It has to LOOK unavailable: `disabled` alone
-     stops the click but leaves the tab reading as one more thing to press. */
   .gh-seg2 button[disabled] {
     opacity: 0.4;
     cursor: not-allowed;
   }
 
-  /* Items whose discount counts this badge (22-br.css:7-8). */
   .gh-uses {
     list-style: none;
     margin: 10px 0 0;
@@ -336,7 +247,6 @@
     margin-top: 14px;
   }
 
-  /* The badge as it appears in the award dialog (21-item.css:36). */
   .gh-thumbrow {
     display: flex;
     align-items: center;
@@ -344,9 +254,6 @@
     margin-top: 12px;
   }
 
-  /* The preview card's foot holds only the discount chip, and that chip is
-     hidden at 0% — without this it would reserve .gh-card-foot's 66px for
-     nothing. The deck gets the same treatment from .gh-cards--b above. */
   .gh-pvflip .gh-card-foot {
     min-height: 0;
     padding: 10px 12px 12px;
@@ -357,27 +264,13 @@
     font: 680 15px/1.25 var(--gh-f-ui);
   }
 
-  /* ---- narrow --------------------------------------------------------- */
-
   @media (max-width: 720px) {
-    /* One badge per row, scrolled with the page.
 
-       The mockup makes this a horizontal scroll-snapping strip
-       (00-base.css:576-579) and the port followed it, but at 390px a 158px card
-       leaves two half-visible slivers and hides the strip's own scrollbar
-       inside a page that already scrolls the other way. DECISIONS.md:50 is the
-       rule that wins here: card lists are single-column on phones, and only the
-       shop keeps two compact columns. */
     .gh-cards--b {
       grid-template-columns: minmax(0, 1fr);
       gap: 18px;
     }
 
-    /* A full-width card would give a 16:10 band about 224px of a 390px screen,
-       so the art arrives before the name and pushes the rule off the fold. Cap
-       it, the way shop.css already caps art inside a zone. The glyph is sized
-       in percentages and the well clips, so this crops the hatching, not the
-       artwork. */
     .gh-cards--b .gh-art,
     .gh-cards--b .gh-back-art {
       max-height: 190px;
@@ -389,9 +282,6 @@
     }
   }
 
-  /* A 0.7s rotation in three dimensions is exactly what this setting is for.
-     The card still turns — that is the information — it just arrives without
-     the animation, and the award glow is dropped entirely. */
   @media (prefers-reduced-motion: reduce) {
     .gh-flip-in {
       transition: none;

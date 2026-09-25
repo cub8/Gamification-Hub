@@ -2,11 +2,11 @@
 -# Mockup: js-expanded/10-core.js `popAvatar()`.
 %dialog#gh-account-menu.gh-dialog.gh-dialog--menu.gh-dialog--anchored{ data: { action: 'click->menu#closeOnBackdrop' },
                                                                        'aria-label': 'Konto' }
-  .gh-dialog-body
+  .gh-dialog-body.gh-oct
     %span.gh-grab{ 'aria-hidden': 'true' }
 
     .gh-pop-me
-      %span.gh-av{ 'data-gh-h': gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
+      %span.gh-av.gh-oct{ 'data-gh-h': gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
         = gh_initials(user.full_name)
       %span
         %b= user.full_name

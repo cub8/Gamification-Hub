@@ -34,7 +34,7 @@
   %h2#gh-adjust-title.gh-h2 Koryguj walutę
   %p= "#{student.display_name} ma teraz #{form.balance} do wydania."
 
-  .gh-seg3{ role: 'radiogroup', 'aria-label': 'Rodzaj korekty' }
+  .gh-seg3.gh-oct{ role: 'radiogroup', 'aria-label': 'Rodzaj korekty' }
     - [[1, 'Dodaj'], [-1, 'Odejmij']].each do |value, label|
       %label.gh-seg3-o
         = f.radio_button :sign, value,

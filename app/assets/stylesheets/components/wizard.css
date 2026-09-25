@@ -1,32 +1,8 @@
-/* --------------------------------------------------------------------------
-   The story-group creation wizard.
-
-   Ported from design/mockup-src/css/20-form.css — the classes the rest of the
-   app never needed, because this is the one stepped flow in it
-   (DECISIONS.md:26). Everything the wizard shares with the other forms
-   (.gh-wiz, .gh-fcol, .gh-pcol, .gh-fsec, .gh-inp, .gh-nstep, .gh-sw,
-   .gh-wbar, .gh-pz*, .gh-crop*) already lives in form.css and is NOT repeated.
-
-   Two of the mockup's blocks are deliberately absent:
-     * `.focal` / `.mk`, its focal-point picker — superseded by the real crop
-       in .gh-crop (DECISIONS.md:25);
-     * `.row3`, the three currency declensions — the schema has one name.
-
-   Frames are a ::before/::after pair with an inset background, never a border
-   or a box-shadow: both break at a cut corner.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
-  /* Steps 3 and 4 have no preview beside them, so the form takes the whole
-     width (mockup `.wiz.full`, 20-form.css:12). group_wizard_controller
-     toggles this class; without the rule the 380px preview column stayed
-     behind as dead space. */
   .gh-wiz--full {
     grid-template-columns: minmax(0, 1fr);
   }
-
-  /* ---- The stepper (20-form.css:5-11) ---- */
 
   .gh-stepper {
     display: flex;
@@ -63,19 +39,8 @@
     background: var(--gh-card-3);
     color: var(--gh-ink-2);
     font: 780 13px var(--gh-f-ui);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* The step you are on: orange, like every other "acting now" affordance. */
   .gh-stp--on {
     color: var(--gh-ink);
     border-top-color: var(--gh-item);
@@ -86,7 +51,6 @@
     color: var(--gh-on-item);
   }
 
-  /* A step already passed: gold, the colour of something earned. */
   .gh-stp--ok {
     color: var(--gh-ink-2);
     border-top-color: var(--gh-rank);
@@ -100,9 +64,6 @@
   .gh-stp-n .fa-check {
     font-size: 13px;
   }
-
-  /* ---- Big radio cards: "Szybki start" / "Od zera", and the packs
-          (20-form.css:59-67) ---- */
 
   .gh-opts {
     display: grid;
@@ -127,16 +88,14 @@
     content: "";
     position: absolute;
     z-index: -1;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-opt::before {
@@ -175,7 +134,7 @@
     font-stretch: 90%;
   }
 
-  .gh-opt > span:not(.gh-tag) {
+  .gh-opt>span:not(.gh-tag) {
     font-size: 14px;
     line-height: 1.45;
     color: var(--gh-ink-2);
@@ -190,19 +149,17 @@
     color: var(--gh-ink);
   }
 
-  /* ---- Step 4: the starter-pack review (20-form.css:87-95) ---- */
-
   .gh-rgrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px 36px;
   }
 
-  .gh-rz {
+  .gh-section-gap {
     margin-top: 18px;
   }
 
-  .gh-rz > h3 {
+  .gh-section-gap>h3 {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -218,7 +175,7 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-rrow > .fa-solid {
+  .gh-rrow>.fa-solid {
     color: var(--gh-ink-3);
     justify-self: center;
   }
@@ -271,16 +228,10 @@
     outline-offset: 2px;
   }
 
-  /* The number beside a row. Narrow and right-aligned: these are quantities to
-     compare down a column, not prose. */
   .gh-inp--sm {
     --gh-c: 5px;
   }
 
-  /* Wide enough for three digits AND the spinner beside them. The widest value
-     the presets generate is a 250 threshold at 30 classes, and at 68px the
-     spinner was clipping it — the fix for that is room, not taking the arrows
-     away. The right padding is trimmed because the spinner already sits in it. */
   .gh-inp--sm input {
     width: 88px;
     padding: 7px 4px 7px 9px;
@@ -288,8 +239,6 @@
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
-
-  /* ---- The "Od zera" summary, and the currency sentences (20-form.css:96) ---- */
 
   .gh-sumt {
     display: grid;
@@ -314,15 +263,8 @@
     gap: 10px;
   }
 
-  /* A scrap of the app's own table, so the coin is judged against the surface
-     it will actually sit on. `.gh-theme--light` / `--dark` on this element
-     carries the whole token set (tokens.css), which is what lets one page show
-     both themes at once. */
   .gh-cmini {
     display: flex;
-    /* A column, centred: the preview column is narrow and a wrapped row left
-       the four chips ragged. Each one is a separate screen being previewed,
-       so they read as a list rather than a toolbar. */
     flex-direction: column;
     align-items: center;
     gap: 14px;
@@ -347,11 +289,6 @@
     color: var(--gh-ink-2);
   }
 
-  /* "Historia waluty": the balance as the headline (20-form.css:83).
-
-     NOT `.gh-purse` — that name already belongs to the student's gold purse
-     card (story_groups/_student_show.html.haml, overview.css:340). This file
-     loads last, so reusing it would restyle that card. */
   .gh-cmini-purse {
     display: flex;
     align-items: center;
@@ -363,7 +300,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* The price inside the buy dialog (20-form.css:84). */
   .gh-dlgt {
     display: flex;
     align-items: center;
@@ -371,17 +307,12 @@
     font: 800 19px/1 var(--gh-f-ui);
   }
 
-  /* ---- The success screen (20-form.css:100-107) ---- */
-
   .gh-okv {
     max-width: 760px;
     margin: 8px auto 0;
     padding: 30px 34px 32px;
   }
 
-  /* .gh-expl's base rule is `margin: 8px 14px 0` (dashboard.css:113), written
-     for the inside of a card — on this panel it reads as inset and cramped.
-     The mockup spaces both of these itself (30-form.js:92-93). */
   .gh-okv .gh-expl {
     margin: 22px 0 0;
   }
@@ -400,20 +331,8 @@
     background: var(--gh-rank);
     color: var(--gh-on-rank);
     font-size: 30px;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* Numbered by counter, not by <ol>'s own marker: the marker cannot take the
-     octagon. */
   .gh-todo-l {
     list-style: none;
     margin: 10px 0 22px;
@@ -432,6 +351,7 @@
   }
 
   .gh-todo-l li::before {
+    --gh-c: 6px;
     content: counter(gh-todo);
     width: 28px;
     height: 28px;
@@ -440,34 +360,27 @@
     place-items: center;
     background: var(--gh-card-3);
     font: 760 13px var(--gh-f-ui);
-    clip-path: polygon(
-      6px 0,
-      calc(100% - 6px) 0,
-      100% 6px,
-      100% calc(100% - 6px),
-      calc(100% - 6px) 100%,
-      6px 100%,
-      0 calc(100% - 6px),
-      0 6px
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
-  /* Two labels on the submit button, one shown per breakpoint. Which one is a
-     question of available width, so the stylesheet answers it and the 720px
-     number is never repeated in TypeScript. */
   .gh-wbar-lbl--sm {
     display: none;
   }
 
-  /* ---- Narrow (20-form.css:108-116) ---- */
-
   @media (max-width: 720px) {
-    /* Only the step you are on keeps its name, so four of them still fit. */
-    .gh-stp > span:last-child {
+
+    .gh-stp>span:last-child {
       display: none;
     }
 
-    .gh-stp--on > span:last-child {
+    .gh-stp--on>span:last-child {
       display: inline;
     }
 
@@ -488,11 +401,7 @@
       padding: 22px 18px;
     }
 
-    /* The bottom bar has to hold back, a step count and a create button, and
-       "Utwórz grupę z zestawem" alone is wider than a phone. The mockup drops
-       the counter (`.wbar .k`); the back button keeps only its chevron and the
-       submit button swaps to its short label, so the bar stays one row. */
-    .gh-wbar .gh-k {
+    .gh-wbar .gh-kicker {
       display: none;
     }
 
@@ -504,7 +413,6 @@
       display: inline;
     }
 
-    /* Nothing may push the create button off the edge. */
     .gh-wbar .gh-btn {
       min-width: 0;
     }

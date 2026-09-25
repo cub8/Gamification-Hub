@@ -1,20 +1,5 @@
-/* The grading table — "Ocenianie".
-   Lifted from design/mockup-src/css/00-base.css:388-455 (grid) and 456-470
-   (the review dialog's list). The mockup's `@container app` breakpoints are
-   plain media queries here, at the same 720px.
-
-   The cell is the only three-state control in the app: empty, marked now, and
-   awarded. The third is not a control at all — it is rendered without an input
-   because the award behind it cannot be taken back (DECISIONS.md:31). */
-
 @layer components {
 
-  /* ---- Page shell ---- */
-
-  /* The mockup puts .main-grade on <main> for this screen (00-base.css:389).
-     .gh-main is shared chrome, so the page claims it by what it contains
-     instead of by a class the layout would have to know about. The app already
-     requires :has support — `allow_browser versions: :modern` names it. */
   @media (min-width: 721px) {
     .gh-main:has(.gh-gradeview) {
       display: flex;
@@ -23,9 +8,6 @@
     }
   }
 
-  /* Fills the main area rather than growing past it, so the page itself never
-     scrolls: the table scrolls inside .gh-board-scroll and the award bar stays
-     where the teacher left it. */
   .gh-gradeview {
     display: flex;
     flex: 1;
@@ -66,12 +48,6 @@
     gap: 7px;
   }
 
-  /* ---- The table ---- */
-
-  /* The grading form wraps the board and the award bar, so it is a level in
-     the height chain, not a wrapper to look past: without this it is a block
-     box sized by its content, .gh-board's `flex: 1` resolves against nothing,
-     and the bar is pushed below the clipped edge of .gh-main. */
   .gh-gform {
     display: flex;
     flex: 1;
@@ -87,8 +63,6 @@
     padding: 0;
   }
 
-  /* The only scroll container on the page: the sticky student column and the
-     sticky "Razem" column are sticky against THIS, not the viewport. */
   .gh-board-scroll {
     flex: 1;
     min-height: 0;
@@ -130,15 +104,13 @@
     border-right: 1px solid var(--gh-line-2);
   }
 
-  /* Above both the sticky row header and the sticky column header, so the
-     top-left corner does not get painted over while scrolling diagonally. */
   .gh-grid thead .gh-th-stu {
     z-index: 3;
     font: 680 13px/1.2 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-grid tbody tr:hover > * {
+  .gh-grid tbody tr:hover>* {
     background: var(--gh-card-2);
   }
 
@@ -146,14 +118,12 @@
     white-space: nowrap;
   }
 
-  .gh-td-stu > span {
+  .gh-td-stu>span {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     font: 620 14.5px/1.2 var(--gh-f-ui);
   }
-
-  /* ---- Column header ---- */
 
   .gh-thc {
     display: flex;
@@ -164,8 +134,6 @@
     margin: 0 auto;
   }
 
-  /* `cursor: help` because the column's story description is its title —
-     "Najedź na nagłówek, żeby zobaczyć opis fabularny". */
   .gh-thn {
     display: flex;
     align-items: flex-end;
@@ -198,8 +166,6 @@
     font-size: 11px;
   }
 
-  /* ---- "Razem" column ---- */
-
   .gh-grid .gh-th-sum,
   .gh-grid .gh-td-sum {
     position: sticky;
@@ -208,12 +174,6 @@
     min-width: 92px;
     padding-right: 16px;
     text-align: right;
-    /* "4 +3" reads as one figure, so it never breaks in two. The mockup gets
-       this for free by emitting the two spans with no whitespace between them
-       (30-main.js:162); HAML puts each on its own line, which is a break
-       opportunity. Unbreakable content also sets the column's minimum width
-       under automatic table layout, so the column grows to fit rather than
-       being squeezed. */
     white-space: nowrap;
     border-left: 1px solid var(--gh-line-2);
   }
@@ -229,21 +189,15 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* --sum-a/--sum-p, not the mockup's own .s-a/.s-p: student_list.css already
-     owns .gh-s-a for the row-actions cell and makes it `display: flex`, which
-     turned this pair into two stacked blocks. */
   .gh-sum-a {
     display: inline;
   }
 
-  /* What this save would add, beside what the student already has. */
   .gh-sum-p {
     display: inline;
     margin-left: 5px;
     color: var(--gh-spend);
   }
-
-  /* ---- Cells ---- */
 
   .gh-cell {
     --gh-c: 7px;
@@ -265,16 +219,14 @@
     content: "";
     position: absolute;
     z-index: -1;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-cell::before {
@@ -296,7 +248,6 @@
     font-size: 15px;
   }
 
-  /* The checkbox is the control; the label is the cell. */
   .gh-cell input {
     position: absolute;
     width: 1px;
@@ -310,9 +261,6 @@
     outline-offset: 2px;
   }
 
-  /* "Marked now" is driven by :checked, not by a class, so a cell the teacher
-     ticked looks marked whether or not the controller ever ran. The class is
-     for the legend swatch, which has no input behind it. */
   .gh-cell--pending,
   .gh-cell:has(input:checked) {
     color: var(--gh-on-item);
@@ -330,14 +278,13 @@
     background: var(--gh-item);
   }
 
-  /* The tick belongs to the marked and awarded states only. */
-  .gh-cell > i {
+  .gh-cell>i {
     visibility: hidden;
   }
 
-  .gh-cell--pending > i,
-  .gh-cell--awarded > i,
-  .gh-cell:has(input:checked) > i {
+  .gh-cell--pending>i,
+  .gh-cell--awarded>i,
+  .gh-cell:has(input:checked)>i {
     visibility: visible;
   }
 
@@ -360,8 +307,6 @@
     background: var(--gh-rank);
   }
 
-  /* The padlock corner, so "awarded" reads as locked and not merely as a
-     different colour of tick. */
   .gh-cell .gh-lk {
     position: absolute;
     top: 3px;
@@ -370,7 +315,6 @@
     opacity: 0.8;
   }
 
-  /* Legend swatches and the template editor's preview grid. */
   .gh-cell--sm {
     width: 28px;
     height: 22px;
@@ -381,7 +325,6 @@
     font-size: 11px;
   }
 
-  /* Played once, staggered by --gh-d, over the cells the last save granted. */
   .gh-cell--stamp {
     animation: gh-stamp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
     animation-delay: var(--gh-d, 0ms);
@@ -408,8 +351,6 @@
       animation: none;
     }
   }
-
-  /* ---- Award bar ---- */
 
   .gh-abar {
     display: flex;
@@ -439,8 +380,6 @@
     flex: 0 0 auto;
     gap: 10px;
   }
-
-  /* ---- Review dialog ---- */
 
   .gh-dialog--review .gh-dialog-body {
     width: min(700px, 100%);
@@ -491,16 +430,10 @@
     color: var(--gh-spend);
   }
 
-  /* ---- Phone ---- */
-
-  /* The mockup refuses to render the table below 720px rather than shrinking
-     it: eleven columns and a dozen students do not survive a phone, and a
-     misread cell here grants currency that cannot be taken back. */
   .gh-grade-mobile {
     display: none;
   }
 
-  /* Not .gh-gm — groups.css already owns that for the empty-state panel. */
   .gh-gmob {
     padding: 24px 20px;
   }

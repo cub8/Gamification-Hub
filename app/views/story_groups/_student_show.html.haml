@@ -17,12 +17,12 @@
           %h1.gh-h1= story_group.name
           - if story_group.description.present?
             %p.gh-lore-t= story_group.description
-          %p.gh-lore-a Prowadzi #{story_group.owner.full_name}
+          %p.gh-small.gh-lore-a Prowadzi #{story_group.owner.full_name}
 
   %section.gh-card.gh-card--gold.gh-purse{ 'aria-label': "Twoje #{story_group.currency_name}" }
     .gh-card-f
       .gh-card-i
-        %p.gh-k Do wydania
+        %p.gh-kicker Do wydania
         .gh-big
           = render 'layouts/currency_token', story_group: story_group, size: 44
           %span.gh-num= overview.balance
@@ -47,7 +47,7 @@
     .gh-card-f
       .gh-card-i
         .gh-rk-top
-          %p.gh-k Twoja ranga
+          %p.gh-kicker Twoja ranga
           %h2.gh-rank-name= overview.rank&.name || 'Brak rangi'
 
         - if overview.rank
@@ -63,12 +63,12 @@
             .gh-rank-pt
               %span #{overview.total} z #{overview.next_rank.required_currency_value}
               %span= overview.next_rank.name
-            .gh-bar{ role:              'progressbar',
+            .gh-bar.gh-oct{ role:              'progressbar',
                      'aria-valuemin': 0,
                      'aria-valuemax': span,
                      'aria-valuenow': progress,
                      'aria-label':    'Postęp do następnej rangi', }
-              %i{ style: "--gh-p: #{gh_percent(progress, span)}%" }
+              %i.gh-oct{ style: "--gh-p: #{gh_percent(progress, span)}%" }
             %p.gh-small= overview_next_rank_line(overview.missing_to_next_rank, overview.next_rank)
         - elsif overview.rank
           %p.gh-small #{overview.total} zebranych. To najwyższa ranga w tej grupie.
@@ -86,7 +86,7 @@
     %section.gh-zone.gh-zone--badges
       %h2.gh-zone-l
         %span Odznaki
-        %span.gh-zone-n #{shelf.earned_count} z #{shelf.size}
+        %span.gh-zone-n.gh-oct #{shelf.earned_count} z #{shelf.size}
       .gh-cards.gh-cards--b
         - shelf.slots.each do |slot|
           = render 'badges/flip_card', badge:       slot.badge,
@@ -97,7 +97,7 @@
   %section.gh-zone.gh-zone--hand
     %h2.gh-zone-l
       %span Twoje przedmioty
-      %span.gh-zone-n= overview.items_count
+      %span.gh-zone-n.gh-oct= overview.items_count
     .gh-hand
       - count = overview.items.size
       - overview.items.each_with_index do |purchase, index|

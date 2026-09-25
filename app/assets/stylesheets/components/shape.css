@@ -1,28 +1,13 @@
-/* --------------------------------------------------------------------------
-   Components.
-
-   These are the primitives that do NOT express well as utilities: the octagon
-   clip-path, the physical button edge, and the framed surfaces. Everything
-   else in a view should be Tailwind utilities.
-
-   Rule: never use `border` or `box-shadow` on a clipped surface — they break
-   at the cut corners. Use a frame layer plus an inset background instead.
-   -------------------------------------------------------------------------- */
-
 @layer components {
-
-  /* The one shape. `--gh-c` is the corner size; every surface sets its own. */
   .gh-oct {
     --gh-c: 10px;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 }

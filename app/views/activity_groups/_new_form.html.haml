@@ -19,7 +19,7 @@
 = form_with url: story_group_activity_groups_path(@story_group), method: :post, data: form_data do |f|
   = hidden_field_tag 'activity_group[activity_group_template_id]', template.id
 
-  .gh-seg3{ role: 'radiogroup', 'aria-label': 'Ile arkuszy' }
+  .gh-seg3.gh-oct{ role: 'radiogroup', 'aria-label': 'Ile arkuszy' }
     - [%w[one Jeden\ arkusz], %w[many Kilka\ naraz]].each do |value, label|
       %label.gh-seg3-o
         = radio_button_tag 'activity_group[mode]', value, value == 'one',
@@ -36,11 +36,11 @@
   .gh-fld{ data: { sheet_create_target: 'manyPane' } }
     %p#gh-sheet-count-label.gh-lbl Ile arkuszy utworzyć
     .gh-nstep{ role: 'group', 'aria-labelledby': 'gh-sheet-count-label' }
-      %button.gh-nstep-b{ type: 'button', 'aria-label': 'Mniej',
+      %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Mniej',
                           data: { sheet_create_target: 'down', action: 'sheet-create#down' } }
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
       %output{ 'aria-live': 'polite', data: { sheet_create_target: 'output' } }= count
-      %button.gh-nstep-b{ type: 'button', 'aria-label': 'Więcej',
+      %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Więcej',
                           data: { sheet_create_target: 'up', action: 'sheet-create#up' } }
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
     = hidden_field_tag :count, count, data: { sheet_create_target: 'count' }

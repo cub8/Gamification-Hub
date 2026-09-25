@@ -7,9 +7,9 @@
 
 .gh-trow
   %span.gh-s-n
-    %span.gh-av.gh-av--sm{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+    %span.gh-av.gh-av--sm.gh-oct{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
       = gh_initials(name)
-    %span.gh-tn
+    %span.gh-name-wrap
       %b= name
       %small= person.email
 
@@ -24,7 +24,7 @@
 
   %span
     %span.gh-lbl-m Dodano
-    %span.gh-dt= teacher_added_on(row.added_at)
+    %span.gh-small= teacher_added_on(row.added_at)
 
   %span.gh-trow-a
     -# Never for the owner: ownership is the group's own column, not a

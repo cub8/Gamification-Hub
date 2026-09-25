@@ -1,33 +1,6 @@
-/* --------------------------------------------------------------------------
-   Application chrome: header, desktop sidebar, content well, mobile tab bar.
-
-   Ported from design/mockup-src/css/00-base.css (208-276 for the shell,
-   531-616 for the 720px swap) and js-expanded/10-core.js for the structure.
-
-   Both variants are here: the out-of-group nav plus group list (the mockup's
-   `chrome: 'app'`), and the in-group deck, its section nav and the group
-   switcher (`chrome: 'group'`). The student balance chip `.gh-bal`
-   (00-base.css:217) is the one piece still outstanding.
-
-   One predicate decides between them — whether the page has a
-   GroupChrome. The mockup has two that disagree, `inGroup()`
-   (10-core.js:153) and the `.in-group` body class (:337), which is why its
-   phone header can end up with the logo, the switcher and the spacer all
-   fighting over 58px.
-
-   The shell is a fixed-height flex column with internal scrolling, the same
-   model the Bootstrap layout already uses (`body.vh-100.overflow-hidden` +
-   `#app-content.overflow-auto`). That is what lets the tab bar stay pinned on
-   phones without position:fixed.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
-  /* ---- Shell ---- */
-
   .gh-shell {
-    /* dvh so the mobile URL bar cannot push the tab bar off-screen; the vh
-       line above it is the fallback for browsers without dvh. */
     height: 100vh;
     height: 100dvh;
     display: flex;
@@ -41,20 +14,13 @@
     min-height: 0;
   }
 
-  /* The content well. Position:relative + overflow:hidden is what lets the
-     table texture and the scrolling content both fill it exactly. */
-  .gh-tw {
+  .gh-well {
     flex: 1;
     position: relative;
     min-width: 0;
     overflow: hidden;
   }
 
-  /* The mockup caps its content at 1320px (00-base.css:281, `.page`). That cap
-     lives in the PADDING here rather than a max-width, because this element is
-     the scroll container itself — a max-width on it would stop it filling the
-     well and drag the scrollbar in from the edge with it. The `max()` keeps the
-     ordinary 30px gutter until the well is wider than the cap. */
   .gh-main {
     position: absolute;
     inset: 0;
@@ -63,8 +29,6 @@
     padding-inline: max(30px, (100% - 1320px) / 2);
     scrollbar-gutter: stable;
   }
-
-  /* ---- Header ---- */
 
   .gh-hd {
     flex: 0 0 auto;
@@ -101,9 +65,6 @@
     flex: 1;
   }
 
-  /* The student's purse (00-base.css:217-222). The background is a ::before
-     layer, not a background on the element: it is a clipped surface, and every
-     octagon in this design is painted that way so the cut corners stay cut. */
   .gh-bal {
     --gh-c: 9px;
     position: relative;
@@ -127,16 +88,14 @@
     z-index: -1;
     inset: 0;
     background: var(--gh-card-2);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-bal:hover::before {
@@ -174,18 +133,12 @@
     color: var(--gh-ink);
   }
 
-  /* Container for the unread badge.
-     .gh-iconbtn is `display: grid; place-items: center` with a single cell, so
-     a second IN-FLOW child creates a second row and shoves the glyph upward —
-     the bell looked off-centre for exactly this reason. Taking the slot out of
-     flow restores one centred cell, and the badge positions against it. */
   .gh-dot-slot {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
 
-  /* Unread badge on the bell. */
   .gh-count {
     --gh-c: 5px;
     position: absolute;
@@ -199,22 +152,8 @@
     background: var(--gh-item);
     color: var(--gh-on-item);
     font: 780 11px/1 var(--gh-f-ui);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* Both theme glyphs ship and CSS picks one. This cannot be a single
-     server-rendered icon: with no cookie set, `gh_theme` is nil and the server
-     genuinely does not know which way prefers-color-scheme will resolve. The
-     three selector states mirror tokens.css exactly. */
   .gh-ic-sun {
     display: none;
   }
@@ -237,8 +176,6 @@
     display: none;
   }
 
-  /* Mobile-only: below 720px the sidebar and its deck are gone, and this is
-     the only thing naming the group you are in (00-base.css:228 / :537). */
   .gh-gsw {
     display: none;
     flex: 1;
@@ -273,8 +210,6 @@
     color: var(--gh-ink-2);
   }
 
-  /* ---- Avatar ---- */
-
   .gh-av {
     --gh-c: 8px;
     --gh-h: var(--gh-item);
@@ -286,16 +221,6 @@
     font: 760 14px/1 var(--gh-f-ui);
     color: var(--gh-ink);
     background: color-mix(in srgb, var(--gh-h) 34%, var(--gh-card));
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-av--sm {
@@ -305,11 +230,25 @@
     font-size: 11.5px;
   }
 
-  .gh-av[data-gh-h="0"] { --gh-h: var(--gh-item); }
-  .gh-av[data-gh-h="1"] { --gh-h: var(--gh-badge); }
-  .gh-av[data-gh-h="2"] { --gh-h: var(--gh-rank); }
-  .gh-av[data-gh-h="3"] { --gh-h: var(--gh-focus); }
-  .gh-av[data-gh-h="4"] { --gh-h: var(--gh-heart); }
+  .gh-av[data-gh-h="0"] {
+    --gh-h: var(--gh-item);
+  }
+
+  .gh-av[data-gh-h="1"] {
+    --gh-h: var(--gh-badge);
+  }
+
+  .gh-av[data-gh-h="2"] {
+    --gh-h: var(--gh-rank);
+  }
+
+  .gh-av[data-gh-h="3"] {
+    --gh-h: var(--gh-focus);
+  }
+
+  .gh-av[data-gh-h="4"] {
+    --gh-h: var(--gh-heart);
+  }
 
   .gh-avbtn {
     border: 0;
@@ -317,8 +256,6 @@
     padding: 2px;
     cursor: pointer;
   }
-
-  /* ---- Group thumbnail ---- */
 
   .gh-gthumb {
     --gh-c: 6px;
@@ -331,16 +268,6 @@
     background-color: var(--gh-card-3);
     color: var(--gh-ink-2);
     font: 720 10px/1 var(--gh-f-ui);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-gthumb img {
@@ -355,8 +282,6 @@
     height: 46px;
     font-size: 15px;
   }
-
-  /* ---- Sidebar ---- */
 
   .gh-sb {
     width: 276px;
@@ -397,8 +322,6 @@
     color: var(--gh-ink);
   }
 
-  /* The active marker is an inset shadow, not a border: it must not shift the
-     text, and the sidebar is not a clipped surface so box-shadow is safe here. */
   .gh-nl--on {
     background: var(--gh-card-2);
     color: var(--gh-ink);
@@ -412,12 +335,6 @@
     padding: 18px 22px 8px;
   }
 
-  /* ---- The in-group deck (00-base.css:245-255) ----
-
-     A framed card: .gh-deck-f paints the 2px frame and .gh-deck-i the surface
-     inside it. Two layers rather than a border, because a border follows the
-     element's box and not its clip-path, so on a cut corner it would cross the
-     cut. Same technique as .gh-card-f / .gh-card-i. */
   .gh-deck {
     margin: 14px 12px 12px;
     filter: drop-shadow(0 3px 0 var(--gh-line-2));
@@ -427,32 +344,12 @@
     --gh-c: 12px;
     padding: 2px;
     background: var(--gh-line-2);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-deck-i {
     --gh-c: 11px;
     background: var(--gh-card);
     padding-bottom: 8px;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-deck-art {
@@ -462,16 +359,6 @@
     aspect-ratio: 2 / 1;
     overflow: hidden;
     background-color: var(--gh-card-3);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-deck-art img {
@@ -480,7 +367,6 @@
     object-fit: cover;
   }
 
-  /* No art: the monogram fills the banner, as on the groups index. */
   .gh-deck-art--mono {
     display: grid;
     place-items: center;
@@ -587,19 +473,16 @@
     color: var(--gh-ink);
   }
 
-  /* Collapsed: icons only. Driven by a class the sidebar controller toggles,
-     never by a breakpoint — the mockup has no width-driven collapse and
-     inventing one would fight the user's explicit choice. */
   .gh-sb--collapsed {
     width: 82px;
   }
 
-  .gh-sb--collapsed .gh-nl > span,
-  .gh-sb--collapsed .gh-sb-col > span,
+  .gh-sb--collapsed .gh-nl>span,
+  .gh-sb--collapsed .gh-sb-col>span,
   .gh-sb--collapsed .gh-sb-sec,
   .gh-sb--collapsed .gh-gl-t,
   .gh-sb--collapsed .gh-deck-head,
-  .gh-sb--collapsed .gh-deck-sw > span {
+  .gh-sb--collapsed .gh-deck-sw>span {
     display: none;
   }
 
@@ -607,15 +490,11 @@
     margin: 12px 9px;
   }
 
-  /* Square, since there is no room for a 2:1 banner at 82px. */
   .gh-sb--collapsed .gh-deck-art {
     aspect-ratio: 1;
     margin: 6px;
   }
 
-  /* The mockup hides .deck-head wholesale here, and its header switcher is
-     mobile-only — so a collapsed desktop sidebar inside a group has no way to
-     change group at all. Keep the button, as an icon. */
   .gh-sb--collapsed .gh-deck-sw {
     justify-content: center;
     margin: 6px 0 8px;
@@ -628,8 +507,6 @@
     justify-content: center;
     padding: 10px 0;
   }
-
-  /* ---- Mobile tab bar ---- */
 
   .gh-tabbar {
     display: none;
@@ -650,9 +527,6 @@
       display: none;
     }
 
-    /* The number survives; the label under it does not. At 58px of header
-       there is no room for two lines, and the coin already says what it is
-       (00-base.css:541-544). */
     .gh-bal {
       padding: 4px 9px 4px 4px;
     }
@@ -669,8 +543,6 @@
       display: none;
     }
 
-    /* In a group the switcher takes the logo's place and the spacer's job
-       (00-base.css:535-538). */
     .gh-gsw {
       display: flex;
     }

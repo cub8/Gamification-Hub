@@ -25,10 +25,10 @@
     = hidden_field_tag 'setup[classes]', preset.classes, id: nil
 
     .gh-rgrid
-      %section.gh-rz
+      %section.gh-section-gap
         %h3.gh-h3
           Rangi
-          %span.gh-zone-n= preset.ranks.size
+          %span.gh-zone-n.gh-oct= preset.ranks.size
         - preset.ranks.each do |rank|
           = render layout: 'preset_row', locals: { zone: 'ranks', index: rank.index, icon: 'fa-ranking-star',
             name: rank.name,
@@ -43,19 +43,19 @@
                   = number_field_tag "setup[ranks][#{rank.index}][value]", rank.threshold,
                     min: 0, step: 1, id: nil, 'aria-label': "#{rank.name}: próg"
 
-      %section.gh-rz
+      %section.gh-section-gap
         %h3.gh-h3
           Odznaki
-          %span.gh-zone-n= preset.badges.size
+          %span.gh-zone-n.gh-oct= preset.badges.size
         - preset.badges.each do |badge|
           = render layout: 'preset_row', locals: { zone: 'badges', index: badge.index, icon: 'fa-award',
             name: badge.name, note: badge.didactic_description } do
             %span.gh-rv2= "−#{badge.discount}% w sklepie"
 
-      %section.gh-rz
+      %section.gh-section-gap
         %h3.gh-h3
           Przedmioty w sklepie
-          %span.gh-zone-n= preset.items.size
+          %span.gh-zone-n.gh-oct= preset.items.size
         - preset.items.each do |item|
           = render layout: 'preset_row', locals: { zone: 'items', index: item.index, icon: 'fa-bag-shopping',
             name: item.name, note: item.didactic_description } do
@@ -66,15 +66,15 @@
               -# The group's own coin, as the mockup shows it (30-form.js:79).
               -# Filled by group_wizard_controller from the checked picker tile
               -# once this frame loads — the same clone the previews use.
-              %span.gh-tok{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
-                %span{ data: { group_wizard_target: 'markBox' } }
+              %span.gh-tok.gh-oct{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
+                %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
                   %span{ data: { group_wizard_target: 'markLetter' } }
 
-      %section.gh-rz
+      %section.gh-section-gap
         %h3.gh-h3
           Kategorie zajęć
-          %small.gh-k= "(szablon „#{StarterPack::TEMPLATE_NAME}”)"
-          %span.gh-zone-n= preset.categories.size
+          %small.gh-kicker= "(szablon „#{StarterPack::TEMPLATE_NAME}”)"
+          %span.gh-zone-n.gh-oct= preset.categories.size
         - preset.categories.each do |category|
           = render layout: 'preset_row', locals: { zone: 'cats', index: category.index, icon: 'fa-table-cells',
             name: category.didactic_description, note: nil } do
@@ -90,6 +90,6 @@
               -# The group's own coin, as the mockup shows it (30-form.js:79).
               -# Filled by group_wizard_controller from the checked picker tile
               -# once this frame loads — the same clone the previews use.
-              %span.gh-tok{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
-                %span{ data: { group_wizard_target: 'markBox' } }
+              %span.gh-tok.gh-oct{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
+                %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
                   %span{ data: { group_wizard_target: 'markLetter' } }

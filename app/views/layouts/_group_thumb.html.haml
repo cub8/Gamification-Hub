@@ -2,5 +2,5 @@
 -# so a group without art still has a stable, recognisable mark.
 - size = local_assigns[:size]
 
-%span{ class: "gh-gthumb #{'gh-gthumb--lg' if size == :lg}", 'aria-hidden': 'true' }
+%span{ class: "gh-gthumb gh-oct #{'gh-gthumb--lg' if size == :lg}", 'aria-hidden': 'true' }
   = gh_group_cover(story_group) || gh_initials(story_group.name)

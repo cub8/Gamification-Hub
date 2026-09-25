@@ -1,36 +1,6 @@
-/* --------------------------------------------------------------------------
-   Toasts: the app's confirmations.
-
-   Ported from design/mockup-src/css/00-base.css:511-514 and its 720px block at
-   :614-615. The mockup positions the container absolutely inside its device
-   frame; here it is fixed to the viewport, since there is no frame to sit in.
-
-   Errors do NOT come through here — they stay as the inline .gh-plate at the
-   top of the content, where they keep still until dismissed. The mockup toasts
-   only confirmations, and a validation failure that fades after three seconds
-   is a failure the reader misses.
-   -------------------------------------------------------------------------- */
-
 @layer components {
-
-  /* The container is always in the DOM and always empty until something is
-     said, so it needs no show/hide of its own.
-
-     `popover` is what lifts it into the TOP LAYER, above an open modal
-     <dialog> — without it a toast raised from inside a dialog (the copy button
-     on the "Pokaż" screen) would be painted behind that dialog's backdrop.
-     Where popover is unsupported the attribute is inert, these rules still
-     apply, and the container just sits there empty. Hence no fallback branch:
-     the unsupported path is the supported one minus the top layer.
-
-     Written without [popover] in the selector so both paths get it. */
   .gh-toasts {
     position: fixed;
-    /* MUST come before the two offsets below. The UA stylesheet gives every
-       [popover] `inset: 0`, and a fixed box with both top and bottom set
-       resolves its auto height to fill the viewport — which would leave the
-       toasts pinned to the TOP of a full-height container instead of rising
-       from the bottom. */
     inset: auto;
     left: 50%;
     bottom: 26px;
@@ -40,7 +10,6 @@
     flex-direction: column;
     align-items: center;
     gap: 8px;
-    /* Never swallows a click: it covers the middle of the screen. */
     pointer-events: none;
     margin: 0;
     padding: 0;
@@ -63,24 +32,20 @@
     animation: gh-rise 0.2s ease-out;
   }
 
-  /* A ::before layer rather than a background, like every other clipped
-     surface in this bundle — see shape.css. */
   .gh-toast::before {
     content: "";
     position: absolute;
     z-index: -1;
     inset: 0;
     background: var(--gh-ink);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-toast i {
@@ -102,7 +67,7 @@
   }
 
   @media (max-width: 720px) {
-    /* Clear of the bottom tab bar, which owns the bottom edge on a phone. */
+
     .gh-toasts {
       bottom: 80px;
       width: calc(100% - 24px);

@@ -60,16 +60,16 @@
                  image_crop_width_value: 1024, } }
   %p.gh-lbl= copy[:label]
 
-  .gh-pz-grid{ class: "gh-pz-grid--#{kind}", role: 'radiogroup', 'aria-label': copy[:presets],
+  .gh-preset-tile-grid{ class: "gh-preset-tile-grid--#{kind}", role: 'radiogroup', 'aria-label': copy[:presets],
                'aria-invalid': (art_error ? 'true' : nil),
                'aria-describedby': (art_error ? error_id : nil) }
     - presets.each do |key|
-      %label.gh-pz{ class: "gh-pz--#{kind}" }
+      %label.gh-preset-tile{ class: "gh-preset-tile--#{kind}" }
         = form.radio_button glyph_attribute, key, class: 'sr-only',
           id: field_id.call(key),
           'aria-label': "#{copy[:label]}: #{registry.label_for(key)}",
           data: { action: ['image-crop#pickPreset', refresh].compact.join(' ') }
-        %i
+        %i.gh-oct
           - case tile
           - when :art
             = gh_group_art(key)
@@ -82,13 +82,13 @@
     -# is something to show — image_crop_controller reveals and selects it the
     -# moment a file is chosen, so the picker never disagrees with what will be
     -# saved. An empty key is how the record says "the upload is the art".
-    %label.gh-pz.gh-pz--own{ hidden: !attachment.attached? }
+    %label.gh-preset-tile.gh-preset-tile--own{ hidden: !attachment.attached? }
       = form.radio_button glyph_attribute, '', class: 'sr-only',
         id: field_id.call('own'), 'aria-label': copy[:own],
         checked: attachment.attached? && record.public_send(glyph_attribute).blank?,
         data: { image_crop_target: 'ownRadio',
                 action: ['image-crop#pickOwn', refresh].compact.join(' ') }
-      %i
+      %i.gh-oct
         -# `src` is omitted, not blank, when there is nothing yet: an empty src
         -# resolves against the page URL, so the browser would re-request this
         -# very page for an image it cannot even see.

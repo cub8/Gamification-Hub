@@ -23,13 +23,13 @@
     -# shape, and it keeps the value inside 0..∞ without a spinner nobody on a
     -# phone can hit. The field is what posts; the <output> is what is read.
     .gh-nstep{ role: 'group', 'aria-labelledby': 'gh-lives-label' }
-      %button.gh-nstep-b{ type: 'button', 'aria-label': 'Odbierz życie',
+      %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Odbierz życie',
                           disabled: lives.zero?,
                           data: { lives_stepper_target: 'down',
                                   action: 'lives-stepper#down' } }
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
       %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= lives
-      %button.gh-nstep-b{ type: 'button', 'aria-label': 'Dodaj życie',
+      %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Dodaj życie',
                           data: { lives_stepper_target: 'up',
                                   action: 'lives-stepper#up' } }
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }

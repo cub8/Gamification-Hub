@@ -5,6 +5,6 @@
   %div
     -# Spelled out character by character so a screen reader does not try to
     -# pronounce the code as a word.
-    .gh-code-big{ 'aria-label': invite_code_aria_label(invite) }= invite.code
+    .gh-code-big.gh-oct{ 'aria-label': invite_code_aria_label(invite) }= invite.code
     %p.gh-small= invite_stat_sentence(invite)
     = render 'copy_button', invite: invite

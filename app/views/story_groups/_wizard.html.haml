@@ -45,7 +45,7 @@
                         data: { group_wizard_target: 'stepTab',
                                 group_wizard_index_param: index,
                                 action: 'group-wizard#goto' } }
-          %span.gh-stp-n
+          %span.gh-stp-n.gh-oct
             %span{ data: { group_wizard_target: 'stepNum' } }= index + 1
             %i.fa-solid.fa-check{ 'aria-hidden': 'true', hidden: true,
                                   data: { group_wizard_target: 'stepTick' } }
@@ -154,14 +154,14 @@
             .gh-fld{ data: { controller: 'lives-stepper', lives_stepper_max_value: 10 } }
               %p#gh-wiz-lives-label.gh-lbl Życia na start
               .gh-nstep{ role: 'group', 'aria-labelledby': 'gh-wiz-lives-label' }
-                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Mniej żyć',
+                %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Mniej żyć',
                                     disabled: story_group.default_lives.to_i.zero?,
                                     data: { lives_stepper_target: 'down',
                                             action: 'lives-stepper#down' } }
                   %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
                 %output{ 'aria-live': 'polite',
                          data: { lives_stepper_target: 'output' } }= story_group.default_lives
-                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Więcej żyć',
+                %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Więcej żyć',
                                     disabled: story_group.default_lives.to_i >= 10,
                                     data: { lives_stepper_target: 'up',
                                             action: 'lives-stepper#up' } }
@@ -184,7 +184,7 @@
             .gh-swrow
               -# f.check_box writes its own hidden companion, which is what
               -# makes "off" arrive at all: an unchecked box posts nothing.
-              = f.check_box :ranking_enabled, class: 'gh-sw', role: 'switch',
+              = f.check_box :ranking_enabled, class: 'gh-sw gh-oct', role: 'switch',
                 'aria-labelledby': 'gh-wiz-ranking-label',
                 data: { group_wizard_target: 'ranking',
                         action: 'change->group-wizard#refresh' }
@@ -266,13 +266,13 @@
             -# starter pack, which lives-stepper has no way to announce.
             .gh-fld
               .gh-nstep{ role: 'group', 'aria-label': 'Liczba zajęć' }
-                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Mniej zajęć',
+                %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Mniej zajęć',
                                     data: { group_wizard_target: 'classesDown',
                                             action: 'group-wizard#classesDown' } }
                   %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
                 %output{ 'aria-live': 'polite',
                          data: { group_wizard_target: 'classesOutput' } }= packs::DEFAULT_CLASSES
-                %button.gh-nstep-b{ type: 'button', 'aria-label': 'Więcej zajęć',
+                %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Więcej zajęć',
                                     data: { group_wizard_target: 'classesUp',
                                             action: 'group-wizard#classesUp' } }
                   %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
@@ -357,7 +357,7 @@
         %i.fa-solid.fa-chevron-left{ 'aria-hidden': 'true' }
         %span.gh-wbar-lbl Wstecz
       %span.gh-wbar-sp
-      %span.gh-k{ data: { group_wizard_target: 'counter' } } Krok 1 z 4
+      %span.gh-kicker{ data: { group_wizard_target: 'counter' } } Krok 1 z 4
       -# Two labels, one shown per breakpoint: the long one does not fit beside
       -# the chevron on a phone, and the 720px rule lives in the stylesheet.
       %button.gh-btn{ type: 'button', data: { group_wizard_target: 'next',

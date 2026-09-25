@@ -4,6 +4,6 @@
 -# the token still reads as a coin rather than collapsing to an empty square.
 - size = local_assigns[:size] || 24
 
-%span.gh-tok{ style: "--gh-s: #{size}px", 'aria-hidden': 'true' }
-  %span
+%span.gh-tok.gh-oct{ style: "--gh-s: #{size}px", 'aria-hidden': 'true' }
+  %span.gh-oct
     = gh_currency_mark(story_group) || story_group.currency_name.to_s.first&.upcase

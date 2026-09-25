@@ -1,23 +1,5 @@
-/* --------------------------------------------------------------------------
-   Sklep — the student's shop.
-
-   Ported from design/mockup-src/css/00-base.css: the zones on the table
-   (:286-291), the purse in the page head (:293-296), the buy dialog
-   (:471-478) and the affordable card's lift (:158).
-
-   THE ZONE IS THE SCREEN. The mockup does not sort a shop by price and leave
-   the student to work out what they can have — it fences the items into three
-   dashed frames and labels them. Everything else here is the card, which is
-   app/views/items/_card.html.haml and styled in items.css; this file only
-   builds the table it is laid out on.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
-  /* ---- zones ---------------------------------------------------------- */
-
-  /* A dashed frame is deliberately not a panel: a zone is a region of the
-     table, not an object sitting on it. */
   .gh-zone {
     position: relative;
     margin-top: 40px;
@@ -25,9 +7,6 @@
     border: 2px dashed var(--gh-zone);
   }
 
-  /* The label straddles the frame's top edge, so its own background has to
-     punch a hole in the dash. --gh-chrome, not --gh-card: the table shows
-     through, not a card. */
   .gh-zone-l {
     --gh-c: 8px;
     position: absolute;
@@ -49,16 +28,14 @@
     z-index: -1;
     inset: 0;
     background: var(--gh-chrome);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-zone-n {
@@ -72,28 +49,12 @@
     color: var(--gh-card);
     font: 760 13px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* .gh-cards (badges.css) already matches the mockup's grid exactly and is
-     reused whole; inside a zone the frame supplies the space its margin was
-     for. */
   .gh-zone .gh-cards {
     margin-top: 0;
   }
 
-  /* Held back when the teacher's grid shipped (items.css), because there the
-     card is not the target — the pen in its foot is, and a lift would promise a
-     click that does nothing. Here the card really is an offer you can take. */
   .gh-card.gh-card--afford {
     transition: transform 0.15s ease;
   }
@@ -101,8 +62,6 @@
   .gh-card.gh-card--afford:hover {
     transform: translateY(-3px);
   }
-
-  /* ---- the purse in the page head ------------------------------------- */
 
   .gh-purse-mini {
     flex: 0 0 auto;
@@ -130,8 +89,6 @@
     background: var(--gh-line);
   }
 
-  /* ---- the buy dialog -------------------------------------------------- */
-
   .gh-buy {
     display: flex;
     align-items: center;
@@ -139,8 +96,6 @@
     margin-top: 16px;
   }
 
-  /* The thumbnail is the notification-row mini card at dialog size: this is
-     the object you are about to own, so it gets more than 34px. */
   .gh-buy .gh-mc {
     flex: 0 0 auto;
     width: 92px;
@@ -186,21 +141,13 @@
     color: var(--gh-ink-2);
   }
 
-  /* ---- narrow ---------------------------------------------------------- */
-
   @media (max-width: 720px) {
-    /* ONE card per row, not the mockup's two (00-base.css:553). Two-up on a
-       phone the cards are too dense to read, and a full-width card keeps its
-       rules, its flavour and its buy button — so the mockup's mobile collapse
-       to a mini-foot is not ported either, and buying stays one tap. */
+
     .gh-zone .gh-cards {
       grid-template-columns: minmax(0, 1fr);
       gap: 16px;
     }
 
-    /* A full-width card would give the artwork a 16:10 well nearly as tall as
-       the phone, burying the rules and the button under it. The well keeps its
-       ratio until it hits this, then stops growing. */
     .gh-zone .gh-art {
       max-height: 190px;
     }
@@ -215,8 +162,6 @@
       font-size: 15px;
     }
 
-    /* .gh-phead stacks below 720px (dashboard.css), so the purse stops being a
-       column beside the heading and becomes a row under it. */
     .gh-purse-mini {
       justify-content: space-between;
       padding-top: 12px;

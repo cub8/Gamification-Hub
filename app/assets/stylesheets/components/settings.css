@@ -1,16 +1,4 @@
 @layer components {
-
-  /* ---- Group settings and per-group settings ----
-
-     Teacher "Ustawienia grupy" (27-isg.css) and student "Ustawienia w grupie"
-     (29-gh.css). The mockup keeps them in two files as .setp and .setp2, which
-     are the same rule written twice; one class here.
-
-     Nearly everything else these screens need is already ported: .gh-panel,
-     .gh-phead, .gh-fsec, .gh-fld, .gh-inp, .gh-pz-grid, .gh-nstep, .gh-drop,
-     .gh-wbar, .gh-crumbs and the dialog system. .gh-danger lives in
-     surfaces.css, because both screens use it. */
-
   .gh-setp {
     margin-top: 22px;
     padding: 24px 28px;
@@ -21,19 +9,12 @@
     padding: 22px 28px;
   }
 
-  /* The first section in a panel has the panel's own padding above it, so it
-     must not also carry a divider and a top margin (the mockup does this with
-     an inline style, 30-isg.js:50). */
   .gh-setp .gh-fsec--first {
     margin: 0;
     padding: 0;
     border: 0;
   }
 
-  /* ---- "Co widzi prowadzący" (29-gh.css:23) ----
-
-     A label/value list, not a table: three rows, no header, and it has to stack
-     legibly on a phone. */
   .gh-seeing {
     margin: 10px 0 0;
     padding: 0;
@@ -58,10 +39,6 @@
     word-break: break-word;
   }
 
-  /* ---- The nickname row (30-gh.js:47) ----
-
-     One field and its own save button side by side, because this section saves
-     by itself. Wraps to two rows when there is no width for both. */
   .gh-namerow {
     display: flex;
     flex-wrap: wrap;
@@ -74,47 +51,34 @@
     min-width: 220px;
   }
 
-  /* ---- Preset tiles for the group's two images ----
-
-     The entity tints in form.css do not apply: a group cover carries its own
-     palette and a currency mark sits on a fixed cream coin face, so neither
-     takes a --gh-frame from an entity colour. Both frame in --gh-rank, the
-     currency role (DECISIONS.md:22), which is also what .gh-tok's rim is. */
-  .gh-pz--group,
-  .gh-pz--currency {
+  .gh-preset-tile--group,
+  .gh-preset-tile--currency {
     --gh-frame: var(--gh-rank);
   }
 
-  /* `cover`, not the `contain` form.css gives a glyph tile: these are 160x90
-     scenes cut to the card by their own `slice`, and the tile is a preview of
-     that crop. */
-  .gh-pz--group img {
+  .gh-preset-tile--group img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  /* Square tiles on the cream plate (20-form.css:39-41). Sized from the GRID so
-     the upload tile matches without needing the modifier class — it only ever
-     carries .gh-pz--own. */
-  .gh-pz-grid--currency .gh-pz {
+  .gh-preset-tile-grid--currency .gh-preset-tile {
     width: 58px;
   }
 
-  .gh-pz--currency i {
-    background: #fff8e6;
-    color: #221a2b;
+  .gh-preset-tile--currency i {
+    background: var(--gh-coin-face);
+    color: var(--gh-coin-ink);
   }
 
-  .gh-pz--currency img {
+  .gh-preset-tile--currency img {
     width: 70%;
     height: 70%;
     object-fit: contain;
   }
 
-  /* Same breakpoint as the mockup's container query (27-isg.css:30,
-     29-gh.css:26); a media query here, per HANDOFF.md:135. */
   @media (max-width: 720px) {
+
     .gh-setp,
     .gh-danger {
       padding: 18px 16px;

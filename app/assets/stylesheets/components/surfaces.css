@@ -1,7 +1,5 @@
 @layer components {
 
-  /* ---- Surfaces ---- */
-
   .gh-panel {
     --gh-c: 14px;
     position: relative;
@@ -14,50 +12,39 @@
     position: absolute;
     z-index: -1;
     inset: 0;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
     background: var(--gh-card);
   }
 
-  /* A panel that frames itself in --gh-heart: the destructive corner of a
-     settings screen (27-isg.css:16-19). Used by both of them, which is why it
-     sits here with .gh-panel rather than in either screen's own file.
-
-     A frame LAYER, never a border: on a clipped surface a border follows the
-     box, not the octagon, and shows through at the cut corners
-     (DECISIONS.md:23). ::before is the red plate, ::after the card inset 2px
-     inside it, so what is left is a 2px red edge all the way round. */
   .gh-danger::before {
     background: var(--gh-heart);
   }
 
   .gh-danger::after {
+    --gh-c: 13px;
     content: "";
     position: absolute;
     z-index: -1;
     inset: 2px;
-    clip-path: polygon(
-      13px 0,
-      calc(100% - 13px) 0,
-      100% 13px,
-      100% calc(100% - 13px),
-      calc(100% - 13px) 100%,
-      13px 100%,
-      0 calc(100% - 13px),
-      0 13px
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
     background: var(--gh-card);
   }
 
-  .gh-danger > h2 {
+  .gh-danger>h2 {
     color: var(--gh-heart-ink);
   }
 
@@ -72,16 +59,14 @@
     position: absolute;
     z-index: -1;
     inset: 0;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
     background: var(--gh-chrome);
   }
 }

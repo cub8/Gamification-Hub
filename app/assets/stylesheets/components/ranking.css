@@ -1,30 +1,4 @@
-/* --------------------------------------------------------------------------
-   The Ranking screens (teacher and student).
-
-   Ported from design/mockup-src/css/26-rk.css, the ranking half only: the
-   file's `.tch`/`.trow` and `.tres`/`.tr` blocks belong to the Nauczyciele
-   screen and live in teachers.css, and its `.np`/`.nrow` blocks belong to
-   Powiadomienia, which is not converted yet.
-
-   26-rk.css is not self-sufficient — the screens also use `.panel`, `.phead`,
-   `.info`, `.swrow`/`.sw`, `.seg3`, `.opts`/`.opt`, `.linkbtn` and the
-   empty-state panel, all of which are already here as .gh-panel, .gh-phead
-   (dashboard.css), .gh-info (form.css), .gh-swrow/.gh-sw (form.css), .gh-seg2
-   (badges.css), .gh-opts/.gh-opt (wizard.css), .gh-linkbtn (buttons.css) and
-   .gh-gm (groups.css). Nothing of those is repeated here.
-
-   Breakpoints are plain media queries at the mockup's own values; its
-   `@container app` exists only because it renders inside a scaled device frame.
-   -------------------------------------------------------------------------- */
-
 @layer components {
-
-  /* ---- The board ----
-
-     A grid carrying table roles rather than a real <table>: below 720px the
-     four columns reflow into three, with the rank wrapped under the name and
-     the score spanning both rows, which no table layout can do. */
-
   .gh-rkt {
     margin-top: 22px;
     padding: 8px 10px;
@@ -45,21 +19,15 @@
     color: var(--gh-ink-3);
   }
 
-  /* The viewer's own row. Only ever rendered on the student's board — the
-     teacher has no row of their own here. */
   .gh-rk-row--me {
     background: color-mix(in srgb, var(--gh-item) 12%, var(--gh-card));
     box-shadow: inset 4px 0 0 var(--gh-item);
   }
 
-  /* The places the podium hides. Hatched rather than blank, so it reads as
-     "something is here and withheld" instead of a rendering gap. */
   .gh-rk-row--gap {
-    background: repeating-linear-gradient(
-      135deg,
-      var(--gh-card-2) 0 8px,
-      transparent 8px 16px
-    );
+    background: repeating-linear-gradient(135deg,
+        var(--gh-card-2) 0 8px,
+        transparent 8px 16px);
   }
 
   .gh-gapt {
@@ -67,8 +35,6 @@
     color: var(--gh-ink-3);
     text-align: center;
   }
-
-  /* ---- The place medallion ---- */
 
   .gh-pos {
     --gh-c: 9px;
@@ -79,37 +45,22 @@
     font: 800 16px var(--gh-f-ui);
     background: var(--gh-card-3);
     color: var(--gh-ink);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  .gh-pos--p1 {
+  .gh-pos.gh-pos--p1 {
     background: var(--gh-rank);
     color: var(--gh-on-rank);
   }
 
-  /* Silver and bronze are the only hard-coded colours in the design, in the
-     mockup too (26-rk.css:6). They are metals, not semantic roles, so they do
-     not flip with the theme — both are dark-text-on-light by construction. */
-  .gh-pos--p2 {
-    background: #cdd3dc;
-    color: #221a2b;
+  .gh-pos.gh-pos--p2 {
+    background: var(--gh-silver);
+    color: var(--gh-metal-ink);
   }
 
-  .gh-pos--p3 {
-    background: #d99e63;
-    color: #221a2b;
+  .gh-pos.gh-pos--p3 {
+    background: var(--gh-bronze);
+    color: var(--gh-metal-ink);
   }
-
-  /* ---- The name cell ---- */
 
   .gh-nm b {
     display: block;
@@ -127,27 +78,6 @@
     font-style: italic;
     color: var(--gh-ink-3);
     font-weight: 560;
-  }
-
-  .gh-youtag {
-    --gh-c: 5px;
-    display: inline-block;
-    margin-left: 8px;
-    padding: 2px 7px;
-    font: 720 11.5px var(--gh-f-ui);
-    background: var(--gh-item);
-    color: var(--gh-on-item);
-    vertical-align: 2px;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-rk-r {
@@ -169,14 +99,10 @@
     margin-top: 12px;
   }
 
-  /* .gh-info is a form note and carries a bottom margin for the field under
-     it; here it sits between the head and the board and needs the opposite. */
   .gh-rk-note {
     margin-top: 18px;
     margin-bottom: 0;
   }
-
-  /* ---- The student's own strip ---- */
 
   .gh-mine {
     display: flex;
@@ -188,7 +114,7 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-mine > div:not(.gh-nick) b {
+  .gh-mine>div:not(.gh-nick) b {
     display: block;
     font: 800 24px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
@@ -206,8 +132,6 @@
     font: 600 14.5px var(--gh-f-ui);
   }
 
-  /* ---- The teacher's controls ---- */
-
   .gh-rkctl {
     display: flex;
     flex-direction: column;
@@ -217,15 +141,9 @@
 
   .gh-rkctl .gh-seg2 {
     margin-top: 0;
-    /* .gh-seg2 defaults to the badge teal, because the badge form was its first
-       caller. The mockup's ranking control underlines with --item (23-ag.css:32)
-       — the same orange as the switch directly above it. */
     --gh-seg: var(--gh-item);
   }
 
-  /* The mockup carries this as an inline margin on the dialog's .opts
-     (30-rk.js:57). .gh-opts has none of its own — in the wizard its .gh-fsec
-     wrapper does the spacing, and in a dialog there is no wrapper. */
   .gh-rk-modes {
     margin-top: 14px;
   }
@@ -235,9 +153,6 @@
     align-items: center;
   }
 
-  /* .gh-sw is normally a checkbox and switches on :checked. This one is a link
-     — it does not save a value, it opens the dialog that asks whether to — so
-     the same two rules hang off aria-checked instead. */
   .gh-sw--link {
     display: block;
   }
@@ -251,10 +166,6 @@
     background: var(--gh-on-item);
   }
 
-  /* ---- The hidden-ranking panel ----
-
-     .gh-gm (groups.css) is the empty-state panel; it has no icon slot, and
-     this is the only empty state in the app that opens with one. */
   .gh-gm-ic {
     --gh-c: 12px;
     width: 64px;
@@ -272,8 +183,6 @@
       align-items: stretch;
     }
 
-    /* Three columns: the rank drops under the name and the score spans both
-       rows, so the numbers stay in one right-hand strip. */
     .gh-rk-row {
       grid-template-columns: 40px minmax(0, 1fr) auto;
       gap: 10px;
@@ -290,7 +199,6 @@
       grid-column: 3;
     }
 
-    /* Nothing left for it to label once the columns move. */
     .gh-rk-row--h {
       display: none;
     }

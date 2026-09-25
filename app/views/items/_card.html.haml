@@ -63,7 +63,7 @@
 
         -# Stamped across the artwork, naming the first requirement. The foot
         -# below lists them all; this is what you read at a glance in a grid.
-        %span.gh-seal{ hidden: state != :sealed, data: targets[:seal] }
+        %span.gh-seal.gh-oct{ hidden: state != :sealed, data: targets[:seal] }
           %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
           %span{ data: targets[:seal_label] }= offer.seal_label
 
@@ -114,8 +114,8 @@
             -# preview rewrites only the fill's width, so an aria-valuenow on
             -# this wrapper would go stale as the teacher types. The line above
             -# already says the number out loud.
-            .gh-bar
-              %i{ style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%", data: targets[:bar] }
+            .gh-bar.gh-oct
+              %i.gh-oct{ style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%", data: targets[:bar] }
 
         - if all_feet || state == :sealed
           .gh-req{ hidden: hide.call(:sealed), data: targets[:foot_sealed] }
@@ -130,9 +130,9 @@
             -# Only when a rank is what stands in the way, and only in the shop:
             -# the teacher's preview has no student to measure.
             - if (rp = offer.rank_progress)
-              .gh-bar{ role: 'progressbar',
+              .gh-bar.gh-oct{ role: 'progressbar',
                        'aria-valuemin': 0,
                        'aria-valuemax': rp.target,
                        'aria-valuenow': rp.collected,
                        'aria-label': "Postęp do rangi #{rp.rank_name}" }
-                %i{ style: "--gh-p: #{gh_percent(rp.collected, rp.target)}%" }
+                %i.gh-oct{ style: "--gh-p: #{gh_percent(rp.collected, rp.target)}%" }

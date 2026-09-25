@@ -95,13 +95,13 @@
       .gh-fld{ data: { controller: 'lives-stepper', lives_stepper_max_value: 10 } }
         %p#gh-default-lives-label.gh-lbl Życia na start
         .gh-nstep{ role: 'group', 'aria-labelledby': 'gh-default-lives-label' }
-          %button.gh-nstep-b{ type: 'button', 'aria-label': 'Mniej',
+          %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Mniej',
                               disabled: story_group.default_lives.to_i.zero?,
                               data: { lives_stepper_target: 'down',
                                       action: 'lives-stepper#down' } }
             %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
           %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= story_group.default_lives
-          %button.gh-nstep-b{ type: 'button', 'aria-label': 'Więcej',
+          %button.gh-nstep-b.gh-oct{ type: 'button', 'aria-label': 'Więcej',
                               disabled: story_group.default_lives.to_i >= 10,
                               data: { lives_stepper_target: 'up',
                                       action: 'lives-stepper#up' } }

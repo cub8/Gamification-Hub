@@ -64,7 +64,7 @@
       %section.gh-card.gh-todo
         .gh-card-f
           .gh-card-i
-            %p.gh-k Czeka na ocenę
+            %p.gh-kicker Czeka na ocenę
             %h2.gh-todo-t= pending.activity_group.name
             = render 'layouts/group_chip', story_group: pending.story_group
             %p.gh-small
@@ -80,14 +80,14 @@
         %ul.gh-gtl
           - groups.each do |group|
             %li
-              = link_to story_group_path(group.story_group), class: 'gh-gt' do
+              = link_to story_group_path(group.story_group), class: 'gh-group-tile' do
                 = render 'layouts/group_thumb', story_group: group.story_group, size: :lg
                 %span
                   %b= group.story_group.name
                   %small
                     = "#{group.role}, #{group.students_count} #{gh_plural(group.students_count, 'student', 'studentów', 'studentów')}"
                 - if group.new_purchases.positive?
-                  %span.gh-gt-new
+                  %span.gh-group-tile-new
                     = "#{group.new_purchases} #{gh_plural(group.new_purchases, 'nowy zakup', 'nowe zakupy', 'nowych zakupów')}"
       - else
         %p.gh-small Nie prowadzisz jeszcze żadnej grupy.

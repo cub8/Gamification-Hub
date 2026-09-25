@@ -6,10 +6,10 @@
 - story_group = chrome.story_group
 
 %section.gh-deck{ 'aria-label': "Grupa #{chrome.name}" }
-  .gh-deck-f
-    .gh-deck-i
+  .gh-deck-f.gh-oct
+    .gh-deck-i.gh-oct
       - cover = gh_group_cover(story_group)
-      %span.gh-deck-art{ class: ('gh-deck-art--mono' if cover.nil?), 'aria-hidden': 'true' }
+      %span.gh-deck-art.gh-oct{ class: ('gh-deck-art--mono' if cover.nil?), 'aria-hidden': 'true' }
         = cover || gh_monogram(story_group.name)
 
       .gh-deck-head

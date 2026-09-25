@@ -22,7 +22,7 @@
       -# mockup wires it.
       = link_to '', confirm_visibility_story_group_ranking_path(story_group,
                                                                 enabled: !board.visible?),
-        class: 'gh-sw gh-sw--link', role: 'switch',
+        class: 'gh-sw gh-sw--link gh-oct', role: 'switch',
         'aria-checked': board.visible?.to_s, 'aria-labelledby': 'gh-rk-vis',
         data: { turbo_frame: 'modal' }
       %span
@@ -31,7 +31,7 @@
     -# Only while the board is visible: with it off there is nothing for the
     -# mode to describe (mockup renders the segment under the same condition).
     - if board.visible?
-      .gh-seg2{ role: 'group', 'aria-label': 'Co widzą studenci' }
+      .gh-seg2.gh-oct{ role: 'group', 'aria-label': 'Co widzą studenci' }
         - StoryGroup::RANKING_MODE_LABELS.each do |mode, label|
           - if story_group.ranking_mode == mode
             -# The mode already in force is not a link: confirming a change to

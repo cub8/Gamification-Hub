@@ -16,7 +16,7 @@
              data: { list_search_target: 'row',
                      list_search_name: name.downcase } }
   %span.gh-s-n
-    %span.gh-av.gh-av--sm{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+    %span.gh-av.gh-av--sm.gh-oct{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
       = gh_initials(name)
     = link_to story_group_student_path(@story_group, student), class: 'gh-s-link' do
       %b= name
@@ -33,7 +33,7 @@
       -# failing there, so the only way to reach the controller's guard is a
       -# hand-built request.
       = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
-        method: :post, class: 'gh-lives-b',
+        method: :post, class: 'gh-lives-b gh-oct',
         disabled: lives.zero?,
         form: { 'aria-label': "Odbierz życie: #{name}" },
         'aria-label': "Odbierz życie: #{name}" do
@@ -45,7 +45,7 @@
         %b= lives
 
       = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
-        method: :post, class: 'gh-lives-b',
+        method: :post, class: 'gh-lives-b gh-oct',
         form: { 'aria-label': "Dodaj życie: #{name}" },
         'aria-label': "Dodaj życie: #{name}" do
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }

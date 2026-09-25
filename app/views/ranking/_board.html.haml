@@ -26,7 +26,7 @@
     - else
       .gh-rk-row{ class: ('gh-rk-row--me' if row.mine), role: 'row' }
         %span{ role: 'cell' }
-          %span.gh-pos{ class: ("gh-pos--p#{row.place}" if row.place <= 3),
+          %span.gh-pos.gh-oct{ class: ("gh-pos--p#{row.place}" if row.place <= 3),
                         'aria-label': "Miejsce #{row.place}" }= row.place
 
         %span.gh-nm{ role: 'cell' }
@@ -35,7 +35,7 @@
             -# The mockup tags the viewer's own row; the teacher's board has no
             -# row of their own, so this only ever appears for a student.
             - if row.mine
-              %span.gh-youtag Ty
+              %span.gh-youtag.gh-oct Ty
           - if reveal_names
             -# Ours diverges from the mockup here, which makes a nickname
             -# mandatory. A blank one already falls back to the real name

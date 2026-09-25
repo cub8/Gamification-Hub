@@ -5,18 +5,18 @@
   %span.gh-iv-cd= invite.code
 
   %span.gh-iv-st
-    %span.gh-stt{ class: invite.active? ? 'gh-stt--on' : 'gh-stt--off' }= invite.status_label
+    %span.gh-stt.gh-oct{ class: invite.active? ? 'gh-stt--on' : 'gh-stt--off' }= invite.status_label
 
   %span.gh-iv-u
     = "Użycia: #{invite_uses_label(invite)}"
     -# Only a limited code has a denominator, so only a limited code gets a bar.
     - if invite.max_uses
-      .gh-bar{ role: 'progressbar',
+      .gh-bar.gh-oct{ role: 'progressbar',
                'aria-valuemin': 0,
                'aria-valuemax': invite.max_uses,
                'aria-valuenow': invite.uses,
                'aria-label': "Wykorzystanie kodu #{invite.code}" }
-        %i{ style: "--gh-p: #{gh_percent(invite.uses, invite.max_uses)}%" }
+        %i.gh-oct{ style: "--gh-p: #{gh_percent(invite.uses, invite.max_uses)}%" }
 
   %span.gh-iv-e= invite_expiry_label(invite)
 

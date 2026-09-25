@@ -20,7 +20,7 @@
   = hidden_field_tag "#{f.object_name}[#{field}][]", '', id: nil
 
   - badges.each do |badge|
-    %label.gh-chip{ data: { chip_picker_target: 'chip',
+    %label.gh-chip.gh-oct{ data: { chip_picker_target: 'chip',
                             item_form_target:   form_target,
                             gh_name:            badge.name,
                             gh_discount:        badge.discount.to_i } }

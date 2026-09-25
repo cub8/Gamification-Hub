@@ -52,7 +52,7 @@
                                                           current_path: request.path,
                                                           collapsed:    @sidebar_collapsed,
                                                           group_chrome: gh_group_chrome)
-          .gh-tw
+          .gh-well
             -# Scoped to the well, not the page: the header and sidebar sit on
             -# flat --gh-chrome, exactly as .tpat does inside .tw in the mockup.
             -#
@@ -104,7 +104,7 @@
         -# data: { turbo_frame: 'panel' }.
         %dialog.gh-dialog.gh-dialog--anchored{ data: { controller: 'dialog',
                                                        action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
-          .gh-dialog-body
+          .gh-dialog-body.gh-oct
             = turbo_frame_tag 'panel', data: { dialog_target: 'frame',
                                                action: 'turbo:frame-load->dialog#open' }
 
@@ -116,7 +116,7 @@
     -# data: { turbo_frame: 'modal' }, exactly as before.
     %dialog.gh-dialog{ data: { controller: 'dialog',
                                action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
-      .gh-dialog-body
+      .gh-dialog-body.gh-oct
         = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
                                            action: 'turbo:frame-load->dialog#open' }
 
@@ -131,6 +131,6 @@
     -# dialog underneath belongs in `modal`.
     %dialog.gh-dialog{ data: { controller: 'dialog',
                                action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
-      .gh-dialog-body
+      .gh-dialog-body.gh-oct
         = turbo_frame_tag 'modal2', data: { dialog_target: 'frame',
                                             action: 'turbo:frame-load->dialog#open' }

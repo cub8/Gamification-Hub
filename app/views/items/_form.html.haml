@@ -115,7 +115,7 @@
                 'aria-describedby': (error.call(:price) ? 'gh-item-price-error' : nil),
                 data: { item_form_target: 'price', action: 'item-form#refresh' }
             = render 'layouts/currency_token', story_group: @story_group, size: 32
-            %span.gh-k= @story_group.currency_name
+            %span.gh-kicker= @story_group.currency_name
 
         - if error.call(:price)
           %p#gh-item-price-error.gh-err{ role: 'alert' }
@@ -126,7 +126,7 @@
           -# `change->` explicitly: Stimulus defaults an <input> to the
           -# `input` event, which a checkbox does fire on click but which
           -# reads wrong for a toggle.
-          = f.check_box :can_buy_at_0_lives, class: 'gh-sw',
+          = f.check_box :can_buy_at_0_lives, class: 'gh-sw gh-oct',
             'aria-labelledby': 'gh-item-zero-label',
             data: { item_form_target: 'zero', action: 'change->item-form#refresh' }
           %span
@@ -192,7 +192,7 @@
         -# elements because writeSentence replaces a target's children whole.
         .gh-expl
           %p{ data: { item_form_target: 'discountText' } }= item_discount_sentence(item, card, example)
-          %p.gh-expl-max{ data: { item_form_target: 'discountMax' } }= item_discount_max_sentence(card)
+          %p.gh-small{ data: { item_form_target: 'discountMax' } }= item_discount_max_sentence(card)
 
         -# Not errors: a teacher may well mean an overlap. Rendered as notes, and
         -# the form saves either way.

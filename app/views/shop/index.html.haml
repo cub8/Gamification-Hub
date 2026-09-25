@@ -29,7 +29,7 @@
     %section.gh-zone
       %h2.gh-zone-l
         %span= zone.label
-        %span.gh-zone-n= zone.offers.size
+        %span.gh-zone-n.gh-oct= zone.offers.size
       .gh-cards
         - zone.offers.each do |offer|
           = render 'shop/card', offer: offer, state: zone.key

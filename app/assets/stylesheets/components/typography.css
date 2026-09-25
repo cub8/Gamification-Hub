@@ -1,7 +1,5 @@
 @layer components {
 
-  /* ---- Type scale ---- */
-
   .gh-h1 {
     font: 780 36px/1.04 var(--gh-f-ui);
     font-stretch: 86%;

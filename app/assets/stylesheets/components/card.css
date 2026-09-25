@@ -1,19 +1,3 @@
-/* --------------------------------------------------------------------------
-   The card primitive.
-
-   Ported from design/mockup-src/css/00-base.css:135-170. Entities are cards and
-   the frame colour carries the meaning: item = orange, badge = teal,
-   rank/currency = gold, sealed = grey, neutral = everything else.
-
-   The frame is a real layer (`.gh-card-f` painted `--gh-frame`, with
-   `.gh-card-i` inset on top of it), never a border — a border breaks at the
-   cut corners. The drop-shadow gives the card its physical edge.
-
-   All five variants ship even though the start screens only use `--neutral`:
-   each is a two-line custom-property swap, and the shop, badge and rank screens
-   need them next.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
   .gh-card {
@@ -51,16 +35,6 @@
     height: 100%;
     padding: 5px;
     background: var(--gh-frame);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-card-i {
@@ -69,16 +43,6 @@
     flex-direction: column;
     height: 100%;
     background: var(--gh-card);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-card-top {
@@ -110,8 +74,6 @@
     flex: 1;
   }
 
-  /* Artwork well. Without an image it is a hatched field tinted by the frame
-     colour, so a card with no upload still reads as an entity of its kind. */
   .gh-art {
     --gh-c: 8px;
     position: relative;
@@ -121,27 +83,13 @@
     place-items: center;
     overflow: hidden;
     background:
-      repeating-linear-gradient(
-        135deg,
+      repeating-linear-gradient(135deg,
         color-mix(in srgb, var(--gh-frame) 12%, transparent) 0 6px,
-        transparent 6px 12px
-      ),
+        transparent 6px 12px),
       color-mix(in srgb, var(--gh-frame) 15%, var(--gh-card));
     color: color-mix(in srgb, var(--gh-frame) 58%, var(--gh-ink));
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* The glyph reads at full frame colour on dark, muted toward ink on light.
-     Three selector states, mirroring tokens.css. */
   @media (prefers-color-scheme: dark) {
     :root:not([data-gh-theme="light"]) .gh-art {
       color: var(--gh-frame);
@@ -160,25 +108,10 @@
     object-fit: cover;
   }
 
-  /* Rank and currency art is cropped to this well's own 16:10 at upload time
-     (image_crop_controller), so `contain` fills it exactly and can never cut.
-     Scoped to --gold rather than made the default: story group icons are not
-     cropped yet, and .gh-ixc / .gh-gcard still need `cover` to fill.
-
-     NEVER give this a `width` of its own. The box is the full well and
-     `object-position`'s default 50% 50% is what centres the picture inside it.
-     `width: auto` on an ABSOLUTELY POSITIONED replaced element resolves to
-     intrinsic-ratio × height, not to the containing block — and then `left: 0`
-     and `right: 0` are over-constrained, `right` is dropped, and the art ends
-     up flush against the left edge. */
   .gh-card--gold .gh-art img {
     object-fit: contain;
   }
 
-  /* The same picture in a square thumbnail (.gh-mc, dashboard.css): letterboxed
-     on the frame tint rather than cut. The teacher chose the framing in the
-     cropper; cropping it a second time here would throw that choice away.
-     Outranks `.gh-mc img` on specificity, so the import order does not matter. */
   .gh-card--gold.gh-mc img {
     object-fit: contain;
   }
@@ -187,13 +120,6 @@
     font-size: 40px;
   }
 
-  /* Preset artwork (Glyphs), inlined by ApplicationHelper#gh_glyph.
-     Ported from 00-base.css:150-151.
-
-     `currentColor` is the whole design: the same shape is gold inside a rank
-     card, teal inside a badge and orange inside an item, because .gh-art and
-     .gh-mc set the colour from --gh-frame. It is also why these are inlined
-     rather than <img> — an external image cannot inherit it. */
   .gh-gph {
     width: 52%;
     height: auto;
@@ -205,9 +131,6 @@
     stroke-linejoin: miter;
   }
 
-  /* The filled ghost behind the outline: the mockup draws every glyph twice,
-     once faintly filled and once stroked, which is what gives them weight
-     without a second colour. */
   .gh-gph .f {
     fill: currentColor;
     fill-opacity: 0.2;
@@ -220,26 +143,15 @@
     stroke-width: 4.2;
   }
 
-  /* Progress meter (rank progress on the group cards). */
   .gh-bar {
     --gh-c: 4px;
     position: relative;
     height: 10px;
     background: var(--gh-card-3);
     overflow: hidden;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  .gh-bar > i {
+  .gh-bar>i {
     --gh-c: 4px;
     position: absolute;
     left: 0;
@@ -247,23 +159,10 @@
     bottom: 0;
     width: var(--gh-p);
     background: var(--gh-rank);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  /* The gold-rimmed currency token (20-form.css:40). A cream face inside a
-     gold rim, so an uploaded currency icon always reads as a coin. */
   .gh-tok {
     --gh-c: 29%;
-    --gh-s: 24px;
     display: inline-grid;
     flex: 0 0 auto;
     width: var(--gh-s);
@@ -271,35 +170,15 @@
     padding: max(2px, calc(var(--gh-s) * 0.08));
     background: var(--gh-rank);
     vertical-align: middle;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
-  .gh-tok > span {
+  .gh-tok>span {
     --gh-c: 29%;
     display: grid;
     place-items: center;
-    background: #fff8e6;
-    color: #221a2b;
+    background: var(--gh-coin-face);
+    color: var(--gh-coin-ink);
     font: 800 11px/1 var(--gh-f-ui);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-tok img {
@@ -308,13 +187,6 @@
     object-fit: contain;
   }
 
-  /* A preset mark (CurrencyIcons) instead of an upload. Drawn in
-     currentColor, which `.gh-tok > span` has already set to the dark ink of the
-     cream face — so one file works on the coin in both themes. The translucent
-     `.f` layer is the mockup's own treatment (20-form.css:40): a ghost fill
-     under the outline, so the mark reads as a struck coin rather than a
-     line drawing. Not scoped to .gh-tok on purpose — the picker tile
-     (.gh-pz--cur) wants exactly the same thing. */
   .gh-cmark {
     width: 62%;
     height: 62%;
@@ -330,8 +202,6 @@
     stroke: none;
   }
 
-  /* Gold price chip. The 2px bottom band is the same physical-edge idea as
-     the buttons, done as a gradient because this is a clipped surface. */
   .gh-cost {
     --gh-c: 5px;
     position: relative;
@@ -351,16 +221,14 @@
     z-index: -1;
     inset: 0;
     background: linear-gradient(to top, var(--gh-rank-edge) 0 2px, var(--gh-rank) 2px);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-cost b {
@@ -368,10 +236,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* The card-top chip, which is the price as a headline rather than a footnote
-     (00-base.css:118-123 — the mockup's default, with `.cost.sm` as the small
-     one; here the small one is the default because the dashboard needed it
-     first). */
   .gh-cost--lg {
     --gh-c: 8px;
     padding: 5px 7px 7px 9px;
@@ -381,16 +245,12 @@
     font-size: 18px;
   }
 
-  /* The struck-through original beside a discounted price. */
   .gh-cost s {
     font: 650 12.5px/1 var(--gh-f-ui);
     opacity: 0.62;
     margin-right: 1px;
   }
 
-  /* Flavour text — the story on a card, as opposed to the rules above it.
-     Literata, italic: the one place in the app where a different typeface
-     carries meaning rather than decoration (00-base.css:153). */
   .gh-flavor {
     font: italic 400 13.5px/1.46 var(--gh-f-text);
     color: var(--gh-ink-2);
@@ -399,7 +259,6 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  /* A row of chips between the artwork and the rules (00-base.css:127). */
   .gh-tags {
     display: flex;
     flex-wrap: wrap;
@@ -407,15 +266,11 @@
     padding: 10px 12px 0;
   }
 
-  /* The quiet fact in a card foot: how many students hold this, how many times
-     it was bought (24-lists.css:13). */
   .gh-meta {
     font: 560 13px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  /* The buttons opposite it. `.gh-card-foot .gh-btn { flex: 1 }` above would
-     otherwise stretch a "Przyznaj" across the whole foot. */
   .gh-card-acts {
     display: flex;
     align-items: center;

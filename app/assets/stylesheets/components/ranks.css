@@ -1,26 +1,8 @@
-/* --------------------------------------------------------------------------
-   The Rangi screens.
-
-   Ported from design/mockup-src/css/24-lists.css:3-10 and :34 (the teacher's
-   ladder), css/30-sp.css:3-8 and :23 (the student's), css/22-br.css:9-14 (the
-   form's preview ladder) and css/26-rk.css:9 (the "Twoja ranga" chip — which
-   the mockup defines in its RANKING stylesheet and uses here, a cross-file
-   dependency worth not reproducing).
-
-   The layout the form itself uses lives in form.css: it is shared with every
-   other create/edit screen, and ranks are only the first to need it.
-
-   Breakpoints are plain media queries at the mockup's own values; its
-   `@container app` exists only because it renders inside a scaled device frame.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
   .gh-lst {
     margin-top: 22px;
   }
-
-  /* ---- The teacher's ladder ---- */
 
   .gh-rlad {
     list-style: none;
@@ -54,8 +36,6 @@
   .gh-rl small {
     display: block;
     margin-top: 3px;
-    font-size: 13.5px;
-    color: var(--gh-ink-2);
   }
 
   .gh-rl .gh-req2 {
@@ -78,19 +58,12 @@
     margin-top: 6px;
   }
 
-  /* The distance between two rungs, printed in the space between them and
-     indented past the thumbnails so it reads as a gap rather than a row. */
   .gh-rgap {
     margin-left: 80px;
     font: 560 12.5px var(--gh-f-ui);
     color: var(--gh-ink-3);
   }
 
-  /* ---- The student's ladder ---- */
-
-  /* Top padding is the panel's corner radius, not the mockup's 8px: the current
-     rung bleeds to the panel's edges, and at 8px a student standing on the
-     HIGHEST rung would have that bleed overhang the cut corners. */
   .gh-sl {
     list-style: none;
     margin-top: 22px;
@@ -124,8 +97,6 @@
   .gh-srk small {
     display: block;
     margin-top: 3px;
-    font-size: 13.5px;
-    color: var(--gh-ink-2);
   }
 
   /* The rung you are standing on. Bled to the panel's edges and marked with a
@@ -163,32 +134,6 @@
   .gh-srk .gh-bar {
     margin-top: 6px;
   }
-
-  /* "Twoja ranga". The mockup paints this --item orange (26-rk.css:9) even
-     though it labels a gold row; kept, because it is the same chip that marks
-     "you" in the ranking table and it has to read the same in both. */
-  .gh-youtag {
-    --gh-c: 5px;
-    display: inline-block;
-    margin-left: 8px;
-    padding: 2px 7px;
-    vertical-align: 2px;
-    font: 720 11.5px var(--gh-f-ui);
-    background: var(--gh-item);
-    color: var(--gh-on-item);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
-  }
-
-  /* ---- The form's preview ---- */
 
   /* Ascending in the DOM, reversed on screen, so the highest rung reads first
      here exactly as it does on both list screens (22-br.css:9). */
@@ -231,7 +176,6 @@
     white-space: nowrap;
   }
 
-  /* The rung being written. */
   .gh-lad--new {
     background: color-mix(in srgb, var(--gh-rank) 22%, var(--gh-card));
   }
@@ -268,7 +212,7 @@
     }
 
     .gh-rl-s,
-    .gh-rl > .gh-btn {
+    .gh-rl>.gh-btn {
       grid-column: 2;
     }
 
@@ -285,7 +229,7 @@
       height: 52px;
     }
 
-    .gh-srk > :last-child {
+    .gh-srk> :last-child {
       grid-column: 2;
     }
 

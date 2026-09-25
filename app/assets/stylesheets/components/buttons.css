@@ -1,7 +1,5 @@
 @layer components {
 
-  /* ---- Buttons: flat chips with a physical bottom edge ---- */
-
   .gh-btn {
     --gh-c: 7px;
     position: relative;
@@ -27,22 +25,20 @@
     position: absolute;
     z-index: -1;
     inset: 0;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
     background: linear-gradient(to top, var(--gh-item-edge) 0 3px, var(--gh-item) 3px);
   }
 
   .gh-btn:hover::before {
     background: linear-gradient(to top, var(--gh-item-edge) 0 3px,
-      color-mix(in srgb, var(--gh-item) 88%, #fff) 3px);
+        color-mix(in srgb, var(--gh-item) 88%, #fff) 3px);
   }
 
   .gh-btn:active {
@@ -63,7 +59,7 @@
 
   .gh-btn--sec:hover::before {
     background: linear-gradient(to top, var(--gh-line-2) 0 3px,
-      color-mix(in srgb, var(--gh-card-3) 80%, var(--gh-ink) 8%) 3px);
+        color-mix(in srgb, var(--gh-card-3) 80%, var(--gh-ink) 8%) 3px);
   }
 
   .gh-btn--gold {
@@ -105,9 +101,6 @@
     color: var(--gh-ink);
   }
 
-  /* Icon-only dismiss control (flash messages, dialogs).
-     Deliberately NOT .gh-linkbtn — that one is underlined by design, which
-     looks wrong on a glyph. */
   .gh-close {
     flex: 0 0 auto;
     display: inline-grid;
@@ -126,8 +119,6 @@
     color: var(--gh-ink);
   }
 
-  /* A wrapping row of buttons (20-form.css:104) — the action cluster in a page
-     header, a card footer or a dialog. */
   .gh-rowb {
     display: flex;
     flex-wrap: wrap;

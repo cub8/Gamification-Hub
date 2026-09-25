@@ -1,10 +1,3 @@
-/* --------------------------------------------------------------------------
-   Joining a group — the six-box code and the confirmation art.
-
-   Ported from design/mockup-src/css/00-base.css:480-489 and its 720px block
-   at :608-610.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
   .gh-code {
@@ -14,8 +7,6 @@
     margin: 22px 0 12px;
   }
 
-  /* Frame layer plus inset fill, never a border: the box is clipped to an
-     octagon and a border would break at the cuts. */
   .gh-slot {
     --gh-c: 9px;
     position: relative;
@@ -29,16 +20,14 @@
     content: "";
     position: absolute;
     z-index: -1;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-slot::before {
@@ -52,8 +41,6 @@
     background: var(--gh-card);
   }
 
-  /* The frame itself is the focus ring — the box you are typing in lights up
-     in the item colour, which is why the input's own outline is suppressed. */
   .gh-slot:focus-within::before {
     background: var(--gh-item);
   }

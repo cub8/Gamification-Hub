@@ -19,8 +19,8 @@
           %b
             = rung.rank.name
             - if rung.current?
-              %span.gh-youtag Twoja ranga
-          %small= rank_summary_sentences(rung.rank)
+              %span.gh-youtag.gh-oct Twoja ranga
+          %small.gh-small= rank_summary_sentences(rung.rank)
 
         %div
           - if rung.done?
@@ -34,12 +34,12 @@
                 = "#{collected} z #{needed} do pierwszej rangi"
               - else
                 = "#{ladder.collected} z #{rung.next_threshold} do następnej"
-            .gh-bar{ role: 'progressbar',
+            .gh-bar.gh-oct{ role: 'progressbar',
                      'aria-valuemin': 0,
                      'aria-valuemax': needed,
                      'aria-valuenow': collected,
                      'aria-label': "Postęp do rangi wyżej niż #{rung.rank.name}" }
-              %i{ style: "--gh-p: #{gh_percent(collected, needed)}%" }
+              %i.gh-oct{ style: "--gh-p: #{gh_percent(collected, needed)}%" }
           - elsif rung.current?
             %span.gh-st3.gh-st3--ok Najwyższa ranga
           - else

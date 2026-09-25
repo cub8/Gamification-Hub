@@ -1,22 +1,3 @@
-/* --------------------------------------------------------------------------
-   The Nauczyciele screen: who runs a group, and the dialog for adding
-   somebody to that list.
-
-   Ported from design/mockup-src/css/26-rk.css — the `.tch`/`.trow` and
-   `.tres`/`.tr` blocks, which sit in the ranking file only because the mockup
-   keeps both screens in one module (30-rk.js).
-
-   Like the invites and students lists this is a grid, not a <table>: below
-   720px each row folds into a two-column block, which no table layout can do.
-   The mockup's `@container app` is a plain media query here, as everywhere
-   else in this bundle.
-
-   Reused from elsewhere, deliberately not redefined: .gh-panel, .gh-phead
-   (dashboard.css), .gh-btn (buttons.css), .gh-av (chrome.css), .gh-s-n and
-   .gh-lbl-m (student_list.css), .gh-st2 and .gh-search--full (student.css),
-   .gh-expl (dashboard.css), .gh-meta (card.css).
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
   .gh-tch {
@@ -24,9 +5,6 @@
     padding: 6px 8px;
   }
 
-  /* Nauczyciel | Rola | Dodano | akcja. The name column gives and the role
-     follows it; the date and the button are fixed, so the row does not shift
-     when a long name lands next to a short one. */
   .gh-trow {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 120px 110px;
@@ -42,9 +20,7 @@
     color: var(--gh-ink-3);
   }
 
-  /* The name block inside .gh-s-n, which is a flex line: without this the
-     e-mail refuses to ellipsis and pushes the row wide. */
-  .gh-tn {
+  .gh-name-wrap {
     min-width: 0;
   }
 
@@ -52,8 +28,6 @@
     font: 600 14px var(--gh-f-ui);
   }
 
-  /* "Utworzył grupę", under "Właściciel" — the owner is the only row that
-     explains itself. */
   .gh-role small {
     display: block;
     font-weight: 500;
@@ -61,27 +35,15 @@
     color: var(--gh-ink-3);
   }
 
-  .gh-dt {
-    font-size: 13.5px;
-    color: var(--gh-ink-2);
-  }
-
   .gh-trow-a {
     display: flex;
     justify-content: flex-end;
   }
 
-  /* ---- the add dialog -------------------------------------------------- */
-
-  /* Everything under the search field runs that field's full width. .gh-expl
-     is inset 14px on both sides by default (dashboard.css), which left the
-     hint visibly narrower than the box it explains. */
   .gh-tpick .gh-expl {
     margin: 12px 0 0;
   }
 
-  /* .gh-meta carries no margin of its own (card.css), so "2 wyniki" sat flush
-     against the field. The mockup's .n-sec has room above it (26-rk.css). */
   .gh-tpick .gh-meta {
     margin: 12px 0 2px;
   }
@@ -125,14 +87,10 @@
     white-space: nowrap;
   }
 
-  /* The matched run of a name. Tinted rather than the browser's yellow, which
-     is unreadable on the dark theme. */
   .gh-tr mark {
     background: color-mix(in srgb, var(--gh-rank) 45%, transparent);
     color: inherit;
   }
-
-  /* ---- narrow ---------------------------------------------------------- */
 
   @media (max-width: 720px) {
     .gh-trow {
@@ -144,13 +102,11 @@
       display: none;
     }
 
-    /* Name, role and date stack down the first column; the action spans them
-       all and stays on the right, where the thumb is. */
-    .gh-trow > :not(:last-child) {
+    .gh-trow> :not(:last-child) {
       grid-column: 1;
     }
 
-    .gh-trow > :last-child {
+    .gh-trow> :last-child {
       grid-column: 2;
       grid-row: 1 / 4;
       align-self: center;

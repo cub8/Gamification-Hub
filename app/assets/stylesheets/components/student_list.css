@@ -1,16 +1,5 @@
-/* --------------------------------------------------------------------------
-   The teacher's list of students.
-
-   Ported from design/mockup-src/css/24-lists.css:2, :15-26, :30-31, :36-37.
-
-   Like the invites list and the ledger this is a grid, not a <table>: below
-   720px each row folds into a two-column block where every cell carries its
-   own little label (.gh-lbl-m), which no table layout can do.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
-  /* Search on the left, "12 z 12" pushed to the far end. */
   .gh-stbar {
     display: flex;
     align-items: center;
@@ -38,10 +27,6 @@
     padding: 0;
   }
 
-  /* Student | Ranga | Życia | Do wydania | Zebrane | Odznaki | Akcje.
-     The name column gives first and the rank second; the rest are fixed,
-     because a column of numbers that changes width as you type in the search
-     box reads as the page flinching. */
   .gh-srow {
     display: grid;
     grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) 150px 84px 84px 64px 128px;
@@ -58,8 +43,6 @@
     color: var(--gh-ink-3);
   }
 
-  /* A red rail down the left of anyone at zero lives — the one state on this
-     screen a teacher scans for. */
   .gh-srow--zero {
     box-shadow: inset 4px 0 0 var(--gh-heart);
   }
@@ -104,8 +87,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* The stepper. Each button is its own <form> (button_to), so the row is a
-     flex line of three unrelated elements rather than one control. */
   .gh-lives {
     display: flex;
     align-items: center;
@@ -126,16 +107,6 @@
     cursor: pointer;
     color: var(--gh-ink);
     background: var(--gh-card-3);
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-lives-b:hover:not([disabled]) {
@@ -158,13 +129,9 @@
     height: 38px;
   }
 
-  /* Only on a phone, where the header row is gone and each value needs a name
-     of its own. */
   .gh-lbl-m {
     display: none;
   }
-
-  /* ---- narrow --------------------------------------------------------- */
 
   @media (max-width: 720px) {
     .gh-srow {

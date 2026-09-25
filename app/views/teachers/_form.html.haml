@@ -49,7 +49,7 @@
             %li.gh-tr{ hidden: true,
                        data: { teacher_picker_target: 'row',
                                teacher_picker_key: candidate.search_key } }
-              %span.gh-av.gh-av--sm{ 'data-gh-h': gh_avatar_hue(candidate.name), 'aria-hidden': 'true' }
+              %span.gh-av.gh-av--sm.gh-oct{ 'data-gh-h': gh_avatar_hue(candidate.name), 'aria-hidden': 'true' }
                 = gh_initials(candidate.name)
               %span.gh-tr-n
                 %b{ data: { teacher_picker_target: 'name' } }= candidate.name

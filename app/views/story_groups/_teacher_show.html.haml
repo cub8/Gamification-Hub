@@ -95,9 +95,9 @@
               %ol.gh-top3
                 - sheet.podium.each_with_index do |place, index|
                   %li
-                    %span.gh-pos{ class: "gh-pos--#{index + 1}" }= index + 1
+                    %span.gh-pos.gh-oct{ class: "gh-pos--p#{index + 1}" }= index + 1
                     = place.student.display_name
-                    %span.gh-sc +#{place.points}
+                    %span.gh-podium-score +#{place.points}
               %p.gh-small= ranking_visibility_note(story_group)
             - else
               %p.gh-small Nikt nie ma jeszcze nagród z tego arkusza.

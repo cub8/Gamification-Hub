@@ -11,7 +11,7 @@
 
 %section.gh-panel.gh-sheet
   .gh-sh-top
-    %span.gh-av{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }= gh_initials(name)
+    %span.gh-av.gh-oct{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }= gh_initials(name)
     %div
       %p.gh-crumbs
         = link_to 'Studenci', story_group_students_path(@story_group)
@@ -42,10 +42,10 @@
         - if (line = student_rank_progress_line(@sheet))
           %small= line
       - if (progress = @sheet.rank_progress)
-        .gh-bar{ role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100,
+        .gh-bar.gh-oct{ role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100,
                  'aria-valuenow': progress,
                  'aria-label': "Postęp do rangi #{@sheet.next_rank.name}" }
-          %i{ style: "--gh-p: #{progress}%" }
+          %i.gh-oct{ style: "--gh-p: #{progress}%" }
 
     .gh-stat
       %dt Do wydania

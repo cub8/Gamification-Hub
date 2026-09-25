@@ -52,7 +52,7 @@
       -# unchecked checkbox posts nothing.
       = hidden_field_tag scope.call(:limit_enabled), '0', id: nil
       = check_box_tag scope.call(:limit_enabled), '1', form.limit_enabled?,
-        id: 'gh-limit-switch', class: 'gh-sw', role: 'switch',
+        id: 'gh-limit-switch', class: 'gh-sw gh-oct', role: 'switch',
         data: { invite_form_target: 'limitSwitch', action: 'invite-form#refresh' }
       %span
         %b
@@ -66,7 +66,7 @@
           'aria-invalid': limit_error ? 'true' : nil,
           'aria-describedby': (limit_error ? 'gh-limit-error' : nil),
           data: { invite_form_target: 'maxUses', action: 'invite-form#refresh' }
-      %span.gh-k{ data: { invite_form_target: 'unit' } }= form.unit_label
+      %span.gh-kicker{ data: { invite_form_target: 'unit' } }= form.unit_label
 
     - if limit_error
       %p#gh-limit-error.gh-err{ role: 'alert' }
@@ -77,7 +77,7 @@
     .gh-swrow
       = hidden_field_tag scope.call(:expiry_enabled), '0', id: nil
       = check_box_tag scope.call(:expiry_enabled), '1', form.expiry_enabled?,
-        id: 'gh-expiry-switch', class: 'gh-sw', role: 'switch',
+        id: 'gh-expiry-switch', class: 'gh-sw gh-oct', role: 'switch',
         data: { invite_form_target: 'expirySwitch', action: 'invite-form#refresh' }
       %span
         %b

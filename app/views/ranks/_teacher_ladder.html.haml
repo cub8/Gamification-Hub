@@ -30,7 +30,7 @@
           = render 'rank_thumb', rank: rung.rank
           %div
             %b= rung.rank.name
-            %small= rank_summary(rung.rank)
+            %small.gh-small= rank_summary(rung.rank)
 
             - required_by = ladder.dependent_items(rung.rank)
             - if required_by.any?
@@ -43,12 +43,12 @@
             -# Nothing to compare against in a group with no students yet, and
             -# gh_percent reads an empty denominator as "full".
             - if ladder.total_students.positive?
-              .gh-bar{ role: 'progressbar',
+              .gh-bar.gh-oct{ role: 'progressbar',
                        'aria-valuemin': 0,
                        'aria-valuemax': ladder.total_students,
                        'aria-valuenow': rung.holders,
                        'aria-label': "Studenci z rangą #{rung.rank.name}" }
-                %i{ style: "--gh-p: #{gh_percent(rung.holders, ladder.total_students)}%" }
+                %i.gh-oct{ style: "--gh-p: #{gh_percent(rung.holders, ladder.total_students)}%" }
 
           = link_to edit_story_group_rank_path(@story_group, rung.rank),
             class: 'gh-btn gh-btn--sec gh-btn--sm' do

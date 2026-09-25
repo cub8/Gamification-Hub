@@ -1,24 +1,5 @@
-/* --------------------------------------------------------------------------
-   The item card's three states, and the item form's preview column.
-
-   Ported from design/mockup-src/css/00-base.css:110-175 and
-   design/mockup-src/css/21-item.css.
-
-   An item is the only entity with STATES rather than one appearance: the same
-   card is something you can buy, something you are saving for, or something
-   sealed behind a requirement. The card markup is identical in all three
-   (app/views/items/_card.html.haml) — everything below is the difference.
-
-   The teacher's list reuses `.gh-lgrid` from badges.css: it is the shared
-   "grid of entity cards" layout, not a badge-specific one.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
-  /* ---- Sealed: locked behind a rank or a badge ---- */
-
-  /* The face goes a shade back so the card reads as switched off. The frame is
-     already grey, via .gh-card--sealed in card.css. */
   .gh-card--sealed .gh-card-i {
     background: var(--gh-card-2);
   }
@@ -32,9 +13,6 @@
     filter: grayscale(1);
   }
 
-  /* A grille of the app's own octagon laid over the artwork — the shape that
-     runs through every surface in this design, used here as a texture. A mask
-     rather than a background so it takes the lock colour from the token. */
   .gh-card--sealed .gh-art::after {
     content: "";
     position: absolute;
@@ -49,9 +27,6 @@
     opacity: 0.75;
   }
 
-  /* The plate stamped across the artwork, naming the first requirement
-     (00-base.css:172). Inverted, because it is the one thing on a sealed card
-     you must read. */
   .gh-seal {
     --gh-c: 7px;
     position: absolute;
@@ -69,16 +44,6 @@
     color: var(--gh-card);
     font: 650 12.5px/1.2 var(--gh-f-ui);
     text-align: left;
-    clip-path: polygon(
-      var(--gh-c) 0,
-      calc(100% - var(--gh-c)) 0,
-      100% var(--gh-c),
-      100% calc(100% - var(--gh-c)),
-      calc(100% - var(--gh-c)) 100%,
-      var(--gh-c) 100%,
-      0 calc(100% - var(--gh-c)),
-      0 var(--gh-c)
-    );
   }
 
   .gh-seal i {
@@ -86,22 +51,11 @@
     font-size: 13px;
   }
 
-  /* The artwork's own box inside the well. `display: contents` because the
-     well is a centring grid and the SVG's width is a percentage of it — a real
-     box here would become the grid item instead and the glyph would resolve its
-     size against an indefinite width. It exists only so the live preview has
-     something to replace that is not the well itself (the seal lives there
-     too). */
   .gh-art-slot {
     display: contents;
   }
 
-  /* ---- The three feet ---- */
-
-  /* The card foot is a flex row with `.gh-btn { flex: 1 }` already on it
-     (card.css), so each foot variant takes the whole width itself and lets the
-     button inside fill it. */
-  .gh-card-foot > .gh-foot {
+  .gh-card-foot>.gh-foot {
     flex: 1;
     min-width: 0;
   }
@@ -110,7 +64,6 @@
     width: 100%;
   }
 
-  /* Saving up (00-base.css:161-164). */
   .gh-need {
     flex: 1;
     min-width: 0;
@@ -129,7 +82,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* What is still missing, on a sealed card. */
   .gh-req {
     flex: 1;
     min-width: 0;
@@ -148,35 +100,20 @@
     color: var(--gh-ink);
   }
 
-  /* ---- The form's preview ---- */
-
   .gh-pv .gh-seg2 {
     --gh-seg: var(--gh-item);
   }
 
-  /* A real card is as wide as its grid cell; the preview has a whole column, so
-     it is pinned to roughly a shop card's width (21-item.css:6). */
   .gh-pvcard {
     max-width: 250px;
     margin: 16px auto 0;
   }
 
-  /* The preview's buy button is a picture of an offer, not one. Disabled
-     already stops the click; this stops the cursor promising otherwise. */
   .gh-pvcard .gh-card-foot .gh-btn {
     pointer-events: none;
   }
 
-  /* A chip row with nothing in it is not a row. The card always renders both
-     chips so the live preview has somewhere to write, which means "empty" here
-     means "every child hidden" rather than "no children". */
   .gh-tags:not(:has(> :not([hidden]))) {
     display: none;
   }
-
-  /* The mockup lifts an affordable card under the pointer (00-base.css:158).
-     Deliberately NOT ported yet: it belongs to a card you can click to buy, and
-     on the teacher's list the card is not the target — the pen in its foot is.
-     A lift there would promise a click that does nothing. It arrives with the
-     shop. */
 }

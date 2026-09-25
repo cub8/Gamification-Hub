@@ -1,12 +1,3 @@
-/* --------------------------------------------------------------------------
-   Icon sizing.
-
-   Icons are Font Awesome <i> elements (see ../font-awesome.css), so they size
-   by font-size, not width/height. These rules give each context the size the
-   mockup uses, so views write a plain `%i.fa-solid.fa-envelope` with no extra
-   sizing classes.
-   -------------------------------------------------------------------------- */
-
 @layer components {
 
   .gh-btn i {
@@ -25,8 +16,6 @@
     font-size: 14px;
   }
 
-  /* ---- Chrome ---- */
-
   .gh-nl i {
     font-size: 18px;
     width: 20px;
@@ -41,8 +30,6 @@
     font-size: 19px;
   }
 
-  /* Narrower than the default button icon: the header is 62px tall and the
-     join button has to sit inside it with its label. */
   .gh-hd-join i {
     font-size: 15px;
   }
@@ -51,7 +38,6 @@
     font-size: 15px;
   }
 
-  /* Glyph standing in for a missing item image in a purchase row. */
   .gh-mc i {
     font-size: 20px;
   }
