@@ -35,6 +35,14 @@
     height: 100%;
     padding: 5px;
     background: var(--gh-frame);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-card-inset {
@@ -43,6 +51,14 @@
     flex-direction: column;
     height: 100%;
     background: var(--gh-card);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-card-header {
@@ -88,6 +104,14 @@
         transparent 6px 12px),
       color-mix(in srgb, var(--gh-frame) 15%, var(--gh-card));
     color: color-mix(in srgb, var(--gh-frame) 58%, var(--gh-ink));
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   @media (prefers-color-scheme: dark) {

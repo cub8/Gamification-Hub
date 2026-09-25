@@ -63,5 +63,5 @@
   %button.gh-avatar-button{ type: 'button',
                     data: { action: 'menu#open', menu_id_param: 'gh-account-menu' },
                     'aria-label': "Konto: #{user.full_name}" }
-    %span.gh-avatar{ 'data-gh-h': helpers.gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
+    %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': helpers.gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
       = helpers.gh_initials(user.full_name)

@@ -483,6 +483,14 @@
     width: 44px;
     height: 44px;
     background: var(--gh-card-2);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-file-dropzone>span:nth-child(2) {
@@ -516,6 +524,14 @@
     max-width: 420px;
     height: 300px;
     background: var(--gh-card-3);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-image-cropper-box cropper-canvas {
@@ -586,6 +602,14 @@
     padding: 12px 14px;
     background: color-mix(in srgb, var(--gh-badge) 14%, var(--gh-card));
     font: 500 14.5px/1.45 var(--gh-f-ui);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-info-banner i {

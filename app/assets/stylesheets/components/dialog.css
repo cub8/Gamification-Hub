@@ -26,6 +26,14 @@
     overflow-y: auto;
     max-height: 86vh;
     background: var(--gh-chrome);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
   }
 
   .gh-dialog:not(.gh-dialog--menu, .gh-dialog--anchored) .gh-dialog-body {

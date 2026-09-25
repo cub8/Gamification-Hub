@@ -35,7 +35,7 @@
 
   .gh-sheet-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 220px) auto;
+    grid-template-columns: minmax(0, 1fr) max-content auto;
     gap: 18px;
     align-items: center;
     padding: 12px 4px;
