@@ -13,7 +13,7 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Zaloguj się'
     assert_select 'p.gh-lead'
     assert_select 'p.gh-who', 2
-    assert_select '.gh-or', 'albo'
+    assert_select '.gh-divider', 'albo'
     assert_select 'button.gh-btn', /Zaloguj się przez USOS/
     assert_select 'a.gh-btn.gh-btn--sec', /Zaloguj się e-mailem/
     assert_select 'i.fa-solid.fa-graduation-cap'

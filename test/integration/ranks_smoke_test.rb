@@ -204,20 +204,20 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Nowa ranga'
     assert_select 'input[name=?][value=?]', 'rank[required_currency_value]', '0'
     assert_select 'input[name=?][value=?]', 'rank[discount]', '0'
-    assert_select '.gh-pz-grid .gh-pz--rank input[type=radio]', Glyphs::RANK.size
+    assert_select '.gh-preset-tile-grid .gh-preset-tile--rank input[type=radio]', Glyphs::RANK.size
     # The "Twoja grafika" tile is always in the markup so JavaScript can reveal
     # and select it the moment a file is chosen, but there is nothing to show
     # yet — and no src at all, since an empty one would make the browser
     # re-request this page as an image.
-    assert_select '.gh-pz--own[hidden]', 1
-    assert_select '.gh-pz--own img[src]', false
+    assert_select '.gh-preset-tile--own[hidden]', 1
+    assert_select '.gh-preset-tile--own img[src]', false
   end
 
   test 'the image field offers presets, an upload and a crop box' do
     get new_story_group_rank_path(@story_group)
 
-    assert_select '.gh-pz-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
-    assert_select '.gh-pz input[aria-label=?]', 'Grafika: Korona'
+    assert_select '.gh-preset-tile-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
+    assert_select '.gh-preset-tile input[aria-label=?]', 'Grafika: Korona'
     assert_select '.gh-drop input[type=file][accept=?]', 'image/png,image/jpeg,image/gif'
     assert_select '.gh-crop[hidden] .gh-crop-box', 1
   end
@@ -408,8 +408,8 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select ".gh-rl img[alt='']", 1
 
     get edit_story_group_rank_path(@story_group, @pilot)
-    assert_select '.gh-pz--own[hidden]', false
-    assert_select '.gh-pz--own input[checked=checked]', 1
+    assert_select '.gh-preset-tile--own[hidden]', false
+    assert_select '.gh-preset-tile--own input[checked=checked]', 1
   end
 
   # Without JavaScript nothing would ever select the upload: the picker's own

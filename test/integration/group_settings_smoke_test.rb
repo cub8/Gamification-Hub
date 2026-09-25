@@ -99,14 +99,14 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    tiles = css_select('.gh-pz-grid--group .gh-pz input[type=radio]')
+    tiles = css_select('.gh-preset-tile-grid--group .gh-preset-tile input[type=radio]')
 
     # Five presets plus the upload tile, whose value is the empty string.
     assert_equal([*GroupArt::KEYS, ''], tiles.map { |tile| tile['value'] })
-    assert_select '.gh-pz-grid--group input[aria-label=?]', 'Grafika grupy: Zamek'
-    assert_select '.gh-pz-grid--group input[value=tables][checked]'
+    assert_select '.gh-preset-tile-grid--group input[aria-label=?]', 'Grafika grupy: Zamek'
+    assert_select '.gh-preset-tile-grid--group input[value=tables][checked]'
     # Scenes carry their own palette, so they are <img>, not inlined glyphs.
-    assert_select '.gh-pz-grid--group .gh-pz img'
+    assert_select '.gh-preset-tile-grid--group .gh-preset-tile img'
   end
 
   test 'the currency picker offers every coin preset, named in Polish' do
@@ -114,13 +114,13 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    tiles = css_select('.gh-pz-grid--currency .gh-pz input[type=radio]')
+    tiles = css_select('.gh-preset-tile-grid--currency .gh-preset-tile input[type=radio]')
 
     assert_equal([*CurrencyIcons::KEYS, ''], tiles.map { |tile| tile['value'] })
-    assert_select '.gh-pz-grid--currency input[aria-label=?]', 'Ikona waluty: Marchewka'
-    assert_select '.gh-pz-grid--currency input[value=pearl][checked]'
+    assert_select '.gh-preset-tile-grid--currency input[aria-label=?]', 'Ikona waluty: Marchewka'
+    assert_select '.gh-preset-tile-grid--currency input[value=pearl][checked]'
     # Marks are inlined, so currentColor can tint them on the cream coin face.
-    assert_select '.gh-pz-grid--currency .gh-pz svg.gh-cmark'
+    assert_select '.gh-preset-tile-grid--currency .gh-preset-tile svg.gh-cmark'
   end
 
   test 'both pickers are radio groups and the upload tile is hidden until there is one' do
@@ -128,9 +128,9 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    assert_select '.gh-pz-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
-    assert_select '.gh-pz-grid[role=radiogroup][aria-label=?]', 'Gotowe ikony'
-    assert_select '.gh-pz--own[hidden]', 2
+    assert_select '.gh-preset-tile-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
+    assert_select '.gh-preset-tile-grid[role=radiogroup][aria-label=?]', 'Gotowe ikony'
+    assert_select '.gh-preset-tile--own[hidden]', 2
   end
 
   test 'an upload reveals its own tile and deselects the preset' do
@@ -140,8 +140,8 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    assert_select '.gh-pz-grid--group .gh-pz--own:not([hidden]) input[checked]'
-    assert_select '.gh-pz-grid--group .gh-pz--own img[src]'
+    assert_select '.gh-preset-tile-grid--group .gh-preset-tile--own:not([hidden]) input[checked]'
+    assert_select '.gh-preset-tile-grid--group .gh-preset-tile--own img[src]'
   end
 
   # --- teacher: saving ------------------------------------------------------

@@ -98,7 +98,7 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     get preset_preview_story_groups_path(pack: 'neutral', classes: 12)
 
     assert_equal(['Rangi', 'Odznaki', 'Przedmioty w sklepie', 'Kategorie zajęć'],
-                 css_select('.gh-rz > h3').map { |node| node.text.split("\n").map(&:strip).find(&:present?) },)
+                 css_select('.gh-section-gap > h3').map { |node| node.text.split("\n").map(&:strip).find(&:present?) },)
   end
 
   # The coin, not the currency's name in words, and no stray leading "+".
@@ -108,7 +108,7 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-rv2 .gh-tok[style=?]', '--gh-s: 20px', count: 7 + 8
     assert_select '.gh-rv2 .gh-tok [data-group-wizard-target="markBox"]', count: 7 + 8
-    assert_select '.gh-rv2 .gh-k', false
+    assert_select '.gh-rv2 .gh-kicker', false
     assert_select 'input[aria-label=?]', 'Obecność: nagroda w Monet'
 
     css_select('.gh-rv2').each do |cell|

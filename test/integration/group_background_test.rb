@@ -23,9 +23,9 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
     get story_group_path(group)
 
     assert_response :success
-    assert_select '.gh-tw .gh-tbg'
-    assert_select '.gh-tw .gh-ttint'
-    assert_select '.gh-tw .gh-tpat', false
+    assert_select '.gh-well .gh-tbg'
+    assert_select '.gh-well .gh-ttint'
+    assert_select '.gh-well .gh-tpat', false
     assert_match(/background-image:url\([^)]*castle/, response.body)
   end
 
@@ -35,8 +35,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
 
     get story_group_path(group)
 
-    assert_select '.gh-tw .gh-tbg'
-    assert_select '.gh-tw .gh-tpat', false
+    assert_select '.gh-well .gh-tbg'
+    assert_select '.gh-well .gh-tpat', false
   end
 
   # The fallback the octagon texture has always been.
@@ -45,8 +45,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
 
     get story_group_path(group)
 
-    assert_select '.gh-tw .gh-tpat--well'
-    assert_select '.gh-tw .gh-tbg', false
+    assert_select '.gh-well .gh-tpat--well'
+    assert_select '.gh-well .gh-tbg', false
   end
 
   # A retired preset key must fall back rather than render an empty frame.
@@ -56,8 +56,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
 
     get story_group_path(group)
 
-    assert_select '.gh-tw .gh-tpat--well'
-    assert_select '.gh-tw .gh-tbg', false
+    assert_select '.gh-well .gh-tpat--well'
+    assert_select '.gh-well .gh-tbg', false
   end
 
   test 'the background follows into the nested screens' do
@@ -70,7 +70,7 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
       get path
 
       assert_response :success
-      assert_select '.gh-tw .gh-tbg', 1, "no background on #{path}"
+      assert_select '.gh-well .gh-tbg', 1, "no background on #{path}"
     end
   end
 
@@ -87,7 +87,7 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
   test 'the wizard renders an empty background layer to paint into' do
     get new_story_group_path
 
-    assert_select '.gh-tw .gh-tbg[hidden]'
+    assert_select '.gh-well .gh-tbg[hidden]'
     assert_select '[data-group-art-layer]'
   end
 

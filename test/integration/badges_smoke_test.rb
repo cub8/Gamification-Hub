@@ -229,9 +229,9 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'main#app-content turbo-frame#modal', false
     assert_select 'h1.gh-h1', 'Nowa odznaka'
     assert_select 'input[name=?][value=?]', 'badge[discount]', '0'
-    assert_select '.gh-pz-grid .gh-pz--badge input[type=radio]', Glyphs::BADGE.size
-    assert_select '.gh-pz--own[hidden]', 1
-    assert_select '.gh-pz--own img[src]', false
+    assert_select '.gh-preset-tile-grid .gh-preset-tile--badge input[type=radio]', Glyphs::BADGE.size
+    assert_select '.gh-preset-tile--own[hidden]', 1
+    assert_select '.gh-preset-tile--own img[src]', false
   end
 
   test 'the form listens for the crop so the preview can follow it' do
@@ -452,8 +452,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select ".gh-lgrid img[alt='']", 1
 
     get edit_story_group_badge_path(@story_group, @mechanik)
-    assert_select '.gh-pz--own[hidden]', false
-    assert_select '.gh-pz--own input[checked=checked]', 1
+    assert_select '.gh-preset-tile--own[hidden]', false
+    assert_select '.gh-preset-tile--own input[checked=checked]', 1
   end
 
   # Without JavaScript nothing would ever select the upload: the picker's own

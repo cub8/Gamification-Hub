@@ -343,9 +343,9 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_equal ['Laboratoria 4', 'Laboratoria 3'], names
 
     assert_select '.gh-sheet2:first-of-type .gh-top3 li:first-child' do
-      assert_select '.gh-pos.gh-pos--1', '1'
+      assert_select '.gh-pos.gh-pos--p1', '1'
       # A nickname where one is set, the real name otherwise.
-      assert_select '.gh-sc', '+11'
+      assert_select '.gh-podium-score', '+11'
     end
     assert_select '.gh-top3 li', /Meteor/
     assert_select '.gh-top3 li', /Barbara Kowalewska/
@@ -393,7 +393,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-purse .gh-k', 'Do wydania'
+    assert_select '.gh-purse .gh-kicker', 'Do wydania'
     assert_select '.gh-purse .gh-num', '12'
     assert_select '.gh-purse .gh-unit', 'Marchewek'
     assert_select '.gh-purse-stats dd', '34'

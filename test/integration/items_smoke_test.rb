@@ -151,7 +151,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   test 'the picker offers exactly the item presets, as radios' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-pz-grid .gh-pz--item input[type=radio]', Glyphs::ITEM.size
+    assert_select '.gh-preset-tile-grid .gh-preset-tile--item input[type=radio]', Glyphs::ITEM.size
     assert_select 'input[name=?][value=?][checked=checked]', 'item[icon_glyph]', 'shield'
   end
 
@@ -644,7 +644,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-pz-grid[aria-invalid=true]'
+    assert_select '.gh-preset-tile-grid[aria-invalid=true]'
     assert_select '.gh-err[role=alert] span', 'Wybierz gotową grafikę albo wgraj własną.'
   end
 

@@ -38,7 +38,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     rows = css_select('.gh-trow').reject { |row| row['class'].include?('gh-trow--h') }
-    assert_equal(['Zofia Zawadzka', 'Adam Adamczyk'], rows.map { |row| row.css('.gh-tn b').text })
+    assert_equal(['Zofia Zawadzka', 'Adam Adamczyk'], rows.map { |row| row.css('.gh-name-wrap b').text })
     assert_equal 'WłaścicielUtworzył grupę', rows.first.css('.gh-role').text.delete("\n").strip
     assert_equal 0, rows.first.css('a').size
   end
@@ -58,7 +58,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_teachers_path(@story_group)
 
-    assert_includes css_select('.gh-dt').map(&:text),
+    assert_includes css_select('.gh-small').map(&:text),
                     membership.created_at.to_date.strftime('%d.%m.%Y')
   end
 

@@ -18,7 +18,7 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
 
     # The texture belongs to the content well, not the whole page: the header
     # and sidebar sit on flat chrome colour.
-    assert_select '.gh-tw > .gh-tpat.gh-tpat--well'
+    assert_select '.gh-well > .gh-tpat.gh-tpat--well'
     assert_select 'body > .gh-tpat', false
 
     # No Bootstrap on this page any more.
@@ -322,7 +322,7 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get home_path
 
-    assert_select '.gh-todo .gh-k', 'Czeka na ocenę'
+    assert_select '.gh-todo .gh-kicker', 'Czeka na ocenę'
     assert_select '.gh-todo-t', 'Laboratoria 5'
     assert_select '.gh-todo p.gh-small', /Zostało 2 kategorie dla 1 studenta\./
     assert_select '.gh-todo a[href=?]',
@@ -362,9 +362,9 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get home_path
 
-    assert_select '.gh-gtl .gh-gt' do
+    assert_select '.gh-gtl .gh-group-tile' do
       assert_select 'small', 'Prowadzisz, 1 student'
-      assert_select '.gh-gt-new', '1 nowy zakup'
+      assert_select '.gh-group-tile-new', '1 nowy zakup'
     end
   end
 
