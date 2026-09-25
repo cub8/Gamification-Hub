@@ -14,7 +14,7 @@
     --gh-frame-edge: var(--gh-badge-edge);
   }
 
-  .gh-card--gold {
+  .gh-card--rank {
     --gh-frame: var(--gh-rank);
     --gh-frame-edge: var(--gh-rank-edge);
   }
@@ -29,7 +29,7 @@
     --gh-frame-edge: var(--gh-neutral-edge);
   }
 
-  .gh-card-f {
+  .gh-card-frame {
     --gh-c: var(--gh-cc);
     display: block;
     height: 100%;
@@ -37,7 +37,7 @@
     background: var(--gh-frame);
   }
 
-  .gh-card-i {
+  .gh-card-inset {
     --gh-c: calc(var(--gh-cc) - 2px);
     display: flex;
     flex-direction: column;
@@ -45,7 +45,7 @@
     background: var(--gh-card);
   }
 
-  .gh-card-top {
+  .gh-card-header {
     display: flex;
     align-items: flex-start;
     gap: 8px;
@@ -61,7 +61,7 @@
     hyphens: auto;
   }
 
-  .gh-card-foot {
+  .gh-card-footer {
     margin-top: auto;
     padding: 12px;
     display: flex;
@@ -70,11 +70,11 @@
     min-height: 66px;
   }
 
-  .gh-card-foot .gh-btn {
+  .gh-card-footer .gh-btn {
     flex: 1;
   }
 
-  .gh-art {
+  .gh-card-art {
     --gh-c: 8px;
     position: relative;
     margin: 0 10px;
@@ -91,16 +91,16 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root:not([data-gh-theme="light"]) .gh-art {
+    :root:not([data-gh-theme="light"]) .gh-card-art {
       color: var(--gh-frame);
     }
   }
 
-  :root[data-gh-theme="dark"] .gh-art {
+  :root[data-gh-theme="dark"] .gh-card-art {
     color: var(--gh-frame);
   }
 
-  .gh-art img {
+  .gh-card-art img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -108,19 +108,19 @@
     object-fit: cover;
   }
 
-  .gh-card--gold .gh-art img {
+  .gh-card--rank .gh-card-art img {
     object-fit: contain;
   }
 
-  .gh-card--gold.gh-mc img {
+  .gh-card--rank.gh-mini-thumb img {
     object-fit: contain;
   }
 
-  .gh-art i {
+  .gh-card-art i {
     font-size: 40px;
   }
 
-  .gh-gph {
+  .gh-card-art-glyph {
     width: 52%;
     height: auto;
     max-height: 78%;
@@ -131,19 +131,19 @@
     stroke-linejoin: miter;
   }
 
-  .gh-gph .f {
+  .gh-card-art-glyph .f {
     fill: currentColor;
     fill-opacity: 0.2;
   }
 
-  .gh-mc .gh-gph {
+  .gh-mini-thumb .gh-card-art-glyph {
     width: 60%;
     height: 60%;
     max-height: none;
     stroke-width: 4.2;
   }
 
-  .gh-bar {
+  .gh-progress-bar {
     --gh-c: 4px;
     position: relative;
     height: 10px;
@@ -151,7 +151,7 @@
     overflow: hidden;
   }
 
-  .gh-bar>i {
+  .gh-progress-bar>i {
     --gh-c: 4px;
     position: absolute;
     left: 0;
@@ -161,7 +161,7 @@
     background: var(--gh-rank);
   }
 
-  .gh-tok {
+  .gh-currency-token {
     --gh-c: 29%;
     display: inline-grid;
     flex: 0 0 auto;
@@ -172,7 +172,7 @@
     vertical-align: middle;
   }
 
-  .gh-tok>span {
+  .gh-currency-token>span {
     --gh-c: 29%;
     display: grid;
     place-items: center;
@@ -181,13 +181,13 @@
     font: 800 11px/1 var(--gh-f-ui);
   }
 
-  .gh-tok img {
+  .gh-currency-token img {
     width: 80%;
     height: 80%;
     object-fit: contain;
   }
 
-  .gh-cmark {
+  .gh-coin-mark {
     width: 62%;
     height: 62%;
     fill: none;
@@ -196,13 +196,13 @@
     stroke-linecap: square;
   }
 
-  .gh-cmark .f {
+  .gh-coin-mark .f {
     fill: currentColor;
     fill-opacity: 0.28;
     stroke: none;
   }
 
-  .gh-cost {
+  .gh-price-badge {
     --gh-c: 5px;
     position: relative;
     isolation: isolate;
@@ -215,7 +215,7 @@
     white-space: nowrap;
   }
 
-  .gh-cost::before {
+  .gh-price-badge::before {
     content: "";
     position: absolute;
     z-index: -1;
@@ -231,27 +231,27 @@
         0 var(--gh-c));
   }
 
-  .gh-cost b {
+  .gh-price-badge b {
     font: 800 14px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-cost--lg {
+  .gh-price-badge--lg {
     --gh-c: 8px;
     padding: 5px 7px 7px 9px;
   }
 
-  .gh-cost--lg b {
+  .gh-price-badge--lg b {
     font-size: 18px;
   }
 
-  .gh-cost s {
+  .gh-price-badge s {
     font: 650 12.5px/1 var(--gh-f-ui);
     opacity: 0.62;
     margin-right: 1px;
   }
 
-  .gh-flavor {
+  .gh-card-flavor {
     font: italic 400 13.5px/1.46 var(--gh-f-text);
     color: var(--gh-ink-2);
     margin: 9px 12px 0;
@@ -259,26 +259,26 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-tags {
+  .gh-card-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     padding: 10px 12px 0;
   }
 
-  .gh-meta {
+  .gh-card-meta {
     font: 560 13px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-card-acts {
+  .gh-card-actions {
     display: flex;
     align-items: center;
     gap: 6px;
     margin-left: auto;
   }
 
-  .gh-card-acts .gh-btn {
+  .gh-card-actions .gh-btn {
     flex: 0 0 auto;
   }
 }

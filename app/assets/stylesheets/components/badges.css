@@ -1,6 +1,6 @@
 @layer components {
 
-  .gh-cards {
+  .gh-card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
     gap: 24px 18px;
@@ -8,81 +8,81 @@
     margin-top: 22px;
   }
 
-  .gh-cards--b {
+  .gh-card-grid--compact {
     grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
     gap: 22px 16px;
   }
 
-  .gh-cards--b .gh-card-name {
+  .gh-card-grid--compact .gh-card-name {
     font-size: 15.5px;
   }
 
-  .gh-cards--b .gh-rules {
+  .gh-card-grid--compact .gh-rule-text {
     font-size: 13px;
   }
 
-  .gh-cards--b .gh-flavor {
+  .gh-card-grid--compact .gh-card-flavor {
     font-size: 12.5px;
   }
 
-  .gh-cards--b .gh-card-foot {
+  .gh-card-grid--compact .gh-card-footer {
     min-height: 0;
     padding: 10px 12px 12px;
   }
 
-  .gh-card-foot {
+  .gh-card-footer {
     flex-wrap: wrap;
     row-gap: 8px;
   }
 
-  .gh-tag--disc,
-  .gh-flipbtn {
+  .gh-tag--discount,
+  .gh-card-flip-btn {
     white-space: nowrap;
   }
 
-  .gh-lgrid {
+  .gh-badge-grid--teacher {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
     gap: 24px 18px;
     margin-top: 22px;
   }
 
-  .gh-lgrid .gh-card-foot {
+  .gh-badge-grid--teacher .gh-card-footer {
     justify-content: space-between;
     min-height: 0;
     flex-wrap: wrap;
   }
 
-  .gh-flip {
+  .gh-flip-card {
     perspective: 1000px;
     filter: none;
   }
 
-  .gh-flip-in {
+  .gh-flip-card-inner {
     display: grid;
     height: 100%;
     transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
     transform-style: preserve-3d;
   }
 
-  .gh-face {
+  .gh-flip-card-face {
     grid-area: 1 / 1;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     filter: drop-shadow(0 3px 0 var(--gh-frame-edge));
   }
 
-  .gh-face--back {
+  .gh-flip-card-face--back {
     --gh-frame: var(--gh-lock);
     --gh-frame-edge: var(--gh-lock-edge);
     transform: rotateY(180deg);
   }
 
-  .gh-flip--down .gh-flip-in {
+  .gh-flip-card--down .gh-flip-card-inner {
     transform: rotateY(180deg);
   }
 
-  .gh-back-i {
+  .gh-flip-card-back-body {
     align-items: center;
     text-align: center;
     padding: 12px 12px 14px;
@@ -90,11 +90,11 @@
     background: color-mix(in srgb, var(--gh-badge) 10%, var(--gh-card-2));
   }
 
-  .gh-back-i .gh-card-name {
+  .gh-flip-card-back-body .gh-card-name {
     flex: 0 0 auto;
   }
 
-  .gh-back-art {
+  .gh-flip-card-back-mark {
     --gh-c: 8px;
     position: relative;
     display: grid;
@@ -104,7 +104,7 @@
     background: color-mix(in srgb, var(--gh-badge) 26%, var(--gh-card-2));
   }
 
-  .gh-back-art::after {
+  .gh-flip-card-back-mark::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -114,31 +114,31 @@
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M8.5 2h7l6.5 6.5v7L15.5 22h-7L2 15.5v-7z' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") 0 0 / 24px 24px;
   }
 
-  .gh-back-art svg {
+  .gh-flip-card-back-mark svg {
     position: relative;
     z-index: 1;
     width: 38%;
     height: auto;
   }
 
-  .gh-mark-t {
+  .gh-badge-mark-text {
     font: 800 15px var(--gh-f-ui);
     fill: var(--gh-card);
   }
 
-  .gh-how {
+  .gh-badge-rule-text {
     font: 400 13px/1.42 var(--gh-f-text);
     color: var(--gh-ink-2);
   }
 
-  .gh-how>span:first-child {
+  .gh-badge-rule-text>span:first-child {
     display: block;
     font: 680 12.5px/1.2 var(--gh-f-ui);
     color: var(--gh-badge-ink);
     margin-bottom: 3px;
   }
 
-  .gh-flipbtn {
+  .gh-card-flip-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -150,23 +150,23 @@
     cursor: pointer;
   }
 
-  .gh-flipbtn:hover {
+  .gh-card-flip-btn:hover {
     color: var(--gh-ink);
   }
 
-  .gh-card-foot .gh-flipbtn {
+  .gh-card-footer .gh-card-flip-btn {
     margin-left: auto;
   }
 
-  .gh-back-i .gh-flipbtn {
+  .gh-flip-card-back-body .gh-card-flip-btn {
     margin-top: auto;
   }
 
-  .gh-flip[data-controller] {
+  .gh-flip-card[data-controller] {
     cursor: pointer;
   }
 
-  .gh-flip--just .gh-face--front {
+  .gh-flip-card--just-earned .gh-flip-card-face--front {
     animation: gh-glow 1.6s ease-out 0.55s 1;
   }
 
@@ -184,7 +184,7 @@
     }
   }
 
-  .gh-seg2 {
+  .gh-segmented-toggle-2 {
     --gh-c: 7px;
     --gh-seg: var(--gh-badge);
     display: flex;
@@ -194,7 +194,7 @@
     background: var(--gh-card-2);
   }
 
-  .gh-seg2 :is(button, a, span) {
+  .gh-segmented-toggle-2 :is(button, a, span) {
     flex: 1;
     display: grid;
     place-items: center;
@@ -208,28 +208,28 @@
     cursor: pointer;
   }
 
-  .gh-seg2 span[aria-pressed] {
+  .gh-segmented-toggle-2 span[aria-pressed] {
     cursor: default;
   }
 
-  .gh-seg2 :is(button, a, span)[aria-pressed="true"] {
+  .gh-segmented-toggle-2 :is(button, a, span)[aria-pressed="true"] {
     background: var(--gh-card);
     color: var(--gh-ink);
     box-shadow: inset 0 -3px 0 var(--gh-seg);
   }
 
-  .gh-seg2 button[disabled] {
+  .gh-segmented-toggle-2 button[disabled] {
     opacity: 0.4;
     cursor: not-allowed;
   }
 
-  .gh-uses {
+  .gh-badge-usage-list {
     list-style: none;
     margin: 10px 0 0;
     padding: 0;
   }
 
-  .gh-uses li {
+  .gh-badge-usage-list li {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -238,56 +238,56 @@
     font: 600 14px var(--gh-f-ui);
   }
 
-  .gh-uses .gh-mc {
+  .gh-badge-usage-list .gh-mini-thumb {
     width: 34px;
     height: 34px;
   }
 
-  .gh-lbl--spaced {
+  .gh-label--spaced {
     margin-top: 14px;
   }
 
-  .gh-thumbrow {
+  .gh-preview-thumb-row {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-top: 12px;
   }
 
-  .gh-pvflip .gh-card-foot {
+  .gh-preview-flip-card .gh-card-footer {
     min-height: 0;
     padding: 10px 12px 12px;
   }
 
-  .gh-thumbrow b {
+  .gh-preview-thumb-row b {
     display: block;
     font: 680 15px/1.25 var(--gh-f-ui);
   }
 
-  @media (max-width: 720px) {
+  @media (width <= theme(--breakpoint-mobile)) {
 
-    .gh-cards--b {
+    .gh-card-grid--compact {
       grid-template-columns: minmax(0, 1fr);
       gap: 18px;
     }
 
-    .gh-cards--b .gh-art,
-    .gh-cards--b .gh-back-art {
+    .gh-card-grid--compact .gh-card-art,
+    .gh-card-grid--compact .gh-flip-card-back-mark {
       max-height: 190px;
     }
 
-    .gh-lgrid {
+    .gh-badge-grid--teacher {
       grid-template-columns: minmax(0, 1fr);
       gap: 18px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gh-flip-in {
+    .gh-flip-card-inner {
       transition: none;
     }
 
-    .gh-flip--just .gh-face--front {
+    .gh-flip-card--just-earned .gh-flip-card-face--front {
       animation: none;
     }
   }

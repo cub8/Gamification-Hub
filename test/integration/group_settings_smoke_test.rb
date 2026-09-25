@@ -58,7 +58,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_path(story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -70,7 +70,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     # The old screen wrapped itself in the shared modal frame. A page must not:
     # the layout already carries one inside its <dialog>.
     assert_select 'turbo-frame#modal form', false
-    assert_select '.gh-wbar button[type=submit]', 'Zapisz zmiany'
+    assert_select '.gh-form-actions-bar button[type=submit]', 'Zapisz zmiany'
   end
 
   test 'the sidebar marks Ustawienia grupy as the current destination' do
@@ -78,7 +78,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    assert_select 'aside.gh-sb a.gh-nl.gh-nl--on[href=?][aria-current=page]',
+    assert_select 'aside.gh-sidebar a.gh-sidebar-link.gh-sidebar-link--active[href=?][aria-current=page]',
                   edit_story_group_path(story_group), 'Ustawienia grupy'
   end
 
@@ -87,7 +87,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get story_group_path(story_group)
 
-    assert_select ".gh-hero a[href='#{edit_story_group_path(story_group)}']" do |links|
+    assert_select ".gh-overview-hero a[href='#{edit_story_group_path(story_group)}']" do |links|
       assert_nil links.first['data-turbo-frame']
     end
   end
@@ -99,14 +99,14 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    tiles = css_select('.gh-preset-tile-grid--group .gh-preset-tile input[type=radio]')
+    tiles = css_select('.gh-art-preset-grid--group .gh-art-preset-tile input[type=radio]')
 
     # Five presets plus the upload tile, whose value is the empty string.
     assert_equal([*GroupArt::KEYS, ''], tiles.map { |tile| tile['value'] })
-    assert_select '.gh-preset-tile-grid--group input[aria-label=?]', 'Grafika grupy: Zamek'
-    assert_select '.gh-preset-tile-grid--group input[value=tables][checked]'
+    assert_select '.gh-art-preset-grid--group input[aria-label=?]', 'Grafika grupy: Zamek'
+    assert_select '.gh-art-preset-grid--group input[value=tables][checked]'
     # Scenes carry their own palette, so they are <img>, not inlined glyphs.
-    assert_select '.gh-preset-tile-grid--group .gh-preset-tile img'
+    assert_select '.gh-art-preset-grid--group .gh-art-preset-tile img'
   end
 
   test 'the currency picker offers every coin preset, named in Polish' do
@@ -114,13 +114,13 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    tiles = css_select('.gh-preset-tile-grid--currency .gh-preset-tile input[type=radio]')
+    tiles = css_select('.gh-art-preset-grid--currency .gh-art-preset-tile input[type=radio]')
 
     assert_equal([*CurrencyIcons::KEYS, ''], tiles.map { |tile| tile['value'] })
-    assert_select '.gh-preset-tile-grid--currency input[aria-label=?]', 'Ikona waluty: Marchewka'
-    assert_select '.gh-preset-tile-grid--currency input[value=pearl][checked]'
+    assert_select '.gh-art-preset-grid--currency input[aria-label=?]', 'Ikona waluty: Marchewka'
+    assert_select '.gh-art-preset-grid--currency input[value=pearl][checked]'
     # Marks are inlined, so currentColor can tint them on the cream coin face.
-    assert_select '.gh-preset-tile-grid--currency .gh-preset-tile svg.gh-cmark'
+    assert_select '.gh-art-preset-grid--currency .gh-art-preset-tile svg.gh-coin-mark'
   end
 
   test 'both pickers are radio groups and the upload tile is hidden until there is one' do
@@ -128,9 +128,9 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    assert_select '.gh-preset-tile-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
-    assert_select '.gh-preset-tile-grid[role=radiogroup][aria-label=?]', 'Gotowe ikony'
-    assert_select '.gh-preset-tile--own[hidden]', 2
+    assert_select '.gh-art-preset-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
+    assert_select '.gh-art-preset-grid[role=radiogroup][aria-label=?]', 'Gotowe ikony'
+    assert_select '.gh-art-preset-tile--custom[hidden]', 2
   end
 
   test 'an upload reveals its own tile and deselects the preset' do
@@ -140,8 +140,8 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    assert_select '.gh-preset-tile-grid--group .gh-preset-tile--own:not([hidden]) input[checked]'
-    assert_select '.gh-preset-tile-grid--group .gh-preset-tile--own img[src]'
+    assert_select '.gh-art-preset-grid--group .gh-art-preset-tile--custom:not([hidden]) input[checked]'
+    assert_select '.gh-art-preset-grid--group .gh-art-preset-tile--custom img[src]'
   end
 
   # --- teacher: saving ------------------------------------------------------
@@ -196,8 +196,8 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert_equal 'Kosmiczne króliki', story_group.reload.name
-    assert_select '.gh-inp--bad input[name=?]', 'story_group[name]'
-    assert_select '.gh-err[role=alert] span', 'Podaj nazwę grupy.'
+    assert_select '.gh-text-input--invalid input[name=?]', 'story_group[name]'
+    assert_select '.gh-field-error[role=alert] span', 'Podaj nazwę grupy.'
   end
 
   test 'an unknown preset key is refused rather than stored' do
@@ -207,7 +207,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert_nil story_group.reload.icon_glyph
-    assert_select '.gh-err[role=alert] span', 'Nieznana grafika.'
+    assert_select '.gh-field-error[role=alert] span', 'Nieznana grafika.'
   end
 
   # --- teacher: who may do what --------------------------------------------
@@ -222,8 +222,8 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     # DECISIONS.md:40 — everything except deleting the group.
-    assert_select '.gh-wbar button[type=submit]'
-    assert_select '.gh-danger', false
+    assert_select '.gh-form-actions-bar button[type=submit]'
+    assert_select '.gh-danger-zone', false
     assert_select "a[href='#{confirm_destroy_story_group_path(story_group)}']", false
 
     patch story_group_path(story_group), params: settings_params
@@ -248,8 +248,8 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    assert_select '.gh-panel.gh-danger h2', 'Usuń grupę'
-    assert_select ".gh-danger a[href='#{confirm_destroy_story_group_path(story_group)}'][data-turbo-frame=modal]"
+    assert_select '.gh-panel.gh-danger-zone h2', 'Usuń grupę'
+    assert_select ".gh-danger-zone a[href='#{confirm_destroy_story_group_path(story_group)}'][data-turbo-frame=modal]"
   end
 
   test 'a student of the group cannot open its settings' do
@@ -291,7 +291,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     get confirm_destroy_story_group_path(story_group)
 
     assert_response :success
-    assert_select '.gh-shell .gh-panel.gh-dlg-page h2.gh-h2', 'Usunąć grupę na zawsze?'
+    assert_select '.gh-app-shell .gh-panel.gh-dialog-page-panel h2.gh-h2', 'Usunąć grupę na zawsze?'
     assert_select 'turbo-frame#modal h2', false
   end
 
@@ -306,7 +306,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     # Case-sensitive on purpose: the point is to make you read the name.
     assert_response :unprocessable_content
-    assert_select '.gh-err[role=alert] span', /nie zgadza się z nazwą grupy/
+    assert_select '.gh-field-error[role=alert] span', /nie zgadza się z nazwą grupy/
   end
 
   test 'a delete with no confirmation at all is refused' do
@@ -344,9 +344,9 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_membership_path(story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_select 'h1.gh-h1', 'Ustawienia w grupie'
-    assert_select '.gh-crumbs a[href=?]', story_group_path(story_group), 'Kosmiczne króliki'
+    assert_select '.gh-breadcrumbs a[href=?]', story_group_path(story_group), 'Kosmiczne króliki'
     assert_select '.gh-lead', 'Te ustawienia dotyczą tylko grupy Kosmiczne króliki.'
   end
 
@@ -355,7 +355,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in student_in(story_group).user
     get edit_story_group_membership_path(story_group)
 
-    assert_select 'aside.gh-sb a.gh-nl.gh-nl--on[href=?][aria-current=page]',
+    assert_select 'aside.gh-sidebar a.gh-sidebar-link.gh-sidebar-link--active[href=?][aria-current=page]',
                   edit_story_group_membership_path(story_group), 'Ustawienia w grupie'
   end
 
@@ -367,7 +367,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in student.user
     get edit_story_group_membership_path(story_group)
 
-    rows = css_select('.gh-seeing li').map { |row| row.text.split.join(' ') }
+    rows = css_select('.gh-visible-fields-list li').map { |row| row.text.split.join(' ') }
 
     assert_equal ['Imię i nazwisko Sebastian Alejandro',
                   "E-mail #{student.email}",
@@ -385,7 +385,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in student.user
     get edit_story_group_membership_path(story_group)
 
-    assert_select '.gh-seeing li:last-child b', 'Brak'
+    assert_select '.gh-visible-fields-list li:last-child b', 'Brak'
   end
 
   # --- student: the nickname ------------------------------------------------
@@ -414,8 +414,8 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert_equal 'Kadet', mine.reload.nickname
-    assert_select '.gh-inp--bad input[name=?]', 'story_group_student[nickname]'
-    assert_select '.gh-err[role=alert] span', 'Ten pseudonim jest już zajęty w tej grupie.'
+    assert_select '.gh-text-input--invalid input[name=?]', 'story_group_student[nickname]'
+    assert_select '.gh-field-error[role=alert] span', 'Ten pseudonim jest już zajęty w tej grupie.'
   end
 
   test 'the same nickname in another group is fine' do
@@ -471,7 +471,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'turbo-frame#modal h2.gh-h2', 'Opuścić grupę Kosmiczne króliki?'
     assert_match(/120 Marchewek, 1 odznaka i 0 przedmiotów/, response.body.gsub(/\s+/, ' '))
-    assert_select '.gh-warn[role=alert] span', /Tego nie da się cofnąć/
+    assert_select '.gh-warning-note[role=alert] span', /Tego nie da się cofnąć/
     # DECISIONS.md:44 wants rejoining to restore everything; ours is a hard
     # delete, so the dialog must not say that.
     assert_no_match(/wszystko wróci|Nic nie przepada/, response.body)
@@ -482,7 +482,7 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in student_in(story_group).user
     get confirm_leave_story_group_membership_path(story_group), headers: { 'Turbo-Frame' => 'modal' }
 
-    assert_select '.gh-dlg-b button[autofocus][data-action=?]', 'dialog#close', 'Zostań w grupie'
+    assert_select '.gh-dialog-button-row button[autofocus][data-action=?]', 'dialog#close', 'Zostań w grupie'
   end
 
   test 'leaving destroys the membership and everything hanging off it' do

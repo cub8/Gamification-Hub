@@ -7,5 +7,5 @@
 -# ask the same question through gh_group_cover but draw their own box.
 - cover = gh_group_cover(story_group)
 
-.gh-art{ class: ('gh-art--mono' if cover.nil?) }
+.gh-card-art{ class: ('gh-art--monogram' if cover.nil?) }
   = cover || gh_monogram(story_group.name)

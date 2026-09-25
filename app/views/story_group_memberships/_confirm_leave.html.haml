@@ -23,21 +23,21 @@
   = "#{badges} #{gh_plural(badges, 'odznaka', 'odznaki', 'odznak')}"
   = "i #{items} #{gh_plural(items, 'przedmiot', 'przedmioty', 'przedmiotów')}."
 
-%p.gh-warn{ role: 'alert' }
+%p.gh-warning-note{ role: 'alert' }
   %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
   %span
     Tego nie da się cofnąć. Jeśli wrócisz do tej grupy z nowym kodem od
     prowadzącego, zaczniesz od zera.
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# "Zostań w grupie" first and focused: the safe button is the one you land
   -# on, and here it is also the one that says what staying means.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Zostań w grupie
   - else
     = link_to 'Zostań w grupie', edit_story_group_membership_path(story_group),
-      class: 'gh-btn gh-btn--sec'
+      class: 'gh-btn gh-btn--secondary'
 
   = button_to 'Opuść grupę', story_group_membership_path(story_group),
     method: :delete, class: 'gh-btn',

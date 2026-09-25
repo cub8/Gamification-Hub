@@ -1,6 +1,6 @@
 @layer components {
 
-  .gh-brand {
+  .gh-brand-lockup {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -9,33 +9,33 @@
     color: var(--gh-ink);
   }
 
-  .gh-acard {
+  .gh-auth-card {
     width: min(470px, 100%);
     padding: 30px 30px 26px;
   }
 
-  .gh-acard .gh-h1 {
+  .gh-auth-card .gh-h1 {
     font-size: 30px;
   }
 
-  .gh-acard .gh-lead {
+  .gh-auth-card .gh-lead {
     margin-top: 8px;
   }
 
-  .gh-stack {
+  .gh-button-stack {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin-top: 22px;
   }
 
-  .gh-stack .gh-btn {
+  .gh-button-stack .gh-btn {
     width: 100%;
     min-height: 50px;
     font-size: 16px;
   }
 
-  .gh-divider {
+  .gh-auth-divider {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -43,22 +43,22 @@
     font: 560 13px var(--gh-f-ui);
   }
 
-  .gh-divider::before,
-  .gh-divider::after {
+  .gh-auth-divider::before,
+  .gh-auth-divider::after {
     content: "";
     flex: 1;
     height: 1px;
     background: var(--gh-line);
   }
 
-  .gh-who {
+  .gh-signed-in-as {
     font: 500 13px/1.4 var(--gh-f-ui);
     color: var(--gh-ink-2);
     margin-top: 4px;
     text-align: center;
   }
 
-  .gh-back {
+  .gh-back-link {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -66,12 +66,12 @@
     text-decoration: none;
   }
 
-  .gh-back>span {
+  .gh-back-link>span {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  .gh-auth {
+  .gh-auth-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -81,27 +81,27 @@
     padding: 36px 16px;
   }
 
-  .gh-stack form {
+  .gh-button-stack form {
     width: 100%;
     margin: 0;
   }
 
-  @media (max-width: 720px) {
-    .gh-auth {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-auth-page {
       justify-content: flex-start;
       padding-top: 24px;
     }
 
-    .gh-acard {
+    .gh-auth-card {
       padding: 22px 18px 20px;
     }
 
-    .gh-acard .gh-h1 {
+    .gh-auth-card .gh-h1 {
       font-size: 25px;
     }
   }
 
-  .gh-foot {
+  .gh-auth-footer {
     font: 520 12.5px var(--gh-f-ui);
     color: var(--gh-ink-3);
     display: flex;
@@ -109,7 +109,7 @@
     align-items: center;
   }
 
-  .gh-alt {
+  .gh-auth-alt-action {
     margin-top: 22px;
     padding-top: 16px;
     border-top: 1px solid var(--gh-line);
@@ -118,11 +118,11 @@
     text-align: center;
   }
 
-  .gh-alt .gh-linkbtn {
+  .gh-auth-alt-action .gh-link-button {
     font-size: 14.5px;
   }
 
-  .gh-big-ic {
+  .gh-icon-circle-lg {
     --gh-c: 14px;
     width: 64px;
     height: 64px;
@@ -132,7 +132,7 @@
     background: var(--gh-card-2);
   }
 
-  .gh-addr {
+  .gh-email-display {
     font: 700 15.5px var(--gh-f-ui);
     color: var(--gh-ink);
     word-break: break-all;

@@ -6,13 +6,13 @@
 -# cookie, which hid the thing the screen exists to show.
 - content_for :title, 'Arkusze ocen'
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Arkusze ocen
     %p.gh-lead Arkusze pogrupowane według szablonów. Najnowsze są na górze.
 
-  .gh-rowb
-    = link_to new_story_group_activity_group_template_path(@story_group), class: 'gh-btn gh-btn--sec' do
+  .gh-button-row
+    = link_to new_story_group_activity_group_template_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
       Nowy szablon
 
@@ -22,7 +22,7 @@
 - else
   -# The mockup has no empty state for this screen. House rule: name the next
   -# action rather than only reporting the absence.
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie masz jeszcze żadnego szablonu
     %p.gh-lead
       Szablon to zestaw kategorii, za które nagradzasz studentów. Z jednego

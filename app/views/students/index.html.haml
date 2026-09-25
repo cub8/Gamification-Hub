@@ -1,12 +1,12 @@
 - content_for :title, 'Studenci'
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Studenci
     %p.gh-lead= student_list_lead(@list)
 
-  .gh-rowb
-    = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec' do
+  .gh-button-row
+    = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
       Kody i zaproszenia
     = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn',
@@ -18,45 +18,45 @@
   %div{data: { controller:              'list-search',
                list_search_total_value: @list.size,
                list_search_of_value:    'z',  }}
-    .gh-stbar
-      %label.gh-search
+    .gh-student-list-toolbar
+      %label.gh-search-input
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
         %input{type:         'search',
                placeholder:  'Szukaj studenta',
                'aria-label': 'Szukaj studenta',
                data:         { list_search_target: 'input', action: 'input->list-search#filter' },}
-      %span.gh-meta{ data: { list_search_target: 'count' } }
+      %span.gh-card-meta{ data: { list_search_target: 'count' } }
         = "#{@list.size} z #{@list.size}"
 
-    %section.gh-panel.gh-st
-      %ul.gh-srows{ role: 'list' }
-        %li.gh-srow.gh-srow--h{ 'aria-hidden': 'true' }
+    %section.gh-panel.gh-student-list-panel
+      %ul.gh-student-rows{ role: 'list' }
+        %li.gh-student-row.gh-student-row--header{ 'aria-hidden': 'true' }
           %span Student
           %span Ranga
           %span Życia
           %span Do wydania
           %span Zebrane
           %span Odznaki
-          %span.gh-lrow-r Akcje
+          %span.gh-ledger-cell--right Akcje
 
         = render partial: 'students/row', collection: @list.rows, as: :row
 
     -# Revealed by the controller when the query matches nobody on the page.
-    %section.gh-panel.gh-gm{ hidden: true, data: { list_search_target: 'empty' } }
+    %section.gh-panel.gh-empty-state{ hidden: true, data: { list_search_target: 'empty' } }
       %h2.gh-h2
         Brak studentów o nazwie
         %span{ data: { list_search_target: 'emptyQuery' } }
       %p.gh-lead Wyczyść wyszukiwanie albo sprawdź pisownię.
 - else
   -# The mockup has no empty state here. House rule: name the next action.
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie ma jeszcze nikogo w grupie
     %p.gh-lead
       Wyślij studentom kod albo zaproszenie — kiedy dołączą, pojawią się tutaj
       razem z rangą, walutą i życiami.
-    .gh-rowb
+    .gh-button-row
       = link_to 'Kody i zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'
-      = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec',
+      = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary',
                                                               data:  { turbo_frame: 'modal' } do
         %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
         Pokaż kod dla studentów

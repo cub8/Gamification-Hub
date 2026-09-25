@@ -15,40 +15,40 @@
 - summary = local_assigns.fetch(:summary, nil)
 - entries = ledger.entries(kind: kind)
 
-.gh-ledh
+.gh-ledger-header
   = ledger_filter_chips(ledger, kind, path_for: path_for)
   - if summary
-    %span.gh-ledh-sp
+    %span.gh-ledger-header-spacer
     %span.gh-small= summary
 
 -# role="table" rather than a <table>: every row has to reflow into a stacked
 -# block on a phone, which a table cannot do. Same reasoning as the invites list.
 %div{ role: 'table', 'aria-label': 'Historia waluty' }
-  .gh-lrow.gh-lrow--h{ role: 'row' }
+  .gh-ledger-row.gh-ledger-row--header{ role: 'row' }
     %span{ role: 'columnheader' } Kwota
     %span{ role: 'columnheader' } Typ
     %span{ role: 'columnheader' } Za co
     %span{ role: 'columnheader' } Kiedy
-    %span.gh-lrow-r{ role: 'columnheader' } Saldo po
+    %span.gh-ledger-cell--right{ role: 'columnheader' } Saldo po
 
   - entries.each do |entry|
-    .gh-lrow{ role: 'row' }
-      %span.gh-amt{ class: "gh-amt--#{entry.tone}", role: 'cell' }= entry.signed_amount
+    .gh-ledger-row{ role: 'row' }
+      %span.gh-ledger-amount{ class: "gh-ledger-amount--#{entry.tone}", role: 'cell' }= entry.signed_amount
       -# The chip IS the cell. The mockup wraps it in a second span, which
       -# leaves the wrapper as the grid item and the chip's own placement rules
       -# matching nothing — visible only once the row reflows on a phone.
-      %span.gh-ty.gh-oct{ class: "gh-ty--#{entry.tone}", role: 'cell' }= entry.label
-      %span.gh-src{ role: 'cell' }
+      %span.gh-ledger-type-pill.gh-octagon-clip{ class: "gh-ledger-type-pill--#{entry.tone}", role: 'cell' }= entry.label
+      %span.gh-ledger-source{ role: 'cell' }
         = entry.title
         -# The item is off the shelf but the row stays: soft delete keeps
         -# history (DECISIONS.md:28), and a purchase that vanished would make
         -# the balance below it unexplainable.
         - if entry.withdrawn?
-          %span.gh-tag.gh-tag--del Usunięty z oferty
+          %span.gh-tag.gh-tag--removed Usunięty z oferty
         - if entry.context.present?
           %small= entry.context
-      %span.gh-small.gh-dt{ role: 'cell' }= ledger_when(entry)
-      %span.gh-bal2{ role: 'cell' }= entry.balance_after
+      %span.gh-small.gh-ledger-date{ role: 'cell' }= ledger_when(entry)
+      %span.gh-ledger-balance{ role: 'cell' }= entry.balance_after
 
 - if entries.empty?
-  %p.gh-expl.gh-ledger-empty= empty_message
+  %p.gh-explainer-note.gh-ledger-empty= empty_message

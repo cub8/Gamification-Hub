@@ -4,17 +4,17 @@
 - targets = local_assigns.fetch(:targets, {})
 - flipper = local_assigns.fetch(:flipper, false)
 
-.gh-back-art.gh-oct
+.gh-flip-card-back-mark.gh-octagon-clip
   = render 'badges/badge_mark'
 
-%h3.gh-card-name{ class: ('gh-ph' if badge.name.blank?), data: targets[:back_name] }
+%h3.gh-card-name{ class: ('gh-placeholder-text' if badge.name.blank?), data: targets[:back_name] }
   = badge_name(badge)
 
-%p.gh-how
+%p.gh-badge-rule-text
   %span Jak zdobyć
   %span{ data: targets[:how] }= badge_rule(badge)
 
 - if flipper
-  %button.gh-flipbtn{ type: 'button', 'aria-label': "Pokaż odznakę #{badge.name}" }
+  %button.gh-card-flip-btn{ type: 'button', 'aria-label': "Pokaż odznakę #{badge.name}" }
     %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
     Pokaż odznakę

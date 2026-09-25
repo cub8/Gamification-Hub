@@ -40,14 +40,14 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     get story_group_activity_groups_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
   test 'the sidebar marks Arkusze ocen as the current destination' do
     get story_group_activity_groups_path(@story_group)
 
-    assert_select 'aside.gh-sb a.gh-nl.gh-nl--on[href=?][aria-current=page]',
+    assert_select 'aside.gh-sidebar a.gh-sidebar-link.gh-sidebar-link--active[href=?][aria-current=page]',
                   story_group_activity_groups_path(@story_group), 'Arkusze ocen'
   end
 
@@ -58,7 +58,7 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'h1.gh-h1', 'Arkusze ocen'
     assert_select 'p.gh-lead', 'Arkusze pogrupowane według szablonów. Najnowsze są na górze.'
-    assert_select '.gh-rowb a', 'Nowy szablon'
+    assert_select '.gh-button-row a', 'Nowy szablon'
     assert_no_match(/Grupy aktywności/i, response.body)
   end
 
@@ -68,9 +68,9 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     template = template!(rewards: [2, 3])
     get story_group_activity_groups_path(@story_group)
 
-    assert_select 'section.gh-tpl[aria-labelledby=?]', "gh-tpl-#{template.id}" do
+    assert_select 'section.gh-template-panel[aria-labelledby=?]', "gh-tpl-#{template.id}" do
       assert_select 'h2', 'Laboratoria'
-      assert_select '.gh-tpl-meta', /2 kategorie, do 5 marchewek na studenta za arkusz\./
+      assert_select '.gh-template-panel-meta', /2 kategorie, do 5 marchewek na studenta za arkusz\./
       assert_select 'a', 'Edytuj szablon'
       assert_select 'a', 'Utwórz arkusz'
     end
@@ -83,7 +83,7 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     sheet!(template, 'Laboratoria 1')
     get story_group_activity_groups_path(@story_group)
 
-    assert_select 'ul.gh-agl li.gh-ag', 1
+    assert_select 'ul.gh-sheet-list li.gh-sheet-row', 1
     assert_select '[data-controller*=collapse-memory]', false
     assert_select '[data-bs-toggle]', false
   end
@@ -94,12 +94,12 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     sheet!(template, 'Laboratoria 2')
     get story_group_activity_groups_path(@story_group)
 
-    names = css_select('ul.gh-agl li.gh-ag .gh-ag-n b').map(&:text)
+    names = css_select('ul.gh-sheet-list li.gh-sheet-row .gh-sheet-row-name b').map(&:text)
     assert_equal ['Laboratoria 2', 'Laboratoria 1'], names
 
-    buttons = css_select('ul.gh-agl li.gh-ag .gh-ag-a a.gh-btn')
-    assert_not_includes buttons.first['class'], 'gh-btn--sec'
-    assert_includes buttons.last['class'], 'gh-btn--sec'
+    buttons = css_select('ul.gh-sheet-list li.gh-sheet-row .gh-sheet-row-actions a.gh-btn')
+    assert_not_includes buttons.first['class'], 'gh-btn--secondary'
+    assert_includes buttons.last['class'], 'gh-btn--secondary'
   end
 
   test 'a sheet reports how much it has already paid out' do
@@ -108,7 +108,7 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     award!(sheet.activity_group_categories.first)
 
     get story_group_activity_groups_path(@story_group)
-    assert_select '.gh-ag-s', 'Przyznano 1 nagrodę'
+    assert_select '.gh-sheet-row-stats', 'Przyznano 1 nagrodę'
   end
 
   test 'a sheet nobody has graded says so' do
@@ -116,7 +116,7 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     sheet!(template, 'Laboratoria 1')
 
     get story_group_activity_groups_path(@story_group)
-    assert_select '.gh-ag-s', 'Jeszcze nic nie przyznano'
+    assert_select '.gh-sheet-row-stats', 'Jeszcze nic nie przyznano'
   end
 
   # "Zmienione kolumny" — this sheet's own columns were edited, which is not
@@ -126,25 +126,25 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     sheet = sheet!(template, 'Laboratoria 1')
 
     get story_group_activity_groups_path(@story_group)
-    assert_select '.gh-tag--mod', false
+    assert_select '.gh-tag--modified', false
 
     sheet.update!(columns_modified_at: Time.current)
     get story_group_activity_groups_path(@story_group)
-    assert_select '.gh-tag--mod', 'Zmienione kolumny'
+    assert_select '.gh-tag--modified', 'Zmienione kolumny'
   end
 
   test 'a template with no sheets names the next action' do
     template!
     get story_group_activity_groups_path(@story_group)
 
-    assert_select '.gh-expl', 'Z tego szablonu nie utworzono jeszcze arkuszy.'
+    assert_select '.gh-explainer-note', 'Z tego szablonu nie utworzono jeszcze arkuszy.'
   end
 
   test 'a group with no templates gets the empty panel' do
     get story_group_activity_groups_path(@story_group)
 
-    assert_select '.gh-gm h2', 'Nie masz jeszcze żadnego szablonu'
-    assert_select 'section.gh-tpl', false
+    assert_select '.gh-empty-state h2', 'Nie masz jeszcze żadnego szablonu'
+    assert_select 'section.gh-template-panel', false
   end
 
   test 'a soft deleted template drops off the index and takes no sheets with it' do
@@ -153,7 +153,7 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     template.soft_delete!
 
     get story_group_activity_groups_path(@story_group)
-    assert_select 'section.gh-tpl', false
+    assert_select 'section.gh-template-panel', false
     assert_equal 1, @story_group.activity_groups.kept.count
   end
 
@@ -167,7 +167,7 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h2', 'Nowy arkusz z szablonu Laboratoria'
     assert_select 'p', /Każdy arkusz dostanie 2 kategorie z szablonu\./
     assert_select '[data-controller=sheet-create]' do
-      assert_select '.gh-seg3[role=radiogroup][aria-label=?]', 'Ile arkuszy'
+      assert_select '.gh-segmented-toggle-3[role=radiogroup][aria-label=?]', 'Ile arkuszy'
       assert_select 'input[name=?][value=one][checked]', 'activity_group[mode]'
       assert_select 'input[name=?][value=many]', 'activity_group[mode]'
     end
@@ -181,12 +181,12 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     get new_story_group_activity_group_path(@story_group, template_id: template.id)
 
     assert_select 'input[name=?][value=?]', 'activity_group[name]', 'Laboratoria 2'
-    names = css_select('.gh-names span').map(&:text).map(&:strip)
+    names = css_select('.gh-sample-name-chips span').map(&:text).map(&:strip)
     assert_equal 'Laboratoria 2', names.first
     assert_equal 'Laboratoria 3', names.second
 
     # Only the first few are shown; the rest wait for the stepper.
-    shown = css_select('.gh-names span').reject { |chip| chip.attributes.key?('hidden') }
+    shown = css_select('.gh-sample-name-chips span').reject { |chip| chip.attributes.key?('hidden') }
     assert_equal 3, shown.size
   end
 
@@ -203,12 +203,12 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     assert_turbo_redirected_to story_group_activity_groups_path(@story_group)
     get story_group_activity_groups_path(@story_group)
 
-    assert_select 'li.gh-ag--fresh', 2
+    assert_select 'li.gh-sheet-row--fresh', 2
     assert_select '.gh-toasts template', /Utworzono: Laboratoria 1 – Laboratoria 2\./
 
     # Only once: a reload is not a creation.
     get story_group_activity_groups_path(@story_group)
-    assert_select 'li.gh-ag--fresh', false
+    assert_select 'li.gh-sheet-row--fresh', false
   end
 
   test 'the dialog renders as a page when it is not in the modal frame' do
@@ -217,8 +217,8 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
 
     # The layout's own empty `modal` frame is always there; what matters is
     # that the dialog's body is not inside it.
-    assert_select 'section.gh-panel.gh-dlg-page'
-    assert_select '.gh-shell'
+    assert_select 'section.gh-panel.gh-dialog-page-panel'
+    assert_select '.gh-app-shell'
     assert_select 'turbo-frame#modal h2', false
   end
 
@@ -228,6 +228,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
         headers: { 'Turbo-Frame' => 'modal' }
 
     assert_select 'turbo-frame#modal'
-    assert_select '.gh-shell', false
+    assert_select '.gh-app-shell', false
   end
 end

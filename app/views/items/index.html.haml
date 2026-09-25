@@ -5,26 +5,26 @@
 -# in their inventory, both of which are still on the Bootstrap layout.
 - content_for :title, 'Przedmioty'
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Przedmioty
     %p.gh-lead
       = "#{@shelf.size} #{gh_plural(@shelf.size, 'przedmiot', 'przedmioty', 'przedmiotów')} w sklepie,"
       od najtańszego.
 
-  .gh-rowb
+  .gh-button-row
     = link_to new_story_group_item_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       Nowy przedmiot
 
 - if @shelf.any?
-  .gh-lgrid
+  .gh-badge-grid--teacher
     - @shelf.slots.each do |slot|
       = render 'grid_card', item: slot.item, card: @shelf.card_for(slot.item), bought: slot.bought
 - else
   -# The mockup has no empty state for this screen. House rule: name the next
   -# action rather than only reporting the absence.
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Sklep jest jeszcze pusty
     %p.gh-lead
       Dodaj przedmioty, żeby zebrana waluta miała na co iść. Każdy może mieć

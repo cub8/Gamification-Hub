@@ -13,9 +13,9 @@
   -# characters are pasted rather than typed.
   = hidden_field_tag :code, code, data: { join_code_target: 'code' }
 
-  .gh-code{ role: 'group', 'aria-label': 'Kod zaproszenia' }
+  .gh-join-code-inputs{ role: 'group', 'aria-label': 'Kod zaproszenia' }
     - StoryGroupInvite::CODE_LENGTH.times do |index|
-      %span.gh-slot
+      %span.gh-join-code-slot
         %input{ type: 'text',
                 maxlength: 2,
                 autocomplete: 'off',
@@ -29,19 +29,19 @@
   - if member_of
     -# Not an error: already belonging to the group is a dead end for the form
     -# but good news for the person, so the mockup offers the way in instead.
-    %p.gh-hint
+    %p.gh-field-hint
       Już należysz do tej grupy.
-      = link_to 'Otwórz grupę', story_group_path(member_of), class: 'gh-linkbtn',
+      = link_to 'Otwórz grupę', story_group_path(member_of), class: 'gh-link-button',
         data: { turbo_frame: '_top' }
   - elsif error
-    %p.gh-err{ role: 'alert' }
+    %p.gh-field-error{ role: 'alert' }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= error
 
-  %p.gh-small.gh-hint-q
+  %p.gh-small.gh-join-hint
     %i.fa-solid.fa-camera{ 'aria-hidden': 'true' }
     Masz kod QR? Zeskanuj go aparatem telefonu, a kod wpisze się sam.
 
-  .gh-dlg-b
+  .gh-dialog-button-row
     = render 'join/cancel'
     %button.gh-btn{ type: 'submit', data: { join_code_target: 'submit' } } Dalej

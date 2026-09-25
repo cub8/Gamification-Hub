@@ -28,31 +28,31 @@
       -# Mirrors the mockup's .auth column (28-auth.css). The texture is a
       -# fixed full-bleed layer here because there is no content well to
       -# scope it to; content carries `relative z-10` to sit above it.
-      .gh-tpat{ 'aria-hidden': 'true' }
+      .gh-cover-pattern{ 'aria-hidden': 'true' }
 
-      %main.gh-auth.relative.z-10
-        = link_to root_path, class: 'gh-brand no-underline' do
+      %main.gh-auth-page.relative.z-10
+        = link_to root_path, class: 'gh-brand-lockup no-underline' do
           = image_tag 'logo.png', alt: '', class: 'h-[46px] w-[46px] object-contain'
           %span Gamification Hub
-        %section.gh-panel.gh-acard
+        %section.gh-panel.gh-auth-card
           = render 'layouts/flash'
           = yield
         = render 'layouts/theme_toggle'
     - else
       -# App shell. One element owns the three chrome controllers so the
       -# header, sidebar, tab bar and both menu dialogs can all reach them.
-      .gh-shell{ data: { controller: 'theme menu sidebar',
+      .gh-app-shell{ data: { controller: 'theme menu sidebar',
                          theme_light_label_value: 'Jasny motyw',
                          theme_dark_label_value: 'Ciemny motyw' } }
         = render Shared::HeaderComponent.new(user:         @current_user,
                                                         group_chrome: gh_group_chrome)
 
-        .gh-body
+        .gh-app-body
           = render Shared::SidebarComponent.new(user:         @current_user,
                                                           current_path: request.path,
                                                           collapsed:    @sidebar_collapsed,
                                                           group_chrome: gh_group_chrome)
-          .gh-well
+          .gh-content-well
             -# Scoped to the well, not the page: the header and sidebar sit on
             -# flat --gh-chrome, exactly as .tpat does inside .tw in the mockup.
             -#
@@ -67,13 +67,13 @@
             -# from Stimulus as the teacher clicks a tile.
             - group_art = gh_group_cover_url(gh_group_chrome&.story_group)
             - if group_art || @group_art_layer
-              .gh-tbg{ 'aria-hidden': 'true', hidden: group_art.nil?,
+              .gh-group-cover-bg{ 'aria-hidden': 'true', hidden: group_art.nil?,
                        style: (group_art ? "background-image:url(#{group_art})" : nil),
                        data: { group_art_layer: '' } }
-              .gh-ttint{ 'aria-hidden': 'true' }
+              .gh-group-cover-tint{ 'aria-hidden': 'true' }
             - else
-              .gh-tpat.gh-tpat--well{ 'aria-hidden': 'true' }
-            %main#app-content.gh-main
+              .gh-cover-pattern.gh-cover-pattern--inset{ 'aria-hidden': 'true' }
+            %main#app-content.gh-main-content
               = render 'layouts/flash'
               = yield
 
@@ -84,7 +84,7 @@
                                                          current_path: request.path,
                                                          group_chrome: gh_group_chrome)
 
-        -# These MUST stay inside .gh-shell: it owns the theme/menu/sidebar
+        -# These MUST stay inside .gh-app-shell: it owns the theme/menu/sidebar
         -# controllers, and a Stimulus action only reaches a controller on an
         -# ancestor. As siblings they rendered fine but did nothing.
         -# A closed <dialog> is display:none and an open modal one lives in the
@@ -104,11 +104,11 @@
         -# data: { turbo_frame: 'panel' }.
         %dialog.gh-dialog.gh-dialog--anchored{ data: { controller: 'dialog',
                                                        action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
-          .gh-dialog-body.gh-oct
+          .gh-dialog-body.gh-octagon-clip
             = turbo_frame_tag 'panel', data: { dialog_target: 'frame',
                                                action: 'turbo:frame-load->dialog#open' }
 
-    -# Outside .gh-shell for the same reason the dialog is: its overflow:hidden
+    -# Outside .gh-app-shell for the same reason the dialog is: its overflow:hidden
     -# would clip a fixed layer pinned to the bottom of the viewport.
     = render 'layouts/toasts'
 
@@ -116,7 +116,7 @@
     -# data: { turbo_frame: 'modal' }, exactly as before.
     %dialog.gh-dialog{ data: { controller: 'dialog',
                                action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
-      .gh-dialog-body.gh-oct
+      .gh-dialog-body.gh-octagon-clip
         = turbo_frame_tag 'modal', data: { dialog_target: 'frame',
                                            action: 'turbo:frame-load->dialog#open' }
 
@@ -131,6 +131,6 @@
     -# dialog underneath belongs in `modal`.
     %dialog.gh-dialog{ data: { controller: 'dialog',
                                action: 'close->dialog#onClose click->dialog#closeOnBackdrop' } }
-      .gh-dialog-body.gh-oct
+      .gh-dialog-body.gh-octagon-clip
         = turbo_frame_tag 'modal2', data: { dialog_target: 'frame',
                                             action: 'turbo:frame-load->dialog#open' }

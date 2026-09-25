@@ -1,6 +1,6 @@
 - content_for :title, 'Logowanie e-mailem'
 
-= link_to login_path, class: 'gh-linkbtn gh-back' do
+= link_to login_path, class: 'gh-link-button gh-back-link' do
   %i.fa-solid.fa-chevron-left
   %span Inne sposoby logowania
 
@@ -8,16 +8,16 @@
 %p.gh-lead Wyślemy Ci link do logowania. Hasło nie jest potrzebne.
 
 = form_with url: auth_passwordless_path, method: :post do |f|
-  .gh-fld
+  .gh-form-field
     = f.label :email, 'Adres e-mail'
-    .gh-inp
+    .gh-text-input
       = f.email_field :email,
         placeholder: 'jan.nowak@example.com',
         autocomplete: 'email',
         autofocus: true,
         required: true
 
-  .gh-stack
+  .gh-button-stack
     %button.gh-btn{ type: 'submit' } Wyślij link
 
 = render 'shared/register_prompt'

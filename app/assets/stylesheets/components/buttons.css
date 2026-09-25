@@ -49,15 +49,15 @@
     background: linear-gradient(to top, var(--gh-item-edge) 0 1px, var(--gh-item) 1px);
   }
 
-  .gh-btn--sec {
+  .gh-btn--secondary {
     color: var(--gh-ink);
   }
 
-  .gh-btn--sec::before {
+  .gh-btn--secondary::before {
     background: linear-gradient(to top, var(--gh-line-2) 0 3px, var(--gh-card-3) 3px);
   }
 
-  .gh-btn--sec:hover::before {
+  .gh-btn--secondary:hover::before {
     background: linear-gradient(to top, var(--gh-line-2) 0 3px,
         color-mix(in srgb, var(--gh-card-3) 80%, var(--gh-ink) 8%) 3px);
   }
@@ -70,7 +70,7 @@
     background: linear-gradient(to top, var(--gh-rank-edge) 0 3px, var(--gh-rank) 3px);
   }
 
-  .gh-btn--sm {
+  .gh-btn--small {
     min-height: 34px;
     padding: 0 12px 3px;
     font-size: 14px;
@@ -86,7 +86,7 @@
     background: var(--gh-card-3);
   }
 
-  .gh-linkbtn {
+  .gh-link-button {
     border: 0;
     background: none;
     padding: 0;
@@ -97,7 +97,7 @@
     text-underline-offset: 3px;
   }
 
-  .gh-linkbtn:hover {
+  .gh-link-button:hover {
     color: var(--gh-ink);
   }
 
@@ -119,7 +119,7 @@
     color: var(--gh-ink);
   }
 
-  .gh-rowb {
+  .gh-button-row {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;

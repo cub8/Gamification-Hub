@@ -1,18 +1,18 @@
 @layer components {
 
-  .gh-pgrid {
+  .gh-inventory-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 24px 18px;
     margin-top: 22px;
   }
 
-  .gh-card--gone .gh-art .gh-gph,
-  .gh-card--gone .gh-art img {
+  .gh-card--consumed .gh-card-art .gh-card-art-glyph,
+  .gh-card--consumed .gh-card-art img {
     opacity: 0.4;
   }
 
-  .gh-slot-e {
+  .gh-empty-slot-panel {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -23,7 +23,7 @@
     text-align: left;
   }
 
-  .gh-slot-e::after {
+  .gh-empty-slot-panel::after {
     content: "";
     position: absolute;
     inset: 8px;
@@ -31,22 +31,22 @@
     pointer-events: none;
   }
 
-  .gh-slot-e p {
+  .gh-empty-slot-panel p {
     margin: 0;
     font: 560 15px/1.4 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-slot-e .gh-btn {
+  .gh-empty-slot-panel .gh-btn {
     align-self: flex-start;
   }
 
-  @media (max-width: 720px) {
-    .gh-pgrid {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-inventory-grid {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-slot-e {
+    .gh-empty-slot-panel {
       min-height: 0;
     }
   }

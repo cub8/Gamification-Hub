@@ -1,22 +1,22 @@
 -# Contents of the notifications panel. Kept separate from index so
 -# mark_as_read can re-render it into the open panel without nesting a second
 -# turbo-frame inside the first.
-.gh-pop-h
+.gh-popover-header
   %h2.gh-h3 Powiadomienia
   - if unread.any?
-    = button_to mark_as_read_notifications_path, class: 'gh-linkbtn' do
+    = button_to mark_as_read_notifications_path, class: 'gh-link-button' do
       %i.fa-solid.fa-check-double
       Oznacz wszystkie
 
 - if notifications.any?
   - if unread.any?
-    %p.gh-pop-sec Nowe
-    %ul.gh-nlist
+    %p.gh-popover-section-label Nowe
+    %ul.gh-notification-list
       = render partial: 'notifications/notification', collection: unread, as: :notification
 
   - if read.any?
-    %p.gh-pop-sec Wcześniej
-    %ul.gh-nlist
+    %p.gh-popover-section-label Wcześniej
+    %ul.gh-notification-list
       = render partial: 'notifications/notification', collection: read, as: :notification
 - else
   %p.gh-small Brak powiadomień.

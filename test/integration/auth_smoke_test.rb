@@ -8,14 +8,14 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
   test 'login page renders on the app layout' do
     get login_path
     assert_response :success
-    assert_select 'main.gh-auth'
-    assert_select 'section.gh-panel.gh-acard'
+    assert_select 'main.gh-auth-page'
+    assert_select 'section.gh-panel.gh-auth-card'
     assert_select 'h1.gh-h1', 'Zaloguj się'
     assert_select 'p.gh-lead'
-    assert_select 'p.gh-who', 2
-    assert_select '.gh-divider', 'albo'
+    assert_select 'p.gh-signed-in-as', 2
+    assert_select '.gh-auth-divider', 'albo'
     assert_select 'button.gh-btn', /Zaloguj się przez USOS/
-    assert_select 'a.gh-btn.gh-btn--sec', /Zaloguj się e-mailem/
+    assert_select 'a.gh-btn.gh-btn--secondary', /Zaloguj się e-mailem/
     assert_select 'i.fa-solid.fa-graduation-cap'
     assert_select 'i.fa-solid.fa-envelope'
     assert_select 'dialog.gh-dialog turbo-frame#modal'
@@ -29,11 +29,11 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Logowanie e-mailem'
     # The label lives in its own span so the underline lands on the text only,
     # not on the chevron (the icon is a flex item and would inherit it).
-    assert_select 'a.gh-back > span', 'Inne sposoby logowania'
-    assert_select 'a.gh-back > i.fa-solid.fa-chevron-left'
+    assert_select 'a.gh-back-link > span', 'Inne sposoby logowania'
+    assert_select 'a.gh-back-link > i.fa-solid.fa-chevron-left'
     assert_select 'form[action=?][method=post]', auth_passwordless_path
-    assert_select '.gh-fld label[for=email]', 'Adres e-mail'
-    assert_select '.gh-inp input#email[name=email][type=email][required]'
+    assert_select '.gh-form-field label[for=email]', 'Adres e-mail'
+    assert_select '.gh-text-input input#email[name=email][type=email][required]'
     # Must be a <button>, not <input>: the edge is a ::before.
     assert_select 'button.gh-btn[type=submit]', 'Wyślij link'
     assert_select 'input[type=submit]', false
@@ -54,10 +54,10 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     [login_path, new_auth_passwordless_path].each do |path|
       get path
       assert_response :success
-      assert_select 'p.gh-alt', /Nie masz konta\?/
-      assert_select 'p.gh-alt button.gh-linkbtn', 'Zarejestruj się'
+      assert_select 'p.gh-auth-alt-action', /Nie masz konta\?/
+      assert_select 'p.gh-auth-alt-action button.gh-link-button', 'Zarejestruj się'
       # Never a dead link: a nil/# href is the bug this replaced.
-      assert_select 'p.gh-alt a', false
+      assert_select 'p.gh-auth-alt-action a', false
     end
   end
 
@@ -68,7 +68,7 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     get auth_passwordless_verify_path(token: 'nie-ma-takiego')
     follow_redirect!
 
-    assert_select '.gh-plate', /Nieprawidłowy token/
+    assert_select '.gh-inset-plate', /Nieprawidłowy token/
 
     # The bug this pins: the close button dispatched flash#dismiss but nothing
     # carried data-controller="flash", so the action had no controller to reach.
@@ -80,7 +80,7 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
       end
     end
     # The close control must not be the underlined link style.
-    assert_select 'button.gh-close.gh-linkbtn', false
+    assert_select 'button.gh-close.gh-link-button', false
   end
 
   test 'a notice rises as a toast instead of sitting in the content' do
@@ -98,17 +98,17 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
 
   test 'the table pattern layer is present' do
     get login_path
-    assert_select 'div.gh-tpat[aria-hidden=true]'
+    assert_select 'div.gh-cover-pattern[aria-hidden=true]'
   end
 
   test 'footer offers the theme toggle and help' do
     get login_path
-    assert_select '.gh-foot button.gh-linkbtn', 'Ciemny motyw'
-    assert_select '.gh-foot', /Pomoc:/
+    assert_select '.gh-auth-footer button.gh-link-button', 'Ciemny motyw'
+    assert_select '.gh-auth-footer', /Pomoc:/
 
     cookies[:gh_theme] = 'dark'
     get login_path
-    assert_select '.gh-foot button.gh-linkbtn', 'Jasny motyw'
+    assert_select '.gh-auth-footer button.gh-link-button', 'Jasny motyw'
   end
 
   # --- the inbox screen ----------------------------------------------------
@@ -123,10 +123,10 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     follow_redirect!
 
     assert_select 'h1.gh-h1', 'Sprawdź skrzynkę'
-    assert_select 'p.gh-addr', user.email
-    assert_select '.gh-big-ic i.fa-solid.fa-envelope'
+    assert_select 'p.gh-email-display', user.email
+    assert_select '.gh-icon-circle-lg i.fa-solid.fa-envelope'
     assert_select 'p.gh-small', /5 minut/
-    assert_select 'a.gh-linkbtn', 'Zmień adres e-mail'
+    assert_select 'a.gh-link-button', 'Zmień adres e-mail'
     # The address must not leak into any URL.
     assert_select 'a[href*=?]', user.email, false
   end
@@ -141,7 +141,7 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     follow_redirect!
 
     assert_select 'h1.gh-h1', 'Sprawdź skrzynkę'
-    assert_select 'p.gh-addr', 'nobody@example.com'
+    assert_select 'p.gh-email-display', 'nobody@example.com'
     assert_select 'p.gh-small', /5 minut/
   end
 

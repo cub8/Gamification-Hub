@@ -2,17 +2,17 @@
 -# Mockup: js-expanded/10-core.js `popAvatar()`.
 %dialog#gh-account-menu.gh-dialog.gh-dialog--menu.gh-dialog--anchored{ data: { action: 'click->menu#closeOnBackdrop' },
                                                                        'aria-label': 'Konto' }
-  .gh-dialog-body.gh-oct
-    %span.gh-grab{ 'aria-hidden': 'true' }
+  .gh-dialog-body.gh-octagon-clip
+    %span.gh-sheet-drag-handle{ 'aria-hidden': 'true' }
 
-    .gh-pop-me
-      %span.gh-av.gh-oct{ 'data-gh-h': gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
+    .gh-popover-identity
+      %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
         = gh_initials(user.full_name)
       %span
         %b= user.full_name
         %small= user.email
 
-    %ul.gh-menu
+    %ul.gh-menu-list
       %li
         -# Inert until #/s/account exists: a button, never a dead href.
         %button{ type: 'button' }
@@ -20,8 +20,8 @@
           %span Ustawienia konta
       %li
         %button{ type: 'button', data: { action: 'theme#toggle' } }
-          %i.fa-solid.fa-moon.gh-ic-moon
-          %i.fa-solid.fa-sun.gh-ic-sun
+          %i.fa-solid.fa-moon.gh-theme-icon-moon
+          %i.fa-solid.fa-sun.gh-theme-icon-sun
           %span{ data: { theme_target: 'label' } }
             = gh_theme == 'dark' ? 'Jasny motyw' : 'Ciemny motyw'
       %li

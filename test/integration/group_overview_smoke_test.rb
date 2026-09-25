@@ -47,7 +47,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(group(owner: teacher))
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -59,7 +59,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
   end
 
   test 'the sidebar marks Przegląd as the current destination' do
@@ -69,7 +69,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select 'aside.gh-sb a.gh-nl.gh-nl--on[href=?][aria-current=page]',
+    assert_select 'aside.gh-sidebar a.gh-sidebar-link.gh-sidebar-link--active[href=?][aria-current=page]',
                   story_group_path(story_group), 'Przegląd'
   end
 
@@ -93,8 +93,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-home .gh-purse'
-    assert_select '.gh-kpis', false
+    assert_select '.gh-group-overview-grid .gh-currency-balance-card'
+    assert_select '.gh-kpi-row', false
   end
 
   # --- teacher: hero and KPIs -----------------------------------------------
@@ -106,12 +106,12 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-hero .gh-h1', 'Kosmiczne króliki'
-    assert_select '.gh-hero .gh-lore-t', 'Galaktyka jest wielka.'
-    assert_select '.gh-hero .gh-art--mono', 'KK'
-    assert_select '.gh-hero a[href=?]', story_group_invites_path(story_group), /Pokaż kod/
-    assert_select '.gh-hero a[href=?]', story_group_activity_groups_path(story_group), /Utwórz arkusz/
-    assert_select '.gh-hero a[href=?]', edit_story_group_path(story_group), /Ustawienia grupy/
+    assert_select '.gh-overview-hero .gh-h1', 'Kosmiczne króliki'
+    assert_select '.gh-overview-hero .gh-group-description-text', 'Galaktyka jest wielka.'
+    assert_select '.gh-overview-hero .gh-art--monogram', 'KK'
+    assert_select '.gh-overview-hero a[href=?]', story_group_invites_path(story_group), /Pokaż kod/
+    assert_select '.gh-overview-hero a[href=?]', story_group_activity_groups_path(story_group), /Utwórz arkusz/
+    assert_select '.gh-overview-hero a[href=?]', edit_story_group_path(story_group), /Ustawienia grupy/
   end
 
   test 'a group with artwork shows it instead of the monogram' do
@@ -122,8 +122,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-hero .gh-art img'
-    assert_select '.gh-hero .gh-art--mono', false
+    assert_select '.gh-overview-hero .gh-card-art img'
+    assert_select '.gh-overview-hero .gh-art--monogram', false
   end
 
   test 'a group with no description says what to do about it' do
@@ -134,8 +134,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-hero .gh-lore-t', /1 student w tej grupie/
-    assert_select '.gh-hero .gh-lore-t', /Dodaj opis/
+    assert_select '.gh-overview-hero .gh-group-description-text', /1 student w tej grupie/
+    assert_select '.gh-overview-hero .gh-group-description-text', /Dodaj opis/
   end
 
   test 'a supporting teacher gets the hero without the settings button' do
@@ -150,7 +150,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     # A supporting teacher may edit everything but the group's existence, so
     # the button stays — this is the policy speaking, not the screen.
-    assert_select '.gh-hero a[href=?]', edit_story_group_path(story_group)
+    assert_select '.gh-overview-hero a[href=?]', edit_story_group_path(story_group)
   end
 
   test 'the KPI strip counts only this week and only this group' do
@@ -170,7 +170,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    values = css_select('.gh-kpi').map { |kpi| [kpi.css('dt').text, kpi.css('dd').text.strip] }
+    values = css_select('.gh-kpi-tile').map { |kpi| [kpi.css('dt').text, kpi.css('dd').text.strip] }
 
     assert_equal '1', values[0].last
     assert_equal 'Studenci', values[0].first
@@ -186,12 +186,12 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-kpi:last-child dd', 'Podium i własne miejsce'
+    assert_select '.gh-kpi-tile:last-child dd', 'Podium i własne miejsce'
 
     story_group.update!(ranking_mode: :full)
     get story_group_path(story_group)
 
-    assert_select '.gh-kpi:last-child dd', 'Pełny ranking'
+    assert_select '.gh-kpi-tile:last-child dd', 'Pełny ranking'
   end
 
   # --- teacher: purchases ---------------------------------------------------
@@ -207,11 +207,11 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-plist .gh-prow' do
+    assert_select '.gh-purchase-list .gh-purchase-row' do
       assert_select 'b', 'Poprawka'
       # The nickname is what everybody else in the group sees.
-      assert_select '.gh-p-main span', 'Nova'
-      assert_select '.gh-cost b', '15'
+      assert_select '.gh-purchase-row-main span', 'Nova'
+      assert_select '.gh-price-badge b', '15'
     end
     assert_select 'a[href=?]', home_path(group: story_group.id), 'Wszystkie zakupy w grupie'
   end
@@ -229,7 +229,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(story_group)
 
     assert_response :success
-    assert_select '.gh-prow b', 'Przedmiot usunięty z oferty'
+    assert_select '.gh-purchase-row b', 'Przedmiot usunięty z oferty'
   end
 
   # Four columns, not the Start screen's five: without the modifier the price
@@ -246,11 +246,11 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select 'li.gh-prow.gh-prow--group', 1
+    assert_select 'li.gh-purchase-row.gh-purchase-row--group-variant', 1
     # No group chip in a group: the row has four children, which is what the
     # modifier's track list is for.
-    assert_select '.gh-prow--group .gh-p-g', false
-    assert_select '.gh-prow--group > *', 4
+    assert_select '.gh-purchase-row--group-variant .gh-purchase-row-group', false
+    assert_select '.gh-purchase-row--group-variant > *', 4
   end
 
   test 'a group where nobody has bought anything says so' do
@@ -259,8 +259,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(group(owner: teacher))
 
-    assert_select '.gh-plist', false
-    assert_select '.gh-hp .gh-expl', /Nikt jeszcze niczego nie kupił/
+    assert_select '.gh-purchase-list', false
+    assert_select '.gh-overview-side-panel .gh-explainer-note', /Nikt jeszcze niczego nie kupił/
   end
 
   # --- teacher: Wymaga uwagi ------------------------------------------------
@@ -273,8 +273,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-att li:first-child' do
-      assert_select '.gh-att-ic--zero'
+    assert_select '.gh-attention-list li:first-child' do
+      assert_select '.gh-attention-icon--zero'
       assert_select 'b', 'Mateusz Lewandowski ma 0 żyć'
       assert_select 'a[href=?]', story_group_student_path(story_group, membership), 'Otwórz'
     end
@@ -291,7 +291,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-att', false
+    assert_select '.gh-attention-list', false
     assert_select 'body', { text: /do awansu/, count: 0 }
   end
 
@@ -305,9 +305,9 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-att b', 'Laboratoria 5 w trakcie'
-    assert_select '.gh-att small', 'Przyznano 1 nagrodę, 1 kolumna bez ocen.'
-    assert_select '.gh-att a.gh-btn[href=?]',
+    assert_select '.gh-attention-list b', 'Laboratoria 5 w trakcie'
+    assert_select '.gh-attention-list small', 'Przyznano 1 nagrodę, 1 kolumna bez ocen.'
+    assert_select '.gh-attention-list a.gh-btn[href=?]',
                   edit_story_group_activity_group_students_activity_group_categories_path(story_group, sheet),
                   'Oceń'
   end
@@ -320,7 +320,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-att', false
+    assert_select '.gh-attention-list', false
   end
 
   # --- teacher: per-sheet podium --------------------------------------------
@@ -337,18 +337,18 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    names = css_select('.gh-sheet2 b').map(&:text)
+    names = css_select('.gh-sheet-summary-row b').map(&:text)
 
     # Newest first, and only two of the three.
     assert_equal ['Laboratoria 4', 'Laboratoria 3'], names
 
-    assert_select '.gh-sheet2:first-of-type .gh-top3 li:first-child' do
-      assert_select '.gh-pos.gh-pos--p1', '1'
+    assert_select '.gh-sheet-summary-row:first-of-type .gh-leaderboard-top3 li:first-child' do
+      assert_select '.gh-position-badge.gh-position-badge--p1', '1'
       # A nickname where one is set, the real name otherwise.
-      assert_select '.gh-podium-score', '+11'
+      assert_select '.gh-leaderboard-score', '+11'
     end
-    assert_select '.gh-top3 li', /Meteor/
-    assert_select '.gh-top3 li', /Barbara Kowalewska/
+    assert_select '.gh-leaderboard-top3 li', /Meteor/
+    assert_select '.gh-leaderboard-top3 li', /Barbara Kowalewska/
   end
 
   test 'the podium note follows the group ranking settings' do
@@ -360,17 +360,17 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-sheet2 .gh-small', /Ranking jest wyłączony/
+    assert_select '.gh-sheet-summary-row .gh-small', /Ranking jest wyłączony/
 
     story_group.update!(ranking_enabled: true)
     get story_group_path(story_group)
 
-    assert_select '.gh-sheet2 .gh-small', /podium i własne miejsce/
+    assert_select '.gh-sheet-summary-row .gh-small', /podium i własne miejsce/
 
     story_group.update!(ranking_mode: :full)
     get story_group_path(story_group)
 
-    assert_select '.gh-sheet2 .gh-small', /pełny ranking/i
+    assert_select '.gh-sheet-summary-row .gh-small', /pełny ranking/i
   end
 
   test 'a group with no sheets is told what a sheet is for' do
@@ -380,8 +380,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-hcol h2', 'Nie masz jeszcze arkuszy ocen'
-    assert_select '.gh-hcol a[href=?]', story_group_activity_groups_path(story_group), 'Utwórz arkusz'
+    assert_select '.gh-overview-column h2', 'Nie masz jeszcze arkuszy ocen'
+    assert_select '.gh-overview-column a[href=?]', story_group_activity_groups_path(story_group), 'Utwórz arkusz'
   end
 
   # --- student: purse and rank ----------------------------------------------
@@ -393,12 +393,12 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-purse .gh-kicker', 'Do wydania'
-    assert_select '.gh-purse .gh-num', '12'
-    assert_select '.gh-purse .gh-unit', 'Marchewek'
-    assert_select '.gh-purse-stats dd', '34'
-    assert_select '.gh-purse .gh-lv', /2/
-    assert_select '.gh-purse a[href=?]', story_group_shop_index_path(story_group), /Otwórz sklep/
+    assert_select '.gh-currency-balance-card .gh-page-kicker', 'Do wydania'
+    assert_select '.gh-currency-balance-card .gh-tabular-nums', '12'
+    assert_select '.gh-currency-balance-card .gh-price-unit-label', 'Marchewek'
+    assert_select '.gh-currency-balance-stats dd', '34'
+    assert_select '.gh-currency-balance-card .gh-lives-badge', /2/
+    assert_select '.gh-currency-balance-card a[href=?]', story_group_shop_index_path(story_group), /Otwórz sklep/
   end
 
   test 'zero lives are marked in the purse' do
@@ -408,7 +408,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-purse .gh-lv.gh-lv--zero'
+    assert_select '.gh-currency-balance-card .gh-lives-badge.gh-lives-badge--zero'
   end
 
   test 'the rank card measures progress from the rung you hold, not from zero' do
@@ -421,11 +421,11 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rank-name', 'Królik'
-    assert_select '.gh-rank-pt span', '30 z 40'
+    assert_select '.gh-rank-card-name', 'Królik'
+    assert_select '.gh-rank-progress-text span', '30 z 40'
     # Half of the 20 that separates the two rungs, not three quarters of 40.
-    assert_select '.gh-bar[aria-valuenow="10"][aria-valuemax="20"] i[style=?]', '--gh-p: 50%'
-    assert_select '.gh-rank-p .gh-small', 'Jeszcze 10 do rangi Kosmiczny Królik. Ta ranga daje −15% w sklepie.'
+    assert_select '.gh-progress-bar[aria-valuenow="10"][aria-valuemax="20"] i[style=?]', '--gh-p: 50%'
+    assert_select '.gh-rank-progress .gh-small', 'Jeszcze 10 do rangi Kosmiczny Królik. Ta ranga daje −15% w sklepie.'
   end
 
   test 'a rank with no discount does not promise one' do
@@ -436,7 +436,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rank-p .gh-small', 'Jeszcze 15 do rangi Królik.'
+    assert_select '.gh-rank-progress .gh-small', 'Jeszcze 15 do rangi Królik.'
   end
 
   test 'a student at the top rung is told there is nothing above it' do
@@ -447,9 +447,9 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in top.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rank-name', 'Królik'
-    assert_select '.gh-rankc .gh-small', /To najwyższa ranga/
-    assert_select '.gh-rank-p', false
+    assert_select '.gh-rank-card-name', 'Królik'
+    assert_select '.gh-rank-card .gh-small', /To najwyższa ranga/
+    assert_select '.gh-rank-progress', false
   end
 
   test 'a group with no ranks says so instead of showing an empty rank card' do
@@ -459,9 +459,9 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rank-name', 'Brak rangi'
-    assert_select '.gh-rankc .gh-small', /nie dodał jeszcze rang/
-    assert_select '.gh-rankc .gh-art', false
+    assert_select '.gh-rank-card-name', 'Brak rangi'
+    assert_select '.gh-rank-card .gh-small', /nie dodał jeszcze rang/
+    assert_select '.gh-rank-card .gh-card-art', false
   end
 
   # ranks/_rank_thumb is a mini entity card with its own frame and shadow;
@@ -476,8 +476,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rankc .gh-art .gh-mc', false
-    assert_select '.gh-rankc .gh-art > svg.gh-gph'
+    assert_select '.gh-rank-card .gh-card-art .gh-mini-thumb', false
+    assert_select '.gh-rank-card .gh-card-art > svg.gh-card-art-glyph'
   end
 
   # A rank always validates with art, so the fallback only fires for a row whose
@@ -493,8 +493,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rankc .gh-art i.fa-ranking-star'
-    assert_select '.gh-rankc .gh-art svg.gh-gph', false
+    assert_select '.gh-rank-card .gh-card-art i.fa-ranking-star'
+    assert_select '.gh-rank-card .gh-card-art svg.gh-card-art-glyph', false
   end
 
   # --- student: ranking place -----------------------------------------------
@@ -507,12 +507,12 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rk', false
+    assert_select '.gh-rank-card-footer', false
 
     story_group.update!(ranking_enabled: true)
     get story_group_path(story_group)
 
-    assert_select '.gh-rk a[href=?]', story_group_ranking_path(story_group), '2. miejsce w rankingu grupy'
+    assert_select '.gh-rank-card-footer a[href=?]', story_group_ranking_path(story_group), '2. miejsce w rankingu grupy'
   end
 
   test 'students tied on the total share a place' do
@@ -525,14 +525,14 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in tied.user
     get story_group_path(story_group)
 
-    assert_select '.gh-rk a', '2. miejsce w rankingu grupy'
+    assert_select '.gh-rank-card-footer a', '2. miejsce w rankingu grupy'
 
     sign_out
     sign_in last.user
     get story_group_path(story_group)
 
     # 4., not 3.: the two on 40 both take second place.
-    assert_select '.gh-rk a', '4. miejsce w rankingu grupy'
+    assert_select '.gh-rank-card-footer a', '4. miejsce w rankingu grupy'
   end
 
   # --- student: collections and ledger --------------------------------------
@@ -547,10 +547,10 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-zone--badges .gh-zone-n', '1 z 2'
-    assert_select '.gh-zone--badges .gh-card--badge', 2
+    assert_select '.gh-showcase-zone--badges .gh-showcase-zone-count', '1 z 2'
+    assert_select '.gh-showcase-zone--badges .gh-card--badge', 2
     # The unearned one lies face down: its art is the reward.
-    assert_select '.gh-zone--badges .gh-flip--down', 1
+    assert_select '.gh-showcase-zone--badges .gh-flip-card--down', 1
   end
 
   test 'a group with no badges has no badges zone' do
@@ -560,7 +560,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-zone--badges', false
+    assert_select '.gh-showcase-zone--badges', false
   end
 
   test 'the hand fans the newest items and the slot counts what is affordable' do
@@ -577,17 +577,17 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-zone--hand .gh-zone-n', '3'
-    assert_select '.gh-hand .gh-hc', 3
+    assert_select '.gh-showcase-zone--hand .gh-showcase-zone-count', '3'
+    assert_select '.gh-item-hand .gh-item-hand-card', 3
     # Middle card straight, the other two splayed either side of it.
-    rotations = css_select('.gh-hand .gh-hc').map { |node| node['style'] }
+    rotations = css_select('.gh-item-hand .gh-item-hand-card').map { |node| node['style'] }
 
     assert_equal ['--gh-rot: -4.0deg', '--gh-rot: 0.0deg', '--gh-rot: 4.0deg'], rotations
 
     # Everything but "Drogi" is within reach. Owning an item does not take it
     # out of the count — the shop sells repeats, and "Moje przedmioty" says the
     # same number for the same reason.
-    assert_select '.gh-slot-e p', 'Dobierz coś w sklepie. Stać cię teraz na 4 przedmioty.'
+    assert_select '.gh-empty-slot-panel p', 'Dobierz coś w sklepie. Stać cię teraz na 4 przedmioty.'
   end
 
   # Three is what the span-7 column holds; the counter and "Moje przedmioty"
@@ -603,8 +603,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-hand .gh-hc', 3
-    assert_select '.gh-zone--hand .gh-zone-n', '7'
+    assert_select '.gh-item-hand .gh-item-hand-card', 3
+    assert_select '.gh-showcase-zone--hand .gh-showcase-zone-count', '7'
   end
 
   # A single card is not a fan: it sits straight, not tipped to one side.
@@ -617,7 +617,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-hand .gh-hc[style=?]', '--gh-rot: 0.0deg'
+    assert_select '.gh-item-hand .gh-item-hand-card[style=?]', '--gh-rot: 0.0deg'
   end
 
   test 'the ledger shows the six newest rows and links to the whole history' do
@@ -630,9 +630,9 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-ledger .gh-led-r', 6
-    assert_select '.gh-ledger .gh-led-a--corr', '−4'
-    assert_select '.gh-ledger a[href=?]',
+    assert_select '.gh-overview-ledger-panel .gh-activity-feed-row', 6
+    assert_select '.gh-overview-ledger-panel .gh-activity-feed-row-amount--corr', '−4'
+    assert_select '.gh-overview-ledger-panel a[href=?]',
                   story_group_student_currency_transactions_path(story_group, membership),
                   'Pokaż całą historię'
   end
@@ -644,8 +644,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_path(story_group)
 
-    assert_select '.gh-ledger .gh-led', false
-    assert_select '.gh-ledger .gh-expl', /Pierwsze wpisy pojawią się po zajęciach/
+    assert_select '.gh-overview-ledger-panel .gh-ledger-list', false
+    assert_select '.gh-overview-ledger-panel .gh-explainer-note', /Pierwsze wpisy pojawią się po zajęciach/
   end
 
   test 'the student overview never shows a sheet podium' do
@@ -657,7 +657,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(story_group)
 
     assert_response :success
-    assert_select '.gh-top3', false
-    assert_select '.gh-sheet2', false
+    assert_select '.gh-leaderboard-top3', false
+    assert_select '.gh-sheet-summary-row', false
   end
 end

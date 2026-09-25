@@ -6,105 +6,105 @@
 -# teacher opens this page to start.
 - story_group = overview.story_group
 
-%section.gh-card.gh-card--neutral.gh-hero
-  .gh-card-f
-    .gh-card-i
+%section.gh-card.gh-card--neutral.gh-overview-hero
+  .gh-card-frame
+    .gh-card-inset
       = render 'layouts/group_art', story_group: story_group
 
-      .gh-hero-b
+      .gh-overview-hero-body
         %h1.gh-h1= story_group.name
-        %p.gh-lore-t= overview_teacher_lead(story_group, overview.students_count)
+        %p.gh-group-description-text= overview_teacher_lead(story_group, overview.students_count)
 
-        .gh-rowb
+        .gh-button-row
           = link_to story_group_invites_path(story_group), class: 'gh-btn' do
             %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
             Pokaż kod dla studentów
-          = link_to story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--sec' do
+          = link_to story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--secondary' do
             %i.fa-solid.fa-table{ 'aria-hidden': 'true' }
             Utwórz arkusz
           - if policy(story_group).update?
             -# A page now, not a dialog (DECISIONS.md:26) — so no turbo_frame
             -# here, or settings would render inside the modal.
-            = link_to edit_story_group_path(story_group), class: 'gh-btn gh-btn--sec' do
+            = link_to edit_story_group_path(story_group), class: 'gh-btn gh-btn--secondary' do
               %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }
               Ustawienia grupy
 
-%section.gh-panel.gh-kpis{ 'aria-label': 'Podsumowanie grupy' }
+%section.gh-panel.gh-kpi-row{ 'aria-label': 'Podsumowanie grupy' }
   %dl
     - overview.kpis.each do |kpi|
-      .gh-kpi
+      .gh-kpi-tile
         %dt= kpi.label
         %dd
           = kpi.value
           - if kpi.note
             %small= kpi.note
 
-.gh-hgrid
-  %section.gh-panel.gh-hp{ 'aria-labelledby': 'gh-purchases-title' }
+.gh-overview-grid
+  %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-purchases-title' }
     %h2#gh-purchases-title.gh-h2 Ostatnie zakupy
 
     - if overview.purchases.any?
-      -# gh-prow--group: four columns, not the Start screen's five. In a group
-      -# there is no group chip to show, and the row has to say so — a .gh-prow
+      -# gh-purchase-row--group-variant: four columns, not the Start screen's five. In a group
+      -# there is no group chip to show, and the row has to say so — a .gh-purchase-row
       -# with four children would auto-place the price chip into the chip's
       -# 210px track and stretch it into a bar.
-      %ul.gh-plist
+      %ul.gh-purchase-list
         - overview.purchases.each do |purchase|
-          %li.gh-prow.gh-prow--group
+          %li.gh-purchase-row.gh-purchase-row--group-variant
             = render 'layouts/item_thumb', item: purchase.item
-            %span.gh-p-main
+            %span.gh-purchase-row-main
               %b= purchase.item&.name || 'Przedmiot usunięty z oferty'
               %span= purchase.student_name
-            %span.gh-cost
+            %span.gh-price-badge
               %b= purchase.price
               = render 'layouts/currency_token', story_group: story_group, size: 16
-            %span.gh-p-time= gh_when(purchase.time)
+            %span.gh-purchase-row-time= gh_when(purchase.time)
 
       -# The teacher Start screen already filters every purchase by group, so
       -# "wszystkie zakupy w tej grupie" is that screen with this group picked.
-      = link_to 'Wszystkie zakupy w grupie', home_path(group: story_group.id), class: 'gh-linkbtn'
+      = link_to 'Wszystkie zakupy w grupie', home_path(group: story_group.id), class: 'gh-link-button'
     - else
-      %p.gh-expl
+      %p.gh-explainer-note
         Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same, gdy
         studenci zaczną wydawać walutę w sklepie.
 
-  .gh-hcol
+  .gh-overview-column
     - if overview.attention.any?
-      %section.gh-panel.gh-hp{ 'aria-labelledby': 'gh-attention-title' }
+      %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-attention-title' }
         %h2#gh-attention-title.gh-h2 Wymaga uwagi
-        %ul.gh-att
+        %ul.gh-attention-list
           - overview.attention.each do |row|
             %li
-              %span.gh-att-ic{ class: ("gh-att-ic--#{row.tone}" if row.tone) }
+              %span.gh-attention-icon{ class: ("gh-attention-icon--#{row.tone}" if row.tone) }
                 %i.fa-solid{ class: row.icon, 'aria-hidden': 'true' }
               %span
                 %b= row.title
                 %small= row.detail
               = link_to row.action_label, row.action_path,
-                        class: (row.emphasised? ? 'gh-btn gh-btn--sm' : 'gh-linkbtn')
+                        class: (row.emphasised? ? 'gh-btn gh-btn--small' : 'gh-link-button')
 
     - if overview.recent_sheets.any?
-      %section.gh-panel.gh-hp{ 'aria-labelledby': 'gh-sheets-title' }
+      %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-sheets-title' }
         %h2#gh-sheets-title.gh-h2 Ostatnie arkusze
         - overview.recent_sheets.each do |sheet|
-          .gh-sheet2
+          .gh-sheet-summary-row
             %div
               %b= sheet.activity_group.name
-              = link_to 'Otwórz', story_group_activity_groups_path(story_group), class: 'gh-linkbtn'
+              = link_to 'Otwórz', story_group_activity_groups_path(story_group), class: 'gh-link-button'
             - if sheet.podium.any?
-              %ol.gh-top3
+              %ol.gh-leaderboard-top3
                 - sheet.podium.each_with_index do |place, index|
                   %li
-                    %span.gh-pos.gh-oct{ class: "gh-pos--p#{index + 1}" }= index + 1
+                    %span.gh-position-badge.gh-octagon-clip{ class: "gh-position-badge--p#{index + 1}" }= index + 1
                     = place.student.display_name
-                    %span.gh-podium-score +#{place.points}
+                    %span.gh-leaderboard-score +#{place.points}
               %p.gh-small= ranking_visibility_note(story_group)
             - else
               %p.gh-small Nikt nie ma jeszcze nagród z tego arkusza.
     - else
-      %section.gh-panel.gh-hp
+      %section.gh-panel.gh-overview-side-panel
         %h2.gh-h2 Nie masz jeszcze arkuszy ocen
-        %p.gh-expl
+        %p.gh-explainer-note
           Arkusz to jedne zajęcia: kolumny z nagrodami i lista studentów.
           Utwórz pierwszy, żeby zacząć przyznawać walutę.
-        = link_to 'Utwórz arkusz', story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--sec'
+        = link_to 'Utwórz arkusz', story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--secondary'

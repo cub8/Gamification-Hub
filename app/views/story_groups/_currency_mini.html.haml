@@ -11,31 +11,31 @@
 -#
 -# Every token's mark is filled by group_wizard_controller, which clones it out
 -# of the checked picker tile — the same trick rank_form_controller uses.
-.gh-cmini{ class: "gh-theme--#{theme}" }
+.gh-currency-preview{ class: "gh-theme--#{theme}" }
   -# The purse in the header.
-  %span.gh-bal
-    %span.gh-tok.gh-oct{ style: '--gh-s: 32px', 'aria-hidden': 'true' }
-      %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
+  %span.gh-balance-button
+    %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 32px', 'aria-hidden': 'true' }
+      %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
         %span{ data: { group_wizard_target: 'markLetter' } }
     %span
       %b 19
       %small do wydania
 
   -# "Historia waluty", where the balance is the headline.
-  %span.gh-cmini-purse
-    %span.gh-tok.gh-oct{ style: '--gh-s: 50px', 'aria-hidden': 'true' }
-      %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
+  %span.gh-currency-preview-purse
+    %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 50px', 'aria-hidden': 'true' }
+      %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
         %span{ data: { group_wizard_target: 'markLetter' } }
     %b 19
 
   -# The buy dialog, where the price is read as a sentence.
-  %span.gh-dlgt
+  %span.gh-currency-preview-price-line
     15
-    %span.gh-tok.gh-oct{ style: '--gh-s: 22px', 'aria-hidden': 'true' }
-      %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
+    %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 22px', 'aria-hidden': 'true' }
+      %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
         %span{ data: { group_wizard_target: 'markLetter' } }
 
   -# A price chip on a shop card, which shows the number alone
   -# (DECISIONS.md:24) — so there is no mark in this one.
-  %span.gh-cost
+  %span.gh-price-badge
     %b 15

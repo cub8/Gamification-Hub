@@ -23,11 +23,11 @@
     background: var(--gh-card);
   }
 
-  .gh-danger::before {
+  .gh-danger-zone::before {
     background: var(--gh-heart);
   }
 
-  .gh-danger::after {
+  .gh-danger-zone::after {
     --gh-c: 13px;
     content: "";
     position: absolute;
@@ -44,17 +44,17 @@
     background: var(--gh-card);
   }
 
-  .gh-danger>h2 {
+  .gh-danger-zone>h2 {
     color: var(--gh-heart-ink);
   }
 
-  .gh-plate {
+  .gh-inset-plate {
     --gh-c: 8px;
     position: relative;
     isolation: isolate;
   }
 
-  .gh-plate::before {
+  .gh-inset-plate::before {
     content: "";
     position: absolute;
     z-index: -1;

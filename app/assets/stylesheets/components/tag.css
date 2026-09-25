@@ -45,43 +45,43 @@
     background: color-mix(in srgb, var(--gh-badge) 20%, var(--gh-card));
   }
 
-  .gh-tag--disc {
+  .gh-tag--discount {
     color: var(--gh-badge-ink);
   }
 
-  .gh-tag--disc::before {
+  .gh-tag--discount::before {
     background: color-mix(in srgb, var(--gh-badge) 20%, var(--gh-card));
   }
 
   /* An item that works with no lives left (00-base.css:132-134). The heart is
      filled rather than outlined — it is a state, not an action. */
-  .gh-tag--life {
+  .gh-tag--no-lives {
     color: var(--gh-heart-ink);
   }
 
-  .gh-tag--life::before {
+  .gh-tag--no-lives::before {
     background: color-mix(in srgb, var(--gh-heart) 16%, var(--gh-card));
   }
 
   /* What gates an item on the teacher's list (24-lists.css:14). The only
      inverted chip in the set: a requirement is the one thing on that card you
      must not skim past. */
-  .gh-tag--lock {
+  .gh-tag--locked {
     color: var(--gh-card);
   }
 
-  .gh-tag--lock::before {
+  .gh-tag--locked::before {
     background: var(--gh-ink);
   }
 
   /* Soft-deleted, but still on someone's shelf. Grey, and it says so in
      words — the card behind it is otherwise unchanged, because the student
      still owns what it shows. */
-  .gh-tag--del {
+  .gh-tag--removed {
     color: var(--gh-ink-2);
   }
 
-  .gh-tag--del::before {
+  .gh-tag--removed::before {
     background: var(--gh-card-3);
   }
 
@@ -89,7 +89,7 @@
      even though it labels a gold row; kept, because it is the same chip that
      marks "you" in both the ranking table and the rank ladder, and it has to
      read the same in both. */
-  .gh-youtag {
+  .gh-you-badge {
     --gh-c: 5px;
     display: inline-block;
     margin-left: 8px;

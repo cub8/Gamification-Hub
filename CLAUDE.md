@@ -28,5 +28,5 @@ controllers live in `app/javascript/controllers/` and self-register in
 `controllers/index.ts`.
 
 Every in-group screen carries the group's cover as a blurred table background
-(`.gh-tbg` + `.gh-ttint`), from one branch in `layouts/application.html.haml`.
+(`.gh-group-cover-bg` + `.gh-group-cover-tint`), from one branch in `layouts/application.html.haml`.
 

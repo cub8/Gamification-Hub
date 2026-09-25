@@ -1,24 +1,24 @@
 @layer components {
 
-  .gh-fld {
+  .gh-form-field {
     margin-top: 16px;
   }
 
-  .gh-fld>label {
+  .gh-form-field>label {
     display: block;
     font: 650 14px/1.2 var(--gh-f-ui);
     margin-bottom: 8px;
   }
 
-  .gh-inp {
+  .gh-text-input {
     --gh-c: 7px;
     position: relative;
     isolation: isolate;
     display: flex;
   }
 
-  .gh-inp::before,
-  .gh-inp::after {
+  .gh-text-input::before,
+  .gh-text-input::after {
     content: "";
     position: absolute;
     z-index: -1;
@@ -32,27 +32,27 @@
         0 var(--gh-c));
   }
 
-  .gh-inp::before {
+  .gh-text-input::before {
     inset: 0;
     background: var(--gh-line-2);
   }
 
-  .gh-inp::after {
+  .gh-text-input::after {
     --gh-c: 6px;
     inset: 2px;
     background: var(--gh-card);
   }
 
-  .gh-inp:focus-within::before {
+  .gh-text-input:focus-within::before {
     background: var(--gh-focus);
   }
 
-  .gh-inp--bad::before {
+  .gh-text-input--invalid::before {
     background: var(--gh-heart);
   }
 
-  .gh-inp input,
-  .gh-inp textarea {
+  .gh-text-input input,
+  .gh-text-input textarea {
     flex: 1;
     min-width: 0;
     border: 0;
@@ -63,12 +63,12 @@
     color: var(--gh-ink);
   }
 
-  .gh-inp textarea {
+  .gh-text-input textarea {
     min-height: 72px;
     resize: vertical;
   }
 
-  .gh-err {
+  .gh-field-error {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -77,7 +77,7 @@
     font: 620 13.5px var(--gh-f-ui);
   }
 
-  .gh-search {
+  .gh-search-input {
     --gh-c: 7px;
     position: relative;
     isolation: isolate;
@@ -90,11 +90,11 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-search--wide {
+  .gh-search-input--wide {
     width: 300px;
   }
 
-  .gh-search::before {
+  .gh-search-input::before {
     content: "";
     position: absolute;
     z-index: -1;
@@ -110,16 +110,16 @@
         0 var(--gh-c));
   }
 
-  .gh-search:focus-within::before {
+  .gh-search-input:focus-within::before {
     background: var(--gh-card-3);
   }
 
-  .gh-search:focus-within {
+  .gh-search-input:focus-within {
     outline: 3px solid var(--gh-focus);
     outline-offset: 2px;
   }
 
-  .gh-search input {
+  .gh-search-input input {
     flex: 1;
     min-width: 0;
     border: 0;
@@ -129,33 +129,33 @@
     outline: none;
   }
 
-  .gh-hint {
+  .gh-field-hint {
     display: block;
     margin-top: 7px;
     font: 450 13px/1.4 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-inp--num input {
+  .gh-text-input--numeric input {
     width: 104px;
     text-align: right;
     font: 800 22px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-swrow {
+  .gh-toggle-switch-row {
     display: flex;
     align-items: flex-start;
     gap: 14px;
     margin-top: 18px;
   }
 
-  .gh-swrow b {
+  .gh-toggle-switch-row b {
     display: block;
     font: 650 14.5px/1.3 var(--gh-f-ui);
   }
 
-  .gh-sw {
+  .gh-toggle-switch {
     --gh-c: 6px;
     position: relative;
     width: 54px;
@@ -168,7 +168,7 @@
     background: var(--gh-card-3);
   }
 
-  .gh-sw::after {
+  .gh-toggle-switch::after {
     --gh-c: 5px;
     content: "";
     position: absolute;
@@ -188,21 +188,21 @@
         0 var(--gh-c));
   }
 
-  .gh-sw:checked {
+  .gh-toggle-switch:checked {
     background: var(--gh-item);
   }
 
-  .gh-sw:checked::after {
+  .gh-toggle-switch:checked::after {
     left: 28px;
     background: var(--gh-on-item);
   }
 
-  .gh-sw:focus-visible {
+  .gh-toggle-switch:focus-visible {
     outline: 2px solid var(--gh-focus);
     outline-offset: 3px;
   }
 
-  .gh-code-big {
+  .gh-invite-code-display {
     --gh-c: 10px;
     display: inline-block;
     margin: 6px 0 12px;
@@ -215,11 +215,11 @@
 }
 
 @layer components {
-  .gh-phead.gh-phead--stack {
+  .gh-page-header.gh-page-header--stacked {
     display: block;
   }
 
-  .gh-crumbs {
+  .gh-breadcrumbs {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -228,20 +228,20 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-crumbs a {
+  .gh-breadcrumbs a {
     color: inherit;
     text-decoration: none;
   }
 
-  .gh-crumbs a:hover {
+  .gh-breadcrumbs a:hover {
     text-decoration: underline;
   }
 
-  .gh-crumbs i {
+  .gh-breadcrumbs i {
     font-size: 11px;
   }
 
-  .gh-wiz {
+  .gh-form-shell {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 380px;
     gap: 22px;
@@ -249,11 +249,11 @@
     align-items: start;
   }
 
-  .gh-fcol {
+  .gh-form-column {
     padding: 24px 28px 28px;
   }
 
-  .gh-pcol {
+  .gh-preview-column {
     position: sticky;
     top: 0;
     display: flex;
@@ -261,58 +261,58 @@
     gap: 16px;
   }
 
-  .gh-pv {
+  .gh-preview-panel {
     padding: 18px 20px 20px;
   }
 
-  .gh-pv h3 {
+  .gh-preview-panel h3 {
     font: 700 14px/1.2 var(--gh-f-ui);
     letter-spacing: 0.02em;
     color: var(--gh-ink-2);
   }
 
-  .gh-pvd>summary {
+  .gh-preview-details>summary {
     display: none;
   }
 
-  .gh-fsec+.gh-fsec {
+  .gh-form-section+.gh-form-section {
     margin-top: 28px;
     padding-top: 24px;
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-fsec>.gh-hint {
+  .gh-form-section>.gh-field-hint {
     margin: 4px 0 12px;
   }
 
-  .gh-lbl {
+  .gh-form-label {
     display: block;
     font: 650 14px/1.2 var(--gh-f-ui);
     margin-bottom: 8px;
   }
 
-  .gh-frow2 {
+  .gh-form-row-2col {
     display: flex;
     flex-wrap: wrap;
     gap: 18px 28px;
   }
 
-  .gh-frow2 .gh-fld {
+  .gh-form-row-2col .gh-form-field {
     margin-top: 16px;
   }
 
-  .gh-price-row {
+  .gh-price-field-row {
     display: flex;
     align-items: center;
     gap: 12px;
   }
 
-  .gh-unit {
+  .gh-price-unit-label {
     font: 680 16px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-tok {
+  .gh-currency-token {
     --gh-c: 29%;
     display: inline-grid;
     flex: 0 0 auto;
@@ -323,7 +323,7 @@
     vertical-align: middle;
   }
 
-  .gh-tok>span {
+  .gh-currency-token>span {
     display: grid;
     place-items: center;
     background: var(--gh-coin-face);
@@ -331,23 +331,23 @@
     clip-path: inherit;
   }
 
-  .gh-tok img {
+  .gh-currency-token img {
     width: 80%;
     height: 80%;
     object-fit: contain;
   }
 
-  .gh-tok i {
+  .gh-currency-token i {
     font-size: calc(var(--gh-s) * 0.42);
   }
 
-  .gh-preset-tile-grid {
+  .gh-art-preset-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
   }
 
-  .gh-preset-tile {
+  .gh-art-preset-tile {
     --gh-c: 8px;
     position: relative;
     display: inline-block;
@@ -357,7 +357,7 @@
     cursor: pointer;
   }
 
-  .gh-preset-tile::before {
+  .gh-art-preset-tile::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -373,7 +373,7 @@
         0 var(--gh-c));
   }
 
-  .gh-preset-tile i {
+  .gh-art-preset-tile i {
     --gh-c: 6px;
     position: absolute;
     inset: 3px;
@@ -383,90 +383,90 @@
     background: var(--gh-card-2);
   }
 
-  .gh-preset-tile img {
+  .gh-art-preset-tile img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
 
-  .gh-preset-tile .gh-gph {
+  .gh-art-preset-tile .gh-card-art-glyph {
     width: 56%;
     height: auto;
     max-height: 76%;
   }
 
-  .gh-preset-tile:has(input:checked)::before {
+  .gh-art-preset-tile:has(input:checked)::before {
     background: var(--gh-frame, var(--gh-item));
   }
 
-  .gh-preset-tile:has(input:checked) i {
+  .gh-art-preset-tile:has(input:checked) i {
     inset: 4px;
   }
 
-  .gh-preset-tile:has(input:focus-visible)::before {
+  .gh-art-preset-tile:has(input:focus-visible)::before {
     outline: 2px solid var(--gh-focus);
     outline-offset: 2px;
   }
 
-  .gh-preset-tile--rank {
+  .gh-art-preset-tile--rank {
     --gh-frame: var(--gh-rank);
   }
 
-  .gh-preset-tile--rank i {
+  .gh-art-preset-tile--rank i {
     background: color-mix(in srgb, var(--gh-rank) 18%, var(--gh-card));
     color: color-mix(in srgb, var(--gh-rank) 55%, var(--gh-ink));
   }
 
-  .gh-preset-tile--badge {
+  .gh-art-preset-tile--badge {
     --gh-frame: var(--gh-badge);
   }
 
-  .gh-preset-tile--badge i {
+  .gh-art-preset-tile--badge i {
     background: color-mix(in srgb, var(--gh-badge) 15%, var(--gh-card));
     color: color-mix(in srgb, var(--gh-badge) 58%, var(--gh-ink));
   }
 
-  .gh-preset-tile--item {
+  .gh-art-preset-tile--item {
     --gh-frame: var(--gh-item);
   }
 
-  .gh-preset-tile--item i {
+  .gh-art-preset-tile--item i {
     background: color-mix(in srgb, var(--gh-item) 15%, var(--gh-card));
     color: color-mix(in srgb, var(--gh-item) 58%, var(--gh-ink));
   }
 
-  .gh-preset-tile--item .gh-gph {
+  .gh-art-preset-tile--item .gh-card-art-glyph {
     width: 56%;
     max-height: 78%;
   }
 
   @media (prefers-color-scheme: dark) {
-    :root:not([data-gh-theme="light"]) .gh-preset-tile--rank i {
+    :root:not([data-gh-theme="light"]) .gh-art-preset-tile--rank i {
       color: var(--gh-rank);
     }
 
-    :root:not([data-gh-theme="light"]) .gh-preset-tile--badge i {
+    :root:not([data-gh-theme="light"]) .gh-art-preset-tile--badge i {
       color: var(--gh-badge);
     }
 
-    :root:not([data-gh-theme="light"]) .gh-preset-tile--item i {
+    :root:not([data-gh-theme="light"]) .gh-art-preset-tile--item i {
       color: var(--gh-item);
     }
   }
 
-  :root[data-gh-theme="dark"] .gh-preset-tile--rank i {
+  :root[data-gh-theme="dark"] .gh-art-preset-tile--rank i {
     color: var(--gh-rank);
   }
 
-  :root[data-gh-theme="dark"] .gh-preset-tile--badge i {
+  :root[data-gh-theme="dark"] .gh-art-preset-tile--badge i {
     color: var(--gh-badge);
   }
 
-  :root[data-gh-theme="dark"] .gh-preset-tile--item i {
+  :root[data-gh-theme="dark"] .gh-art-preset-tile--item i {
     color: var(--gh-item);
   }
 
-  .gh-drop {
+  .gh-file-dropzone {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -475,7 +475,7 @@
     border: 2px dashed var(--gh-line-2);
   }
 
-  .gh-drop-ic {
+  .gh-file-dropzone-icon {
     --gh-c: 8px;
     flex: 0 0 auto;
     display: grid;
@@ -485,32 +485,32 @@
     background: var(--gh-card-2);
   }
 
-  .gh-drop>span:nth-child(2) {
+  .gh-file-dropzone>span:nth-child(2) {
     flex: 1;
     min-width: 0;
   }
 
-  .gh-drop b {
+  .gh-file-dropzone b {
     display: block;
     font: 650 14.5px var(--gh-f-ui);
   }
 
-  .gh-drop small {
+  .gh-file-dropzone small {
     display: block;
     margin-top: 2px;
     font-size: 13px;
     color: var(--gh-ink-2);
   }
 
-  .gh-drop label {
+  .gh-file-dropzone label {
     cursor: pointer;
   }
 
-  .gh-crop {
+  .gh-image-cropper {
     margin-top: 16px;
   }
 
-  .gh-crop-box {
+  .gh-image-cropper-box {
     --gh-c: 10px;
     position: relative;
     max-width: 420px;
@@ -518,17 +518,17 @@
     background: var(--gh-card-3);
   }
 
-  .gh-crop-box cropper-canvas {
+  .gh-image-cropper-box cropper-canvas {
     width: 100%;
     height: 100%;
   }
 
-  .gh-crop .gh-hint {
+  .gh-image-cropper .gh-field-hint {
     margin-top: 8px;
   }
 
-  .gh-fsec .gh-expl,
-  .gh-dlg-page .gh-expl {
+  .gh-form-section .gh-explainer-note,
+  .gh-dialog-page-panel .gh-explainer-note {
     margin: 14px 0 0;
     padding: 12px 14px;
     background: var(--gh-card-2);
@@ -536,20 +536,20 @@
     color: var(--gh-ink);
   }
 
-  .gh-expl p {
+  .gh-explainer-note p {
     margin: 0;
   }
 
-  .gh-expl p+p {
+  .gh-explainer-note p+p {
     margin-top: 8px;
   }
 
-  .gh-expl p:empty {
+  .gh-explainer-note p:empty {
     display: none;
   }
 
-  .gh-warn,
-  .gh-warn2 {
+  .gh-warning-note,
+  .gh-warning-note--alt {
     display: flex;
     align-items: flex-start;
     gap: 9px;
@@ -557,8 +557,8 @@
     font: 560 14px/1.45 var(--gh-f-ui);
   }
 
-  .gh-warn i,
-  .gh-warn2 i {
+  .gh-warning-note i,
+  .gh-warning-note--alt i {
     flex: 0 0 auto;
     margin-top: 2px;
     color: var(--gh-rank-edge);
@@ -566,18 +566,18 @@
 
   @media (prefers-color-scheme: dark) {
 
-    :root:not([data-gh-theme="light"]) .gh-warn i,
-    :root:not([data-gh-theme="light"]) .gh-warn2 i {
+    :root:not([data-gh-theme="light"]) .gh-warning-note i,
+    :root:not([data-gh-theme="light"]) .gh-warning-note--alt i {
       color: var(--gh-rank);
     }
   }
 
-  :root[data-gh-theme="dark"] .gh-warn i,
-  :root[data-gh-theme="dark"] .gh-warn2 i {
+  :root[data-gh-theme="dark"] .gh-warning-note i,
+  :root[data-gh-theme="dark"] .gh-warning-note--alt i {
     color: var(--gh-rank);
   }
 
-  .gh-info {
+  .gh-info-banner {
     --gh-c: 8px;
     display: flex;
     align-items: flex-start;
@@ -588,13 +588,13 @@
     font: 500 14.5px/1.45 var(--gh-f-ui);
   }
 
-  .gh-info i {
+  .gh-info-banner i {
     flex: 0 0 auto;
     margin-top: 3px;
     color: var(--gh-badge-edge);
   }
 
-  .gh-wbar {
+  .gh-form-actions-bar {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -602,21 +602,21 @@
     padding: 14px 18px;
   }
 
-  .gh-wbar-sp {
+  .gh-form-actions-spacer {
     flex: 1;
   }
 
-  .gh-ph {
+  .gh-placeholder-text {
     color: var(--gh-ink-3);
   }
 
-  .gh-rules {
+  .gh-rule-text {
     padding: 6px 12px 12px;
     font: 500 14px/1.45 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-sent {
+  .gh-sentence-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -625,11 +625,11 @@
     font: 600 15px var(--gh-f-ui);
   }
 
-  .gh-sent>span:first-child {
+  .gh-sentence-row>span:first-child {
     min-width: 128px;
   }
 
-  .gh-sel {
+  .gh-select-input {
     --gh-c: 7px;
     position: relative;
     isolation: isolate;
@@ -637,8 +637,8 @@
     align-items: center;
   }
 
-  .gh-sel::before,
-  .gh-sel::after {
+  .gh-select-input::before,
+  .gh-select-input::after {
     content: "";
     position: absolute;
     z-index: -1;
@@ -652,22 +652,22 @@
         0 var(--gh-c));
   }
 
-  .gh-sel::before {
+  .gh-select-input::before {
     inset: 0;
     background: var(--gh-line-2);
   }
 
-  .gh-sel::after {
+  .gh-select-input::after {
     --gh-c: 6px;
     inset: 2px;
     background: var(--gh-card);
   }
 
-  .gh-sel:focus-within::before {
+  .gh-select-input:focus-within::before {
     background: var(--gh-focus);
   }
 
-  .gh-sel select {
+  .gh-select-input select {
     appearance: none;
     border: 0;
     background: none;
@@ -678,12 +678,12 @@
     cursor: pointer;
   }
 
-  .gh-sel select option {
+  .gh-select-input select option {
     background: var(--gh-card);
     color: var(--gh-ink);
   }
 
-  .gh-sel>i {
+  .gh-select-input>i {
     position: absolute;
     right: 12px;
     font-size: 12px;
@@ -691,7 +691,7 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-chips {
+  .gh-chip-group {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -702,7 +702,7 @@
     min-width: 0;
   }
 
-  .gh-chip {
+  .gh-choice-chip {
     --gh-c: 6px;
     display: inline-flex;
     align-items: center;
@@ -714,43 +714,43 @@
     cursor: pointer;
   }
 
-  .gh-chip:hover {
+  .gh-choice-chip:hover {
     background: color-mix(in srgb, var(--gh-badge) 28%, var(--gh-card));
   }
 
-  .gh-chip small {
+  .gh-choice-chip small {
     color: var(--gh-badge-ink);
     font-weight: 700;
   }
 
-  .gh-chip>i {
+  .gh-choice-chip>i {
     font-size: 11px;
     color: var(--gh-ink-2);
   }
 
-  .gh-chip:not(:has(input:checked)) {
+  .gh-choice-chip:not(:has(input:checked)) {
     background: var(--gh-card-2);
   }
 
-  .gh-chip:not(:has(input:checked))>i {
+  .gh-choice-chip:not(:has(input:checked))>i {
     display: none;
   }
 
-  .gh-chip:has(input:focus-visible) {
+  .gh-choice-chip:has(input:focus-visible) {
     outline: 2px solid var(--gh-focus);
     outline-offset: 2px;
   }
 
-  @media (max-width: 1080px) {
-    .gh-wiz {
+  @media (width <= theme(--breakpoint-tablet)) {
+    .gh-form-shell {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-pcol {
+    .gh-preview-column {
       position: static;
     }
 
-    .gh-pvd>summary {
+    .gh-preview-details>summary {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -761,34 +761,34 @@
       list-style: none;
     }
 
-    .gh-pvd>summary::-webkit-details-marker {
+    .gh-preview-details>summary::-webkit-details-marker {
       display: none;
     }
 
-    .gh-pvd[open]>summary i {
+    .gh-preview-details[open]>summary i {
       transform: rotate(180deg);
     }
   }
 
-  @media (max-width: 720px) {
-    .gh-search--wide {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-search-input--wide {
       width: 100%;
     }
 
-    .gh-fcol {
+    .gh-form-column {
       padding: 18px 16px 20px;
     }
 
-    .gh-wbar {
+    .gh-form-actions-bar {
       margin-top: 16px;
       padding: 10px 12px;
     }
 
-    .gh-drop {
+    .gh-file-dropzone {
       flex-wrap: wrap;
     }
 
-    .gh-preset-tile {
+    .gh-art-preset-tile {
       width: 78px;
       height: 52px;
     }

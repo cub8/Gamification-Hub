@@ -7,35 +7,35 @@
 - story_group = overview.story_group
 - shelf = overview.badges
 
-.gh-home
-  %section.gh-card.gh-card--neutral.gh-lore
-    .gh-card-f
-      .gh-card-i
+.gh-group-overview-grid
+  %section.gh-card.gh-card--neutral.gh-group-description-card
+    .gh-card-frame
+      .gh-card-inset
         = render 'layouts/group_art', story_group: story_group
 
-        .gh-lore-b
+        .gh-group-description-card-body
           %h1.gh-h1= story_group.name
           - if story_group.description.present?
-            %p.gh-lore-t= story_group.description
-          %p.gh-small.gh-lore-a Prowadzi #{story_group.owner.full_name}
+            %p.gh-group-description-text= story_group.description
+          %p.gh-small.gh-group-description-card-action Prowadzi #{story_group.owner.full_name}
 
-  %section.gh-card.gh-card--gold.gh-purse{ 'aria-label': "Twoje #{story_group.currency_name}" }
-    .gh-card-f
-      .gh-card-i
-        %p.gh-kicker Do wydania
-        .gh-big
+  %section.gh-card.gh-card--rank.gh-currency-balance-card{ 'aria-label': "Twoje #{story_group.currency_name}" }
+    .gh-card-frame
+      .gh-card-inset
+        %p.gh-page-kicker Do wydania
+        .gh-big-number-row
           = render 'layouts/currency_token', story_group: story_group, size: 44
-          %span.gh-num= overview.balance
-        %p.gh-unit= story_group.currency_name
+          %span.gh-tabular-nums= overview.balance
+        %p.gh-price-unit-label= story_group.currency_name
 
-        %dl.gh-purse-stats
+        %dl.gh-currency-balance-stats
           %div
             %dt Zebrane łącznie
             %dd= overview.total
           %div
             %dt Życia
             %dd
-              %span.gh-lv{ class: ('gh-lv--zero' if overview.lives.zero?) }
+              %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if overview.lives.zero?) }
                 %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
                 = overview.lives
 
@@ -43,32 +43,32 @@
           %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
           Otwórz sklep
 
-  %section.gh-card.gh-card--gold.gh-rankc
-    .gh-card-f
-      .gh-card-i
-        .gh-rk-top
-          %p.gh-kicker Twoja ranga
-          %h2.gh-rank-name= overview.rank&.name || 'Brak rangi'
+  %section.gh-card.gh-card--rank.gh-rank-card
+    .gh-card-frame
+      .gh-card-inset
+        .gh-rank-card-top
+          %p.gh-page-kicker Twoja ranga
+          %h2.gh-rank-card-name= overview.rank&.name || 'Brak rangi'
 
         - if overview.rank
           -# The bare art, NOT ranks/_rank_thumb: that partial is a mini entity
           -# card with its own frame and shadow, and nesting one inside an art
           -# well leaves a 52px chip floating in a 200px rectangle.
-          .gh-art
+          .gh-card-art
             = render 'ranks/art', rank: overview.rank
 
         - if overview.next_rank
           - progress, span = overview.rank_progress
-          .gh-rank-p
-            .gh-rank-pt
+          .gh-rank-progress
+            .gh-rank-progress-text
               %span #{overview.total} z #{overview.next_rank.required_currency_value}
               %span= overview.next_rank.name
-            .gh-bar.gh-oct{ role:              'progressbar',
+            .gh-progress-bar.gh-octagon-clip{ role:              'progressbar',
                      'aria-valuemin': 0,
                      'aria-valuemax': span,
                      'aria-valuenow': progress,
                      'aria-label':    'Postęp do następnej rangi', }
-              %i.gh-oct{ style: "--gh-p: #{gh_percent(progress, span)}%" }
+              %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(progress, span)}%" }
             %p.gh-small= overview_next_rank_line(overview.missing_to_next_rank, overview.next_rank)
         - elsif overview.rank
           %p.gh-small #{overview.total} zebranych. To najwyższa ranga w tej grupie.
@@ -78,54 +78,54 @@
             mimo to — rangi przyznają się same, gdy się pojawią.
 
         - if overview.ranking_place
-          %p.gh-small.gh-rk
+          %p.gh-small.gh-rank-card-footer
             %i.fa-solid.fa-ranking-star{ 'aria-hidden': 'true' }
             = link_to overview_place_line(overview.ranking_place), story_group_ranking_path(story_group)
 
   - if shelf.any?
-    %section.gh-zone.gh-zone--badges
-      %h2.gh-zone-l
+    %section.gh-showcase-zone.gh-showcase-zone--badges
+      %h2.gh-showcase-zone-label
         %span Odznaki
-        %span.gh-zone-n.gh-oct #{shelf.earned_count} z #{shelf.size}
-      .gh-cards.gh-cards--b
+        %span.gh-showcase-zone-count.gh-octagon-clip #{shelf.earned_count} z #{shelf.size}
+      .gh-card-grid.gh-card-grid--compact
         - shelf.slots.each do |slot|
           = render 'badges/flip_card', badge:       slot.badge,
                                       earned:      slot.earned?,
                                       interactive: slot.earned?,
                                       withdrawn:   slot.withdrawn?
 
-  %section.gh-zone.gh-zone--hand
-    %h2.gh-zone-l
+  %section.gh-showcase-zone.gh-showcase-zone--hand
+    %h2.gh-showcase-zone-label
       %span Twoje przedmioty
-      %span.gh-zone-n.gh-oct= overview.items_count
-    .gh-hand
+      %span.gh-showcase-zone-count.gh-octagon-clip= overview.items_count
+    .gh-item-hand
       - count = overview.items.size
       - overview.items.each_with_index do |purchase, index|
-        .gh-hc{ style: "--gh-rot: #{overview_hand_rotation(index, count)}deg" }
+        .gh-item-hand-card{ style: "--gh-rot: #{overview_hand_rotation(index, count)}deg" }
           = render 'students_items/card', purchase: purchase, foot: purchase_line(purchase)
 
       -# Closes the hand rather than sitting under it: the overview's job is to
       -# send you back to the shop, exactly as on "Moje przedmioty".
-      .gh-panel.gh-slot-e
+      .gh-panel.gh-empty-slot-panel
         %p= overview_hand_line(overview.affordable)
-        = link_to 'Przejdź do sklepu', story_group_shop_index_path(story_group), class: 'gh-btn gh-btn--sec'
+        = link_to 'Przejdź do sklepu', story_group_shop_index_path(story_group), class: 'gh-btn gh-btn--secondary'
 
-  %section.gh-panel.gh-ledger{ 'aria-labelledby': 'gh-ledger-title' }
+  %section.gh-panel.gh-overview-ledger-panel{ 'aria-labelledby': 'gh-ledger-title' }
     %h2#gh-ledger-title.gh-h2 Ostatnie zmiany
     - if overview.entries.any?
-      %ul.gh-led
+      %ul.gh-ledger-list
         - overview.entries.each do |entry|
-          %li.gh-led-r
-            %span.gh-led-m{ class: "gh-led-m--#{entry.tone}", 'aria-hidden': 'true' }
-            %span.gh-led-t
+          %li.gh-activity-feed-row
+            %span.gh-activity-feed-row-marker{ class: "gh-activity-feed-row-marker--#{entry.tone}", 'aria-hidden': 'true' }
+            %span.gh-activity-feed-row-text
               = entry.title
               %small #{entry.label}, #{gh_when(entry.occurred_at)}
-            %span.gh-led-a{ class: "gh-led-a--#{entry.tone}" }= entry.signed_amount
+            %span.gh-activity-feed-row-amount{ class: "gh-activity-feed-row-amount--#{entry.tone}" }= entry.signed_amount
 
       = link_to 'Pokaż całą historię',
                 story_group_student_currency_transactions_path(story_group, overview.student),
-                class: 'gh-linkbtn'
+                class: 'gh-link-button'
     - else
-      %p.gh-expl
+      %p.gh-explainer-note
         Pierwsze wpisy pojawią się po zajęciach. Prowadzący przyznaje walutę za
         obecność, punktualność i aktywność.

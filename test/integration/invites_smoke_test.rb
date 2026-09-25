@@ -46,7 +46,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
   # assert_select cannot select "the row whose code cell says X" — :has with a
   # nested matcher is beyond its selector support — so pick the row in Ruby.
   def row_for(code)
-    css_select('.gh-iv').find { |row| row.css('.gh-iv-cd').text.strip == code }
+    css_select('.gh-invite-row').find { |row| row.css('.gh-invite-code').text.strip == code }
   end
 
   # --- the list -------------------------------------------------------------
@@ -59,10 +59,10 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     get story_group_invites_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-ivl .gh-iv-cd', text: live.code, count: 1
-    assert_select 'details.gh-inact summary', 'Nieaktywne (2): wygasłe i wyczerpane'
-    assert_select 'details.gh-inact .gh-iv-cd', text: expired.code, count: 1
-    assert_select 'details.gh-inact .gh-iv-cd', text: exhausted.code, count: 1
+    assert_select '.gh-invite-list .gh-invite-code', text: live.code, count: 1
+    assert_select 'details.gh-inactive-invites summary', 'Nieaktywne (2): wygasłe i wyczerpane'
+    assert_select 'details.gh-inactive-invites .gh-invite-code', text: expired.code, count: 1
+    assert_select 'details.gh-inactive-invites .gh-invite-code', text: exhausted.code, count: 1
   end
 
   test 'the inactive block is absent entirely when every code still works' do
@@ -70,7 +70,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    assert_select 'details.gh-inact', false
+    assert_select 'details.gh-inactive-invites', false
   end
 
   test 'a code that is both expired and exhausted reports the expiry first' do
@@ -78,7 +78,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    assert_select '.gh-stt', 'Wygasło'
+    assert_select '.gh-status-pill', 'Wygasło'
   end
 
   test 'only a limited code gets a usage bar, and only a live one gets Pokaz' do
@@ -88,8 +88,8 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    assert_equal 1, row_for(limited.code).css('.gh-bar').size
-    assert_equal 0, row_for(unlimited.code).css('.gh-bar').size
+    assert_equal 1, row_for(limited.code).css('.gh-progress-bar').size
+    assert_equal 0, row_for(unlimited.code).css('.gh-progress-bar').size
     assert_select 'a[href=?]', story_group_invite_path(@story_group, limited), count: 1
     assert_select 'a[href=?]', story_group_invite_path(@story_group, dead), count: 0
   end
@@ -100,10 +100,10 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    assert_includes css_select('.gh-iv-u').map { |e| e.text.strip }, 'Użycia: 3 z 30'
-    assert_includes css_select('.gh-iv-u').map { |e| e.text.strip }, 'Użycia: 8, bez limitu'
-    assert_includes css_select('.gh-iv-e').map(&:text), 'Wygasa 30.09, 23:59'
-    assert_includes css_select('.gh-iv-e').map(&:text), 'Bez daty ważności'
+    assert_includes css_select('.gh-invite-usage').map { |e| e.text.strip }, 'Użycia: 3 z 30'
+    assert_includes css_select('.gh-invite-usage').map { |e| e.text.strip }, 'Użycia: 8, bez limitu'
+    assert_includes css_select('.gh-invite-expiry').map(&:text), 'Wygasa 30.09, 23:59'
+    assert_includes css_select('.gh-invite-expiry').map(&:text), 'Bez daty ważności'
   end
 
   test 'the expiry cell switches to the past tense once the date is behind' do
@@ -111,13 +111,13 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    assert_select '.gh-iv-e', 'Wygasło 01.09, 23:59'
+    assert_select '.gh-invite-expiry', 'Wygasło 01.09, 23:59'
   end
 
   test 'an empty list explains what to do about it' do
     get story_group_invites_path(@story_group)
 
-    assert_select '.gh-expl', 'Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.'
+    assert_select '.gh-explainer-note', 'Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.'
   end
 
   # --- creating -------------------------------------------------------------
@@ -150,7 +150,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad #gh-max-uses'
+    assert_select '.gh-text-input--invalid #gh-max-uses'
     assert_select '#gh-limit-error span', 'Limit musi wynosić co najmniej 1.'
   end
 
@@ -161,7 +161,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad #gh-expires-on'
+    assert_select '.gh-text-input--invalid #gh-expires-on'
     assert_select '#gh-expiry-error span', 'Ta data już minęła. Wybierz późniejszą.'
   end
 
@@ -195,12 +195,12 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
   test 'the presets are offered when creating and withheld when editing' do
     get new_story_group_invite_path(@story_group), headers: MODAL
-    assert_select '.gh-presets .gh-fchip', 2
-    assert_select '.gh-presets .gh-fchip', text: 'Na dzisiejsze zajęcia'
-    assert_select '.gh-presets .gh-fchip', text: 'Bez ograniczeń'
+    assert_select '.gh-invite-presets .gh-purchase-filter-chip', 2
+    assert_select '.gh-invite-presets .gh-purchase-filter-chip', text: 'Na dzisiejsze zajęcia'
+    assert_select '.gh-invite-presets .gh-purchase-filter-chip', text: 'Bez ograniczeń'
 
     get edit_story_group_invite_path(@story_group, invite), headers: MODAL
-    assert_select '.gh-presets', false
+    assert_select '.gh-invite-presets', false
   end
 
   test 'creating names the new code and flashes its row once' do
@@ -211,11 +211,11 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
                  flash[:notice]
 
     get story_group_invites_path(@story_group)
-    assert_select '.gh-iv--fresh .gh-iv-cd', created.code
+    assert_select '.gh-invite-row--new .gh-invite-code', created.code
 
     # One render only — a highlight that stuck around would stop meaning "new".
     get story_group_invites_path(@story_group)
-    assert_select '.gh-iv--fresh', false
+    assert_select '.gh-invite-row--new', false
   end
 
   # --- editing --------------------------------------------------------------
@@ -270,9 +270,9 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     get story_group_invite_path(@story_group, existing), headers: MODAL
 
     assert_select '#gh-code-title', 'Dołącz do grupy Zakon Algorytmów'
-    assert_select '.gh-qr img[src^=?]', 'data:image/png;base64,'
-    assert_select '.gh-code-big', existing.code
-    assert_select '.gh-code-big[aria-label=?]', "Kod: #{existing.code.chars.join(' ')}"
+    assert_select '.gh-invite-qr img[src^=?]', 'data:image/png;base64,'
+    assert_select '.gh-invite-code-display', existing.code
+    assert_select '.gh-invite-code-display[aria-label=?]', "Kod: #{existing.code.chars.join(' ')}"
     assert_select '.gh-small', 'Użycia: 3 z 30. Wygasa 30.09, 23:59.'
   end
 
@@ -292,8 +292,8 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     get quick_story_group_invites_path(@story_group), headers: MODAL
 
     assert_select '#gh-quick-title', 'Dołącz do grupy Zakon Algorytmów'
-    assert_select '.gh-qr img[src^=?]', 'data:image/png;base64,'
-    assert_select '.gh-code-big', existing.code
+    assert_select '.gh-invite-qr img[src^=?]', 'data:image/png;base64,'
+    assert_select '.gh-invite-code-display', existing.code
   end
 
   test 'the select lists only active invites, newest first, with a compact label' do
@@ -324,7 +324,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get quick_story_group_invites_path(@story_group), headers: MODAL
 
-    assert_select '.gh-expl', 'Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.'
+    assert_select '.gh-explainer-note', 'Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.'
     assert_select 'a[href=?][data-turbo-frame=modal]', new_story_group_invite_path(@story_group)
     assert_select 'select', false
   end
@@ -393,7 +393,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
       # As a page the only modal frame is the layout's own, inside <dialog>.
       get path
       assert_select 'main#app-content turbo-frame#modal', false, "#{path} as a page"
-      assert_select 'header.gh-hd', 1, "#{path} keeps the shell as a page"
+      assert_select 'header.gh-topbar', 1, "#{path} keeps the shell as a page"
     end
   end
 
@@ -408,11 +408,11 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     paths.each do |path|
       get path
-      assert_select 'main .gh-panel.gh-dlg-page', 1, "#{path} as a page sits on a panel"
+      assert_select 'main .gh-panel.gh-dialog-page-panel', 1, "#{path} as a page sits on a panel"
 
       # In the dialog the <dialog> itself is the surface.
       get path, headers: MODAL
-      assert_select '.gh-dlg-page', false, "#{path} in the dialog needs no panel"
+      assert_select '.gh-dialog-page-panel', false, "#{path} in the dialog needs no panel"
     end
   end
 
@@ -445,7 +445,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     get story_group_invites_path(@story_group)
 
     assert_select '#gh-toasts[popover=manual][aria-live=polite]', 1
-    assert_select '.gh-shell #gh-toasts', false
+    assert_select '.gh-app-shell #gh-toasts', false
   end
 
   # --- authorization --------------------------------------------------------

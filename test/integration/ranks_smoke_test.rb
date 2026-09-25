@@ -60,7 +60,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
   end
 
   def rows
-    css_select('.gh-rlad .gh-rl').map { |row| row.css('b').first.text.strip }
+    css_select('.gh-rank-ladder-list .gh-rank-row').map { |row| row.css('b').first.text.strip }
   end
 
   # --- the teacher ladder ---------------------------------------------------
@@ -73,7 +73,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h1.gh-h1', 'Rangi'
     assert_equal ['Pilot Marcheton-7', 'Kosmiczny Królik', 'Rekrut'], rows
-    assert_select '.gh-rowb a[href=?]', new_story_group_rank_path(@story_group), 'Nowa ranga'
+    assert_select '.gh-button-row a[href=?]', new_story_group_rank_path(@story_group), 'Nowa ranga'
   end
 
   test 'the lead counts the rungs in Polish' do
@@ -89,7 +89,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    gaps = css_select('.gh-rlad .gh-rgap').map { |gap| gap.text.strip }
+    gaps = css_select('.gh-rank-ladder-list .gh-rank-gap').map { |gap| gap.text.strip }
     # Highest first, so the gaps read 80-40 then 40-0.
     assert_equal ['↑ 40 zebranych do awansu', '↑ 40 zebranych do awansu'], gaps
   end
@@ -99,8 +99,8 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-rl small', 'Ranga startowa, bez zniżki'
-    assert_select '.gh-rl small', 'Od 40 zebranych, −3% w sklepie'
+    assert_select '.gh-rank-row small', 'Ranga startowa, bez zniżki'
+    assert_select '.gh-rank-row small', 'Od 40 zebranych, −3% w sklepie'
   end
 
   # The mockup calls its lowest rung "Ranga startowa" by array index
@@ -110,8 +110,8 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-rl small', 'Od 30 zebranych, bez zniżki'
-    assert_select '.gh-rl small', { text: 'Ranga startowa, bez zniżki', count: 0 }
+    assert_select '.gh-rank-row small', 'Od 30 zebranych, bez zniżki'
+    assert_select '.gh-rank-row small', { text: 'Ranga startowa, bez zniżki', count: 0 }
   end
 
   test 'each rung counts the students standing on it' do
@@ -124,7 +124,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    counts = css_select('.gh-rl .gh-rl-s b').map { |cell| cell.text.strip }
+    counts = css_select('.gh-rank-row .gh-rank-row-stats b').map { |cell| cell.text.strip }
     assert_equal %w[1 2 1], counts
   end
 
@@ -134,14 +134,14 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-req2', 'Wymagana do zakupu: 0.5% oceny'
+    assert_select '.gh-rank-row-requirement', 'Wymagana do zakupu: 0.5% oceny'
   end
 
   test 'a group with no ranks tells the teacher what to do about it' do
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-rlad', false
-    assert_select '.gh-gm .gh-h2', 'Nie ma jeszcze żadnych rang'
+    assert_select '.gh-rank-ladder-list', false
+    assert_select '.gh-empty-state .gh-h2', 'Nie ma jeszcze żadnych rang'
   end
 
   # --- the student ladder ---------------------------------------------------
@@ -153,12 +153,12 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranks_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-rlad', false
-    assert_select '.gh-srk--current .gh-youtag', 'Twoja ranga'
-    assert_select '.gh-srk--current b', /Kosmiczny Królik/
-    assert_select '.gh-srk--done b', /Rekrut/
-    assert_select '.gh-srk--locked b', /Pilot Marcheton-7/
-    assert_select '.gh-srk--current .gh-st3', '50 z 80 do następnej'
+    assert_select '.gh-rank-ladder-list', false
+    assert_select '.gh-student-rank-row--current .gh-you-badge', 'Twoja ranga'
+    assert_select '.gh-student-rank-row--current b', /Kosmiczny Królik/
+    assert_select '.gh-student-rank-row--done b', /Rekrut/
+    assert_select '.gh-student-rank-row--locked b', /Pilot Marcheton-7/
+    assert_select '.gh-student-rank-row--current .gh-rank-status', '50 z 80 do następnej'
   end
 
   test 'a student on the top rung is told so' do
@@ -167,7 +167,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-srk--current .gh-st3', 'Najwyższa ranga'
+    assert_select '.gh-student-rank-row--current .gh-rank-status', 'Najwyższa ranga'
   end
 
   # The mockup cannot render this: rankIdx() falls back to index 0, so its
@@ -179,10 +179,10 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-youtag', false
-    assert_select '.gh-srk--current', false
-    assert_select '.gh-srk--next .gh-st3', '10 z 30 do pierwszej rangi'
-    assert_select '.gh-srk--locked .gh-st3', 'Brakuje 80'
+    assert_select '.gh-you-badge', false
+    assert_select '.gh-student-rank-row--current', false
+    assert_select '.gh-student-rank-row--next .gh-rank-status', '10 z 30 do pierwszej rangi'
+    assert_select '.gh-student-rank-row--locked .gh-rank-status', 'Brakuje 80'
   end
 
   test 'a student in a group with no ranks gets their own empty state' do
@@ -190,7 +190,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    assert_select '.gh-gm .gh-h2', 'W tej grupie nie ma jeszcze rang'
+    assert_select '.gh-empty-state .gh-h2', 'W tej grupie nie ma jeszcze rang'
   end
 
   # --- creating and editing -------------------------------------------------
@@ -199,30 +199,30 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     get new_story_group_rank_path(@story_group)
 
     assert_response :success
-    assert_select 'header.gh-hd', 1
+    assert_select 'header.gh-topbar', 1
     assert_select 'main#app-content turbo-frame#modal', false
     assert_select 'h1.gh-h1', 'Nowa ranga'
     assert_select 'input[name=?][value=?]', 'rank[required_currency_value]', '0'
     assert_select 'input[name=?][value=?]', 'rank[discount]', '0'
-    assert_select '.gh-preset-tile-grid .gh-preset-tile--rank input[type=radio]', Glyphs::RANK.size
+    assert_select '.gh-art-preset-grid .gh-art-preset-tile--rank input[type=radio]', Glyphs::RANK.size
     # The "Twoja grafika" tile is always in the markup so JavaScript can reveal
     # and select it the moment a file is chosen, but there is nothing to show
     # yet — and no src at all, since an empty one would make the browser
     # re-request this page as an image.
-    assert_select '.gh-preset-tile--own[hidden]', 1
-    assert_select '.gh-preset-tile--own img[src]', false
+    assert_select '.gh-art-preset-tile--custom[hidden]', 1
+    assert_select '.gh-art-preset-tile--custom img[src]', false
   end
 
   test 'the image field offers presets, an upload and a crop box' do
     get new_story_group_rank_path(@story_group)
 
-    assert_select '.gh-preset-tile-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
-    assert_select '.gh-preset-tile input[aria-label=?]', 'Grafika: Korona'
-    assert_select '.gh-drop input[type=file][accept=?]', 'image/png,image/jpeg,image/gif'
-    assert_select '.gh-crop[hidden] .gh-crop-box', 1
+    assert_select '.gh-art-preset-grid[role=radiogroup][aria-label=?]', 'Gotowe grafiki'
+    assert_select '.gh-art-preset-tile input[aria-label=?]', 'Grafika: Korona'
+    assert_select '.gh-file-dropzone input[type=file][accept=?]', 'image/png,image/jpeg,image/gif'
+    assert_select '.gh-image-cropper[hidden] .gh-image-cropper-box', 1
   end
 
-  # The crop is cut to the shape of the hole it goes into — .gh-art's
+  # The crop is cut to the shape of the hole it goes into — .gh-card-art's
   # `aspect-ratio: 16 / 10` (card.css). A square crop could never fill the card.
   test 'the crop is locked to the shape of the card' do
     get new_story_group_rank_path(@story_group)
@@ -275,7 +275,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad input[name=?]', 'rank[name]'
+    assert_select '.gh-text-input--invalid input[name=?]', 'rank[name]'
     assert_select '#gh-rank-name-error span', 'Podaj nazwę rangi.'
   end
 
@@ -320,10 +320,10 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     # Three rungs, never four: the draft IS the edited rank.
-    assert_select '.gh-ladder .gh-lad', 3
-    assert_select '.gh-ladder .gh-lad--new', 1
-    assert_select '.gh-ladder .gh-lad--new [data-rank-form-target=draftName]', 'Kosmiczny Królik'
-    assert_select ".gh-ladder .gh-lad[data-rank-id=#{@krolik.id}]", false
+    assert_select '.gh-rank-form-ladder .gh-rank-form-rung', 3
+    assert_select '.gh-rank-form-ladder .gh-rank-form-rung--draft', 1
+    assert_select '.gh-rank-form-ladder .gh-rank-form-rung--draft [data-rank-form-target=draftName]', 'Kosmiczny Królik'
+    assert_select ".gh-rank-form-ladder .gh-rank-form-rung[data-rank-id=#{@krolik.id}]", false
   end
 
   # --- deleting -------------------------------------------------------------
@@ -336,7 +336,7 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h2', 'Usunąć rangę „Pilot Marcheton-7”?'
     assert_select 'p', 'Studenci z tą rangą spadną do rangi niżej.'
-    assert_select '.gh-warn', false
+    assert_select '.gh-warning-note', false
   end
 
   test 'deleting an unreferenced rank works and leaves the dialog' do
@@ -357,8 +357,8 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
                              min_rank_for_discount: @pilot,)
 
     get confirm_destroy_story_group_rank_path(@story_group, @pilot), headers: MODAL
-    assert_select '.gh-warn span', /0\.5% oceny i Bezpieczna poprawa/
-    assert_select '.gh-dlg-b button[disabled]', 'Usuń rangę'
+    assert_select '.gh-warning-note span', /0\.5% oceny i Bezpieczna poprawa/
+    assert_select '.gh-dialog-button-row button[disabled]', 'Usuń rangę'
 
     # Refused server-side too: the disabled button is a courtesy, the foreign
     # keys on items are the reason.
@@ -375,15 +375,15 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:item, story_group: @story_group, name: '0.5% oceny', unlock_rank: @pilot)
 
     get confirm_destroy_story_group_rank_path(@story_group, @pilot), headers: MODAL
-    assert_select '.gh-warn span', /Przedmiot 0\.5% oceny wymaga tej rangi\./
-    assert_select '.gh-warn span', /przypisz mu inną rangę/
+    assert_select '.gh-warning-note span', /Przedmiot 0\.5% oceny wymaga tej rangi\./
+    assert_select '.gh-warning-note span', /przypisz mu inną rangę/
 
     FactoryBot.create(:item, story_group: @story_group, name: 'Bezpieczna poprawa',
                              unlock_rank: @pilot,)
 
     get confirm_destroy_story_group_rank_path(@story_group, @pilot), headers: MODAL
-    assert_select '.gh-warn span', /Przedmioty .* wymagają tej rangi\./
-    assert_select '.gh-warn span', /przypisz im inną rangę/
+    assert_select '.gh-warning-note span', /Przedmioty .* wymagają tej rangi\./
+    assert_select '.gh-warning-note span', /przypisz im inną rangę/
   end
 
   # --- art ------------------------------------------------------------------
@@ -393,10 +393,10 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_ranks_path(@story_group)
 
-    # Inline SVG, not <img>: .gh-gph strokes in currentColor, which is what
+    # Inline SVG, not <img>: .gh-card-art-glyph strokes in currentColor, which is what
     # makes the same shape gold here and teal on a badge.
-    assert_select '.gh-rl .gh-mc svg.gh-gph', 3
-    assert_select '.gh-rl .gh-mc img', false
+    assert_select '.gh-rank-row .gh-mini-thumb svg.gh-card-art-glyph', 3
+    assert_select '.gh-rank-row .gh-mini-thumb img', false
   end
 
   test 'an uploaded icon becomes the art and the picker agrees' do
@@ -405,11 +405,11 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     @pilot.update!(icon_glyph: nil)
 
     get story_group_ranks_path(@story_group)
-    assert_select ".gh-rl img[alt='']", 1
+    assert_select ".gh-rank-row img[alt='']", 1
 
     get edit_story_group_rank_path(@story_group, @pilot)
-    assert_select '.gh-preset-tile--own[hidden]', false
-    assert_select '.gh-preset-tile--own input[checked=checked]', 1
+    assert_select '.gh-art-preset-tile--custom[hidden]', false
+    assert_select '.gh-art-preset-tile--custom input[checked=checked]', 1
   end
 
   # Without JavaScript nothing would ever select the upload: the picker's own
@@ -465,8 +465,8 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
 
     get path
     assert_select 'main#app-content turbo-frame#modal', false
-    assert_select 'main .gh-panel.gh-dlg-page', 1
-    assert_select 'header.gh-hd', 1
+    assert_select 'main .gh-panel.gh-dialog-page-panel', 1
+    assert_select 'header.gh-topbar', 1
   end
 
   test 'creating says so in a toast, not in a banner' do

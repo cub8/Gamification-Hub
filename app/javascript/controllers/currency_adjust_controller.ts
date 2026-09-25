@@ -80,7 +80,7 @@ class CurrencyAdjustController extends Controller<HTMLFormElement> {
 
   private showError(bad: boolean) {
     this.errorTarget.hidden = !bad
-    this.boxTarget.classList.toggle("gh-inp--bad", bad)
+    this.boxTarget.classList.toggle("gh-text-input--invalid", bad)
 
     if (bad) {
       this.errorTextTarget.textContent = this.overValue

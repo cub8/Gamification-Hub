@@ -13,9 +13,9 @@
 - currency = @currency_name.presence || 'waluty'
 
 = turbo_frame_tag 'starter_pack' do
-  .gh-fsec.gh-fsec--first
+  .gh-form-section.gh-form-section--first
     %h2.gh-h3= "Zestaw „#{preset.label}” dla #{preset.classes} zajęć"
-    %p.gh-hint
+    %p.gh-field-hint
       Usuń, czego nie potrzebujesz, i popraw liczby. Nazwy i opisy zmienisz po
       utworzeniu grupy.
 
@@ -24,57 +24,57 @@
     = hidden_field_tag 'setup[pack]', preset.pack, id: nil
     = hidden_field_tag 'setup[classes]', preset.classes, id: nil
 
-    .gh-rgrid
-      %section.gh-section-gap
+    .gh-preset-review-grid
+      %section.gh-preset-review-section
         %h3.gh-h3
           Rangi
-          %span.gh-zone-n.gh-oct= preset.ranks.size
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.ranks.size
         - preset.ranks.each do |rank|
           = render layout: 'preset_row', locals: { zone: 'ranks', index: rank.index, icon: 'fa-ranking-star',
             name: rank.name,
             note: (rank.discount.positive? ? "−#{rank.discount}% w sklepie" : 'Ranga startowa') } do
             - if rank.index.zero?
-              %span.gh-rv2 od 0
+              %span.gh-preset-row-value od 0
               = hidden_field_tag "setup[ranks][#{rank.index}][value]", rank.threshold, id: nil
             - else
-              %span.gh-rv2
+              %span.gh-preset-row-value
                 od
-                .gh-inp.gh-inp--sm
+                .gh-text-input.gh-input--compact
                   = number_field_tag "setup[ranks][#{rank.index}][value]", rank.threshold,
                     min: 0, step: 1, id: nil, 'aria-label': "#{rank.name}: próg"
 
-      %section.gh-section-gap
+      %section.gh-preset-review-section
         %h3.gh-h3
           Odznaki
-          %span.gh-zone-n.gh-oct= preset.badges.size
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.badges.size
         - preset.badges.each do |badge|
           = render layout: 'preset_row', locals: { zone: 'badges', index: badge.index, icon: 'fa-award',
             name: badge.name, note: badge.didactic_description } do
-            %span.gh-rv2= "−#{badge.discount}% w sklepie"
+            %span.gh-preset-row-value= "−#{badge.discount}% w sklepie"
 
-      %section.gh-section-gap
+      %section.gh-preset-review-section
         %h3.gh-h3
           Przedmioty w sklepie
-          %span.gh-zone-n.gh-oct= preset.items.size
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.items.size
         - preset.items.each do |item|
           = render layout: 'preset_row', locals: { zone: 'items', index: item.index, icon: 'fa-bag-shopping',
             name: item.name, note: item.didactic_description } do
-            %span.gh-rv2
-              .gh-inp.gh-inp--sm
+            %span.gh-preset-row-value
+              .gh-text-input.gh-input--compact
                 = number_field_tag "setup[items][#{item.index}][value]", item.price,
                   min: 1, step: 1, id: nil, 'aria-label': "#{item.name}: cena w #{currency}"
               -# The group's own coin, as the mockup shows it (30-form.js:79).
               -# Filled by group_wizard_controller from the checked picker tile
               -# once this frame loads — the same clone the previews use.
-              %span.gh-tok.gh-oct{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
-                %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
+              %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
+                %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
                   %span{ data: { group_wizard_target: 'markLetter' } }
 
-      %section.gh-section-gap
+      %section.gh-preset-review-section
         %h3.gh-h3
           Kategorie zajęć
-          %small.gh-kicker= "(szablon „#{StarterPack::TEMPLATE_NAME}”)"
-          %span.gh-zone-n.gh-oct= preset.categories.size
+          %small.gh-page-kicker= "(szablon „#{StarterPack::TEMPLATE_NAME}”)"
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.categories.size
         - preset.categories.each do |category|
           = render layout: 'preset_row', locals: { zone: 'cats', index: category.index, icon: 'fa-table-cells',
             name: category.didactic_description, note: nil } do
@@ -82,14 +82,14 @@
             -# the zone heading already says these are rewards, and the plus
             -# only read as a stray character beside the field. The unit is
             -# spelled out in the aria-label, where a coin cannot be read.
-            %span.gh-rv2
-              .gh-inp.gh-inp--sm
+            %span.gh-preset-row-value
+              .gh-text-input.gh-input--compact
                 = number_field_tag "setup[cats][#{category.index}][value]", category.reward,
                   min: 1, step: 1, id: nil,
                   'aria-label': "#{category.didactic_description}: nagroda w #{currency}"
               -# The group's own coin, as the mockup shows it (30-form.js:79).
               -# Filled by group_wizard_controller from the checked picker tile
               -# once this frame loads — the same clone the previews use.
-              %span.gh-tok.gh-oct{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
-                %span.gh-oct{ data: { group_wizard_target: 'markBox' } }
+              %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
+                %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
                   %span{ data: { group_wizard_target: 'markLetter' } }

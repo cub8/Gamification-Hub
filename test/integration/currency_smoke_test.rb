@@ -53,12 +53,12 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     get story_group_student_students_items_path(@story_group, @student)
   end
 
-  def rows = css_select('.gh-lrow:not(.gh-lrow--h)')
+  def rows = css_select('.gh-ledger-row:not(.gh-ledger-row--header)')
 
   # Trimmed text of every match, so assertions read as data rather than nodes.
   def texts(selector) = css_select(selector).map { |node| node.text.strip }
 
-  def balances = texts('.gh-bal2')
+  def balances = texts('.gh-ledger-balance')
 
   # ---- Historia waluty -------------------------------------------------
 
@@ -83,12 +83,12 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_history
 
-    assert_equal ['Kwota', 'Typ', 'Za co', 'Kiedy', 'Saldo po'], texts('.gh-lrow--h [role=columnheader]')
-    assert_equal %w[Korekta Zakup Nagroda], texts('.gh-ty')
-    assert_equal ['−5', '−15', '+50'], texts('.gh-amt')
-    assert_select '.gh-src', /Obecność/
-    assert_select '.gh-src small', 'Laboratoria 4'
-    assert_select '.gh-src small', @owner.full_name
+    assert_equal ['Kwota', 'Typ', 'Za co', 'Kiedy', 'Saldo po'], texts('.gh-ledger-row--header [role=columnheader]')
+    assert_equal %w[Korekta Zakup Nagroda], texts('.gh-ledger-type-pill')
+    assert_equal ['−5', '−15', '+50'], texts('.gh-ledger-amount')
+    assert_select '.gh-ledger-source', /Obecność/
+    assert_select '.gh-ledger-source small', 'Laboratoria 4'
+    assert_select '.gh-ledger-source small', @owner.full_name
   end
 
   test 'the running balance walks back from what the student has now' do
@@ -111,7 +111,7 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_history(kind: 'reward')
     assert_equal 1, rows.size
-    assert_select '.gh-fchip[aria-current=true]', /Nagrody/
+    assert_select '.gh-purchase-filter-chip[aria-current=true]', /Nagrody/
     assert_equal [all.last], balances
   end
 
@@ -119,12 +119,12 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     entry(amount: 50, kind: :reward)
 
     visit_history(kind: 'purchase')
-    assert_select '.gh-expl', 'Nie masz jeszcze wpisów tego typu.'
+    assert_select '.gh-explainer-note', 'Nie masz jeszcze wpisów tego typu.'
 
     CurrencyTransaction.destroy_all
     visit_history
-    assert_select '.gh-gm .gh-h2', 'Pierwsze wpisy pojawią się po zajęciach'
-    assert_select '.gh-lrow', false
+    assert_select '.gh-empty-state .gh-h2', 'Pierwsze wpisy pojawią się po zajęciach'
+    assert_select '.gh-ledger-row', false
   end
 
   test 'a purchase of a withdrawn item stays in the ledger, tagged' do
@@ -134,8 +134,8 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_history
 
-    assert_select '.gh-src', /Stary przedmiot/
-    assert_select '.gh-src .gh-tag--del', 'Usunięty z oferty'
+    assert_select '.gh-ledger-source', /Stary przedmiot/
+    assert_select '.gh-ledger-source .gh-tag--removed', 'Usunięty z oferty'
   end
 
   test 'the filter chips count what is behind them' do
@@ -144,7 +144,7 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_history
 
-    assert_equal %w[2 1 1 0], texts('.gh-fchip .gh-n')
+    assert_equal %w[2 1 1 0], texts('.gh-purchase-filter-chip .gh-count-label')
   end
 
   test 'a teacher reads the same ledger, a stranger reads none of it' do
@@ -153,7 +153,7 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     sign_in_as @owner
     visit_history
     assert_response :success
-    assert_select '.gh-lrow .gh-amt', '+50'
+    assert_select '.gh-ledger-row .gh-ledger-amount', '+50'
 
     stranger = FactoryBot.create(:user, role: :student)
     FactoryBot.create(:story_group_student, user: stranger, story_group: @story_group)
@@ -173,8 +173,8 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h1.gh-h1', 'Moje przedmioty'
     assert_select '.gh-lead', /\A2 przedmioty\. Wykorzystanie przedmiotu zgłaszasz/
-    assert_select '.gh-pgrid .gh-card-name', 2
-    assert_select ".gh-rowb a[href='#{story_group_shop_index_path(@story_group)}']", 'Przejdź do sklepu'
+    assert_select '.gh-inventory-grid .gh-card-name', 2
+    assert_select ".gh-button-row a[href='#{story_group_shop_index_path(@story_group)}']", 'Przejdź do sklepu'
   end
 
   test 'an owned card says when and for how much, without a price chip' do
@@ -182,8 +182,8 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_inventory
 
-    assert_select '.gh-card-foot .gh-meta', /\AKupione .*, za 15\z/
-    assert_select '.gh-pgrid .gh-cost', false
+    assert_select '.gh-card-footer .gh-card-meta', /\AKupione .*, za 15\z/
+    assert_select '.gh-inventory-grid .gh-price-badge', false
   end
 
   test 'a withdrawn item stays owned and says why it is nowhere else' do
@@ -192,8 +192,8 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_inventory
 
-    assert_select '.gh-card--gone .gh-card-name', 'Stary przedmiot'
-    assert_select '.gh-tag--del', 'Usunięty z oferty'
+    assert_select '.gh-card--consumed .gh-card-name', 'Stary przedmiot'
+    assert_select '.gh-tag--removed', 'Usunięty z oferty'
   end
 
   test 'the grid closes with what the shop can still sell you' do
@@ -204,16 +204,16 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
     visit_inventory
 
-    assert_select '.gh-slot-e p', 'Stać cię teraz na 1 przedmiot w sklepie.'
-    assert_select ".gh-slot-e a[href='#{story_group_shop_index_path(@story_group)}']", 'Zobacz sklep'
+    assert_select '.gh-empty-slot-panel p', 'Stać cię teraz na 1 przedmiot w sklepie.'
+    assert_select ".gh-empty-slot-panel a[href='#{story_group_shop_index_path(@story_group)}']", 'Zobacz sklep'
   end
 
   test 'an empty inventory points at the shop' do
     visit_inventory
 
-    assert_select '.gh-gm .gh-h2', 'Nie masz jeszcze żadnego przedmiotu'
-    assert_select '.gh-pgrid', false
-    assert_select '.gh-gm a', 'Przejdź do sklepu'
+    assert_select '.gh-empty-state .gh-h2', 'Nie masz jeszcze żadnego przedmiotu'
+    assert_select '.gh-inventory-grid', false
+    assert_select '.gh-empty-state a', 'Przejdź do sklepu'
   end
 
   test 'a teacher following the URL gets the teacher wording and no shop slot' do
@@ -223,8 +223,8 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     visit_inventory
 
     assert_select 'h1.gh-h1', 'Przedmioty — Anna Kowalska'
-    assert_select '.gh-slot-e', false
-    assert_select '.gh-cost b', '15'
+    assert_select '.gh-empty-slot-panel', false
+    assert_select '.gh-price-badge b', '15'
   end
 
   # ---- Koryguj walutę --------------------------------------------------
@@ -238,7 +238,7 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     assert_select 'turbo-frame#modal'
     assert_select '.gh-h2', 'Koryguj walutę'
     assert_select 'p', 'Anna Kowalska ma teraz 30 do wydania.'
-    assert_select '.gh-seg3 input[value="1"][checked]'
+    assert_select '.gh-segmented-toggle-3 input[value="1"][checked]'
     assert_select '[data-currency-adjust-target=preview][hidden]'
     assert_select '[data-currency-adjust-target=error][hidden]'
     assert_select '[data-currency-adjust-target=submit]', 'Podaj kwotę'
@@ -299,10 +299,10 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad input[aria-invalid=true]'
-    assert_select '.gh-err[role=alert] span', 'Student ma tylko 30 do wydania.'
+    assert_select '.gh-text-input--invalid input[aria-invalid=true]'
+    assert_select '.gh-field-error[role=alert] span', 'Student ma tylko 30 do wydania.'
     # The toggle comes back the way the teacher left it.
-    assert_select '.gh-seg3 input[value="-1"][checked]'
+    assert_select '.gh-segmented-toggle-3 input[value="-1"][checked]'
     assert_equal 30, @student.reload.current_currency
   end
 
@@ -315,7 +315,7 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-err[role=alert] span', 'Podaj kwotę.'
+    assert_select '.gh-field-error[role=alert] span', 'Podaj kwotę.'
   end
 
   test 'the server renders the preview itself, so the dialog works without JS' do

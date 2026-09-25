@@ -1,11 +1,11 @@
 @layer components {
 
-  .gh-ivl {
+  .gh-invite-list {
     margin-top: 22px;
     padding: 6px 8px;
   }
 
-  .gh-iv {
+  .gh-invite-row {
     display: grid;
     grid-template-columns: 130px 110px minmax(0, 1fr) minmax(0, 1fr) auto;
     gap: 14px;
@@ -14,13 +14,13 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-iv--h {
+  .gh-invite-row--header {
     border-top: 0;
     font: 680 12.5px var(--gh-f-ui);
     color: var(--gh-ink-3);
   }
 
-  .gh-iv--fresh {
+  .gh-invite-row--new {
     animation: gh-fresh 2.4s ease-out 1;
   }
 
@@ -35,64 +35,64 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gh-iv--fresh {
+    .gh-invite-row--new {
       animation: none;
       background: color-mix(in srgb, var(--gh-item) 12%, transparent);
     }
   }
 
-  .gh-iv-cd {
+  .gh-invite-code {
     font: 700 20px var(--gh-f-mono);
     letter-spacing: 0.1em;
   }
 
-  .gh-iv-u {
+  .gh-invite-usage {
     font: 560 14px var(--gh-f-ui);
   }
 
-  .gh-iv-u .gh-bar {
+  .gh-invite-usage .gh-progress-bar {
     margin-top: 6px;
     max-width: 160px;
   }
 
-  .gh-iv-e {
+  .gh-invite-expiry {
     font-size: 14px;
     color: var(--gh-ink-2);
   }
 
-  .gh-iv-acts {
+  .gh-invite-actions {
     display: flex;
     gap: 4px;
     justify-content: flex-end;
   }
 
-  .gh-iv-acts .gh-iconbtn {
+  .gh-invite-actions .gh-icon-button {
     width: 38px;
     height: 38px;
   }
 
-  .gh-stt {
+  .gh-status-pill {
     --gh-c: 5px;
     display: inline-block;
     padding: 4px 8px;
     font: 680 12px var(--gh-f-ui);
   }
 
-  .gh-stt--on {
+  .gh-status-pill--active {
     background: color-mix(in srgb, var(--gh-earn) 18%, var(--gh-card));
     color: var(--gh-earn);
   }
 
-  .gh-stt--off {
+  .gh-status-pill--inactive {
     background: var(--gh-card-3);
     color: var(--gh-ink-2);
   }
 
-  .gh-inact {
+  .gh-inactive-invites {
     margin-top: 14px;
   }
 
-  .gh-inact>summary {
+  .gh-inactive-invites>summary {
     cursor: pointer;
     font: 680 14px var(--gh-f-ui);
     color: var(--gh-ink-2);
@@ -100,49 +100,49 @@
     list-style: none;
   }
 
-  .gh-inact>summary::-webkit-details-marker {
+  .gh-inactive-invites>summary::-webkit-details-marker {
     display: none;
   }
 
-  .gh-inact>summary::before {
+  .gh-inactive-invites>summary::before {
     content: "▸ ";
   }
 
-  .gh-inact[open]>summary::before {
+  .gh-inactive-invites[open]>summary::before {
     content: "▾ ";
   }
 
-  .gh-inact .gh-ivl {
+  .gh-inactive-invites .gh-invite-list {
     margin-top: 6px;
   }
 
-  .gh-quick-cta {
+  .gh-quick-invite-cta {
     justify-content: center;
     margin-top: 14px;
   }
 
-  .gh-presets {
+  .gh-invite-presets {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     margin-top: 12px;
   }
 
-  .gh-lim {
+  .gh-invite-limits {
     margin-top: 14px;
     padding-top: 14px;
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-lim .gh-swrow {
+  .gh-invite-limits .gh-toggle-switch-row {
     margin-top: 0;
   }
 
-  .gh-lim:has(.gh-sw:not(:checked)) .gh-row2 {
+  .gh-invite-limits:has(.gh-toggle-switch:not(:checked)) .gh-limit-fields-row {
     display: none;
   }
 
-  .gh-row2 {
+  .gh-limit-fields-row {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -150,16 +150,16 @@
     margin-top: 10px;
   }
 
-  .gh-row2 .gh-inp {
+  .gh-limit-fields-row .gh-text-input {
     flex: 0 0 auto;
   }
 
-  .gh-lim .gh-inp input[type="date"],
-  .gh-lim .gh-inp input[type="time"] {
+  .gh-invite-limits .gh-text-input input[type="date"],
+  .gh-invite-limits .gh-text-input input[type="time"] {
     font: 600 15px var(--gh-f-ui);
   }
 
-  .gh-qrbox {
+  .gh-invite-qr-box {
     display: flex;
     gap: 26px;
     align-items: center;
@@ -167,7 +167,7 @@
     margin-top: 18px;
   }
 
-  .gh-qr {
+  .gh-invite-qr {
     width: 190px;
     height: 190px;
     background: #fff;
@@ -175,31 +175,31 @@
     flex: 0 0 auto;
   }
 
-  .gh-qr img {
+  .gh-invite-qr img {
     width: 100%;
     height: 100%;
   }
 
-  .gh-qrbox .gh-code-big {
+  .gh-invite-qr-box .gh-invite-code-display {
     font-size: 48px;
     margin: 0;
   }
 
-  .gh-copy {
+  .gh-copy-action {
     margin-top: 12px;
   }
 
-  @media (max-width: 720px) {
-    .gh-iv {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-invite-row {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 6px 12px;
     }
 
-    .gh-iv--h {
+    .gh-invite-row--header {
       display: none;
     }
 
-    .gh-iv-acts {
+    .gh-invite-actions {
       grid-column: 2;
       grid-row: 1 / 4;
       display: grid;
@@ -207,19 +207,19 @@
       align-content: start;
     }
 
-    .gh-iv-st {
+    .gh-invite-status {
       grid-row: 1;
       grid-column: 1;
       justify-self: end;
       margin-right: 4px;
     }
 
-    .gh-qr {
+    .gh-invite-qr {
       width: 150px;
       height: 150px;
     }
 
-    .gh-qrbox .gh-code-big {
+    .gh-invite-qr-box .gh-invite-code-display {
       font-size: 36px;
     }
   }

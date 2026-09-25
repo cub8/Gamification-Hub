@@ -7,8 +7,8 @@
 - content_for :title, title
 - count = @purchases.size
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1= title
     %p.gh-lead
       - if @own_items
@@ -18,13 +18,13 @@
         Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach.
 
   - if @own_items
-    .gh-rowb
-      = link_to story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--sec' do
+    .gh-button-row
+      = link_to story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary' do
         %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
         Przejdź do sklepu
 
 - if @purchases.any?
-  .gh-pgrid
+  .gh-inventory-grid
     - @purchases.each do |purchase|
       = render 'students_items/card', purchase: purchase, cost: !@own_items,
         foot: (@own_items ? purchase_line(purchase) : purchase_teacher_line(purchase))
@@ -32,17 +32,17 @@
     -# Closes the grid rather than sitting under it, exactly as in the mockup:
     -# the inventory's job is to send you back for more.
     - if @shop
-      .gh-panel.gh-slot-e
+      .gh-panel.gh-empty-slot-panel
         %p= inventory_shop_line(@shop.affordable)
-        = link_to 'Zobacz sklep', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--sec'
+        = link_to 'Zobacz sklep', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary'
 - else
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     - if @own_items
       %h2.gh-h2 Nie masz jeszcze żadnego przedmiotu
       %p.gh-lead
         Zbieraj walutę na zajęciach i wydaj ją w sklepie — kupione przedmioty
         zostaną tutaj razem z datą zakupu.
-      .gh-rowb
+      .gh-button-row
         = link_to 'Przejdź do sklepu', story_group_shop_index_path(@story_group), class: 'gh-btn'
     - else
       %h2.gh-h2 Student nic jeszcze nie kupił

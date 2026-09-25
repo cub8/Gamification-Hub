@@ -61,14 +61,14 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     # The layout carries a <turbo-frame id="modal"> of its own inside the
     # dialog, so rendering it here too would give Turbo two to choose from.
     assert_select 'turbo-frame#modal', 1
-    assert_select 'header.gh-hd', false
+    assert_select 'header.gh-topbar', false
   end
 
   test 'an unknown code comes back on step 1 with its own message' do
     get lookup_join_index_path(code: 'ZZZZZZ'), headers: MODAL
 
     assert_response :unprocessable_content
-    assert_select '.gh-err span', 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.'
+    assert_select '.gh-field-error span', 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.'
     assert_select 'input[data-join-code-target=slot]', 6
   end
 
@@ -78,7 +78,7 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
     assert_response :unprocessable_content
-    assert_select '.gh-err span', 'Ten kod wygasł. Poproś prowadzącego o nowy.'
+    assert_select '.gh-field-error span', 'Ten kod wygasł. Poproś prowadzącego o nowy.'
   end
 
   test 'a code that ran out of seats gets its own message' do
@@ -87,7 +87,7 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
     assert_response :unprocessable_content
-    assert_select '.gh-err span', /maksymalna liczba osób/
+    assert_select '.gh-field-error span', /maksymalna liczba osób/
   end
 
   test 'already belonging to the group is a way in, not an error' do
@@ -96,8 +96,8 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
     assert_response :unprocessable_content
-    assert_select '.gh-err', false
-    assert_select '.gh-hint a[href=?]', story_group_path(@story_group), 'Otwórz grupę'
+    assert_select '.gh-field-error', false
+    assert_select '.gh-field-hint a[href=?]', story_group_path(@story_group), 'Otwórz grupę'
   end
 
   # --- step 2 ---------------------------------------------------------------
@@ -116,7 +116,7 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
     # Deliberately unlike the mockup, which makes the nickname mandatory.
-    assert_select '.gh-hint', /Zostaw puste/
+    assert_select '.gh-field-hint', /Zostaw puste/
     assert_select 'input[name=nickname][required]', false
     assert_select 'button[type=submit][disabled]', false
   end
@@ -157,8 +157,8 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad input[name=nickname]'
-    assert_select '.gh-err span'
+    assert_select '.gh-text-input--invalid input[name=nickname]'
+    assert_select '.gh-field-error span'
   end
 
   test 'the same nickname in a different group is fine' do
@@ -193,7 +193,7 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
   test 'Gotowe leaves the dialog for the group itself' do
     join
 
-    assert_select '.gh-dlg-b a[href=?][data-turbo-frame=_top]', story_group_path(@story_group), 'Gotowe'
+    assert_select '.gh-dialog-button-row a[href=?][data-turbo-frame=_top]', story_group_path(@story_group), 'Gotowe'
   end
 
   # --- the QR landing page --------------------------------------------------
@@ -204,17 +204,17 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     # The layout always carries one modal frame in its dialog; what matters is
     # that the step rendered as page content rather than inside it.
-    assert_select 'main.gh-auth turbo-frame#modal', false
+    assert_select 'main.gh-auth-page turbo-frame#modal', false
     # The focused, navigation-less shell: no chrome to distract from one task.
-    assert_select 'main.gh-auth .gh-acard'
-    assert_select 'header.gh-hd', false
+    assert_select 'main.gh-auth-page .gh-auth-card'
+    assert_select 'header.gh-topbar', false
     assert_select 'h2', 'Dołączasz do grupy Zakon Algorytmów'
   end
 
   test 'the page variant offers a way back instead of a dialog close button' do
     get join_path(code: @invite.code)
 
-    assert_select 'a.gh-btn--sec[href=?]', home_path, 'Anuluj'
+    assert_select 'a.gh-btn--secondary[href=?]', home_path, 'Anuluj'
     assert_select '[data-action=?]', 'dialog#close', false
   end
 
@@ -222,8 +222,8 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     get join_path(code: 'ZZZZZZ')
 
     assert_response :unprocessable_content
-    assert_select 'main.gh-auth input[data-join-code-target=slot]', 6
-    assert_select '.gh-err span', 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.'
+    assert_select 'main.gh-auth-page input[data-join-code-target=slot]', 6
+    assert_select '.gh-field-error span', 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.'
   end
 
   # --- chrome ---------------------------------------------------------------
@@ -234,7 +234,7 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
       sign_in user
       get home_path
 
-      assert_select '.gh-hd a.gh-hd-join[href=?][data-turbo-frame=modal]', new_join_path
+      assert_select '.gh-topbar a.gh-topbar-join-link[href=?][data-turbo-frame=modal]', new_join_path
     end
   end
 end

@@ -56,9 +56,11 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
   end
 
   # Values of one column across every rendered row, header excluded.
-  def column(selector) = css_select(".gh-srow:not(.gh-srow--h) #{selector}").map { |cell| cell.text.strip }
+  def column(selector) = css_select(".gh-student-row:not(.gh-student-row--header) #{selector}").map do |cell|
+    cell.text.strip
+  end
 
-  def names = css_select('.gh-s-n b').map { |cell| cell.text.strip }
+  def names = css_select('.gh-student-name-cell b').map { |cell| cell.text.strip }
 
   # Trimmed text of every match, so assertions read as data rather than nodes.
   def texts(selector) = css_select(selector).map { |node| node.text.strip }
@@ -66,9 +68,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
   # A tab's own word, without the count that follows it.
   def first_words(selector) = css_select(selector).map { |node| node.text.split.first }
 
-  def tab_labels = first_words('.gh-gt2')
+  def tab_labels = first_words('.gh-group-tab')
 
-  def current_tab = first_words('.gh-gt2[aria-current=true]').first
+  def current_tab = first_words('.gh-group-tab[aria-current=true]').first
 
   # ---- the list --------------------------------------------------------
 
@@ -85,9 +87,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h1.gh-h1', 'Studenci'
     assert_equal ['Anna Kowalska', 'Zofia Nowak'], names
-    assert_equal %w[Rekrut Kapitan], column('.gh-s-r')
+    assert_equal %w[Rekrut Kapitan], column('.gh-student-rank-cell')
     # Do wydania | Zebrane | Odznaki, per row, Anna first.
-    assert_equal %w[10 10 0 10 60 1], column('.gh-num2')
+    assert_equal %w[10 10 0 10 60 1], column('.gh-numeric-cell')
   end
 
   test 'the header offers both Kody i zaproszenia and the quick invite dialog' do
@@ -95,8 +97,8 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_list
 
-    assert_select ".gh-phead a[href='#{story_group_invites_path(@story_group)}']", 'Kody i zaproszenia'
-    assert_select ".gh-phead a[href='#{quick_story_group_invites_path(@story_group)}']" \
+    assert_select ".gh-page-header a[href='#{story_group_invites_path(@story_group)}']", 'Kody i zaproszenia'
+    assert_select ".gh-page-header a[href='#{quick_story_group_invites_path(@story_group)}']" \
                   '[data-turbo-frame=modal]', 'Pokaż kod dla studentów'
   end
 
@@ -108,7 +110,7 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     student(name: 'Zofia Nowak', lives: 0)
     visit_list
     assert_select '.gh-lead b', '1 student ma 0 żyć'
-    assert_select '.gh-srow--zero', 1
+    assert_select '.gh-student-row--no-lives', 1
   end
 
   # The other way round from the ranking, which is the only screen where a
@@ -119,7 +121,7 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     visit_list
 
     assert_equal ['Sebastian Alejandro'], names
-    assert_select '.gh-s-n small', /\A„Kapitan Marchewka” · /
+    assert_select '.gh-student-name-cell small', /\A„Kapitan Marchewka” · /
   end
 
   test 'a student without a nickname does not repeat their own name' do
@@ -128,16 +130,16 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     visit_list
 
     assert_equal ['Anna Kowalska'], names
-    assert_select '.gh-s-n small', member.email
+    assert_select '.gh-student-name-cell small', member.email
   end
 
   test 'the minus button is gone at zero lives and there otherwise' do
     student(name: 'Anna Kowalska', lives: 0)
     visit_list
-    assert_select '.gh-lives button[disabled]', 1
+    assert_select '.gh-lives-control button[disabled]', 1
 
     visit_list
-    assert_select '.gh-lv--zero', 1
+    assert_select '.gh-lives-badge--zero', 1
   end
 
   test 'the list carries the search, its counter and a hidden empty panel' do
@@ -154,10 +156,10 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
   test 'an empty group names the next action' do
     visit_list
 
-    assert_select '.gh-gm .gh-h2', 'Nie ma jeszcze nikogo w grupie'
-    assert_select '.gh-srow', false
-    assert_select ".gh-gm a[href='#{story_group_invites_path(@story_group)}']", 'Kody i zaproszenia'
-    assert_select ".gh-gm a[href='#{quick_story_group_invites_path(@story_group)}']" \
+    assert_select '.gh-empty-state .gh-h2', 'Nie ma jeszcze nikogo w grupie'
+    assert_select '.gh-student-row', false
+    assert_select ".gh-empty-state a[href='#{story_group_invites_path(@story_group)}']", 'Kody i zaproszenia'
+    assert_select ".gh-empty-state a[href='#{quick_story_group_invites_path(@story_group)}']" \
                   '[data-turbo-frame=modal]', 'Pokaż kod dla studentów'
   end
 
@@ -192,7 +194,7 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 0, member.reload.lives
     follow_redirect!
     # An error stays on the page rather than rising as a toast.
-    assert_select '.gh-plate[role=alert] span', /student ma już 0/
+    assert_select '.gh-inset-plate[role=alert] span', /student ma już 0/
   end
 
   # ---- the sheet -------------------------------------------------------
@@ -204,9 +206,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member)
 
-    assert_select '.gh-sheet h1.gh-h1', 'Sebastian Alejandro'
-    assert_select '.gh-crumbs span', 'Sebastian Alejandro'
-    assert_select '.gh-sh-sub', /\APseudonim: Kapitan Marchewka, /
+    assert_select '.gh-student-page h1.gh-h1', 'Sebastian Alejandro'
+    assert_select '.gh-breadcrumbs span', 'Sebastian Alejandro'
+    assert_select '.gh-student-page-subtitle', /\APseudonim: Kapitan Marchewka, /
   end
 
   test 'a student with no nickname gets no pseudonym fragment' do
@@ -214,7 +216,7 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member)
 
-    assert_select '.gh-sheet h1.gh-h1', 'Anna Kowalska'
+    assert_select '.gh-student-page h1.gh-h1', 'Anna Kowalska'
     assert_no_match(/Pseudonim:/, response.body)
   end
 
@@ -227,14 +229,14 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'main#app-content turbo-frame#modal', false
-    assert_select '.gh-sheet h1.gh-h1', 'Anna Kowalska'
-    assert_select '.gh-sh-sub', /#{Regexp.escape(member.email)}/
-    assert_select '.gh-crumbs a[href=?]', story_group_students_path(@story_group), 'Studenci'
+    assert_select '.gh-student-page h1.gh-h1', 'Anna Kowalska'
+    assert_select '.gh-student-page-subtitle', /#{Regexp.escape(member.email)}/
+    assert_select '.gh-breadcrumbs a[href=?]', story_group_students_path(@story_group), 'Studenci'
 
-    stats = css_select('.gh-stat dd').map { |cell| cell.text.split.first }
+    stats = css_select('.gh-student-stat dd').map { |cell| cell.text.split.first }
     assert_equal %w[Rekrut 12 30 2], stats
-    assert_select '.gh-stat dd small', '30 z 50 do rangi Kapitan'
-    assert_select '.gh-stat .gh-bar[role=progressbar][aria-valuenow="60"]'
+    assert_select '.gh-student-stat dd small', '30 z 50 do rangi Kapitan'
+    assert_select '.gh-student-stat .gh-progress-bar[role=progressbar][aria-valuenow="60"]'
 
     assert_equal %w[Odznaki Przedmioty Historia], tab_labels
   end
@@ -244,13 +246,13 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     member = student(name: 'Anna Kowalska', total: 30)
 
     visit_sheet(member)
-    assert_select '.gh-stat .gh-bar', false
-    assert_select '.gh-stat dd small', false
+    assert_select '.gh-student-stat .gh-progress-bar', false
+    assert_select '.gh-student-stat dd small', false
 
     other = student(name: 'Zofia Nowak', total: 30)
     @story_group.ranks.destroy_all
     visit_sheet(other)
-    assert_select '.gh-stat dd', '—'
+    assert_select '.gh-student-stat dd', '—'
   end
 
   test 'badges is the default tab and the others follow the query' do
@@ -276,7 +278,7 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member)
 
-    assert_equal %w[2 1 1], texts('.gh-gt2 .gh-n')
+    assert_equal %w[2 1 1], texts('.gh-group-tab .gh-count-label')
   end
 
   test 'the badges tab shows held badges with a revoke link' do
@@ -286,16 +288,16 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member)
 
-    assert_select '.gh-bgrid .gh-card-name', 'Nawigator'
-    assert_select '.gh-tag--disc', '−5% w sklepie'
-    assert_select '.gh-card-foot a[data-turbo-frame=modal]', 'Odbierz'
+    assert_select '.gh-badge-grid .gh-card-name', 'Nawigator'
+    assert_select '.gh-tag--discount', '−5% w sklepie'
+    assert_select '.gh-card-footer a[data-turbo-frame=modal]', 'Odbierz'
   end
 
   test 'the badges tab says so when there are none' do
     visit_sheet(student(name: 'Anna Kowalska'))
 
-    assert_select '.gh-expl', 'Student nie ma jeszcze żadnej odznaki.'
-    assert_select '.gh-bgrid', false
+    assert_select '.gh-explainer-note', 'Student nie ma jeszcze żadnej odznaki.'
+    assert_select '.gh-badge-grid', false
   end
 
   test 'the items tab shows what was paid and flags a discount' do
@@ -306,9 +308,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member, tab: 'items')
 
-    assert_select '.gh-ilist .gh-card-name', 'Poprawa wejściówki'
-    assert_select '.gh-cost b', '15'
-    assert_select '.gh-card-foot .gh-meta', /\AKupione .*, ze zniżką z 20\z/
+    assert_select '.gh-item-list .gh-card-name', 'Poprawa wejściówki'
+    assert_select '.gh-price-badge b', '15'
+    assert_select '.gh-card-footer .gh-card-meta', /\AKupione .*, ze zniżką z 20\z/
   end
 
   test 'a withdrawn item stays in the inventory tab, tagged' do
@@ -319,8 +321,8 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member, tab: 'items')
 
-    assert_select '.gh-card--gone .gh-card-name', 'Stary przedmiot'
-    assert_select '.gh-tag--del', 'Usunięty z oferty'
+    assert_select '.gh-card--consumed .gh-card-name', 'Stary przedmiot'
+    assert_select '.gh-tag--removed', 'Usunięty z oferty'
   end
 
   test 'the history tab carries the ledger, the summary and the filters' do
@@ -329,10 +331,10 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     visit_sheet(member, tab: 'hist')
 
-    assert_select '.gh-ledh .gh-small', 'Saldo: 50, zebrane łącznie: 50.'
-    assert_equal %w[Wszystkie Nagrody Zakupy Korekty], first_words('.gh-fchip')
-    assert_select '.gh-lrow .gh-amt--earn', '+50'
-    assert_select '.gh-bal2', '50'
+    assert_select '.gh-ledger-header .gh-small', 'Saldo: 50, zebrane łącznie: 50.'
+    assert_equal %w[Wszystkie Nagrody Zakupy Korekty], first_words('.gh-purchase-filter-chip')
+    assert_select '.gh-ledger-row .gh-ledger-amount--earn', '+50'
+    assert_select '.gh-ledger-balance', '50'
   end
 
   test 'the history filter narrows the rows and marks itself current' do
@@ -342,11 +344,11 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
                                              granted_by_user: @owner,)
 
     visit_sheet(member, tab: 'hist')
-    assert_select '.gh-lrow:not(.gh-lrow--h)', 2
+    assert_select '.gh-ledger-row:not(.gh-ledger-row--header)', 2
 
     visit_sheet(member, tab: 'hist', kind: 'adjustment')
-    assert_select '.gh-lrow:not(.gh-lrow--h)', 1
-    assert_select '.gh-fchip[aria-current=true]', /Korekty/
+    assert_select '.gh-ledger-row:not(.gh-ledger-row--header)', 1
+    assert_select '.gh-purchase-filter-chip[aria-current=true]', /Korekty/
   end
 
   # ---- edit and removal ------------------------------------------------
@@ -359,11 +361,11 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'turbo-frame#modal'
     assert_select '.gh-h2', 'Edytuj studenta'
-    assert_select '.gh-nstep output', '2'
+    assert_select '.gh-number-stepper output', '2'
     assert_select 'input[type=hidden][name=?][value=?]', 'story_group_student[lives]', '2'
     assert_select '[data-lives-stepper-start-value="2"]'
     # The removal opens the SECOND dialog, over this one.
-    assert_select 'a.gh-kick[data-turbo-frame=modal2]', /Usuń z grupy/
+    assert_select 'a.gh-remove-student-btn[data-turbo-frame=modal2]', /Usuń z grupy/
   end
 
   test 'the edit dialog also renders as a page' do
@@ -371,9 +373,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_student_path(@story_group, member)
 
-    assert_select 'turbo-frame#modal .gh-nstep', false
-    assert_select '.gh-panel.gh-dlg-page .gh-nstep'
-    assert_select ".gh-dlg-b a[href='#{story_group_student_path(@story_group, member)}']", 'Anuluj'
+    assert_select 'turbo-frame#modal .gh-number-stepper', false
+    assert_select '.gh-panel.gh-dialog-page-panel .gh-number-stepper'
+    assert_select ".gh-dialog-button-row a[href='#{story_group_student_path(@story_group, member)}']", 'Anuluj'
   end
 
   test 'saving lives lands on the sheet and says the result' do
@@ -398,9 +400,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'turbo-frame#modal2'
     assert_select '.gh-h2', 'Usunąć studenta z grupy?'
     assert_select 'p', /\AAnna Kowalska straci dostęp do grupy/
-    assert_select '.gh-warn[role=alert] span',
+    assert_select '.gh-warning-note[role=alert] span',
                   /Przepadną: 1 odznakę, 1 przedmiot i całą historię waluty \(1 wpis\)\./
-    assert_select '.gh-dlg-b button[autofocus]', 'Anuluj'
+    assert_select '.gh-dialog-button-row button[autofocus]', 'Anuluj'
   end
 
   test 'the removal confirmation says plainly when there is nothing to lose' do
@@ -408,8 +410,8 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     get confirm_destroy_story_group_student_path(@story_group, member), headers: MODAL2
 
-    assert_select '.gh-warn', false
-    assert_select '.gh-expl', 'Ten student nie ma jeszcze odznak, przedmiotów ani historii waluty.'
+    assert_select '.gh-warning-note', false
+    assert_select '.gh-explainer-note', 'Ten student nie ma jeszcze odznak, przedmiotów ani historii waluty.'
   end
 
   test 'removing a student takes everything with it' do
@@ -445,9 +447,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select '.gh-h2', 'Przyznaj odznakę'
     assert_select 'p', 'Anna Kowalska ma 1 z 2 odznak.'
-    assert_select '.gh-bpick li', 2
-    assert_select '.gh-bp--owned input[disabled]'
-    assert_equal ['Ma już', '−10%'], texts('.gh-st2')
+    assert_select '.gh-badge-picker-list li', 2
+    assert_select '.gh-badge-picker-row--owned input[disabled]'
+    assert_equal ['Ma już', '−10%'], texts('.gh-badge-picker-status')
     # One effect sentence per badge, all hidden until something is picked.
     assert_select '[data-badge-picker-target=effect][hidden]', 2
   end
@@ -493,7 +495,7 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-h2', 'Odebrać odznakę „Nawigator”?'
     assert_select 'p', 'Anna Kowalska straci zniżkę −5% i możliwość zakupu: ' \
                        'Poprawa wejściówki. Kupione wcześniej przedmioty zostają.'
-    assert_select '.gh-dlg-b button[autofocus]', 'Anuluj'
+    assert_select '.gh-dialog-button-row button[autofocus]', 'Anuluj'
   end
 
   test 'revoking takes the award and leaves the badge alone' do

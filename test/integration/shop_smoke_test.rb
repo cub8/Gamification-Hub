@@ -47,19 +47,19 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
   # The zone a card landed in, by its item name.
   def zone_of(name)
-    css_select('.gh-zone').find do |zone|
+    css_select('.gh-showcase-zone').find do |zone|
       zone.css('.gh-card-name').any? { |title| title.text.strip == name }
     end
   end
 
-  # `> span:first-child` throughout: .gh-zone-n is a span in the same label.
-  def zone_label(zone) = zone.css('.gh-zone-l > span:first-child').first.text.strip
+  # `> span:first-child` throughout: .gh-showcase-zone-count is a span in the same label.
+  def zone_label(zone) = zone.css('.gh-showcase-zone-label > span:first-child').first.text.strip
 
-  def zone_labels = css_select('.gh-zone-l > span:first-child').map { |label| label.text.strip }
+  def zone_labels = css_select('.gh-showcase-zone-label > span:first-child').map { |label| label.text.strip }
 
-  def zone_counts = css_select('.gh-zone-n').map { |count| count.text.strip }
+  def zone_counts = css_select('.gh-showcase-zone-count').map { |count| count.text.strip }
 
-  def requirement_lines(card) = card.css('.gh-req li').map { |line| line.text.squish }
+  def requirement_lines(card) = card.css('.gh-requirement-list li').map { |line| line.text.squish }
 
   # --- who may see it ------------------------------------------------------
 
@@ -114,27 +114,27 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     visit_shop
 
-    assert_select '.gh-zone', 1
+    assert_select '.gh-showcase-zone', 1
     assert_equal ['Stać cię teraz'], zone_labels
   end
 
   test 'the head names the balance and the total collected' do
     visit_shop
 
-    assert_select '.gh-phead .gh-lead', /Masz\s+100\s+do wydania\./
-    purse = css_select('.gh-purse-mini b').map { |value| value.text.strip }
+    assert_select '.gh-page-header .gh-lead', /Masz\s+100\s+do wydania\./
+    purse = css_select('.gh-wallet-summary b').map { |value| value.text.strip }
     assert_equal %w[100 100], purse
   end
 
   test 'the head names the badges that cut prices, and says nothing when there are none' do
     visit_shop
-    assert_select '.gh-phead .gh-lead', { text: /odznak/, count: 0 }
+    assert_select '.gh-page-header .gh-lead', { text: /odznak/, count: 0 }
 
     @student.badges << badge(name: 'Nawigator', discount: 10)
     @student.badges << badge(name: 'Mechanik', discount: 5)
     visit_shop
 
-    assert_select '.gh-phead .gh-lead',
+    assert_select '.gh-page-header .gh-lead',
                   /Twoje odznaki\s+Mechanik\s+i\s+Nawigator\s+obniżają ceny niektórych przedmiotów\./
   end
 
@@ -145,12 +145,12 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     visit_shop
 
-    link = css_select(".gh-cards a[href='#{confirm_buy_story_group_shop_path(@story_group, cheap)}']").first
+    link = css_select(".gh-card-grid a[href='#{confirm_buy_story_group_shop_path(@story_group, cheap)}']").first
     assert_not_nil link
     assert_equal 'Kup za 10', link.text.strip
     assert_equal 'modal', link['data-turbo-frame']
-    assert_select '.gh-card--afford', 1
-    assert_select '.gh-seal[hidden]', 1
+    assert_select '.gh-card--affordable', 1
+    assert_select '.gh-lock-seal[hidden]', 1
   end
 
   # --- the price is the student's, not the list ----------------------------
@@ -164,11 +164,11 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     visit_shop
 
     card = css_select('.gh-card').first
-    assert_equal '50', card.css('.gh-cost s').first.text.strip
-    assert_equal '40', card.css('.gh-cost b').first.text.strip
+    assert_equal '50', card.css('.gh-price-badge s').first.text.strip
+    assert_equal '40', card.css('.gh-price-badge b').first.text.strip
     # The student's own percentage, NOT ItemCard's "Zniżki do −20%"
     # ceiling, which is what the teacher's screens show.
-    assert_equal '−20% za odznaki', card.css('.gh-tag--disc').first.text.strip
+    assert_equal '−20% za odznaki', card.css('.gh-tag--discount').first.text.strip
   end
 
   test 'an undiscounted card shows one price and hides the discount chip' do
@@ -177,9 +177,9 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     visit_shop
 
     card = css_select('.gh-card').first
-    assert_empty card.css('.gh-cost s')
-    assert_equal '10', card.css('.gh-cost b').first.text.strip
-    assert_not_nil card.css('.gh-tag--disc[hidden]').first
+    assert_empty card.css('.gh-price-badge s')
+    assert_equal '10', card.css('.gh-price-badge b').first.text.strip
+    assert_not_nil card.css('.gh-tag--discount[hidden]').first
   end
 
   # --- saving up -----------------------------------------------------------
@@ -190,10 +190,10 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     visit_shop
 
     card = css_select('.gh-card').first
-    assert_equal '60', card.css('.gh-need b').first.text.strip
-    assert_includes card.css('.gh-need .gh-bar i').first['style'], '--gh-p: 63%'
+    assert_equal '60', card.css('.gh-requirement-block b').first.text.strip
+    assert_includes card.css('.gh-requirement-block .gh-progress-bar i').first['style'], '--gh-p: 63%'
     # No button: there is nothing to press yet.
-    assert_empty card.css('.gh-foot')
+    assert_empty card.css('.gh-auth-footer')
   end
 
   # --- sealed --------------------------------------------------------------
@@ -211,8 +211,8 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     card = css_select('.gh-card').first
     assert_equal ['Wymaga odznaki Mechanik'], requirement_lines(card)
-    assert_equal 'Za odznakę Mechanik', card.css('.gh-seal span').first.text.strip
-    assert_nil card.css('.gh-seal').first['hidden']
+    assert_equal 'Za odznakę Mechanik', card.css('.gh-lock-seal span').first.text.strip
+    assert_nil card.css('.gh-lock-seal').first['hidden']
   end
 
   # A rank the student already holds gates nothing, so it is neither listed nor
@@ -229,8 +229,8 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     card = css_select('.gh-card').first
     assert_equal ['Wymaga odznaki Mechanik'], requirement_lines(card)
-    assert_equal 'Za odznakę Mechanik', card.css('.gh-seal span').first.text.strip
-    assert_empty card.css('.gh-req .gh-bar')
+    assert_equal 'Za odznakę Mechanik', card.css('.gh-lock-seal span').first.text.strip
+    assert_empty card.css('.gh-requirement-list .gh-progress-bar')
   end
 
   test 'a rank out of reach is listed with a bar toward it' do
@@ -241,7 +241,7 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     card = css_select('.gh-card').first
     assert_equal ['Wymaga rangi Admirał'], requirement_lines(card)
-    bar = card.css('.gh-req .gh-bar').first
+    bar = card.css('.gh-requirement-list .gh-progress-bar').first
     assert_equal '400', bar['aria-valuemax']
     assert_equal '100', bar['aria-valuenow']
     assert_equal 'Postęp do rangi Admirał', bar['aria-label']
@@ -260,7 +260,7 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     card = sealed.css('.gh-card').first
     assert_equal ['Masz 0 żyć. Najpierw odzyskaj życie.'], requirement_lines(card)
-    assert_equal 'Niedostępne przy 0 życiach', card.css('.gh-seal span').first.text.strip
+    assert_equal 'Niedostępne przy 0 życiach', card.css('.gh-lock-seal span').first.text.strip
   end
 
   # --- the buy confirmation ------------------------------------------------
@@ -276,13 +276,13 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'turbo-frame#modal'
     assert_select 'h2', 'Kupić „Poprawa”?'
-    labels = css_select('.gh-buy-dl dt').map { |term| term.text.strip }
+    labels = css_select('.gh-purchase-details dt').map { |term| term.text.strip }
     assert_equal ['Cena', 'Zostanie Ci'], labels
-    values = css_select('.gh-buy-dl .gh-buy-v').map { |dd| dd.text.strip }
+    values = css_select('.gh-purchase-details .gh-buy-v').map { |dd| dd.text.strip }
     assert_equal %w[40 60], values
-    assert_equal '50', css_select('.gh-buy-dl s').first.text.strip
-    assert_select '.gh-note', /Zniżka −20% za odznaki\./
-    assert_select '.gh-note', /Prowadzący dostanie powiadomienie o zakupie\./
+    assert_equal '50', css_select('.gh-purchase-details s').first.text.strip
+    assert_select '.gh-note-row', /Zniżka −20% za odznaki\./
+    assert_select '.gh-note-row', /Prowadzący dostanie powiadomienie o zakupie\./
   end
 
   test 'the confirmation posts to buy and breaks out of the frame' do
@@ -293,7 +293,7 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     form = css_select("form[action='#{buy_story_group_shop_path(@story_group, bought)}']").first
     assert_not_nil form
     assert_equal '_top', form['data-turbo-frame']
-    assert_select '.gh-dlg-b button', 'Kup za 10'
+    assert_select '.gh-dialog-button-row button', 'Kup za 10'
   end
 
   # Ctrl-click, or no JavaScript: the same content as a page on the app shell.
@@ -303,9 +303,9 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     get confirm_buy_story_group_shop_path(@story_group, bought)
 
     assert_response :success
-    assert_select 'turbo-frame#modal .gh-buy', false
-    assert_select '.gh-panel.gh-dlg-page .gh-buy'
-    assert_select ".gh-dlg-b a[href='#{story_group_shop_index_path(@story_group)}']", 'Anuluj'
+    assert_select 'turbo-frame#modal .gh-purchase-summary', false
+    assert_select '.gh-panel.gh-dialog-page-panel .gh-purchase-summary'
+    assert_select ".gh-dialog-button-row a[href='#{story_group_shop_index_path(@story_group)}']", 'Anuluj'
   end
 
   # The dialog quotes a price, so it re-checks the offer rather than trusting
@@ -365,7 +365,7 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     visit_shop
     assert_select '.gh-card', 0
-    assert_select '.gh-gm h2', 'Sklep jest jeszcze pusty'
+    assert_select '.gh-empty-state h2', 'Sklep jest jeszcze pusty'
 
     # `kept` at the finder, so the record is simply not there — the app's own
     # RecordNotFound rescue sends you home.
@@ -386,7 +386,7 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
   test 'the header shows the balance in a group and links to the history' do
     visit_shop
 
-    chip = css_select('.gh-hd a.gh-bal').first
+    chip = css_select('.gh-topbar a.gh-balance-button').first
     assert_not_nil chip
     assert_equal story_group_student_currency_transactions_path(@story_group, @student), chip['href']
     assert_equal '100', chip.css('b').first.text.strip
@@ -399,13 +399,13 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     get story_group_items_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-bal', false
+    assert_select '.gh-balance-button', false
   end
 
   test 'out of a group there is no balance to show' do
     get home_path
 
     assert_response :success
-    assert_select '.gh-bal', false
+    assert_select '.gh-balance-button', false
   end
 end

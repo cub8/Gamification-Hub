@@ -5,8 +5,8 @@
 -# frame around nothing reads as a fault, not as an absence.
 - content_for :title, 'Sklep'
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Sklep
     %p.gh-lead
       = shop_balance_sentence(@shop.balance)
@@ -14,27 +14,27 @@
 
   -# Both numbers, because they answer different questions: one is what you can
   -# spend today, the other is what decides your rank and never goes down.
-  .gh-purse-mini
+  .gh-wallet-summary
     = render 'layouts/currency_token', story_group: @story_group, size: 32
     %div
       %b= @shop.balance
       %small do wydania
-    %span.gh-div{ 'aria-hidden': 'true' }
+    %span.gh-wallet-divider{ 'aria-hidden': 'true' }
     %div
       %b= @shop.total
       %small zebrane łącznie
 
 - if @shop.any?
   - @shop.zones.each do |zone|
-    %section.gh-zone
-      %h2.gh-zone-l
+    %section.gh-showcase-zone
+      %h2.gh-showcase-zone-label
         %span= zone.label
-        %span.gh-zone-n.gh-oct= zone.offers.size
-      .gh-cards
+        %span.gh-showcase-zone-count.gh-octagon-clip= zone.offers.size
+      .gh-card-grid
         - zone.offers.each do |offer|
           = render 'shop/card', offer: offer, state: zone.key
 - else
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Sklep jest jeszcze pusty
     %p.gh-lead
       Prowadzący nie dodał jeszcze przedmiotów. Zbieraj walutę — przyda się,

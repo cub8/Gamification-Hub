@@ -9,33 +9,33 @@
 - discount = badge_discount_label(badge)
 - flipper  = local_assigns.fetch(:flipper, false)
 
-.gh-card-top
-  %h3.gh-card-name{ class: ('gh-ph' if badge.name.blank?),
+.gh-card-header
+  %h3.gh-card-name{ class: ('gh-placeholder-text' if badge.name.blank?),
                     data: targets[:name] }
     = badge_name(badge)
 
-.gh-art{ data: targets[:art] }
+.gh-card-art{ data: targets[:art] }
   = render 'badges/art', badge: badge
 
 - if local_assigns[:withdrawn]
-  .gh-tags
-    %span.gh-tag.gh-tag--del Usunięta z listy
+  .gh-card-tags
+    %span.gh-tag.gh-tag--removed Usunięta z listy
 
-%p.gh-rules{ class: ('gh-ph' if badge.didactic_description.blank?), data: targets[:rules] }
+%p.gh-rule-text{ class: ('gh-placeholder-text' if badge.didactic_description.blank?), data: targets[:rules] }
   = badge_rule(badge)
 
 -# Always in the markup even when empty, so the preview has somewhere to write
 -# a story the moment one is typed.
-%p.gh-flavor{ hidden: badge.story_description.blank?, data: targets[:flavor] }
+%p.gh-card-flavor{ hidden: badge.story_description.blank?, data: targets[:flavor] }
   = badge.story_description
 
-.gh-card-foot
-  %span.gh-tag.gh-tag--disc{ hidden: discount.nil?, data: targets[:tag] }= discount
+.gh-card-footer
+  %span.gh-tag.gh-tag--discount{ hidden: discount.nil?, data: targets[:tag] }= discount
   - if flipper
     -# No aria-expanded: this is not a disclosure, it is a toggle between two
     -# views, and the turned-away face is inert — so the only button a screen
     -# reader can reach is the one whose label says what pressing it will do.
-    %button.gh-flipbtn{ type: 'button',
+    %button.gh-card-flip-btn{ type: 'button',
                         'aria-label': "Pokaż, jak zdobyć odznakę #{badge.name}" }
       %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
       Jak zdobyć

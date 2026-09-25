@@ -17,15 +17,15 @@
               back_name: { badge_form_target: 'backName' },
               how:       { badge_form_target: 'backHow' }, }
 
-%details.gh-pvd{ open: true }
+%details.gh-preview-details{ open: true }
   %summary
     Podgląd karty
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3 Tak zobaczą to studenci
 
-    .gh-seg2.gh-oct{ role: 'group', 'aria-label': 'Strona karty' }
+    .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': 'Strona karty' }
       %button{ type: 'button', 'aria-pressed': 'true', value: 'won',
                data: { action: 'badge-form#side', badge_form_target: 'side' } }
         Zdobyta
@@ -33,13 +33,13 @@
                data: { action: 'badge-form#side', badge_form_target: 'side' } }
         Jeszcze niezdobyta
 
-    .gh-pvflip
+    .gh-preview-flip-card
       = render 'flip_card', badge: badge, earned: true,
         interactive: false, targets: targets
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3 W oknie przyznawania
-    .gh-thumbrow
+    .gh-preview-thumb-row
       = render 'badge_thumb', badge: badge,
         inner_data: { badge_form_target: 'thumbArt' }
       %span

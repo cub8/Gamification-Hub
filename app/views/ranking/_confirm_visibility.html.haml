@@ -13,25 +13,25 @@
     data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |f|
     = f.hidden_field :ranking_enabled, value: true
 
-    .gh-opts.gh-rk-modes{ role: 'radiogroup', 'aria-label': 'Co widzą studenci' }
-      %label.gh-opt
+    .gh-choice-grid.gh-ranking-mode-options{ role: 'radiogroup', 'aria-label': 'Co widzą studenci' }
+      %label.gh-choice-card
         = f.radio_button :ranking_mode, 'podium_and_own', checked: mode == 'podium_and_own',
           class: 'sr-only'
         %b= StoryGroup::RANKING_MODE_LABELS.fetch('podium_and_own')
         %span
           Wszyscy widzą pierwsze 3 miejsca. Każdy widzi też swoje miejsce, ale
           nie cudze.
-      %label.gh-opt
+      %label.gh-choice-card
         = f.radio_button :ranking_mode, 'full', checked: mode == 'full', class: 'sr-only'
         %b= StoryGroup::RANKING_MODE_LABELS.fetch('full')
         %span
           Wszyscy widzą miejsca i pseudonimy wszystkich, także na końcu listy.
 
-    .gh-dlg-b
+    .gh-dialog-button-row
       - if @in_modal
-        %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+        %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
       - else
-        = link_to 'Anuluj', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--sec'
+        = link_to 'Anuluj', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
 
       -# Focus on the primary here, unlike the other three: showing the ranking
       -# is the benign direction and is undone by the same switch.
@@ -42,13 +42,13 @@
     Studenci przestaną widzieć miejsca i pseudonimy. Ty nadal widzisz cały
     ranking, a zebrana waluta i rangi nie zmieniają się.
 
-  .gh-dlg-b
+  .gh-dialog-button-row
     -# The safe button first and focused, as everywhere else.
     - if @in_modal
-      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
         Zostaw widoczny
     - else
-      = link_to 'Zostaw widoczny', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--sec'
+      = link_to 'Zostaw widoczny', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
 
     = button_to 'Ukryj ranking', story_group_ranking_path(story_group),
       method: :patch, class: 'gh-btn',

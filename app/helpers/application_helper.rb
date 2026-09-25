@@ -151,7 +151,7 @@ module ApplicationHelper
   # One of the preset glyphs (Glyphs), written into the page.
   #
   # INLINED, not `image_tag`. The whole glyph system runs on `currentColor`:
-  # `.gh-gph { stroke: currentColor }` plus `.gh-gph .f { fill: currentColor }`
+  # `.gh-card-art-glyph { stroke: currentColor }` plus `.gh-card-art-glyph .f { fill: currentColor }`
   # is what tints one shape gold on a rank card, teal on a badge and orange on
   # an item, and flips it between themes. An external <img> cannot inherit
   # currentColor, so as a file reference each glyph would need one copy per
@@ -160,7 +160,7 @@ module ApplicationHelper
   #
   # Returns nil for an unknown key so a record whose art has been retired
   # renders its fallback rather than raising.
-  def gh_glyph(key, css_class: 'gh-gph')
+  def gh_glyph(key, css_class: 'gh-card-art-glyph')
     markup = Glyphs.markup(key)
     return if markup.nil?
 
@@ -172,7 +172,7 @@ module ApplicationHelper
   # An <img>, NOT inlined — the opposite of gh_glyph, and for the opposite
   # reason. These are 160x90 scenes carrying their own palette, so there is
   # nothing for `currentColor` to tint; inlining five of them into every card on
-  # the group index would only make the page bigger. They go into `.gh-art`,
+  # the group index would only make the page bigger. They go into `.gh-card-art`,
   # which crops them to the card, so the file's own `slice` does the rest.
   #
   # Returns nil for an unknown key so a group whose preset has been retired
@@ -196,7 +196,7 @@ module ApplicationHelper
 
   # The same cover, as a bare URL rather than an <img>.
   #
-  # The blurred table layer (.gh-tbg) is a CSS background, and a background
+  # The blurred table layer (.gh-group-cover-bg) is a CSS background, and a background
   # cannot take an <img>. Everything else about the rule is gh_group_cover's:
   # an upload wins, a preset key resolves through GroupArt, and an unknown or
   # missing key is nil, which is how the layout knows to keep the octagon
@@ -220,12 +220,12 @@ module ApplicationHelper
   # One of the preset currency marks (CurrencyIcons).
   #
   # Inlined, like gh_glyph and for the same reason: the mark is drawn in
-  # `currentColor`, and inside `.gh-tok > span` that resolves to the dark ink of
+  # `currentColor`, and inside `.gh-currency-token > span` that resolves to the dark ink of
   # the cream coin face in both themes. An <img> could not inherit it.
   #
   # Returns nil for an unknown key so a group whose icon has been retired falls
   # through to the initial rather than raising.
-  def gh_currency_icon(key, css_class: 'gh-cmark')
+  def gh_currency_icon(key, css_class: 'gh-coin-mark')
     markup = CurrencyIcons.markup(key)
     return if markup.nil?
 

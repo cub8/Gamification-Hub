@@ -16,15 +16,15 @@
     Studentom zostaną pierwsze 3 miejsca i ich własne. Nikt nie zobaczy, kto
     jest na końcu listy.
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# The safe button is the one that keeps the current setting, and it is the
   -# one you land on.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       = full ? 'Zostaw podium' : 'Anuluj'
   - else
     = link_to (full ? 'Zostaw podium' : 'Anuluj'), story_group_ranking_path(story_group),
-      class: 'gh-btn gh-btn--sec'
+      class: 'gh-btn gh-btn--secondary'
 
   = button_to (full ? 'Pokaż pełny ranking' : 'Pokaż tylko podium'),
     story_group_ranking_path(story_group),

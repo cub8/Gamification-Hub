@@ -7,20 +7,20 @@
 - error = membership.errors[:nickname].first
 - autofocus = local_assigns.fetch(:autofocus, false)
 
-.gh-fld
+.gh-form-field
   = f.label :nickname, 'Twój pseudonim'
-  .gh-namerow
-    .gh-inp{ class: ('gh-inp--bad' if error) }
+  .gh-nickname-field-row
+    .gh-text-input{ class: ('gh-text-input--invalid' if error) }
       = f.text_field :nickname, maxlength: 24, autocomplete: 'off', autofocus: autofocus,
         'aria-invalid': (error ? 'true' : nil),
         'aria-describedby': (error ? 'gh-nickname-error' : nil)
     - if submit_label
       %button.gh-btn{ type: 'submit' }= submit_label
   - if error
-    %p#gh-nickname-error.gh-err{ role: 'alert' }
+    %p#gh-nickname-error.gh-field-error{ role: 'alert' }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= error
   -# Ours is optional where the mockup's is required (DECISIONS.md:38): left
   -# blank, the ranking shows your real name, which the join screen offers in as
   -# many words. See StoryGroupStudent#display_name.
-  %span.gh-hint Do 24 znaków. Zostaw puste, żeby pokazywać imię i nazwisko.
+  %span.gh-field-hint Do 24 znaków. Zostaw puste, żeby pokazywać imię i nazwisko.

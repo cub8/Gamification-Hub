@@ -1,6 +1,6 @@
 -# Mockup: #/t/ranks, js-expanded/30-lists.js:25-29.
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Rangi
     %p.gh-lead
       = "#{ladder.size} #{gh_plural(ladder.size, 'ranga', 'rangi', 'rang')}."
@@ -10,23 +10,23 @@
       -# (30-br.js:56) rather than inventing a case we cannot build.
       Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi.
 
-  .gh-rowb
+  .gh-button-row
     = link_to new_story_group_rank_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       Nowa ranga
 
 - if ladder.any?
-  %section.gh-panel.gh-lst
+  %section.gh-panel.gh-list-panel
     -# Highest rung first, as every ladder in the mockup is.
-    %ol.gh-rlad
+    %ol.gh-rank-ladder-list
       - ladder.descending.each_with_index do |rung, position|
         -# The distance from the rung below to this one, printed between them.
         -# aria-hidden: it repeats the two thresholds either side of it.
         - if position.positive?
-          %li.gh-rgap{ 'aria-hidden': 'true' }
+          %li.gh-rank-gap{ 'aria-hidden': 'true' }
             = "↑ #{rung.gap_to_next} zebranych do awansu"
 
-        %li.gh-rl
+        %li.gh-rank-row
           = render 'rank_thumb', rank: rung.rank
           %div
             %b= rung.rank.name
@@ -34,30 +34,30 @@
 
             - required_by = ladder.dependent_items(rung.rank)
             - if required_by.any?
-              %small.gh-req2
+              %small.gh-rank-row-requirement
                 = "Wymagana do zakupu: #{required_by.map(&:name).join(', ')}"
 
-          .gh-rl-s
+          .gh-rank-row-stats
             %b= rung.holders
             = gh_plural(rung.holders, 'student', 'studentów', 'studentów')
             -# Nothing to compare against in a group with no students yet, and
             -# gh_percent reads an empty denominator as "full".
             - if ladder.total_students.positive?
-              .gh-bar.gh-oct{ role: 'progressbar',
+              .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                        'aria-valuemin': 0,
                        'aria-valuemax': ladder.total_students,
                        'aria-valuenow': rung.holders,
                        'aria-label': "Studenci z rangą #{rung.rank.name}" }
-                %i.gh-oct{ style: "--gh-p: #{gh_percent(rung.holders, ladder.total_students)}%" }
+                %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(rung.holders, ladder.total_students)}%" }
 
           = link_to edit_story_group_rank_path(@story_group, rung.rank),
-            class: 'gh-btn gh-btn--sec gh-btn--sm' do
+            class: 'gh-btn gh-btn--secondary gh-btn--small' do
             %i.fa-solid.fa-pen
             Edytuj
 - else
   -# The mockup has no empty state for this screen. House rule: name the next
   -# action rather than only reporting the absence.
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie ma jeszcze żadnych rang
     %p.gh-lead
       Dodaj rangi, żeby studenci widzieli, do czego dążą. Ranga zależy od łącznie

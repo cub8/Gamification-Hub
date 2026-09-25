@@ -20,7 +20,7 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
     # The confirmation step renders in place; it is "Gotowe" that leaves for
     # the group, so this is a 200 rather than the old turbo redirect.
     assert_response :success
-    assert_select '.gh-dlg-b a[href=?]', story_group_path(@story_group), 'Gotowe'
+    assert_select '.gh-dialog-button-row a[href=?]', story_group_path(@story_group), 'Gotowe'
   end
 
   test 'should detect max_uses' do
@@ -32,6 +32,6 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-err span', /maksymalna liczba osób/
+    assert_select '.gh-field-error span', /maksymalna liczba osób/
   end
 end

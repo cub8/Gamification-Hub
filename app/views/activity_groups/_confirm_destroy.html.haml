@@ -5,19 +5,19 @@
 %p Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii.
 
 - if awards_count.positive?
-  %p.gh-info
+  %p.gh-info-banner
     %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
     %span
       = "Przyznano z niego #{awards_count} #{gh_plural(awards_count, 'nagrodę', 'nagrody', 'nagród')}."
       Usunięcie arkusza niczego nie cofa.
 
-.gh-dlg-b
+.gh-dialog-button-row
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj
   - else
     = link_to 'Anuluj', edit_story_group_activity_group_path(@story_group, activity_group),
-      class: 'gh-btn gh-btn--sec'
+      class: 'gh-btn gh-btn--secondary'
 
   = button_to 'Usuń arkusz', story_group_activity_group_path(@story_group, activity_group),
     method: :delete, class: 'gh-btn',

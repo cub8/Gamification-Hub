@@ -11,20 +11,20 @@
   -# Not in the mockup, and NOT a blocker: a soft delete breaks no foreign key.
   -# But an item that unlocks on this badge becomes unbuyable for everyone who
   -# does not already hold it, and that is worth hearing before confirming.
-  %p.gh-warn{ role: 'alert' }
+  %p.gh-warning-note{ role: 'alert' }
     %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
     %span
       = "#{one ? 'Przedmiot' : 'Przedmioty'} #{gh_and_list(unlocking_items.map(&:name))}"
       = one ? 'odblokowuje się tą odznaką' : 'odblokowują się tą odznaką'
       = "i po usunięciu #{one ? 'kupi go' : 'kupią je'} tylko ci, którzy już ją mają."
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# Anuluj first and focused: the safe button is the one you land on.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj
   - else
-    = link_to 'Anuluj', edit_story_group_badge_path(@story_group, badge), class: 'gh-btn gh-btn--sec'
+    = link_to 'Anuluj', edit_story_group_badge_path(@story_group, badge), class: 'gh-btn gh-btn--secondary'
 
   = button_to 'Usuń odznakę', story_group_badge_path(@story_group, badge),
     method: :delete, class: 'gh-btn',

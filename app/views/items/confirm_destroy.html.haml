@@ -8,6 +8,6 @@
     = render 'confirm_destroy', item: @item, bought: @bought
 - else
   -# As a page it needs a surface of its own: this screen keeps the app shell,
-  -# so unlike the join flow it never lands inside .gh-acard.
-  %section.gh-panel.gh-dlg-page
+  -# so unlike the join flow it never lands inside .gh-auth-card.
+  %section.gh-panel.gh-dialog-page-panel
     = render 'confirm_destroy', item: @item, bought: @bought

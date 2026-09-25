@@ -1,6 +1,6 @@
 @layer components {
 
-  .gh-tpat {
+  .gh-cover-pattern {
     position: fixed;
     inset: 0;
     z-index: 0;
@@ -12,13 +12,13 @@
 }
 
 @layer components {
-  .gh-tpat--well {
+  .gh-cover-pattern--inset {
     position: absolute;
   }
 }
 
 @layer components {
-  .gh-tbg {
+  .gh-group-cover-bg {
     position: absolute;
     inset: -24px;
     background-size: cover;
@@ -27,7 +27,7 @@
     pointer-events: none;
   }
 
-  .gh-ttint {
+  .gh-group-cover-tint {
     position: absolute;
     inset: 0;
     background: var(--gh-tint);

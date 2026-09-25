@@ -80,8 +80,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h1.gh-h1', 'Odznaki'
     assert_equal ['Mechanik Załogi', 'Perfekcyjny Lot', 'Zawsze na pokładzie'],
-                 card_names('.gh-lgrid')
-    assert_select '.gh-rowb a[href=?]', new_story_group_badge_path(@story_group), 'Nowa odznaka'
+                 card_names('.gh-badge-grid--teacher')
+    assert_select '.gh-button-row a[href=?]', new_story_group_badge_path(@story_group), 'Nowa odznaka'
   end
 
   # Przyznaj happens one student at a time, on the students list — that screen
@@ -91,8 +91,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-card-acts a[href=?]', story_group_students_path(@story_group), 'Przyznaj'
-    assert_select '.gh-card-acts a[href=?][aria-label=?]',
+    assert_select '.gh-card-actions a[href=?]', story_group_students_path(@story_group), 'Przyznaj'
+    assert_select '.gh-card-actions a[href=?][aria-label=?]',
                   edit_story_group_badge_path(@story_group, @mechanik),
                   'Edytuj odznakę Mechanik Załogi'
   end
@@ -112,8 +112,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-lgrid .gh-flip', false
-    assert_select '.gh-lgrid .gh-face', false
+    assert_select '.gh-badge-grid--teacher .gh-flip-card', false
+    assert_select '.gh-badge-grid--teacher .gh-flip-card-face', false
   end
 
   test 'each card counts who holds it' do
@@ -126,8 +126,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-meta', 'Ma ją 2 studentów'
-    assert_select '.gh-meta', 'Nikt jej jeszcze nie ma'
+    assert_select '.gh-card-meta', 'Ma ją 2 studentów'
+    assert_select '.gh-card-meta', 'Nikt jej jeszcze nie ma'
   end
 
   test 'a badge worth nothing shows no discount tag' do
@@ -135,16 +135,16 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-tag--disc', '−3% w sklepie'
-    assert_select '.gh-tag--disc', '−5% w sklepie'
-    assert_select '.gh-tag--disc', { text: '−0% w sklepie', count: 0 }
+    assert_select '.gh-tag--discount', '−3% w sklepie'
+    assert_select '.gh-tag--discount', '−5% w sklepie'
+    assert_select '.gh-tag--discount', { text: '−0% w sklepie', count: 0 }
   end
 
   test 'a group with no badges tells the teacher what to do about it' do
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-lgrid', false
-    assert_select '.gh-gm .gh-h2', 'Nie ma jeszcze żadnych odznak'
+    assert_select '.gh-badge-grid--teacher', false
+    assert_select '.gh-empty-state .gh-h2', 'Nie ma jeszcze żadnych odznak'
   end
 
   # --- the student deck -----------------------------------------------------
@@ -156,11 +156,11 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     get story_group_badges_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-lgrid', false
-    assert_select '.gh-cards--b .gh-flip', 3
-    assert_select '.gh-cards--b .gh-flip--down', 2
-    assert_select '.gh-flip:not(.gh-flip--down)[aria-label=?]', 'Odznaka Mechanik Załogi'
-    assert_select '.gh-flip--down[aria-label=?]', 'Odznaka Perfekcyjny Lot, jeszcze niezdobyta'
+    assert_select '.gh-badge-grid--teacher', false
+    assert_select '.gh-card-grid--compact .gh-flip-card', 3
+    assert_select '.gh-card-grid--compact .gh-flip-card--down', 2
+    assert_select '.gh-flip-card:not(.gh-flip-card--down)[aria-label=?]', 'Odznaka Mechanik Załogi'
+    assert_select '.gh-flip-card--down[aria-label=?]', 'Odznaka Perfekcyjny Lot, jeszcze niezdobyta'
   end
 
   test 'the lead counts what the student has out of what there is' do
@@ -180,9 +180,9 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-face--back .gh-back-art svg', 3
-    assert_select '.gh-face--back .gh-how span', 'Jak zdobyć'
-    assert_select '.gh-face--back .gh-how', /Trzy wejściówki z rzędu/
+    assert_select '.gh-flip-card-face--back .gh-flip-card-back-mark svg', 3
+    assert_select '.gh-flip-card-face--back .gh-badge-rule-text span', 'Jak zdobyć'
+    assert_select '.gh-flip-card-face--back .gh-badge-rule-text', /Trzy wejściówki z rzędu/
   end
 
   # The decision: an earned card can be turned over to re-read how it was won;
@@ -193,10 +193,10 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-flip[data-controller=badge-flip]', 1
-    assert_select '.gh-flip--down[data-controller=badge-flip]', false
-    assert_select '.gh-flip[data-controller=badge-flip] .gh-flipbtn', 2
-    assert_select '.gh-flip--down .gh-flipbtn', false
+    assert_select '.gh-flip-card[data-controller=badge-flip]', 1
+    assert_select '.gh-flip-card--down[data-controller=badge-flip]', false
+    assert_select '.gh-flip-card[data-controller=badge-flip] .gh-card-flip-btn', 2
+    assert_select '.gh-flip-card--down .gh-card-flip-btn', false
   end
 
   # backface-visibility hides the far side from the eye, not from the tab order.
@@ -206,9 +206,9 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-flip:not(.gh-flip--down) .gh-face--back[inert][aria-hidden=true]', 1
-    assert_select '.gh-flip:not(.gh-flip--down) .gh-face--front[inert]', false
-    assert_select '.gh-flip--down .gh-face--front[inert][aria-hidden=true]', 2
+    assert_select '.gh-flip-card:not(.gh-flip-card--down) .gh-flip-card-face--back[inert][aria-hidden=true]', 1
+    assert_select '.gh-flip-card:not(.gh-flip-card--down) .gh-flip-card-face--front[inert]', false
+    assert_select '.gh-flip-card--down .gh-flip-card-face--front[inert][aria-hidden=true]', 2
   end
 
   test 'a student in a group with no badges gets their own empty state' do
@@ -216,7 +216,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-gm .gh-h2', 'W tej grupie nie ma jeszcze odznak'
+    assert_select '.gh-empty-state .gh-h2', 'W tej grupie nie ma jeszcze odznak'
   end
 
   # --- creating and editing -------------------------------------------------
@@ -225,13 +225,13 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     get new_story_group_badge_path(@story_group)
 
     assert_response :success
-    assert_select 'header.gh-hd', 1
+    assert_select 'header.gh-topbar', 1
     assert_select 'main#app-content turbo-frame#modal', false
     assert_select 'h1.gh-h1', 'Nowa odznaka'
     assert_select 'input[name=?][value=?]', 'badge[discount]', '0'
-    assert_select '.gh-preset-tile-grid .gh-preset-tile--badge input[type=radio]', Glyphs::BADGE.size
-    assert_select '.gh-preset-tile--own[hidden]', 1
-    assert_select '.gh-preset-tile--own img[src]', false
+    assert_select '.gh-art-preset-grid .gh-art-preset-tile--badge input[type=radio]', Glyphs::BADGE.size
+    assert_select '.gh-art-preset-tile--custom[hidden]', 1
+    assert_select '.gh-art-preset-tile--custom img[src]', false
   end
 
   test 'the form listens for the crop so the preview can follow it' do
@@ -246,21 +246,21 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
   test 'the preview shows both faces and a control to turn between them' do
     get new_story_group_badge_path(@story_group)
 
-    assert_select '.gh-pvflip .gh-face--front', 1
-    assert_select '.gh-pvflip .gh-face--back', 1
-    assert_select '.gh-seg2 button[aria-pressed=true]', 'Zdobyta'
-    assert_select '.gh-seg2 button[aria-pressed=false]', 'Jeszcze niezdobyta'
+    assert_select '.gh-preview-flip-card .gh-flip-card-face--front', 1
+    assert_select '.gh-preview-flip-card .gh-flip-card-face--back', 1
+    assert_select '.gh-segmented-toggle-2 button[aria-pressed=true]', 'Zdobyta'
+    assert_select '.gh-segmented-toggle-2 button[aria-pressed=false]', 'Jeszcze niezdobyta'
     # The teacher turns it with the control, never by clicking the card.
-    assert_select '.gh-pvflip .gh-flip[data-controller]', false
+    assert_select '.gh-preview-flip-card .gh-flip-card[data-controller]', false
   end
 
   test 'the empty preview says what each field will say' do
     get new_story_group_badge_path(@story_group)
 
-    assert_select '.gh-pvflip .gh-face--front .gh-card-name.gh-ph', 'Nazwa odznaki'
-    assert_select '.gh-pvflip .gh-face--front .gh-rules.gh-ph', 'Jak zdobyć…'
-    assert_select '.gh-pvflip .gh-face--front .gh-flavor[hidden]', 1
-    assert_select '.gh-pvflip .gh-tag--disc[hidden]', 1
+    assert_select '.gh-preview-flip-card .gh-flip-card-face--front .gh-card-name.gh-placeholder-text', 'Nazwa odznaki'
+    assert_select '.gh-preview-flip-card .gh-flip-card-face--front .gh-rule-text.gh-placeholder-text', 'Jak zdobyć…'
+    assert_select '.gh-preview-flip-card .gh-flip-card-face--front .gh-card-flavor[hidden]', 1
+    assert_select '.gh-preview-flip-card .gh-tag--discount[hidden]', 1
   end
 
   test 'creating a badge says so and returns to the list' do
@@ -278,7 +278,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad input[name=?]', 'badge[name]'
+    assert_select '.gh-text-input--invalid input[name=?]', 'badge[name]'
     assert_select '#gh-badge-name-error span', 'Podaj nazwę odznaki.'
   end
 
@@ -289,7 +289,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-inp--bad textarea[name=?]', 'badge[didactic_description]'
+    assert_select '.gh-text-input--invalid textarea[name=?]', 'badge[didactic_description]'
     assert_select '#gh-badge-rule-error span', 'Napisz, jak zdobyć tę odznakę.'
   end
 
@@ -311,7 +311,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h1.gh-h1', 'Edytuj odznakę'
-    assert_select '.gh-info b', '1 student ma tę odznakę.'
+    assert_select '.gh-info-banner b', '1 student ma tę odznakę.'
   end
 
   test 'the edit form lists the items whose discount counts this badge' do
@@ -320,11 +320,11 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
                              discount_badges: [@mechanik],)
 
     get edit_story_group_badge_path(@story_group, @mechanik)
-    assert_select '.gh-uses li', /Bezpieczna poprawa/
+    assert_select '.gh-badge-usage-list li', /Bezpieczna poprawa/
 
     get edit_story_group_badge_path(@story_group, @pilot)
-    assert_select '.gh-uses', false
-    assert_select '.gh-expl', 'Na razie żaden przedmiot jej nie uwzględnia.'
+    assert_select '.gh-badge-usage-list', false
+    assert_select '.gh-explainer-note', 'Na razie żaden przedmiot jej nie uwzględnia.'
   end
 
   test 'editing a badge keeps the count and says so' do
@@ -349,7 +349,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h2', 'Usunąć odznakę „Mechanik Załogi”?'
     assert_select 'p', /zachowają ją w historii, ale nikt nowy jej nie dostanie/
-    assert_select '.gh-warn', false
+    assert_select '.gh-warning-note', false
   end
 
   # Not a blocker, unlike ranks: a soft delete breaks no foreign key. The button
@@ -360,8 +360,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
                              unlock_badges: [@mechanik],)
 
     get confirm_destroy_story_group_badge_path(@story_group, @mechanik), headers: MODAL
-    assert_select '.gh-warn span', /Przedmiot 0\.5% oceny odblokowuje się tą odznaką/
-    assert_select '.gh-dlg-b button[disabled]', false
+    assert_select '.gh-warning-note span', /Przedmiot 0\.5% oceny odblokowuje się tą odznaką/
+    assert_select '.gh-dialog-button-row button[disabled]', false
 
     delete story_group_badge_path(@story_group, @mechanik), headers: MODAL
     assert_predicate @mechanik.reload, :deleted?
@@ -376,7 +376,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get confirm_destroy_story_group_badge_path(@story_group, @mechanik), headers: MODAL
 
-    assert_select '.gh-warn', false
+    assert_select '.gh-warning-note', false
   end
 
   test 'deleting takes the badge off every list but leaves it on the deck that earned it' do
@@ -393,7 +393,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_match(/Usunięto odznakę „Mechanik Załogi”/, flash[:notice])
 
     get story_group_badges_path(@story_group)
-    assert_equal ['Perfekcyjny Lot', 'Zawsze na pokładzie'], card_names('.gh-lgrid')
+    assert_equal ['Perfekcyjny Lot', 'Zawsze na pokładzie'], card_names('.gh-badge-grid--teacher')
 
     # It is gone from the award picker too.
     get new_story_group_student_badge_path(@story_group, membership)
@@ -402,8 +402,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     sign_in_as student
     get story_group_badges_path(@story_group)
     # Two live badges plus the one they earned, which is now history.
-    assert_select '.gh-cards--b .gh-flip', 3
-    assert_select '.gh-tag--del', 'Usunięta z listy'
+    assert_select '.gh-card-grid--compact .gh-flip-card', 3
+    assert_select '.gh-tag--removed', 'Usunięta z listy'
     assert_select '.gh-lead', /\AMasz 0 z 2\./
   end
 
@@ -425,10 +425,10 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    # Inline SVG, not <img>: .gh-gph strokes in currentColor, which is what
+    # Inline SVG, not <img>: .gh-card-art-glyph strokes in currentColor, which is what
     # makes the same shape teal here and gold on a rank.
-    assert_select '.gh-lgrid .gh-art svg.gh-gph', 3
-    assert_select '.gh-lgrid .gh-art img', false
+    assert_select '.gh-badge-grid--teacher .gh-card-art svg.gh-card-art-glyph', 3
+    assert_select '.gh-badge-grid--teacher .gh-card-art img', false
   end
 
   # Neither a preset nor an upload. Art is required of new badges now, so this
@@ -439,7 +439,7 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_badges_path(@story_group)
 
-    assert_select '.gh-lgrid .gh-art i.fa-award', 1
+    assert_select '.gh-badge-grid--teacher .gh-card-art i.fa-award', 1
   end
 
   test 'an uploaded icon becomes the art and the picker agrees' do
@@ -449,11 +449,11 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     @mechanik.update!(icon_glyph: nil)
 
     get story_group_badges_path(@story_group)
-    assert_select ".gh-lgrid img[alt='']", 1
+    assert_select ".gh-badge-grid--teacher img[alt='']", 1
 
     get edit_story_group_badge_path(@story_group, @mechanik)
-    assert_select '.gh-preset-tile--own[hidden]', false
-    assert_select '.gh-preset-tile--own input[checked=checked]', 1
+    assert_select '.gh-art-preset-tile--custom[hidden]', false
+    assert_select '.gh-art-preset-tile--custom input[checked=checked]', 1
   end
 
   # Without JavaScript nothing would ever select the upload: the picker's own
@@ -481,8 +481,8 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     get path
     assert_select 'main#app-content turbo-frame#modal', false
-    assert_select 'main .gh-panel.gh-dlg-page', 1
-    assert_select 'header.gh-hd', 1
+    assert_select 'main .gh-panel.gh-dialog-page-panel', 1
+    assert_select 'header.gh-topbar', 1
   end
 
   test 'creating says so in a toast, not in a banner' do

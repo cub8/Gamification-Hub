@@ -4,7 +4,7 @@
 -#
 -# The art itself is ranks/_art, so this chip and the group overview's rank card
 -# cannot end up disagreeing about what a rank looks like.
-%span.gh-card.gh-card--gold.gh-mc
-  %span.gh-card-f
-    %span.gh-card-i{ data: local_assigns[:inner_data] }
+%span.gh-card.gh-card--rank.gh-mini-thumb
+  %span.gh-card-frame
+    %span.gh-card-inset{ data: local_assigns[:inner_data] }
       = render 'ranks/art', rank: rank

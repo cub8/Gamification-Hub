@@ -57,7 +57,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-err span', 'Ta osoba jest już w grupie.'
+    assert_select '.gh-field-error span', 'Ta osoba jest już w grupie.'
   end
 
   test 'the pool holds teachers of this university only' do
@@ -65,8 +65,8 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
 
     get new_story_group_teacher_url(@story_group)
 
-    assert_select '.gh-tr button[value=?]', @teacher2.id.to_s, count: 1
-    assert_select '.gh-tr button[value=?]', elsewhere.id.to_s, count: 0
+    assert_select '.gh-teacher-result-row button[value=?]', @teacher2.id.to_s, count: 1
+    assert_select '.gh-teacher-result-row button[value=?]', elsewhere.id.to_s, count: 0
   end
 
   test 'a global admin sees every university in the pool' do
@@ -77,7 +77,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
 
     get new_story_group_teacher_url(@story_group)
 
-    assert_select '.gh-tr button[value=?]', elsewhere.id.to_s, count: 1
+    assert_select '.gh-teacher-result-row button[value=?]', elsewhere.id.to_s, count: 1
   end
 
   test 'a supporting teacher may read the list but not change it' do
@@ -103,9 +103,9 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     get story_group_teachers_url(@story_group)
     assert_select 'a[href=?]',
                   confirm_destroy_story_group_teacher_path(@story_group, @story_group_teacher), count: 1
-    assert_select '.gh-trow', 3 # header + owner + one supporting teacher
+    assert_select '.gh-teacher-row', 3 # header + owner + one supporting teacher
 
     get new_story_group_teacher_url(@story_group)
-    assert_select '.gh-tr button[value=?]', @current_user.id.to_s, count: 0
+    assert_select '.gh-teacher-result-row button[value=?]', @current_user.id.to_s, count: 0
   end
 end

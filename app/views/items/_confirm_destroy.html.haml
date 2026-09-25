@@ -9,19 +9,19 @@
 - if bought.positive?
   -# Not a blocker: a soft delete breaks no foreign key. It is here because the
   -# number is the whole reason the dialog exists.
-  %p.gh-warn{ role: 'alert' }
+  %p.gh-warning-note{ role: 'alert' }
     %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
     %span
       = "#{bought} #{gh_plural(bought, 'student ma', 'studentów ma', 'studentów ma')} ten przedmiot"
       i zachowa go po usunięciu.
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# Anuluj first and focused: the safe button is the one you land on.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj
   - else
-    = link_to 'Anuluj', edit_story_group_item_path(@story_group, item), class: 'gh-btn gh-btn--sec'
+    = link_to 'Anuluj', edit_story_group_item_path(@story_group, item), class: 'gh-btn gh-btn--secondary'
 
   = button_to 'Usuń z oferty', story_group_item_path(@story_group, item),
     method: :delete, class: 'gh-btn',

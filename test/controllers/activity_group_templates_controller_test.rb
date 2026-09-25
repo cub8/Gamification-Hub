@@ -20,7 +20,7 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     # The mockup opens with two rows, the first already filled in.
-    assert_select 'ul.gh-cats li.gh-cat', 2
+    assert_select 'ul.gh-category-list li.gh-category-row', 2
   end
 
   test 'should get edit' do

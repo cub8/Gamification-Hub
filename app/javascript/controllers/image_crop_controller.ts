@@ -41,7 +41,7 @@ class ImageCropController extends Controller<HTMLElement> {
   static targets = ["input", "editor", "box", "ownRadio", "ownPreview"]
 
   static values = {
-    // 1.6 is `.gh-art`'s `aspect-ratio: 16 / 10` (card.css). The two must move
+    // 1.6 is `.gh-card-art`'s `aspect-ratio: 16 / 10` (card.css). The two must move
     // together: this is the shape the picture is cut to, that is the shape of
     // the hole it goes into.
     aspect: { type: Number, default: 1.6 },

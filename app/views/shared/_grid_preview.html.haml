@@ -6,45 +6,45 @@
 -# use for their previews.
 - sample = local_assigns[:sample_names].presence || ['Adam Pawłowski', 'Barbara Kowalewska']
 
-%details.gh-pvd{ open: true }
+%details.gh-preview-details{ open: true }
   %summary
     Podgląd tabeli ocen
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3.gh-h3 Nagłówek tabeli ocen
 
-    .gh-gprev
-      %table.gh-grid
+    .gh-grading-table-preview
+      %table.gh-grading-table
         %thead
           %tr{ data: { sheet_form_target: 'previewHead' } }
-            %th.gh-th-stu{ scope: 'col' } Student
+            %th.gh-grading-th-student{ scope: 'col' } Student
             - categories.each do |category|
               %th{ scope: 'col' }
-                .gh-thc
-                  %span.gh-thn= category.didactic_description.presence || '…'
-                  %span.gh-cost
+                .gh-grading-column-head
+                  %span.gh-grading-column-name= category.didactic_description.presence || '…'
+                  %span.gh-price-badge
                     %b= "+#{category.reward.to_i}"
                     = render 'layouts/currency_token', story_group: @story_group, size: 16
         %tbody
           - sample.each do |name|
             %tr{ data: { sheet_form_target: 'previewRow' } }
-              %th.gh-td-stu{ scope: 'row' }= name
+              %th.gh-grading-td-student{ scope: 'row' }= name
               - categories.each do
                 %td
-                  %span.gh-cell.gh-cell--sm
+                  %span.gh-grading-cell.gh-grading-cell--sm
 
-    %span.gh-hint Najedź na nagłówek w prawdziwej tabeli, żeby zobaczyć opis fabularny.
+    %span.gh-field-hint Najedź na nagłówek w prawdziwej tabeli, żeby zobaczyć opis fabularny.
 
 -# Clone sources. Kept out of the table so an empty preview has nothing to
 -# accidentally render.
 %template{ data: { sheet_form_target: 'previewHeadCell' } }
   %th{ scope: 'col' }
-    .gh-thc
-      %span.gh-thn
-      %span.gh-cost
+    .gh-grading-column-head
+      %span.gh-grading-column-name
+      %span.gh-price-badge
         %b
         = render 'layouts/currency_token', story_group: @story_group, size: 16
 %template{ data: { sheet_form_target: 'previewBodyCell' } }
   %td
-    %span.gh-cell.gh-cell--sm
+    %span.gh-grading-cell.gh-grading-cell--sm

@@ -4,7 +4,7 @@
 -# `badges/art`, spelled out: a bare "art" resolves against the RENDERING
 -# controller's view path, and this thumb is rendered from the notification
 -# feed, the purchase rows and the badge picker as well as from badges/.
-%span.gh-card.gh-card--badge.gh-mc
-  %span.gh-card-f
-    %span.gh-card-i{ data: local_assigns[:inner_data] }
+%span.gh-card.gh-card--badge.gh-mini-thumb
+  %span.gh-card-frame
+    %span.gh-card-inset{ data: local_assigns[:inner_data] }
       = render 'badges/art', badge: badge

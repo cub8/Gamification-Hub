@@ -14,35 +14,35 @@
 - entries = (saved.map { |other| [other, false] } << [rank, true])
 - entries = entries.sort_by { |entry, draft| [entry.required_currency_value.to_i, draft ? 1 : 0] }
 
-%details.gh-pvd{ open: true }
+%details.gh-preview-details{ open: true }
   %summary
     Podgląd rangi
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3 Karta rangi
-    .gh-pvflip
-      %article.gh-card.gh-card--gold
-        .gh-card-f
-          .gh-card-i
-            .gh-card-top
-              %h4.gh-card-name{ class: ('gh-ph' if rank.name.blank?),
+    .gh-preview-flip-card
+      %article.gh-card.gh-card--rank
+        .gh-card-frame
+          .gh-card-inset
+            .gh-card-header
+              %h4.gh-card-name{ class: ('gh-placeholder-text' if rank.name.blank?),
                                 data: { rank_form_target: 'cardName' } }
                 = rank.name.presence || 'Nazwa rangi'
-            .gh-art{ data: { rank_form_target: 'cardArt' } }
+            .gh-card-art{ data: { rank_form_target: 'cardArt' } }
               - if rank.upload?
                 = image_tag rank.icon, alt: ''
               - else
                 = gh_glyph(rank.icon_glyph)
-            %p.gh-rules{ data: { rank_form_target: 'cardRules' } }= rank_reward_line(rank)
+            %p.gh-rule-text{ data: { rank_form_target: 'cardRules' } }= rank_reward_line(rank)
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3 Drabinka rang
-    -# Ascending in the DOM; .gh-ladder reverses it visually, so the highest
+    -# Ascending in the DOM; .gh-rank-form-ladder reverses it visually, so the highest
     -# rung reads first exactly as it does on both list screens.
-    %ol.gh-ladder{ data: { rank_form_target: 'ladder' } }
+    %ol.gh-rank-form-ladder{ data: { rank_form_target: 'ladder' } }
       - entries.each do |entry, draft|
-        %li.gh-lad{ class: ('gh-lad--new' if draft),
+        %li.gh-rank-form-rung{ class: ('gh-rank-form-rung--draft' if draft),
                     data: { rank_id: (draft ? 'draft' : entry.id),
                             min: entry.required_currency_value.to_i } }
           = render 'rank_thumb', rank: entry,
@@ -55,5 +55,5 @@
                 %small (ta ranga)
             %small{ data: (draft ? { rank_form_target: 'draftTerms' } : {}) }
               = rank_ladder_terms(entry)
-          %span.gh-lad-v{ data: (draft ? { rank_form_target: 'draftValue' } : {}) }
+          %span.gh-rank-form-rung-value{ data: (draft ? { rank_form_target: 'draftValue' } : {}) }
             = "od #{entry.required_currency_value.to_i}"

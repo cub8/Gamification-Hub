@@ -20,7 +20,7 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     get new_story_group_path
 
     assert_response :success
-    assert_select 'nav.gh-stepper button.gh-stp', 4
+    assert_select 'nav.gh-wizard-steps button.gh-wizard-step-tab', 4
     assert_select '[data-group-wizard-target="panel"]', 4
     assert_select 'form[enctype="multipart/form-data"]'
   end
@@ -47,14 +47,14 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select '[data-group-wizard-target="rankingMode"][hidden]'
   end
 
-  # .gh-inp is the TEXT INPUT shell and stretches a native select across the
-  # form; .gh-sel is the octagon select the rest of the app uses.
+  # .gh-text-input is the TEXT INPUT shell and stretches a native select across the
+  # form; .gh-select-input is the octagon select the rest of the app uses.
   test 'the ranking mode picker uses the select shell, not the input shell' do
     get new_story_group_path
 
-    assert_select '.gh-sel select[name="story_group[ranking_mode]"]'
-    assert_select '.gh-sel .fa-chevron-down'
-    assert_select '.gh-inp select', false
+    assert_select '.gh-select-input select[name="story_group[ranking_mode]"]'
+    assert_select '.gh-select-input .fa-chevron-down'
+    assert_select '.gh-text-input select', false
   end
 
   # Both themes at once, so a mark that vanishes on one table colour is caught
@@ -62,11 +62,11 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
   test 'step 2 previews the currency on a light and a dark table' do
     get new_story_group_path
 
-    assert_select '.gh-cprev .gh-cmini', 2
-    assert_select '.gh-cmini.gh-theme--light'
-    assert_select '.gh-cmini.gh-theme--dark'
-    assert_select '.gh-cmini .gh-bal'
-    assert_select '.gh-cmini .gh-cost'
+    assert_select '.gh-currency-preview-pair .gh-currency-preview', 2
+    assert_select '.gh-currency-preview.gh-theme--light'
+    assert_select '.gh-currency-preview.gh-theme--dark'
+    assert_select '.gh-currency-preview .gh-balance-button'
+    assert_select '.gh-currency-preview .gh-price-badge'
     assert_no_match(/W zdaniach/, response.body)
   end
 
@@ -77,7 +77,7 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'turbo-frame#starter_pack'
-    assert_select '.gh-rrow', 5 + 6 + 7 + 8
+    assert_select '.gh-preset-row', 5 + 6 + 7 + 8
     assert_select 'input[name="setup[ranks][1][value]"][value="20"]'
     assert_select 'input[name="setup[items][6][value]"][value="79"]'
     assert_match 'Giermek', response.body
@@ -92,13 +92,15 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select 'input[type=checkbox][name="setup[badges][0][keep]"][checked]'
   end
 
-  # .gh-rgrid is two columns filling row-major, so this order is what puts
+  # .gh-preset-review-grid is two columns filling row-major, so this order is what puts
   # ranks and badges on the top row and items and categories beneath.
   test 'the preset zones read ranks, badges, items, categories' do
     get preset_preview_story_groups_path(pack: 'neutral', classes: 12)
 
     assert_equal(['Rangi', 'Odznaki', 'Przedmioty w sklepie', 'Kategorie zajęć'],
-                 css_select('.gh-section-gap > h3').map { |node| node.text.split("\n").map(&:strip).find(&:present?) },)
+                 css_select('.gh-preset-review-section > h3').map do |node|
+                   node.text.split("\n").map(&:strip).find(&:present?)
+                 end,)
   end
 
   # The coin, not the currency's name in words, and no stray leading "+".
@@ -106,12 +108,12 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
   test 'item and category rows show the coin beside the number' do
     get preset_preview_story_groups_path(pack: 'neutral', classes: 12, currency_name: 'Monet')
 
-    assert_select '.gh-rv2 .gh-tok[style=?]', '--gh-s: 20px', count: 7 + 8
-    assert_select '.gh-rv2 .gh-tok [data-group-wizard-target="markBox"]', count: 7 + 8
-    assert_select '.gh-rv2 .gh-kicker', false
+    assert_select '.gh-preset-row-value .gh-currency-token[style=?]', '--gh-s: 20px', count: 7 + 8
+    assert_select '.gh-preset-row-value .gh-currency-token [data-group-wizard-target="markBox"]', count: 7 + 8
+    assert_select '.gh-preset-row-value .gh-page-kicker', false
     assert_select 'input[aria-label=?]', 'Obecność: nagroda w Monet'
 
-    css_select('.gh-rv2').each do |cell|
+    css_select('.gh-preset-row-value').each do |cell|
       assert_not_includes cell.text, '+', 'a value cell still carries a leading plus'
     end
   end
@@ -208,7 +210,7 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select 'nav.gh-stepper'
+    assert_select 'nav.gh-wizard-steps'
   end
 
   # The group and the pack share one transaction, so a pack that cannot be
@@ -228,7 +230,7 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-err', /tego samego progu/
+    assert_select '.gh-field-error', /tego samego progu/
   end
 
   # ---- the success screen --------------------------------------------------
@@ -242,10 +244,10 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     follow_redirect!
 
     assert_response :success
-    assert_select '.gh-okv'
+    assert_select '.gh-wizard-success-panel'
     assert_match '5 rang', response.body
     assert_match '7 przedmiotów', response.body
-    assert_select '.gh-code-big', false
+    assert_select '.gh-invite-code-display', false
   end
 
   # ApplicationController turns a Pundit refusal into a redirect, not a raise.

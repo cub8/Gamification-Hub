@@ -3,8 +3,8 @@
 -# are what differ, and both are decided by the data rather than by the role.
 - content_for :title, 'Grupy'
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Grupy
     %p.gh-lead
       - if @current_user.student?
@@ -12,8 +12,8 @@
       - else
         Grupy, które prowadzisz, wspierasz albo w których się uczysz.
 
-  .gh-rowb
-    = link_to new_join_path, class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+  .gh-button-row
+    = link_to new_join_path, class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus
       Dołącz do grupy
     -# A page, not the dialog it used to be: creation is a four-step wizard now
@@ -24,40 +24,40 @@
         Utwórz grupę
 
 -# The mockup's tabs are buttons that swap content client-side; ours navigate,
--# so they are links carrying aria-current — the same shape as the .gh-fchip
+-# so they are links carrying aria-current — the same shape as the .gh-purchase-filter-chip
 -# group filter already shipped on the teacher start screen. role="tab" without
 -# a tabpanel would be a lie.
 - if @listing.tabs.size > 1
-  %nav.gh-gtabs{ 'aria-label': 'Filtr grup' }
+  %nav.gh-group-tabs{ 'aria-label': 'Filtr grup' }
     - @listing.tabs.each do |tab|
-      = link_to story_groups_path(filter: tab.key), class: 'gh-gt2',
+      = link_to story_groups_path(filter: tab.key), class: 'gh-group-tab',
         'aria-current': (@listing.filter == tab.key).to_s do
         = tab.label
-        %span.gh-n= tab.total
+        %span.gh-count-label= tab.total
 
 %div{ data: { controller: 'group-search' } }
   - if @listing.groups.any?
     .flex.flex-wrap.gap-3.items-center.mt-4
-      %label.gh-search.gh-search--wide
+      %label.gh-search-input.gh-search-input--wide
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
         %input{ type: 'search',
                 placeholder: 'Szukaj grupy',
                 'aria-label': 'Szukaj grupy',
                 data: { group_search_target: 'input', action: 'input->group-search#filter' } }
 
-    .gh-ixgrid
+    .gh-group-index-grid
       - @listing.groups.each do |group|
         = render 'story_groups/group_card', group: group
 
     -# Revealed by the controller when the query matches nothing on the page.
-    %section.gh-panel.gh-gm{ hidden: true, data: { group_search_target: 'empty' } }
+    %section.gh-panel.gh-empty-state{ hidden: true, data: { group_search_target: 'empty' } }
       %h2.gh-h2
         Brak grup o nazwie
         %span{ data: { group_search_target: 'emptyQuery' } }
       %p.gh-lead Wyczyść wyszukiwanie albo sprawdź pisownię.
 
   - else
-    %section.gh-panel.gh-gm
+    %section.gh-panel.gh-empty-state
       %h2.gh-h2
         - if @listing.filter
           Brak grup w tej zakładce

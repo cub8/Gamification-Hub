@@ -7,9 +7,9 @@
 -#
 -# `item` may be nil — a purchase whose Item was hard deleted before soft delete
 -# existed. A soft-deleted item still resolves and still shows its own art.
-%span.gh-card.gh-mc
-  %span.gh-card-f
-    %span.gh-card-i{ data: local_assigns[:inner_data] }
+%span.gh-card.gh-mini-thumb
+  %span.gh-card-frame
+    %span.gh-card-inset{ data: local_assigns[:inner_data] }
       - if item
         = render 'items/art', item: item
       - else

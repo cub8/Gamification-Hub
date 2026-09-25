@@ -28,7 +28,7 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
   # css_select inside an assert_select block is not scoped to the block here,
   # so the card is addressed by its link in one selector instead.
   def card_meta(story_group)
-    css_select("article.gh-ixc:has(a[href='#{story_group_path(story_group)}']) .gh-ixmeta span")
+    css_select("article.gh-group-index-card:has(a[href='#{story_group_path(story_group)}']) .gh-group-index-meta span")
       .map(&:text)
   end
 
@@ -39,7 +39,7 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     get story_groups_path
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -50,7 +50,7 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     get new_story_group_path
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -58,7 +58,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, role: :teacher)
     get story_groups_path
 
-    assert_select 'aside.gh-sb a.gh-nl.gh-nl--on[href=?][aria-current=page]', story_groups_path, 'Grupy'
+    assert_select 'aside.gh-sidebar a.gh-sidebar-link.gh-sidebar-link--active[href=?][aria-current=page]',
+                  story_groups_path, 'Grupy'
   end
 
   # --- tabs -----------------------------------------------------------------
@@ -69,13 +70,13 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path
 
-    assert_select 'nav.gh-gtabs a.gh-gt2', 4
-    assert_select 'a.gh-gt2[href=?]', story_groups_path, /Wszystkie/
-    assert_select 'a.gh-gt2[href=?]', story_groups_path(filter: 'mine'), /Moje/
-    assert_select 'a.gh-gt2[href=?]', story_groups_path(filter: 'teacher'), /Nauczam/
-    assert_select 'a.gh-gt2[href=?]', story_groups_path(filter: 'student'), /Uczę się/
+    assert_select 'nav.gh-group-tabs a.gh-group-tab', 4
+    assert_select 'a.gh-group-tab[href=?]', story_groups_path, /Wszystkie/
+    assert_select 'a.gh-group-tab[href=?]', story_groups_path(filter: 'mine'), /Moje/
+    assert_select 'a.gh-group-tab[href=?]', story_groups_path(filter: 'teacher'), /Nauczam/
+    assert_select 'a.gh-group-tab[href=?]', story_groups_path(filter: 'student'), /Uczę się/
 
-    counts = css_select('a.gh-gt2 .gh-n').map { |node| node.text.to_i }
+    counts = css_select('a.gh-group-tab .gh-count-label').map { |node| node.text.to_i }
 
     assert_equal [3, 1, 1, 1], counts
     assert_equal counts.first, counts.drop(1).sum
@@ -87,8 +88,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path(filter: 'mine')
 
-    assert_select 'a.gh-gt2[aria-current=true]', 1
-    assert_select 'a.gh-gt2[aria-current=true][href=?]', story_groups_path(filter: 'mine')
+    assert_select 'a.gh-group-tab[aria-current=true]', 1
+    assert_select 'a.gh-group-tab[aria-current=true][href=?]', story_groups_path(filter: 'mine')
   end
 
   test 'a tab that would select everything is not shown at all' do
@@ -101,8 +102,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
 
     # "Moje" would repeat "Wszystkie" exactly, so only one tab survives and the
     # strip does not render.
-    assert_select 'nav.gh-gtabs', false
-    assert_select 'article.gh-ixc', 2
+    assert_select 'nav.gh-group-tabs', false
+    assert_select 'article.gh-group-index-card', 2
   end
 
   test 'a student gets no tab strip and cannot create a group' do
@@ -114,7 +115,7 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     get story_groups_path
 
     assert_response :success
-    assert_select 'nav.gh-gtabs', false
+    assert_select 'nav.gh-group-tabs', false
     assert_select 'a[href=?]', new_story_group_path, false
     assert_select 'a[href=?]', new_join_path, 'Dołącz do grupy'
   end
@@ -129,8 +130,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     { 'mine' => owned, 'teacher' => supported, 'student' => learned }.each do |filter, expected|
       get story_groups_path(filter: filter)
 
-      assert_select 'article.gh-ixc', 1
-      assert_select 'a.gh-ixc-l[href=?]', story_group_path(expected)
+      assert_select 'article.gh-group-index-card', 1
+      assert_select 'a.gh-group-index-card-link[href=?]', story_group_path(expected)
     end
   end
 
@@ -140,8 +141,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path(filter: 'nonsense')
 
-    assert_select 'article.gh-ixc', 3
-    assert_select 'a.gh-gt2[aria-current=true][href=?]', story_groups_path
+    assert_select 'article.gh-group-index-card', 3
+    assert_select 'a.gh-group-tab[aria-current=true][href=?]', story_groups_path
   end
 
   # --- cards ----------------------------------------------------------------
@@ -155,13 +156,16 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path
 
-    assert_select "article.gh-ixc:has(a[href='#{story_group_path(owned)}']) .gh-tag.gh-tag--own", 'Prowadzisz'
+    assert_select "article.gh-group-index-card:has(a[href='#{story_group_path(owned)}']) .gh-tag.gh-tag--own",
+                  'Prowadzisz'
     assert_equal ['1 student', 'Brak nowych zakupów'], card_meta(owned)
 
-    assert_select "article.gh-ixc:has(a[href='#{story_group_path(supported)}']) .gh-tag.gh-tag--sup", 'Wspierasz'
+    assert_select "article.gh-group-index-card:has(a[href='#{story_group_path(supported)}']) .gh-tag.gh-tag--sup",
+                  'Wspierasz'
     assert_equal ['0 studentów', 'Właściciel: Janusz Nowakowski'], card_meta(supported)
 
-    assert_select "article.gh-ixc:has(a[href='#{story_group_path(learned)}']) .gh-tag.gh-tag--lrn", 'Uczysz się'
+    assert_select "article.gh-group-index-card:has(a[href='#{story_group_path(learned)}']) .gh-tag.gh-tag--lrn",
+                  'Uczysz się'
     assert_equal ['1 student', 'Masz 14 Punktów'], card_meta(learned)
   end
 
@@ -182,7 +186,7 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
 
     # Two, not four: the older purchase is outside the window and a reward is
     # not a purchase.
-    assert_select '.gh-ixmeta span', '2 nowe zakupy'
+    assert_select '.gh-group-index-meta span', '2 nowe zakupy'
   end
 
   # --- artwork --------------------------------------------------------------
@@ -194,8 +198,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path
 
-    assert_select '.gh-art.gh-art--mono', 'WA'
-    assert_select '.gh-art img', false
+    assert_select '.gh-card-art.gh-art--monogram', 'WA'
+    assert_select '.gh-card-art img', false
   end
 
   test 'a group with artwork shows it instead of the monogram' do
@@ -206,8 +210,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path
 
-    assert_select '.gh-art img'
-    assert_select '.gh-art--mono', false
+    assert_select '.gh-card-art img'
+    assert_select '.gh-art--monogram', false
   end
 
   # --- search ---------------------------------------------------------------
@@ -220,9 +224,9 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '[data-controller=group-search]' do
       assert_select 'input[type=search][data-action=?]', 'input->group-search#filter'
-      assert_select 'article.gh-ixc[data-group-search-target=card]', 3
+      assert_select 'article.gh-group-index-card[data-group-search-target=card]', 3
       assert_select 'article[data-group-search-name=?]', owned.name.downcase
-      assert_select '.gh-gm[hidden][data-group-search-target=empty]'
+      assert_select '.gh-empty-state[hidden][data-group-search-target=empty]'
     end
   end
 
@@ -232,8 +236,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, role: :teacher)
     get story_groups_path
 
-    assert_select '.gh-gm h2', 'Nie masz jeszcze żadnej grupy'
+    assert_select '.gh-empty-state h2', 'Nie masz jeszcze żadnej grupy'
     assert_select 'input[type=search]', false
-    assert_select 'article.gh-ixc', false
+    assert_select 'article.gh-group-index-card', false
   end
 end

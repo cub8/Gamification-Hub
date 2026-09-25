@@ -8,7 +8,7 @@
 
 - if message
   #flash-messages.flex.flex-col.gap-2.mb-4{ data: { controller: 'flash' } }
-    %div{ class: 'gh-plate relative flex items-center justify-center px-10 py-3 text-center text-heart-ink',
+    %div{ class: 'gh-inset-plate relative flex items-center justify-center px-10 py-3 text-center text-heart-ink',
           role: 'alert',
           data: { flash_target: 'message' } }
       %span= message

@@ -9,26 +9,26 @@
   i zniknie z list, rankingu i arkuszy ocen.
 
 - if losses.any?
-  %p.gh-warn{ role: 'alert' }
+  %p.gh-warning-note{ role: 'alert' }
     %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
     %span
       = "Przepadną: #{gh_and_list(losses)}."
       Tego nie da się cofnąć.
 - else
-  %p.gh-expl Ten student nie ma jeszcze odznak, przedmiotów ani historii waluty.
+  %p.gh-explainer-note Ten student nie ma jeszcze odznak, przedmiotów ani historii waluty.
 
 %p.gh-small
   Jeśli wróci do grupy, dostanie nowe konto uczestnika i zacznie od zera.
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# Anuluj first and focused: the safe button is the one you land on. In the
   -# stacked dialog closing means going back to the edit dialog underneath,
   -# which is still open.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj
   - else
-    = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--sec'
+    = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
 
   = button_to 'Usuń z grupy', story_group_student_path(@story_group, student),
     method: :delete, class: 'gh-btn',

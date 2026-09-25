@@ -1,75 +1,75 @@
 @layer components {
-  .gh-hero .gh-card-i {
+  .gh-overview-hero .gh-card-inset {
     display: grid;
     grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
     gap: 0;
   }
 
-  .gh-hero .gh-art {
+  .gh-overview-hero .gh-card-art {
     aspect-ratio: auto;
     min-height: 190px;
     margin: 10px 0 10px 10px;
   }
 
-  .gh-hero-b {
+  .gh-overview-hero-body {
     padding: 18px 20px;
   }
 
-  .gh-hero-b .gh-h1 {
+  .gh-overview-hero-body .gh-h1 {
     font-size: 32px;
   }
 
-  .gh-hero-b .gh-lore-t {
+  .gh-overview-hero-body .gh-group-description-text {
     margin-top: 8px;
     font-size: 15px;
   }
 
-  .gh-hero-b .gh-rowb {
+  .gh-overview-hero-body .gh-button-row {
     margin-top: 16px;
   }
 
-  .gh-kpis {
+  .gh-kpi-row {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: 22px;
     padding: 4px 8px;
   }
 
-  .gh-kpis dl {
+  .gh-kpi-row dl {
     display: contents;
   }
 
-  .gh-kpi {
+  .gh-kpi-tile {
     padding: 14px 16px;
   }
 
-  .gh-kpi+.gh-kpi {
+  .gh-kpi-tile+.gh-kpi-tile {
     border-left: 1px solid var(--gh-line);
   }
 
-  .gh-kpi dt {
+  .gh-kpi-tile dt {
     font: 620 12.5px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-kpi dd {
+  .gh-kpi-tile dd {
     margin: 6px 0 0;
     font: 800 26px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-kpis .gh-kpi:last-child dd {
+  .gh-kpi-row .gh-kpi-tile:last-child dd {
     font-size: 17px;
     line-height: 1.25;
   }
 
-  .gh-kpi dd small {
+  .gh-kpi-tile dd small {
     margin-left: 4px;
     font: 560 13px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-hgrid {
+  .gh-overview-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     gap: 22px;
@@ -77,42 +77,42 @@
     margin-top: 22px;
   }
 
-  .gh-hcol {
+  .gh-overview-column {
     display: flex;
     flex-direction: column;
     gap: 22px;
   }
 
-  .gh-hp {
+  .gh-overview-side-panel {
     padding: 20px 22px 14px;
   }
 
-  .gh-hp .gh-h2 {
+  .gh-overview-side-panel .gh-h2 {
     margin-bottom: 8px;
   }
 
-  /* .gh-expl is written for the inside of a card, where it is inset by the
+  /* .gh-explainer-note is written for the inside of a card, where it is inset by the
      card's own gutter. In a panel it supplies its own. */
-  .gh-hp .gh-expl,
-  .gh-ledger .gh-expl {
+  .gh-overview-side-panel .gh-explainer-note,
+  .gh-overview-ledger-panel .gh-explainer-note {
     margin: 10px 0 6px;
   }
 
-  .gh-prow--group {
+  .gh-purchase-row--group-variant {
     grid-template-columns: 52px minmax(0, 1fr) auto 90px;
   }
 
-  .gh-prow--group .gh-cost {
+  .gh-purchase-row--group-variant .gh-price-badge {
     justify-self: end;
   }
 
-  .gh-att {
+  .gh-attention-list {
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .gh-att li {
+  .gh-attention-list li {
     display: grid;
     grid-template-columns: 32px minmax(0, 1fr) auto;
     gap: 12px;
@@ -121,50 +121,50 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-att-ic {
+  .gh-attention-icon {
     display: grid;
     place-items: center;
     font-size: 17px;
     color: var(--gh-ink-2);
   }
 
-  .gh-att-ic--zero {
+  .gh-attention-icon--zero {
     color: var(--gh-heart);
   }
 
-  .gh-att b {
+  .gh-attention-list b {
     display: block;
     font: 650 14.5px var(--gh-f-ui);
   }
 
-  .gh-att small {
+  .gh-attention-list small {
     display: block;
     margin-top: 2px;
     font-size: 12.5px;
     color: var(--gh-ink-2);
   }
 
-  .gh-sheet2 {
+  .gh-sheet-summary-row {
     padding: 10px 0;
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-sheet2>div {
+  .gh-sheet-summary-row>div {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: 10px;
   }
 
-  .gh-sheet2 b {
+  .gh-sheet-summary-row b {
     font: 700 15px var(--gh-f-ui);
   }
 
-  .gh-sheet2 .gh-small {
+  .gh-sheet-summary-row .gh-small {
     margin-top: 6px;
   }
 
-  .gh-top3 {
+  .gh-leaderboard-top3 {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -173,14 +173,14 @@
     list-style: none;
   }
 
-  .gh-top3 li {
+  .gh-leaderboard-top3 li {
     display: flex;
     align-items: center;
     gap: 10px;
     font: 560 14px var(--gh-f-ui);
   }
 
-  .gh-top3 .gh-pos {
+  .gh-leaderboard-top3 .gh-position-badge {
     --gh-c: 9px;
     display: grid;
     place-items: center;
@@ -191,93 +191,93 @@
     font: 800 13px var(--gh-f-ui);
   }
 
-  .gh-podium-score {
+  .gh-leaderboard-score {
     margin-left: auto;
     font-size: 15px;
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-home {
+  .gh-group-overview-grid {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 22px;
     align-items: stretch;
   }
 
-  .gh-home>.gh-lore {
+  .gh-group-overview-grid>.gh-group-description-card {
     grid-column: span 6;
   }
 
-  .gh-home>.gh-purse {
+  .gh-group-overview-grid>.gh-currency-balance-card {
     grid-column: span 3;
   }
 
-  .gh-home>.gh-rankc {
+  .gh-group-overview-grid>.gh-rank-card {
     grid-column: span 3;
   }
 
-  .gh-home>.gh-zone--badges {
+  .gh-group-overview-grid>.gh-showcase-zone--badges {
     grid-column: 1 / -1;
   }
 
-  .gh-home>.gh-zone--hand {
+  .gh-group-overview-grid>.gh-showcase-zone--hand {
     grid-column: span 7;
   }
 
-  .gh-home>.gh-ledger {
+  .gh-group-overview-grid>.gh-overview-ledger-panel {
     grid-column: span 5;
     align-self: start;
     margin-top: 40px;
   }
 
-  .gh-home .gh-zone {
+  .gh-group-overview-grid .gh-showcase-zone {
     margin-top: 40px;
   }
 
-  .gh-lore .gh-art {
+  .gh-group-description-card .gh-card-art {
     aspect-ratio: 21 / 9;
     margin: 10px 10px 0;
   }
 
-  .gh-lore-b {
+  .gh-group-description-card-body {
     padding: 16px 16px 18px;
   }
 
-  .gh-lore-t {
+  .gh-group-description-text {
     max-width: 60ch;
     margin-top: 10px;
     font: italic 400 16px/1.55 var(--gh-f-text);
     color: var(--gh-ink);
   }
 
-  .gh-lore-a {
+  .gh-group-description-card-action {
     margin-top: 12px;
   }
 
-  .gh-purse .gh-card-i,
-  .gh-rankc .gh-card-i {
+  .gh-currency-balance-card .gh-card-inset,
+  .gh-rank-card .gh-card-inset {
     padding: 16px;
   }
 
-  .gh-big {
+  .gh-big-number-row {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-top: 10px;
   }
 
-  .gh-big .gh-num {
+  .gh-big-number-row .gh-tabular-nums {
     font: 800 68px/0.9 var(--gh-f-ui);
     font-stretch: 88%;
     letter-spacing: -0.02em;
   }
 
-  .gh-purse .gh-unit {
+  .gh-currency-balance-card .gh-price-unit-label {
     margin-top: 6px;
     font: 620 15px/1.2 var(--gh-f-ui);
   }
 
-  .gh-purse-stats {
+  .gh-currency-balance-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -286,42 +286,42 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-purse-stats dt {
+  .gh-currency-balance-stats dt {
     font-size: 12.5px;
     color: var(--gh-ink-2);
   }
 
-  .gh-purse-stats dd {
+  .gh-currency-balance-stats dd {
     margin: 3px 0 0;
     font: 780 20px/1.1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-purse-stats .gh-lv {
+  .gh-currency-balance-stats .gh-lives-badge {
     min-width: 0;
     justify-content: flex-start;
     font: inherit;
   }
 
-  .gh-purse .gh-btn {
+  .gh-currency-balance-card .gh-btn {
     margin-top: auto;
   }
 
-  .gh-rank-name {
+  .gh-rank-card-name {
     margin-top: 4px;
     font: 780 26px/1.05 var(--gh-f-ui);
     font-stretch: 84%;
   }
 
-  .gh-rankc .gh-art {
+  .gh-rank-card .gh-card-art {
     margin: 14px 0 0;
   }
 
-  .gh-rank-p {
+  .gh-rank-progress {
     margin-top: 14px;
   }
 
-  .gh-rank-pt {
+  .gh-rank-progress-text {
     display: flex;
     justify-content: space-between;
     gap: 8px;
@@ -331,11 +331,11 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-rank-p .gh-small {
+  .gh-rank-progress .gh-small {
     margin-top: 9px;
   }
 
-  .gh-rk {
+  .gh-rank-card-footer {
     display: flex;
     align-items: center;
     gap: 7px;
@@ -344,16 +344,16 @@
     color: var(--gh-ink);
   }
 
-  .gh-rk i {
+  .gh-rank-card-footer i {
     font-size: 15px;
     color: var(--gh-rank-edge);
   }
 
-  [data-gh-theme="dark"] .gh-rk i {
+  [data-gh-theme="dark"] .gh-rank-card-footer i {
     color: var(--gh-rank);
   }
 
-  .gh-hand {
+  .gh-item-hand {
     display: flex;
     align-items: stretch;
     flex-wrap: wrap;
@@ -361,7 +361,7 @@
     padding: 40px 32px 28px;
   }
 
-  .gh-hc {
+  .gh-item-hand-card {
     flex: 0 0 auto;
     width: 196px;
     transform: rotate(var(--gh-rot, 0deg));
@@ -369,188 +369,188 @@
     transition: transform 0.18s;
   }
 
-  .gh-hc>.gh-card {
+  .gh-item-hand-card>.gh-card {
     height: 100%;
   }
 
-  .gh-hc+.gh-hc {
+  .gh-item-hand-card+.gh-item-hand-card {
     margin-left: -86px;
   }
 
-  .gh-hc:hover,
-  .gh-hc:focus-within {
+  .gh-item-hand-card:hover,
+  .gh-item-hand-card:focus-within {
     z-index: 2;
     transform: rotate(var(--gh-rot, 0deg)) translateY(-10px);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gh-hc {
+    .gh-item-hand-card {
       transition: none;
     }
   }
 
-  .gh-hc .gh-flavor {
+  .gh-item-hand-card .gh-card-flavor {
     display: none;
   }
 
-  .gh-hc .gh-card-foot {
+  .gh-item-hand-card .gh-card-footer {
     min-height: 0;
   }
 
-  .gh-zone--hand .gh-slot-e {
+  .gh-showcase-zone--hand .gh-empty-slot-panel {
     flex: 0 0 auto;
     width: 196px;
     margin-left: 28px;
   }
 
-  .gh-ledger {
+  .gh-overview-ledger-panel {
     padding: 20px 20px 16px;
   }
 
-  .gh-ledger .gh-led {
+  .gh-overview-ledger-panel .gh-ledger-list {
     margin-bottom: 10px;
   }
 
   @media (max-width: 1199px) {
-    .gh-home>.gh-lore {
+    .gh-group-overview-grid>.gh-group-description-card {
       grid-column: 1 / -1;
     }
 
-    .gh-home>.gh-purse,
-    .gh-home>.gh-rankc {
+    .gh-group-overview-grid>.gh-currency-balance-card,
+    .gh-group-overview-grid>.gh-rank-card {
       grid-column: span 6;
     }
 
-    .gh-home>.gh-zone--hand,
-    .gh-home>.gh-ledger {
+    .gh-group-overview-grid>.gh-showcase-zone--hand,
+    .gh-group-overview-grid>.gh-overview-ledger-panel {
       grid-column: 1 / -1;
     }
 
-    .gh-home>.gh-ledger {
+    .gh-group-overview-grid>.gh-overview-ledger-panel {
       margin-top: 0;
     }
 
-    .gh-lore .gh-card-i {
+    .gh-group-description-card .gh-card-inset {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     }
 
-    .gh-lore .gh-art {
+    .gh-group-description-card .gh-card-art {
       aspect-ratio: auto;
       min-height: 170px;
       margin: 10px 0 10px 10px;
     }
   }
 
-  @media (max-width: 1080px) {
-    .gh-hgrid {
+  @media (width <= theme(--breakpoint-tablet)) {
+    .gh-overview-grid {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-prow--group {
+    .gh-purchase-row--group-variant {
       grid-template-columns: 52px minmax(0, 1fr) auto 76px;
     }
 
-    .gh-kpis {
+    .gh-kpi-row {
       grid-template-columns: 1fr 1fr;
     }
 
-    .gh-kpi:nth-child(3) {
+    .gh-kpi-tile:nth-child(3) {
       border-left: 0;
     }
   }
 
-  @media (max-width: 720px) {
-    .gh-hero .gh-card-i {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-overview-hero .gh-card-inset {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-hero .gh-art {
+    .gh-overview-hero .gh-card-art {
       aspect-ratio: 21 / 9;
       min-height: 0;
       margin: 10px 10px 0;
     }
 
-    .gh-hero-b .gh-h1 {
+    .gh-overview-hero-body .gh-h1 {
       font-size: 26px;
     }
 
-    .gh-kpi {
+    .gh-kpi-tile {
       padding: 12px 10px;
     }
 
-    .gh-home {
+    .gh-group-overview-grid {
       gap: 18px;
     }
 
-    .gh-home>.gh-purse,
-    .gh-home>.gh-rankc {
+    .gh-group-overview-grid>.gh-currency-balance-card,
+    .gh-group-overview-grid>.gh-rank-card {
       grid-column: 1 / -1;
     }
 
-    .gh-prow--group {
+    .gh-purchase-row--group-variant {
       grid-template-columns: 44px minmax(0, 1fr) auto;
     }
 
-    .gh-rankc .gh-card-i:has(> .gh-art) {
+    .gh-rank-card .gh-card-inset:has(> .gh-card-art) {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 112px;
       column-gap: 14px;
       align-content: start;
     }
 
-    .gh-rankc .gh-card-i:has(> .gh-art)>.gh-rk-top {
+    .gh-rank-card .gh-card-inset:has(> .gh-card-art)>.gh-rank-card-top {
       grid-column: 1;
       grid-row: 1;
     }
 
-    .gh-rankc .gh-card-i:has(> .gh-art)>.gh-art {
+    .gh-rank-card .gh-card-inset:has(> .gh-card-art)>.gh-card-art {
       grid-column: 2;
       grid-row: 1 / span 2;
       aspect-ratio: 1;
       margin: 0;
     }
 
-    .gh-rankc .gh-card-i:has(> .gh-art)> :not(.gh-rk-top):not(.gh-art) {
+    .gh-rank-card .gh-card-inset:has(> .gh-card-art)> :not(.gh-rank-card-top):not(.gh-card-art) {
       grid-column: 1 / -1;
     }
 
-    .gh-rankc .gh-rk {
+    .gh-rank-card .gh-rank-card-footer {
       margin-top: 12px;
     }
 
-    .gh-lore .gh-card-i {
+    .gh-group-description-card .gh-card-inset {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-lore .gh-art {
+    .gh-group-description-card .gh-card-art {
       aspect-ratio: 21 / 9;
       min-height: 0;
       margin: 10px 10px 0;
     }
 
-    .gh-hand {
+    .gh-item-hand {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       gap: 18px;
       padding: 4px 0 10px;
     }
 
-    .gh-hc {
+    .gh-item-hand-card {
       width: auto;
       transform: none;
     }
 
-    .gh-hc+.gh-hc {
+    .gh-item-hand-card+.gh-item-hand-card {
       margin-left: 0;
     }
 
-    .gh-hc:hover,
-    .gh-hc:focus-within {
+    .gh-item-hand-card:hover,
+    .gh-item-hand-card:focus-within {
       transform: none;
     }
 
-    .gh-zone--hand .gh-slot-e {
+    .gh-showcase-zone--hand .gh-empty-slot-panel {
       width: auto;
       margin-left: 0;
       min-height: 0;

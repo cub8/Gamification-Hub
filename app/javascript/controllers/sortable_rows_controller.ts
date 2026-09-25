@@ -20,7 +20,7 @@ import Sortable from "sortablejs"
  * they live in sheet_form — this controller only owns the pointer.
  */
 class SortableRowsController extends Controller<HTMLElement> {
-  static values = { handle: { type: String, default: ".gh-handle" } }
+  static values = { handle: { type: String, default: ".gh-category-drag-handle" } }
 
   declare readonly handleValue: string
 
@@ -31,8 +31,8 @@ class SortableRowsController extends Controller<HTMLElement> {
       handle: this.handleValue,
       animation: 150,
       draggable: "li",
-      ghostClass: "gh-cat--over",
-      dragClass: "gh-cat--dragging",
+      ghostClass: "gh-category-row--drop-target",
+      dragClass: "gh-category-row--dragging",
       onEnd: () => {
         this.renumber()
         this.dispatch("reordered")

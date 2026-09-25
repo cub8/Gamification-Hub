@@ -513,7 +513,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
 
   private placeholder(element: HTMLElement, value: string, fallback: string) {
     element.textContent = value || fallback
-    element.classList.toggle("gh-ph", value === "")
+    element.classList.toggle("gh-placeholder-text", value === "")
   }
 }
 

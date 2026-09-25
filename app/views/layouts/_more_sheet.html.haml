@@ -2,8 +2,8 @@
 -# Mockup: js-expanded/10-core.js `sheetMore()`.
 %dialog#gh-more-sheet.gh-dialog.gh-dialog--menu{ data: { action: 'click->menu#closeOnBackdrop' },
                                                  'aria-labelledby': 'gh-more-title' }
-  .gh-dialog-body.gh-oct
-    %span.gh-grab{ 'aria-hidden': 'true' }
+  .gh-dialog-body.gh-octagon-clip
+    %span.gh-sheet-drag-handle{ 'aria-hidden': 'true' }
     %h2#gh-more-title.gh-h2 Więcej
 
     -# In a group this is where the sections the tab bar could not fit live.
@@ -11,21 +11,21 @@
     -# (10-core.js:278), so the sheet is a complete index rather than a
     -# remainder you have to reason about.
     - if chrome
-      %ul.gh-menu.gh-more-m
+      %ul.gh-menu-list.gh-menu-list--nav
         - chrome.items.each do |item|
           %li
             = link_to item.path, 'aria-current': ('page' if item.current?(current_path)) do
               %i.fa-solid{ class: item.icon }
               %span= item.label
     - elsif user.teacher?
-      %ul.gh-menu
+      %ul.gh-menu-list
         %li
           = link_to new_story_group_path, data: { turbo_frame: 'modal' } do
             %i.fa-solid.fa-plus
             %span Utwórz grupę
 
-    %p.gh-pop-sec Konto
-    %ul.gh-menu
+    %p.gh-popover-section-label Konto
+    %ul.gh-menu-list
       %li
         -# Inert until #/s/account exists.
         %button{ type: 'button' }
@@ -33,8 +33,8 @@
           %span Ustawienia konta
       %li
         %button{ type: 'button', data: { action: 'theme#toggle' } }
-          %i.fa-solid.fa-moon.gh-ic-moon
-          %i.fa-solid.fa-sun.gh-ic-sun
+          %i.fa-solid.fa-moon.gh-theme-icon-moon
+          %i.fa-solid.fa-sun.gh-theme-icon-sun
           %span{ data: { theme_target: 'label' } }
             = gh_theme == 'dark' ? 'Jasny motyw' : 'Ciemny motyw'
       %li
@@ -42,5 +42,5 @@
           %i.fa-solid.fa-arrow-right-from-bracket
           %span Wyloguj się
 
-    .gh-stack
-      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'menu#close' } } Zamknij
+    .gh-button-stack
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'menu#close' } } Zamknij

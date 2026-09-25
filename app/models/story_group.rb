@@ -86,7 +86,7 @@ class StoryGroup < ApplicationRecord
     acceptable_image(:currency_icon)
   end
 
-  # The settings form renders these straight into its `.gh-err` slot, so the
+  # The settings form renders these straight into its `.gh-field-error` slot, so the
   # message is Polish like every other piece of copy in the app.
   def acceptable_image(attribute)
     attachment = public_send(attribute)

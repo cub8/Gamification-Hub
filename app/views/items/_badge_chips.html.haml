@@ -11,7 +11,7 @@
 -# Locals: f, field, badges, legend, placeholder, form_target, show_discount
 - show_discount = local_assigns.fetch(:show_discount, false)
 
-%fieldset.gh-chips{ data: { controller: 'chip-picker' } }
+%fieldset.gh-chip-group{ data: { controller: 'chip-picker' } }
   %legend.sr-only= legend
 
   -# Clearing every chip has to post something, or `unlock_badge_ids` would keep
@@ -20,7 +20,7 @@
   = hidden_field_tag "#{f.object_name}[#{field}][]", '', id: nil
 
   - badges.each do |badge|
-    %label.gh-chip.gh-oct{ data: { chip_picker_target: 'chip',
+    %label.gh-choice-chip.gh-octagon-clip{ data: { chip_picker_target: 'chip',
                             item_form_target:   form_target,
                             gh_name:            badge.name,
                             gh_discount:        badge.discount.to_i } }
@@ -41,7 +41,7 @@
       %i.fa-solid.fa-xmark{ 'aria-hidden': 'true' }
 
   - if badges.any?
-    %span.gh-sel{ data: { chip_picker_target: 'adder' }, hidden: true }
+    %span.gh-select-input{ data: { chip_picker_target: 'adder' }, hidden: true }
       %select{ 'aria-label': legend, data: { chip_picker_target: 'select', action: 'chip-picker#add' } }
         %option{ value: '' }= placeholder
         - badges.each do |badge|

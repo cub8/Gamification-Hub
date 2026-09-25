@@ -1,13 +1,13 @@
 @layer components {
 
-  .gh-zone {
+  .gh-showcase-zone {
     position: relative;
     margin-top: 40px;
     padding: 34px 18px 22px;
     border: 2px dashed var(--gh-zone);
   }
 
-  .gh-zone-l {
+  .gh-showcase-zone-label {
     --gh-c: 8px;
     position: absolute;
     top: 0;
@@ -22,7 +22,7 @@
     font-stretch: 90%;
   }
 
-  .gh-zone-l::before {
+  .gh-showcase-zone-label::before {
     content: "";
     position: absolute;
     z-index: -1;
@@ -38,7 +38,7 @@
         0 var(--gh-c));
   }
 
-  .gh-zone-n {
+  .gh-showcase-zone-count {
     --gh-c: 5px;
     display: inline-grid;
     place-items: center;
@@ -51,58 +51,58 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-zone .gh-cards {
+  .gh-showcase-zone .gh-card-grid {
     margin-top: 0;
   }
 
-  .gh-card.gh-card--afford {
+  .gh-card.gh-card--affordable {
     transition: transform 0.15s ease;
   }
 
-  .gh-card.gh-card--afford:hover {
+  .gh-card.gh-card--affordable:hover {
     transform: translateY(-3px);
   }
 
-  .gh-purse-mini {
+  .gh-wallet-summary {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 16px;
   }
 
-  .gh-purse-mini b {
+  .gh-wallet-summary b {
     display: block;
     font: 800 26px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-purse-mini small {
+  .gh-wallet-summary small {
     display: block;
     margin-top: 3px;
     font-size: 13px;
     color: var(--gh-ink-2);
   }
 
-  .gh-purse-mini .gh-div {
+  .gh-wallet-summary .gh-wallet-divider {
     width: 1px;
     align-self: stretch;
     background: var(--gh-line);
   }
 
-  .gh-buy {
+  .gh-purchase-summary {
     display: flex;
     align-items: center;
     gap: 18px;
     margin-top: 16px;
   }
 
-  .gh-buy .gh-mc {
+  .gh-purchase-summary .gh-mini-thumb {
     flex: 0 0 auto;
     width: 92px;
     height: 92px;
   }
 
-  .gh-buy-dl {
+  .gh-purchase-details {
     display: grid;
     grid-template-columns: auto auto;
     align-items: center;
@@ -110,12 +110,12 @@
     margin: 0;
   }
 
-  .gh-buy-dl dt {
+  .gh-purchase-details dt {
     font-size: 14px;
     color: var(--gh-ink-2);
   }
 
-  .gh-buy-dl dd {
+  .gh-purchase-details dd {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -124,62 +124,62 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-buy-dl dd s {
+  .gh-purchase-details dd s {
     font-size: 14px;
     font-weight: 600;
     color: var(--gh-ink-3);
   }
 
-  .gh-note {
+  .gh-note-row {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 14px;
   }
 
-  .gh-note i {
+  .gh-note-row i {
     color: var(--gh-ink-2);
   }
 
-  @media (max-width: 720px) {
+  @media (width <= theme(--breakpoint-mobile)) {
 
-    .gh-zone .gh-cards {
+    .gh-showcase-zone .gh-card-grid {
       grid-template-columns: minmax(0, 1fr);
       gap: 16px;
     }
 
-    .gh-zone .gh-art {
+    .gh-showcase-zone .gh-card-art {
       max-height: 190px;
     }
 
-    .gh-zone {
+    .gh-showcase-zone {
       margin-top: 32px;
       padding: 28px 10px 14px;
     }
 
-    .gh-zone-l {
+    .gh-showcase-zone-label {
       left: 10px;
       font-size: 15px;
     }
 
-    .gh-purse-mini {
+    .gh-wallet-summary {
       justify-content: space-between;
       padding-top: 12px;
       border-top: 1px solid var(--gh-line);
     }
 
-    .gh-buy .gh-mc {
+    .gh-purchase-summary .gh-mini-thumb {
       width: 72px;
       height: 72px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gh-card.gh-card--afford {
+    .gh-card.gh-card--affordable {
       transition: none;
     }
 
-    .gh-card.gh-card--afford:hover {
+    .gh-card.gh-card--affordable:hover {
       transform: none;
     }
   }

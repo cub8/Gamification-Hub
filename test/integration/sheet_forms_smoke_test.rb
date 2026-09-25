@@ -36,12 +36,12 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     get new_story_group_activity_group_template_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
     # DECISIONS.md:26 — create and edit are pages. The Bootstrap version
     # rendered both into a shared `modal` frame.
-    assert_select '.gh-wiz .gh-fcol'
-    assert_select '.gh-wiz .gh-pcol'
+    assert_select '.gh-form-shell .gh-form-column'
+    assert_select '.gh-form-shell .gh-preview-column'
   end
 
   test 'each screen carries its own heading and crumb trail' do
@@ -59,8 +59,8 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
       get path
 
       assert_select 'h1.gh-h1', heading
-      assert_select '.gh-crumbs a', 'Arkusze ocen'
-      assert_select '.gh-crumbs span', crumb
+      assert_select '.gh-breadcrumbs a', 'Arkusze ocen'
+      assert_select '.gh-breadcrumbs span', crumb
     end
   end
 
@@ -69,11 +69,14 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
   test 'the preview shows the grading table header it is describing' do
     get edit_story_group_activity_group_template_path(@story_group, @template)
 
-    assert_select 'aside.gh-pcol[aria-label=?]', 'Podgląd' do
-      assert_select '.gh-pv h3', 'Nagłówek tabeli ocen'
-      assert_select '.gh-gprev table.gh-grid thead th', 3 # Student + two columns
-      assert_equal(['Obecność', 'Pomoc innym'], css_select('.gh-gprev .gh-thn').map { |th| th.text.strip })
-      assert_select '.gh-hint', /Najedź na nagłówek/
+    assert_select 'aside.gh-preview-column[aria-label=?]', 'Podgląd' do
+      assert_select '.gh-preview-panel h3', 'Nagłówek tabeli ocen'
+      assert_select '.gh-grading-table-preview table.gh-grading-table thead th', 3 # Student + two columns
+      names = css_select('.gh-grading-table-preview .gh-grading-column-name').map do |th|
+        th.text.strip
+      end
+      assert_equal(['Obecność', 'Pomoc innym'], names)
+      assert_select '.gh-field-hint', /Najedź na nagłówek/
     end
   end
 
@@ -89,7 +92,7 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
   test 'a new template opens with two rows, the first filled in' do
     get new_story_group_activity_group_template_path(@story_group)
 
-    assert_select 'ul.gh-cats li.gh-cat', 2
+    assert_select 'ul.gh-category-list li.gh-category-row', 2
     assert_select 'h2.gh-h3', 'Kategorie nagród'
     assert_select 'button', 'Dodaj kategorię'
     assert_select 'input[value=Obecność]'
@@ -105,8 +108,8 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
   test 'rows are wired for reordering by pointer and by keyboard' do
     get new_story_group_activity_group_template_path(@story_group)
 
-    assert_select 'ul.gh-cats[data-controller=sortable-rows]'
-    assert_select '.gh-handle[title=?]', 'Przeciągnij, aby zmienić kolejność'
+    assert_select 'ul.gh-category-list[data-controller=sortable-rows]'
+    assert_select '.gh-category-drag-handle[title=?]', 'Przeciągnij, aby zmienić kolejność'
     assert_select 'button[aria-label=?]', 'Przesuń wyżej'
     assert_select 'button[aria-label=?]', 'Przesuń niżej'
   end
@@ -118,9 +121,9 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
 
     # Scoped to the list: the blank row the "Dodaj" button clones lives in a
     # <template> beside it and carries the same markup.
-    assert_select 'ul.gh-cats input[data-sheet-form-target=destroy]', 2
-    assert_select 'ul.gh-cats input[data-sheet-form-target=hide]', false
-    assert_select '.gh-lockn', false
+    assert_select 'ul.gh-category-list input[data-sheet-form-target=destroy]', 2
+    assert_select 'ul.gh-category-list input[data-sheet-form-target=hide]', false
+    assert_select '.gh-category-lock-note', false
   end
 
   # DECISIONS.md:31 — a column that has paid out can be hidden, never removed.
@@ -133,7 +136,7 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'li#gh-cat-0 input[data-sheet-form-target=hide]'
     assert_select 'li#gh-cat-0 input[data-sheet-form-target=destroy]', false
-    assert_select 'li#gh-cat-0 .gh-lockn',
+    assert_select 'li#gh-cat-0 .gh-category-lock-note',
                   /Przyznano 1 nagrodę\.\s*Kolumny nie można usunąć, można ją ukryć\./
     assert_select 'li#gh-cat-1 input[data-sheet-form-target=destroy]'
   end
@@ -144,9 +147,11 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_activity_group_path(@story_group, sheet)
 
-    assert_select 'li.gh-cat--hidden'
-    assert_select '.gh-tag--hidden', 'Ukryta w tabeli ocen'
-    assert_equal(['Pomoc innym'], css_select('.gh-gprev .gh-thn').map { |th| th.text.strip })
+    assert_select 'li.gh-category-row--hidden'
+    assert_select '.gh-tag--hidden-column', 'Ukryta w tabeli ocen'
+    assert_equal(['Pomoc innym'], css_select('.gh-grading-table-preview .gh-grading-column-name').map do |th|
+      th.text.strip
+    end,)
     assert_select '[data-sheet-form-target=summaryCount]', '1 kolumna'
   end
 
@@ -156,7 +161,7 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     sheet.activity_group_categories.create!(didactic_description: 'Prezentacja', reward: 3, position: 2)
 
     get edit_story_group_activity_group_path(@story_group, sheet)
-    assert_select '.gh-tag--only', 'Tylko w tym arkuszu'
+    assert_select '.gh-tag--sheet-only', 'Tylko w tym arkuszu'
   end
 
   # --- the banners ----------------------------------------------------------
@@ -166,8 +171,8 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     sheet!('Laboratoria 2')
 
     get edit_story_group_activity_group_template_path(@story_group, @template)
-    assert_select '.gh-info b', 'Zmiany dotyczą tylko arkuszy utworzonych od teraz.'
-    assert_select '.gh-info', /Laboratoria 1 – Laboratoria 2 zostają bez zmian\./
+    assert_select '.gh-info-banner b', 'Zmiany dotyczą tylko arkuszy utworzonych od teraz.'
+    assert_select '.gh-info-banner', /Laboratoria 1 – Laboratoria 2 zostają bez zmian\./
   end
 
   test 'sheet settings says how much has already been paid out of it' do
@@ -175,15 +180,15 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     award!(sheet.activity_group_categories.first)
 
     get edit_story_group_activity_group_path(@story_group, sheet)
-    assert_select '.gh-info b', 'W tym arkuszu przyznano już 1 nagrodę.'
-    assert_select '.gh-info', /Szablon Laboratoria się nie zmienia\./
+    assert_select '.gh-info-banner b', 'W tym arkuszu przyznano już 1 nagrodę.'
+    assert_select '.gh-info-banner', /Szablon Laboratoria się nie zmienia\./
   end
 
   test 'a new template has no delete section and no banner' do
     get new_story_group_activity_group_template_path(@story_group)
 
     assert_select 'h2.gh-h3', { text: 'Usuwanie', count: 0 }
-    assert_select '.gh-info', false
+    assert_select '.gh-info-banner', false
   end
 
   # --- the action bar and the discard guard ---------------------------------
@@ -191,15 +196,15 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
   test 'the action bar reports its state and offers a way out' do
     get edit_story_group_activity_group_template_path(@story_group, @template)
 
-    assert_select '.gh-wbar a.gh-linkbtn', 'Anuluj'
+    assert_select '.gh-form-actions-bar a.gh-link-button', 'Anuluj'
     assert_select '[data-sheet-form-target=dirty]', 'Brak zmian'
-    assert_select '.gh-wbar button[type=submit]', 'Zapisz zmiany'
+    assert_select '.gh-form-actions-bar button[type=submit]', 'Zapisz zmiany'
   end
 
   test 'creating says create' do
     get new_story_group_activity_group_template_path(@story_group)
 
-    assert_select '.gh-wbar button[type=submit]', 'Utwórz szablon'
+    assert_select '.gh-form-actions-bar button[type=submit]', 'Utwórz szablon'
     assert_select '[data-sheet-form-target=dirty]', false
   end
 
@@ -209,8 +214,8 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'dialog[data-sheet-form-target=discard]' do
       assert_select 'h2', 'Odrzucić zmiany?'
       # The safe button comes first and takes the focus.
-      assert_select '.gh-dlg-b button:first-child[autofocus]', 'Wróć do edycji'
-      assert_select '.gh-dlg-b button:last-child', 'Odrzuć zmiany'
+      assert_select '.gh-dialog-button-row button:first-child[autofocus]', 'Wróć do edycji'
+      assert_select '.gh-dialog-button-row button:last-child', 'Odrzuć zmiany'
     end
   end
 
@@ -224,10 +229,10 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'h2', 'Usunąć arkusz „Laboratoria 1”?'
     assert_select 'p', 'Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii.'
-    assert_select '.gh-info', /Przyznano z niego 1 nagrodę\./
+    assert_select '.gh-info-banner', /Przyznano z niego 1 nagrodę\./
     # As a page the safe way out is a link back to the settings screen; in the
     # dialog it is a button that closes it.
-    assert_select '.gh-dlg-b a.gh-btn--sec', 'Anuluj'
+    assert_select '.gh-dialog-button-row a.gh-btn--secondary', 'Anuluj'
   end
 
   test 'the template delete confirmation promises the sheets survive' do
@@ -237,6 +242,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'h2', 'Usunąć szablon „Laboratoria”?'
     assert_select 'p', 'Szablon zniknie z listy, a utworzone z niego arkusze zostają.'
-    assert_select '.gh-info', /1 arkusz zostaje bez zmian: Laboratoria 1/
+    assert_select '.gh-info-banner', /1 arkusz zostaje bez zmian: Laboratoria 1/
   end
 end

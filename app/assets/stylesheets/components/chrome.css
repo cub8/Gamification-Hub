@@ -1,6 +1,6 @@
 @layer components {
 
-  .gh-shell {
+  .gh-app-shell {
     height: 100vh;
     height: 100dvh;
     display: flex;
@@ -8,20 +8,20 @@
     overflow: hidden;
   }
 
-  .gh-body {
+  .gh-app-body {
     flex: 1;
     display: flex;
     min-height: 0;
   }
 
-  .gh-well {
+  .gh-content-well {
     flex: 1;
     position: relative;
     min-width: 0;
     overflow: hidden;
   }
 
-  .gh-main {
+  .gh-main-content {
     position: absolute;
     inset: 0;
     overflow: auto;
@@ -30,7 +30,7 @@
     scrollbar-gutter: stable;
   }
 
-  .gh-hd {
+  .gh-topbar {
     flex: 0 0 auto;
     height: 62px;
     display: flex;
@@ -43,7 +43,7 @@
     z-index: 6;
   }
 
-  .gh-logo {
+  .gh-topbar-logo {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -54,18 +54,18 @@
     letter-spacing: -0.01em;
   }
 
-  .gh-logo img {
+  .gh-topbar-logo img {
     width: 34px;
     height: 34px;
     flex: 0 0 auto;
     object-fit: contain;
   }
 
-  .gh-sp {
+  .gh-topbar-spacer {
     flex: 1;
   }
 
-  .gh-bal {
+  .gh-balance-button {
     --gh-c: 9px;
     position: relative;
     isolation: isolate;
@@ -82,7 +82,7 @@
     cursor: pointer;
   }
 
-  .gh-bal::before {
+  .gh-balance-button::before {
     content: "";
     position: absolute;
     z-index: -1;
@@ -98,24 +98,24 @@
         0 var(--gh-c));
   }
 
-  .gh-bal:hover::before {
+  .gh-balance-button:hover::before {
     background: var(--gh-card-3);
   }
 
-  .gh-bal b {
+  .gh-balance-button b {
     display: block;
     font: 800 20px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-bal small {
+  .gh-balance-button small {
     display: block;
     margin-top: 2px;
     font: 500 12px/1.2 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-iconbtn {
+  .gh-icon-button {
     position: relative;
     width: 42px;
     height: 42px;
@@ -128,18 +128,18 @@
     text-decoration: none;
   }
 
-  .gh-iconbtn:hover {
+  .gh-icon-button:hover {
     background: var(--gh-card-2);
     color: var(--gh-ink);
   }
 
-  .gh-dot-slot {
+  .gh-icon-button-badge-slot {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
 
-  .gh-count {
+  .gh-notification-count {
     --gh-c: 5px;
     position: absolute;
     top: 3px;
@@ -154,29 +154,29 @@
     font: 780 11px/1 var(--gh-f-ui);
   }
 
-  .gh-ic-sun {
+  .gh-theme-icon-sun {
     display: none;
   }
 
   @media (prefers-color-scheme: dark) {
-    :root:not([data-gh-theme="light"]) .gh-ic-sun {
+    :root:not([data-gh-theme="light"]) .gh-theme-icon-sun {
       display: block;
     }
 
-    :root:not([data-gh-theme="light"]) .gh-ic-moon {
+    :root:not([data-gh-theme="light"]) .gh-theme-icon-moon {
       display: none;
     }
   }
 
-  :root[data-gh-theme="dark"] .gh-ic-sun {
+  :root[data-gh-theme="dark"] .gh-theme-icon-sun {
     display: block;
   }
 
-  :root[data-gh-theme="dark"] .gh-ic-moon {
+  :root[data-gh-theme="dark"] .gh-theme-icon-moon {
     display: none;
   }
 
-  .gh-gsw {
+  .gh-group-switcher {
     display: none;
     flex: 1;
     min-width: 0;
@@ -190,13 +190,13 @@
     color: var(--gh-ink);
   }
 
-  .gh-gsw .gh-gthumb {
+  .gh-group-switcher .gh-group-thumb {
     width: 36px;
     height: 36px;
     font-size: 12px;
   }
 
-  .gh-gsw-name {
+  .gh-group-switcher-name {
     font: 760 15px/1.12 var(--gh-f-ui);
     font-stretch: 84%;
     display: -webkit-box;
@@ -205,12 +205,12 @@
     overflow: hidden;
   }
 
-  .gh-gsw i {
+  .gh-group-switcher i {
     font-size: 13px;
     color: var(--gh-ink-2);
   }
 
-  .gh-av {
+  .gh-avatar {
     --gh-c: 8px;
     --gh-h: var(--gh-item);
     width: 38px;
@@ -223,41 +223,41 @@
     background: color-mix(in srgb, var(--gh-h) 34%, var(--gh-card));
   }
 
-  .gh-av--sm {
+  .gh-avatar--sm {
     --gh-c: 5px;
     width: 28px;
     height: 28px;
     font-size: 11.5px;
   }
 
-  .gh-av[data-gh-h="0"] {
+  .gh-avatar[data-gh-h="0"] {
     --gh-h: var(--gh-item);
   }
 
-  .gh-av[data-gh-h="1"] {
+  .gh-avatar[data-gh-h="1"] {
     --gh-h: var(--gh-badge);
   }
 
-  .gh-av[data-gh-h="2"] {
+  .gh-avatar[data-gh-h="2"] {
     --gh-h: var(--gh-rank);
   }
 
-  .gh-av[data-gh-h="3"] {
+  .gh-avatar[data-gh-h="3"] {
     --gh-h: var(--gh-focus);
   }
 
-  .gh-av[data-gh-h="4"] {
+  .gh-avatar[data-gh-h="4"] {
     --gh-h: var(--gh-heart);
   }
 
-  .gh-avbtn {
+  .gh-avatar-button {
     border: 0;
     background: none;
     padding: 2px;
     cursor: pointer;
   }
 
-  .gh-gthumb {
+  .gh-group-thumb {
     --gh-c: 6px;
     display: inline-grid;
     place-items: center;
@@ -270,20 +270,20 @@
     font: 720 10px/1 var(--gh-f-ui);
   }
 
-  .gh-gthumb img {
+  .gh-group-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .gh-gthumb--lg {
+  .gh-group-thumb--lg {
     --gh-c: 8px;
     width: 46px;
     height: 46px;
     font-size: 15px;
   }
 
-  .gh-sb {
+  .gh-sidebar {
     width: 276px;
     flex: 0 0 auto;
     display: flex;
@@ -296,17 +296,17 @@
     transition: width 0.18s;
   }
 
-  .gh-nav {
+  .gh-sidebar-nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .gh-nav--primary {
+  .gh-sidebar-nav--primary {
     padding: 0 10px;
   }
 
-  .gh-nl {
+  .gh-sidebar-link {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -317,42 +317,42 @@
     white-space: nowrap;
   }
 
-  .gh-nl:hover {
+  .gh-sidebar-link:hover {
     background: var(--gh-card-2);
     color: var(--gh-ink);
   }
 
-  .gh-nl--on {
+  .gh-sidebar-link--active {
     background: var(--gh-card-2);
     color: var(--gh-ink);
     font-weight: 720;
     box-shadow: inset 4px 0 0 var(--gh-item);
   }
 
-  .gh-sb-sec {
+  .gh-sidebar-section-label {
     font: 680 13px/1.2 var(--gh-f-ui);
     color: var(--gh-ink-3);
     padding: 18px 22px 8px;
   }
 
-  .gh-deck {
+  .gh-current-group-card {
     margin: 14px 12px 12px;
     filter: drop-shadow(0 3px 0 var(--gh-line-2));
   }
 
-  .gh-deck-f {
+  .gh-current-group-card-frame {
     --gh-c: 12px;
     padding: 2px;
     background: var(--gh-line-2);
   }
 
-  .gh-deck-i {
+  .gh-current-group-card-inner {
     --gh-c: 11px;
     background: var(--gh-card);
     padding-bottom: 8px;
   }
 
-  .gh-deck-art {
+  .gh-current-group-card-cover {
     --gh-c: 9px;
     display: block;
     margin: 8px 8px 0;
@@ -361,60 +361,60 @@
     background-color: var(--gh-card-3);
   }
 
-  .gh-deck-art img {
+  .gh-current-group-card-cover img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .gh-deck-art--mono {
+  .gh-current-group-card-cover--fallback {
     display: grid;
     place-items: center;
     font: 800 20px/1 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-deck-head {
+  .gh-current-group-card-header {
     padding: 12px 12px 4px;
   }
 
-  .gh-deck-name {
+  .gh-current-group-card-name {
     font: 780 21px/1.1 var(--gh-f-ui);
     font-stretch: 84%;
     text-wrap: balance;
   }
 
-  .gh-deck-role {
+  .gh-current-group-card-role {
     margin-top: 4px;
     font-size: 13px;
     color: var(--gh-ink-2);
   }
 
-  .gh-deck-sw {
+  .gh-current-group-card-switch-trigger {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     margin: 6px 12px 10px;
   }
 
-  .gh-deck .gh-nav {
+  .gh-current-group-card .gh-sidebar-nav {
     margin: 0 6px;
     padding-top: 6px;
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-deck .gh-nl {
+  .gh-current-group-card .gh-sidebar-link {
     padding: 8px 10px;
   }
 
-  .gh-glist {
+  .gh-sidebar-group-list {
     display: flex;
     flex-direction: column;
     padding: 0 10px;
     gap: 2px;
   }
 
-  .gh-gl {
+  .gh-sidebar-group-list-item {
     display: flex;
     align-items: center;
     gap: 11px;
@@ -423,39 +423,39 @@
     color: var(--gh-ink);
   }
 
-  .gh-gl:hover {
+  .gh-sidebar-group-list-item:hover {
     background: var(--gh-card-2);
   }
 
-  .gh-gl .gh-gthumb {
+  .gh-sidebar-group-list-item .gh-group-thumb {
     width: 34px;
     height: 34px;
     font-size: 12px;
   }
 
-  .gh-gl-t {
+  .gh-sidebar-group-list-item-text {
     min-width: 0;
   }
 
-  .gh-gl-t b {
+  .gh-sidebar-group-list-item-text b {
     display: block;
     font: 650 14px/1.2 var(--gh-f-ui);
     font-stretch: 90%;
   }
 
-  .gh-gl-t small {
+  .gh-sidebar-group-list-item-text small {
     display: block;
     font-size: 12.5px;
     color: var(--gh-ink-3);
     margin-top: 1px;
   }
 
-  .gh-sb-foot {
+  .gh-sidebar-footer {
     margin-top: auto;
     padding: 10px;
   }
 
-  .gh-sb-col {
+  .gh-sidebar-collapse-toggle {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -468,109 +468,109 @@
     color: var(--gh-ink-3);
   }
 
-  .gh-sb-col:hover {
+  .gh-sidebar-collapse-toggle:hover {
     background: var(--gh-card-2);
     color: var(--gh-ink);
   }
 
-  .gh-sb--collapsed {
+  .gh-sidebar--collapsed {
     width: 82px;
   }
 
-  .gh-sb--collapsed .gh-nl>span,
-  .gh-sb--collapsed .gh-sb-col>span,
-  .gh-sb--collapsed .gh-sb-sec,
-  .gh-sb--collapsed .gh-gl-t,
-  .gh-sb--collapsed .gh-deck-head,
-  .gh-sb--collapsed .gh-deck-sw>span {
+  .gh-sidebar--collapsed .gh-sidebar-link>span,
+  .gh-sidebar--collapsed .gh-sidebar-collapse-toggle>span,
+  .gh-sidebar--collapsed .gh-sidebar-section-label,
+  .gh-sidebar--collapsed .gh-sidebar-group-list-item-text,
+  .gh-sidebar--collapsed .gh-current-group-card-header,
+  .gh-sidebar--collapsed .gh-current-group-card-switch-trigger>span {
     display: none;
   }
 
-  .gh-sb--collapsed .gh-deck {
+  .gh-sidebar--collapsed .gh-current-group-card {
     margin: 12px 9px;
   }
 
-  .gh-sb--collapsed .gh-deck-art {
+  .gh-sidebar--collapsed .gh-current-group-card-cover {
     aspect-ratio: 1;
     margin: 6px;
   }
 
-  .gh-sb--collapsed .gh-deck-sw {
+  .gh-sidebar--collapsed .gh-current-group-card-switch-trigger {
     justify-content: center;
     margin: 6px 0 8px;
     width: 100%;
   }
 
-  .gh-sb--collapsed .gh-nl,
-  .gh-sb--collapsed .gh-sb-col,
-  .gh-sb--collapsed .gh-gl {
+  .gh-sidebar--collapsed .gh-sidebar-link,
+  .gh-sidebar--collapsed .gh-sidebar-collapse-toggle,
+  .gh-sidebar--collapsed .gh-sidebar-group-list-item {
     justify-content: center;
     padding: 10px 0;
   }
 
-  .gh-tabbar {
+  .gh-mobile-tabbar {
     display: none;
   }
 
-  @media (max-width: 720px) {
-    .gh-sb {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-sidebar {
       display: none;
     }
 
-    .gh-hd {
+    .gh-topbar {
       height: 58px;
       padding: 0 8px 0 10px;
       gap: 6px;
     }
 
-    .gh-logo-word {
+    .gh-topbar-logo-word {
       display: none;
     }
 
-    .gh-bal {
+    .gh-balance-button {
       padding: 4px 9px 4px 4px;
     }
 
-    .gh-bal .gh-tok {
+    .gh-balance-button .gh-currency-token {
       --gh-s: 28px;
     }
 
-    .gh-bal b {
+    .gh-balance-button b {
       font-size: 18px;
     }
 
-    .gh-bal small {
+    .gh-balance-button small {
       display: none;
     }
 
-    .gh-gsw {
+    .gh-group-switcher {
       display: flex;
     }
 
-    .gh-hd:has(.gh-gsw) .gh-logo,
-    .gh-hd:has(.gh-gsw) .gh-sp {
+    .gh-topbar:has(.gh-group-switcher) .gh-topbar-logo,
+    .gh-topbar:has(.gh-group-switcher) .gh-topbar-spacer {
       display: none;
     }
 
-    .gh-hd-join span {
+    .gh-topbar-join-link span {
       display: none;
     }
 
-    .gh-hd-theme {
+    .gh-topbar-theme-toggle {
       display: none;
     }
 
-    .gh-av {
+    .gh-avatar {
       width: 34px;
       height: 34px;
     }
 
-    .gh-main {
+    .gh-main-content {
       padding: 16px 12px 28px;
       scrollbar-gutter: auto;
     }
 
-    .gh-tabbar {
+    .gh-mobile-tabbar {
       flex: 0 0 auto;
       display: flex;
       height: 66px;
@@ -580,7 +580,7 @@
       z-index: 6;
     }
 
-    .gh-tab {
+    .gh-mobile-tab {
       flex: 1;
       position: relative;
       display: flex;
@@ -596,11 +596,11 @@
       cursor: pointer;
     }
 
-    .gh-tab--on {
+    .gh-mobile-tab--active {
       color: var(--gh-ink);
     }
 
-    .gh-tab--on::before {
+    .gh-mobile-tab--active::before {
       content: "";
       position: absolute;
       top: 0;

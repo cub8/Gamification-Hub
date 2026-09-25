@@ -5,24 +5,24 @@
 -# head and the board is the only place that difference is visible.
 - story_group = board.story_group
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Ranking
     %p.gh-lead
       = "Kolejność według łącznie zebranej waluty (#{story_group.currency_name})."
       Studenci widzą tylko pseudonimy, Ty widzisz też imiona i nazwiska.
 
-  .gh-rkctl
-    -# An <a>, not the checkbox .gh-sw is usually built on: this does not save a
+  .gh-ranking-controls
+    -# An <a>, not the checkbox .gh-toggle-switch is usually built on: this does not save a
     -# field, it opens the dialog that asks whether to. role="switch" keeps it
     -# announced as the control it looks like.
-    .gh-swrow.gh-swrow--inline
+    .gh-toggle-switch-row.gh-switch-row--inline
       -# Empty body on purpose: the switch is a knob, and its accessible name
       -# comes from the label beside it through aria-labelledby, exactly as the
       -# mockup wires it.
       = link_to '', confirm_visibility_story_group_ranking_path(story_group,
                                                                 enabled: !board.visible?),
-        class: 'gh-sw gh-sw--link gh-oct', role: 'switch',
+        class: 'gh-toggle-switch gh-switch--link gh-octagon-clip', role: 'switch',
         'aria-checked': board.visible?.to_s, 'aria-labelledby': 'gh-rk-vis',
         data: { turbo_frame: 'modal' }
       %span
@@ -31,7 +31,7 @@
     -# Only while the board is visible: with it off there is nothing for the
     -# mode to describe (mockup renders the segment under the same condition).
     - if board.visible?
-      .gh-seg2.gh-oct{ role: 'group', 'aria-label': 'Co widzą studenci' }
+      .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': 'Co widzą studenci' }
         - StoryGroup::RANKING_MODE_LABELS.each do |mode, label|
           - if story_group.ranking_mode == mode
             -# The mode already in force is not a link: confirming a change to
@@ -44,13 +44,13 @@
 -# One sentence, only when students see less than the teacher does. "Pełny
 -# ranking" needs none: then the two views match.
 - if !board.visible?
-  %p.gh-info.gh-rk-note
+  %p.gh-info-banner.gh-ranking-visibility-note
     %i.fa-solid.fa-eye-slash{ 'aria-hidden': 'true' }
     %span
       %b Ranking jest ukryty przed studentami.
       Ty nadal go widzisz.
 - elsif story_group.ranking_podium_and_own?
-  %p.gh-info.gh-rk-note
+  %p.gh-info-banner.gh-ranking-visibility-note
     %i.fa-solid.fa-eye-slash{ 'aria-hidden': 'true' }
     %span
       %b Studenci widzą tylko podium i swoje miejsce.
@@ -59,17 +59,17 @@
 - if board.any?
   = render 'board', board: board, reveal_names: true
 
-  %p.gh-small.gh-rk-foot
+  %p.gh-small.gh-ranking-footnote
     Remis daje to samo miejsce.
     Studenci bez pseudonimu są widoczni pod imieniem i nazwiskiem.
 - else
   -# The mockup has no empty state for this screen. House rule: name the next
   -# action rather than only reporting the absence.
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nikt jeszcze nie dołączył do grupy
     %p.gh-lead
       Ranking ułoży się sam, gdy studenci dołączą i zaczną zbierać walutę.
-    .gh-rowb
+    .gh-button-row
       = link_to story_group_invites_path(story_group), class: 'gh-btn' do
         %i.fa-solid.fa-qrcode
         Zaproszenia

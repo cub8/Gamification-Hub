@@ -76,8 +76,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h1.gh-h1', 'Przedmioty'
-    assert_equal ['Poprawa wejściówki', 'Dodatkowe życie', 'Konsultacja'], card_names('.gh-lgrid')
-    assert_select '.gh-rowb a[href=?]', new_story_group_item_path(@story_group), 'Nowy przedmiot'
+    assert_equal ['Poprawa wejściówki', 'Dodatkowe życie', 'Konsultacja'], card_names('.gh-badge-grid--teacher')
+    assert_select '.gh-button-row a[href=?]', new_story_group_item_path(@story_group), 'Nowy przedmiot'
   end
 
   test 'the lead counts the items in Polish' do
@@ -93,7 +93,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-card-acts a[href=?][aria-label=?]',
+    assert_select '.gh-card-actions a[href=?][aria-label=?]',
                   edit_story_group_item_path(@story_group, @poprawa),
                   'Edytuj przedmiot Poprawa wejściówki'
   end
@@ -108,8 +108,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-meta', 'Kupiono 2 razy'
-    assert_select '.gh-meta', 'Jeszcze nikt nie kupił'
+    assert_select '.gh-card-meta', 'Kupiono 2 razy'
+    assert_select '.gh-card-meta', 'Jeszcze nikt nie kupił'
   end
 
   # Requirements read as locks on this screen, and the discount is a flag rather
@@ -124,16 +124,16 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-tag--lock', 'Od rangi Kapitan'
-    assert_select '.gh-tag--disc', 'Zniżka'
-    assert_select '.gh-tag--life', 'Przy 0 życiach'
+    assert_select '.gh-tag--locked', 'Od rangi Kapitan'
+    assert_select '.gh-tag--discount', 'Zniżka'
+    assert_select '.gh-tag--no-lives', 'Przy 0 życiach'
   end
 
   test 'a group with no items tells the teacher what to do about it' do
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-lgrid', false
-    assert_select '.gh-gm .gh-h2', 'Sklep jest jeszcze pusty'
+    assert_select '.gh-badge-grid--teacher', false
+    assert_select '.gh-empty-state .gh-h2', 'Sklep jest jeszcze pusty'
   end
 
   # --- the form -------------------------------------------------------------
@@ -151,7 +151,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   test 'the picker offers exactly the item presets, as radios' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-preset-tile-grid .gh-preset-tile--item input[type=radio]', Glyphs::ITEM.size
+    assert_select '.gh-art-preset-grid .gh-art-preset-tile--item input[type=radio]', Glyphs::ITEM.size
     assert_select 'input[name=?][value=?][checked=checked]', 'item[icon_glyph]', 'shield'
   end
 
@@ -171,15 +171,15 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     post story_group_items_path(@story_group), params: form_params(name: '', rules: '')
 
     assert_response :unprocessable_content
-    assert_select '.gh-err[role=alert]', 2
-    assert_select '.gh-inp--bad input[aria-invalid=true]'
+    assert_select '.gh-field-error[role=alert]', 2
+    assert_select '.gh-text-input--invalid input[aria-invalid=true]'
   end
 
   test 'the price floor is 1' do
     post story_group_items_path(@story_group), params: form_params(price: 0)
 
     assert_response :unprocessable_content
-    assert_select '.gh-err[role=alert] span', 'Cena musi wynosić co najmniej 1.'
+    assert_select '.gh-field-error[role=alert] span', 'Cena musi wynosić co najmniej 1.'
   end
 
   test 'editing an item saves and says the change is not retroactive' do
@@ -203,7 +203,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-info', /1 student ma ten przedmiot\./
+    assert_select '.gh-info-banner', /1 student ma ten przedmiot\./
   end
 
   # --- the chip multiselect -------------------------------------------------
@@ -217,7 +217,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_item_path(@story_group, @poprawa)
 
     # Two badges, two pickers: required-to-buy and discount-giving.
-    assert_select '.gh-chips', 2
+    assert_select '.gh-chip-group', 2
     assert_select 'input[type=checkbox][name=?]', 'item[unlock_badge_ids][]', 2
     assert_select 'input[type=checkbox][name=?][value=?][checked=checked]',
                   'item[unlock_badge_ids][]', nawigator.id.to_s
@@ -246,8 +246,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     # Hidden until chip_picker_controller connects: with JavaScript off the
     # chips themselves are the control and the select would be dead weight.
-    assert_select '.gh-chips .gh-sel[hidden]', 2
-    assert_select '.gh-chips .gh-sel select option', 6 # 2 placeholders + 2 badges each
+    assert_select '.gh-chip-group .gh-select-input[hidden]', 2
+    assert_select '.gh-chip-group .gh-select-input select option', 6 # 2 placeholders + 2 badges each
   end
 
   test 'a group with no badges says so instead of showing an empty picker' do
@@ -255,8 +255,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-chips', false
-    assert_select '.gh-sent .gh-hint', { text: 'W tej grupie nie ma jeszcze odznak.', count: 2 }
+    assert_select '.gh-chip-group', false
+    assert_select '.gh-sentence-row .gh-field-hint', { text: 'W tej grupie nie ma jeszcze odznak.', count: 2 }
   end
 
   # --- the preview ----------------------------------------------------------
@@ -264,18 +264,18 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   test 'all three feet are rendered and only the current one is visible' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-pvcard .gh-foot'
-    assert_select '.gh-pvcard .gh-need[hidden]'
-    assert_select '.gh-pvcard .gh-req[hidden]'
-    assert_select '.gh-pvcard .gh-foot[hidden]', false
+    assert_select '.gh-item-preview-card .gh-auth-footer'
+    assert_select '.gh-item-preview-card .gh-requirement-block[hidden]'
+    assert_select '.gh-item-preview-card .gh-requirement-list[hidden]'
+    assert_select '.gh-item-preview-card .gh-auth-footer[hidden]', false
   end
 
   # DECISIONS.md:34 — an item without requirements can never be sealed.
   test 'the sealed tab is disabled until the item has a requirement' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-seg2 button[value=sealed][disabled]'
-    assert_select '.gh-hint', 'Bez wymagań przedmiot nigdy nie będzie zapieczętowany.'
+    assert_select '.gh-segmented-toggle-2 button[value=sealed][disabled]'
+    assert_select '.gh-field-hint', 'Bez wymagań przedmiot nigdy nie będzie zapieczętowany.'
   end
 
   test 'the sealed tab opens once something gates the item' do
@@ -284,9 +284,9 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-seg2 button[value=sealed][disabled]', false
-    assert_select '.gh-seal span', 'Od rangi Kapitan'
-    assert_select '.gh-req li b', 'Kapitan'
+    assert_select '.gh-segmented-toggle-2 button[value=sealed][disabled]', false
+    assert_select '.gh-lock-seal span', 'Od rangi Kapitan'
+    assert_select '.gh-requirement-list li b', 'Kapitan'
   end
 
   test 'the preview names the ceiling a student could reach' do
@@ -297,7 +297,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-tag--disc', 'Zniżki do −25%'
+    assert_select '.gh-tag--discount', 'Zniżki do −25%'
   end
 
   # Discount::CAP_VALUE is what the shop actually charges; a card promising more
@@ -310,7 +310,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-tag--disc', "Zniżki do −#{Discount::CAP_VALUE}%"
+    assert_select '.gh-tag--discount', "Zniżki do −#{Discount::CAP_VALUE}%"
   end
 
   test 'an item with no discounts hides the tag rather than promising nothing' do
@@ -318,7 +318,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-pvcard .gh-tag--disc[hidden]'
+    assert_select '.gh-item-preview-card .gh-tag--discount[hidden]'
     assert_select EXAMPLE, /\ABez zniżek\./
   end
 
@@ -341,9 +341,9 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-warn2 span',
+    assert_select '.gh-warning-note--alt span',
                   'Odznaka Nawigator jest wymagana do zakupu, więc jej zniżka obejmie każdego kupującego.'
-    assert_select '.gh-err', false
+    assert_select '.gh-field-error', false
   end
 
   # item_form_controller rewrites this sentence as you type, so the two build
@@ -362,7 +362,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select EXAMPLE,
                   'Przykładowo: student z odznaką Mechanik Załogi zaoszczędzi 5% i zapłaci 29 zamiast 30.'
-    assert_select '.gh-hint', /Wystarczy spełnić jeden z warunków/
+    assert_select '.gh-field-hint', /Wystarczy spełnić jeden z warunków/
   end
 
   test 'the example joins a rank and badges with oraz' do
@@ -393,8 +393,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-pvcard .gh-tag--disc[hidden]', false
-    assert_select '.gh-tag--disc', 'Zniżki do −25%'
+    assert_select '.gh-item-preview-card .gh-tag--discount[hidden]', false
+    assert_select '.gh-tag--discount', 'Zniżki do −25%'
     assert_select EXAMPLE,
                   'Przykładowo: student z rangą Kapitan oraz odznaką Nawigator ' \
                   'zaoszczędzi 25% i zapłaci 8 zamiast 10.'
@@ -408,7 +408,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-tag--disc', 'Zniżki do −15%'
+    assert_select '.gh-tag--discount', 'Zniżki do −15%'
     assert_select EXAMPLE,
                   'Przykładowo: student z odznakami Mechanik i Nawigator ' \
                   'zaoszczędzi 15% i zapłaci 85 zamiast 100.'
@@ -424,7 +424,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-tag--disc', 'Zniżki do −25%'
+    assert_select '.gh-tag--discount', 'Zniżki do −25%'
   end
 
   # The one configuration that DOES narrow the ladder: a floor with nothing
@@ -438,12 +438,12 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     @poprawa.update!(min_rank_for_discount: kapitan)
 
     get edit_story_group_item_path(@story_group, @poprawa)
-    assert_select '.gh-tag--disc', 'Zniżki do −10%'
+    assert_select '.gh-tag--discount', 'Zniżki do −10%'
 
     @poprawa.discount_badges << badge(name: 'Nawigator', discount: 10)
 
     get edit_story_group_item_path(@story_group, @poprawa)
-    assert_select '.gh-tag--disc', 'Zniżki do −40%'
+    assert_select '.gh-tag--discount', 'Zniżki do −40%'
   end
 
   # "Does anybody pay less than the price on this card", not "did the teacher
@@ -455,7 +455,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-lgrid .gh-tag--disc', 3
+    assert_select '.gh-badge-grid--teacher .gh-tag--discount', 3
   end
 
   # The ceiling's group-wide half crosses into TypeScript, so the form hands it
@@ -555,7 +555,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-warn2 span',
+    assert_select '.gh-warning-note--alt span',
                   "Zniżki sumują się do 80%, a sklep odejmie najwyżej #{Discount::CAP_VALUE}%. " \
                   'Nadwyżka przepada — rozważ niższe zniżki przy rangach i odznakach.'
     assert_select MAXIMUM, /uzyska zniżkę #{Discount::CAP_VALUE}%\./
@@ -568,7 +568,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-warn2 span', { text: /sumują się/, count: 0 }
+    assert_select '.gh-warning-note--alt span', { text: /sumują się/, count: 0 }
     assert_select MAXIMUM, /uzyska zniżkę 40%\./
   end
 
@@ -617,14 +617,14 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
                  'item_form_controller.ts and Discount::CAP_VALUE have drifted.'
   end
 
-  # `.gh-art-slot` is display:contents, which is what keeps the SVG itself the
-  # grid item of the well — otherwise .gh-gph's percentage width resolves
+  # `.gh-art-slot-wrapper` is display:contents, which is what keeps the SVG itself the
+  # grid item of the well — otherwise .gh-card-art-glyph's percentage width resolves
   # against an indefinite box and the glyph lands off-centre at its intrinsic
   # size.
   test 'the preview art sits in a slot that does not become the grid item' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-pvcard .gh-art > .gh-art-slot > svg.gh-gph'
+    assert_select '.gh-item-preview-card .gh-card-art > .gh-art-slot-wrapper > svg.gh-card-art-glyph'
   end
 
   # The preview exists to show the button a student will see. `disabled` would
@@ -632,8 +632,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   test 'the preview buy button looks live but is not reachable' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-pvcard .gh-foot .gh-btn[disabled]', false
-    assert_select '.gh-pvcard .gh-foot .gh-btn[tabindex=?]', '-1'
+    assert_select '.gh-item-preview-card .gh-auth-footer .gh-btn[disabled]', false
+    assert_select '.gh-item-preview-card .gh-auth-footer .gh-btn[tabindex=?]', '-1'
   end
 
   # --- artwork is required --------------------------------------------------
@@ -644,8 +644,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-preset-tile-grid[aria-invalid=true]'
-    assert_select '.gh-err[role=alert] span', 'Wybierz gotową grafikę albo wgraj własną.'
+    assert_select '.gh-art-preset-grid[aria-invalid=true]'
+    assert_select '.gh-field-error[role=alert] span', 'Wybierz gotową grafikę albo wgraj własną.'
   end
 
   test 'an upload alone satisfies the art requirement' do
@@ -666,10 +666,10 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-seg2 button[value=sealed][disabled]'
-    assert_select '.gh-hint', 'Bez wymagań przedmiot nigdy nie będzie zapieczętowany.'
+    assert_select '.gh-segmented-toggle-2 button[value=sealed][disabled]'
+    assert_select '.gh-field-hint', 'Bez wymagań przedmiot nigdy nie będzie zapieczętowany.'
     assert_select UNLOCK, /\AKażdy student może kupić ten przedmiot/
-    assert_select '.gh-pvcard .gh-req li', false
+    assert_select '.gh-item-preview-card .gh-requirement-list li', false
   end
 
   test 'the starting rank is not a lock on the teacher list either' do
@@ -678,7 +678,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-tag--lock', false
+    assert_select '.gh-tag--locked', false
   end
 
   test 'a badge beside the starting rank seals the item again, and names itself' do
@@ -688,10 +688,10 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    assert_select '.gh-seg2 button[value=sealed][disabled]', false
+    assert_select '.gh-segmented-toggle-2 button[value=sealed][disabled]', false
     # The seal names the badge, not the rank nobody can miss.
-    assert_select '.gh-seal span', 'Za odznakę Nawigator'
-    assert_select '.gh-pvcard .gh-req li', 1
+    assert_select '.gh-lock-seal span', 'Za odznakę Nawigator'
+    assert_select '.gh-item-preview-card .gh-requirement-list li', 1
   end
 
   test 'the unlock rank select says which rungs actually gate' do
@@ -712,8 +712,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_items_path(@story_group)
 
-    assert_select '.gh-art svg.gh-gph'
-    assert_select '.gh-art img', false
+    assert_select '.gh-card-art svg.gh-card-art-glyph'
+    assert_select '.gh-card-art img', false
   end
 
   test 'an upload wins over a preset in the same submission' do
@@ -740,7 +740,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'h2', 'Usunąć „Poprawa wejściówki” ze sklepu?'
     assert_select 'p', /zostanie oznaczony jako „Usunięty z oferty”/
-    assert_select '.gh-warn span', /1 student ma ten przedmiot/
+    assert_select '.gh-warning-note span', /1 student ma ten przedmiot/
   end
 
   test 'deleting is soft and leaves the purchase alone' do
@@ -763,7 +763,7 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     @poprawa.soft_delete!
 
     get story_group_items_path(@story_group)
-    assert_equal ['Dodatkowe życie', 'Konsultacja'], card_names('.gh-lgrid')
+    assert_equal ['Dodatkowe życie', 'Konsultacja'], card_names('.gh-badge-grid--teacher')
 
     student = FactoryBot.create(:user, role: :student)
     FactoryBot.create(:story_group_student, story_group: @story_group, user: student)

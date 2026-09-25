@@ -17,7 +17,7 @@
 -#   `copy`      — overrides for the field's wording; the defaults below are the
 -#     glyph field's, which three of the five callers want verbatim.
 -#   `aspect`    — the shape the upload is cut to, and it MUST be the shape of
--#     the hole it goes into: 1.6 is `.gh-art`'s `aspect-ratio: 16 / 10`
+-#     the hole it goes into: 1.6 is `.gh-card-art`'s `aspect-ratio: 16 / 10`
 -#     (card.css), 1 is the square coin face. Change one and change the other,
 -#     or uploads stop filling the frame.
 -#   `refresh_action` — lets the screen's own controller hear the picker without
@@ -55,21 +55,21 @@
 - art_error = record.errors[glyph_attribute].first || record.errors[attribute].first
 - error_id  = field_id.call('error')
 
-.gh-fld{ data: { controller: 'image-crop',
+.gh-form-field{ data: { controller: 'image-crop',
                  image_crop_aspect_value: local_assigns.fetch(:aspect, 1.6),
                  image_crop_width_value: 1024, } }
-  %p.gh-lbl= copy[:label]
+  %p.gh-form-label= copy[:label]
 
-  .gh-preset-tile-grid{ class: "gh-preset-tile-grid--#{kind}", role: 'radiogroup', 'aria-label': copy[:presets],
+  .gh-art-preset-grid{ class: "gh-art-preset-grid--#{kind}", role: 'radiogroup', 'aria-label': copy[:presets],
                'aria-invalid': (art_error ? 'true' : nil),
                'aria-describedby': (art_error ? error_id : nil) }
     - presets.each do |key|
-      %label.gh-preset-tile{ class: "gh-preset-tile--#{kind}" }
+      %label.gh-art-preset-tile{ class: "gh-art-preset-tile--#{kind}" }
         = form.radio_button glyph_attribute, key, class: 'sr-only',
           id: field_id.call(key),
           'aria-label': "#{copy[:label]}: #{registry.label_for(key)}",
           data: { action: ['image-crop#pickPreset', refresh].compact.join(' ') }
-        %i.gh-oct
+        %i.gh-octagon-clip
           - case tile
           - when :art
             = gh_group_art(key)
@@ -82,13 +82,13 @@
     -# is something to show — image_crop_controller reveals and selects it the
     -# moment a file is chosen, so the picker never disagrees with what will be
     -# saved. An empty key is how the record says "the upload is the art".
-    %label.gh-preset-tile.gh-preset-tile--own{ hidden: !attachment.attached? }
+    %label.gh-art-preset-tile.gh-art-preset-tile--custom{ hidden: !attachment.attached? }
       = form.radio_button glyph_attribute, '', class: 'sr-only',
         id: field_id.call('own'), 'aria-label': copy[:own],
         checked: attachment.attached? && record.public_send(glyph_attribute).blank?,
         data: { image_crop_target: 'ownRadio',
                 action: ['image-crop#pickOwn', refresh].compact.join(' ') }
-      %i.gh-oct
+      %i.gh-octagon-clip
         -# `src` is omitted, not blank, when there is nothing yet: an empty src
         -# resolves against the page URL, so the browser would re-request this
         -# very page for an image it cannot even see.
@@ -97,17 +97,17 @@
         %img{ preview }
 
   - if art_error
-    %p.gh-err{ id: error_id, role: 'alert' }
+    %p.gh-field-error{ id: error_id, role: 'alert' }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= art_error
 
-  .gh-drop
-    %span.gh-drop-ic
+  .gh-file-dropzone
+    %span.gh-file-dropzone-icon
       %i.fa-solid.fa-upload{ 'aria-hidden': 'true' }
     %span
       %b= copy[:upload]
       %small= copy[:hint]
-    %label.gh-btn.gh-btn--sec.gh-btn--sm
+    %label.gh-btn.gh-btn--secondary.gh-btn--small
       Wybierz plik
       = form.file_field attribute, class: 'sr-only',
         accept: 'image/png,image/jpeg,image/gif',
@@ -116,7 +116,7 @@
   -# Populated by image_crop_controller once a file is chosen, and hidden until
   -# then. Without JavaScript it stays hidden and the file posts uncropped — a
   -# worse frame, but a working form.
-  .gh-crop{ data: { image_crop_target: 'editor' }, hidden: true }
-    %p.gh-lbl= copy[:crop]
-    .gh-crop-box{ data: { image_crop_target: 'box' } }
-    %span.gh-hint= copy[:cropped]
+  .gh-image-cropper{ data: { image_crop_target: 'editor' }, hidden: true }
+    %p.gh-form-label= copy[:crop]
+    .gh-image-cropper-box{ data: { image_crop_target: 'box' } }
+    %span.gh-field-hint= copy[:cropped]

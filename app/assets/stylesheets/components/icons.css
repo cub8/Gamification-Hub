@@ -4,11 +4,11 @@
     font-size: 18px;
   }
 
-  .gh-back i {
+  .gh-back-link i {
     font-size: 16px;
   }
 
-  .gh-big-ic i {
+  .gh-icon-circle-lg i {
     font-size: 30px;
   }
 
@@ -16,29 +16,29 @@
     font-size: 14px;
   }
 
-  .gh-nl i {
+  .gh-sidebar-link i {
     font-size: 18px;
     width: 20px;
     text-align: center;
   }
 
-  .gh-tab i {
+  .gh-mobile-tab i {
     font-size: 20px;
   }
 
-  .gh-iconbtn i {
+  .gh-icon-button i {
     font-size: 19px;
   }
 
-  .gh-hd-join i {
+  .gh-topbar-join-link i {
     font-size: 15px;
   }
 
-  .gh-sb-col i {
+  .gh-sidebar-collapse-toggle i {
     font-size: 15px;
   }
 
-  .gh-mc i {
+  .gh-mini-thumb i {
     font-size: 20px;
   }
 }

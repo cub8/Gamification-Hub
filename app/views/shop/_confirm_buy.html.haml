@@ -8,9 +8,9 @@
 
 %h2#gh-buy-title.gh-h2= "Kupić „#{item.name}”?"
 
-.gh-buy
+.gh-purchase-summary
   = render 'layouts/item_thumb', item: item
-  %dl.gh-buy-dl
+  %dl.gh-purchase-details
     %dt Cena
     %dd
       - if offer.discounted?
@@ -23,21 +23,21 @@
       = render 'layouts/currency_token', story_group: @story_group, size: 22
 
 - if offer.discounted?
-  %p.gh-small.gh-note= "Zniżka #{offer.discount_label}."
+  %p.gh-small.gh-note-row= "Zniżka #{offer.discount_label}."
 
 -# True, not decoration: ItemPurchaseService#notify_teachers! sends one to the
 -# owner and every supporting teacher.
-%p.gh-small.gh-note
+%p.gh-small.gh-note-row
   %i.fa-solid.fa-bell{ 'aria-hidden': 'true' }
   %span Prowadzący dostanie powiadomienie o zakupie.
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# Anuluj first and focused: the safe button is the one you land on.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj
   - else
-    = link_to 'Anuluj', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--sec'
+    = link_to 'Anuluj', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary'
 
   -# `_top`, unlike the delete confirmations: a purchase changes the header
   -# balance and moves the item into another zone, so the whole page has to come

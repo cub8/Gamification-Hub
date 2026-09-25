@@ -15,28 +15,28 @@
 - item = purchase.item
 - cost = local_assigns.fetch(:cost, false)
 
-%article.gh-card{ class: ('gh-card--gone' if item.deleted?) }
-  .gh-card-f
-    .gh-card-i
-      .gh-card-top
+%article.gh-card{ class: ('gh-card--consumed' if item.deleted?) }
+  .gh-card-frame
+    .gh-card-inset
+      .gh-card-header
         %h3.gh-card-name= item.name
         - if cost
-          %span.gh-cost.gh-cost--lg
+          %span.gh-price-badge.gh-price-badge--lg
             %b= purchase.price_paid
 
-      .gh-art
-        %span.gh-art-slot
+      .gh-card-art
+        %span.gh-art-slot-wrapper
           = render 'items/art', item: item
 
       -# Off the shelf, still owned. Soft delete keeps it (DECISIONS.md:28) and
       -# the tag is the only thing that says why it is nowhere else.
       - if item.deleted?
-        .gh-tags
-          %span.gh-tag.gh-tag--del Usunięty z oferty
+        .gh-card-tags
+          %span.gh-tag.gh-tag--removed Usunięty z oferty
 
-      %p.gh-rules= item.didactic_description
+      %p.gh-rule-text= item.didactic_description
       - if item.story_description.present?
-        %p.gh-flavor= item.story_description
+        %p.gh-card-flavor= item.story_description
 
-      .gh-card-foot
-        %span.gh-meta.gh-small= foot
+      .gh-card-footer
+        %span.gh-card-meta.gh-small= foot

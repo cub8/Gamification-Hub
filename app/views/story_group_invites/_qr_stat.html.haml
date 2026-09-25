@@ -1,10 +1,10 @@
 -# QR + big code + stat line. Shared by the single-invite show dialog and
 -# every option in the quick multi-invite dialog, so the two cannot drift.
-.gh-qrbox
-  .gh-qr= invite_qr_code(invite)
+.gh-invite-qr-box
+  .gh-invite-qr= invite_qr_code(invite)
   %div
     -# Spelled out character by character so a screen reader does not try to
     -# pronounce the code as a word.
-    .gh-code-big.gh-oct{ 'aria-label': invite_code_aria_label(invite) }= invite.code
+    .gh-invite-code-display.gh-octagon-clip{ 'aria-label': invite_code_aria_label(invite) }= invite.code
     %p.gh-small= invite_stat_sentence(invite)
     = render 'copy_button', invite: invite

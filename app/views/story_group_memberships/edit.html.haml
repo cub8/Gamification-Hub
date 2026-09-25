@@ -5,28 +5,28 @@
 -# settings — name, e-mail, theme — are a different screen entirely.
 - content_for :title, "Ustawienia w grupie — #{@story_group.name}"
 
-%section.gh-panel.gh-phead
-  %p.gh-crumbs
+%section.gh-panel.gh-page-header
+  %p.gh-breadcrumbs
     = link_to @story_group.name, story_group_path(@story_group)
     %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
     %span Ustawienia w grupie
   %h1.gh-h1 Ustawienia w grupie
   %p.gh-lead= "Te ustawienia dotyczą tylko grupy #{@story_group.name}."
 
-%section.gh-panel.gh-setp
+%section.gh-panel.gh-settings-section
   %h2.gh-h3 Pseudonim
-  %p.gh-hint Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
+  %p.gh-field-hint Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
 
   -# One field, so it saves by itself rather than through a page-wide save bar:
   -# there is nothing else on this screen for "Zapisz zmiany" to mean.
   = form_with model: @membership, url: story_group_membership_path(@story_group), method: :patch do |f|
     = render 'nickname_field', f: f, membership: @membership, submit_label: 'Zapisz'
 
-%section.gh-panel.gh-setp
+%section.gh-panel.gh-settings-section
   %h2.gh-h3 Co widzi prowadzący
-  %p.gh-hint Pozostali studenci widzą tylko Twój pseudonim, i to tylko w rankingu.
+  %p.gh-field-hint Pozostali studenci widzą tylko Twój pseudonim, i to tylko w rankingu.
 
-  %ul.gh-seeing
+  %ul.gh-visible-fields-list
     %li
       %span Imię i nazwisko
       %b= @membership.full_name
@@ -37,13 +37,13 @@
       %span Numer indeksu
       %b= @membership.university_number.presence || 'Brak'
 
-%section.gh-panel.gh-danger
+%section.gh-panel.gh-danger-zone
   %h2.gh-h3 Opuść grupę
   %p.gh-small
     Stracisz dostęp do grupy, a Twoja waluta, odznaki i przedmioty w niej
     przepadną. Żeby wrócić, potrzebujesz nowego kodu od prowadzącego.
-  .gh-rowb
+  .gh-button-row
     = link_to confirm_leave_story_group_membership_path(@story_group),
-      class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+      class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-right-from-bracket{ 'aria-hidden': 'true' }
       Opuść grupę

@@ -1,17 +1,17 @@
 @layer components {
 
-  .gh-ledh {
+  .gh-ledger-header {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
   }
 
-  .gh-ledh-sp {
+  .gh-ledger-header-spacer {
     flex: 1;
   }
 
-  .gh-lrow {
+  .gh-ledger-row {
     display: grid;
     grid-template-columns: 70px 96px minmax(0, 1fr) 110px 70px;
     gap: 12px;
@@ -20,34 +20,34 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-lrow--h {
+  .gh-ledger-row--header {
     border-top: 0;
     font: 680 12.5px var(--gh-f-ui);
     color: var(--gh-ink-3);
   }
 
-  .gh-lrow-r {
+  .gh-ledger-cell--right {
     text-align: right;
   }
 
-  .gh-amt {
+  .gh-ledger-amount {
     font: 800 17px var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-amt--earn {
+  .gh-ledger-amount--earn {
     color: var(--gh-earn);
   }
 
-  .gh-amt--spend {
+  .gh-ledger-amount--spend {
     color: var(--gh-spend);
   }
 
-  .gh-amt--corr {
+  .gh-ledger-amount--corr {
     color: var(--gh-ink-2);
   }
 
-  .gh-ty {
+  .gh-ledger-type-pill {
     --gh-c: 5px;
     display: inline-block;
     justify-self: start;
@@ -55,41 +55,41 @@
     font: 680 12px var(--gh-f-ui);
   }
 
-  .gh-ty--earn {
+  .gh-ledger-type-pill--earn {
     background: color-mix(in srgb, var(--gh-earn) 18%, var(--gh-card));
     color: var(--gh-earn);
   }
 
-  .gh-ty--spend {
+  .gh-ledger-type-pill--spend {
     background: color-mix(in srgb, var(--gh-item) 18%, var(--gh-card));
     color: var(--gh-spend);
   }
 
-  .gh-ty--corr {
+  .gh-ledger-type-pill--corr {
     background: var(--gh-card-3);
     color: var(--gh-ink-2);
   }
 
-  .gh-src {
+  .gh-ledger-source {
     font: 540 14.5px/1.3 var(--gh-f-ui);
   }
 
-  .gh-src small {
+  .gh-ledger-source small {
     display: block;
     font-size: 12.5px;
     color: var(--gh-ink-3);
   }
 
-  .gh-src .gh-tag {
+  .gh-ledger-source .gh-tag {
     margin-left: 6px;
     vertical-align: middle;
   }
 
-  .gh-dt {
+  .gh-ledger-date {
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-bal2 {
+  .gh-ledger-balance {
     font-size: 13.5px;
     text-align: right;
     font-weight: 700;
@@ -101,37 +101,37 @@
     margin-top: 12px;
   }
 
-  @media (max-width: 720px) {
+  @media (width <= theme(--breakpoint-mobile)) {
 
-    .gh-lrow {
+    .gh-ledger-row {
       grid-template-columns: 62px minmax(0, 1fr) auto;
       gap: 4px 10px;
     }
 
-    .gh-lrow--h {
+    .gh-ledger-row--header {
       display: none;
     }
 
-    .gh-lrow .gh-amt {
+    .gh-ledger-row .gh-ledger-amount {
       grid-row: 1 / 4;
     }
 
-    .gh-lrow .gh-src {
+    .gh-ledger-row .gh-ledger-source {
       grid-row: 1;
       grid-column: 2;
     }
 
-    .gh-lrow .gh-ty {
+    .gh-ledger-row .gh-ledger-type-pill {
       grid-row: 2;
       grid-column: 2;
     }
 
-    .gh-lrow .gh-dt {
+    .gh-ledger-row .gh-ledger-date {
       grid-row: 3;
       grid-column: 2;
     }
 
-    .gh-lrow .gh-bal2 {
+    .gh-ledger-row .gh-ledger-balance {
       grid-row: 1;
       grid-column: 3;
     }

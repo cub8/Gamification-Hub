@@ -18,16 +18,16 @@
   %p= badge_assign_lead(@student, held, @badges.size)
 
   - if @badges.any?
-    %label.gh-search.gh-search--full
+    %label.gh-search-input.gh-search--full-width
       %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
       %input{ type: 'search', placeholder: 'Szukaj odznaki', 'aria-label': 'Szukaj odznaki',
               data: { badge_picker_target: 'input', action: 'input->badge-picker#filter' } }
 
-    %ul.gh-bpick
+    %ul.gh-badge-picker-list
       - @badges.each do |badge|
         - owned = @held.include?(badge.id)
         %li{ data: { badge_picker_target: 'row', badge_picker_name: badge.name.downcase } }
-          %label.gh-bp{ class: ('gh-bp--owned' if owned) }
+          %label.gh-badge-picker-row{ class: ('gh-badge-picker-row--owned' if owned) }
             = f.radio_button :badge_id, badge.id, disabled: owned,
               data: { badge_picker_target: 'radio',
                       badge_picker_label: badge.name,
@@ -36,33 +36,33 @@
             %span
               %b= badge.name
               %small= badge.didactic_description
-            %span.gh-st2= badge_pick_status(badge, owned)
+            %span.gh-badge-picker-status= badge_pick_status(badge, owned)
 
     -# One sentence per badge, all rendered, all hidden but at most one: the
     -# controller reveals the matching one rather than writing markup.
     - @badges.each do |badge|
-      %p.gh-expl.gh-effect{ hidden: true,
+      %p.gh-explainer-note.gh-badge-effect-note{ hidden: true,
                             data: { badge_picker_target: 'effect',
                                     badge_picker_for: badge.id } }
         = badge_effect_sentence(badge)
 
-    %p.gh-expl{ hidden: true, data: { badge_picker_target: 'empty' } }
+    %p.gh-explainer-note{ hidden: true, data: { badge_picker_target: 'empty' } }
       Brak odznak o tej nazwie.
   - else
-    %p.gh-expl
+    %p.gh-explainer-note
       W tej grupie nie ma jeszcze odznak. Dodaj je w zakładce Odznaki, a potem
       wróć tutaj.
 
   - if error
-    %p.gh-err{ role: 'alert' }
+    %p.gh-field-error{ role: 'alert' }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= error
 
-  .gh-dlg-b
+  .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
     - else
-      = link_to 'Anuluj', story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--sec'
+      = link_to 'Anuluj', story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--secondary'
     %button.gh-btn{ type: 'submit', disabled: @badges.empty?,
                     data: { badge_picker_target: 'submit' } }
       Wybierz odznakę

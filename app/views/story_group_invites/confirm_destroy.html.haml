@@ -5,6 +5,6 @@
     = render 'confirm_destroy', invite: @invite
 - else
   -# Rendered as a page it needs a surface of its own: these screens keep the app
-  -# shell, so unlike the join flow they never land inside .gh-acard.
-  %section.gh-panel.gh-dlg-page
+  -# shell, so unlike the join flow they never land inside .gh-auth-card.
+  %section.gh-panel.gh-dialog-page-panel
     = render 'confirm_destroy', invite: @invite

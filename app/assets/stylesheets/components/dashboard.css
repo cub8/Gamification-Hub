@@ -1,6 +1,6 @@
 @layer components {
 
-  .gh-phead {
+  .gh-page-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -8,32 +8,32 @@
     padding: 22px 26px;
   }
 
-  .gh-phead-t {
+  .gh-page-header-text {
     min-width: 0;
   }
 
-  .gh-kicker {
+  .gh-page-kicker {
     font: 650 13px/1.2 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-sgrid {
+  .gh-group-card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px 18px;
     margin-top: 22px;
   }
 
-  .gh-gcard .gh-art {
+  .gh-gcard .gh-card-art {
     aspect-ratio: 21 / 9;
     margin: 10px 10px 0;
   }
 
-  .gh-gcard .gh-card-i {
+  .gh-gcard .gh-card-inset {
     padding-bottom: 14px;
   }
 
-  .gh-gcard .gh-card-top {
+  .gh-gcard .gh-card-header {
     padding-bottom: 4px;
   }
 
@@ -41,24 +41,24 @@
     font-size: 19px;
   }
 
-  .gh-gcard .gh-card-foot {
+  .gh-gcard .gh-card-footer {
     gap: 8px;
     padding-top: 14px;
   }
 
-  .gh-gstat {
+  .gh-group-card-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px 16px;
     padding: 10px 14px 0;
   }
 
-  .gh-gstat dt {
+  .gh-group-card-stats dt {
     font-size: 12.5px;
     color: var(--gh-ink-2);
   }
 
-  .gh-gstat dd {
+  .gh-group-card-stats dd {
     margin: 3px 0 0;
     font: 780 18px/1.15 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
@@ -67,33 +67,33 @@
     gap: 6px;
   }
 
-  .gh-gstat dd small {
+  .gh-group-card-stats dd small {
     font: 560 12.5px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-gstat .gh-full2 {
+  .gh-group-card-stats .gh-stat-span-full {
     grid-column: 1 / -1;
   }
 
-  .gh-gstat .gh-bar {
+  .gh-group-card-stats .gh-progress-bar {
     margin-top: 6px;
   }
 
-  .gh-gstat .gh-rank-to {
+  .gh-group-card-stats .gh-rank-progress-target {
     font-size: 13px;
     font-weight: 560;
     color: var(--gh-ink-2);
   }
 
-  .gh-expl {
+  .gh-explainer-note {
     margin: 8px 14px 0;
     padding: 12px 14px;
     background: var(--gh-card-2);
     font: 500 14.5px/1.5 var(--gh-f-ui);
   }
 
-  .gh-lv {
+  .gh-lives-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -103,17 +103,17 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-lv i {
+  .gh-lives-badge i {
     font-size: 17px;
     color: var(--gh-heart);
   }
 
-  .gh-lv--zero i {
+  .gh-lives-badge--zero i {
     color: var(--gh-heart-ink);
     font-weight: 400;
   }
 
-  .gh-joinc {
+  .gh-join-code-card {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -122,7 +122,7 @@
     min-height: 300px;
   }
 
-  .gh-joinc::after {
+  .gh-join-code-card::after {
     content: "";
     position: absolute;
     inset: 8px;
@@ -130,18 +130,18 @@
     pointer-events: none;
   }
 
-  .gh-feed {
+  .gh-activity-feed {
     margin-top: 24px;
     padding: 20px 22px;
   }
 
-  .gh-led {
+  .gh-ledger-list {
     list-style: none;
     margin: 12px 0 10px;
     padding: 0;
   }
 
-  .gh-led-r {
+  .gh-activity-feed-row {
     display: grid;
     grid-template-columns: 12px minmax(0, 1fr) auto;
     gap: 12px;
@@ -150,7 +150,7 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-led-m {
+  .gh-activity-feed-row-marker {
     --gh-c: 3px;
     width: 10px;
     height: 10px;
@@ -158,47 +158,47 @@
     background: var(--gh-ink-3);
   }
 
-  .gh-led-m--earn {
+  .gh-activity-feed-row-marker--earn {
     background: var(--gh-earn);
   }
 
-  .gh-led-m--spend {
+  .gh-activity-feed-row-marker--spend {
     background: var(--gh-spend);
   }
 
-  .gh-led-m--corr {
+  .gh-activity-feed-row-marker--corr {
     background: var(--gh-ink-3);
   }
 
-  .gh-led-t {
+  .gh-activity-feed-row-text {
     font: 520 14.5px/1.3 var(--gh-f-ui);
   }
 
-  .gh-led-t small {
+  .gh-activity-feed-row-text small {
     display: block;
     font-size: 12.5px;
     color: var(--gh-ink-3);
     margin-top: 2px;
   }
 
-  .gh-led-a {
+  .gh-activity-feed-row-amount {
     font: 800 17px/1.2 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-led-a--earn {
+  .gh-activity-feed-row-amount--earn {
     color: var(--gh-earn);
   }
 
-  .gh-led-a--spend {
+  .gh-activity-feed-row-amount--spend {
     color: var(--gh-spend);
   }
 
-  .gh-led-a--corr {
+  .gh-activity-feed-row-amount--corr {
     color: var(--gh-ink);
   }
 
-  .gh-dash {
+  .gh-dashboard-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 344px;
     gap: 22px;
@@ -206,26 +206,26 @@
     margin-top: 22px;
   }
 
-  .gh-dash-side {
+  .gh-dashboard-side-column {
     display: flex;
     flex-direction: column;
     gap: 22px;
     min-width: 0;
   }
 
-  .gh-purch {
+  .gh-recent-purchases-panel {
     padding: 20px 22px 12px;
     min-width: 0;
   }
 
-  .gh-filters {
+  .gh-purchase-filter-bar {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     margin: 14px 0 6px;
   }
 
-  .gh-fchip {
+  .gh-purchase-filter-chip {
     --gh-c: 7px;
     position: relative;
     isolation: isolate;
@@ -241,11 +241,11 @@
     text-decoration: none;
   }
 
-  .gh-fchip:first-child {
+  .gh-purchase-filter-chip:first-child {
     padding-left: 12px;
   }
 
-  .gh-fchip::before {
+  .gh-purchase-filter-chip::before {
     content: "";
     position: absolute;
     z-index: -1;
@@ -261,31 +261,31 @@
         0 var(--gh-c));
   }
 
-  .gh-fchip:hover::before {
+  .gh-purchase-filter-chip:hover::before {
     background: var(--gh-card-3);
   }
 
-  .gh-fchip[aria-current="true"] {
+  .gh-purchase-filter-chip[aria-current="true"] {
     color: var(--gh-card);
   }
 
-  .gh-fchip[aria-current="true"]::before {
+  .gh-purchase-filter-chip[aria-current="true"]::before {
     background: var(--gh-ink);
   }
 
-  .gh-day {
+  .gh-purchase-day-label {
     font: 700 13.5px/1.2 var(--gh-f-ui);
     color: var(--gh-ink-3);
     margin: 20px 0 2px;
   }
 
-  .gh-plist {
+  .gh-purchase-list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .gh-prow {
+  .gh-purchase-row {
     display: grid;
     grid-template-columns: 52px minmax(0, 1fr) minmax(0, 210px) auto 64px;
     gap: 14px;
@@ -294,44 +294,44 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-day+.gh-plist .gh-prow:first-child {
+  .gh-purchase-day-label+.gh-purchase-list .gh-purchase-row:first-child {
     border-top: 0;
   }
 
-  .gh-p-main {
+  .gh-purchase-row-main {
     min-width: 0;
   }
 
-  .gh-p-main b {
+  .gh-purchase-row-main b {
     display: block;
     font: 680 16px/1.2 var(--gh-f-ui);
     font-stretch: 92%;
   }
 
-  .gh-p-main>span {
+  .gh-purchase-row-main>span {
     display: block;
     font-size: 14px;
     color: var(--gh-ink-2);
     margin-top: 2px;
   }
 
-  .gh-p-gm {
+  .gh-purchase-row-group--mobile {
     display: none;
   }
 
-  .gh-p-g {
+  .gh-purchase-row-group {
     min-width: 0;
     overflow: hidden;
   }
 
-  .gh-p-time {
+  .gh-purchase-row-time {
     font-size: 13px;
     color: var(--gh-ink-3);
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-gchip {
+  .gh-group-chip {
     display: inline-flex;
     align-items: center;
     gap: 7px;
@@ -341,13 +341,13 @@
     max-width: 100%;
   }
 
-  .gh-gchip span:last-child {
+  .gh-group-chip span:last-child {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .gh-mc {
+  .gh-mini-thumb {
     --gh-cc: 7px;
     width: 52px;
     height: 52px;
@@ -355,11 +355,11 @@
     filter: drop-shadow(0 2px 0 var(--gh-frame-edge));
   }
 
-  .gh-mc .gh-card-f {
+  .gh-mini-thumb .gh-card-frame {
     padding: 3px;
   }
 
-  .gh-mc .gh-card-i {
+  .gh-mini-thumb .gh-card-inset {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -368,38 +368,38 @@
     overflow: hidden;
   }
 
-  .gh-mc img {
+  .gh-mini-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .gh-todo .gh-card-i {
+  .gh-todo-card .gh-card-inset {
     padding: 16px;
   }
 
-  .gh-todo-t {
+  .gh-todo-card-title {
     font: 780 24px/1.1 var(--gh-f-ui);
     font-stretch: 86%;
     margin: 4px 0 8px;
     overflow-wrap: anywhere;
   }
 
-  .gh-todo .gh-small {
+  .gh-todo-card .gh-small {
     margin: 12px 0 16px;
   }
 
-  .gh-mygroups {
+  .gh-my-groups-panel {
     padding: 20px 20px 18px;
   }
 
-  .gh-gtl {
+  .gh-my-groups-list {
     list-style: none;
     margin: 12px 0 14px;
     padding: 0;
   }
 
-  .gh-group-tile {
+  .gh-my-groups-list-item {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -409,33 +409,33 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-gtl li:first-child .gh-group-tile {
+  .gh-my-groups-list li:first-child .gh-my-groups-list-item {
     border-top: 0;
   }
 
-  .gh-group-tile:hover {
+  .gh-my-groups-list-item:hover {
     background: var(--gh-card-2);
   }
 
-  .gh-group-tile>span {
+  .gh-my-groups-list-item>span {
     min-width: 0;
   }
 
-  .gh-group-tile b {
+  .gh-my-groups-list-item b {
     display: block;
     font: 660 14.5px/1.2 var(--gh-f-ui);
     font-stretch: 92%;
     overflow-wrap: anywhere;
   }
 
-  .gh-group-tile small {
+  .gh-my-groups-list-item small {
     display: block;
     font-size: 12.5px;
     color: var(--gh-ink-3);
     margin-top: 2px;
   }
 
-  .gh-group-tile-new {
+  .gh-my-groups-list-item-alert {
     margin-left: auto;
     font: 680 12px/1.2 var(--gh-f-ui);
     color: var(--gh-spend);
@@ -443,66 +443,66 @@
     flex: 0 0 auto;
   }
 
-  @media (max-width: 1080px) {
+  @media (width <= theme(--breakpoint-tablet)) {
 
-    .gh-dash {
+    .gh-dashboard-layout {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-prow {
+    .gh-purchase-row {
       grid-template-columns: 52px minmax(0, 1fr) minmax(0, 170px) auto 56px;
     }
   }
 
-  @media (max-width: 720px) {
+  @media (width <= theme(--breakpoint-mobile)) {
 
-    .gh-phead {
+    .gh-page-header {
       flex-direction: column;
       align-items: stretch;
       gap: 14px;
       padding: 18px;
     }
 
-    .gh-sgrid {
+    .gh-group-card-grid {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-dash {
+    .gh-dashboard-layout {
       margin-top: 16px;
       gap: 16px;
     }
 
-    .gh-purch {
+    .gh-recent-purchases-panel {
       padding: 18px 14px 8px;
     }
 
-    .gh-filters {
+    .gh-purchase-filter-bar {
       flex-wrap: nowrap;
       overflow-x: auto;
       padding-bottom: 4px;
       margin-right: -14px;
     }
 
-    .gh-fchip {
+    .gh-purchase-filter-chip {
       flex: 0 0 auto;
     }
 
-    .gh-prow {
+    .gh-purchase-row {
       grid-template-columns: 44px minmax(0, 1fr) auto;
       gap: 12px;
     }
 
-    .gh-prow .gh-mc {
+    .gh-purchase-row .gh-mini-thumb {
       width: 44px;
       height: 44px;
     }
 
-    .gh-p-g,
-    .gh-p-time {
+    .gh-purchase-row-group,
+    .gh-purchase-row-time {
       display: none;
     }
 
-    .gh-p-gm {
+    .gh-purchase-row-group--mobile {
       display: flex;
       margin-top: 6px;
     }
@@ -511,13 +511,13 @@
 
 @layer components {
 
-  .gh-nlist {
+  .gh-notification-list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .gh-nrow-l {
+  .gh-notification-row-link {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr);
     gap: 12px;
@@ -528,45 +528,45 @@
     color: var(--gh-ink);
   }
 
-  .gh-nrow-l {
+  .gh-notification-row-link {
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-nrow-l:hover {
+  .gh-notification-row-link:hover {
     background: var(--gh-card-2);
   }
 
-  .gh-nrow--unread .gh-nrow-l {
+  .gh-notification-row--unread .gh-notification-row-link {
     grid-template-columns: 44px minmax(0, 1fr) 10px;
   }
 
-  .gh-nrow .gh-mc {
+  .gh-notification-row .gh-mini-thumb {
     width: 44px;
     height: 44px;
   }
 
-  .gh-nrow-t {
+  .gh-notification-row-text {
     min-width: 0;
   }
 
-  .gh-nrow-t b {
+  .gh-notification-row-text b {
     display: block;
     font: 680 14.5px/1.25 var(--gh-f-ui);
   }
 
-  .gh-nrow-t>span {
+  .gh-notification-row-text>span {
     display: block;
     font-size: 14px;
   }
 
-  .gh-nrow-t small {
+  .gh-notification-row-text small {
     display: block;
     font-size: 12.5px;
     color: var(--gh-ink-3);
     margin-top: 2px;
   }
 
-  .gh-ndot {
+  .gh-notification-unread-dot {
     --gh-c: 2px;
     width: 8px;
     height: 8px;

@@ -93,7 +93,7 @@ class RankFormController extends Controller<HTMLFormElement> {
 
   private renderCard(draft: Rung) {
     this.cardNameTarget.textContent = draft.name || "Nazwa rangi"
-    this.cardNameTarget.classList.toggle("gh-ph", draft.name === "")
+    this.cardNameTarget.classList.toggle("gh-placeholder-text", draft.name === "")
     this.cardRulesTarget.textContent = rewardLine(draft)
     this.renderArt()
   }
@@ -138,11 +138,11 @@ class RankFormController extends Controller<HTMLFormElement> {
   }
 
   private get draftRow(): HTMLElement | null {
-    return this.ladderTarget.querySelector('[data-rank-id="draft"], .gh-lad--new')
+    return this.ladderTarget.querySelector('[data-rank-id="draft"], .gh-rank-form-rung--draft')
   }
 
   /**
-   * Ascending in the DOM; .gh-ladder is column-reverse, so the highest rung
+   * Ascending in the DOM; .gh-rank-form-ladder is column-reverse, so the highest rung
    * reads first. The draft sorts last on a tie, which puts it visually above
    * the rung it collides with — the same order the server renders.
    */
@@ -162,7 +162,7 @@ class RankFormController extends Controller<HTMLFormElement> {
 
     rows.forEach((row) => {
       const clash = rows.some((other) => other !== row && minOf(other) === minOf(row))
-      row.classList.toggle("gh-lad--clash", clash)
+      row.classList.toggle("gh-rank-form-rung--clash", clash)
     })
   }
 
@@ -309,7 +309,7 @@ function warning(message: string): HTMLElement {
   const icon = document.createElement("i")
   const span = document.createElement("span")
 
-  paragraph.className = "gh-warn2"
+  paragraph.className = "gh-warning-note--alt"
   icon.className = "fa-solid fa-triangle-exclamation"
   icon.setAttribute("aria-hidden", "true")
   span.textContent = message

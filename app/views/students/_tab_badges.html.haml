@@ -3,34 +3,34 @@
 -# Flat cards, not the student's flip cards: the teacher has no "not earned yet"
 -# side to see — these are the ones this student already holds.
 - if sheet.badges.any?
-  .gh-bgrid
+  .gh-badge-grid
     - sheet.badges.each do |students_badge|
       - badge = students_badge.badge
       %article.gh-card.gh-card--badge
-        .gh-card-f
-          .gh-card-i
-            .gh-card-top
+        .gh-card-frame
+          .gh-card-inset
+            .gh-card-header
               %h3.gh-card-name= badge.name
 
-            .gh-art
+            .gh-card-art
               = render 'badges/art', badge: badge
 
-            .gh-tags
+            .gh-card-tags
               - if (discount = badge_discount_label(badge))
-                %span.gh-tag.gh-tag--disc= discount
+                %span.gh-tag.gh-tag--discount= discount
               - if badge.deleted?
-                %span.gh-tag.gh-tag--del Usunięta z listy
+                %span.gh-tag.gh-tag--removed Usunięta z listy
 
-            %p.gh-rules= badge.didactic_description
+            %p.gh-rule-text= badge.didactic_description
             - if badge.story_description.present?
-              %p.gh-flavor= badge.story_description
+              %p.gh-card-flavor= badge.story_description
 
-            .gh-card-foot
-              %span.gh-meta= "Przyznana #{gh_when(students_badge.created_at)}"
+            .gh-card-footer
+              %span.gh-card-meta= "Przyznana #{gh_when(students_badge.created_at)}"
               = link_to 'Odbierz',
                 confirm_destroy_story_group_student_badge_path(@story_group, sheet.student, students_badge),
-                class: 'gh-linkbtn',
+                class: 'gh-link-button',
                 'aria-label': "Odbierz odznakę #{badge.name}",
                 data: { turbo_frame: 'modal' }
 - else
-  %p.gh-expl Student nie ma jeszcze żadnej odznaki.
+  %p.gh-explainer-note Student nie ma jeszcze żadnej odznaki.

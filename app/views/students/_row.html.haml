@@ -12,71 +12,71 @@
 - name    = student.full_name
 - lives   = student.lives.to_i
 
-%li.gh-srow{ class: ('gh-srow--zero' if row.zero_lives?),
+%li.gh-student-row{ class: ('gh-student-row--no-lives' if row.zero_lives?),
              data: { list_search_target: 'row',
                      list_search_name: name.downcase } }
-  %span.gh-s-n
-    %span.gh-av.gh-av--sm.gh-oct{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+  %span.gh-student-name-cell
+    %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
       = gh_initials(name)
-    = link_to story_group_student_path(@story_group, student), class: 'gh-s-link' do
+    = link_to story_group_student_path(@story_group, student), class: 'gh-student-link' do
       %b= name
       %small= student_list_subtitle(student)
 
   %span
-    %span.gh-lbl-m Ranga
-    %span.gh-s-r= row.rank&.name || '—'
+    %span.gh-mobile-field-label Ranga
+    %span.gh-student-rank-cell= row.rank&.name || '—'
 
   %span
-    %span.gh-lbl-m Życia
-    .gh-lives
+    %span.gh-mobile-field-label Życia
+    .gh-lives-control
       -# Each step is its own POST. The minus disappears at zero rather than
       -# failing there, so the only way to reach the controller's guard is a
       -# hand-built request.
       = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
-        method: :post, class: 'gh-lives-b gh-oct',
+        method: :post, class: 'gh-lives-button gh-octagon-clip',
         disabled: lives.zero?,
         form: { 'aria-label': "Odbierz życie: #{name}" },
         'aria-label': "Odbierz życie: #{name}" do
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
 
       -# One heart and a number, never one heart per life (DECISIONS.md:35).
-      %span.gh-lv{ class: ('gh-lv--zero' if lives.zero?) }
+      %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if lives.zero?) }
         %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
         %b= lives
 
       = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
-        method: :post, class: 'gh-lives-b gh-oct',
+        method: :post, class: 'gh-lives-button gh-octagon-clip',
         form: { 'aria-label': "Dodaj życie: #{name}" },
         'aria-label': "Dodaj życie: #{name}" do
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
 
   %span
-    %span.gh-lbl-m Do wydania
-    %span.gh-num2= student.current_currency.to_i
+    %span.gh-mobile-field-label Do wydania
+    %span.gh-numeric-cell= student.current_currency.to_i
   %span
-    %span.gh-lbl-m Zebrane
-    %span.gh-num2= student.total_currency.to_i
+    %span.gh-mobile-field-label Zebrane
+    %span.gh-numeric-cell= student.total_currency.to_i
   %span
-    %span.gh-lbl-m Odznaki
-    %span.gh-num2= row.badge_count
+    %span.gh-mobile-field-label Odznaki
+    %span.gh-numeric-cell= row.badge_count
 
-  .gh-s-a
+  .gh-student-actions-cell
     -# The mockup carries a tab name on each of these and opens the sheet;
     -# these go straight to the thing, which is one click less and a URL that
     -# can be shared.
     = link_to new_story_group_student_badge_path(@story_group, student),
-      class: 'gh-iconbtn', title: 'Przyznaj odznakę',
+      class: 'gh-icon-button', title: 'Przyznaj odznakę',
       'aria-label': "Przyznaj odznakę: #{name}",
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
 
     = link_to new_story_group_student_currency_adjustment_path(@story_group, student),
-      class: 'gh-iconbtn', title: 'Koryguj walutę',
+      class: 'gh-icon-button', title: 'Koryguj walutę',
       'aria-label': "Koryguj walutę: #{name}",
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-coins{ 'aria-hidden': 'true' }
 
     = link_to story_group_student_path(@story_group, student, tab: 'hist'),
-      class: 'gh-iconbtn', title: 'Historia transakcji',
+      class: 'gh-icon-button', title: 'Historia transakcji',
       'aria-label': "Historia: #{name}" do
       %i.fa-solid.fa-clock-rotate-left{ 'aria-hidden': 'true' }

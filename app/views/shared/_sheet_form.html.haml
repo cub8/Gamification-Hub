@@ -38,8 +38,8 @@
 -# The controller wraps the whole screen, not just the <form>: the crumb link
 -# above it and the discard dialog below it are both things it has to reach.
 %div{ data: form_data }
-  %section.gh-panel.gh-phead.gh-phead--stack
-    %p.gh-crumbs
+  %section.gh-panel.gh-page-header.gh-page-header--stacked
+    %p.gh-breadcrumbs
       = link_to 'Arkusze ocen', story_group_activity_groups_path(@story_group),
         data: { action: 'sheet-form#leave' }
       %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
@@ -49,10 +49,10 @@
       = sheet ? 'Zmiany dotyczą tylko tego arkusza.' : 'Podgląd obok pokazuje nagłówek tabeli ocen.'
 
   = form_with model: [@story_group, record], data: { sheet_form_target: 'form' } do |f|
-    .gh-wiz
-      %section.gh-panel.gh-fcol
+    .gh-form-shell
+      %section.gh-panel.gh-form-column
         - if variant == :template_edit && sheet_names.any?
-          %p.gh-info
+          %p.gh-info-banner
             %i.fa-solid.fa-table{ 'aria-hidden': 'true' }
             %span
               %b Zmiany dotyczą tylko arkuszy utworzonych od teraz.
@@ -61,7 +61,7 @@
               - else
                 = "#{sheet_names.first} zostaje bez zmian."
         - if sheet && awards_count.positive?
-          %p.gh-info
+          %p.gh-info-banner
             %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
             %span
               %b= "W tym arkuszu przyznano już #{awards_count} #{gh_plural(awards_count, 'nagrodę', 'nagrody', 'nagród')}."
@@ -69,44 +69,44 @@
               = "Szablon #{record.activity_group_template.base_name} się nie zmienia."
 
         - if record.errors[:base].any?
-          %p.gh-err{ role: 'alert' }
+          %p.gh-field-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= record.errors[:base].first
 
-        .gh-fsec
-          .gh-fld.mt-0
+        .gh-form-section
+          .gh-form-field.mt-0
             = f.label name_attr, sheet ? 'Nazwa arkusza' : 'Nazwa szablonu'
-            .gh-inp{ class: ('gh-inp--bad' if error.call(name_attr)) }
+            .gh-text-input{ class: ('gh-text-input--invalid' if error.call(name_attr)) }
               = f.text_field name_attr, maxlength: 100, autocomplete: 'off',
                 placeholder: (sheet ? 'np. Laboratoria 5 (14.10)' : 'np. Laboratoria'),
                 'aria-invalid': (error.call(name_attr) ? 'true' : nil),
                 'aria-describedby': (error.call(name_attr) ? 'gh-sheet-name-error' : nil),
                 data: { sheet_form_target: 'title', action: 'sheet-form#refresh' }
             - if error.call(name_attr)
-              %p#gh-sheet-name-error.gh-err{ role: 'alert' }
+              %p#gh-sheet-name-error.gh-field-error{ role: 'alert' }
                 %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
                 %span= error.call(name_attr)
             - unless sheet
-              %span.gh-hint
+              %span.gh-field-hint
                 Nowe arkusze dostaną nazwę szablonu z kolejnym numerem, np.
                 = "#{record.base_name.presence || 'Laboratoria'} 6."
 
-        .gh-fsec
+        .gh-form-section
           %h2.gh-h3= sheet ? 'Kolumny w tabeli ocen' : 'Kategorie nagród'
-          %p.gh-hint
+          %p.gh-field-hint
             Każda kategoria to kolumna w tabeli ocen. Kolejność tutaj to kolejność kolumn.
 
-          %ul.gh-cats{ data: { controller: 'sortable-rows', sheet_form_target: 'list',
+          %ul.gh-category-list{ data: { controller: 'sortable-rows', sheet_form_target: 'list',
                                action: 'sortable-rows:reordered->sheet-form#refresh' } }
             = f.fields_for cats_attr do |cf|
               = render 'shared/category_row', f: cf, category: cf.object,
                 number: cf.index.to_i + 1, sheet: sheet
 
-          %button.gh-btn.gh-btn--sec.gh-addcat{ type: 'button', data: { action: 'sheet-form#add' } }
+          %button.gh-btn.gh-btn--secondary.gh-add-category-btn{ type: 'button', data: { action: 'sheet-form#add' } }
             %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
             = sheet ? 'Dodaj kolumnę' : 'Dodaj kategorię'
 
-          %p.gh-expl
+          %p.gh-explainer-note
             %span{ data: { sheet_form_target: 'summaryCount' } }
               = "#{visible.size} #{gh_plural(visible.size, 'kolumna', 'kolumny', 'kolumn')}"
             w tabeli ocen. Student może zdobyć do
@@ -122,23 +122,23 @@
                 number: 0, sheet: sheet
 
         - if editing
-          .gh-fsec
+          .gh-form-section
             %h2.gh-h3 Usuwanie
-            %p.gh-hint
+            %p.gh-field-hint
               = sheet ? 'Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii.' : 'Szablon zniknie z listy, a utworzone z niego arkusze zostają.'
-            .gh-rowb
+            .gh-button-row
               - path = sheet ? confirm_destroy_story_group_activity_group_path(@story_group, record) : confirm_destroy_story_group_activity_group_template_path(@story_group, record)
-              = link_to path, class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+              = link_to path, class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
                 %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
                 = sheet ? 'Usuń arkusz' : 'Usuń szablon'
 
-      %aside.gh-pcol{ 'aria-label': 'Podgląd' }
+      %aside.gh-preview-column{ 'aria-label': 'Podgląd' }
         = render 'shared/grid_preview', categories: visible, sample_names: sample_names
 
-    .gh-panel.gh-wbar
-      = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'gh-linkbtn',
+    .gh-panel.gh-form-actions-bar
+      = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'gh-link-button',
         data: { action: 'sheet-form#leave' }
-      %span.gh-wbar-sp
+      %span.gh-form-actions-spacer
       - if editing
         -# Server-rendered as "Brak zmian" and enabled: without JavaScript there
         -# is no dirty tracking, and a submit button you cannot press is worse
@@ -153,10 +153,10 @@
   -# opened without JavaScript.
   %dialog.gh-dialog{ data: { sheet_form_target: 'discard',
                              action: 'close->sheet-form#closeDiscard click->sheet-form#closeOnBackdrop' } }
-    .gh-dialog-body.gh-oct
+    .gh-dialog-body.gh-octagon-clip
       %h2.gh-h2 Odrzucić zmiany?
       %p Niezapisane zmiany zostaną utracone.
-      .gh-dlg-b
-        %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'sheet-form#closeDiscard' }, autofocus: true }
+      .gh-dialog-button-row
+        %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'sheet-form#closeDiscard' }, autofocus: true }
           Wróć do edycji
         %button.gh-btn{ type: 'button', data: { action: 'sheet-form#discard' } } Odrzuć zmiany

@@ -7,10 +7,10 @@
 -# label; with JavaScript off the box still reads as what it is.
 - row_id = "gh-preset-#{zone}-#{index}"
 
-.gh-rrow{ data: { controller: 'preset-row' } }
+.gh-preset-row{ data: { controller: 'preset-row' } }
   %i.fa-solid{ class: icon, 'aria-hidden': 'true' }
 
-  %span.gh-rn
+  %span.gh-preset-row-name
     %b= name
     - if note.present?
       %small= note
@@ -22,7 +22,7 @@
   -# StarterPackBuilder would keep it.
   = hidden_field_tag "setup[#{zone}][#{index}][keep]", '0', id: nil
 
-  %label.gh-rrow-x{ for: row_id }
+  %label.gh-preset-row-remove{ for: row_id }
     = check_box_tag "setup[#{zone}][#{index}][keep]", '1', true, id: row_id,
       class: 'sr-only', data: { preset_row_target: 'keep', action: 'preset-row#toggle' }
     %span.sr-only{ data: { preset_row_target: 'label' } }= "Usuń: #{name}"

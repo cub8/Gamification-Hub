@@ -22,7 +22,7 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
   end
 
   def deck_items
-    css_select('.gh-deck .gh-nl').map { |link| link.text.strip }
+    css_select('.gh-current-group-card .gh-sidebar-link').map { |link| link.text.strip }
   end
 
   # Zaproszenia is as good a group screen as any to see the chrome end to end.
@@ -36,21 +36,21 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     visit_group_screen
 
     assert_response :success
-    assert_select '.gh-deck-name', 'Zakon Algorytmów'
-    assert_select '.gh-deck-role', 'Prowadzisz tę grupę'
+    assert_select '.gh-current-group-card-name', 'Zakon Algorytmów'
+    assert_select '.gh-current-group-card-role', 'Prowadzisz tę grupę'
     # Mockup-faithful: the two never appear together (10-core.js:171-183).
-    assert_select '.gh-glist', false
-    assert_select '.gh-sb-sec', false
+    assert_select '.gh-sidebar-group-list', false
+    assert_select '.gh-sidebar-section-label', false
   end
 
   test 'out-of-group screens keep the group list and grow no deck' do
     get home_path
 
-    assert_select '.gh-deck', false
-    assert_select '.gh-glist a.gh-gl', 2
+    assert_select '.gh-current-group-card', false
+    assert_select '.gh-sidebar-group-list a.gh-sidebar-group-list-item', 2
     # The count start_smoke_test pins: the section nav must not leak
     # out of a group.
-    assert_select 'aside.gh-sb a.gh-nl', 2
+    assert_select 'aside.gh-sidebar a.gh-sidebar-link', 2
   end
 
   test 'the teacher deck lists every section of the group' do
@@ -76,7 +76,7 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
 
     visit_group_screen
 
-    assert_select '.gh-deck-role', 'Wspierasz tę grupę'
+    assert_select '.gh-current-group-card-role', 'Wspierasz tę grupę'
     assert_includes deck_items, 'Studenci'
   end
 
@@ -84,14 +84,14 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
 
   test 'a section stays lit on its own child pages' do
     visit_group_screen
-    assert_select '.gh-deck .gh-nl--on', 'Zaproszenia'
+    assert_select '.gh-current-group-card .gh-sidebar-link--active', 'Zaproszenia'
 
     # The prefix rule: a dialog URL under /invites is still "Zaproszenia".
     get confirm_destroy_story_group_invite_path(@story_group, @invite)
-    assert_select '.gh-deck .gh-nl--on', 'Zaproszenia'
+    assert_select '.gh-current-group-card .gh-sidebar-link--active', 'Zaproszenia'
 
     get edit_story_group_invite_path(@story_group, @invite)
-    assert_select '.gh-deck .gh-nl--on', 'Zaproszenia'
+    assert_select '.gh-current-group-card .gh-sidebar-link--active', 'Zaproszenia'
   end
 
   # Przegląd is story_group_path, which is a prefix of every other group path.
@@ -99,8 +99,8 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
   test 'Przeglad is never lit on a section screen' do
     visit_group_screen
 
-    assert_select '.gh-deck .gh-nl--on', 1
-    assert_select '.gh-deck .gh-nl--on', { text: 'Przegląd', count: 0 }
+    assert_select '.gh-current-group-card .gh-sidebar-link--active', 1
+    assert_select '.gh-current-group-card .gh-sidebar-link--active', { text: 'Przegląd', count: 0 }
   end
 
   # --- the student variant --------------------------------------------------
@@ -185,20 +185,20 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     get lookup_join_index_path(code: @invite.code), headers: { 'Turbo-Frame' => 'modal' }
 
     assert_response :success
-    assert_select '.gh-deck', false
+    assert_select '.gh-current-group-card', false
   end
 
   # A long group list has to scroll inside the panel rather than run off the
   # screen, and the footer has to stay reachable while it does — hence the
-  # sticky .gh-pop-f rather than a plain spaced one.
+  # sticky .gh-popover-footer rather than a plain spaced one.
   test 'the switcher keeps its footer reachable however many groups there are' do
     11.times { |index| FactoryBot.create(:story_group, owner: @owner, name: "Grupa #{index}") }
 
     visit_group_screen
 
-    assert_select '#gh-group-switcher ul.gh-menu li a', 13
+    assert_select '#gh-group-switcher ul.gh-menu-list li a', 13
     # Inside the scrolling body, or `position: sticky` has nothing to stick to.
-    assert_select '#gh-group-switcher .gh-dialog-body > .gh-pop-f a', 'Dołącz do grupy'
+    assert_select '#gh-group-switcher .gh-dialog-body > .gh-popover-footer a', 'Dołącz do grupy'
   end
 
   # --- mobile ---------------------------------------------------------------
@@ -207,35 +207,35 @@ class GroupChromeSmokeTest < ActionDispatch::IntegrationTest
     visit_group_screen
 
     assert_equal(%w[Przegląd Studenci Arkusze Więcej],
-                 css_select('.gh-tabbar .gh-tab').map { |tab| tab.text.strip },)
+                 css_select('.gh-mobile-tabbar .gh-mobile-tab').map { |tab| tab.text.strip },)
   end
 
   test 'the Wiecej sheet is a complete index of the group sections' do
     visit_group_screen
 
-    assert_equal(deck_items, css_select('#gh-more-sheet .gh-more-m a').map { |a| a.text.strip })
-    assert_select '#gh-more-sheet .gh-more-m a[aria-current]', 'Zaproszenia'
+    assert_equal(deck_items, css_select('#gh-more-sheet .gh-menu-list--nav a').map { |a| a.text.strip })
+    assert_select '#gh-more-sheet .gh-menu-list--nav a[aria-current]', 'Zaproszenia'
   end
 
   test 'the group switcher lists your groups and says which one you are in' do
     visit_group_screen
 
-    # Inside .gh-shell, or menu#open cannot reach it — the same requirement the
+    # Inside .gh-app-shell, or menu#open cannot reach it — the same requirement the
     # account menu and the "Więcej" sheet already have.
-    assert_select '.gh-shell #gh-group-switcher', 1
-    assert_select '#gh-group-switcher ul.gh-menu li a', 2
-    assert_select '#gh-group-switcher a[aria-current=page] .gh-cur', 'Tu jesteś'
+    assert_select '.gh-app-shell #gh-group-switcher', 1
+    assert_select '#gh-group-switcher ul.gh-menu-list li a', 2
+    assert_select '#gh-group-switcher a[aria-current=page] .gh-current-badge', 'Tu jesteś'
 
     # Two ways in: the deck on desktop, the header switcher on a phone.
-    assert_select '.gh-deck [data-menu-id-param=gh-group-switcher]', 1
-    assert_select '.gh-hd .gh-gsw[data-menu-id-param=gh-group-switcher]', 1
+    assert_select '.gh-current-group-card [data-menu-id-param=gh-group-switcher]', 1
+    assert_select '.gh-topbar .gh-group-switcher[data-menu-id-param=gh-group-switcher]', 1
   end
 
   test 'the header switcher names the group it would change' do
     visit_group_screen
 
-    assert_select '.gh-gsw[aria-label=?]', 'Grupa Zakon Algorytmów, zmień grupę'
-    assert_select '.gh-gsw .gh-gsw-name', 'Zakon Algorytmów'
+    assert_select '.gh-group-switcher[aria-label=?]', 'Grupa Zakon Algorytmów, zmień grupę'
+    assert_select '.gh-group-switcher .gh-group-switcher-name', 'Zakon Algorytmów'
   end
 
   private

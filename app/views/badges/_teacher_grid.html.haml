@@ -1,52 +1,52 @@
 -# Mockup: #/t/badges, js-expanded/30-lists.js:30-33.
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Odznaki
     %p.gh-lead
       = "#{shelf.size} #{gh_plural(shelf.size, 'odznaka', 'odznaki', 'odznak')}."
       Przyznajesz je ręcznie, z tej listy albo z listy studentów.
 
-  .gh-rowb
+  .gh-button-row
     = link_to new_story_group_badge_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       Nowa odznaka
 
 - if shelf.any?
-  .gh-lgrid
+  .gh-badge-grid--teacher
     - shelf.slots.each do |slot|
       - badge = slot.badge
       -# Flat, not a flip card: the teacher has no "not earned yet" side to see.
       %article.gh-card.gh-card--badge
-        .gh-card-f
-          .gh-card-i
-            .gh-card-top
+        .gh-card-frame
+          .gh-card-inset
+            .gh-card-header
               %h3.gh-card-name= badge.name
 
-            .gh-art
+            .gh-card-art
               = render 'art', badge: badge
 
             - if (discount = badge_discount_label(badge))
-              .gh-tags
-                %span.gh-tag.gh-tag--disc= discount
+              .gh-card-tags
+                %span.gh-tag.gh-tag--discount= discount
 
-            %p.gh-rules= badge.didactic_description
+            %p.gh-rule-text= badge.didactic_description
             - if badge.story_description.present?
-              %p.gh-flavor= badge.story_description
+              %p.gh-card-flavor= badge.story_description
 
-            .gh-card-foot
-              %span.gh-meta= badge_holders_line(slot.holders)
-              .gh-card-acts
+            .gh-card-footer
+              %span.gh-card-meta= badge_holders_line(slot.holders)
+              .gh-card-actions
                 -# Przyznaj happens one student at a time, so it sends the
                 -# teacher to the list to pick one.
                 = link_to 'Przyznaj', story_group_students_path(@story_group),
-                  class: 'gh-btn gh-btn--sm'
+                  class: 'gh-btn gh-btn--small'
                 = link_to edit_story_group_badge_path(@story_group, badge),
-                  class: 'gh-iconbtn', 'aria-label': "Edytuj odznakę #{badge.name}" do
+                  class: 'gh-icon-button', 'aria-label': "Edytuj odznakę #{badge.name}" do
                   %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
 - else
   -# The mockup has no empty state for this screen. House rule: name the next
   -# action rather than only reporting the absence.
-  %section.gh-panel.gh-gm
+  %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie ma jeszcze żadnych odznak
     %p.gh-lead
       Dodaj odznaki, żeby mieć czym nagradzać to, czego nie widać w punktach.

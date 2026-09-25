@@ -32,15 +32,15 @@
 - price = item.price.to_i
 - need  = [(price * 0.4).ceil, 1].max
 
-%details.gh-pvd{ open: true }
+%details.gh-preview-details{ open: true }
   %summary
     Podgląd karty
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3 Tak zobaczą to studenci
 
-    .gh-seg2.gh-oct{ role: 'group', 'aria-label': 'Stan karty' }
+    .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': 'Stan karty' }
       %button{ type: 'button', 'aria-pressed': 'true', value: 'afford',
                data: { action: 'item-form#state', item_form_target: 'state' } }
         Dostępny
@@ -54,16 +54,16 @@
                data: { action: 'item-form#state', item_form_target: 'state' } }
         Zapieczętowany
 
-    %span.gh-hint{ hidden: card.requires?, data: { item_form_target: 'sealHint' } }
+    %span.gh-field-hint{ hidden: card.requires?, data: { item_form_target: 'sealHint' } }
       Bez wymagań przedmiot nigdy nie będzie zapieczętowany.
 
-    .gh-pvcard
+    .gh-item-preview-card
       = render 'card', item: item, card: card, state: :afford,
         need: need, progress: 0.6, targets: targets, all_feet: true
 
-  %section.gh-panel.gh-pv
+  %section.gh-panel.gh-preview-panel
     %h3 Miniatura w powiadomieniach
-    .gh-thumbrow
+    .gh-preview-thumb-row
       = render 'layouts/item_thumb', item: item,
         inner_data: { item_form_target: 'thumbArt' }
       %span

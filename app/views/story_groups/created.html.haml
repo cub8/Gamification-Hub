@@ -16,8 +16,8 @@
 - created_parts = %i[ranks badges items categories].each_with_index.map { |key, i| "#{@counts[key]} #{created_list[i]}" }
 - created_parts[3] = "#{created_parts[3]} w szablonie arkusza"
 
-%section.gh-panel.gh-okv
-  .gh-ok-ic.gh-oct
+%section.gh-panel.gh-wizard-success-panel
+  .gh-wizard-success-icon.gh-octagon-clip
     %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
 
   %h1.gh-h1= "Grupa „#{@story_group.name}” jest gotowa"
@@ -28,7 +28,7 @@
     - else
       Grupa jest pusta. Poniżej znajdziesz kolejne kroki.
 
-  %p.gh-expl
+  %p.gh-explainer-note
     %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
     %span
       Kod do dołączenia utworzysz w zakładce
@@ -37,7 +37,7 @@
       z limitem osób albo datą ważności.
 
   %h2.gh-h3 Co dalej
-  %ol.gh-todo-l
+  %ol.gh-next-steps-list
     - if quick
       %li Zaproś studentów: pokaż im kod albo kod QR.
       %li Po pierwszych zajęciach utwórz arkusz ocen i oceń studentów.
@@ -49,8 +49,8 @@
       %li Utwórz szablon arkusza ocen.
       %li Zaproś studentów: pokaż im kod albo kod QR.
 
-  .gh-rowb
+  .gh-button-row
     = link_to 'Przejdź do grupy', story_group_path(@story_group), class: 'gh-btn'
-    = link_to new_story_group_invite_path(@story_group), class: 'gh-btn gh-btn--sec' do
+    = link_to new_story_group_invite_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
       Utwórz zaproszenie

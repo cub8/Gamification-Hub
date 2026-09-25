@@ -1,13 +1,13 @@
 @layer components {
 
-  .gh-code {
+  .gh-join-code-inputs {
     display: flex;
     justify-content: center;
     gap: 9px;
     margin: 22px 0 12px;
   }
 
-  .gh-slot {
+  .gh-join-code-slot {
     --gh-c: 9px;
     position: relative;
     isolation: isolate;
@@ -15,8 +15,8 @@
     height: 64px;
   }
 
-  .gh-slot::before,
-  .gh-slot::after {
+  .gh-join-code-slot::before,
+  .gh-join-code-slot::after {
     content: "";
     position: absolute;
     z-index: -1;
@@ -30,22 +30,22 @@
         0 var(--gh-c));
   }
 
-  .gh-slot::before {
+  .gh-join-code-slot::before {
     inset: 0;
     background: var(--gh-line-2);
   }
 
-  .gh-slot::after {
+  .gh-join-code-slot::after {
     --gh-c: 8px;
     inset: 2px;
     background: var(--gh-card);
   }
 
-  .gh-slot:focus-within::before {
+  .gh-join-code-slot:focus-within::before {
     background: var(--gh-item);
   }
 
-  .gh-slot input {
+  .gh-join-code-slot input {
     width: 100%;
     height: 100%;
     padding: 0;
@@ -59,7 +59,7 @@
     caret-color: var(--gh-item);
   }
 
-  .gh-hint-q {
+  .gh-join-hint {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,7 +67,7 @@
     text-align: center;
   }
 
-  .gh-joined-art {
+  .gh-joined-group-art {
     --gh-c: 10px;
     aspect-ratio: 21 / 9;
     margin: 0 0 16px;
@@ -76,17 +76,17 @@
     letter-spacing: 0.04em;
   }
 
-  @media (max-width: 720px) {
-    .gh-code {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-join-code-inputs {
       gap: 7px;
     }
 
-    .gh-slot {
+    .gh-join-code-slot {
       width: 44px;
       height: 56px;
     }
 
-    .gh-slot input {
+    .gh-join-code-slot input {
       font-size: 24px;
     }
   }

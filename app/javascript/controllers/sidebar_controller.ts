@@ -28,7 +28,7 @@ class SidebarController extends Controller {
   declare readonly collapseLabelValue: string
 
   toggle() {
-    const collapsed = this.sidebarTarget.classList.toggle("gh-sb--collapsed")
+    const collapsed = this.sidebarTarget.classList.toggle("gh-sidebar--collapsed")
 
     document.cookie = `${this.cookieValue}=${collapsed};path=/;max-age=31536000;samesite=lax`
 

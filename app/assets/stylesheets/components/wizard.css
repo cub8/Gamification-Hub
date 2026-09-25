@@ -1,16 +1,16 @@
 @layer components {
 
-  .gh-wiz--full {
+  .gh-form-shell--full {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .gh-stepper {
+  .gh-wizard-steps {
     display: flex;
     gap: 8px;
     margin-top: 20px;
   }
 
-  .gh-stp {
+  .gh-wizard-step-tab {
     flex: 1;
     display: flex;
     align-items: center;
@@ -25,11 +25,11 @@
     font: 620 14px/1.2 var(--gh-f-ui);
   }
 
-  .gh-stp[disabled] {
+  .gh-wizard-step-tab[disabled] {
     cursor: default;
   }
 
-  .gh-stp-n {
+  .gh-wizard-step-number {
     --gh-c: 6px;
     width: 28px;
     height: 28px;
@@ -41,37 +41,37 @@
     font: 780 13px var(--gh-f-ui);
   }
 
-  .gh-stp--on {
+  .gh-wizard-step-tab--current {
     color: var(--gh-ink);
     border-top-color: var(--gh-item);
   }
 
-  .gh-stp--on .gh-stp-n {
+  .gh-wizard-step-tab--current .gh-wizard-step-number {
     background: var(--gh-item);
     color: var(--gh-on-item);
   }
 
-  .gh-stp--ok {
+  .gh-wizard-step-tab--done {
     color: var(--gh-ink-2);
     border-top-color: var(--gh-rank);
   }
 
-  .gh-stp--ok .gh-stp-n {
+  .gh-wizard-step-tab--done .gh-wizard-step-number {
     background: var(--gh-rank);
     color: var(--gh-on-rank);
   }
 
-  .gh-stp-n .fa-check {
+  .gh-wizard-step-number .fa-check {
     font-size: 13px;
   }
 
-  .gh-opts {
+  .gh-choice-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 14px;
   }
 
-  .gh-opt {
+  .gh-choice-card {
     --gh-c: 12px;
     position: relative;
     isolation: isolate;
@@ -83,8 +83,8 @@
     cursor: pointer;
   }
 
-  .gh-opt::before,
-  .gh-opt::after {
+  .gh-choice-card::before,
+  .gh-choice-card::after {
     content: "";
     position: absolute;
     z-index: -1;
@@ -98,75 +98,75 @@
         0 var(--gh-c));
   }
 
-  .gh-opt::before {
+  .gh-choice-card::before {
     inset: 0;
     background: var(--gh-line-2);
   }
 
-  .gh-opt::after {
+  .gh-choice-card::after {
     --gh-c: 11px;
     inset: 2px;
     background: var(--gh-card);
   }
 
-  .gh-opt:hover::after {
+  .gh-choice-card:hover::after {
     background: var(--gh-card-2);
   }
 
   /* :has, so the frame follows the REAL radio inside rather than a class the
      controller would have to keep in sync. */
-  .gh-opt:has(input:checked)::before {
+  .gh-choice-card:has(input:checked)::before {
     background: var(--gh-item);
   }
 
-  .gh-opt:has(input:checked)::after {
+  .gh-choice-card:has(input:checked)::after {
     inset: 3px;
     background: color-mix(in srgb, var(--gh-item) 9%, var(--gh-card));
   }
 
-  .gh-opt:has(input:focus-visible) {
+  .gh-choice-card:has(input:focus-visible) {
     outline: 3px solid var(--gh-focus);
     outline-offset: 2px;
   }
 
-  .gh-opt b {
+  .gh-choice-card b {
     font: 750 18px/1.2 var(--gh-f-ui);
     font-stretch: 90%;
   }
 
-  .gh-opt>span:not(.gh-tag) {
+  .gh-choice-card>span:not(.gh-tag) {
     font-size: 14px;
     line-height: 1.45;
     color: var(--gh-ink-2);
   }
 
-  .gh-opt .gh-tag {
+  .gh-choice-card .gh-tag {
     align-self: flex-start;
   }
 
-  .gh-opt em {
+  .gh-choice-card em {
     font: italic 400 13.5px/1.4 var(--gh-f-text);
     color: var(--gh-ink);
   }
 
-  .gh-rgrid {
+  .gh-preset-review-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px 36px;
   }
 
-  .gh-section-gap {
+  .gh-preset-review-section {
     margin-top: 18px;
   }
 
-  .gh-section-gap>h3 {
+  .gh-preset-review-section>h3 {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 6px;
   }
 
-  .gh-rrow {
+  .gh-preset-row {
     display: grid;
     grid-template-columns: 22px minmax(0, 1fr) auto 38px;
     gap: 12px;
@@ -175,24 +175,24 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-rrow>.fa-solid {
+  .gh-preset-row>.fa-solid {
     color: var(--gh-ink-3);
     justify-self: center;
   }
 
-  .gh-rn b {
+  .gh-preset-row-name b {
     display: block;
     font: 640 14.5px/1.25 var(--gh-f-ui);
   }
 
-  .gh-rn small {
+  .gh-preset-row-name small {
     display: block;
     margin-top: 2px;
     font-size: 12.5px;
     color: var(--gh-ink-3);
   }
 
-  .gh-rv2 {
+  .gh-preset-row-value {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -202,15 +202,15 @@
 
   /* A row the teacher has dropped. It stays in the form — the checkbox is what
      posts the decision — so it is greyed rather than removed. */
-  .gh-rrow--x {
+  .gh-preset-row--removed {
     opacity: 0.5;
   }
 
-  .gh-rrow--x .gh-rn b {
+  .gh-preset-row--removed .gh-preset-row-name b {
     text-decoration: line-through;
   }
 
-  .gh-rrow-x {
+  .gh-preset-row-remove {
     width: 36px;
     height: 36px;
     display: grid;
@@ -219,20 +219,20 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-rrow-x:hover {
+  .gh-preset-row-remove:hover {
     color: var(--gh-ink);
   }
 
-  .gh-rrow-x:has(input:focus-visible) {
+  .gh-preset-row-remove:has(input:focus-visible) {
     outline: 3px solid var(--gh-focus);
     outline-offset: 2px;
   }
 
-  .gh-inp--sm {
+  .gh-input--compact {
     --gh-c: 5px;
   }
 
-  .gh-inp--sm input {
+  .gh-input--compact input {
     width: 88px;
     padding: 7px 4px 7px 9px;
     font-size: 14.5px;
@@ -240,30 +240,30 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-sumt {
+  .gh-summary-list {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 10px 24px;
     margin: 14px 0 0;
   }
 
-  .gh-sumt dt {
+  .gh-summary-list dt {
     color: var(--gh-ink-2);
     font-size: 14px;
   }
 
-  .gh-sumt dd {
+  .gh-summary-list dd {
     margin: 0;
     font: 620 15px var(--gh-f-ui);
   }
 
-  .gh-cprev {
+  .gh-currency-preview-pair {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .gh-cmini {
+  .gh-currency-preview {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -273,55 +273,55 @@
     color: var(--gh-ink);
   }
 
-  .gh-cmini .gh-bal {
+  .gh-currency-preview .gh-balance-button {
     cursor: default;
   }
 
-  .gh-cmini .gh-bal b {
+  .gh-currency-preview .gh-balance-button b {
     display: block;
     font: 800 20px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-cmini .gh-bal small {
+  .gh-currency-preview .gh-balance-button small {
     display: block;
     font: 500 12px/1 var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-cmini-purse {
+  .gh-currency-preview-purse {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  .gh-cmini-purse b {
+  .gh-currency-preview-purse b {
     font: 800 38px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-dlgt {
+  .gh-currency-preview-price-line {
     display: flex;
     align-items: center;
     gap: 6px;
     font: 800 19px/1 var(--gh-f-ui);
   }
 
-  .gh-okv {
+  .gh-wizard-success-panel {
     max-width: 760px;
     margin: 8px auto 0;
     padding: 30px 34px 32px;
   }
 
-  .gh-okv .gh-expl {
+  .gh-wizard-success-panel .gh-explainer-note {
     margin: 22px 0 0;
   }
 
-  .gh-okv .gh-h3 {
+  .gh-wizard-success-panel .gh-h3 {
     margin-top: 28px;
   }
 
-  .gh-ok-ic {
+  .gh-wizard-success-icon {
     --gh-c: 14px;
     width: 64px;
     height: 64px;
@@ -333,26 +333,26 @@
     font-size: 30px;
   }
 
-  .gh-todo-l {
+  .gh-next-steps-list {
     list-style: none;
     margin: 10px 0 22px;
     padding: 0;
-    counter-reset: gh-todo;
+    counter-reset: gh-todo-card;
   }
 
-  .gh-todo-l li {
+  .gh-next-steps-list li {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px 0;
     border-top: 1px solid var(--gh-line);
     font: 560 15px/1.35 var(--gh-f-ui);
-    counter-increment: gh-todo;
+    counter-increment: gh-todo-card;
   }
 
-  .gh-todo-l li::before {
+  .gh-next-steps-list li::before {
     --gh-c: 6px;
-    content: counter(gh-todo);
+    content: counter(gh-todo-card);
     width: 28px;
     height: 28px;
     flex: 0 0 auto;
@@ -370,50 +370,50 @@
         0 var(--gh-c));
   }
 
-  .gh-wbar-lbl--sm {
+  .gh-form-actions-bar-label--compact {
     display: none;
   }
 
-  @media (max-width: 720px) {
+  @media (width <= theme(--breakpoint-mobile)) {
 
-    .gh-stp>span:last-child {
+    .gh-wizard-step-tab>span:last-child {
       display: none;
     }
 
-    .gh-stp--on>span:last-child {
+    .gh-wizard-step-tab--current>span:last-child {
       display: inline;
     }
 
-    .gh-stp {
+    .gh-wizard-step-tab {
       justify-content: center;
     }
 
-    .gh-stp--on {
+    .gh-wizard-step-tab--current {
       flex: 3;
       justify-content: flex-start;
     }
 
-    .gh-rgrid {
+    .gh-preset-review-grid {
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .gh-okv {
+    .gh-wizard-success-panel {
       padding: 22px 18px;
     }
 
-    .gh-wbar .gh-kicker {
+    .gh-form-actions-bar .gh-page-kicker {
       display: none;
     }
 
-    .gh-wbar-lbl {
+    .gh-form-actions-bar-label {
       display: none;
     }
 
-    .gh-wbar-lbl--sm {
+    .gh-form-actions-bar-label--compact {
       display: inline;
     }
 
-    .gh-wbar .gh-btn {
+    .gh-form-actions-bar .gh-btn {
       min-width: 0;
     }
   }

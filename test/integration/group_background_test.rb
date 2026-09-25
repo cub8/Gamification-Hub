@@ -23,9 +23,9 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
     get story_group_path(group)
 
     assert_response :success
-    assert_select '.gh-well .gh-tbg'
-    assert_select '.gh-well .gh-ttint'
-    assert_select '.gh-well .gh-tpat', false
+    assert_select '.gh-content-well .gh-group-cover-bg'
+    assert_select '.gh-content-well .gh-group-cover-tint'
+    assert_select '.gh-content-well .gh-cover-pattern', false
     assert_match(/background-image:url\([^)]*castle/, response.body)
   end
 
@@ -35,8 +35,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
 
     get story_group_path(group)
 
-    assert_select '.gh-well .gh-tbg'
-    assert_select '.gh-well .gh-tpat', false
+    assert_select '.gh-content-well .gh-group-cover-bg'
+    assert_select '.gh-content-well .gh-cover-pattern', false
   end
 
   # The fallback the octagon texture has always been.
@@ -45,8 +45,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
 
     get story_group_path(group)
 
-    assert_select '.gh-well .gh-tpat--well'
-    assert_select '.gh-well .gh-tbg', false
+    assert_select '.gh-content-well .gh-cover-pattern--inset'
+    assert_select '.gh-content-well .gh-group-cover-bg', false
   end
 
   # A retired preset key must fall back rather than render an empty frame.
@@ -56,8 +56,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
 
     get story_group_path(group)
 
-    assert_select '.gh-well .gh-tpat--well'
-    assert_select '.gh-well .gh-tbg', false
+    assert_select '.gh-content-well .gh-cover-pattern--inset'
+    assert_select '.gh-content-well .gh-group-cover-bg', false
   end
 
   test 'the background follows into the nested screens' do
@@ -70,7 +70,7 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
       get path
 
       assert_response :success
-      assert_select '.gh-well .gh-tbg', 1, "no background on #{path}"
+      assert_select '.gh-content-well .gh-group-cover-bg', 1, "no background on #{path}"
     end
   end
 
@@ -78,8 +78,8 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
   test 'the group index keeps the texture' do
     get story_groups_path
 
-    assert_select '.gh-tpat'
-    assert_select '.gh-tbg', false
+    assert_select '.gh-cover-pattern'
+    assert_select '.gh-group-cover-bg', false
   end
 
   # The wizard asks for the layer up front and fills it from Stimulus as the
@@ -87,7 +87,7 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
   test 'the wizard renders an empty background layer to paint into' do
     get new_story_group_path
 
-    assert_select '.gh-well .gh-tbg[hidden]'
+    assert_select '.gh-content-well .gh-group-cover-bg[hidden]'
     assert_select '[data-group-art-layer]'
   end
 
@@ -95,9 +95,9 @@ class GroupBackgroundTest < ActionDispatch::IntegrationTest
   # never rendering in tests.
   test 'the wizard hides the mobile tab bar that other screens show' do
     get story_groups_path
-    assert_select 'nav.gh-tabbar', 1
+    assert_select 'nav.gh-mobile-tabbar', 1
 
     get new_story_group_path
-    assert_select 'nav.gh-tabbar', false
+    assert_select 'nav.gh-mobile-tabbar', false
   end
 end

@@ -16,7 +16,7 @@
     background: var(--gh-scrim);
   }
 
-  .gh-dialog:has(.gh-qrbox) {
+  .gh-dialog:has(.gh-invite-qr-box) {
     width: min(92vw, 620px);
     max-width: min(92vw, 620px);
   }
@@ -33,7 +33,7 @@
   }
 
   .gh-dialog-body p:not([class]),
-  .gh-dlg-page p:not([class]) {
+  .gh-dialog-page-panel p:not([class]) {
     margin-top: 8px;
     font-size: 15px;
     color: var(--gh-ink-2);
@@ -53,19 +53,19 @@
     max-width: min(92vw, 370px);
   }
 
-  .gh-dialog--switcher {
+  .gh-dialog--group-switcher {
     margin: 120px auto auto 14px;
     width: min(92vw, 320px);
     max-width: min(92vw, 320px);
   }
 
-  .gh-cur {
+  .gh-current-badge {
     margin-left: auto;
     font-size: 12.5px;
     color: var(--gh-ink-3);
   }
 
-  .gh-pop-f {
+  .gh-popover-footer {
     position: sticky;
     bottom: 0;
     display: flex;
@@ -75,19 +75,19 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-pop-f .gh-btn {
+  .gh-popover-footer .gh-btn {
     flex: 1;
   }
 
-  @media (min-width: 721px) {
+  @media (width > theme(--breakpoint-mobile)) {
 
     .gh-dialog--anchored::backdrop,
-    .gh-dialog--switcher::backdrop {
+    .gh-dialog--group-switcher::backdrop {
       background: transparent;
     }
 
     .gh-dialog--anchored,
-    .gh-dialog--switcher {
+    .gh-dialog--group-switcher {
       filter: drop-shadow(0 3px 0 var(--gh-line-2)) drop-shadow(0 14px 26px var(--gh-shadow));
     }
 
@@ -95,19 +95,19 @@
       max-height: 520px;
     }
 
-    .gh-dialog--switcher .gh-dialog-body {
+    .gh-dialog--group-switcher .gh-dialog-body {
       max-height: min(520px, calc(100dvh - 140px));
     }
   }
 
-  .gh-menu {
+  .gh-menu-list {
     list-style: none;
     margin: 8px 0 0;
     padding: 0;
   }
 
-  .gh-menu button,
-  .gh-menu a {
+  .gh-menu-list button,
+  .gh-menu-list a {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -122,30 +122,30 @@
     font: 560 15px var(--gh-f-ui);
   }
 
-  .gh-menu button:hover,
-  .gh-menu a:hover {
+  .gh-menu-list button:hover,
+  .gh-menu-list a:hover {
     background: var(--gh-card-2);
   }
 
-  .gh-menu .gh-gthumb {
+  .gh-menu-list .gh-group-thumb {
     width: 30px;
     height: 30px;
     font-size: 11px;
   }
 
-  .gh-menu i {
+  .gh-menu-list i {
     width: 20px;
     text-align: center;
     color: var(--gh-ink-2);
   }
 
-  .gh-more-m a[aria-current] {
+  .gh-menu-list--nav a[aria-current] {
     background: var(--gh-card-2);
     color: var(--gh-ink);
     font-weight: 720;
   }
 
-  .gh-pop-sec {
+  .gh-popover-section-label {
     font: 680 11.5px/1.2 var(--gh-f-ui);
     letter-spacing: .06em;
     text-transform: uppercase;
@@ -153,7 +153,7 @@
     padding: 10px 0 4px;
   }
 
-  .gh-pop-h {
+  .gh-popover-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -161,18 +161,18 @@
     margin-bottom: 4px;
   }
 
-  .gh-pop-h form {
+  .gh-popover-header form {
     display: contents;
   }
 
-  .gh-pop-h .gh-linkbtn {
+  .gh-popover-header .gh-link-button {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     line-height: 1;
   }
 
-  .gh-pop-me {
+  .gh-popover-identity {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -180,22 +180,22 @@
     border-bottom: 1px solid var(--gh-line);
   }
 
-  .gh-pop-me b {
+  .gh-popover-identity b {
     display: block;
     font: 720 15px/1.2 var(--gh-f-ui);
   }
 
-  .gh-pop-me small {
+  .gh-popover-identity small {
     font-size: 13px;
     color: var(--gh-ink-2);
     overflow-wrap: anywhere;
   }
 
-  .gh-grab {
+  .gh-sheet-drag-handle {
     display: none;
   }
 
-  @media (max-width: 720px) {
+  @media (width <= theme(--breakpoint-mobile)) {
 
     .gh-dialog,
     .gh-dialog--menu,
@@ -213,7 +213,7 @@
       clip-path: polygon(var(--gh-c) 0, calc(100% - var(--gh-c)) 0, 100% var(--gh-c), 100% 100%, 0 100%, 0 var(--gh-c));
     }
 
-    .gh-grab {
+    .gh-sheet-drag-handle {
       display: block;
       width: 44px;
       height: 4px;
@@ -222,19 +222,19 @@
     }
   }
 
-  .gh-dlg-page {
+  .gh-dialog-page-panel {
     width: min(560px, 100%);
     margin-top: 22px;
     padding: 26px 28px 24px;
   }
 
-  @media (max-width: 720px) {
-    .gh-dlg-page {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-dialog-page-panel {
       padding: 18px 16px;
     }
   }
 
-  .gh-dlg-b {
+  .gh-dialog-button-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -242,12 +242,12 @@
     margin-top: 22px;
   }
 
-  @media (max-width: 720px) {
-    .gh-dlg-b {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-dialog-button-row {
       justify-content: stretch;
     }
 
-    .gh-dlg-b .gh-btn {
+    .gh-dialog-button-row .gh-btn {
       flex: 1;
     }
   }

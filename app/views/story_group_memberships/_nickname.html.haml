@@ -14,11 +14,11 @@
   -# No submit button inside the row here — the dialog's own footer carries it.
   = render 'nickname_field', f: f, membership: membership, submit_label: nil, autofocus: true
 
-  .gh-dlg-b
+  .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
     - else
       = link_to 'Anuluj', story_group_ranking_path(membership.story_group),
-        class: 'gh-btn gh-btn--sec'
+        class: 'gh-btn gh-btn--secondary'
 
     %button.gh-btn{ type: 'submit' } Zapisz pseudonim

@@ -187,7 +187,7 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
 
     get story_group_activity_groups_url(@story_group)
     assert_response :success
-    assert_select '.gh-ag-n b', false
+    assert_select '.gh-sheet-row-name b', false
 
     # ApplicationController turns the RecordNotFound into the app's own
     # "Nie znaleziono." rather than a bare 404.

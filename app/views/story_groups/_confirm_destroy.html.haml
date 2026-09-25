@@ -20,7 +20,7 @@
           confirm_name_expected_value: story_group.name,
           turbo_frame: (@in_modal ? 'modal' : nil) } do
 
-  .gh-fld
+  .gh-form-field
     = label_tag :confirm do
       Wpisz nazwę grupy, żeby potwierdzić:
       %b= story_group.name
@@ -28,21 +28,21 @@
     -# other confirmation. There is nothing dangerous to land on: the delete
     -# button starts disabled, and this is the control you have to reach to get
     -# anywhere at all.
-    .gh-inp{ class: ('gh-inp--bad' if @confirm_failed) }
+    .gh-text-input{ class: ('gh-text-input--invalid' if @confirm_failed) }
       = text_field_tag :confirm, nil, autocomplete: 'off', autofocus: true,
         'aria-invalid': (@confirm_failed ? 'true' : nil),
         'aria-describedby': (@confirm_failed ? 'gh-del-group-error' : nil),
         data: { confirm_name_target: 'input', action: 'confirm-name#check' }
     - if @confirm_failed
-      %p#gh-del-group-error.gh-err{ role: 'alert' }
+      %p#gh-del-group-error.gh-field-error{ role: 'alert' }
         %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
         %span Wpisana nazwa nie zgadza się z nazwą grupy. Grupa nie została usunięta.
 
-  .gh-dlg-b
+  .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
     - else
-      = link_to 'Anuluj', edit_story_group_path(story_group), class: 'gh-btn gh-btn--sec'
+      = link_to 'Anuluj', edit_story_group_path(story_group), class: 'gh-btn gh-btn--secondary'
 
     -# Disabled until the name matches, and re-checked in the controller: this
     -# button is the courtesy, the server comparison is the protection.

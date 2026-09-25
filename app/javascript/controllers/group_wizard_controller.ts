@@ -145,7 +145,7 @@ class GroupWizardController extends Controller<HTMLElement> {
    * enough that "Dalej" sits well below the fold, and without this the next
    * step opens scrolled past its own heading.
    *
-   * The scroller is #app-content (.gh-main is `overflow: auto`), NOT the
+   * The scroller is #app-content (.gh-main-content is `overflow: auto`), NOT the
    * window — window.scrollTo is a no-op inside this shell. Called only from
    * the three navigation actions, never from render(), so a re-render for a
    * field edit leaves the scroll position alone; and never on connect(), so a
@@ -222,8 +222,8 @@ class GroupWizardController extends Controller<HTMLElement> {
       const done = index < this.step
 
       tab.disabled = index > this.max
-      tab.classList.toggle("gh-stp--on", index === this.step)
-      tab.classList.toggle("gh-stp--ok", done)
+      tab.classList.toggle("gh-wizard-step-tab--current", index === this.step)
+      tab.classList.toggle("gh-wizard-step-tab--done", done)
       if (index === this.step) tab.setAttribute("aria-current", "step")
       else tab.removeAttribute("aria-current")
 
@@ -245,7 +245,7 @@ class GroupWizardController extends Controller<HTMLElement> {
     const withPreview = this.step <= 1
 
     this.previewTarget.hidden = !withPreview
-    this.gridTarget.classList.toggle("gh-wiz--full", !withPreview)
+    this.gridTarget.classList.toggle("gh-form-shell--full", !withPreview)
     this.previewGroupTarget.hidden = this.step !== 0
     this.previewCurrencyTarget.hidden = this.step !== 1
   }
@@ -270,13 +270,13 @@ class GroupWizardController extends Controller<HTMLElement> {
 
   private renderArt() {
     this.nameEchoTarget.textContent = this.nameTarget.value.trim() || "Nazwa grupy"
-    this.nameEchoTarget.classList.toggle("gh-ph", this.nameTarget.value.trim() === "")
+    this.nameEchoTarget.classList.toggle("gh-placeholder-text", this.nameTarget.value.trim() === "")
 
     const art = this.chosen("[icon_glyph]")
 
     // Drop whatever was cloned last time, keeping the monogram node itself.
     this.artBoxTarget.querySelectorAll("[data-wizard-clone]").forEach((node) => node.remove())
-    this.artBoxTarget.classList.toggle("gh-art--mono", art === null)
+    this.artBoxTarget.classList.toggle("gh-art--monogram", art === null)
     this.artMonoTarget.hidden = art !== null
     this.artMonoTarget.textContent = monogram(this.nameTarget.value)
 
@@ -306,7 +306,7 @@ class GroupWizardController extends Controller<HTMLElement> {
 
     this.currencyEchoTargets.forEach((echo) => {
       echo.textContent = name || "Marchewek"
-      echo.classList.toggle("gh-ph", name === "")
+      echo.classList.toggle("gh-placeholder-text", name === "")
     })
 
     // One chosen mark, several tokens showing it — the preview renders the
@@ -418,7 +418,7 @@ class GroupWizardController extends Controller<HTMLElement> {
 
       slot.hidden = !invalid
       field?.setAttribute("aria-invalid", String(invalid))
-      field?.closest(".gh-inp")?.classList.toggle("gh-inp--bad", invalid)
+      field?.closest(".gh-text-input")?.classList.toggle("gh-text-input--invalid", invalid)
 
       if (invalid) {
         ok = false

@@ -1,4 +1,4 @@
--# A badge as a two-sided card (00-base.css:180-197). `.gh-flip--down` turns it
+-# A badge as a two-sided card (00-base.css:180-197). `.gh-flip-card--down` turns it
 -# to the back, which is the resting state of a badge nobody has earned yet.
 -#
 -# Locals:
@@ -17,21 +17,21 @@
 - card_data = targets[:flip].to_h
 - card_data.merge!(controller: 'badge-flip', action: 'click->badge-flip#toggle') if interactive
 
-%article.gh-card.gh-card--badge.gh-flip{ class: ('gh-flip--down' unless earned),
+%article.gh-card.gh-card--badge.gh-flip-card{ class: ('gh-flip-card--down' unless earned),
                                          'aria-label': label,
                                          data: card_data }
-  .gh-flip-in
+  .gh-flip-card-inner
     -# The turned-away face is `inert` as well as aria-hidden: backface-
     -# visibility hides it from the eye, not from the tab order.
-    .gh-face.gh-face--front{ 'aria-hidden': (earned ? nil : 'true'), inert: !earned,
+    .gh-flip-card-face.gh-flip-card-face--front{ 'aria-hidden': (earned ? nil : 'true'), inert: !earned,
                              data: { badge_flip_target: 'front' } }
-      .gh-card-f
-        .gh-card-i
+      .gh-card-frame
+        .gh-card-inset
           = render 'badges/front', badge: badge, targets: targets,
             flipper: interactive, withdrawn: withdrawn
 
-    .gh-face.gh-face--back{ 'aria-hidden': (earned ? 'true' : nil), inert: earned,
+    .gh-flip-card-face.gh-flip-card-face--back{ 'aria-hidden': (earned ? 'true' : nil), inert: earned,
                             data: { badge_flip_target: 'back' } }
-      .gh-card-f
-        .gh-card-i.gh-back-i
+      .gh-card-frame
+        .gh-card-inset.gh-flip-card-back-body
           = render 'badges/back', badge: badge, targets: targets, flipper: interactive

@@ -41,15 +41,15 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     get grade_path
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
   test 'the page head names the sheet and what is about to happen' do
     get grade_path
 
-    assert_select '.gh-crumbs a', 'Arkusze ocen'
-    assert_select '.gh-crumbs span', 'Laboratoria'
+    assert_select '.gh-breadcrumbs a', 'Arkusze ocen'
+    assert_select '.gh-breadcrumbs span', 'Laboratoria'
     assert_select 'h1.gh-h1', 'Laboratoria 5'
     assert_select 'p.gh-lead',
                   /2 kategorie, 2 studentów\. Zaznacz, kto zdobył nagrody, a przed przyznaniem/
@@ -58,10 +58,10 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
   test 'the legend names all three cell states' do
     get grade_path
 
-    assert_select 'ul.gh-legend[aria-label=Legenda] li', 3
-    assert_select '.gh-legend', /Puste/
-    assert_select '.gh-legend', /Zaznaczone teraz/
-    assert_select '.gh-legend', /Przyznane, nie do cofnięcia/
+    assert_select 'ul.gh-cell-legend[aria-label=Legenda] li', 3
+    assert_select '.gh-cell-legend', /Puste/
+    assert_select '.gh-cell-legend', /Zaznaczone teraz/
+    assert_select '.gh-cell-legend', /Przyznane, nie do cofnięcia/
   end
 
   # --- the grid -------------------------------------------------------------
@@ -69,13 +69,15 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
   test 'categories are columns and students are rows' do
     get grade_path
 
-    assert_select 'table.gh-grid thead th.gh-th-stu', 'Student'
-    assert_select 'table.gh-grid thead th.gh-th-sum', 'Razem'
-    assert_equal(['Obecność', 'Pomoc innym'], css_select('.gh-thc .gh-thn').map { |th| th.text.strip })
+    assert_select 'table.gh-grading-table thead th.gh-grading-th-student', 'Student'
+    assert_select 'table.gh-grading-table thead th.gh-grading-th-total', 'Razem'
+    assert_equal(['Obecność', 'Pomoc innym'], css_select('.gh-grading-column-head .gh-grading-column-name').map do |th|
+      th.text.strip
+    end,)
     assert_select 'tbody tr[data-grading-target=row]', 2
     # The avatar initials share the cell, so read past them.
     assert_equal(['Ada Kowalska', 'Bartek Nowak'],
-                 css_select('tbody th.gh-td-stu').map { |th| th.text.split("\n").map(&:strip).last },)
+                 css_select('tbody th.gh-grading-td-student').map { |th| th.text.split("\n").map(&:strip).last },)
   end
 
   # Never the nickname: the sheet is the teacher naming a person before an award
@@ -87,8 +89,8 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     get grade_path
 
     assert_equal(['Ada Kowalska', 'Bartek Nowak'],
-                 css_select('tbody th.gh-td-stu').map { |th| th.text.split("\n").map(&:strip).last },)
-    assert_select '.gh-rv .gh-rv-n', /Ada Kowalska/
+                 css_select('tbody th.gh-grading-td-student').map { |th| th.text.split("\n").map(&:strip).last },)
+    assert_select '.gh-review-list .gh-review-row-name', /Ada Kowalska/
     assert_no_match(/Kapitan Marchewka/, response.body)
   end
 
@@ -99,21 +101,21 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     get grade_path
 
     assert_equal(['Ada Kowalska', 'Bartek Nowak'],
-                 css_select('tbody th.gh-td-stu').map { |th| th.text.split("\n").map(&:strip).last },)
+                 css_select('tbody th.gh-grading-td-student').map { |th| th.text.split("\n").map(&:strip).last },)
   end
 
   test 'the story description is the column tooltip and appears nowhere else' do
     get grade_path
 
-    assert_select '.gh-thn[title=?]', 'Stawił się na mostku'
+    assert_select '.gh-grading-column-name[title=?]', 'Stawił się na mostku'
     assert_select 'td', { text: 'Stawił się na mostku', count: 0 }
   end
 
   test 'each column carries its reward and a select-all button' do
     get grade_path
 
-    assert_equal(['+2', '+3'], css_select('.gh-thc .gh-cost b').map { |b| b.text.strip })
-    assert_select '.gh-colbtn[data-grading-column-param=?][title=?]',
+    assert_equal(['+2', '+3'], css_select('.gh-grading-column-head .gh-price-badge b').map { |b| b.text.strip })
+    assert_select '.gh-grading-column-select-all[data-grading-column-param=?][title=?]',
                   @obecnosc.id.to_s, 'Zaznacz całą kolumnę'
   end
 
@@ -126,10 +128,10 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'input[name=?]', "completions[#{@ada.id}][#{@pomoc.id}]"
     assert_select 'input[name=?]', "completions[#{@ada.id}][#{@obecnosc.id}]", false
 
-    assert_select 'span.gh-cell--awarded[title=?]', 'Przyznane, nie można cofnąć' do
+    assert_select 'span.gh-grading-cell--awarded[title=?]', 'Przyznane, nie można cofnąć' do
       assert_select '[aria-label=?]', 'Ada Kowalska, Obecność: przyznane'
     end
-    assert_select 'label.gh-cell input[aria-label=?]', 'Ada Kowalska, Pomoc innym: puste'
+    assert_select 'label.gh-grading-cell input[aria-label=?]', 'Ada Kowalska, Pomoc innym: puste'
   end
 
   test 'the Razem column shows what a student has already collected here' do
@@ -137,20 +139,20 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     award!(@pomoc, @ada)
     get grade_path
 
-    assert_select 'tbody tr:first-child td.gh-td-sum .gh-sum-a', '5'
-    assert_select 'tbody tr:last-child td.gh-td-sum .gh-sum-a', '0'
-    assert_select '.gh-sum-p[hidden]', 2
+    assert_select 'tbody tr:first-child td.gh-grading-td-total .gh-grading-total-awarded', '5'
+    assert_select 'tbody tr:last-child td.gh-grading-td-total .gh-grading-total-awarded', '0'
+    assert_select '.gh-grading-total-pending[hidden]', 2
   end
 
   test 'a hidden column is out of the table entirely' do
     @pomoc.update!(hidden: true)
     get grade_path
 
-    assert_equal(['Obecność'], css_select('.gh-thc .gh-thn').map { |th| th.text.strip })
+    assert_equal(['Obecność'], css_select('.gh-grading-column-head .gh-grading-column-name').map { |th| th.text.strip })
     assert_select 'input[name=?]', "completions[#{@ada.id}][#{@pomoc.id}]", false
   end
 
-  # The CSS gives the page its shape through this exact nesting: .gh-gradeview
+  # The CSS gives the page its shape through this exact nesting: .gh-grading-screen
   # is a flex column, the form inside it carries the height down, and the three
   # bands are its children. The form is easy to overlook as "just a wrapper" —
   # it is a box in the height chain, and when it was left out of it the award
@@ -159,26 +161,26 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
   test 'the three bands are laid out the way the stylesheet expects' do
     get grade_path
 
-    assert_select '.gh-gradeview > section.gh-ghead'
-    assert_select '.gh-gradeview > form.gh-gform' do
-      assert_select '> section.gh-board > .gh-board-scroll > table.gh-grid'
-      assert_select '> section.gh-abar'
+    assert_select '.gh-grading-screen > section.gh-grading-head'
+    assert_select '.gh-grading-screen > form.gh-grading-form' do
+      assert_select '> section.gh-grading-board > .gh-grading-board-scroll > table.gh-grading-table'
+      assert_select '> section.gh-action-bar'
     end
 
     # Order matters: the bar is the last band, under the board.
-    bands = css_select('.gh-gform > section').map { |node| node['class'].split.last }
-    assert_equal %w[gh-board gh-abar], bands
+    bands = css_select('.gh-grading-form > section').map { |node| node['class'].split.last }
+    assert_equal %w[gh-grading-board gh-action-bar], bands
   end
 
-  # .gh-s-a belongs to student_list.css, where it is a flex row of buttons.
+  # .gh-student-actions-cell belongs to student_list.css, where it is a flex row of buttons.
   # Reusing the mockup's own class name here turned the two numbers into
   # stacked blocks.
   test 'the Razem column does not borrow the student list class names' do
     get grade_path
 
-    assert_select 'td.gh-td-sum .gh-sum-a'
-    assert_select 'td.gh-td-sum .gh-s-a', false
-    assert_select 'td.gh-td-sum .gh-s-p', false
+    assert_select 'td.gh-grading-td-total .gh-grading-total-awarded'
+    assert_select 'td.gh-grading-td-total .gh-student-actions-cell', false
+    assert_select 'td.gh-grading-td-total .gh-s-p', false
   end
 
   # --- the award bar --------------------------------------------------------
@@ -186,7 +188,7 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
   test 'the award bar starts empty and is a live region' do
     get grade_path
 
-    assert_select 'section.gh-abar[aria-live=polite]' do
+    assert_select 'section.gh-action-bar[aria-live=polite]' do
       assert_select '[data-grading-target=barEmpty]',
                     'Nic nie jest zaznaczone. Kliknij pola studentów, którzy zdobyli nagrody.'
       assert_select '[data-grading-target=barActive][hidden]'
@@ -202,8 +204,8 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
   test 'the review dialog holds the whole matrix, hidden' do
     get grade_path
 
-    assert_select 'dialog.gh-dialog--review' do
-      assert_select '.gh-warn',
+    assert_select 'dialog.gh-dialog--grading-review' do
+      assert_select '.gh-warning-note',
                     /Po zatwierdzeniu nie da się tego cofnąć\. Sprawdź listę, zanim przyznasz nagrody\./
       assert_select 'li[data-grading-target=reviewRow][hidden]', 2
       assert_select 'span[data-grading-target=reviewChip][hidden]', 4
@@ -214,7 +216,7 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
   test 'the review dialog focuses the safe button and submits the real form' do
     get grade_path
 
-    assert_select '.gh-dialog--review .gh-dlg-b' do
+    assert_select '.gh-dialog--grading-review .gh-dialog-button-row' do
       assert_select 'button:first-child[autofocus]', /Wróć do edycji/
       assert_select 'button[type=submit][form=gh-grade-form]', /Przyznaj/
     end
@@ -248,7 +250,7 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
           params: { completions: { @ada.id.to_s => { @obecnosc.id.to_s => '1' } } }
     follow_redirect!
 
-    assert_select 'span.gh-cell--awarded.gh-cell--stamp', 1
+    assert_select 'span.gh-grading-cell--awarded.gh-grading-cell--stamp', 1
   end
 
   # There is no un-grant, by design: a pair missing from the submission is not
@@ -287,22 +289,22 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     @sheet.activity_group_categories.destroy_all
     get grade_path
 
-    assert_select '.gh-gm h2', 'Ten arkusz nie ma żadnej kolumny'
-    assert_select 'table.gh-grid', false
+    assert_select '.gh-empty-state h2', 'Ten arkusz nie ma żadnej kolumny'
+    assert_select 'table.gh-grading-table', false
   end
 
   test 'a group with no students names the next action' do
     @story_group.student_memberships.destroy_all
     get grade_path
 
-    assert_select '.gh-gm h2', 'W tej grupie nie ma jeszcze studentów'
-    assert_select 'table.gh-grid', false
+    assert_select '.gh-empty-state h2', 'W tej grupie nie ma jeszcze studentów'
+    assert_select 'table.gh-grading-table', false
   end
 
   test 'the phone gets an explanation instead of an unreadable table' do
     get grade_path
 
-    assert_select '.gh-grade-mobile .gh-gmob' do
+    assert_select '.gh-grading-mobile-fallback .gh-grading-mobile-panel' do
       assert_select 'h1', 'Laboratoria 5'
       assert_select '.gh-lead', /Ocenianie w tabeli działa na komputerze/
       assert_select 'a', 'Wróć na start'

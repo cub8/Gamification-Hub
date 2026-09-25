@@ -1,5 +1,5 @@
 @layer components {
-  .gh-oct {
+  .gh-octagon-clip {
     --gh-c: 10px;
     clip-path: polygon(var(--gh-c) 0,
         calc(100% - var(--gh-c)) 0,

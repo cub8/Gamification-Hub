@@ -4,7 +4,7 @@
 #
 # The group switcher `.gsw` renders only inside a group and only below
 # 720px, where the sidebar and its deck are gone; the balance chip
-# `.gh-bal` renders inside a group for anyone enrolled in it.
+# `.gh-balance-button` renders inside a group for anyone enrolled in it.
 class Shared::HeaderComponent < ViewComponent::Base
   attr_reader :user, :group_chrome
 

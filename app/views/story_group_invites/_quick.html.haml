@@ -5,10 +5,10 @@
 %p Wpisz kod w aplikacji („Dołącz do grupy”) albo zeskanuj kod QR.
 
 - if active.any?
-  .gh-fld{ data: { controller: 'invite-picker' } }
+  .gh-form-field{ data: { controller: 'invite-picker' } }
     %label{ for: 'gh-quick-select' }
       = "Zaproszenie (aktywne: #{active.size}, najnowsze na górze)"
-    %span.gh-sel
+    %span.gh-select-input
       %select#gh-quick-select{ data: { invite_picker_target: 'select',
                                        action: 'change->invite-picker#pick' } }
         - active.each do |invite|
@@ -27,16 +27,16 @@
                         data: { invite_picker_target: 'block', invite_picker_for: invite.id } }
         = render 'qr_stat', invite: invite
 - else
-  %p.gh-expl Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.
-  .gh-rowb.gh-quick-cta
+  %p.gh-explainer-note Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.
+  .gh-button-row.gh-quick-invite-cta
     = link_to new_story_group_invite_path(@story_group), class: 'gh-btn',
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
       Nowe zaproszenie
 
-.gh-dlg-b
+.gh-dialog-button-row
   = link_to 'Zarządzać zaproszeniami', story_group_invites_path(@story_group),
-    class: 'gh-btn gh-btn--sec', data: { turbo_frame: '_top' }
+    class: 'gh-btn gh-btn--secondary', data: { turbo_frame: '_top' }
   - if @in_modal
     %button.gh-btn{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Zamknij
   - else

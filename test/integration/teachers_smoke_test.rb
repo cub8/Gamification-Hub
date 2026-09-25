@@ -37,9 +37,9 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     get story_group_teachers_path(@story_group)
 
     assert_response :success
-    rows = css_select('.gh-trow').reject { |row| row['class'].include?('gh-trow--h') }
-    assert_equal(['Zofia Zawadzka', 'Adam Adamczyk'], rows.map { |row| row.css('.gh-name-wrap b').text })
-    assert_equal 'WłaścicielUtworzył grupę', rows.first.css('.gh-role').text.delete("\n").strip
+    rows = css_select('.gh-teacher-row').reject { |row| row['class'].include?('gh-teacher-row--header') }
+    assert_equal(['Zofia Zawadzka', 'Adam Adamczyk'], rows.map { |row| row.css('.gh-name-cell b').text })
+    assert_equal 'WłaścicielUtworzył grupę', rows.first.css('.gh-teacher-role').text.delete("\n").strip
     assert_equal 0, rows.first.css('a').size
   end
 
@@ -48,7 +48,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_teachers_path(@story_group)
 
-    assert_select '.gh-role', text: 'Nauczyciel wspomagający', count: 1
+    assert_select '.gh-teacher-role', text: 'Nauczyciel wspomagający', count: 1
     assert_select 'a[href=?]',
                   confirm_destroy_story_group_teacher_path(@story_group, membership), count: 1
   end
@@ -76,8 +76,8 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get new_story_group_teacher_path(@story_group), headers: MODAL
 
-    assert_select '.gh-tres[hidden]', 1
-    assert_select '.gh-tr[hidden]', 3 # two candidates plus the owner
+    assert_select '.gh-teacher-results-list[hidden]', 1
+    assert_select '.gh-teacher-result-row[hidden]', 3 # two candidates plus the owner
     assert_select "[data-teacher-picker-target='hint']",
                   'Wpisz co najmniej 2 znaki imienia, nazwiska albo e-maila. ' \
                   'W Twojej uczelni są 3 nauczyciele.'
@@ -88,7 +88,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get new_story_group_teacher_path(@story_group), headers: MODAL
 
-    row = css_select('.gh-tr').find { |item| item.css('b').text == 'Łukasz Lis' }
+    row = css_select('.gh-teacher-result-row').find { |item| item.css('b').text == 'Łukasz Lis' }
     assert_equal "lukasz lis #{person.email.downcase}", row['data-teacher-picker-key']
   end
 
@@ -98,13 +98,13 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get new_story_group_teacher_path(@story_group), headers: MODAL
 
-    rows = css_select('.gh-tr')
-    inside = rows.select { |row| row.css('.gh-st2').any? }
+    rows = css_select('.gh-teacher-result-row')
+    inside = rows.select { |row| row.css('.gh-badge-picker-status').any? }
                  .map { |row| row.css('b').text }
 
     assert_equal ['Adam Adamczyk', 'Zofia Zawadzka'], inside
-    assert_select '.gh-tr button', 1
-    assert_select '.gh-tr button[aria-label=?]', 'Dodaj Bogdan Borek'
+    assert_select '.gh-teacher-result-row button', 1
+    assert_select '.gh-teacher-result-row button[aria-label=?]', 'Dodaj Bogdan Borek'
   end
 
   # One form around the whole list: a form per candidate would be hundreds of
@@ -122,11 +122,11 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     person = teacher('Adam Adamczyk')
 
     get new_story_group_teacher_path(@story_group), headers: MODAL
-    assert_select '.gh-tr-n small', text: person.email, count: 1
+    assert_select '.gh-teacher-result-name small', text: person.email, count: 1
 
     sign_in_as FactoryBot.create(:user, role: :global_admin)
     get new_story_group_teacher_path(@story_group), headers: MODAL
-    assert_select '.gh-tr-n small', text: "#{person.email}, Example university", count: 1
+    assert_select '.gh-teacher-result-name small', text: "#{person.email}, Example university", count: 1
   end
 
   test 'a university with nobody else in it says so instead of showing a search' do
@@ -134,8 +134,8 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get new_story_group_teacher_path(@story_group), headers: MODAL
 
-    assert_select '.gh-search', false
-    assert_select '.gh-expl', /Nie ma kogo dodać/
+    assert_select '.gh-search-input', false
+    assert_select '.gh-explainer-note', /Nie ma kogo dodać/
   end
 
   # --- adding ---------------------------------------------------------------
@@ -161,7 +161,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-err span', 'Ta osoba jest już w grupie.'
+    assert_select '.gh-field-error span', 'Ta osoba jest już w grupie.'
   end
 
   # --- removing -------------------------------------------------------------
@@ -173,7 +173,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '#gh-del-title', 'Usunąć Adam Adamczyk z grupy?'
     assert_select 'p', 'Straci dostęp do grupy. Nagrody, które przyznał, zostają u studentów.'
-    assert_select '.gh-dlg-b button[autofocus]', 'Anuluj'
+    assert_select '.gh-dialog-button-row button[autofocus]', 'Anuluj'
   end
 
   test 'removing takes the membership and names who left' do
@@ -202,7 +202,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
       # As a page the only modal frame is the layout's own, inside <dialog>.
       get path
       assert_select 'main#app-content turbo-frame#modal', false, "#{path} as a page"
-      assert_select 'header.gh-hd', 1, "#{path} keeps the shell as a page"
+      assert_select 'header.gh-topbar', 1, "#{path} keeps the shell as a page"
     end
   end
 
@@ -214,10 +214,10 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     paths.each do |path|
       get path
-      assert_select 'main .gh-panel.gh-dlg-page', 1, "#{path} as a page sits on a panel"
+      assert_select 'main .gh-panel.gh-dialog-page-panel', 1, "#{path} as a page sits on a panel"
 
       get path, headers: MODAL
-      assert_select '.gh-dlg-page', false, "#{path} in the dialog needs no panel"
+      assert_select '.gh-dialog-page-panel', false, "#{path} in the dialog needs no panel"
     end
   end
 
@@ -241,11 +241,11 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     get story_group_teachers_path(@story_group)
 
     assert_response :success
-    assert_select '.gh-trow', 3 # header, the owner, themselves — all readable
+    assert_select '.gh-teacher-row', 3 # header, the owner, themselves — all readable
     assert_select '.gh-lead',
                   'Nauczyciele wspomagający pomagają prowadzić tę grupę. ' \
                   'Dodawać i usuwać nauczycieli może tylko właściciel grupy.'
-    assert_select '.gh-phead .gh-btn', false
+    assert_select '.gh-page-header .gh-btn', false
     assert_select 'a[href=?]',
                   confirm_destroy_story_group_teacher_path(@story_group, membership), count: 0
   end
@@ -279,7 +279,7 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     sign_in_as FactoryBot.create(:user, role: :organization_admin)
 
     get story_group_teachers_path(@story_group)
-    assert_select '.gh-phead .gh-btn', 1
+    assert_select '.gh-page-header .gh-btn', 1
 
     assert_difference('StoryGroupTeacher.count') do
       post story_group_teachers_path(@story_group),

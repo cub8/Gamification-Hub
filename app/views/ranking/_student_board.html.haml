@@ -5,7 +5,7 @@
 -# stay theirs whatever the teacher has switched on.
 - story_group = board.story_group
 
-%section.gh-panel.gh-phead.gh-phead--stack
+%section.gh-panel.gh-page-header.gh-page-header--stacked
   %h1.gh-h1 Ranking
   %p.gh-lead
     - if !board.visible?
@@ -15,7 +15,7 @@
     - else
       = "Kolejność według łącznie zebranej waluty (#{story_group.currency_name})."
 
-  .gh-mine
+  .gh-my-ranking-stats
     -# No place while the board is hidden: RankingBoard#own_place returns nil,
     -# so the number is never computed, let alone printed.
     - if board.own_place
@@ -27,19 +27,19 @@
       %b= board.own_row.student.total_currency
       %small Zebrane łącznie
 
-    .gh-nick
+    .gh-nickname-row
       Twój pseudonim w tej grupie:
       %b= board.membership.nickname.presence || 'brak'
       = link_to nickname_story_group_membership_path(story_group),
-        class: 'gh-linkbtn', data: { turbo_frame: 'modal' } do
+        class: 'gh-link-button', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
         Zmień
 
 - if board.visible?
   = render 'board', board: board, reveal_names: false
 - else
-  %section.gh-panel.gh-gm
-    .gh-gm-ic.gh-oct
+  %section.gh-panel.gh-empty-state
+    .gh-empty-state-icon.gh-octagon-clip
       %i.fa-solid.fa-eye-slash{ 'aria-hidden': 'true' }
     %h2.gh-h2 Ranking jest teraz ukryty
     %p.gh-lead

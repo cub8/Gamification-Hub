@@ -5,15 +5,15 @@
 - person = row.person
 - name   = person.full_name
 
-.gh-trow
-  %span.gh-s-n
-    %span.gh-av.gh-av--sm.gh-oct{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+.gh-teacher-row
+  %span.gh-student-name-cell
+    %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
       = gh_initials(name)
-    %span.gh-name-wrap
+    %span.gh-name-cell
       %b= name
       %small= person.email
 
-  %span.gh-role
+  %span.gh-teacher-role
     -# The owner gets a second line saying why they are the owner; a supporting
     -# teacher needs no explanation.
     - if row.owner?
@@ -23,17 +23,17 @@
       Nauczyciel wspomagający
 
   %span
-    %span.gh-lbl-m Dodano
+    %span.gh-mobile-field-label Dodano
     %span.gh-small= teacher_added_on(row.added_at)
 
-  %span.gh-trow-a
+  %span.gh-teacher-row-actions
     -# Never for the owner: ownership is the group's own column, not a
     -# membership row, so there is nothing here to destroy (DECISIONS.md:40).
     -# And never for a supporting teacher, who reads this list rather than
     -# editing it — the policy is the authority, this just hides the door.
     - if manage && row.removable?
       = link_to confirm_destroy_story_group_teacher_path(@story_group, row.membership),
-        class: 'gh-btn gh-btn--sec gh-btn--sm',
+        class: 'gh-btn gh-btn--secondary gh-btn--small',
         'aria-label': "Usuń z grupy: #{name}",
         data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }

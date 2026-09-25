@@ -149,7 +149,7 @@ class SheetFormController extends Controller<HTMLElement> {
     this.rowTargets.forEach((row) => {
       const hidden = this.hideBox(row)?.checked ?? false
 
-      row.classList.toggle("gh-cat--hidden", hidden)
+      row.classList.toggle("gh-category-row--hidden", hidden)
 
       const tag = row.querySelector<HTMLElement>("[data-sheet-form-target='hiddenTag']")
       if (tag) tag.hidden = !hidden
@@ -186,10 +186,10 @@ class SheetFormController extends Controller<HTMLElement> {
       const head = this.previewHeadCellTarget.content.cloneNode(true) as DocumentFragment
       const name = this.nameField(row)?.value.trim()
 
-      const label = head.querySelector(".gh-thn")
+      const label = head.querySelector(".gh-grading-column-name")
       if (label) label.textContent = name || "…"
 
-      const cost = head.querySelector(".gh-cost b")
+      const cost = head.querySelector(".gh-price-badge b")
       if (cost) cost.textContent = `+${this.reward(row)}`
 
       this.previewHeadTarget.appendChild(head)

@@ -34,18 +34,18 @@
   %h2#gh-adjust-title.gh-h2 Koryguj walutę
   %p= "#{student.display_name} ma teraz #{form.balance} do wydania."
 
-  .gh-seg3.gh-oct{ role: 'radiogroup', 'aria-label': 'Rodzaj korekty' }
+  .gh-segmented-toggle-3.gh-octagon-clip{ role: 'radiogroup', 'aria-label': 'Rodzaj korekty' }
     - [[1, 'Dodaj'], [-1, 'Odejmij']].each do |value, label|
-      %label.gh-seg3-o
+      %label.gh-segmented-toggle-3-option
         = f.radio_button :sign, value,
           checked: (form.sign == value),
           data: { currency_adjust_target: 'sign', action: 'currency-adjust#refresh' }
         %span= label
 
-  .gh-fld
+  .gh-form-field
     = f.label :amount, 'Ile'
-    .gh-price-row
-      .gh-inp.gh-inp--num{ class: ('gh-inp--bad' if error), data: { currency_adjust_target: 'box' } }
+    .gh-price-field-row
+      .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if error), data: { currency_adjust_target: 'box' } }
         = f.number_field :amount, min: 1, step: 1, placeholder: '0', autocomplete: 'off',
           autofocus: true,
           'aria-invalid': (error ? 'true' : nil),
@@ -55,7 +55,7 @@
 
     -# Always in the markup, hidden until there is something to say, so the
     -# controller writes text rather than building an element.
-    %p#gh-adjust-error.gh-err{ role: 'alert', hidden: error.nil?,
+    %p#gh-adjust-error.gh-field-error{ role: 'alert', hidden: error.nil?,
                                data: { currency_adjust_target: 'error' } }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span{ data: { currency_adjust_target: 'errorText' } }= error
@@ -63,7 +63,7 @@
   -# The preview, server-rendered so a re-render after a refusal shows the right
   -# numbers with JavaScript off. Hidden until an amount is entered.
   - shown = form.value.present? && error.nil?
-  %dl.gh-cprev2{ hidden: !shown, data: { currency_adjust_target: 'preview' } }
+  %dl.gh-adjustment-preview{ hidden: !shown, data: { currency_adjust_target: 'preview' } }
     %dt Do wydania
     %dd{ data: { currency_adjust_target: 'balance' } }= "#{form.balance} → #{form.new_balance}"
     %dt Zebrane łącznie
@@ -73,18 +73,18 @@
     %dd.gh-cprev2-r{ hidden: !form.rank_changed?, data: { currency_adjust_target: 'rank' } }
       = "#{form.current_rank&.name || '—'} → #{form.new_rank&.name || '—'}"
 
-  %p.gh-small.gh-cprev2-note{ hidden: !shown, data: { currency_adjust_target: 'note' } }
+  %p.gh-small.gh-adjustment-preview-note{ hidden: !shown, data: { currency_adjust_target: 'note' } }
     - if form.positive?
       Dodanie podnosi też sumę zebranych, więc może podnieść rangę.
     - else
       Odjęcie zmniejsza tylko to, co student ma do wydania. Suma zebranych
       i ranga zostają bez zmian.
 
-  .gh-dlg-b
+  .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
     - else
-      = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--sec'
+      = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
     %button.gh-btn{ type: 'submit', data: { currency_adjust_target: 'submit' } }
       - if form.value.present?
         = "#{form.positive? ? 'Dodaj' : 'Odejmij'} #{form.value}"

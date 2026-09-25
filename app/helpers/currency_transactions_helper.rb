@@ -20,15 +20,15 @@ module CurrencyTransactionsHelper
     safe_join(['Saldo: ', tag.b(ledger.balance), ', zebrane łącznie: ', tag.b(ledger.total), '.'])
   end
 
-  # The filter chips. Links rather than buttons, because the app's .gh-fchip is
+  # The filter chips. Links rather than buttons, because the app's .gh-purchase-filter-chip is
   # keyed on aria-current and because a filter that survives a refresh and can
   # be pasted to someone is worth a query parameter.
   def ledger_filter_chips(ledger, selected, path_for:)
     safe_join(CurrencyLedger::KINDS.map do |kind, label|
       current = kind == selected
 
-      link_to path_for.call(kind), class: 'gh-fchip', 'aria-current': current.to_s do
-        safe_join([label, tag.span(ledger.count_for(kind), class: 'gh-n')], ' ')
+      link_to path_for.call(kind), class: 'gh-purchase-filter-chip', 'aria-current': current.to_s do
+        safe_join([label, tag.span(ledger.count_for(kind), class: 'gh-count-label')], ' ')
       end
     end)
   end

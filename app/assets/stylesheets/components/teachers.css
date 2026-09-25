@@ -1,11 +1,11 @@
 @layer components {
 
-  .gh-tch {
+  .gh-teachers-panel {
     margin-top: 22px;
     padding: 6px 8px;
   }
 
-  .gh-trow {
+  .gh-teacher-row {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 120px 110px;
     gap: 12px;
@@ -14,45 +14,45 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-trow--h {
+  .gh-teacher-row--header {
     border-top: 0;
     font: 680 12.5px var(--gh-f-ui);
     color: var(--gh-ink-3);
   }
 
-  .gh-name-wrap {
+  .gh-name-cell {
     min-width: 0;
   }
 
-  .gh-role {
+  .gh-teacher-role {
     font: 600 14px var(--gh-f-ui);
   }
 
-  .gh-role small {
+  .gh-teacher-role small {
     display: block;
     font-weight: 500;
     font-size: 12.5px;
     color: var(--gh-ink-3);
   }
 
-  .gh-trow-a {
+  .gh-teacher-row-actions {
     display: flex;
     justify-content: flex-end;
   }
 
-  .gh-tpick .gh-expl {
+  .gh-teacher-picker .gh-explainer-note {
     margin: 12px 0 0;
   }
 
-  .gh-tpick .gh-meta {
+  .gh-teacher-picker .gh-card-meta {
     margin: 12px 0 2px;
   }
 
-  .gh-tpick .gh-small {
+  .gh-teacher-picker .gh-small {
     margin-top: 8px;
   }
 
-  .gh-tres {
+  .gh-teacher-results-list {
     list-style: none;
     margin: 6px 0 0;
     padding: 0;
@@ -60,7 +60,7 @@
     overflow: auto;
   }
 
-  .gh-tr {
+  .gh-teacher-result-row {
     display: grid;
     grid-template-columns: 36px minmax(0, 1fr) auto;
     gap: 12px;
@@ -69,16 +69,16 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-tr-n {
+  .gh-teacher-result-name {
     min-width: 0;
   }
 
-  .gh-tr-n b {
+  .gh-teacher-result-name b {
     display: block;
     font: 650 15px var(--gh-f-ui);
   }
 
-  .gh-tr-n small {
+  .gh-teacher-result-name small {
     display: block;
     font-size: 12.5px;
     color: var(--gh-ink-3);
@@ -87,26 +87,26 @@
     white-space: nowrap;
   }
 
-  .gh-tr mark {
+  .gh-teacher-result-row mark {
     background: color-mix(in srgb, var(--gh-rank) 45%, transparent);
     color: inherit;
   }
 
-  @media (max-width: 720px) {
-    .gh-trow {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-teacher-row {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 6px 12px;
     }
 
-    .gh-trow--h {
+    .gh-teacher-row--header {
       display: none;
     }
 
-    .gh-trow> :not(:last-child) {
+    .gh-teacher-row> :not(:last-child) {
       grid-column: 1;
     }
 
-    .gh-trow> :last-child {
+    .gh-teacher-row> :last-child {
       grid-column: 2;
       grid-row: 1 / 4;
       align-self: center;

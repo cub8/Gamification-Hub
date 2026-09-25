@@ -1,15 +1,15 @@
 -# Mockup: tItems(), js-expanded/30-student.js:30.
-%p.gh-small.gh-tab-intro
+%p.gh-small.gh-tab-panel-intro
   Przedmioty kupione w sklepie. Wykorzystanie przedmiotu (np. poprawę
   wejściówki) rozliczasz na zajęciach.
 
 - if sheet.purchases.any?
-  .gh-ilist
+  .gh-item-list
     - sheet.purchases.each do |purchase|
       = render 'students_items/card', purchase: purchase, cost: true,
         foot: purchase_teacher_line(purchase)
 - else
   -# The mockup leaves an empty grid here. House rule: say what happens next.
-  %p.gh-expl
+  %p.gh-explainer-note
     Student nic jeszcze nie kupił. Przedmioty pojawią się tu razem z ceną,
     jaką zapłacił.

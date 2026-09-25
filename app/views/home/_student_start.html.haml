@@ -1,8 +1,8 @@
 -# Mockup: #/s/start, design/mockup-src/js-expanded/30-isg.js `vStart`.
 - groups = @dashboard.groups
 
-%section.gh-panel.gh-phead
-  .gh-phead-t
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
     %h1.gh-h1 Cześć, #{@current_user.full_name.to_s.split(' ').first}
     %p.gh-lead
       - if groups.any?
@@ -11,26 +11,26 @@
       - else
         Nie należysz jeszcze do żadnej grupy. Poproś prowadzącego o kod i dołącz poniżej.
 
-.gh-sgrid
+.gh-group-card-grid
   - groups.each do |group|
     - story_group = group.story_group
     %article.gh-card.gh-card--neutral.gh-gcard
-      .gh-card-f
-        .gh-card-i
-          .gh-art
+      .gh-card-frame
+        .gh-card-inset
+          .gh-card-art
             - cover = gh_group_cover(story_group)
             = cover
             - unless cover
               %i.fa-solid.fa-book-open{ 'aria-hidden': 'true' }
 
-          .gh-card-top
+          .gh-card-header
             %h2.gh-card-name= story_group.name
 
           - if group.fresh?
-            %p.gh-expl
+            %p.gh-explainer-note
               = "Dopiero zaczynasz. Pierwsze #{story_group.currency_name} zdobędziesz na zajęciach."
 
-          %dl.gh-gstat
+          %dl.gh-group-card-stats
             %div
               %dt Do wydania
               %dd
@@ -41,26 +41,26 @@
             %div
               %dt Życia
               %dd
-                %span.gh-lv{ class: ('gh-lv--zero' if group.lives.zero?) }
+                %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if group.lives.zero?) }
                   %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
                   = group.lives
 
-            .gh-full2
+            .gh-stat-span-full
               %dt
                 Ranga:
                 %b= group.rank&.name || 'brak'
               - if group.next_rank
-                %dd.gh-rank-to
+                %dd.gh-rank-progress-target
                   = "#{group.total} z #{group.next_threshold} do rangi #{group.next_rank.name}"
               - else
-                %dd.gh-rank-to
+                %dd.gh-rank-progress-target
                   = "#{group.total} zebranych. To najwyższa ranga."
-              .gh-bar.gh-oct{ role: 'progressbar',
+              .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                        'aria-valuemin': 0,
                        'aria-valuemax': group.next_threshold.positive? ? group.next_threshold : group.total,
                        'aria-valuenow': group.total,
                        'aria-label': "Postęp do następnej rangi w grupie #{story_group.name}" }
-                %i.gh-oct{ style: "--gh-p: #{gh_percent(group.total, group.next_threshold)}%" }
+                %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(group.total, group.next_threshold)}%" }
 
             %div
               %dt Odznaki
@@ -68,29 +68,29 @@
                 = group.badges_earned
                 %small= "z #{group.badges_total}"
 
-          .gh-card-foot
+          .gh-card-footer
             = link_to 'Otwórz grupę', story_group_path(story_group), class: 'gh-btn'
-            = link_to story_group_shop_index_path(story_group), class: 'gh-btn gh-btn--sec' do
+            = link_to story_group_shop_index_path(story_group), class: 'gh-btn gh-btn--secondary' do
               %i.fa-solid.fa-bag-shopping
               Sklep
 
-  .gh-panel.gh-joinc
+  .gh-panel.gh-join-code-card
     %h2.gh-h3 Masz kod od prowadzącego?
     %p.gh-small Kod ma 6 znaków. Możesz też zeskanować kod QR aparatem telefonu.
-    = link_to new_join_path, class: 'gh-btn gh-btn--sec', data: { turbo_frame: 'modal' } do
+    = link_to new_join_path, class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus
       Dołącz do grupy
 
 - if @dashboard.feed.any?
-  %section.gh-panel.gh-feed
+  %section.gh-panel.gh-activity-feed
     %h2.gh-h2 Ostatnio we wszystkich grupach
-    %ul.gh-led
+    %ul.gh-ledger-list
       - @dashboard.feed.each do |entry|
         - tone = entry.reward? ? 'earn' : (entry.purchase? ? 'spend' : nil)
-        %li.gh-led-r
-          %span{ class: "gh-led-m #{"gh-led-m--#{tone}" if tone}", 'aria-hidden': 'true' }
-          %span.gh-led-t
+        %li.gh-activity-feed-row
+          %span{ class: "gh-activity-feed-row-marker #{"gh-activity-feed-row-marker--#{tone}" if tone}", 'aria-hidden': 'true' }
+          %span.gh-activity-feed-row-text
             = gh_feed_title(entry)
             %small= "#{entry.student.story_group.name}, #{gh_when(entry.created_at)}"
-          %span{ class: "gh-led-a #{"gh-led-a--#{tone}" if tone}" }
+          %span{ class: "gh-activity-feed-row-amount #{"gh-activity-feed-row-amount--#{tone}" if tone}" }
             = entry.amount.positive? ? "+#{entry.amount}" : entry.amount

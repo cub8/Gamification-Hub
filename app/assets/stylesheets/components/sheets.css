@@ -1,39 +1,39 @@
 @layer components {
 
-  .gh-tpl {
+  .gh-template-panel {
     margin-top: 22px;
     padding: 20px 22px 14px;
   }
 
-  .gh-tpl-h {
+  .gh-template-panel-header {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
   }
 
-  .gh-tpl-h h2 {
+  .gh-template-panel-header h2 {
     font: 780 24px/1.1 var(--gh-f-ui);
     font-stretch: 86%;
   }
 
-  .gh-tpl-sp {
+  .gh-template-panel-spacer {
     flex: 1;
   }
 
-  .gh-tpl-meta {
+  .gh-template-panel-meta {
     margin-top: 4px;
     font-size: 14px;
     color: var(--gh-ink-2);
   }
 
-  .gh-agl {
+  .gh-sheet-list {
     margin: 14px 0 0;
     padding: 0;
     list-style: none;
   }
 
-  .gh-ag {
+  .gh-sheet-row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 220px) auto;
     gap: 18px;
@@ -42,64 +42,64 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-ag--fresh {
+  .gh-sheet-row--fresh {
     animation: gh-fresh 2.4s ease-out 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .gh-ag--fresh {
+    .gh-sheet-row--fresh {
       animation: none;
       background: color-mix(in srgb, var(--gh-item) 12%, transparent);
     }
   }
 
-  .gh-ag-n b {
+  .gh-sheet-row-name b {
     font: 680 16px/1.2 var(--gh-f-ui);
   }
 
-  .gh-ag-n .gh-tag {
+  .gh-sheet-row-name .gh-tag {
     margin-left: 8px;
     vertical-align: 1px;
   }
 
-  .gh-ag-s {
+  .gh-sheet-row-stats {
     font: 540 13.5px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-ag-a {
+  .gh-sheet-row-actions {
     display: flex;
     align-items: center;
     gap: 6px;
   }
 
-  .gh-tag--mod {
+  .gh-tag--modified {
     color: var(--gh-ink);
   }
 
-  .gh-tag--mod::before {
+  .gh-tag--modified::before {
     background: color-mix(in srgb, var(--gh-rank) 26%, var(--gh-card));
   }
 
-  .gh-tag--only {
+  .gh-tag--sheet-only {
     color: var(--gh-spend);
   }
 
-  .gh-tag--only::before {
+  .gh-tag--sheet-only::before {
     background: color-mix(in srgb, var(--gh-item) 16%, var(--gh-card));
   }
 
-  .gh-tag--hidden::before {
+  .gh-tag--hidden-column::before {
     background: var(--gh-card-3);
   }
 
-  .gh-cats {
+  .gh-category-list {
     margin: 12px 0 0;
     padding: 0;
     list-style: none;
   }
 
-  .gh-cat {
+  .gh-category-row {
     display: grid;
     grid-template-columns: 26px minmax(0, 1fr) auto auto;
     gap: 10px;
@@ -108,45 +108,45 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-cat--dragging {
+  .gh-category-row--dragging {
     opacity: 0.4;
   }
 
-  .gh-cat--over {
+  .gh-category-row--drop-target {
     box-shadow: inset 0 3px 0 var(--gh-item);
   }
 
-  .gh-cat--hidden .gh-cat-b>.gh-inp:first-child {
+  .gh-category-row--hidden .gh-category-row-body>.gh-text-input:first-child {
     opacity: 0.55;
   }
 
-  .gh-handle {
+  .gh-category-drag-handle {
     padding-top: 11px;
     color: var(--gh-ink-3);
     cursor: grab;
   }
 
-  .gh-cat-b {
+  .gh-category-row-body {
     min-width: 0;
   }
 
-  .gh-cat-b .gh-inp input {
+  .gh-category-row-body .gh-text-input input {
     font-weight: 620;
   }
 
-  .gh-cat-b .gh-tag {
+  .gh-category-row-body .gh-tag {
     margin-top: 8px;
   }
 
-  .gh-story-t {
+  .gh-category-story-textarea {
     margin-top: 8px;
   }
 
-  .gh-story-t textarea {
+  .gh-category-story-textarea textarea {
     min-height: 68px;
   }
 
-  .gh-story-add {
+  .gh-category-story-toggle {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -154,30 +154,30 @@
     font-size: 13px;
   }
 
-  .gh-cat-p {
+  .gh-category-row-price {
     display: flex;
     align-items: center;
     gap: 8px;
     padding-top: 4px;
   }
 
-  .gh-cat-a {
+  .gh-category-row-actions {
     display: flex;
     gap: 2px;
     padding-top: 2px;
   }
 
-  .gh-cat-a .gh-iconbtn {
+  .gh-category-row-actions .gh-icon-button {
     width: 38px;
     height: 38px;
   }
 
-  .gh-cat-a .gh-iconbtn[disabled] {
+  .gh-category-row-actions .gh-icon-button[disabled] {
     opacity: 0.3;
     cursor: default;
   }
 
-  .gh-lockn {
+  .gh-category-lock-note {
     display: flex;
     align-items: flex-start;
     gap: 6px;
@@ -186,92 +186,92 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-lockn i {
+  .gh-category-lock-note i {
     flex: 0 0 auto;
     margin-top: 2px;
   }
 
-  .gh-addcat {
+  .gh-add-category-btn {
     margin-top: 14px;
   }
 
-  .gh-gprev {
+  .gh-grading-table-preview {
     margin: 0 -4px;
     overflow-x: auto;
   }
 
-  .gh-gprev table.gh-grid {
+  .gh-grading-table-preview table.gh-grading-table {
     min-width: 0;
   }
 
-  .gh-gprev .gh-thc {
+  .gh-grading-table-preview .gh-grading-column-head {
     width: 66px;
   }
 
-  .gh-gprev .gh-thn {
+  .gh-grading-table-preview .gh-grading-column-name {
     min-height: 3.6em;
     font-size: 11px;
     cursor: default;
   }
 
-  .gh-gprev .gh-th-stu,
-  .gh-gprev .gh-td-stu {
+  .gh-grading-table-preview .gh-grading-th-student,
+  .gh-grading-table-preview .gh-grading-td-student {
     min-width: 112px;
     font-size: 13px;
   }
 
-  .gh-gprev .gh-grid th,
-  .gh-gprev .gh-grid td {
+  .gh-grading-table-preview .gh-grading-table th,
+  .gh-grading-table-preview .gh-grading-table td {
     padding: 4px;
   }
 
-  .gh-gprev .gh-cell--sm {
+  .gh-grading-table-preview .gh-grading-cell--sm {
     width: 30px;
     height: 24px;
   }
 
-  .gh-names {
+  .gh-sample-name-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     margin-top: 12px;
   }
 
-  .gh-names span {
+  .gh-sample-name-chips span {
     --gh-c: 4px;
     padding: 5px 9px;
     background: var(--gh-card-2);
     font: 600 13.5px var(--gh-f-ui);
   }
 
-  @media (max-width: 720px) {
-    .gh-tpl {
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-template-panel {
       padding: 16px 14px 10px;
     }
 
-    .gh-tpl-h h2 {
+    .gh-template-panel-header h2 {
       font-size: 21px;
     }
 
-    .gh-ag {
+    .gh-sheet-row {
       grid-template-columns: minmax(0, 1fr);
       gap: 8px;
     }
 
-    .gh-ag-a {
+    .gh-sheet-row-actions {
       justify-content: flex-start;
     }
 
-    .gh-cat {
+    .gh-category-row {
       grid-template-columns: 22px minmax(0, 1fr);
     }
 
-    .gh-cat-p,
-    .gh-cat-a {
+    .gh-category-row-price,
+    .gh-category-row-actions {
       grid-column: 2;
     }
 
-    .gh-cat-p {
+    .gh-category-row-price {
       padding-top: 0;
     }
   }
@@ -279,12 +279,12 @@
 
 @layer components {
 
-  .gh-toggle {
+  .gh-icon-toggle {
     position: relative;
     cursor: pointer;
   }
 
-  .gh-toggle input {
+  .gh-icon-toggle input {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -292,12 +292,12 @@
     pointer-events: none;
   }
 
-  .gh-toggle:has(input:focus-visible) {
+  .gh-icon-toggle:has(input:focus-visible) {
     outline: 3px solid var(--gh-focus);
     outline-offset: 2px;
   }
 
-  .gh-story>summary {
+  .gh-story-disclosure>summary {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -307,11 +307,11 @@
     cursor: pointer;
   }
 
-  .gh-story>summary::-webkit-details-marker {
+  .gh-story-disclosure>summary::-webkit-details-marker {
     display: none;
   }
 
-  .gh-story[open]>summary {
+  .gh-story-disclosure[open]>summary {
     display: none;
   }
 }

@@ -11,12 +11,12 @@
     = "#{joined} #{gh_plural(joined, 'osoba, która dołączyła', 'osoby, które dołączyły', 'osób, które dołączyły')}"
     = 'z tym kodem, zostaje w grupie.'
 
-.gh-dlg-b
+.gh-dialog-button-row
   -# Anuluj first and focused: the safe button is the one you land on.
   - if @in_modal
-    %button.gh-btn.gh-btn--sec{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Anuluj
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Anuluj
   - else
-    = link_to 'Anuluj', story_group_invites_path(@story_group), class: 'gh-btn gh-btn--sec'
+    = link_to 'Anuluj', story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary'
 
   = button_to 'Usuń zaproszenie', story_group_invite_path(@story_group, invite),
     method: :delete, class: 'gh-btn',

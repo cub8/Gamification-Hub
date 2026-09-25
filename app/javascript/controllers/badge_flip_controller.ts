@@ -27,7 +27,7 @@ class BadgeFlipController extends Controller<HTMLElement> {
   declare readonly backTarget: HTMLElement
 
   toggle() {
-    const down = this.element.classList.toggle("gh-flip--down")
+    const down = this.element.classList.toggle("gh-flip-card--down")
 
     this.hide(this.frontTarget, down)
     this.hide(this.backTarget, !down)

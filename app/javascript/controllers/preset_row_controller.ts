@@ -35,7 +35,7 @@ class PresetRowController extends Controller<HTMLElement> {
   private render() {
     const kept = this.keepTarget.checked
 
-    this.element.classList.toggle("gh-rrow--x", !kept)
+    this.element.classList.toggle("gh-preset-row--removed", !kept)
     this.labelTarget.textContent = `${kept ? "Usuń" : "Przywróć"}: ${this.name}`
     this.iconTarget.classList.toggle("fa-xmark", kept)
     this.iconTarget.classList.toggle("fa-rotate-left", !kept)

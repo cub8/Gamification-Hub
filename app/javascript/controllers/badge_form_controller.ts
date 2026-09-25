@@ -83,7 +83,7 @@ class BadgeFormController extends Controller<HTMLFormElement> {
     const button = event.currentTarget as HTMLButtonElement
     const down = button.value === "lost"
 
-    this.flipTarget.classList.toggle("gh-flip--down", down)
+    this.flipTarget.classList.toggle("gh-flip-card--down", down)
     this.sideTargets.forEach((other) => {
       other.setAttribute("aria-pressed", String(other === button))
     })
@@ -113,7 +113,7 @@ class BadgeFormController extends Controller<HTMLFormElement> {
 
   private placeholder(element: HTMLElement, value: string, fallback: string) {
     element.textContent = value || fallback
-    element.classList.toggle("gh-ph", value === "")
+    element.classList.toggle("gh-placeholder-text", value === "")
   }
 }
 

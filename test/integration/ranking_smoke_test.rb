@@ -27,7 +27,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
   end
 
   def places
-    css_select('.gh-rk-row .gh-pos').map { |node| node.text.strip }
+    css_select('.gh-ranking-row .gh-position-badge').map { |node| node.text.strip }
   end
 
   # --- layout ---------------------------------------------------------------
@@ -39,7 +39,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -51,7 +51,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_response :success
-    assert_select '.gh-shell header.gh-hd'
+    assert_select '.gh-app-shell header.gh-topbar'
   end
 
   # --- the two perspectives -------------------------------------------------
@@ -63,9 +63,9 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
 
-    assert_select '.gh-rk-row .gh-nm b', /Rakietowy Seba/
-    assert_select '.gh-rk-row .gh-nm small', 'Sebastian Alejandro'
-    assert_select '.gh-rk-row--h span', 'Pseudonim i student'
+    assert_select '.gh-ranking-row .gh-ranking-name b', /Rakietowy Seba/
+    assert_select '.gh-ranking-row .gh-ranking-name small', 'Sebastian Alejandro'
+    assert_select '.gh-ranking-row--header span', 'Pseudonim i student'
   end
 
   # Ours diverges from the mockup, whose nickname is mandatory: a blank one
@@ -78,8 +78,8 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
 
-    assert_select '.gh-rk-row .gh-nm b', /Adam Pawłowski/
-    assert_select '.gh-rk-row .gh-nm small.gh-none', 'Bez pseudonimu'
+    assert_select '.gh-ranking-row .gh-ranking-name b', /Adam Pawłowski/
+    assert_select '.gh-ranking-row .gh-ranking-name small.gh-empty-note', 'Bez pseudonimu'
   end
 
   test 'a student sees nobody else\'s real name' do
@@ -91,12 +91,12 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_response :success
-    assert_select '.gh-rk-row .gh-nm b', /Nova/
+    assert_select '.gh-ranking-row .gh-ranking-name b', /Nova/
     assert_no_match(/Barbara Kowalewska/, response.body)
-    assert_select '.gh-rk-row--h span', 'Pseudonim'
+    assert_select '.gh-ranking-row--header span', 'Pseudonim'
     # Their own row is marked, and nobody else's is.
-    assert_select '.gh-rk-row--me .gh-youtag', 'Ty'
-    assert_select '.gh-rk-row--me', 1
+    assert_select '.gh-ranking-row--me .gh-you-badge', 'Ty'
+    assert_select '.gh-ranking-row--me', 1
   end
 
   # The ranking is the ONE screen where a nickname stands in for a person. The
@@ -109,8 +109,8 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
 
-    assert_select '.gh-rk-row .gh-nm b', /Rakietowy Seba/
-    assert_select '.gh-rk-row .gh-nm small', 'Sebastian Alejandro'
+    assert_select '.gh-ranking-row .gh-ranking-name b', /Rakietowy Seba/
+    assert_select '.gh-ranking-row .gh-ranking-name small', 'Sebastian Alejandro'
   end
 
   # --- placement ------------------------------------------------------------
@@ -136,7 +136,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
 
-    assert_select '.gh-rk-row .gh-rk-r', 'Pilot'
+    assert_select '.gh-ranking-row .gh-ranking-rank-cell', 'Pilot'
   end
 
   # --- what the mode hides --------------------------------------------------
@@ -152,8 +152,8 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_equal %w[1 2 3 5], places
-    assert_select '.gh-rk-row--gap', 1
-    assert_select '.gh-rk-row--gap .gh-none', 'Pozostałe miejsca są ukryte'
+    assert_select '.gh-ranking-row--hidden-gap', 1
+    assert_select '.gh-ranking-row--hidden-gap .gh-empty-note', 'Pozostałe miejsca są ukryte'
     assert_no_match(/Kosmo/, response.body)
   end
 
@@ -167,7 +167,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_equal %w[1 2 3], places
-    assert_select '.gh-rk-row--gap', false
+    assert_select '.gh-ranking-row--hidden-gap', false
   end
 
   test 'full mode shows a student every row' do
@@ -179,7 +179,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_equal %w[1 2 3 4 5], places
-    assert_select '.gh-rk-row--gap', false
+    assert_select '.gh-ranking-row--hidden-gap', false
   end
 
   test 'the teacher always sees everyone, whatever students see' do
@@ -202,10 +202,10 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
 
     assert_response :success
-    assert_select '.gh-gm h2', 'Ranking jest teraz ukryty'
-    assert_select '.gh-rk-row', false
+    assert_select '.gh-empty-state h2', 'Ranking jest teraz ukryty'
+    assert_select '.gh-ranking-row', false
     # Their own total and nickname stay theirs; the place does not exist.
-    assert_select '.gh-mine b', '40'
+    assert_select '.gh-my-ranking-stats b', '40'
     assert_no_match(/Twoje miejsce/, response.body)
   end
 
@@ -238,11 +238,11 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
 
-    assert_select 'a.gh-sw[role=switch][aria-checked=false]' do
+    assert_select 'a.gh-toggle-switch[role=switch][aria-checked=false]' do
       assert_select '[href=?]', confirm_visibility_story_group_ranking_path(story_group, enabled: true)
     end
     # Nothing for the mode to describe while the board is off.
-    assert_select '.gh-seg2', false
+    assert_select '.gh-segmented-toggle-2', false
   end
 
   test 'the mode pair links only the mode not in force' do
@@ -251,9 +251,9 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
 
-    assert_select '.gh-seg2 span[aria-pressed=true]', 'Podium i własne miejsce'
-    assert_select '.gh-seg2 a[href=?]', confirm_mode_story_group_ranking_path(story_group, mode: 'full')
-    assert_select '.gh-seg2 a[href=?]',
+    assert_select '.gh-segmented-toggle-2 span[aria-pressed=true]', 'Podium i własne miejsce'
+    assert_select '.gh-segmented-toggle-2 a[href=?]', confirm_mode_story_group_ranking_path(story_group, mode: 'full')
+    assert_select '.gh-segmented-toggle-2 a[href=?]',
                   confirm_mode_story_group_ranking_path(story_group, mode: 'podium_and_own'), false
   end
 
@@ -262,11 +262,11 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
 
     sign_in teacher_of(story_group)
     get story_group_ranking_path(story_group)
-    assert_select '.gh-rk-note b', 'Studenci widzą tylko podium i swoje miejsce.'
+    assert_select '.gh-ranking-visibility-note b', 'Studenci widzą tylko podium i swoje miejsce.'
 
     story_group.ranking_full!
     get story_group_ranking_path(story_group)
-    assert_select '.gh-rk-note', false
+    assert_select '.gh-ranking-visibility-note', false
   end
 
   # --- the dialogs ----------------------------------------------------------
@@ -279,7 +279,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'h2', 'Pokazać ranking studentom?'
-    assert_select '.gh-opts[role=radiogroup] input[type=radio]', 2
+    assert_select '.gh-choice-grid[role=radiogroup] input[type=radio]', 2
     assert_select 'input[name=?][value=?]', 'story_group[ranking_enabled]', 'true'
   end
 
@@ -324,7 +324,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select 'turbo-frame#modal'
-    assert_select '.gh-shell', false
+    assert_select '.gh-app-shell', false
   end
 
   # --- writing --------------------------------------------------------------
@@ -394,8 +394,8 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     sign_in membership.user
     get story_group_ranking_path(story_group)
 
-    assert_select '.gh-nick b', 'Seba'
-    assert_select '.gh-nick a[href=?]', nickname_story_group_membership_path(story_group)
+    assert_select '.gh-nickname-row b', 'Seba'
+    assert_select '.gh-nickname-row a[href=?]', nickname_story_group_membership_path(story_group)
   end
 
   test 'the nickname dialog saves and returns to the ranking' do
@@ -425,7 +425,7 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert_select 'h2', 'Pseudonim w grupie Kosmiczne króliki'
-    assert_select '.gh-err span', 'Ten pseudonim jest już zajęty w tej grupie.'
+    assert_select '.gh-field-error span', 'Ten pseudonim jest już zajęty w tej grupie.'
     assert_equal 'Seba', membership.reload.nickname
   end
 
