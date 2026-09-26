@@ -32,8 +32,6 @@
               %small= badge.didactic_description
             %span.gh-badge-picker-status= badge_pick_status(badge, owned)
 
-    -# One sentence per badge, all rendered, all hidden but at most one: the
-    -# controller reveals the matching one rather than writing markup.
     - @badges.each do |badge|
       %p.gh-explainer-note.gh-badge-effect-note{ hidden: true,
                             data: { badge_picker_target: 'effect',

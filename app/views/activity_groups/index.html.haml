@@ -14,8 +14,6 @@
   - @index.templates.each do |template|
     = render 'template_panel', template: template, fresh_sheet_ids: @fresh_sheet_ids
 - else
-  -# The mockup has no empty state for this screen. House rule: name the next
-  -# action rather than only reporting the absence.
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie masz jeszcze żadnego szablonu
     %p.gh-lead

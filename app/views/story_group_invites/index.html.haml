@@ -1,4 +1,3 @@
--# Mockup: #/t/invites, design/mockup-src/js-expanded/30-isg.js `vInv`.
 - content_for :title, 'Zaproszenia'
 
 %section.gh-panel.gh-page-header
@@ -14,8 +13,6 @@
     Nowe zaproszenie
 
 %section.gh-panel.gh-invite-list
-  -# A header for the grid below, not a <thead>: the rows are grid rows so they
-  -# can reflow into a two-column stack on a phone, where this is hidden.
   .gh-invite-row.gh-invite-row--header{ 'aria-hidden': 'true' }
     %span Kod
     %span Status
@@ -29,9 +26,6 @@
   - else
     %p.gh-explainer-note Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.
 
--# Folded away rather than mixed in: a dead code is history, and the teacher
--# came here to look at the live ones. Gone entirely when there are none —
--# an empty disclosure is worse than no disclosure.
 - if @inactive.any?
   %details.gh-inactive-invites
     %summary= "Nieaktywne (#{@inactive.size}): wygasłe i wyczerpane"

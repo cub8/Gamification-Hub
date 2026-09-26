@@ -11,8 +11,6 @@
                                          'aria-label': label,
                                          data: card_data }
   .gh-flip-card-inner
-    -# The turned-away face is `inert` as well as aria-hidden: backface-
-    -# visibility hides it from the eye, not from the tab order.
     .gh-flip-card-face.gh-flip-card-face--front{ 'aria-hidden': (earned ? nil : 'true'), inert: !earned,
                              data: { badge_flip_target: 'front' } }
       .gh-card-frame

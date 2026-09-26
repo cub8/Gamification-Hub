@@ -1,6 +1,3 @@
--# A dialog rather than data-turbo-confirm, because the point of it is what the
--# delete does NOT take with it: the sheets already stamped from this template
--# keep their own copies of the columns and go on working.
 %h2#gh-del-title.gh-h2= "Usunąć szablon „#{template.base_name}”?"
 %p Szablon zniknie z listy, a utworzone z niego arkusze zostają.
 
@@ -13,7 +10,6 @@
       = gh_and_list(sheet_names)
 
 .gh-dialog-button-row
-  -# Anuluj first and focused: the safe button is the one you land on.
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj

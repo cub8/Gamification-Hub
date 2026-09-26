@@ -48,14 +48,10 @@
     .gh-student-stat
       %dt Życia
       %dd
-        -# One heart and a number (DECISIONS.md:35).
         %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if @sheet.lives.zero?) }
           %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
         = @sheet.lives
 
--# Links carrying aria-current, not role="tab" buttons: these navigate, so the
--# student list's history icon can point straight at one and the choice survives
--# a refresh. Same shape as the group index's tabs.
 %nav.gh-group-tabs{ 'aria-label': 'Sekcje studenta' }
   - StudentSheet::TABS.each do |key, label|
     = link_to story_group_student_path(@story_group, @student, tab: key), class: 'gh-group-tab',

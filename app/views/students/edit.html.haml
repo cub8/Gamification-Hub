@@ -1,6 +1,3 @@
--# Either the layout's shared `modal` frame or a page — never both. A page
--# carrying its own <turbo-frame id="modal"> would collide with the one the
--# layout already has inside the dialog.
 - content_for :title, "Edytuj studenta - #{@student.display_name}"
 
 - if @in_modal

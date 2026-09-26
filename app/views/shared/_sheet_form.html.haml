@@ -8,8 +8,6 @@
 - sheet_names  = local_assigns[:sheet_names] || []
 - awards_count = local_assigns[:awards_count].to_i
 
--# Two real names off the register, so the preview reads as this group's table
--# rather than as a screenshot. The mockup's own two are the fallback.
 - sample_names = @story_group.student_memberships.with_user.first(2).map(&:display_name).presence || ['Adam Pawłowski', 'Barbara Kowalewska']
 
 - headings   = { template_new: 'Nowy szablon arkusza', template_edit: 'Edytuj szablon arkusza', sheet: 'Ustawienia arkusza' }
@@ -17,17 +15,12 @@
 - crumb_tail = sheet ? record.name : (record.base_name_was.presence || record.base_name)
 - crumb_tail = 'Nowy szablon' if variant == :template_new
 
--# The plural forms and the currency name travel as values because the summary
--# line and the dirty marker are the only text this controller rewrites, and
--# Polish plurals are not something JavaScript should be guessing at.
 - form_data = { controller: 'sheet-form',
                 sheet_form_columns_value: %w[kolumna kolumny kolumn].to_json,
                 sheet_form_currency_value: @story_group.currency_name.to_s,
                 sheet_form_category_label_value: (sheet ? 'kolumnę' : 'kategorię'),
                 sheet_form_editing_value: editing.to_s }
 
--# The controller wraps the whole screen, not just the <form>: the crumb link
--# above it and the discard dialog below it are both things it has to reach.
 %div{ data: form_data }
   %section.gh-panel.gh-page-header.gh-page-header--stacked
     %p.gh-breadcrumbs
@@ -104,9 +97,6 @@
             %b{ data: { sheet_form_target: 'summaryMax' } }= visible.sum { |category| category.reward.to_i }
             = "#{@story_group.currency_name} za arkusz."
 
-          -# The blank row the "Dodaj" button clones. NEW_RECORD is rewritten to a
-          -# timestamp on clone, which is how Rails keeps nested-attribute indices
-          -# apart without the server having to hand out more of them.
           %template{ data: { sheet_form_target: 'blank' } }
             = f.fields_for cats_attr, categories.klass.new(reward: 1), child_index: 'NEW_RECORD' do |cf|
               = render 'shared/category_row', f: cf, category: cf.object,
@@ -131,17 +121,12 @@
         data: { action: 'sheet-form#leave' }
       %span.gh-form-actions-spacer
       - if editing
-        -# Server-rendered as "Brak zmian" and enabled: without JavaScript there
-        -# is no dirty tracking, and a submit button you cannot press is worse
-        -# than one that saves an unchanged record.
         %span.gh-small{ data: { sheet_form_target: 'dirty' } } Brak zmian
       %button.gh-btn{ type: 'submit', data: { sheet_form_target: 'submit' } }
         - unless editing
           %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
         = editing ? 'Zapisz zmiany' : 'Utwórz szablon'
 
-  -# Only reachable once something has changed, so it is rendered but never
-  -# opened without JavaScript.
   %dialog.gh-dialog{ data: { sheet_form_target: 'discard',
                              action: 'close->sheet-form#closeDiscard click->sheet-form#closeOnBackdrop' } }
     .gh-dialog-body.gh-octagon-clip

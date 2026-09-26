@@ -1,14 +1,9 @@
--# Mockup: 30-item.js:74. A dialog rather than data-turbo-confirm, because the
--# point of it is the consequence — what happens to the copies students already
--# bought.
 %h2#gh-del-title.gh-h2= "Usunąć „#{item.name}” ze sklepu?"
 %p
   Przedmiot zniknie ze sklepu i z list. Studenci, którzy go kupili, zachowają
   go, a w historii zostanie oznaczony jako „Usunięty z oferty”.
 
 - if bought.positive?
-  -# Not a blocker: a soft delete breaks no foreign key. It is here because the
-  -# number is the whole reason the dialog exists.
   %p.gh-warning-note{ role: 'alert' }
     %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
     %span
@@ -16,7 +11,6 @@
       i zachowa go po usunięciu.
 
 .gh-dialog-button-row
-  -# Anuluj first and focused: the safe button is the one you land on.
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj

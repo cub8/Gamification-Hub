@@ -45,9 +45,6 @@
           %h2.gh-rank-card-name= overview.rank&.name || 'Brak rangi'
 
         - if overview.rank
-          -# The bare art, NOT ranks/_rank_thumb: that partial is a mini entity
-          -# card with its own frame and shadow, and nesting one inside an art
-          -# well leaves a 52px chip floating in a 200px rectangle.
           .gh-card-art
             = render 'ranks/art', rank: overview.rank
 
@@ -98,8 +95,6 @@
         .gh-item-hand-card{ style: "--gh-rot: #{overview_hand_rotation(index, count)}deg" }
           = render 'students_items/card', purchase: purchase, foot: purchase_line(purchase)
 
-      -# Closes the hand rather than sitting under it: the overview's job is to
-      -# send you back to the shop, exactly as on "Moje przedmioty".
       .gh-panel.gh-empty-slot-panel
         %p= overview_hand_line(overview.affordable)
         = link_to 'Przejdź do sklepu', story_group_shop_index_path(story_group), class: 'gh-btn gh-btn--secondary'

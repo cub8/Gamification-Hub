@@ -16,9 +16,6 @@
               bar:         { item_form_target: 'bar' },
               req_list:    { item_form_target: 'reqList' }, }
 
--# Illustrative numbers. The mockup's own are sample data with no meaning
--# (max(1, min(6, price - 1)), 30-item.js:58); this at least shows a student who
--# is most of the way there, which is what the state is for.
 - price = item.price.to_i
 - need  = [(price * 0.4).ceil, 1].max
 
@@ -37,8 +34,6 @@
       %button{ type: 'button', 'aria-pressed': 'false', value: 'save',
                data: { action: 'item-form#state', item_form_target: 'state' } }
         Zbierasz
-      -# An item without requirements can never be sealed (DECISIONS.md:34), so
-      -# the tab is disabled rather than showing a state that cannot happen.
       %button{ type: 'button', 'aria-pressed': 'false', value: 'sealed',
                disabled: !card.requires?,
                data: { action: 'item-form#state', item_form_target: 'state' } }

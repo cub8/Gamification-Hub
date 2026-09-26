@@ -1,4 +1,3 @@
--# Mockup: #/t/dash, design/mockup-src/js-expanded/30-main.js `viewDash`.
 - recent = @dashboard.recent_purchases
 - groups = @dashboard.groups
 
@@ -21,8 +20,6 @@
 
     - if groups.size > 1
       .gh-purchase-filter-bar{ role: 'group', 'aria-label': 'Pokaż zakupy z grupy' }
-        -# Links, not buttons: filtering is server-side so the choice survives
-        -# a refresh and a shared URL.
         = link_to 'Wszystkie grupy', home_path, class: 'gh-purchase-filter-chip',
           'aria-current': @dashboard.filter.nil?.to_s
         - groups.each do |group|

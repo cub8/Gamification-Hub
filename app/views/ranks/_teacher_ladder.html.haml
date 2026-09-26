@@ -1,13 +1,8 @@
--# Mockup: #/t/ranks, js-expanded/30-lists.js:25-29.
 %section.gh-panel.gh-page-header
   .gh-page-header-text
     %h1.gh-h1 Rangi
     %p.gh-lead
       = "#{ladder.size} #{gh_plural(ladder.size, 'ranga', 'rangi', 'rang')}."
-      -# The mockup names the group's currency in its genitive plural here
-      -# ("marchewek"). We hold one currency_name per group and no declension
-      -# for it, so this borrows the phrasing the mockup's own rank FORM uses
-      -# (30-br.js:56) rather than inventing a case we cannot build.
       Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi.
 
   .gh-button-row
@@ -17,11 +12,8 @@
 
 - if ladder.any?
   %section.gh-panel.gh-list-panel
-    -# Highest rung first, as every ladder in the mockup is.
     %ol.gh-rank-ladder-list
       - ladder.descending.each_with_index do |rung, position|
-        -# The distance from the rung below to this one, printed between them.
-        -# aria-hidden: it repeats the two thresholds either side of it.
         - if position.positive?
           %li.gh-rank-gap{ 'aria-hidden': 'true' }
             = "↑ #{rung.gap_to_next} zebranych do awansu"
@@ -40,8 +32,6 @@
           .gh-rank-row-stats
             %b= rung.holders
             = gh_plural(rung.holders, 'student', 'studentów', 'studentów')
-            -# Nothing to compare against in a group with no students yet, and
-            -# gh_percent reads an empty denominator as "full".
             - if ladder.total_students.positive?
               .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                        'aria-valuemin': 0,
@@ -55,8 +45,6 @@
             %i.fa-solid.fa-pen
             Edytuj
 - else
-  -# The mockup has no empty state for this screen. House rule: name the next
-  -# action rather than only reporting the absence.
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie ma jeszcze żadnych rang
     %p.gh-lead

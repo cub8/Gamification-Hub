@@ -3,9 +3,6 @@
     = image_tag 'logo.png', alt: ''
     %span.gh-topbar-logo-word Gamification Hub
 
-  -# Mobile only: below 720px the sidebar and its deck are gone, so this is the
-  -# only thing naming the group you are in. chrome.css keeps it display:none
-  -# on desktop, where the deck says it better.
   - if group_chrome
     %button.gh-group-switcher{ type: 'button',
                     data: { action: 'menu#open', menu_id_param: 'gh-group-switcher' },
@@ -27,17 +24,11 @@
         %b= purse.current_currency
         %small do wydania
 
-  -# The mockup gates this on `role === 'student'` (10-core.js:162) because its
-  -# teacher persona is never also a student. Ours can be, and the groups index
-  -# already lists their "Uczę się" groups, so everyone gets it.
   = link_to new_join_path, class: 'gh-btn gh-btn--secondary gh-btn--small gh-topbar-join-link',
     data: { turbo_frame: 'modal' } do
     %i.fa-solid.fa-plus
     %span Dołącz do grupy
 
-  -# Both glyphs ship; chrome.css shows the one for the theme you would switch
-  -# TO. With no cookie set the server cannot know how prefers-color-scheme
-  -# resolves, so this cannot be a single server-rendered icon.
   %button.gh-icon-button.gh-topbar-theme-toggle{ type: 'button',
                                   data: { action: 'theme#toggle' },
                                   'aria-label': 'Przełącz motyw' }
@@ -46,8 +37,6 @@
 
   - if user.teacher?
     = helpers.turbo_stream_from user, :notifications
-    -# The panel frame, not the modal one: notifications are a popover in the
-    -# mockup — corner-pinned and unscrimmed on desktop — not a centred dialog.
     = link_to notifications_path, class: 'gh-icon-button',
       data: { turbo_frame: 'panel' }, 'aria-label': bell_label do
       %i.fa-solid.fa-bell

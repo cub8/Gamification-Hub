@@ -14,9 +14,6 @@
 
     %ul.gh-review-list
       - students.each do |student|
-        -# The REAL name, never the nickname: grading is the teacher naming a
-        -# person, and a pseudonym in this column is the one thing that could
-        -# make them award the wrong row. The mockup prints `s.name` here too.
         - name = student.full_name
         - open_categories = categories.reject { |category| @sheet.awarded?(student, category) }
         - next if open_categories.empty?
@@ -35,8 +32,6 @@
           %span.gh-review-row-sum{ data: { grading_target: 'reviewRowSum' } }
 
     .gh-dialog-button-row
-      -# The safe button first and focused (DECISIONS.md:31). The one beside it
-      -# hands out currency that cannot be taken back.
       %button.gh-btn.gh-btn--secondary{ type: 'button', autofocus: true,
                                   data: { action: 'grading#closeReview' } }
         Wróć do edycji

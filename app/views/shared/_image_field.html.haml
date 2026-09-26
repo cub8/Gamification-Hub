@@ -40,10 +40,6 @@
           - else
             = gh_glyph(key)
 
-    -# The last tile: your own art. Always in the markup, hidden until there
-    -# is something to show — image_crop_controller reveals and selects it the
-    -# moment a file is chosen, so the picker never disagrees with what will be
-    -# saved. An empty key is how the record says "the upload is the art".
     %label.gh-art-preset-tile.gh-art-preset-tile--custom{ hidden: !attachment.attached? }
       = form.radio_button glyph_attribute, '', class: 'sr-only',
         id: field_id.call('own'), 'aria-label': copy[:own],
@@ -51,9 +47,6 @@
         data: { image_crop_target: 'ownRadio',
                 action: ['image-crop#pickOwn', refresh].compact.join(' ') }
       %i.gh-octagon-clip
-        -# `src` is omitted, not blank, when there is nothing yet: an empty src
-        -# resolves against the page URL, so the browser would re-request this
-        -# very page for an image it cannot even see.
         - preview = { alt: '', data: { image_crop_target: 'ownPreview' } }
         - preview[:src] = url_for(attachment) if attachment.attached?
         %img{ preview }
@@ -75,9 +68,6 @@
         accept: 'image/png,image/jpeg,image/gif',
         data: { image_crop_target: 'input', action: 'image-crop#choose' }
 
-  -# Populated by image_crop_controller once a file is chosen, and hidden until
-  -# then. Without JavaScript it stays hidden and the file posts uncropped — a
-  -# worse frame, but a working form.
   .gh-image-cropper{ data: { image_crop_target: 'editor' }, hidden: true }
     %p.gh-form-label= copy[:crop]
     .gh-image-cropper-box{ data: { image_crop_target: 'box' } }

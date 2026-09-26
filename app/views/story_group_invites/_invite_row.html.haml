@@ -1,4 +1,3 @@
--# One row of the invites list. Mockup: 30-isg.js `ivRow`.
 - fresh = local_assigns[:fresh_id].present? && local_assigns[:fresh_id] == invite.id
 
 .gh-invite-row{ class: ('gh-invite-row--new' if fresh) }
@@ -9,7 +8,6 @@
 
   %span.gh-invite-usage
     = "Użycia: #{invite_uses_label(invite)}"
-    -# Only a limited code has a denominator, so only a limited code gets a bar.
     - if invite.max_uses
       .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                'aria-valuemin': 0,
@@ -21,7 +19,6 @@
   %span.gh-invite-expiry= invite_expiry_label(invite)
 
   %span.gh-invite-actions
-    -# Nothing to project once a code is dead, so "Pokaż" goes with it.
     - if invite.active?
       = link_to story_group_invite_path(@story_group, invite), class: 'gh-btn gh-btn--small',
         data: { turbo_frame: 'modal' } do

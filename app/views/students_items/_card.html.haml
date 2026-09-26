@@ -14,8 +14,6 @@
         %span.gh-art-slot-wrapper
           = render 'items/art', item: item
 
-      -# Off the shelf, still owned. Soft delete keeps it (DECISIONS.md:28) and
-      -# the tag is the only thing that says why it is nowhere else.
       - if item.deleted?
         .gh-card-tags
           %span.gh-tag.gh-tag--removed Usunięty z oferty

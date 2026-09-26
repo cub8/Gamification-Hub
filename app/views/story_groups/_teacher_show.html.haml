@@ -17,8 +17,6 @@
             %i.fa-solid.fa-table{ 'aria-hidden': 'true' }
             Utwórz arkusz
           - if policy(story_group).update?
-            -# A page now, not a dialog (DECISIONS.md:26) — so no turbo_frame
-            -# here, or settings would render inside the modal.
             = link_to edit_story_group_path(story_group), class: 'gh-btn gh-btn--secondary' do
               %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }
               Ustawienia grupy
@@ -38,10 +36,6 @@
     %h2#gh-purchases-title.gh-h2 Ostatnie zakupy
 
     - if overview.purchases.any?
-      -# gh-purchase-row--group-variant: four columns, not the Start screen's five. In a group
-      -# there is no group chip to show, and the row has to say so — a .gh-purchase-row
-      -# with four children would auto-place the price chip into the chip's
-      -# 210px track and stretch it into a bar.
       %ul.gh-purchase-list
         - overview.purchases.each do |purchase|
           %li.gh-purchase-row.gh-purchase-row--group-variant
@@ -54,8 +48,6 @@
               = render 'layouts/currency_token', story_group: story_group, size: 16
             %span.gh-purchase-row-time= gh_when(purchase.time)
 
-      -# The teacher Start screen already filters every purchase by group, so
-      -# "wszystkie zakupy w tej grupie" is that screen with this group picked.
       = link_to 'Wszystkie zakupy w grupie', home_path(group: story_group.id), class: 'gh-link-button'
     - else
       %p.gh-explainer-note

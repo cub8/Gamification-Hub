@@ -8,8 +8,6 @@
       Usuń, czego nie potrzebujesz, i popraw liczby. Nazwy i opisy zmienisz po
       utworzeniu grupy.
 
-    -# Carried in the frame, not read off the step-3 controls, so what is
-    -# created is exactly what these rows were generated from.
     = hidden_field_tag 'setup[pack]', preset.pack, id: nil
     = hidden_field_tag 'setup[classes]', preset.classes, id: nil
 
@@ -52,9 +50,6 @@
               .gh-text-input.gh-input--compact
                 = number_field_tag "setup[items][#{item.index}][value]", item.price,
                   min: 1, step: 1, id: nil, 'aria-label': "#{item.name}: cena w #{currency}"
-              -# The group's own coin, as the mockup shows it (30-form.js:79).
-              -# Filled by group_wizard_controller from the checked picker tile
-              -# once this frame loads — the same clone the previews use.
               %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
                 %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
                   %span{ data: { group_wizard_target: 'markLetter' } }
@@ -67,18 +62,11 @@
         - preset.categories.each do |category|
           = render layout: 'preset_row', locals: { zone: 'cats', index: category.index, icon: 'fa-table-cells',
             name: category.didactic_description, note: nil } do
-            -# The same cell as an item's price, coin and all. No leading "+":
-            -# the zone heading already says these are rewards, and the plus
-            -# only read as a stray character beside the field. The unit is
-            -# spelled out in the aria-label, where a coin cannot be read.
             %span.gh-preset-row-value
               .gh-text-input.gh-input--compact
                 = number_field_tag "setup[cats][#{category.index}][value]", category.reward,
                   min: 1, step: 1, id: nil,
                   'aria-label': "#{category.didactic_description}: nagroda w #{currency}"
-              -# The group's own coin, as the mockup shows it (30-form.js:79).
-              -# Filled by group_wizard_controller from the checked picker tile
-              -# once this frame loads — the same clone the previews use.
               %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
                 %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
                   %span{ data: { group_wizard_target: 'markLetter' } }

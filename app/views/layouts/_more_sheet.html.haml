@@ -1,15 +1,9 @@
--# The mobile "Więcej" sheet — everything the tab bar could not fit.
--# Mockup: js-expanded/10-core.js `sheetMore()`.
 %dialog#gh-more-sheet.gh-dialog.gh-dialog--menu{ data: { action: 'click->menu#closeOnBackdrop' },
                                                  'aria-labelledby': 'gh-more-title' }
   .gh-dialog-body.gh-octagon-clip
     %span.gh-sheet-drag-handle{ 'aria-hidden': 'true' }
     %h2#gh-more-title.gh-h2 Więcej
 
-    -# In a group this is where the sections the tab bar could not fit live.
-    -# The mockup lists ALL of them, including the three already in the tab bar
-    -# (10-core.js:278), so the sheet is a complete index rather than a
-    -# remainder you have to reason about.
     - if chrome
       %ul.gh-menu-list.gh-menu-list--nav
         - chrome.items.each do |item|
@@ -27,7 +21,6 @@
     %p.gh-popover-section-label Konto
     %ul.gh-menu-list
       %li
-        -# Inert until #/s/account exists.
         %button{ type: 'button' }
           %i.fa-solid.fa-gear
           %span Ustawienia konta

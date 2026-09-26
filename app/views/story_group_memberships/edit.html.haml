@@ -1,8 +1,3 @@
--# "Ustawienia w grupie". Mockup: js-expanded/30-gh.js `vSset` (:45-50).
--#
--# Everything here is per-group, which is the whole point of the screen: the
--# nickname is scoped to one group (DECISIONS.md:38), and so is leaving. Account
--# settings — name, e-mail, theme — are a different screen entirely.
 - content_for :title, "Ustawienia w grupie - #{@story_group.name}"
 
 %section.gh-panel.gh-page-header
@@ -17,8 +12,6 @@
   %h2.gh-h3 Pseudonim
   %p.gh-field-hint Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
 
-  -# One field, so it saves by itself rather than through a page-wide save bar:
-  -# there is nothing else on this screen for "Zapisz zmiany" to mean.
   = form_with model: @membership, url: story_group_membership_path(@story_group), method: :patch do |f|
     = render 'nickname_field', f: f, membership: @membership, submit_label: 'Zapisz'
 

@@ -1,7 +1,3 @@
--# Notifications, rendered into the anchored panel.
--#
--# No close button: the panel is dismissed by clicking away from it or with
--# Escape, exactly like the mockup's popover.
 = turbo_frame_tag 'panel' do
   = render 'notifications/panel',
     notifications: @notifications, unread: @unread, read: @read

@@ -7,8 +7,6 @@
     %span.gh-ledger-header-spacer
     %span.gh-small= summary
 
--# role="table" rather than a <table>: every row has to reflow into a stacked
--# block on a phone, which a table cannot do. Same reasoning as the invites list.
 %div{ role: 'table', 'aria-label': 'Historia waluty' }
   .gh-ledger-row.gh-ledger-row--header{ role: 'row' }
     %span{ role: 'columnheader' } Kwota
@@ -20,15 +18,9 @@
   - entries.each do |entry|
     .gh-ledger-row{ role: 'row' }
       %span.gh-ledger-amount{ class: "gh-ledger-amount--#{entry.tone}", role: 'cell' }= entry.signed_amount
-      -# The chip IS the cell. The mockup wraps it in a second span, which
-      -# leaves the wrapper as the grid item and the chip's own placement rules
-      -# matching nothing — visible only once the row reflows on a phone.
       %span.gh-pill.gh-octagon-clip{ class: "gh-pill--#{entry.tone}", role: 'cell' }= entry.label
       %span.gh-ledger-source{ role: 'cell' }
         = entry.title
-        -# The item is off the shelf but the row stays: soft delete keeps
-        -# history (DECISIONS.md:28), and a purchase that vanished would make
-        -# the balance below it unexplainable.
         - if entry.withdrawn?
           %span.gh-tag.gh-tag--removed Usunięty z oferty
         - if entry.context.present?

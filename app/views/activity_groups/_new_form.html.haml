@@ -1,6 +1,3 @@
--# One form for both modes. The radio decides which the server reads, so with
--# JavaScript off both halves are on screen and both still work — the stepper
--# simply does not step, and three is what you get.
 - count   = ActivityGroupsController::BULK_RANGE.min + 1
 - columns = template.categories.size
 
@@ -9,9 +6,6 @@
   = "Każdy arkusz dostanie #{columns} #{gh_plural(columns, 'kategorię', 'kategorie', 'kategorii')} z szablonu."
   Kolumny zmienisz później w ustawieniach arkusza.
 
--# The plural forms for the submit label, for the same reason the editor passes
--# its own: the count changes under the teacher's finger, the grammar does not
--# survive string concatenation in JavaScript.
 - form_data = { controller: 'sheet-create',
                 sheet_create_sheets_value: %w[arkusz arkusze arkuszy].to_json,
                 turbo_frame: (@in_modal ? 'modal' : nil) }
@@ -45,9 +39,6 @@
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
     = hidden_field_tag :count, count, data: { sheet_create_target: 'count' }
 
-    -# Every name the stepper can reach is rendered; stepping only changes how
-    -# many are shown. They come from the same call that will name the records,
-    -# so the preview cannot promise a name the save does not use.
     .gh-sample-name-chips{ 'aria-label': 'Nazwy' }
       - suggested_names.each_with_index do |name, index|
         %span.gh-octagon-clip{ hidden: index >= count, data: { sheet_create_target: 'name' } }= name

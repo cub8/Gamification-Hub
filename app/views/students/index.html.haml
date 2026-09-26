@@ -41,14 +41,12 @@
 
         = render partial: 'students/row', collection: @list.rows, as: :row
 
-    -# Revealed by the controller when the query matches nobody on the page.
     %section.gh-panel.gh-empty-state{ hidden: true, data: { list_search_target: 'empty' } }
       %h2.gh-h2
         Brak studentów o nazwie
         %span{ data: { list_search_target: 'emptyQuery' } }
       %p.gh-lead Wyczyść wyszukiwanie albo sprawdź pisownię.
 - else
-  -# The mockup has no empty state here. House rule: name the next action.
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie ma jeszcze nikogo w grupie
     %p.gh-lead

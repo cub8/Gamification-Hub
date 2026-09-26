@@ -1,14 +1,7 @@
--# The item form, shared by new and edit. Mockup: js-expanded/30-item.js:37-57
--# (the fields) and :133-139 (the page around them).
--#
--# A PAGE, not a dialog (DECISIONS.md:26). The preview column beside it is the
--# reason: an item card has three states and they need the width.
 - editing = item.persisted?
 - error   = ->(attribute) { item.errors[attribute].first }
 - badges  = @story_group.badges.kept.by_name.to_a
 - card    = ItemCard.new(item, ranks: shelf.ranks, badges: badges)
--# Re-picked on every render, which is the point: it is AN example student, not
--# the example. The shuffle below is what lets the browser re-pick the same way.
 - example = DiscountExample.new(card)
 - bought  = editing ? shelf.bought_for(item) : 0
 
@@ -112,9 +105,6 @@
             %span= error.call(:price)
 
         .gh-toggle-switch-row
-          -# `change->` explicitly: Stimulus defaults an <input> to the
-          -# `input` event, which a checkbox does fire on click but which
-          -# reads wrong for a toggle.
           = f.check_box :can_buy_at_0_lives, class: 'gh-toggle-switch gh-octagon-clip',
             'aria-labelledby': 'gh-item-zero-label',
             data: { item_form_target: 'zero', action: 'change->item-form#refresh' }
@@ -147,11 +137,6 @@
 
       .gh-form-section
         %h2.gh-h3 Zniżki
-        -# The second sentence is the part that surprises everyone: the warunki
-        -# below decide WHO gets a discount, never how big it is. The size always
-        -# comes from the student's own rank and every badge they hold
-        -# (DiscountCalculatorService), which is why an item with no conditions
-        -# here still sells below its price.
         %p.gh-field-hint
           Zniżka z rangi to procent przypisany do rangi studenta. Zniżki z odznak
           się sumują. Wystarczy spełnić jeden z warunków, żeby zniżka zadziałała
@@ -176,15 +161,10 @@
           - else
             %span.gh-field-hint W tej grupie nie ma jeszcze odznak.
 
-        -# Two sentences in the one consequence box: a student you could actually
-        -# meet, then the ceiling behind the card's "Zniżki do −X%" chip. Separate
-        -# elements because writeSentence replaces a target's children whole.
         .gh-explainer-note
           %p{ data: { item_form_target: 'discountText' } }= item_discount_sentence(item, card, example)
           %p.gh-small{ data: { item_form_target: 'discountMax' } }= item_discount_max_sentence(card)
 
-        -# Not errors: a teacher may well mean an overlap. Rendered as notes, and
-        -# the form saves either way.
         .gh-warns{ data: { item_form_target: 'warnings' } }
           - item_overlap_warnings(item, card).each do |warning|
             %p.gh-warning-note--alt
@@ -206,9 +186,6 @@
     %aside.gh-preview-column{ 'aria-label': 'Podgląd' }
       = render 'preview', item: item, card: card
 
-  -# The requirement lines the sealed foot shows. A <template> rather than a
-  -# string in the controller: item_form_controller clones these and sets the
-  -# name, so the markup stays here where it can be read alongside the card.
   %template{ data: { item_form_target: 'reqRank' } }
     %li
       Wymaga rangi

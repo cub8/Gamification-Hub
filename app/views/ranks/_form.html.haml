@@ -10,12 +10,7 @@
   %p.gh-lead
     Podgląd obok pokazuje, gdzie ranga trafi na drabince i ilu studentów obejmie.
 
--# The saved ladder and every student's lifetime total, for the preview.
--# Only numbers and names the teacher already sees on the screen behind this.
 - rungs_json = ladder.rungs.map { |rung| { id: rung.rank.id, name: rung.rank.name, min: rung.rank.required_currency_value.to_i, disc: rung.rank.discount.to_i } }.to_json
--# The crop event bubbles up from the image field, and refresh re-reads the art
--# out of the picker tile the cropper just redrew — so dragging the crop box
--# moves the preview card and the drabinka thumbnail with it.
 - form_data = { controller: 'rank-form', action: 'gh:image-crop->rank-form#art', rank_form_rungs_value: rungs_json, rank_form_totals_value: ladder.student_totals.to_json, rank_form_editing_id_value: rank.id.to_i }
 
 = form_with model: [@story_group, rank], data: form_data do |f|
@@ -87,10 +82,6 @@
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:discount)
 
-        -# Filled in by rank_form_controller, and empty without JavaScript. The
-        -# ladder beside it is server-rendered and still tells the static truth;
-        -# only "what would change if you saved this" needs the live arithmetic,
-        -# and keeping its wording in one place beats duplicating it here.
         %p.gh-explainer-note{ data: { rank_form_target: 'impact' } }
         %div{ data: { rank_form_target: 'warnings' } }
 

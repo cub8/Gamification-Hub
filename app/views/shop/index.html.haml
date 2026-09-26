@@ -1,8 +1,3 @@
--# Sklep, the student's shop. Mockup: #/s/shop, js-expanded/30-main.js:87-98.
--#
--# Three zones on the table, in reading order: what you can have, what you are
--# working toward, what is still shut. An empty zone is not rendered — a dashed
--# frame around nothing reads as a fault, not as an absence.
 - content_for :title, 'Sklep'
 
 %section.gh-panel.gh-page-header
@@ -12,8 +7,6 @@
       = shop_balance_sentence(@shop.balance)
       = shop_discount_sentence(@shop.discount_badges)
 
-  -# Both numbers, because they answer different questions: one is what you can
-  -# spend today, the other is what decides your rank and never goes down.
   .gh-wallet-summary
     = render 'layouts/currency_token', story_group: @story_group, size: 32
     %div

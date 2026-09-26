@@ -1,8 +1,3 @@
--# The group you are in: its art, its name, what you are to it, a way out, and
--# its sections. Mockup: js-expanded/10-core.js:173-178.
--#
--# A partial rather than markup inside the sidebar because the mockup renders
--# the same card standalone in the group-creation wizard preview (30-form.js:83).
 - story_group = chrome.story_group
 
 %section.gh-current-group-card{ 'aria-label': "Grupa #{chrome.name}" }
@@ -16,10 +11,6 @@
         %h2.gh-current-group-card-name= chrome.name
         %p.gh-current-group-card-role= chrome.role_label
 
-      -# Outside .gh-current-group-card-header on purpose: the mockup keeps it inside, and its
-      -# collapsed rule then hides the whole head — leaving a collapsed sidebar
-      -# with no way to change group at all, since the header switcher is
-      -# mobile-only. Here it survives as an icon-only button.
       %button.gh-link-button.gh-current-group-card-switch-trigger{ type: 'button',
                                      title: 'Zmień grupę',
                                      data: { action: 'menu#open',
