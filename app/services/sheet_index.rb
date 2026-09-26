@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-# The "Arkusze ocen" index: every kept template of one group, each with the
-# sheets stamped from it.
-#
-# The counts are the reason this is a service. The screen shows a category
-# count and a reward ceiling per template, and an award count per sheet —
-# three numbers that turn into three queries per row if a view asks the
-# records for them. All of it is loaded here in four queries, whatever the
-# group holds.
 class SheetIndex
   Template = Data.define(:record, :categories, :sheets) do
     def name           = record.base_name

@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-# "Ranking" (mockup #/t/ranking and #/s/ranking): one group's students ordered
-# by what they have COLLECTED, not by what they can still spend. Both personas
-# read the same board; who is asking decides how much of it comes back.
-#
-# A service rather than a value: it loads. Same split as RankLadder and
-# StudentList, and the same trick against N+1 — the rank ladder is fetched
-# once and each student's rung resolved in Ruby, because StoryGroupStudent#rank
-# is a query per record and memoised per record, which does nothing for a list.
 class RankingBoard
   # `place` is shared by ties; `mine` is only ever true for the viewer, so the
   # teacher's board carries no self-highlight (mockup: `mine = stu && …`).
@@ -42,13 +34,6 @@ class RankingBoard
 
   def any? = rows.any?
 
-  # Standard competition ranking: equal totals share a place and the next one
-  # skips, so 40/40/10 gives 1, 1, 3 (DECISIONS.md:36).
-  #
-  # Ties still need an order to render in, and `total_currency DESC` alone
-  # leaves it to the database. Sorted by folded display name inside a tie, the
-  # same key StudentList uses, so the same two students never swap places
-  # between two loads of the same page.
   def rows
     @rows ||= begin
       ordered = students.sort_by { |student| [-student.total_currency.to_i, *sort_key(student)] }

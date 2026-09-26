@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 class PurchaseEligibilityService
-  # Why a purchase is blocked, as a record rather than a sentence.
-  #
-  # `errors` was always the whole answer, and a screen that wants to name the
-  # rank a student is short of — or draw a bar toward it — cannot parse it back
-  # out of Polish. The shop card reads these; the till still reads `errors`.
-  #
-  # kind: :lives (record nil), :rank (the Rank), :badge (the Badge).
   Reason = Data.define(:kind, :record)
 
   class Result

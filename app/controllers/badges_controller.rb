@@ -13,12 +13,6 @@ class BadgesController < ApplicationController
   before_action :set_presentation, only: :confirm_destroy
   before_action :set_badge, only: %i[edit update destroy confirm_destroy]
 
-  # GET /story_groups/:story_group_id/badges
-  #
-  # One screen, two personas — the teacher's editable grid and the student's
-  # deck of flip cards. Which one you get is decided by MEMBERSHIP, through the
-  # same object the navigation chrome uses, so the page and the deck beside it
-  # cannot disagree about who you are here.
   def index
     @shelf = BadgeShelf.new(story_group: @story_group,
                             membership:  gh_group_chrome&.student_membership,)

@@ -45,15 +45,6 @@ module StoryGroupsHelper
       "#{gh_plural(affordable, 'przedmiot', 'przedmioty', 'przedmiotów')}."
   end
 
-  # How far the fan rotates one card: the middle card sits straight, the rest
-  # splay to either side of it. handCard() (30-main.js:74) steps by 6°; this
-  # steps by 4°.
-  #
-  # The step is what decides how far the fan reaches sideways, and it reaches
-  # further than it looks: the pivot sits BELOW the card, so a corner swings out
-  # by roughly (1.2 × card height) × sin(angle) — about 87px a side at 12°,
-  # 29px at 8°. Four degrees is the most that stays inside the padding the zone
-  # can afford.
   HAND_ROTATION_STEP = 4
 
   def overview_hand_rotation(index, count)

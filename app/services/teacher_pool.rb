@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# Everyone who could be added to a group as a supporting teacher.
-#
-# The mockup's add dialog is search-first: at least two characters, matched
-# against name and e-mail, diacritics folded, at most eight rows shown
-# (DECISIONS.md:41). None of that can be a query — User#full_name and #email
-# are `encrypts deterministic: true`, so the column holds ciphertext and SQL
-# LIKE matches nothing. The pool is therefore loaded whole, rendered whole
-# (hidden) and filtered in the browser; `search_key` is the folded haystack
-# each row hands the Stimulus controller so the folding rule lives in one
-# place rather than being re-derived from the printed text.
-#
-# A service rather than a value: it does the loading. Same split as
-# StudentList and TeacherList.
 class TeacherPool
   # Who may hold a group at all. Admins are teachers with more rights, not a
   # separate kind of person, so they belong in the pool.

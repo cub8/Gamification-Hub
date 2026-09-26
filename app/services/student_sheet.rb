@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# One student, as the teacher's sheet needs them: the header stats and the
-# three tabs. Mockup: #/t/student, js-expanded/30-student.js:19-35.
-#
-# A service — it loads the ladder, the badges, the purchases and the ledger.
-# The tabs show counts before they are opened, so all three are resolved on
-# every render whatever `tab` says; they are three small queries, and lazily
-# loading two of them would only trade them for a count each.
 class StudentSheet
   TABS = [
     ['badges', 'Odznaki'],

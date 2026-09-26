@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-# The "Grupy" screen (mockup `#/s/groups` and `#/t/groups` — one view, two
-# personas).
-#
-# Turns the Pundit scope into cards and filter tabs: what your role in each
-# group is, how many students it has, and the one extra fact the mockup prints
-# next to that count, which differs per role.
 class StoryGroupsListing
   # gh_plural only formats a number; it touches no view context. Including the
   # helper keeps the Polish plural rule in one place instead of giving the view

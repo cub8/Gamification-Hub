@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-# The app's navigation, in one place.
-#
-# The sidebar, the mobile tab bar and the "Więcej" sheet all render the same
-# destinations; the mockup derives each set from one list
-# (js-expanded/10-core.js:131-147) and so do we. A read-only value object: it
-# builds paths and labels and touches no database — the membership and the
-# role it needs for the in-group lists arrive already resolved, in a
-# GroupChrome.
 class Navigation
   include Rails.application.routes.url_helpers
 

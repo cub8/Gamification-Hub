@@ -1,17 +1,3 @@
--# An item somebody OWNS. Mockup: itemCard(), js-expanded/30-sp.js:17 —
--# a card whose foot is supplied by the caller.
--#
--# Deliberately not items/_card. That one is a shop item in one of three states
--# — buyable, saving up, sealed — and carries a price, a lock plate, a discount
--# ceiling and a progress meter, none of which mean anything once the thing is
--# bought and paid for. Same reasoning as the flat badge card on the teacher's
--# badge grid: a second card, not a fourth state of the first.
--#
--# Locals:
--#   purchase — the StudentsItem
--#   foot     — the line under the card
--#   cost     — show what was paid in the price chip (the teacher's tab does;
--#              the student's own inventory does not, because the foot says it)
 - item = purchase.item
 - cost = local_assigns.fetch(:cost, false)
 

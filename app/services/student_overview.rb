@@ -1,27 +1,6 @@
 # frozen_string_literal: true
 
-# A group's front page, as one of its students reads it. Mockup: #/s/home,
-# viewHome(), js-expanded/30-main.js:99-131.
-#
-# Five questions, all of them queries: what do I have, what rank am I, which
-# badges are still out there, what did I buy, what just happened. Resolved
-# once here, so the view is a rendering and nothing else.
-#
-# Replaces StoryGroupStudentDashboard. The badges and the shop are NOT
-# re-derived: BadgeShelf and Shop already answer those, and a second
-# implementation is how an overview ends up disagreeing with the screen it
-# links to.
 class StudentOverview
-  # The fan holds this many cards.
-  #
-  # Three, because that is what the column can hold. The hand sits in a
-  # `span 7` track — about 510px of usable width on a 1400px screen — and one
-  # 196px card plus 110px of each card behind it means three cards are 416px
-  # and five are 636px, before the "go to shop" slot. The mockup's own fan is
-  # three for the same reason; its fake student owns three items.
-  #
-  # The zone counter still reports everything the student owns, and
-  # "Moje przedmioty" is one click away with the full set.
   HAND = 3
 
   # How many ledger rows the overview shows before handing over to the

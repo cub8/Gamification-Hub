@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-# The Polish plural rule, in one place.
-#
-# It lived only in ApplicationHelper#gh_plural, which is fine while every
-# sentence is written in a view. Services that build a sentence themselves —
-# TeacherOverview's "9 kolumn bez ocen" — need the same rule, and a helper is
-# not reachable from one without going through ApplicationController.helpers.
 module Plural
   extend self
 

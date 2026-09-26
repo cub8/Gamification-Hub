@@ -1,17 +1,3 @@
--# The currency ledger. Mockup: 30-sp.js:32-33 (the student's own screen) and
--# 30-student.js:34-35 (the teacher's third tab).
--#
--# ONE partial for both, because the mockup's two copies are identical apart
--# from their wrapper, the summary line and the empty sentence — and a ledger
--# that disagreed with itself depending on who was reading would be worse than
--# either copy.
--#
--# Locals:
--#   ledger        — CurrencyLedger
--#   kind          — the active filter, or nil for "Wszystkie"
--#   path_for      — ->(kind) { url }, so each screen keeps its own URL shape
--#   empty_message — what to say when the filter matches nothing
--#   summary       — optional markup shown beside the filters (the teacher's)
 - summary = local_assigns.fetch(:summary, nil)
 - entries = ledger.entries(kind: kind)
 

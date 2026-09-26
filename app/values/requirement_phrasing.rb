@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# How a purchase requirement is worded — in one place.
-#
-# Two objects answer "what blocks this item" and they answer different
-# questions: ItemCard lists everything the TEACHER set, while
-# ItemOffer lists only what THIS student fails. Same vocabulary
-# either way, and the teacher's form preview deliberately shows the card a
-# student will see, so the wording must not drift between them.
 module RequirementPhrasing
   # A requirement as a card needs it: what kind of thing it is and what it is
   # called. `name` is nil for :lives, which names no record.

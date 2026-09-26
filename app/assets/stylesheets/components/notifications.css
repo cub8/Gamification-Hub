@@ -15,9 +15,6 @@
     margin: 0 -8px;
     text-decoration: none;
     color: var(--gh-ink);
-  }
-
-  .gh-notification-row-link {
     border-top: 1px solid var(--gh-line);
   }
 

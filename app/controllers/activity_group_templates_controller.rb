@@ -61,12 +61,6 @@ class ActivityGroupTemplatesController < ApplicationController
     end
   end
 
-  # DELETE /story_groups/:story_group_id/activity_group_templates/:id
-  #
-  # Soft, and it stops at the template: the sheets made from it stay on the
-  # index under no heading of their own only because they keep their own
-  # template_id, so they simply stop being listed here. That is what the
-  # confirmation promises — "utworzone z niego arkusze zostają".
   def destroy
     name = @activity_group_template.base_name
     @activity_group_template.soft_delete!

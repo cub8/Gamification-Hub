@@ -13,12 +13,6 @@ class RanksController < ApplicationController
   before_action :set_presentation, only: :confirm_destroy
   before_action :set_rank, only: %i[edit update destroy confirm_destroy]
 
-  # GET /story_groups/:story_group_id/ranks
-  #
-  # One screen, two personas — the teacher's editable ladder and the student's
-  # progress through it. Which one you get is decided by MEMBERSHIP, through the
-  # same object the navigation chrome uses, so the page and the deck beside it
-  # cannot disagree about who you are here.
   def index
     @ladder = RankLadder.new(story_group: @story_group,
                              membership:  gh_group_chrome&.student_membership,)
@@ -66,12 +60,6 @@ class RanksController < ApplicationController
     end
   end
 
-  # DELETE /story_groups/:story_group_id/ranks/:id
-  #
-  # Re-checked here and not only in the dialog: items.unlock_rank_id and
-  # items.min_rank_for_discount_id are real foreign keys, so destroying a
-  # referenced rank raises rather than cascading. The disabled button in the
-  # dialog is a courtesy; this is the rule.
   def destroy
     name = @rank.name
     blockers = @rank.dependent_items.order(:name).pluck(:name)

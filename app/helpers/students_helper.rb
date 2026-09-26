@@ -2,12 +2,6 @@
 
 # Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 module StudentsHelper
-  # The list's own sentence. The second half only appears when somebody is
-  # actually at zero — a line about a state nobody is in is noise.
-  #
-  # The mockup writes "N studentów ma 0 żyć" with a plural table that has no
-  # 2-4 form (30-lists.js:45); gh_plural has one, so this says "2 studentów ma"
-  # where the mockup would have said the same thing by accident.
   def student_list_lead(list)
     lead = ['Życie odbierasz za nieusprawiedliwioną nieobecność.']
     return safe_join(lead) if list.zero_lives.zero?
@@ -19,13 +13,6 @@ module StudentsHelper
                       ' i kupi tylko przedmioty dostępne przy 0 życiach.',])
   end
 
-  # The smaller line under a name in the list.
-  #
-  # The mockup shows the e-mail alone (30-lists.js:40). The bold line above is
-  # the real name, so this carries the NICKNAME when there is one — DECISIONS.md
-  # says the teacher sees nickname and name both, and the ranking is the only
-  # screen where the nickname outranks the name. Without one there is nothing to
-  # add and the e-mail stands alone.
   def student_list_subtitle(student)
     parts = []
     parts << "„#{student.nickname}”" if student.nickname.present?
