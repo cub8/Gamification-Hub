@@ -1,18 +1,7 @@
 # frozen_string_literal: true
 
-# The students of one group, resolved once for the whole page.
-#
-# The teacher's list shows a rank and a badge count beside every name, and
-# both are the kind of thing that turns into a query per row if a view asks
-# the record for it — StoryGroupStudent#rank runs a query, and it is memoised
-# per record, which does nothing for a list. So the ladder is loaded once and
-# each student's rung is resolved in Ruby, and the badge counts come from one
-# grouped count.
-#
-# A service rather than a value: it does the loading. Same split as ItemShelf
-# and BadgeShelf.
 class StudentList
-  Row = Struct.new(:student, :rank, :badge_count) do
+  Row = Data.define(:student, :rank, :badge_count) do
     def zero_lives? = student.lives.to_i.zero?
   end
 

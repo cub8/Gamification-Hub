@@ -1,25 +1,6 @@
 # frozen_string_literal: true
 
-# The rank ladder of one group, resolved once for the whole page.
-#
-# Both rank screens and the form's live preview ask the same questions —
-# which rungs are there, how many students stand on each, how far apart they
-# are, and where the viewer stands — and every one of them is a query, so this
-# is a service rather than a value object.
-#
-# Everything is computed from ONE load of the ranks and ONE pluck of the
-# memberships' totals. Asking each rank for its holders would be a query per
-# rung, and StoryGroupStudent#rank is itself a query per call.
 class RankLadder
-  # `state` is only meaningful when the ladder was built for a membership.
-  #
-  #   :done    — passed
-  #   :current — the rank the student holds
-  #   :next    — the first rung, when the student holds NO rank yet. The
-  #              mockup has no such state (rankIdx falls back to index 0, so
-  #              its student always holds something), but a group need not
-  #              define a rank at 0, and then progress has nowhere else to go.
-  #   :locked  — still out of reach
   Rung = Data.define(:rank, :holders, :gap_to_next, :next_threshold, :state, :progress,
                      :remaining,) do
     def done?    = state == :done

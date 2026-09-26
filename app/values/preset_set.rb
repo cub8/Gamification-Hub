@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# One directory of preset artwork: which keys exist, what each is called in
-# Polish, and where the file is.
-#
-# Three sets inherit from this — Glyphs (entity art), GroupArt (group covers)
-# and CurrencyIcons (the coin face). They differ only in their directory and
-# their contents; the mechanics below were written once for Glyphs and pulled
-# up here when the second and third arrived rather than copied twice.
-#
-# Read-only and database-free, so `values`. Rendering lives in ApplicationHelper.
-#
-# DECISIONS.md:69 — "Real icon set later (use current presets for now)" — so
-# expect the files to be replaced wholesale. Records store the KEY, which is
-# what makes that swap possible without touching a single row.
 class PresetSet
   class << self
     # Subclasses declare these two.
@@ -51,12 +38,6 @@ class PresetSet
       Rails.root.join('app/assets/images', dir, "#{key}.svg")
     end
 
-    # The paths inside the file, without its <svg> wrapper — ApplicationHelper
-    # writes its own so it can put a class and the ARIA on it.
-    #
-    # Cached outside development, where the files are generated artefacts that
-    # change only when the icon set is replaced. In development they are
-    # re-read so a regenerated preset shows up without a restart.
     def markup(key)
       return read(key) if Rails.env.development?
 

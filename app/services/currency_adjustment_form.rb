@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-# The "Koryguj walutę" dialog (mockup 30-student.js:49-55).
-#
-# The dialog's shape and the write do not match. CurrencyAdjusterService takes
-# one signed integer; the dialog has a Dodaj/Odejmij toggle and an unsigned
-# amount, and when a correction is refused both have to come back the way the
-# teacher left them. It also has to answer, before anything is written, what the
-# correction WOULD do — the preview list under the field — which no record can.
-#
-# It acts on data rather than merely describing it, so it lives in services,
-# like InviteForm.
 class CurrencyAdjustmentForm
   include ActiveModel::Model
 
@@ -57,13 +47,6 @@ class CurrencyAdjustmentForm
 
   def balance = student.current_currency.to_i
   def total   = student.total_currency.to_i
-
-  # ---- what the correction would do -------------------------------------
-  #
-  # These are what the preview list renders, and they encode the rule from
-  # DECISIONS.md:32: a correction always moves the spendable balance, and only
-  # a positive one raises the total collected — so only a positive one can move
-  # a rank.
 
   def new_balance = balance + signed_value
   def new_total   = total + [signed_value, 0].max

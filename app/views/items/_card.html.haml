@@ -1,26 +1,3 @@
--# An item as a full card. Mockup: pvCard(), js-expanded/30-item.js:58-64.
--#
--# THE reusable one: the teacher's form preview and the shop both render this
--# partial rather than growing a second copy of these three states. That is why
--# the state is a local and not derived here — on the form it is whichever tab
--# was pressed, in the shop it comes from PurchaseEligibilityService, and those
--# are different questions.
--#
--# Locals:
--#   item      — the Item
--#   card      — ItemCard, built by the caller so a list builds it once
--#   offer     — ItemOffer: what THIS viewer pays and what blocks them.
--#               Defaults to a preview over `card`, which is the teacher's case:
--#               list price, the discount ceiling, every requirement the item
--#               carries. The shop hands in a student's.
--#   state     — :afford (can buy now) | :save (short of currency) | :sealed
--#   price     — what this viewer would pay; defaults to the offer's
--#   need      — how much more to collect, only read in :save
--#   progress  — 0.0..1.0 for the meter, only read in :save
--#   targets   — data-item-form-target attributes; empty outside the form preview
--#   all_feet  — render all three feet, two hidden, so the form's segmented
--#               control can switch between them without generating markup.
--#               A real shop card renders only the foot that applies.
 - offer    = local_assigns.fetch(:offer, nil) || ItemOffer.preview(card)
 - state    = local_assigns.fetch(:state, :afford)
 - price    = local_assigns.fetch(:price, nil) || offer.price
@@ -52,12 +29,6 @@
           %b{ data: targets[:cost] }= price
 
       .gh-card-art{ data: targets[:art_well] }
-        -# `.gh-art-slot-wrapper` is `display: contents`, so the artwork itself stays the
-        -# grid item of the well. Without that, .gh-card-art-glyph's percentage width and
-        -# height would resolve against this span's indefinite width and the
-        -# glyph would fall back to its intrinsic size, off-centre. The span
-        -# still has to exist: item_form_controller replaces its children when
-        -# the art changes, and .gh-lock-seal below is its sibling in the same well.
         %span.gh-art-slot-wrapper{ data: targets[:art] }
           = render 'items/art', item: item
 
@@ -88,20 +59,10 @@
         -# segmented control has to switch between them and item_form_controller
         -# never writes markup.
         - if all_feet || state == :afford
-          %span.gh-auth-footer{ hidden: hide.call(:afford), data: targets[:foot_afford] }
+          %span.gh-item-foot.flex.items-center{ class: 'gap-3.5', hidden: hide.call(:afford), data: targets[:foot_afford] }
             - if local_assigns[:buy]
               = buy
             - else
-              -# A picture of the offer, not the offer. Deliberately NOT
-              -# `disabled`, which would grey it out and misrepresent the button
-              -# a student will actually see — the whole point of the preview.
-              -# tabindex -1 keeps it out of the teacher's tab order and
-              -# `.gh-item-preview-card .gh-card-footer .gh-btn { pointer-events: none }`
-              -# keeps it unclickable, so it is inert without looking it.
-              -#
-              -# One text node, not "Kup za" beside a <span>: .gh-btn is a flex
-              -# row with an 8px gap, which would open a double space between
-              -# the words and the number.
               %button.gh-btn{ type: 'button', tabindex: -1 }
                 %span{ data: targets[:buy_label] }= "Kup za #{price}"
 

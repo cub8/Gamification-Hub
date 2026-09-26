@@ -1,29 +1,5 @@
 # frozen_string_literal: true
 
-# The "Szybki start" set the creation wizard offers: five ranks, six badges,
-# seven shop items and one grading-sheet template, scaled to the number of
-# classes the teacher plans.
-#
-# Read-only and database-free, so `values` — StarterPackBuilder is what turns
-# one of these into records. Nothing here touches ActiveRecord, which is what
-# lets the wizard render step 4 and the summary without creating anything.
-#
-# THE ARITHMETIC
-#
-#   X = CLASS_MAX = 11     the eight categories below add up to this, so it is
-#                          the most one student can earn in a single class
-#   M = classes * X        the most earnable over the whole course
-#
-# Rank thresholds are percentages of M rounded to the nearest 5, because a
-# ladder reads as a ladder only when its rungs are round numbers. Item prices
-# are NOT rounded that way: five of the seven are multiples of X rather than
-# of M, and snapping those to 5 collapses the 1x/1.5x/2x/2.5x tiers into each
-# other. They round to the nearest 1 instead.
-#
-# Three packs differ ONLY in the names of ranks and badges and in the flavour
-# text. Every threshold, discount, price and requirement is identical, so a
-# teacher choosing "Fantasy" over "Neutralny" changes the story and nothing
-# about how the group behaves.
 class StarterPack
   # Sum of CATEGORIES' rewards. Not written as a literal: the two must agree,
   # and a category added later should move it.
@@ -51,12 +27,12 @@ class StarterPack
   # stamps sheets "Zajęcia 1", "Zajęcia 2", … off the back of it later.
   TEMPLATE_NAME = 'Zajęcia'
 
-  Rank     = Struct.new(:index, :name, :threshold, :discount, :icon_glyph)
-  Badge    = Struct.new(:index, :name, :didactic_description, :story_description, :discount,
-                        :icon_glyph,)
-  Item     = Struct.new(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
-                        :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
-  Category = Struct.new(:index, :didactic_description, :story_description, :reward)
+  Rank     = Data.define(:index, :name, :threshold, :discount, :icon_glyph)
+  Badge    = Data.define(:index, :name, :didactic_description, :story_description, :discount,
+                         :icon_glyph,)
+  Item     = Data.define(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
+                         :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
+  Category = Data.define(:index, :didactic_description, :story_description, :reward)
 
   # ---- the catalogue -------------------------------------------------------
 
@@ -90,14 +66,6 @@ class StarterPack
 
   BADGE_DISCOUNTS = [2, 5, 5, 3, 5, 7].freeze
 
-  # Item names do not change between packs: the mockup's own copy promises
-  # that the klimat "zmienia tylko nazwy rang i odznak".
-  #
-  # `price` is either `x:` (a multiple of one class's maximum) or `m:` (a
-  # fraction of the whole course). `unlock` gates BUYING; `discount_rank` and
-  # `discount_badges` gate the DISCOUNT — the item itself carries no
-  # percentage, because DiscountCalculatorService sums the student's rank and
-  # badge discounts instead (capped by Discount::CAP_VALUE).
   ITEMS = [
     {
       name:            '+5 minut do wejściówki',

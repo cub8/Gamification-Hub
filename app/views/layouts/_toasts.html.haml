@@ -1,11 +1,3 @@
--# Toast host. Mockup: `.toasts` (00-base.css:511) + `toast()` (10-core.js:352).
--#
--# Rendered ONCE per page and outside .gh-app-shell, whose overflow:hidden would
--# otherwise clip it. `popover` puts it in the top layer so a toast raised from
--# inside an open <dialog> lands above that dialog rather than behind it.
--#
--# Only notices arrive here. Alerts stay inline in _flash, where they keep
--# still until dismissed — see the note there.
 - messages = [flash[:notice] || notice].compact
 
 #gh-toasts.gh-toasts{ popover: 'manual',

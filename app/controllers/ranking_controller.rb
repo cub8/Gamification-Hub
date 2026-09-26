@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-# "Ranking" (mockup #/t/ranking and #/s/ranking): one group's students ordered
-# by what they have collected.
-#
-# One action, two screens. Which one you get is decided by MEMBERSHIP, through
-# the same object the navigation chrome uses, so the page and the deck beside it
-# cannot disagree about who you are here — the same rule RanksController and
-# BadgesController follow.
-#
-# Everything a teacher can change about what students see is confirmed in a
-# dialog first (DECISIONS.md:36). The four transitions each get their own
-# sentence, because "Pokazać pełny ranking?" and "Ukryć ranking?" warn about
-# opposite things.
 class RankingController < ApplicationController
   include StoryGroupAuthorization
 

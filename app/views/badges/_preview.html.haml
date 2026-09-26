@@ -1,13 +1,3 @@
--# The form's preview column. Mockup: pvBadge(), js-expanded/30-br.js:62-69.
--#
--# Server-rendered so it is right before a single keystroke and right with no
--# JavaScript at all; badge_form_controller then keeps it honest as you type. It
--# never generates markup — it rewrites the text in this one, which is why the
--# glyphs can stay Rails-rendered inline SVG.
--#
--# The card here is NOT interactive: the segmented control below the heading is
--# what turns it, so a teacher can check both faces without guessing which side
--# a click will land them on.
 - targets = { flip:      { badge_form_target: 'flip' },
               name:      { badge_form_target: 'frontName' },
               art:       { badge_form_target: 'frontArt' },

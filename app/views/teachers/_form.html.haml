@@ -1,15 +1,3 @@
--# Dodaj nauczyciela. Mockup: 30-rk.js `mAddT` + `resHtml`.
--#
--# Search-first, and every candidate is server-rendered hidden: full_name and
--# email are `encrypts deterministic: true`, so there is no SQL LIKE to search
--# with and the pool has to be matched in Ruby or in the browser either way.
--# teacher_picker_controller only unhides the matches — it never writes markup,
--# like badge_picker.
--#
--# ONE form around the whole list, not a button_to per row: a form per
--# candidate would be hundreds of forms for one click. Each "Dodaj" is a submit
--# carrying its own user_id, so the dialog also works with JavaScript off —
--# without the filtering, but with every candidate on screen.
 - error = teacher.errors[:user_id].first || teacher.errors[:user].first
 
 = form_with url: story_group_teachers_path(@story_group), method: :post,

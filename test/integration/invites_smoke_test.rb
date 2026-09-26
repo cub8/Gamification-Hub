@@ -78,7 +78,7 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    assert_select '.gh-status-pill', 'Wygasło'
+    assert_select '.gh-pill', 'Wygasło'
   end
 
   test 'only a limited code gets a usage bar, and only a live one gets Pokaz' do

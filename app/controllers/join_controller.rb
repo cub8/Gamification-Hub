@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-# Joining a group: the mockup's three-step flow (js-expanded/10-core.js:288).
-#
-#   new    -> step 1, the six-character code
-#   lookup -> step 2, once a code has been accepted
-#   show   -> step 2 as well, reached by scanning a QR code, which already
-#             carries the code and so has nothing to ask in step 1
-#   create -> step 3, the confirmation that leads into the group
-#
-# Every step renders either into the shared `modal` frame or as a focused page,
-# decided once in `set_presentation`.
 class JoinController < ApplicationController
   # Inside the dialog only the frame is used, and the layout already carries a
   # <turbo-frame id="modal"> of its own. Rendering it too would put two frames

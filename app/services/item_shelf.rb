@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# The items of one group, resolved once for the whole page.
-#
-# All queries, so a service rather than a value object — the same split
-# RankLadder and BadgeShelf make. Everything comes from ONE load of the items
-# with their requirements preloaded and ONE grouped count of the purchases;
-# asking `item.students_items.count` per card would be a query per card, and a
-# card also names its rank and its badges.
 class ItemShelf
   # What a new item costs before the teacher touches the field (30-item.js:14).
   # A default rather than a blank, because a shop item without a price is not

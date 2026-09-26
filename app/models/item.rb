@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
 class Item < ApplicationRecord
-  # The art is one of two things, never both: an uploaded image, or a preset
-  # glyph named by `icon_glyph` (a key into Glyphs, whose files live
-  # in app/assets/images — nothing is ever copied into the database). Keeping
-  # the attachment when a preset is chosen is deliberate: it lets a teacher
-  # switch back without re-uploading.
-  #
-  # Named `icon`, like Rank, Badge and StoryGroup. It was `image` until
-  # 20260915090000, which renamed the attachment rather than the blobs.
   has_one_attached :icon
 
   belongs_to :story_group
@@ -92,20 +84,6 @@ class Item < ApplicationRecord
     deleted_at.present?
   end
 
-  # Soft delete (DECISIONS.md:28): the item leaves the shop and every list, but
-  # "kupione egzemplarze zostają u studentów" — students_items keeps price_paid
-  # and discount_applied, so no purchase is ever recomputed.
-  #
-  # The requirement and discount references go with it, and that is not
-  # housekeeping: items.unlock_rank_id and items.min_rank_for_discount_id are
-  # real foreign keys, and RanksController#destroy refuses while any item points
-  # at a rank. Leaving them would let an invisible item block a rank deletion
-  # forever, with nothing on any screen for the teacher to fix. Nothing is lost
-  # by clearing them — a deleted item cannot be bought, so it has no one left to
-  # gate.
-  #
-  # `update_columns` skips validations deliberately: a record that was already
-  # invalid (a rule since blanked, say) must still be removable.
   def soft_delete!
     transaction do
       update_columns(deleted_at:               Time.current,

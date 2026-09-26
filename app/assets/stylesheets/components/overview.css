@@ -186,8 +186,6 @@
     place-items: center;
     width: 28px;
     height: 28px;
-    background: var(--gh-card-3);
-    color: var(--gh-ink);
     font: 800 13px var(--gh-f-ui);
   }
 

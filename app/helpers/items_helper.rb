@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# Copy for the item screens. Screen-specific labels live in the screen's own
-# helper, not in ApplicationHelper.
-#
-# The three consequence sentences here (unlock / discount / warnings) are
-# rendered on the server so the form is correct before a keystroke and with
-# JavaScript off. item_form_controller rewrites them as you type; keep the two
-# in step.
 module ItemsHelper
   # The line in the foot of a teacher's item card (30-lists.js:36).
   def item_bought_line(count)
@@ -26,12 +19,6 @@ module ItemsHelper
     item.didactic_description.presence || 'Co daje studentowi…'
   end
 
-  # "Kupią tylko studenci z rangą X lub wyższą, którzy mają odznakę Y, jeśli
-  # mają co najmniej 1 życie." (30-item.js:27-29).
-  #
-  # A rank at threshold 0 is skipped, the same way ItemCard skips it:
-  # everyone holds it, so naming it would describe a gate that stops nobody and
-  # the sentence would contradict the card beside it.
   def item_unlock_sentence(item)
     rank   = item.unlock_rank&.starting? ? nil : item.unlock_rank
     badges = item.unlock_badges.map(&:name).sort
@@ -45,18 +32,6 @@ module ItemsHelper
     safe_join(parts + [item_lives_clause(item)])
   end
 
-  # What the discounts add up to, as one worked example (30-item.js:30-32).
-  #
-  # An EXAMPLE, deliberately, not a superlative: a student qualifies by meeting
-  # ANY one of the conditions (DECISIONS.md:33, DiscountCalculatorService), so
-  # "najwięcej zaoszczędzi…" would read as though all of them were needed. This
-  # describes one student who happens to meet them all, which is where the
-  # card's "Zniżki do −X%" ceiling comes from.
-  #
-  # "Bez zniżek." now means what it says: the ceiling is zero only when nothing
-  # in the whole group discounts anything. An item that simply names no discount
-  # conditions still sells below list price to anyone with a rank or a badge,
-  # and used to claim otherwise.
   def item_discount_sentence(item, card, example)
     price = item.price.to_i
     return safe_join(['Bez zniżek. Każdy kupujący zapłaci ', tag.b(price), '.']) if card.max_discount.zero?
@@ -114,13 +89,6 @@ module ItemsHelper
     warnings
   end
 
-  # The "Kupić może" select (30-item.js:50). Each option carries the bare rank
-  # name in a data attribute: the option's own text is a phrase ("od rangi X"),
-  # and item_form_controller needs the name alone for the seal and the
-  # requirement line.
-  # `gh_gates` says whether choosing this rung locks anybody out: a rank at
-  # threshold 0 is held by every student, so it gates nobody.
-  # item_form_controller reads it to decide whether the card can ever be sealed.
   def item_unlock_rank_options(ranks, selected)
     options = ranks.map do |rank|
       data = { gh_name: rank.name, gh_gates: rank.starting? ? 'false' : 'true' }
@@ -132,12 +100,6 @@ module ItemsHelper
     options_for_select([blank] + options, selected)
   end
 
-  # The "Zniżka dla rang" select (30-item.js:54).
-  #
-  # The label is the rung's own discount, as the mockup writes it; the data is
-  # the CEILING that choosing this rung implies — the best discount anywhere at
-  # or above it — because that is what the card's "Zniżki do −X%" promises and
-  # the two must agree.
   def item_discount_rank_options(ranks, selected)
     options = ranks.map do |rank|
       above = ranks.select { |other| other.required_currency_value.to_i >= rank.required_currency_value.to_i }

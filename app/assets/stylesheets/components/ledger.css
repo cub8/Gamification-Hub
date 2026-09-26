@@ -20,12 +20,6 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-ledger-row--header {
-    border-top: 0;
-    font: 680 12.5px var(--gh-f-ui);
-    color: var(--gh-ink-3);
-  }
-
   .gh-ledger-cell--right {
     text-align: right;
   }
@@ -47,27 +41,8 @@
     color: var(--gh-ink-2);
   }
 
-  .gh-ledger-type-pill {
-    --gh-c: 5px;
-    display: inline-block;
+  .gh-ledger-row .gh-pill {
     justify-self: start;
-    padding: 4px 8px;
-    font: 680 12px var(--gh-f-ui);
-  }
-
-  .gh-ledger-type-pill--earn {
-    background: color-mix(in srgb, var(--gh-earn) 18%, var(--gh-card));
-    color: var(--gh-earn);
-  }
-
-  .gh-ledger-type-pill--spend {
-    background: color-mix(in srgb, var(--gh-item) 18%, var(--gh-card));
-    color: var(--gh-spend);
-  }
-
-  .gh-ledger-type-pill--corr {
-    background: var(--gh-card-3);
-    color: var(--gh-ink-2);
   }
 
   .gh-ledger-source {
@@ -121,7 +96,7 @@
       grid-column: 2;
     }
 
-    .gh-ledger-row .gh-ledger-type-pill {
+    .gh-ledger-row .gh-pill {
       grid-row: 2;
       grid-column: 2;
     }

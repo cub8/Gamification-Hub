@@ -128,13 +128,6 @@ class TeacherStartDashboard
     end
   end
 
-  # The sheet most worth opening: the newest one that still has a category
-  # nobody has been awarded in.
-  #
-  # There is no "sheet finished" flag in the schema, so "pending" has to be
-  # defined rather than read. A category with zero awards is the cheapest
-  # definition that never cries wolf — it cannot call a fully-awarded sheet
-  # pending just because one student legitimately missed one category.
   def build_pending
     return if story_group_ids.empty?
 

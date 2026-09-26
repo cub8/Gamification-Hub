@@ -15,12 +15,6 @@ class GroupChrome
   attr_reader :user, :story_group, :student_membership
 
   class << self
-    # nil unless the user actually belongs to this group.
-    #
-    # This is what keeps the join flow safe: JoinController sets @story_group
-    # from an invite lookup for somebody who is not in the group yet. Leaning
-    # on @story_group merely being absent there would be luck; belonging is
-    # the rule.
     def for(user:, story_group:)
       return if user.nil? || story_group.nil?
       # An UNSAVED group is not a group you are in. StoryGroupsController
@@ -63,12 +57,6 @@ class GroupChrome
 
   def tab_items = navigation.group_tab_items(self)
 
-  # The mockup shows Ranking unconditionally; ours honours the same rule the
-  # ranking screen itself enforces, rather than re-deriving `ranking_enabled`
-  # the way the Bootstrap sidebar does. Since #view_ranking? became "may open
-  # the screen", that now means the entry stays put for a student while the
-  # teacher has the board hidden — which is the point: behind it is the panel
-  # explaining that it is hidden, not a dead end.
   def ranking?
     return @ranking unless @ranking.nil?
 

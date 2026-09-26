@@ -1,16 +1,3 @@
--# One themed copy of the currency preview on step 2 of the wizard.
--# Mockup: js-expanded/30-form.js `mini()` (:84).
--#
--# Rendered twice, light and dark, so a teacher picking a mark sees it on both
--# table colours at once — an upload that reads well on one can disappear on the
--# other. `.gh-theme--*` carries a whole token set on this element (tokens.css),
--# which is what makes two themes on one page possible.
--#
--# The numbers are fixed sample values, not data: this is a picture of four
--# screens, not a calculation.
--#
--# Every token's mark is filled by group_wizard_controller, which clones it out
--# of the checked picker tile — the same trick rank_form_controller uses.
 .gh-currency-preview{ class: "gh-theme--#{theme}" }
   -# The purse in the header.
   %span.gh-balance-button

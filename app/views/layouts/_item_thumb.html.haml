@@ -1,12 +1,3 @@
--# An item as a mini entity card: the mockup's miniCard() (00-shared.js:173).
--# Orange frame, because an item is orange in this design language.
--#
--# Lives in layouts/ rather than items/ because three of its four callers are
--# not the items screen: the notification rows, the teacher dashboard's purchase
--# feed and the badge form's "Uwzględniają ją" list.
--#
--# `item` may be nil — a purchase whose Item was hard deleted before soft delete
--# existed. A soft-deleted item still resolves and still shows its own art.
 %span.gh-card.gh-mini-thumb
   %span.gh-card-frame
     %span.gh-card-inset{ data: local_assigns[:inner_data] }

@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 
-# One student's currency history, resolved once for the whole page.
-#
-# Two screens read it: the student's own "Historia waluty" and the third tab
-# of the teacher's student sheet. The mockup writes that table out twice
-# (30-sp.js:32 and 30-student.js:34) and the two copies are identical apart
-# from their wrapper, so here it is one service behind one partial.
-#
-# A service rather than a value: it loads the transactions, their polymorphic
-# subjects and the grading sheets behind the rewards.
 class CurrencyLedger
   # The filter chips, in the order they are shown. `nil` is "Wszystkie".
   # Plural, unlike LedgerEntry::KIND_LABELS — a chip names a set of rows, a
@@ -50,15 +41,6 @@ class CurrencyLedger
 
   private
 
-  # "Saldo po" is not stored, so it is reconstructed — and it has to be
-  # reconstructed over the WHOLE list, before any filter, or a filtered view
-  # would show balances that never existed.
-  #
-  # The walk goes backwards from the balance the student has now: every kind
-  # moves `current_currency` by exactly its own `amount` (rewards and
-  # corrections through increment!, purchases through the subtraction in
-  # ItemPurchaseService), so subtracting each row as we climb the list is
-  # exact rather than an estimate.
   def all_entries
     @all_entries ||= begin
       running = balance

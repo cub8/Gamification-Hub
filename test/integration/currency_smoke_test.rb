@@ -84,7 +84,7 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     visit_history
 
     assert_equal ['Kwota', 'Typ', 'Za co', 'Kiedy', 'Saldo po'], texts('.gh-ledger-row--header [role=columnheader]')
-    assert_equal %w[Korekta Zakup Nagroda], texts('.gh-ledger-type-pill')
+    assert_equal %w[Korekta Zakup Nagroda], texts('.gh-pill')
     assert_equal ['−5', '−15', '+50'], texts('.gh-ledger-amount')
     assert_select '.gh-ledger-source', /Obecność/
     assert_select '.gh-ledger-source small', 'Laboratoria 4'

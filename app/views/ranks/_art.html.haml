@@ -1,13 +1,3 @@
--# The three art states of a rank in one place, so no screen has to re-derive
--# them: an uploaded image, one of the preset glyphs, or neither.
--#
--# Mirrors badges/_art and items/_art. Ranks were the last entity whose branch
--# lived only inside a wrapper — ranks/_rank_thumb, which bakes it into the mini
--# card. A screen that wants the bare art (the group overview's rank card) had
--# nothing to call and ended up nesting a 52px mini card inside a 200px art well.
--#
--# The fallback is the ranking-star the mini card has always shown for a rank
--# with no artwork — one default across the app, not one per screen.
 - if rank.upload?
   = image_tag rank.icon, alt: ''
 - elsif (glyph = gh_glyph(rank.icon_glyph))

@@ -138,6 +138,12 @@
     cursor: default;
   }
 
+  .gh-number-stepper-button--sm {
+    --gh-c: 5px;
+    width: 30px;
+    height: 30px;
+  }
+
   .gh-form-section--divider {
     margin-top: 22px;
     padding-top: 18px;

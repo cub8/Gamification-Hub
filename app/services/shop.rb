@@ -1,18 +1,5 @@
 # frozen_string_literal: true
 
-# The group's offer, resolved once for one student. Mockup: viewShop() and
-# itemState(), js-expanded/30-main.js:87-98 and 10-core.js:15-31.
-#
-# All queries, so a service rather than a value — the same split ItemShelf,
-# RankLadder and BadgeShelf make. Everything comes from ONE load of the items
-# with their requirements preloaded and ONE load of the rank ladder.
-#
-# The three states are NOT re-derived here. Whether an item is sealed comes
-# from PurchaseEligibilityService and what it costs from
-# DiscountCalculatorService + PriceCalculatorService — the same two objects
-# ItemPurchaseService consults at the till. A second implementation of those
-# rules is exactly how a card ends up advertising a price the purchase then
-# refuses to honour.
 class Shop
   # Zone order is the mockup's, and it is a reading order: what you can have,
   # what you are working toward, what is still shut.

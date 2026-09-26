@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-# Resolves an invite code typed into the join dialog, or carried by a QR link,
-# into either a group you may join or the reason you may not.
-#
-# The read half of joining; AcceptInviteService is the write half. Split because
-# the join flow asks this question twice — once to show step 2, once again
-# inside the lock before actually creating the membership.
 class InviteLookup
   # The mockup's own copy (design/mockup-src/js-expanded/30-sp.js:39). Each
   # case gets its own sentence because each has a different remedy.

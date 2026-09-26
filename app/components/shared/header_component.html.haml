@@ -16,13 +16,6 @@
 
   %span.gh-topbar-spacer
 
-  -# The student's purse. The mockup gates it on `role === 'student'`
-  -# (10-core.js:162); ours gates it on MEMBERSHIP of THIS group, which is what
-  -# decides whether there is a balance to show at all — a teacher enrolled in
-  -# the group gets one, the owner who is not enrolled does not.
-  -#
-  -# Both numbers are in the title because they answer different questions: one
-  -# is spendable, the other decides your rank and never goes down.
   - if group_chrome&.student?
     - purse = group_chrome.student_membership
     = link_to story_group_student_currency_transactions_path(group_chrome.story_group, purse),

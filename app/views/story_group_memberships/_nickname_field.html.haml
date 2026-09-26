@@ -1,9 +1,3 @@
--# The nickname field itself, shared by the settings page and the dialog the
--# ranking screen opens. One file so the validation message, the maxlength and
--# the hint cannot drift apart between the two.
--#
--# return_to: the word StoryGroupMembershipsController#from_dialog? reads. A
--# name, never a path — see the comment there.
 - error = membership.errors[:nickname].first
 - autofocus = local_assigns.fetch(:autofocus, false)
 

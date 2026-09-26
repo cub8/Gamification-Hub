@@ -1,20 +1,5 @@
 # frozen_string_literal: true
 
-# Everything an item CARD has to show, in one place — so the teacher grid, the
-# form preview and (next) the shop and the student inventory cannot disagree
-# about what an item requires or what it is worth.
-#
-# Read-only and query-free: it reads associations the caller has already
-# loaded, which is why it is a value rather than a service. `ranks` is the
-# group's ladder and `badges` its badges; both are needed only by
-# #max_discount, so a caller that shows no discount ceiling can leave them out
-# — Shop does, because it always has a real Discount for the student
-# standing in front of it.
-#
-# The card's STATE (:afford / :save / :sealed) is not decided here. On the form
-# it is whichever tab the teacher pressed, and in the shop it will come from
-# PurchaseEligibilityService against a real student — two different questions,
-# neither of them a property of the item.
 class ItemCard
   include RequirementPhrasing
 
@@ -26,15 +11,6 @@ class ItemCard
 
   attr_reader :item, :ranks, :badges
 
-  # Rank first, then badges in name order — the order the seal and the sealed
-  # foot read them in.
-  #
-  # Only the requirements SOMEBODY CAN FAIL. A rank at threshold 0 is held by
-  # every student from the moment they join (StoryGroupStudent#rank returns
-  # the highest rung at or below their total), so gating on it gates nobody —
-  # naming it on the card would put a lock on an item anyone can buy.
-  #
-  # Badges are never universally held, so they always gate.
   def requirements
     @requirements ||= [gating_rank_requirement, *badge_requirements].compact
   end
@@ -48,27 +24,6 @@ class ItemCard
   # The plate stamped across the artwork.
   def seal_label = seal_label_for(requirements.first)
 
-  # The most any student could ever save on this item.
-  #
-  # This MIRRORS DiscountCalculatorService, which is the till, and the till is
-  # more generous than the item's own configuration suggests in two ways:
-  #
-  #   * an item that names no discount conditions discounts for EVERYONE
-  #     (discount_calculator_service.rb:31), and
-  #   * the amount is the student's own rank discount plus every badge they
-  #     hold — not only the badges this item lists (:33-39).
-  #
-  # So the badge half is always the whole group, and the rank half is narrowed
-  # only by a floor standing on its own; see #eligible_ranks.
-  #
-  # NOT the mockup's example() (30-item.js:20), which picks the rank at
-  # max(unlockRank, discRank) — that exists to write one sample sentence about
-  # one imagined student, and under-reports the ceiling this tag promises.
-  #
-  # Run through Discount so the number on the card is the number the shop will
-  # actually charge: DiscountCalculatorService caps every total at
-  # Discount::CAP_VALUE, and a card promising −80% when the till gives −50%
-  # would be a lie told by the design.
   def max_discount
     @max_discount ||= Discount.new(raw_discount).value
   end
@@ -80,13 +35,6 @@ class ItemCard
 
   def capped? = raw_discount > Discount::CAP_VALUE
 
-  # The rungs DiscountExample may put its example student on.
-  #
-  # Deliberately NOT #eligible_ranks. That one answers "which rungs could a
-  # qualifying student be standing on", and as soon as a badge can let them in
-  # the answer is the whole ladder — right for a ceiling, unsafe for ONE
-  # sampled student, who would then be named on a rung below the floor with no
-  # badge to qualify them. Standing at or above the floor always qualifies.
   def discount_rank_pool
     floor = item.min_rank_for_discount
     return ranks if floor.nil?
@@ -169,27 +117,11 @@ class ItemCard
     sorted.map { |badge| Requirement.new(:badge, badge.name) }
   end
 
-  # A student gets their OWN rank's discount once they qualify at all
-  # (DiscountCalculatorService#discount_from_rank), so the ceiling is the best
-  # discount among the rungs a qualifying student could be standing on.
-  #
-  # The best one, not the highest rung's: which rung you stand on is decided
-  # by how much you have COLLECTED (StoryGroupStudent#rank), so a low rung
-  # with a fat discount is reachable simply by having collected less. A ladder
-  # of Rekrut −30% at 0 and Kapitan −10% at 100 tops out at 30%, held by
-  # everyone below 100.
   def rank_discount
     discounts = eligible_ranks.filter_map { |rank| rank.discount&.clamp(0, 100) }
     discounts.max.to_i
   end
 
-  # Which rungs a qualifying student could hold.
-  #
-  # A floor standing ALONE is the only thing that narrows this: there, the
-  # single way in is to be at or above it. As soon as the item also lists
-  # discount badges, holding one of them qualifies a student of any rank
-  # (discount_calculator_service.rb:29) — and with no conditions at all
-  # everyone qualifies — so the whole ladder is reachable either way.
   def eligible_ranks
     floor = item.min_rank_for_discount
     return ranks if floor.nil? || item.discount_badges.any?

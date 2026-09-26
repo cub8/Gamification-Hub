@@ -55,12 +55,12 @@
     display: contents;
   }
 
-  .gh-card-footer>.gh-auth-footer {
+  .gh-card-footer>.gh-item-foot {
     flex: 1;
     min-width: 0;
   }
 
-  .gh-auth-footer .gh-btn {
+  .gh-item-foot .gh-btn {
     width: 100%;
   }
 

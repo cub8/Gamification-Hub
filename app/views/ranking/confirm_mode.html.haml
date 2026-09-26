@@ -1,7 +1,7 @@
 -# Either the layout's shared `modal` frame or a page — never both. A page
 -# carrying its own <turbo-frame id="modal"> would collide with the one the
 -# layout already has inside the dialog.
-- content_for :title, "Ranking — #{StoryGroup::RANKING_MODE_LABELS.fetch(@mode)}"
+- content_for :title, "Ranking - #{StoryGroup::RANKING_MODE_LABELS.fetch(@mode)}"
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

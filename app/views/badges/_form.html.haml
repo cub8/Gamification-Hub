@@ -1,9 +1,3 @@
--# The badge form, shared by new and edit. Mockup: js-expanded/30-br.js:44-52
--# (the fields) and :158-161 (the page around them).
--#
--# A PAGE, not a dialog (DECISIONS.md:26). The preview column beside it is the
--# reason: it shows both sides of the card, which is the whole point of the
--# screen and needs the width.
 - editing = badge.persisted?
 - error   = ->(attribute) { badge.errors[attribute].first }
 - slot    = editing ? shelf.slots.find { |candidate| candidate.badge == badge } : nil

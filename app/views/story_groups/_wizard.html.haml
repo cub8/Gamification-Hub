@@ -1,22 +1,3 @@
--# "Nowa grupa" — the creation wizard. Mockup: js-expanded/30-form.js
--# (`stepper` :48, `step0`-`step3` :49-81, `preview` :82-86), styles in
--# css/20-form.css.
--#
--# The ONE stepped flow in the app (DECISIONS.md:26). Four steps in a single
--# multipart form: nothing is written until the last submit, so abandoning the
--# wizard halfway leaves no draft group behind. Steps are sections toggled by
--# the `group-wizard` controller; only step 4's quick-start table comes from the
--# server, through the frame below, which keeps the starter-pack arithmetic in
--# Ruby (StarterPack) instead of duplicating it in TypeScript.
--#
--# Three deliberate departures from the mockup:
--#   * ONE currency name, not its three Polish declensions — the schema has one
--#     `currency_name`, as story_groups/_settings.html.haml:73-76 already notes.
--#   * ranking STARTS OFF. The mockup's switch defaults on; `ranking_enabled`
--#     defaults to false and that wins. Turning it on reveals the mode picker,
--#     which "Podium i własne miejsce" leads per DECISIONS.md:36.
--#   * the art field crops (DECISIONS.md:25) instead of storing the mockup's
--#     focal-point percentage, so `.focal`/`.mk` are not ported.
 - error  = ->(attribute) { story_group.errors[attribute].first }
 - packs  = StarterPack
 
@@ -300,13 +281,6 @@
               %dt Ranking
               %dd{ data: { group_wizard_target: 'sumRanking' } }
 
-          -# Rendered by StoryGroupsController#preset_preview. Inside the form
-          -# on purpose: its number fields and "keep" checkboxes post with
-          -# everything else, so the teacher's edits survive without any of the
-          -# arithmetic leaving Ruby.
-          -# `turbo:frame-load->refresh` is what fills the coin in each row: the
-          -# frame arrives after the icon was picked, so its tokens are empty
-          -# until the controller clones the chosen mark into them.
           = turbo_frame_tag 'starter_pack',
             data: { group_wizard_target: 'presetFrame',
                     action: 'turbo:frame-load->group-wizard#refresh' },

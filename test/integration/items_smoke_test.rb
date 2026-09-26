@@ -264,10 +264,10 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   test 'all three feet are rendered and only the current one is visible' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-item-preview-card .gh-auth-footer'
+    assert_select '.gh-item-preview-card .gh-item-foot'
     assert_select '.gh-item-preview-card .gh-requirement-block[hidden]'
     assert_select '.gh-item-preview-card .gh-requirement-list[hidden]'
-    assert_select '.gh-item-preview-card .gh-auth-footer[hidden]', false
+    assert_select '.gh-item-preview-card .gh-item-foot[hidden]', false
   end
 
   # DECISIONS.md:34 — an item without requirements can never be sealed.
@@ -632,8 +632,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   test 'the preview buy button looks live but is not reachable' do
     get new_story_group_item_path(@story_group)
 
-    assert_select '.gh-item-preview-card .gh-auth-footer .gh-btn[disabled]', false
-    assert_select '.gh-item-preview-card .gh-auth-footer .gh-btn[tabindex=?]', '-1'
+    assert_select '.gh-item-preview-card .gh-item-foot .gh-btn[disabled]', false
+    assert_select '.gh-item-preview-card .gh-item-foot .gh-btn[tabindex=?]', '-1'
   end
 
   # --- artwork is required --------------------------------------------------

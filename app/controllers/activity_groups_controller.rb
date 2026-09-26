@@ -44,13 +44,6 @@ class ActivityGroupsController < ApplicationController
     @awards_count = awards_count_for(@activity_group)
   end
 
-  # POST /story_groups/:story_group_id/activity_groups
-  #
-  # Submitted from inside the dialog, so it leaves through the turbo_stream
-  # redirect action rather than a 302: a plain redirect would be resolved
-  # INSIDE the `modal` frame, and the index carries an empty frame of that name
-  # itself, so the dialog would be swapped for nothing and the page would never
-  # move. Same exit as CurrencyAdjustmentsController#create.
   def create
     template = @story_group.activity_group_templates.kept.find(create_params[:activity_group_template_id])
     sheets   = build_sheets(template)

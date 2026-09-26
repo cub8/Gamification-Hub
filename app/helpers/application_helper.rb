@@ -41,17 +41,6 @@ module ApplicationHelper
     format('%<m>d:%<s>02d', m: seconds / 60, s: seconds % 60)
   end
 
-  # The in-group chrome for the screen being rendered, or nil out of a group.
-  #
-  # Reads @story_group, which 17 nested controllers already set and which the
-  # layout has always passed to its own sidebar. Memoised because the header,
-  # the sidebar, the tab bar, the "Więcej" sheet and the switcher all ask for
-  # it on every page.
-  #
-  # ONE predicate for the whole chrome. The mockup has two that disagree —
-  # `inGroup()` (10-core.js:153) and the `.in-group` body class (:337) — which
-  # is how its phone header ends up with the logo, the switcher and the spacer
-  # all competing for 58px on a focus route.
   def gh_group_chrome
     return @gh_group_chrome if defined?(@gh_group_chrome)
 
@@ -148,18 +137,6 @@ module ApplicationHelper
     "#{list[0..-2].join(', ')} i #{list.last}"
   end
 
-  # One of the preset glyphs (Glyphs), written into the page.
-  #
-  # INLINED, not `image_tag`. The whole glyph system runs on `currentColor`:
-  # `.gh-card-art-glyph { stroke: currentColor }` plus `.gh-card-art-glyph .f { fill: currentColor }`
-  # is what tints one shape gold on a rank card, teal on a badge and orange on
-  # an item, and flips it between themes. An external <img> cannot inherit
-  # currentColor, so as a file reference each glyph would need one copy per
-  # colour role per theme. The asset on disk stays the single source either way
-  # — Glyphs.asset_for is there for the callers that do want a URL.
-  #
-  # Returns nil for an unknown key so a record whose art has been retired
-  # renders its fallback rather than raising.
   def gh_glyph(key, css_class: 'gh-card-art-glyph')
     markup = Glyphs.markup(key)
     return if markup.nil?
@@ -167,16 +144,6 @@ module ApplicationHelper
     tag.svg(markup.html_safe, class: css_class, viewBox: '0 0 64 64', 'aria-hidden': 'true')
   end
 
-  # One of the preset group covers (GroupArt).
-  #
-  # An <img>, NOT inlined — the opposite of gh_glyph, and for the opposite
-  # reason. These are 160x90 scenes carrying their own palette, so there is
-  # nothing for `currentColor` to tint; inlining five of them into every card on
-  # the group index would only make the page bigger. They go into `.gh-card-art`,
-  # which crops them to the card, so the file's own `slice` does the rest.
-  #
-  # Returns nil for an unknown key so a group whose preset has been retired
-  # renders its monogram rather than a broken image.
   def gh_group_art(key)
     return unless GroupArt.include?(key)
 
@@ -194,13 +161,6 @@ module ApplicationHelper
     gh_group_art(story_group.icon_glyph)
   end
 
-  # The same cover, as a bare URL rather than an <img>.
-  #
-  # The blurred table layer (.gh-group-cover-bg) is a CSS background, and a background
-  # cannot take an <img>. Everything else about the rule is gh_group_cover's:
-  # an upload wins, a preset key resolves through GroupArt, and an unknown or
-  # missing key is nil, which is how the layout knows to keep the octagon
-  # texture instead.
   def gh_group_cover_url(story_group)
     return if story_group.nil?
     return url_for(story_group.icon) if story_group.art == :upload
@@ -217,14 +177,6 @@ module ApplicationHelper
     gh_currency_icon(story_group.currency_icon_glyph)
   end
 
-  # One of the preset currency marks (CurrencyIcons).
-  #
-  # Inlined, like gh_glyph and for the same reason: the mark is drawn in
-  # `currentColor`, and inside `.gh-currency-token > span` that resolves to the dark ink of
-  # the cream coin face in both themes. An <img> could not inherit it.
-  #
-  # Returns nil for an unknown key so a group whose icon has been retired falls
-  # through to the initial rather than raising.
   def gh_currency_icon(key, css_class: 'gh-coin-mark')
     markup = CurrencyIcons.markup(key)
     return if markup.nil?

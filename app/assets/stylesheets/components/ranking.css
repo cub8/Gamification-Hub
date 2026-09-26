@@ -13,12 +13,6 @@
     border-top: 1px solid var(--gh-line);
   }
 
-  .gh-ranking-row--header {
-    border-top: 0;
-    font: 680 12.5px var(--gh-f-ui);
-    color: var(--gh-ink-3);
-  }
-
   .gh-ranking-row--me {
     background: color-mix(in srgb, var(--gh-item) 12%, var(--gh-card));
     box-shadow: inset 4px 0 0 var(--gh-item);

@@ -1,15 +1,5 @@
 # frozen_string_literal: true
 
-# One row of the currency history, already resolved.
-#
-# The ledger is polymorphic — a reward points at a grading-sheet column, a
-# purchase at an item, a correction at nobody — and a view that reached
-# through `transaction.transactionable` would have to know all three shapes
-# and would render whatever an association happened to load. So the service
-# resolves each row once and hands over this.
-#
-# Read-only and query-free: everything it answers was decided by
-# CurrencyLedger before it was built.
 class LedgerEntry
   # The three labels the type chip can carry. Ported from the mockup's
   # TL = {earn:'Nagroda', spend:'Zakup', corr:'Korekta'} (30-sp.js:29), which

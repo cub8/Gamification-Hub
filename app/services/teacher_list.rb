@@ -1,17 +1,7 @@
 # frozen_string_literal: true
 
-# Who runs one group: the owner and every supporting teacher, as one list.
-#
-# The owner has no StoryGroupTeacher row — ownership is `story_groups.owner_id`
-# — so the mockup's single table is assembled here rather than in the view
-# (30-rk.js `vTeachers`). A row carries its membership only when there is one,
-# and that is exactly what decides whether "Usuń" is offered: the owner is
-# shown separately and can never be removed (DECISIONS.md:40).
-#
-# A service rather than a value: it does the loading. Same split as
-# StudentList.
 class TeacherList
-  Row = Struct.new(:person, :membership, :added_at) do
+  Row = Data.define(:person, :membership, :added_at) do
     def owner? = membership.nil?
 
     # The owner row has no id of its own, so nothing that needs one — a

@@ -187,15 +187,6 @@
     background: color-mix(in srgb, var(--gh-heart) 18%, var(--gh-card));
   }
 
-  .gh-preview-flip-card {
-    max-width: 230px;
-    margin: 16px auto 0;
-  }
-
-  .gh-preview-flip-card .gh-card-art {
-    aspect-ratio: 16 / 10;
-  }
-
   @media (width <= theme(--breakpoint-mobile)) {
     .gh-rank-ladder-list {
       padding: 4px 14px 10px;

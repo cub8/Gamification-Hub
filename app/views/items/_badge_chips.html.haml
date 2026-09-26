@@ -1,14 +1,3 @@
--# The badge multiselect. Mockup: chips(), js-expanded/30-item.js:25-26.
--#
--# The mockup's chip is a <span> with a remove <button>, and its only real
--# control is the <select> — so with JavaScript off it selects nothing and posts
--# nothing. Here every badge is a REAL CHECKBOX inside its chip: the control is
--# the thing, its accessible name is the badge name, and its state is announced.
--# chip_picker_controller then hides the unchecked chips and reveals the
--# "Dodaj odznakę…" select, which is what makes it look like the mockup. With
--# JavaScript off nothing is hidden and you get a plain, working chip grid.
--#
--# Locals: f, field, badges, legend, placeholder, form_target, show_discount
 - show_discount = local_assigns.fetch(:show_discount, false)
 
 %fieldset.gh-chip-group{ data: { controller: 'chip-picker' } }

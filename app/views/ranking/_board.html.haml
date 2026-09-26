@@ -1,13 +1,3 @@
--# The board itself, shared by both personas. Mockup: `table()` + `rows()`,
--# js-expanded/30-rk.js:29-34.
--#
--# Divs carrying table roles rather than a real <table>, as the mockup has it:
--# below 720px the four columns reflow into a three-column grid with the rank
--# wrapped under the name and the score spanning two rows, which no <table> can
--# do. Divs-plus-roles or a real table — never half of each.
--#
--# reveal_names: the teacher's second line. Students see pseudonyms and nothing
--# else, which is the whole promise of the nickname (DECISIONS.md:36-38).
 %section.gh-panel.gh-ranking-table{ role: 'table', 'aria-label': 'Ranking' }
   .gh-ranking-row.gh-ranking-row--header{ role: 'row' }
     %span{ role: 'columnheader' } Miejsce

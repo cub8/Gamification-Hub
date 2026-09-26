@@ -1,30 +1,5 @@
 # frozen_string_literal: true
 
-# One plausible student, for the item form's discount example.
-#
-# The sentence used to name the whole group — every rank-topping rung and
-# every badge at once — which is what the ceiling is made of but reads as an
-# impossible completionist and runs off the line in a group with eight badges.
-# This picks somebody believable instead: one rank, at most two badges.
-#
-# THE PICK MUST QUALIFY. A student who does not meet the item's discount
-# conditions saves nothing, so a sentence quoting a percentage for them would
-# be false — the same family of lie as the ceiling that used to say
-# "Bez zniżek" about an item selling at 40% off. #pick_rank and #forced_badge
-# below each guarantee one of the two ways in
-# (DiscountCalculatorService#eligible_for_discount?).
-#
-# Random by design, and re-picked on every render of the form: the point is
-# that it is AN example, not the example.
-#
-# The randomness is ONE shuffle, exposed as #rank_order / #badge_order and
-# handed to item_form_controller, which walks it under the same rule when the
-# teacher edits the conditions. Sampling here and shuffling separately for the
-# browser would be two draws, and the two sides would name different students.
-#
-# The orders are lists of NAMES, because names are all the browser has on a
-# chip. Two badges sharing a name would be ambiguous here — and on every other
-# screen that names one.
 class DiscountExample
   # Two is enough to show that badge discounts stack, and short enough to read.
   MAX_BADGES = 2
@@ -63,12 +38,6 @@ class DiscountExample
     @pick ||= [pick_rank, pick_badges]
   end
 
-  # From the rungs at or above the floor (ItemCard#discount_rank_pool), which
-  # is one of the two ways to qualify — and the only one available when the
-  # item lists no discount badges.
-  #
-  # Rungs worth 0% are skipped: naming one puts a name in the sentence and no
-  # number behind it.
   def pick_rank
     pool    = card.discount_rank_pool.select { |rank| rank.discount.to_i.positive? }
     earning = pool.index_by { |rank| rank.name.to_s }

@@ -16,12 +16,6 @@ class StoryGroupsController < ApplicationController
     @listing = StoryGroupsListing.new(scope: scope, user: current_user, filter: params[:filter]).load
   end
 
-  # GET /story_groups/1
-  #
-  # Two screens, chosen by MEMBERSHIP rather than by role: a teacher enrolled in
-  # somebody else's group reads it as a student. This is the same question
-  # GroupChrome#student? asks for the sidebar, so the page and the
-  # navigation beside it cannot disagree about who you are here.
   def show
     authorize @story_group
     @student = @story_group.student_memberships.find_by(user_id: @current_user.id)
@@ -186,12 +180,6 @@ class StoryGroupsController < ApplicationController
     false
   end
 
-  # The step-4 rows, out of the flat params the form posts and into the nested
-  # shape StarterPackBuilder reads. Indices are the preset's own, written into
-  # the markup server-side, so they always line up with the catalogue.
-  #
-  # Permitted by hand rather than with `expect`: the keys are numeric indices,
-  # so there is no fixed list to name.
   def starter_selection
     setup = params[:setup]
     return {} if setup.blank?
