@@ -51,12 +51,12 @@ class StarterPack
   # stamps sheets "Zajęcia 1", "Zajęcia 2", … off the back of it later.
   TEMPLATE_NAME = 'Zajęcia'
 
-  Rank     = Struct.new(:index, :name, :threshold, :discount, :icon_glyph)
-  Badge    = Struct.new(:index, :name, :didactic_description, :story_description, :discount,
-                        :icon_glyph,)
-  Item     = Struct.new(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
-                        :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
-  Category = Struct.new(:index, :didactic_description, :story_description, :reward)
+  Rank     = Data.define(:index, :name, :threshold, :discount, :icon_glyph)
+  Badge    = Data.define(:index, :name, :didactic_description, :story_description, :discount,
+                         :icon_glyph,)
+  Item     = Data.define(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
+                         :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
+  Category = Data.define(:index, :didactic_description, :story_description, :reward)
 
   # ---- the catalogue -------------------------------------------------------
 

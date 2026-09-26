@@ -24,7 +24,7 @@ class StarterPackBuilder
   # sentence the wizard puts in its error slot.
   class InvalidSelection < StandardError; end
 
-  Result = Struct.new(:ranks, :badges, :items, :categories)
+  Result = Data.define(:ranks, :badges, :items, :categories)
 
   def initialize(story_group:, pack:, classes:, selection: {})
     @story_group = story_group

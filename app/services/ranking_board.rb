@@ -11,7 +11,7 @@
 class RankingBoard
   # `place` is shared by ties; `mine` is only ever true for the viewer, so the
   # teacher's board carries no self-highlight (mockup: `mine = stu && …`).
-  Row = Struct.new(:place, :student, :rank, :mine) do
+  Row = Data.define(:place, :student, :rank, :mine) do
     def gap? = false
   end
 

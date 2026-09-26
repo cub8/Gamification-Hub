@@ -11,7 +11,7 @@
 # A service rather than a value: it does the loading. Same split as
 # StudentList.
 class TeacherList
-  Row = Struct.new(:person, :membership, :added_at) do
+  Row = Data.define(:person, :membership, :added_at) do
     def owner? = membership.nil?
 
     # The owner row has no id of its own, so nothing that needs one — a

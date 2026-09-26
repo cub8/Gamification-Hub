@@ -7,8 +7,7 @@
 # award — which is what "nie można cofnąć" means on the grade screen and why
 # the review dialog in front of it matters.
 class ActivityGroupRewardGranter
-  # `total`, not `sum`: Struct members shadow Enumerable#sum.
-  Result = Struct.new(:pairs, :total, :students) do
+  Result = Data.define(:pairs, :total, :students) do
     def any? = pairs.any?
   end
 

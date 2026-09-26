@@ -12,7 +12,7 @@
 # A service rather than a value: it does the loading. Same split as ItemShelf
 # and BadgeShelf.
 class StudentList
-  Row = Struct.new(:student, :rank, :badge_count) do
+  Row = Data.define(:student, :rank, :badge_count) do
     def zero_lives? = student.lives.to_i.zero?
   end
 

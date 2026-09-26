@@ -24,14 +24,19 @@ class TeacherOverview
   SHEETS = 2
   ATTENTION = 4
 
-  Kpi      = Struct.new(:label, :value, :note)
-  Purchase = Struct.new(:transaction, :student, :item) do
+  Kpi = Data.define(:label, :value, :note) do
+    def initialize(label:, value:, note: nil)
+      super
+    end
+  end
+
+  Purchase = Data.define(:transaction, :student, :item) do
     def price        = transaction.amount.abs
     def time         = transaction.created_at
     def student_name = student.display_name
   end
-  Sheet    = Struct.new(:activity_group, :podium)
-  Place    = Struct.new(:student, :points)
+  Sheet    = Data.define(:activity_group, :podium)
+  Place    = Data.define(:student, :points)
 
   def initialize(story_group:)
     @story_group = story_group

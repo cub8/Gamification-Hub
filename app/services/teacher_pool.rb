@@ -21,7 +21,7 @@ class TeacherPool
   # `search_key` is name and e-mail in one folded string: the mockup matches
   # against both at once (`norm(t.name + ' ' + t.email)`), so a query
   # spanning the two finds nothing, exactly as it does there.
-  Candidate = Struct.new(:person, :in_group, :search_key) do
+  Candidate = Data.define(:person, :in_group, :search_key) do
     def in_group? = in_group
 
     def name = person.full_name.to_s

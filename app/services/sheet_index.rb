@@ -9,7 +9,7 @@
 # records for them. All of it is loaded here in four queries, whatever the
 # group holds.
 class SheetIndex
-  Template = Struct.new(:record, :categories, :sheets) do
+  Template = Data.define(:record, :categories, :sheets) do
     def name           = record.base_name
     def category_count = categories.size
     # The ceiling in "do N marchewek na studenta za arkusz".
@@ -17,7 +17,7 @@ class SheetIndex
     def any_sheets?    = sheets.any?
   end
 
-  Sheet = Struct.new(:record, :awards_count) do
+  Sheet = Data.define(:record, :awards_count) do
     def name              = record.name
     def graded?           = awards_count.positive?
     def columns_modified? = record.columns_modified?
