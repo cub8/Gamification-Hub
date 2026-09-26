@@ -21,15 +21,6 @@ class StoryGroup < ApplicationRecord
   has_many :teacher_memberships, class_name: 'StoryGroupTeacher', foreign_key: 'story_group_id', dependent: :destroy
   has_many :students, through: :student_memberships, source: :user
   has_many :teachers, through: :teacher_memberships, source: :user
-  # Each image is one of two things, never both: an uploaded file, or a preset
-  # named by its `*_glyph` key (into GroupArt and
-  # CurrencyIcons, whose files live in app/assets/images — nothing is
-  # ever copied into the database). Keeping the attachment when a preset is
-  # chosen is deliberate: it lets a teacher switch back without re-uploading.
-  #
-  # Unlike a rank or an item, a group may legitimately have NEITHER: the cards
-  # have always drawn a monogram for a group with no cover, so there is no
-  # `art_chosen` rule here.
   has_one_attached :icon
   has_one_attached :currency_icon
   has_many :activity_group_templates, dependent: :destroy

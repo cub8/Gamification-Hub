@@ -7,8 +7,6 @@
 @source "../../javascript";
 @source "../../helpers";
 
-@custom-variant dark (&:where([data-gh-theme="dark"], [data-gh-theme="dark"] *));
-
 @import "./font-awesome.css";
 @import "./fonts.css";
 @import "./tokens.css";
@@ -29,6 +27,7 @@
 @import "./components/form.css";
 @import "./components/auth.css";
 @import "./components/dashboard.css";
+@import "./components/notifications.css";
 @import "./components/groups.css";
 @import "./components/overview.css";
 @import "./components/join.css";
@@ -47,8 +46,4 @@
 @import "./components/grading.css";
 @import "./components/sheets.css";
 
-/* LAST on purpose. The creation wizard reuses form.css's shell and has to
-   override it: `.gh-form-shell--full` and `.gh-form-shell` are both one class, so only
-   source order decides which wins. Imported before form.css it lost, and
-   steps 3 and 4 kept a 380px column they do not use. */
 @import "./components/wizard.css";

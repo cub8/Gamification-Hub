@@ -5,7 +5,7 @@
   %span.gh-invite-code= invite.code
 
   %span.gh-invite-status
-    %span.gh-status-pill.gh-octagon-clip{ class: invite.active? ? 'gh-status-pill--active' : 'gh-status-pill--inactive' }= invite.status_label
+    %span.gh-pill.gh-octagon-clip{ class: invite.active? ? 'gh-pill--earn' : 'gh-pill--corr' }= invite.status_label
 
   %span.gh-invite-usage
     = "Użycia: #{invite_uses_label(invite)}"

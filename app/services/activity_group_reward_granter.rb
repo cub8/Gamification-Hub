@@ -1,14 +1,7 @@
 # frozen_string_literal: true
 
-# Grants the rewards a teacher marked on a grading sheet.
-#
-# The one rule this service exists to enforce: awards only ever go *on*. A pair
-# missing from the submitted set is not a revocation, it is simply not a new
-# award — which is what "nie można cofnąć" means on the grade screen and why
-# the review dialog in front of it matters.
 class ActivityGroupRewardGranter
-  # `total`, not `sum`: Struct members shadow Enumerable#sum.
-  Result = Struct.new(:pairs, :total, :students) do
+  Result = Data.define(:pairs, :total, :students) do
     def any? = pairs.any?
   end
 

@@ -89,6 +89,28 @@
      even though it labels a gold row; kept, because it is the same chip that
      marks "you" in both the ranking table and the rank ladder, and it has to
      read the same in both. */
+  .gh-pill {
+    --gh-c: 5px;
+    display: inline-block;
+    padding: 4px 8px;
+    font: 680 12px var(--gh-f-ui);
+  }
+
+  .gh-pill--earn {
+    background: color-mix(in srgb, var(--gh-earn) 18%, var(--gh-card));
+    color: var(--gh-earn);
+  }
+
+  .gh-pill--spend {
+    background: color-mix(in srgb, var(--gh-item) 18%, var(--gh-card));
+    color: var(--gh-spend);
+  }
+
+  .gh-pill--corr {
+    background: var(--gh-card-3);
+    color: var(--gh-ink-2);
+  }
+
   .gh-you-badge {
     --gh-c: 5px;
     display: inline-block;

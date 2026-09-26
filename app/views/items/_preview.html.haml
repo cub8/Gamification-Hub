@@ -1,13 +1,3 @@
--# The form's preview column. Mockup: preview(), js-expanded/30-item.js:65-68.
--#
--# Server-rendered so it is right before a single keystroke and right with no
--# JavaScript at all; item_form_controller then keeps it honest as you type. It
--# never generates markup — it rewrites the text in this one and clones the
--# <template>s at the foot of the form, which is what lets the glyphs stay
--# Rails-rendered inline SVG.
--#
--# All three feet are rendered, two of them hidden, so the segmented control
--# below the heading switches between real states rather than building them.
 - targets = { card:        { item_form_target: 'card' },
               name:        { item_form_target: 'frontName' },
               cost:        { item_form_target: 'frontCost' },

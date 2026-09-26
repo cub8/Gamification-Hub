@@ -1,16 +1,5 @@
 # frozen_string_literal: true
 
-# The preset artwork ranks, badges and items offer.
-#
-# The mockup carries these as raw path data in one `GL` map
-# (js-expanded/00-shared.js:48-75) and picks a subset per entity
-# (30-br.js:13). Here each glyph is a real file under
-# app/assets/images/glyphs, generated from that map by
-# design/mockup-src/tools/extract_glyphs.mjs, and this object is the registry:
-# which keys exist, which an entity may use, and where the file is.
-#
-# The directory mechanics live in PresetSet, shared with the group's own two
-# sets. Only the contents are here.
 class Glyphs < PresetSet
   # Verbatim from the mockup's PRE map (30-br.js:13), order included: it is
   # the order the picker renders in, and it runs lowest rung to highest.

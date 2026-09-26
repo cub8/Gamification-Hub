@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-# The "Nowe zaproszenie" / "Edytuj zaproszenie" dialog (mockup 30-isg.js:33-41).
-#
-# The dialog's shape and the record's do not match. The record has two nullable
-# columns; the dialog has two switches, a number, and a date split from a time.
-# And when a save fails the switches have to come back the way the teacher left
-# them, which a bare StoryGroupInvite cannot remember. Hence a form object.
-#
-# It acts on data rather than merely describing it, so it lives in services.
 class InviteForm
   include ApplicationHelper # gh_plural, for the summary sentence
 

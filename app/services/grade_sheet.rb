@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-# One sheet's grading table: the visible columns, the students, and which
-# cells have already paid out.
-#
-# Every cell on the screen asks two questions — is it awarded, and what does
-# it add to this student's row total — and the table is columns x students,
-# so both are answered from one preloaded set rather than per cell.
 class GradeSheet
   def initialize(activity_group)
     @activity_group = activity_group

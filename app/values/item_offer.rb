@@ -1,16 +1,5 @@
 # frozen_string_literal: true
 
-# What one item costs and what blocks it — for ONE student.
-#
-# ItemCard answers the teacher's questions about an item: the list
-# price, every requirement it carries, the best discount anyone could ever
-# get. A student standing in the shop asks narrower ones: what do *I* pay,
-# what am *I* missing, how close am I. Same card markup, different answers,
-# so items/_card.html.haml reads them through this.
-#
-# Read-only and query-free — everything it needs is resolved by
-# Shop and handed in. `preview` is the no-student case: the
-# teacher's form preview, where the card's own answers stand.
 class ItemOffer
   include RequirementPhrasing
 
@@ -60,12 +49,6 @@ class ItemOffer
     "−#{discount.value}% #{discount_source}"
   end
 
-  # A RankProgress toward the rank that blocks this student, or nil when a
-  # rank is not what blocks them. Drawn under the sealed foot (mockup
-  # itemCard(): `bar(st.total, rr.r.min, 'Postęp do rangi')`).
-  #
-  # Collected TOTAL, not the balance: a rank is earned, never bought, so
-  # spending never costs you one (DECISIONS.md).
   def rank_progress
     rank = unmet.find(&:rank?) && item.unlock_rank
     return if rank.nil? || student.nil?

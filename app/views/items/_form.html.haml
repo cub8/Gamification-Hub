@@ -21,17 +21,6 @@
   %p.gh-lead
     = editing ? 'Podgląd obok pokazuje kartę po zmianach.' : 'Wypełnij kartę, a podgląd obok pokaże, jak zobaczą ją studenci.'
 
--# The crop event bubbles up from the image field, and #art re-reads the artwork
--# out of the picker tile the cropper just redrew — so dragging the crop box
--# moves the preview card and the thumbnail with it.
--#
--# The group-wide half of the ceiling, handed over rather than re-derived: the
--# chips carry only each badge's own discount and the ladder's best is not any
--# one select option, so item_form_controller has no way to work these out
--# without a second copy of a rule ItemCard already owns.
--#
--# The two `example_*_order` values are ONE shuffle, walked by both sides, so the
--# server's example student and the browser's cannot come out different.
 - form_data = { controller: 'item-form',
                 action:     'gh:image-crop->item-form#art',
                 item_form_ladder_discount_value: card.ladder_discount,

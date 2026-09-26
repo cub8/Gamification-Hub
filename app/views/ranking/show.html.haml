@@ -1,7 +1,7 @@
 -# One action, two screens. Which one is decided by MEMBERSHIP — the same object
 -# the navigation chrome uses — so the page and the deck beside it cannot
 -# disagree about who you are here. Same fork as ranks/index.
-- content_for :title, "Ranking — #{@story_group.name}"
+- content_for :title, "Ranking - #{@story_group.name}"
 
 - if @board.teacher?
   = render 'teacher_board', board: @board

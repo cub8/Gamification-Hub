@@ -1,22 +1,5 @@
 # frozen_string_literal: true
 
-# Turns a StarterPack into real records for a freshly created group.
-#
-# The wizard's step 4 renders the same pack and lets the teacher drop rows and
-# retype numbers before anything exists, so this takes those edits as
-# `selection` and never invents them itself. Shape, straight off the form:
-#
-#   { ranks:  { 0 => { keep: true, value: 20 }, ... },
-#     badges: { 0 => { keep: true }, ... },
-#     items:  { 0 => { keep: true, value: 11 }, ... },
-#     cats:   { 0 => { keep: true, value: 1 },  ... } }
-#
-# A missing entry means "keep, unedited", so a pack built with no selection at
-# all is the untouched preset — which is what the controller passes when the
-# teacher walks straight through.
-#
-# Order matters: items point at ranks and badges through four different
-# associations, so both have to exist first. Same reasoning as db/seeds/items.rb.
 class StarterPackBuilder
   # Raised when the teacher's own numbers cannot become records — today only
   # two rank thresholds edited onto the same value, which the unique index on
@@ -24,7 +7,7 @@ class StarterPackBuilder
   # sentence the wizard puts in its error slot.
   class InvalidSelection < StandardError; end
 
-  Result = Struct.new(:ranks, :badges, :items, :categories)
+  Result = Data.define(:ranks, :badges, :items, :categories)
 
   def initialize(story_group:, pack:, classes:, selection: {})
     @story_group = story_group

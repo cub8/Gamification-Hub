@@ -355,33 +355,6 @@
     white-space: nowrap;
   }
 
-  .gh-mini-thumb {
-    --gh-cc: 7px;
-    width: 52px;
-    height: 52px;
-    flex: 0 0 auto;
-    filter: drop-shadow(0 2px 0 var(--gh-frame-edge));
-  }
-
-  .gh-mini-thumb .gh-card-frame {
-    padding: 3px;
-  }
-
-  .gh-mini-thumb .gh-card-inset {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: color-mix(in srgb, var(--gh-frame) 15%, var(--gh-card));
-    color: color-mix(in srgb, var(--gh-frame) 58%, var(--gh-ink));
-    overflow: hidden;
-  }
-
-  .gh-mini-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
   .gh-todo-card .gh-card-inset {
     padding: 16px;
   }
@@ -517,68 +490,3 @@
   }
 }
 
-@layer components {
-
-  .gh-notification-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .gh-notification-row-link {
-    display: grid;
-    grid-template-columns: 44px minmax(0, 1fr);
-    gap: 12px;
-    align-items: center;
-    padding: 10px 8px;
-    margin: 0 -8px;
-    text-decoration: none;
-    color: var(--gh-ink);
-  }
-
-  .gh-notification-row-link {
-    border-top: 1px solid var(--gh-line);
-  }
-
-  .gh-notification-row-link:hover {
-    background: var(--gh-card-2);
-  }
-
-  .gh-notification-row--unread .gh-notification-row-link {
-    grid-template-columns: 44px minmax(0, 1fr) 10px;
-  }
-
-  .gh-notification-row .gh-mini-thumb {
-    width: 44px;
-    height: 44px;
-  }
-
-  .gh-notification-row-text {
-    min-width: 0;
-  }
-
-  .gh-notification-row-text b {
-    display: block;
-    font: 680 14.5px/1.25 var(--gh-f-ui);
-  }
-
-  .gh-notification-row-text>span {
-    display: block;
-    font-size: 14px;
-  }
-
-  .gh-notification-row-text small {
-    display: block;
-    font-size: 12.5px;
-    color: var(--gh-ink-3);
-    margin-top: 2px;
-  }
-
-  .gh-notification-unread-dot {
-    --gh-c: 2px;
-    width: 8px;
-    height: 8px;
-    align-self: center;
-    background: var(--gh-item);
-  }
-}

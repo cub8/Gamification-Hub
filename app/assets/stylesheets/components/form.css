@@ -202,6 +202,12 @@
     outline-offset: 3px;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .gh-toggle-switch::after {
+      transition: none;
+    }
+  }
+
   .gh-invite-code-display {
     --gh-c: 10px;
     display: inline-block;
@@ -310,35 +316,6 @@
   .gh-price-unit-label {
     font: 680 16px var(--gh-f-ui);
     color: var(--gh-ink-2);
-  }
-
-  .gh-currency-token {
-    --gh-c: 29%;
-    display: inline-grid;
-    flex: 0 0 auto;
-    width: var(--gh-s);
-    height: var(--gh-s);
-    padding: max(2px, calc(var(--gh-s) * 0.08));
-    background: var(--gh-rank);
-    vertical-align: middle;
-  }
-
-  .gh-currency-token>span {
-    display: grid;
-    place-items: center;
-    background: var(--gh-coin-face);
-    color: var(--gh-coin-ink);
-    clip-path: inherit;
-  }
-
-  .gh-currency-token img {
-    width: 80%;
-    height: 80%;
-    object-fit: contain;
-  }
-
-  .gh-currency-token i {
-    font-size: calc(var(--gh-s) * 0.42);
   }
 
   .gh-art-preset-grid {

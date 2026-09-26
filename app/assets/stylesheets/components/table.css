@@ -18,6 +18,18 @@
 }
 
 @layer components {
+  .gh-teacher-row--header,
+  .gh-invite-row--header,
+  .gh-ledger-row--header,
+  .gh-ranking-row--header,
+  .gh-student-row--header {
+    border-top: 0;
+    font: 680 12.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+}
+
+@layer components {
   .gh-group-cover-bg {
     position: absolute;
     inset: -24px;

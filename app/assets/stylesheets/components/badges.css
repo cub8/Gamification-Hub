@@ -166,24 +166,6 @@
     cursor: pointer;
   }
 
-  .gh-flip-card--just-earned .gh-flip-card-face--front {
-    animation: gh-glow 1.6s ease-out 0.55s 1;
-  }
-
-  @keyframes gh-glow {
-    0% {
-      filter: drop-shadow(0 3px 0 var(--gh-frame-edge)) drop-shadow(0 0 0 var(--gh-badge));
-    }
-
-    35% {
-      filter: drop-shadow(0 3px 0 var(--gh-frame-edge)) drop-shadow(0 0 18px var(--gh-badge));
-    }
-
-    100% {
-      filter: drop-shadow(0 3px 0 var(--gh-frame-edge)) drop-shadow(0 0 0 transparent);
-    }
-  }
-
   .gh-segmented-toggle-2 {
     --gh-c: 7px;
     --gh-seg: var(--gh-badge);
@@ -254,11 +236,6 @@
     margin-top: 12px;
   }
 
-  .gh-preview-flip-card .gh-card-footer {
-    min-height: 0;
-    padding: 10px 12px 12px;
-  }
-
   .gh-preview-thumb-row b {
     display: block;
     font: 680 15px/1.25 var(--gh-f-ui);
@@ -285,10 +262,6 @@
   @media (prefers-reduced-motion: reduce) {
     .gh-flip-card-inner {
       transition: none;
-    }
-
-    .gh-flip-card--just-earned .gh-flip-card-face--front {
-      animation: none;
     }
   }
 }

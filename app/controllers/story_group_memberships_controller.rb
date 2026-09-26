@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-# "Ustawienia w grupie" (mockup #/s/group-settings): what a STUDENT controls
-# about their own place in one group — their nickname, what the teacher can see,
-# and the way out.
-#
-# Singular and always self-addressed: the membership comes from the current
-# user, never from a parameter, so there is no id here to tamper with. The
-# policy still asks (`edit_own?`, `leave?`), because a route that trusts its own
-# lookup is one refactor away from trusting a parameter.
-#
-# The teacher's side of the same record is StudentsController. The two are
-# deliberately separate: removing a student and leaving a group destroy the same
-# row but are different acts, with different copy and different permission.
 class StoryGroupMembershipsController < ApplicationController
   include StoryGroupAuthorization
 
@@ -30,12 +18,6 @@ class StoryGroupMembershipsController < ApplicationController
     authorize @membership, :edit_own?
   end
 
-  # GET /story_groups/:story_group_id/membership/nickname
-  #
-  # The same field as #edit, as a dialog. The ranking screen is the only place
-  # the nickname is shown to anyone else, so it is also where a student is most
-  # likely to want it changed — and sending them to the settings page and back
-  # would lose their place on the board.
   def nickname
     authorize @membership, :edit_own?
   end

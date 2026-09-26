@@ -1,17 +1,5 @@
 # frozen_string_literal: true
 
-# A group's front page, as its teacher reads it. Mockup: #/t/home, vHome(),
-# js-expanded/30-gh.js:33-44.
-#
-# The mockup answers three questions on this screen — how is the group doing,
-# what has just happened, what needs me — and each is a query, so this is a
-# service, like Shop and StudentList. Everything is resolved once here so the
-# view can stay a rendering of it.
-#
-# Replaces StoryGroupTeacherDashboard, and fixes two things it got wrong:
-# "recent" sheets were ordered oldest-first, and the per-sheet podium summed
-# rewards across every student holding those categories before filtering the
-# result in Ruby.
 class TeacherOverview
   include Rails.application.routes.url_helpers
 
@@ -24,14 +12,19 @@ class TeacherOverview
   SHEETS = 2
   ATTENTION = 4
 
-  Kpi      = Struct.new(:label, :value, :note)
-  Purchase = Struct.new(:transaction, :student, :item) do
+  Kpi = Data.define(:label, :value, :note) do
+    def initialize(label:, value:, note: nil)
+      super
+    end
+  end
+
+  Purchase = Data.define(:transaction, :student, :item) do
     def price        = transaction.amount.abs
     def time         = transaction.created_at
     def student_name = student.display_name
   end
-  Sheet    = Struct.new(:activity_group, :podium)
-  Place    = Struct.new(:student, :points)
+  Sheet    = Data.define(:activity_group, :podium)
+  Place    = Data.define(:student, :points)
 
   def initialize(story_group:)
     @story_group = story_group
@@ -94,12 +87,6 @@ class TeacherOverview
 
   # ---- Wymaga uwagi ------------------------------------------------------
 
-  # Read in severity order: somebody blocked out of the shop, then the
-  # teacher's own unfinished work.
-  #
-  # Deliberately NOT "n do awansu". A student climbing toward a rung is the
-  # system working; a panel that reports it stops being a list of things that
-  # need doing and becomes a feed.
   def build_attention
     (out_of_lives + [ungraded_sheet]).compact.first(ATTENTION)
   end
@@ -117,13 +104,6 @@ class TeacherOverview
     end
   end
 
-  # The newest sheet that still has a column nobody has been awarded in.
-  #
-  # There is no "finished" flag in the schema, so pending has to be defined
-  # rather than read, and this is TeacherStartDashboard#build_pending's
-  # definition scoped to one group: a column with zero awards. It is the
-  # cheapest one that never calls a fully-awarded sheet pending just because
-  # one student legitimately missed a column.
   def ungraded_sheet
     activity_group = story_group.activity_groups
                                 .where(id: ungraded_category_scope.select(:activity_group_id))

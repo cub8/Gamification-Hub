@@ -1,5 +1,5 @@
 -# Either the layout's shared `modal` frame or a page — never both.
-- content_for :title, "Przyznaj odznakę — #{@student.display_name}"
+- content_for :title, "Przyznaj odznakę - #{@student.display_name}"
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

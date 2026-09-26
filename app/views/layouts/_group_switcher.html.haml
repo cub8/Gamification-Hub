@@ -23,13 +23,6 @@
             - if here
               %span.gh-current-badge Tu jesteś
 
-    -# Sticky, so it stays reachable however long the list gets (90-core.css:29).
-    -#
-    -# The mockup shows it only to its student persona (10-core.js:275). Ours
-    -# shows it to everyone, for the same reason the header's join button is
-    -# ungated: a teacher can be a student in someone else's group. And on a
-    -# phone the header collapses that button to an icon, so this is the one
-    -# place the action is spelled out.
     .gh-popover-footer
       = link_to new_join_path, class: 'gh-btn gh-btn--secondary',
         data: { turbo_frame: 'modal' } do
