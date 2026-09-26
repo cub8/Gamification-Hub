@@ -25,3 +25,13 @@
     display: none !important;
   }
 }
+
+@keyframes gh-fresh {
+  0% {
+    background: color-mix(in srgb, var(--gh-item) 22%, transparent);
+  }
+
+  100% {
+    background: transparent;
+  }
+}

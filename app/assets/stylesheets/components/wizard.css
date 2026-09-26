@@ -1,6 +1,6 @@
 @layer components {
 
-  .gh-form-shell--full {
+  .gh-form-shell.gh-form-shell--full {
     grid-template-columns: minmax(0, 1fr);
   }
 

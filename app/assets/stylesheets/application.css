@@ -47,8 +47,4 @@
 @import "./components/grading.css";
 @import "./components/sheets.css";
 
-/* LAST on purpose. The creation wizard reuses form.css's shell and has to
-   override it: `.gh-form-shell--full` and `.gh-form-shell` are both one class, so only
-   source order decides which wins. Imported before form.css it lost, and
-   steps 3 and 4 kept a 380px column they do not use. */
 @import "./components/wizard.css";

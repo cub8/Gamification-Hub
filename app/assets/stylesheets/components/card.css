@@ -203,12 +203,17 @@
     background: var(--gh-coin-face);
     color: var(--gh-coin-ink);
     font: 800 11px/1 var(--gh-f-ui);
+    clip-path: inherit;
   }
 
   .gh-currency-token img {
     width: 80%;
     height: 80%;
     object-fit: contain;
+  }
+
+  .gh-currency-token i {
+    font-size: calc(var(--gh-s) * 0.42);
   }
 
   .gh-coin-mark {

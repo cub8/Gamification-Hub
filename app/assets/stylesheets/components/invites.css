@@ -24,16 +24,6 @@
     animation: gh-fresh 2.4s ease-out 1;
   }
 
-  @keyframes gh-fresh {
-    0% {
-      background: color-mix(in srgb, var(--gh-item) 22%, transparent);
-    }
-
-    100% {
-      background: transparent;
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .gh-invite-row--new {
       animation: none;
