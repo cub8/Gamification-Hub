@@ -1,18 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * The template editor and sheet settings — mockup js-expanded/30-ag.js:42-95.
- *
- * Everything this controller does, the screen also does without it, with one
- * exception: reordering. Rows are server-rendered, removal and hiding are
- * checkboxes that post on their own, and the story description is a <details>.
- * What is left here is the live preview, the running summary, the dirty
- * marker, the ordering, and the guard on leaving with unsaved changes.
- *
- * It never writes markup. New rows and preview columns are clones of two
- * <template>s the server rendered; everything else is `hidden` and text.
- */
 class SheetFormController extends Controller<HTMLElement> {
   static targets = [
     "form", "list", "blank", "row", "position", "name", "reward", "hide", "destroy",
@@ -47,21 +35,16 @@ class SheetFormController extends Controller<HTMLElement> {
   declare readonly categoryLabelValue: string
   declare readonly editingValue: string
 
-  /** Where "Odrzuć zmiany" goes once the teacher confirms. */
   private destination = ""
   private pristine = ""
 
   connect() {
-    // Normalise BEFORE the snapshot. Renumbering positions is housekeeping,
-    // not an edit, and a sheet whose saved positions have a gap in them would
-    // otherwise report itself as dirty the moment the page loaded.
     this.hideRemovedRows()
     this.renumber()
     this.pristine = this.signature
     this.refresh()
   }
 
-  /** Any input, any reorder, any checkbox. One entry point, as the mockup has. */
   refresh() {
     this.renumber()
     this.paintRows()
@@ -76,8 +59,6 @@ class SheetFormController extends Controller<HTMLElement> {
     const markup = this.blankTarget.innerHTML.replace(/NEW_RECORD/g, String(Date.now()))
     const holder = document.createElement("div")
 
-    // A <li> cannot be parsed loose, so it travels via a container and is
-    // moved, not copied, into the list.
     holder.innerHTML = `<ul>${markup}</ul>`
     const row = holder.querySelector("li")
 
@@ -88,11 +69,6 @@ class SheetFormController extends Controller<HTMLElement> {
     row.querySelector<HTMLInputElement>("[data-sheet-form-target='name']")?.focus()
   }
 
-  /**
-   * Removal is pending until save, exactly as the mockup has it: the row's
-   * `_destroy` box is now ticked and the row goes out of sight, but nothing
-   * has happened to the record yet.
-   */
   remove(event: Event) {
     const box = event.target as HTMLInputElement
     const row = box.closest<HTMLElement>("li")
@@ -109,10 +85,6 @@ class SheetFormController extends Controller<HTMLElement> {
     this.move(event, 1)
   }
 
-  /**
-   * Intercepts Anuluj and the crumb link while there is something to lose.
-   * With nothing to lose it is an ordinary link.
-   */
   leave(event: Event) {
     if (!this.dirty) return
 
@@ -136,9 +108,6 @@ class SheetFormController extends Controller<HTMLElement> {
     this.discardTarget.close()
   }
 
-  // --- painting ------------------------------------------------------------
-
-  /** Rows the server rendered as already marked for destruction. */
   private hideRemovedRows() {
     this.rowTargets.forEach((row) => {
       if (this.destroyBox(row)?.checked) row.hidden = true
@@ -160,8 +129,6 @@ class SheetFormController extends Controller<HTMLElement> {
         icon.classList.toggle("fa-eye-slash", !hidden)
       }
 
-      // "Nowa wartość obejmie tylko przyszłe nagrody." — only once the number
-      // differs from the one that already paid out.
       const note = row.querySelector<HTMLElement>("[data-sheet-form-target='rewardNote']")
       const field = this.rewardField(row)
       if (note && field) {
@@ -171,11 +138,6 @@ class SheetFormController extends Controller<HTMLElement> {
     })
   }
 
-  /**
-   * The preview is rebuilt rather than patched: a column can appear, vanish,
-   * move or be hidden, and rebuilding from two <template>s is both shorter and
-   * harder to get wrong than reconciling four cases.
-   */
   private paintPreview() {
     const columns = this.liveRows.filter((row) => !(this.hideBox(row)?.checked ?? false))
 
@@ -218,11 +180,6 @@ class SheetFormController extends Controller<HTMLElement> {
     this.submitTarget.disabled = !dirty
   }
 
-  /**
-   * Row numbering is in the aria labels only — "Kategoria 3: za co" — so it has
-   * to follow the list as rows come and go. The position fields are renumbered
-   * at the same time, skipping removed rows so the server gets 0..n-1.
-   */
   private renumber() {
     let number = 0
 
@@ -260,11 +217,8 @@ class SheetFormController extends Controller<HTMLElement> {
 
     this.refresh()
 
-    // Follow the row, or focus lands on whatever slid into its place.
     this.button(row, direction < 0 ? "up" : "down").focus()
   }
-
-  // --- reading the DOM -----------------------------------------------------
 
   private get liveRows(): HTMLElement[] {
     return this.rowTargets.filter((row) => !row.hidden)
@@ -274,7 +228,6 @@ class SheetFormController extends Controller<HTMLElement> {
     return this.signature !== this.pristine
   }
 
-  /** Every posted value in one string. Cheap, and exact about what will save. */
   private get signature(): string {
     return Array.from(new FormData(this.formTarget).entries())
       .map(([key, value]) => `${key}=${String(value)}`)
@@ -316,7 +269,6 @@ class SheetFormController extends Controller<HTMLElement> {
   }
 }
 
-/** Polish plurals: one / few / many, the same split as Plural. */
 function plural(count: number, forms: string[]): string {
   const [one, few, many] = forms
   const last = count % 10

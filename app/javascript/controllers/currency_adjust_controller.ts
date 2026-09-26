@@ -3,21 +3,6 @@ import { Controller } from "@hotwired/stimulus"
 
 type Rung = { v: number; n: string }
 
-/**
- * The live preview in "Koryguj walutę" (mockup 30-student.js:49-55).
- *
- * NEVER WRITES HTML. Every element it touches — the preview list, its rank row,
- * the error, the note, the submit label — is server-rendered by
- * currency_adjustments/_form, so the dialog is correct before this loads and
- * stays correct if it never does. This rewrites text and flips `hidden`.
- *
- * The rule it encodes is DECISIONS.md:32, and it is the whole reason the
- * preview exists: a correction always moves the spendable balance, but only a
- * positive one raises the total collected — so only a positive one can move a
- * rank, and a negative one can never take the balance below zero.
- *
- * No Polish in this file. Every word arrives as a Stimulus value.
- */
 class CurrencyAdjustController extends Controller<HTMLFormElement> {
   static targets = [
     "amount", "sign", "box", "error", "errorText",
@@ -69,7 +54,6 @@ class CurrencyAdjustController extends Controller<HTMLFormElement> {
     const amount = this.amount
     const signed = amount * this.sign
     const newBalance = this.balanceValue + signed
-    // Only the positive half reaches the total collected.
     const newTotal = this.totalValue + Math.max(signed, 0)
     const overdrawn = newBalance < 0
 
@@ -123,7 +107,6 @@ class CurrencyAdjustController extends Controller<HTMLFormElement> {
     this.submitTarget.disabled = amount <= 0 || overdrawn
   }
 
-  /** The highest rung at or below what the student would have COLLECTED. */
   private rungAt(collected: number): Rung | undefined {
     return this.rungsValue.filter((rung) => rung.v <= collected).pop()
   }

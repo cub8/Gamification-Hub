@@ -1,14 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * The six-box invite code (mockup `dlgJoin`, js-expanded/10-core.js:400-424).
- *
- * The boxes are presentation: they carry no name, and the value the form
- * actually submits lives in one hidden field this controller keeps in sync. So
- * a code that arrives by paste, by autofill or by typing all reach the server
- * the same way, and the form still works if this controller never boots.
- */
 class JoinCodeController extends Controller {
   static targets = ["slot", "code", "submit"]
 
@@ -20,7 +12,6 @@ class JoinCodeController extends Controller {
     this.sync()
   }
 
-  /** One character per box, uppercased, then move on. */
   type(event: Event) {
     const slot = event.target as HTMLInputElement
 
@@ -34,8 +25,6 @@ class JoinCodeController extends Controller {
   key(event: KeyboardEvent) {
     const slot = event.target as HTMLInputElement
 
-    // Backspace in an empty box steps back and clears the previous one, so
-    // holding it walks the code backwards instead of stalling.
     if (event.key === "Backspace" && !slot.value) {
       const previous = this.slotBefore(slot)
 
@@ -52,7 +41,6 @@ class JoinCodeController extends Controller {
     }
   }
 
-  /** A pasted code fills every box at once, wherever it was dropped. */
   paste(event: ClipboardEvent) {
     event.preventDefault()
 

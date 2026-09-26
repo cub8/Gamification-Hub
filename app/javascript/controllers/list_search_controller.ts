@@ -1,20 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * Instant filtering of a list of rows, with a "N z M" counter.
- *
- * Client-side on purpose, exactly like group_search: the whole list is on the
- * page already, so matching it costs nothing and it narrows as you type. The
- * mockup does the same and deliberately does not re-render — it sets `hidden`
- * on each row and rewrites the counter (30-lists.js:67).
- *
- * Entity-agnostic: a row announces its own searchable text with
- * `data-list-search-name`, so the student list is only the first caller.
- *
- * No Polish in this file. The connector in the counter arrives as a value,
- * like every other controller here.
- */
 class ListSearchController extends Controller<HTMLElement> {
   static targets = ["input", "row", "count", "empty", "emptyQuery"]
   static values = { total: Number, of: String }
@@ -45,11 +31,6 @@ class ListSearchController extends Controller<HTMLElement> {
   }
 }
 
-/**
- * Diacritics folded, so "lukasz" finds "Łukasz". The teacher typing a name
- * into a hurry is not going to reach for the ogonek, and the mockup's plain
- * `includes` would find nothing.
- */
 function fold(text: string): string {
   return text
     .toLowerCase()

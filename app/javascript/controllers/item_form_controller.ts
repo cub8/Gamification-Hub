@@ -1,28 +1,12 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/** Mirrors Discount::CAP_VALUE — the shop never gives more than this, so the
- *  card must never promise more. */
 const DISCOUNT_CAP = 50
 
-/** Mirrors DiscountExample::MAX_BADGES. */
 const EXAMPLE_BADGES = 2
 
 type Part = string | { b: string }
 
-/**
- * The live preview beside the item form. Mockup: js-expanded/30-item.js:65-72.
- *
- * Like rank_form_controller and badge_form_controller it NEVER WRITES HTML
- * STRINGS. The card, all three of its feet and both consequence sentences are
- * server-rendered; this rewrites their text, clones the <template>s at the foot
- * of the form for the repeating bits, and clones the artwork out of the picker
- * tile. With JavaScript off the preview is still correct, just static.
- *
- * Every name and number it needs is already in the DOM — chips carry
- * data-gh-name and data-gh-discount, rank options carry the same — so there is
- * no second copy of the group's data for the two to disagree about.
- */
 class ItemFormController extends Controller<HTMLFormElement> {
   static targets = [
     "name", "rules", "story", "price", "zero", "unlockRank", "discountRank",
@@ -36,13 +20,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     "thumbArt", "thumbName",
   ]
 
-  /**
-   * The group-wide half of the discount ceiling, handed over by the server
-   * (items/_form.html.haml) because neither number is readable off the form:
-   * a chip carries only its own badge's discount, and the ladder's best belongs
-   * to no single select option. ItemCard owns the rule; this only
-   * recombines the two halves as the teacher types.
-   */
   static values = {
     ladderDiscount: Number,
     ladderRank: String,
@@ -56,8 +33,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
   declare readonly ladderRankValue: string
   declare readonly badgeDiscountValue: number
   declare readonly badgeNamesValue: string[]
-  /** One shuffle, shared with DiscountExample so both sides pick the
-   *  same student out of the same pools. */
   declare readonly exampleRankOrderValue: string[]
   declare readonly exampleBadgeOrderValue: string[]
 
@@ -113,23 +88,15 @@ class ItemFormController extends Controller<HTMLFormElement> {
     this.renderArt()
   }
 
-  /**
-   * Bound to the image field's crop event, which fires on every animation frame
-   * of a drag. Only the picture changes then, so this is deliberately narrower
-   * than refresh().
-   */
   art() {
     this.renderArt()
   }
 
-  /** The Dostępny / Zbierasz / Zapieczętowany control. */
   state(event: Event) {
     const button = event.currentTarget as HTMLButtonElement
     this.currentState = button.value as typeof this.currentState
     this.applyState()
   }
-
-  // ---- rendering -----------------------------------------------------------
 
   private renderCard() {
     const name = this.nameTarget.value.trim()
@@ -188,12 +155,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     this.warningsTarget.replaceChildren(...notes)
   }
 
-  /**
-   * An item with no requirements can never be sealed (DECISIONS.md:34), so that
-   * tab is disabled — and if it was the one showing when the last requirement
-   * came off, the card falls back to Dostępny rather than being stuck in a state
-   * that cannot happen.
-   */
   private applyState() {
     const sealable = this.requirements.length > 0
     if (!sealable && this.currentState === "sealed") this.currentState = "afford"
@@ -219,18 +180,10 @@ class ItemFormController extends Controller<HTMLFormElement> {
     this.thumbArtTarget.replaceChildren(art.cloneNode(true))
   }
 
-  // ---- the form's own state, read straight out of the DOM ------------------
-
   private get price(): number {
     return Math.max(1, parseInt(this.priceTarget.value, 10) || 0)
   }
 
-  /**
-   * Only the requirements SOMEBODY CAN FAIL — the same rule as
-   * ItemCard#requirements. A rank at threshold 0 is held by every
-   * student, so the option carries data-gh-gates="false" and is skipped: an
-   * item gated only on it can be bought by anyone and can never be sealed.
-   */
   private get requirements(): { kind: "rank" | "badge"; name: string }[] {
     const option = this.selectedOption(this.unlockRankTarget)
     const rank = option?.dataset.ghGates === "true" ? (option.dataset.ghName ?? "") : ""
@@ -242,21 +195,11 @@ class ItemFormController extends Controller<HTMLFormElement> {
     ]
   }
 
-  /**
-   * Mirrors ItemCard#max_discount, which mirrors the till.
-   *
-   * The badge half is ALWAYS the whole group: DiscountCalculatorService counts
-   * every badge a student holds, so the chips below decide who qualifies, never
-   * how much they save. The rank half is narrowed only by a floor standing on
-   * its own — once a discount badge is chosen, holding it qualifies a student of
-   * any rank, so the whole ladder is back in reach.
-   */
   private get rankDiscountReach(): { discount: number; name: string } {
     const floor = this.discountRankTarget.selectedIndex > 0
     const alone = this.chosen(this.discountBadgeTargets).length === 0
 
     if (floor && alone) {
-      // The option's own data is already "the best at or above this rung".
       return {
         discount: this.selectedDiscount(this.discountRankTarget),
         name: this.selectedName(this.discountRankTarget),
@@ -278,11 +221,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     const floorIndex = this.discountRankTarget.selectedIndex
     const gateIndex = this.unlockRankTarget.selectedIndex
 
-    // Both selects list the ladder in the same ascending order after their own
-    // "brak" / "każdy student" row, so comparing positions compares thresholds.
-    // This is about thresholds, not gating, so it holds for a starting rank
-    // too — only the wording changes, because "kupić mogą tylko studenci od
-    // rangi X" would be nonsense about a rank everybody has.
     if (gate && floorIndex > 0 && gateIndex >= floorIndex) {
       notes.push(
         gates
@@ -311,10 +249,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
     return notes
   }
 
-  // ---- sentences -----------------------------------------------------------
-
   private unlockParts(): Part[] {
-    // The gating view, so the sentence cannot contradict the card beside it.
     const rank = this.requirements.find(({ kind }) => kind === "rank")?.name ?? ""
     const badges = this.chosen(this.unlockBadgeTargets).map(({ name }) => name)
     const tail = this.zeroTarget.checked
@@ -337,25 +272,14 @@ class ItemFormController extends Controller<HTMLFormElement> {
     return parts
   }
 
-  /**
-   * One plausible student, re-picked live. Mirrors DiscountExample
-   * word for word — a smoke test pins the server's copy of this string and the
-   * browser pass pins this one against it.
-   *
-   * THE PICK MUST QUALIFY, which is why this is re-derived on every edit rather
-   * than handed over once: setting a rank floor above the sampled rung would
-   * otherwise leave a student standing there who saves nothing.
-   */
   private discountParts(): Part[] {
     if (this.maxDiscount === 0) {
       return ["Bez zniżek. Każdy kupujący zapłaci ", { b: String(this.price) }, "."]
     }
 
     const { rank, badges, percent } = this.example
-    // Nobody plausible to name; the maximum line below still says it all.
     if (percent === 0) return []
 
-    // Mirrors PriceCalculatorService: the shop rounds a discounted price UP.
     const paid = Math.ceil((this.price * (100 - percent)) / 100)
 
     const names = badges.map((badge) => badge.name)
@@ -372,15 +296,12 @@ class ItemFormController extends Controller<HTMLFormElement> {
     return parts
   }
 
-  /** The ceiling behind the card's "Zniżki do −X%" chip, spelled out. */
   private maxParts(): Part[] {
     const percent = this.maxDiscount
     if (percent === 0) return []
 
     const reach = this.rankDiscountReach
     const badges = this.badgeNamesValue
-    // "wszystkimi" rather than a list: naming every badge is exactly what the
-    // example above exists to avoid. One badge has nothing to summarise.
     const phrase: Part[] | null =
       badges.length === 0 ? null : badges.length === 1 ? ["odznaką ", { b: badges[0] }] : ["wszystkimi odznakami"]
     const clause = holderClause(reach.discount > 0 ? reach.name : "", phrase)
@@ -388,10 +309,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     return ["Maksymalnie: student", ...clause, " uzyska zniżkę ", { b: `${percent}%` }, "."]
   }
 
-  /**
-   * Walks the shuffle the server passed and takes the first entries that
-   * qualify — same order, same rule, same student as DiscountExample.
-   */
   private get example(): { rank: string; badges: { name: string; discount: number }[]; percent: number } {
     const rank = this.exampleRank
     const badges = this.exampleBadges
@@ -400,16 +317,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     return { rank: rank?.name ?? "", badges, percent: Math.min(DISCOUNT_CAP, total) }
   }
 
-  /**
-   * From the rungs at or above the floor — standing there is one of the two
-   * ways to qualify, and the only one when the item lists no discount badges.
-   * The select lists the ladder in ascending order after its "brak" row, so
-   * selectedIndex is the floor's position in it.
-   *
-   * `ghOwnName`/`ghOwn`, NOT `ghName`/`ghDiscount`: the latter pair describes
-   * the best rung at or above this one, which is the ceiling rather than the
-   * rung an example student is standing on.
-   */
   private get exampleRank(): { name: string; discount: number } | null {
     const floorIndex = this.discountRankTarget.selectedIndex
     const ladder = [...this.discountRankTarget.options].slice(1)
@@ -432,7 +339,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     const all = new Map(this.allBadges.map((badge) => [badge.name, badge.discount]))
     const picked: string[] = []
 
-    // With no floor, holding a listed badge is the only way in.
     if (this.discountRankTarget.selectedIndex === 0) {
       const listed = new Set(this.chosen(this.discountBadgeTargets).map(({ name }) => name))
       if (listed.size > 0) {
@@ -452,7 +358,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
       .map((name) => ({ name, discount: all.get(name) ?? 0 }))
   }
 
-  /** Every badge in the group, from the discount chip set. */
   private get allBadges(): { name: string; discount: number }[] {
     return this.discountBadgeTargets.map((chip) => ({
       name: chip.dataset.ghName ?? "",
@@ -460,7 +365,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     }))
   }
 
-  /** Text nodes and <b> elements, never an HTML string. */
   private writeSentence(target: HTMLElement, parts: Part[]) {
     const nodes = parts.map((part) => {
       if (typeof part === "string") return document.createTextNode(part)
@@ -472,8 +376,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
 
     target.replaceChildren(...nodes)
   }
-
-  // ---- small readers -------------------------------------------------------
 
   private chosen(chips: HTMLElement[]): { name: string; discount: number }[] {
     return chips
@@ -497,12 +399,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
     return parseInt(this.selectedOption(select)?.dataset.ghDiscount ?? "0", 10) || 0
   }
 
-  /**
-   * The artwork inside the checked preset tile — an inline <svg> or, for "Twoja
-   * grafika", the <img>. Cloning what the picker already shows means there is
-   * nowhere for the two to disagree. Same selector as rank_form_controller and
-   * badge_form_controller: it is entity-agnostic on purpose.
-   */
   private get chosenArt(): Element | null {
     const checked = this.element.querySelector<HTMLInputElement>(
       'input[type="radio"][name$="[icon_glyph]"]:checked',
@@ -517,12 +413,6 @@ class ItemFormController extends Controller<HTMLFormElement> {
   }
 }
 
-/**
- * " z rangą X oraz odznakami A i B" — ItemsHelper#holder_clause.
- *
- * `badgePhrase` arrives whole, because Polish puts "wszystkimi" BEFORE the noun
- * and a name after it — one order does not serve both.
- */
 function holderClause(rankName: string, badgePhrase: Part[] | null): Part[] {
   const clause: Part[] = []
   if (rankName) clause.push(" z rangą ", { b: rankName })
@@ -531,7 +421,6 @@ function holderClause(rankName: string, badgePhrase: Part[] | null): Part[] {
   return [...clause, rankName ? " oraz " : " z ", ...badgePhrase]
 }
 
-/** "a, b i c" — the Polish list ApplicationHelper#gh_and_list builds server-side. */
 function andList(names: string[]): string {
   if (names.length < 2) return names[0] ?? ""
 

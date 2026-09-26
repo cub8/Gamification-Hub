@@ -2,21 +2,6 @@ import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 import { TOAST_EVENT, type ToastDetail } from "@controllers/toast_controller"
 
-/**
- * Copy a code to the clipboard and say so, twice.
- *
- * The toast is the confirmation, in the mockup's own words ("Skopiowano kod
- * K7RB2Q.", 30-lists.js:64). The icon swap is the local acknowledgement right
- * where the click happened — which is what matters in a long list, where the
- * bottom of the screen is somewhere else entirely, and on the icon-only button
- * in a row, which has no label to change.
- *
- * Not a mockup affordance: its own `copy` handler is bound to no button. Added
- * so a code can reach a chat or a slide without being retyped.
- *
- * navigator.clipboard is undefined on an insecure origin, so the button removes
- * itself rather than sitting there and failing on click.
- */
 class ClipboardController extends Controller<HTMLElement> {
   static targets = ["label", "icon"]
   static values = {

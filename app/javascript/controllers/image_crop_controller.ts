@@ -2,48 +2,16 @@ import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 import Cropper from "cropperjs"
 
-/** Dispatched on every crop change so the screen's preview can follow. */
 export const CROP_EVENT = "gh:image-crop"
 
-/** How wide the live preview is rendered. Small: it is redrawn as you drag. */
 const PREVIEW_WIDTH = 256
 
-/** Shortest gap between two preview redraws, in ms. */
 const PREVIEW_DELAY = 250
 
-/**
- * The crop half of the shared image field (shared/_image_field).
- *
- * DECISIONS.md:25 makes "presets + upload + crop" a rule for every image in the
- * app, so this controller knows nothing about ranks — badges, items and story
- * group art will mount the same one, passing their own frame's aspect.
- *
- * What it does, once a file is chosen:
- *   1. shows the crop editor and hands the file to Cropper.js,
- *   2. reveals and selects the picker's "Twoja grafika" tile, so the radio
- *      group agrees with what is about to be saved,
- *   3. redraws that tile and fires CROP_EVENT on every drag, which is what
- *      drives the live preview,
- *   4. on submit, renders the selection and swaps the result back into the file
- *      input, so the form posts an ordinary multipart upload and ActiveStorage
- *      needs no direct-upload path.
- *
- * THE CROP IS LOCKED TO THE FRAME'S SHAPE (`aspectValue`, 16:10 for a card's
- * art well). That way an upload fills the well edge to edge and no entity shows
- * the hatched field behind a picture. A square crop could not do that, which is
- * what this replaced.
- *
- * Without JavaScript the editor stays hidden and the raw file posts — a worse
- * frame, but a working form. RanksController#rank_params makes a submitted file
- * win over the preset for exactly that case.
- */
 class ImageCropController extends Controller<HTMLElement> {
   static targets = ["input", "editor", "box", "ownRadio", "ownPreview"]
 
   static values = {
-    // 1.6 is `.gh-card-art`'s `aspect-ratio: 16 / 10` (card.css). The two must move
-    // together: this is the shape the picture is cut to, that is the shape of
-    // the hole it goes into.
     aspect: { type: Number, default: 1.6 },
     width: { type: Number, default: 1024 },
   }
@@ -66,22 +34,12 @@ class ImageCropController extends Controller<HTMLElement> {
   private drawing = false
   private wanted = false
 
-  /** What the picker tile looked like before anything was uploaded. */
   private storedArt: { hidden: boolean; src: string } = { hidden: true, src: "" }
 
-  /**
-   * The submit listener is attached by hand rather than declared as a Stimulus
-   * action: the action would have to live on the <form>, and Stimulus only
-   * resolves an action against a controller on that element or an ancestor —
-   * this one sits on a field inside it.
-   */
   connect() {
     this.form = this.element.closest("form")
     this.form?.addEventListener("submit", this.onSubmit)
 
-    // Remembered so abandoning an upload can put the tile back: on a create
-    // form there is nothing behind it and the tile has to disappear again,
-    // while on an edit form it goes back to showing the stored file.
     this.storedArt = {
       hidden: this.ownTile?.hidden ?? true,
       src: this.hasOwnPreviewTarget ? this.ownPreviewTarget.getAttribute("src") ?? "" : "",
@@ -115,7 +73,6 @@ class ImageCropController extends Controller<HTMLElement> {
     this.watch()
   }
 
-  /** Picking a preset abandons a pending upload, so the two cannot disagree. */
   pickPreset() {
     if (!this.pending) return
 
@@ -123,35 +80,17 @@ class ImageCropController extends Controller<HTMLElement> {
     this.teardown()
   }
 
-  /** Clicking "Twoja grafika" while a file is pending: nothing to reconcile. */
   pickOwn() {
-    // Intentionally empty. The radio carries the choice; this exists so the
-    // markup can name an action and read the same as its sibling.
   }
 
-  // ---- live preview --------------------------------------------------------
-
-  /**
-   * Cropper v2 emits `change` on the selection and `transform` on the image
-   * (moving or zooming the picture under a fixed selection changes the result
-   * just as much as dragging the handles), so both are watched. The first draw
-   * fires immediately, before anything is touched.
-   */
   private watch() {
     this.cropper?.getCropperSelection()?.addEventListener("change", this.onCropChange)
     this.cropper?.getCropperImage()?.addEventListener("transform", this.onCropChange)
 
-    // The opening selection, drawn at once rather than PREVIEW_DELAY later.
     this.wanted = true
     void this.drawPreview()
   }
 
-  /**
-   * Throttled, not run per event: a drag fires on every pixel, and each draw is
-   * a canvas render plus a PNG encode. This redraws at most once every
-   * PREVIEW_DELAY, and always once more after the drag stops, so the preview
-   * ends up showing exactly what will be saved.
-   */
   private onCropChange = () => {
     this.wanted = true
     if (this.timer !== null) return
@@ -163,8 +102,6 @@ class ImageCropController extends Controller<HTMLElement> {
   }
 
   private async drawPreview() {
-    // `drawing` matters on a slow machine, where one encode can outlast the
-    // interval: without it two draws could overlap and finish out of order.
     if (!this.wanted || this.drawing) return
 
     this.wanted = false
@@ -172,11 +109,8 @@ class ImageCropController extends Controller<HTMLElement> {
 
     try {
       const canvas = await this.render(PREVIEW_WIDTH)
-      // PNG, not JPEG: the preview has to show transparency the same way the
-      // saved file will.
       if (canvas) this.publish(canvas.toDataURL("image/png"))
     } catch {
-      // A draw that fails is not worth reporting — the next one will land.
     }
 
     this.drawing = false
@@ -184,15 +118,7 @@ class ImageCropController extends Controller<HTMLElement> {
     if (this.wanted) this.onCropChange()
   }
 
-  /**
-   * The picker tile is the single source of "what is the art" — the screen's
-   * own controller reads it back out of there — so the preview is published by
-   * redrawing the tile and saying so.
-   */
   private publish(src: string) {
-    // teardown() nulls the cropper synchronously, so this is how a draw that
-    // was already awaiting an encode knows the upload has since been abandoned
-    // — otherwise it would repaint the tile restoreOwn() has just reset.
     if (!this.cropper) return
 
     if (this.hasOwnPreviewTarget) this.ownPreviewTarget.src = src
@@ -200,13 +126,9 @@ class ImageCropController extends Controller<HTMLElement> {
     this.element.dispatchEvent(new CustomEvent(CROP_EVENT, { bubbles: true, detail: { src } }))
   }
 
-  // ---- saving --------------------------------------------------------------
-
   private onSubmit = (event: SubmitEvent) => {
     if (!this.cropper || this.cropped || !this.pending) return
 
-    // The crop is asynchronous, so the first submit is cancelled and replayed
-    // once the file has been swapped in.
     event.preventDefault()
     void this.cropAndResubmit()
   }
@@ -217,8 +139,6 @@ class ImageCropController extends Controller<HTMLElement> {
       const blob = canvas && (await toBlob(canvas, this.outputType))
       if (blob) this.swapIn(blob)
     } catch {
-      // A crop that fails must not block the save: the original file is still
-      // in the input, and the server will take it as it is.
     }
 
     this.cropped = true
@@ -232,11 +152,6 @@ class ImageCropController extends Controller<HTMLElement> {
     })
   }
 
-  /**
-   * A PNG in stays a PNG, so a transparent emblem keeps its transparency;
-   * anything else becomes a JPEG, so a photo does not come back as a megabyte
-   * of lossless pixels. Rank#acceptable_icon takes either.
-   */
   private get outputType(): string {
     return this.inputTarget.files?.[0]?.type === "image/png" ? "image/png" : "image/jpeg"
   }
@@ -251,8 +166,6 @@ class ImageCropController extends Controller<HTMLElement> {
     this.inputTarget.files = transfer.files
   }
 
-  // ---- the picker tile -----------------------------------------------------
-
   private selectOwn() {
     if (!this.hasOwnRadioTarget) return
 
@@ -263,7 +176,6 @@ class ImageCropController extends Controller<HTMLElement> {
     this.ownRadioTarget.dispatchEvent(new Event("change", { bubbles: true }))
   }
 
-  /** Puts the tile back the way the server rendered it. */
   private restoreOwn() {
     const tile = this.ownTile
     if (tile) tile.hidden = this.storedArt.hidden
@@ -288,8 +200,6 @@ class ImageCropController extends Controller<HTMLElement> {
     this.drawing = false
     this.wanted = false
 
-    // destroy() unbinds the listeners added in watch() along with everything
-    // else Cropper put in the DOM.
     this.cropper?.destroy()
     this.cropper = null
     this.boxTarget.replaceChildren()
@@ -300,12 +210,6 @@ class ImageCropController extends Controller<HTMLElement> {
     this.objectUrl = null
   }
 
-  /**
-   * Cropper's default template with one change: `aspect-ratio` on the
-   * selection. `aspectRatio` LOCKS the handles, unlike `initialAspectRatio`
-   * which only sets the opening shape — locking is the point, because the
-   * picture has to fit the frame it is going into.
-   */
   private get template(): string {
     return `
       <cropper-canvas background>
@@ -331,7 +235,6 @@ class ImageCropController extends Controller<HTMLElement> {
   }
 }
 
-/** canvas.toBlob is callback-based; everything around it here is a promise. */
 function toBlob(canvas: HTMLCanvasElement, type: string): Promise<Blob | null> {
   return new Promise((resolve) => canvas.toBlob(resolve, type, 0.85))
 }

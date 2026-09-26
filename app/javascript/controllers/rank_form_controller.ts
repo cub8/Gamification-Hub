@@ -3,22 +3,6 @@ import { Controller } from "@hotwired/stimulus"
 
 interface Rung { id: number | string; name: string; min: number; disc: number }
 
-/**
- * The live preview beside the rank form. Mockup: js-expanded/30-br.js:31-42.
- *
- * It never GENERATES markup. The drabinka, the card and their thumbnails are
- * server-rendered, which is what lets the glyphs stay inline SVG; this only
- * moves those rows and rewrites their text. Two consequences worth keeping:
- * with JavaScript off the preview is still correct, just static, and there is
- * no second copy of the card markup to drift.
- *
- * THE DUPLICATION BUG. The mockup splices the draft into its ladder at a
- * hardcoded index 2 (`if (S.mode === 'edit') L[2] = me`, :32), so editing any
- * rank other than the third leaves the real rung in the list beside the draft
- * and the rank shows up twice. Here the edited rank is never rendered as a rung
- * of its own — the draft carries its id — so changing a threshold MOVES the
- * rung. _preview.html.haml does the same on the server.
- */
 class RankFormController extends Controller<HTMLFormElement> {
   static targets = [
     "name", "threshold", "discount",
@@ -65,12 +49,8 @@ class RankFormController extends Controller<HTMLFormElement> {
     this.renderWarnings(draft)
   }
 
-  // ---- reading the form ----------------------------------------------------
-
   private get draft(): Rung {
     return {
-      // Editing: the draft IS that rank, so it carries its id and no rung is
-      // ever counted twice.
       id: this.editing ? this.editingIdValue : "draft",
       name: this.nameTarget.value.trim(),
       min: numberIn(this.thresholdTarget),
@@ -82,14 +62,11 @@ class RankFormController extends Controller<HTMLFormElement> {
     return this.editingIdValue > 0
   }
 
-  /** The ladder as it would be after saving, lowest rung first. */
   private after(draft: Rung): Rung[] {
     const others = this.rungsValue.filter((rung) => rung.id !== draft.id)
 
     return [...others, draft].sort((a, b) => a.min - b.min)
   }
-
-  // ---- the card ------------------------------------------------------------
 
   private renderCard(draft: Rung) {
     this.cardNameTarget.textContent = draft.name || "Nazwa rangi"
@@ -98,11 +75,6 @@ class RankFormController extends Controller<HTMLFormElement> {
     this.renderArt()
   }
 
-  /**
-   * Bound to the image field's crop event, which fires on every animation frame
-   * of a drag. Only the picture changes then — not the name, the threshold or
-   * where the rung sits — so this is deliberately narrower than refresh().
-   */
   art() {
     this.renderArt()
   }
@@ -115,11 +87,6 @@ class RankFormController extends Controller<HTMLFormElement> {
     this.draftArtTarget.replaceChildren(art.cloneNode(true))
   }
 
-  /**
-   * The artwork inside the checked preset tile — an inline <svg> or, for
-   * "Twoja grafika", the <img>. Cloning what the picker already shows means
-   * there is nowhere for the two to disagree.
-   */
   private get chosenArt(): Element | null {
     const checked = this.element.querySelector<HTMLInputElement>(
       'input[type="radio"][name$="[icon_glyph]"]:checked',
@@ -127,8 +94,6 @@ class RankFormController extends Controller<HTMLFormElement> {
 
     return checked?.closest("label")?.querySelector("i")?.firstElementChild ?? null
   }
-
-  // ---- the drabinka --------------------------------------------------------
 
   private renderDraftRow(draft: Rung) {
     this.draftNameTarget.textContent = draft.name || "Nowa ranga"
@@ -141,11 +106,6 @@ class RankFormController extends Controller<HTMLFormElement> {
     return this.ladderTarget.querySelector('[data-rank-id="draft"], .gh-rank-form-rung--draft')
   }
 
-  /**
-   * Ascending in the DOM; .gh-rank-form-ladder is column-reverse, so the highest rung
-   * reads first. The draft sorts last on a tie, which puts it visually above
-   * the rung it collides with — the same order the server renders.
-   */
   private sortLadder() {
     const rows = [...this.ladderTarget.children] as HTMLElement[]
     const draft = this.draftRow
@@ -156,7 +116,6 @@ class RankFormController extends Controller<HTMLFormElement> {
       .forEach((row) => this.ladderTarget.appendChild(row))
   }
 
-  /** Two rungs at one threshold — the error the server is about to return. */
   private markClashes() {
     const rows = [...this.ladderTarget.children] as HTMLElement[]
 
@@ -165,8 +124,6 @@ class RankFormController extends Controller<HTMLFormElement> {
       row.classList.toggle("gh-rank-form-rung--clash", clash)
     })
   }
-
-  // ---- what saving would do ------------------------------------------------
 
   private renderImpact(draft: Rung) {
     const { up, down, got } = this.impact(draft)
@@ -223,11 +180,6 @@ class RankFormController extends Controller<HTMLFormElement> {
     return { up, down, got }
   }
 
-  /**
-   * A ladder where climbing costs you money is worth saying out loud
-   * (30-br.js:36-39). Nothing forbids it — a teacher may want a prestige rank
-   * with no discount — so this warns rather than blocks.
-   */
   private renderWarnings(draft: Rung) {
     const others = this.rungsValue.filter((rung) => rung.id !== draft.id)
     const below = others.filter((rung) => rung.min < draft.min).sort((a, b) => a.min - b.min).pop()
@@ -251,8 +203,6 @@ class RankFormController extends Controller<HTMLFormElement> {
   }
 }
 
-// ---- small helpers ---------------------------------------------------------
-
 function numberIn(input: HTMLInputElement): number {
   return Math.max(0, parseInt(input.value, 10) || 0)
 }
@@ -261,7 +211,6 @@ function minOf(row: Element): number {
   return Number(row.getAttribute("data-min") ?? 0)
 }
 
-/** The highest rung at or below a total, or null when there is none. */
 function held(total: number, ladder: Rung[]): Rung | null {
   return ladder.reduce<Rung | null>(
     (found, rung) => (total >= rung.min ? rung : found),
@@ -281,7 +230,6 @@ function ladderTerms(rung: Rung): string {
   return rung.min === 0 ? "Ranga startowa" : "Bez zniżki"
 }
 
-/** Mirrors ApplicationHelper#gh_plural: 1 / 2-4 / many, with the 12-14 exception. */
 function plural(count: number, one: string, few: string, many: string): string {
   const n = Math.abs(count)
   const lastTwo = n % 100

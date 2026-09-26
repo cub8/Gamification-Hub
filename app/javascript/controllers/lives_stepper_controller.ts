@@ -1,24 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * The lives stepper — "Edytuj studenta" (mockup 30-student.js:39) and "Życia na
- * start" in group settings (30-isg.js:57).
- *
- * A stepper over a hidden field rather than a number input: the mockup's shape,
- * and it keeps the value at or above zero without a spinner nobody can hit on a
- * phone. The field is what posts; the <output> is what is read aloud.
- *
- * `submit` and `max` are optional, and that is the difference between the two
- * screens. The student dialog has this as its ONLY control, so it disables
- * saving while the number is unchanged; group settings has it as one field of
- * six, where that would block saving a renamed group. Group settings caps at 10
- * instead, as the mockup does.
- *
- * With JavaScript off the buttons do nothing and the hidden field still carries
- * the saved number, so submitting changes nothing — which is the right no-op
- * for a form whose only control is this one.
- */
 class LivesStepperController extends Controller<HTMLElement> {
   static targets = ["field", "output", "up", "down", "submit"]
   static values = { start: Number, max: Number }
@@ -51,12 +33,6 @@ class LivesStepperController extends Controller<HTMLElement> {
     this.render()
   }
 
-  /**
-   * Where there is a `submit` target, "Zapisz" is disabled while nothing has
-   * changed — pressing it would write the number that is already there. The
-   * mockup does the same but also puts the initial focus on that disabled
-   * button; focus lives on the stepper here instead.
-   */
   private render() {
     const lives = this.lives
 

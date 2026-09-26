@@ -2,22 +2,6 @@ import { application } from "@controllers/application"
 import { Controller, type ActionEvent } from "@hotwired/stimulus"
 import { TOAST_EVENT, type ToastDetail } from "@controllers/toast_controller"
 
-/**
- * The grading table — mockup js-expanded/30-main.js:169-193, 229-248.
- *
- * Three cell states (DECISIONS.md:31): empty, marked now, and awarded. The
- * third is not a control at all — the server renders it without an input,
- * because the award behind it cannot be taken back — so this controller can
- * only ever move a cell between the first two.
- *
- * The marked look comes from `:has(input:checked)` in CSS, not from here, so a
- * ticked cell reads as ticked with JavaScript off. What this adds is the
- * arithmetic — row totals, the award bar, the review dialog — and the column
- * and search controls that arithmetic depends on.
- *
- * It writes no markup. The review dialog holds the whole matrix, hidden, and
- * this unhides the part that is marked.
- */
 class GradingController extends Controller<HTMLElement> {
   static targets = [
     "search", "row", "cell", "rowPending",
@@ -57,8 +41,6 @@ class GradingController extends Controller<HTMLElement> {
   declare readonly currencyValue: string
 
   connect() {
-    // Only useful once this is running: without it, unticking a box is the
-    // clearing mechanism and it works better.
     this.clearTarget.hidden = false
     this.refresh()
   }
@@ -68,12 +50,6 @@ class GradingController extends Controller<HTMLElement> {
     this.refresh()
   }
 
-  /**
-   * "Wszyscy". Visible rows only — with a search running, the teacher is
-   * looking at a subset and means that subset — and never an awarded cell,
-   * which has no input to tick. Marks the column unless it is already
-   * complete, in which case it clears it.
-   */
   toggleColumn(event: ActionEvent) {
     const column = Number(event.params.column)
     const boxes = this.visibleCells.filter((cell) => this.columnOf(cell) === column).map(boxIn)
@@ -102,7 +78,6 @@ class GradingController extends Controller<HTMLElement> {
     this.refresh()
   }
 
-  /** Hides rows rather than re-rendering, which is also what the mockup does. */
   filter() {
     const query = fold(this.searchTarget.value.trim())
 
@@ -113,10 +88,6 @@ class GradingController extends Controller<HTMLElement> {
     this.refresh()
   }
 
-  /**
-   * An awarded cell is not a control, so clicking it does nothing — which
-   * reads as the page being broken unless it says why.
-   */
   locked() {
     const detail: ToastDetail = {
       message: "To pole jest już przyznane i nie można go cofnąć.",
@@ -126,11 +97,6 @@ class GradingController extends Controller<HTMLElement> {
     window.dispatchEvent(new CustomEvent(TOAST_EVENT, { detail }))
   }
 
-  /**
-   * Intercepts the submit to show what is about to happen first. With
-   * JavaScript off the same button saves directly — a worse screen, but not a
-   * broken one.
-   */
   review(event: Event) {
     const marked = this.markedCells
 
@@ -150,8 +116,6 @@ class GradingController extends Controller<HTMLElement> {
 
     this.dialogTarget.close()
   }
-
-  // --- painting ------------------------------------------------------------
 
   private refresh() {
     this.paintRowTotals()
@@ -225,20 +189,16 @@ class GradingController extends Controller<HTMLElement> {
     this.reviewConfirmSumTarget.textContent = String(sum)
   }
 
-  /** "{student}, {kategoria}: {puste|zaznaczone|przyznane}" */
   private relabel(box: HTMLInputElement) {
     const [empty, marked] = this.statesValue
 
     box.setAttribute("aria-label", `${box.dataset.ghLabel ?? ""}: ${box.checked ? marked : empty}`)
   }
 
-  // --- reading the DOM -----------------------------------------------------
-
   private get visibleCells(): HTMLElement[] {
     return this.cellTargets.filter((cell) => !(cell.closest("tr") as HTMLElement)?.hidden)
   }
 
-  /** Marked cells in hidden rows still count: they are still going to save. */
   private get markedCells(): HTMLElement[] {
     return this.cellTargets.filter((cell) => boxIn(cell)?.checked)
   }
@@ -266,7 +226,6 @@ function rewardOf(cell: HTMLElement): number {
   return Number.isFinite(parsed) ? parsed : 0
 }
 
-/** Diacritics folded, so "lukasz" finds "Łukasz" — as list_search does. */
 function fold(text: string): string {
   return text
     .toLowerCase()

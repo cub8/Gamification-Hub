@@ -1,15 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * Instant filtering of the group grid ("Grupy", mockup `vIndex`).
- *
- * Client-side on purpose: a user's groups are all on the page already, so
- * matching them costs nothing and the list narrows as you type, exactly as the
- * mockup does. The filter tabs stay server-side — those change what is loaded,
- * this only hides what is loaded — so the tab counts deliberately do not react
- * to the query.
- */
 class GroupSearchController extends Controller {
   static targets = ["input", "card", "empty", "emptyQuery"]
 
