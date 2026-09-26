@@ -33,7 +33,7 @@
       -# failing there, so the only way to reach the controller's guard is a
       -# hand-built request.
       = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
-        method: :post, class: 'gh-lives-button gh-octagon-clip',
+        method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
         disabled: lives.zero?,
         form: { 'aria-label': "Odbierz życie: #{name}" },
         'aria-label': "Odbierz życie: #{name}" do
@@ -45,7 +45,7 @@
         %b= lives
 
       = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
-        method: :post, class: 'gh-lives-button gh-octagon-clip',
+        method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
         form: { 'aria-label': "Dodaj życie: #{name}" },
         'aria-label': "Dodaj życie: #{name}" do
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }

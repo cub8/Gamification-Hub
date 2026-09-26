@@ -29,6 +29,7 @@
 @import "./components/form.css";
 @import "./components/auth.css";
 @import "./components/dashboard.css";
+@import "./components/notifications.css";
 @import "./components/groups.css";
 @import "./components/overview.css";
 @import "./components/join.css";

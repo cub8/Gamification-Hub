@@ -277,18 +277,6 @@
     cursor: default;
   }
 
-  .gh-currency-preview .gh-balance-button b {
-    display: block;
-    font: 800 20px/1 var(--gh-f-ui);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .gh-currency-preview .gh-balance-button small {
-    display: block;
-    font: 500 12px/1 var(--gh-f-ui);
-    color: var(--gh-ink-2);
-  }
-
   .gh-currency-preview-purse {
     display: flex;
     align-items: center;

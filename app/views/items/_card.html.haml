@@ -88,7 +88,7 @@
         -# segmented control has to switch between them and item_form_controller
         -# never writes markup.
         - if all_feet || state == :afford
-          %span.gh-auth-footer{ hidden: hide.call(:afford), data: targets[:foot_afford] }
+          %span.gh-item-foot.flex.items-center{ class: 'gap-3.5', hidden: hide.call(:afford), data: targets[:foot_afford] }
             - if local_assigns[:buy]
               = buy
             - else

@@ -37,7 +37,7 @@
       -# The chip IS the cell. The mockup wraps it in a second span, which
       -# leaves the wrapper as the grid item and the chip's own placement rules
       -# matching nothing — visible only once the row reflows on a phone.
-      %span.gh-ledger-type-pill.gh-octagon-clip{ class: "gh-ledger-type-pill--#{entry.tone}", role: 'cell' }= entry.label
+      %span.gh-pill.gh-octagon-clip{ class: "gh-pill--#{entry.tone}", role: 'cell' }= entry.label
       %span.gh-ledger-source{ role: 'cell' }
         = entry.title
         -# The item is off the shelf but the row stays: soft delete keeps

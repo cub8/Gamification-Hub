@@ -254,11 +254,6 @@
     margin-top: 12px;
   }
 
-  .gh-preview-flip-card .gh-card-footer {
-    min-height: 0;
-    padding: 10px 12px 12px;
-  }
-
   .gh-preview-thumb-row b {
     display: block;
     font: 680 15px/1.25 var(--gh-f-ui);

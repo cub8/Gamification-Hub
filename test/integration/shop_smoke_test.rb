@@ -193,7 +193,7 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_equal '60', card.css('.gh-requirement-block b').first.text.strip
     assert_includes card.css('.gh-requirement-block .gh-progress-bar i').first['style'], '--gh-p: 63%'
     # No button: there is nothing to press yet.
-    assert_empty card.css('.gh-auth-footer')
+    assert_empty card.css('.gh-item-foot')
   end
 
   # --- sealed --------------------------------------------------------------
