@@ -2,11 +2,6 @@
 
 require 'test_helper'
 
-# The Przedmioty screens: the teacher's price list (#/t/items,
-# js-expanded/30-lists.js:34-37) and the form page behind it
-# (js-expanded/30-item.js).
-#
-# Teacher only — a student meets items in the shop and in their inventory.
 class ItemsSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -17,8 +12,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     sign_in @owner
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -28,16 +21,12 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:item, story_group: @story_group, name: name, price: price, **attributes)
   end
 
-  # Deliberately created out of price order: the screen sorts, the factory does
-  # not.
   def shop!
     @konsultacja = item(name: 'Konsultacja', price: 30)
     @poprawa     = item(name: 'Poprawa wejściówki', price: 10)
     @oneup       = item(name: 'Dodatkowe życie', price: 20, can_buy_at_0_lives: true)
   end
 
-  # The discount box holds two sentences now, so an assertion has to name the
-  # one it means rather than the box.
   EXAMPLE = '[data-item-form-target=discountText]'
   MAXIMUM = '[data-item-form-target=discountMax]'
   UNLOCK  = '[data-item-form-target=unlockText]'
@@ -66,8 +55,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
   def card_names(selector)
     css_select("#{selector} .gh-card-name").map { |node| node.text.strip }
   end
-
-  # --- the teacher list -----------------------------------------------------
 
   test 'the teacher gets a price list with the create action' do
     shop!
@@ -112,9 +99,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-card-meta', 'Jeszcze nikt nie kupił'
   end
 
-  # Requirements read as locks on this screen, and the discount is a flag rather
-  # than a number: the list is about what an item IS, not what any one student
-  # would pay for it.
   test 'requirements and exceptions show as tags' do
     shop!
     kapitan = rank(name: 'Kapitan', threshold: 100)
@@ -135,8 +119,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-badge-grid--teacher', false
     assert_select '.gh-empty-state .gh-h2', 'Sklep jest jeszcze pusty'
   end
-
-  # --- the form -------------------------------------------------------------
 
   test 'the new form is a page, not a modal, and seeds a price' do
     get new_story_group_item_path(@story_group)
@@ -206,8 +188,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-info-banner', /1 student ma ten przedmiot\./
   end
 
-  # --- the chip multiselect -------------------------------------------------
-
   test 'every badge gets a chip with a real checkbox, checked ones included' do
     shop!
     nawigator = badge(name: 'Nawigator', discount: 10)
@@ -216,13 +196,10 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    # Two badges, two pickers: required-to-buy and discount-giving.
     assert_select '.gh-chip-group', 2
     assert_select 'input[type=checkbox][name=?]', 'item[unlock_badge_ids][]', 2
     assert_select 'input[type=checkbox][name=?][value=?][checked=checked]',
                   'item[unlock_badge_ids][]', nawigator.id.to_s
-    # Clearing every chip has to post something, or the ids would keep their old
-    # value on update.
     assert_select 'input[type=hidden][name=?][value=?]', 'item[unlock_badge_ids][]', ''
   end
 
@@ -244,8 +221,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     get edit_story_group_item_path(@story_group, @poprawa)
 
-    # Hidden until chip_picker_controller connects: with JavaScript off the
-    # chips themselves are the control and the select would be dead weight.
     assert_select '.gh-chip-group .gh-select-input[hidden]', 2
     assert_select '.gh-chip-group .gh-select-input select option', 6 # 2 placeholders + 2 badges each
   end
@@ -259,8 +234,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-sentence-row .gh-field-hint', { text: 'W tej grupie nie ma jeszcze odznak.', count: 2 }
   end
 
-  # --- the preview ----------------------------------------------------------
-
   test 'all three feet are rendered and only the current one is visible' do
     get new_story_group_item_path(@story_group)
 
@@ -270,7 +243,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-item-preview-card .gh-item-foot[hidden]', false
   end
 
-  # DECISIONS.md:34 — an item without requirements can never be sealed.
   test 'the sealed tab is disabled until the item has a requirement' do
     get new_story_group_item_path(@story_group)
 
@@ -300,8 +272,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-tag--discount', 'Zniżki do −25%'
   end
 
-  # Discount::CAP_VALUE is what the shop actually charges; a card promising more
-  # would be a lie told by the design.
   test 'the discount ceiling is capped where the till caps it' do
     shop!
     kapitan = rank(name: 'Kapitan', threshold: 100, discount: 40)
@@ -346,13 +316,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-field-error', false
   end
 
-  # item_form_controller rewrites this sentence as you type, so the two build
-  # it independently. This pins the server's wording; the browser pass pins the
-  # client's against it.
-  #
-  # An EXAMPLE rather than a superlative: a discount needs only ONE condition
-  # met (DECISIONS.md:33), so "najwięcej zaoszczędzi…" would read as though all
-  # of them were required.
   test 'the discount line reads as an example, naming the saving and the price' do
     shop!
     @poprawa.update!(price: 30)
@@ -377,13 +340,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
                   'Przykładowo: student z rangą Kapitan oraz odznakami Mechanik i Nawigator ' \
                   'zaoszczędzi 30% i zapłaci 70 zamiast 100.'
   end
-
-  # --- the ceiling mirrors the till, not the item's configuration ----------
-  #
-  # DiscountCalculatorService is more generous than an item's own settings look:
-  # an item naming no discount conditions discounts for EVERYONE, and the amount
-  # is the student's rank plus every badge they hold, listed here or not. These
-  # five pin the places the old, narrower reading was wrong.
 
   test 'an item with no discount conditions still promises what the till will give' do
     shop!
@@ -414,8 +370,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
                   'zaoszczędzi 15% i zapłaci 85 zamiast 100.'
   end
 
-  # Holding a listed badge qualifies a student of ANY rank, so their own rank's
-  # discount rides along even though the item sets no floor.
   test 'discount badges with no floor still reach the whole ladder' do
     shop!
     @poprawa.update!(price: 100)
@@ -427,9 +381,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-tag--discount', 'Zniżki do −25%'
   end
 
-  # The one configuration that DOES narrow the ladder: a floor with nothing
-  # beside it, where being at or above it is the only way in. Add a discount
-  # badge and the rungs below the floor come back into reach.
   test 'a floor standing alone keeps the rungs below it out of the ceiling' do
     shop!
     @poprawa.update!(price: 100)
@@ -446,9 +397,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-tag--discount', 'Zniżki do −40%'
   end
 
-  # "Does anybody pay less than the price on this card", not "did the teacher
-  # configure a discount" — a dark flag on an item selling below list price is
-  # the same lie in a smaller place.
   test 'the grid flags a discount on an item that names no discount conditions' do
     shop!
     badge(name: 'Nawigator', discount: 10)
@@ -458,9 +406,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-badge-grid--teacher .gh-tag--discount', 3
   end
 
-  # The ceiling's group-wide half crosses into TypeScript, so the form hands it
-  # over rather than letting the preview re-derive it. These four attributes are
-  # the whole of that contract.
   test 'the form hands the preview the same group facts ItemCard uses' do
     shop!
     rank(name: 'Rekrut', threshold: 0, discount: 5)
@@ -479,11 +424,8 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal card.ladder_discount.to_s,   form['data-item-form-ladder-discount-value']
     assert_equal 'Kapitan',                   form['data-item-form-ladder-rank-value']
     assert_equal card.badges_discount.to_s,   form['data-item-form-badge-discount-value']
-    # Only the badges that actually add something, in gh_and_list order.
     assert_equal '["Mechanik","Nawigator"]',  form['data-item-form-badge-names-value']
   end
-
-  # --- the example student, the maximum, and the cap --------------------------
 
   test 'the maximum line spells out the ceiling under the example' do
     shop!
@@ -496,7 +438,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select MAXIMUM, 'Maksymalnie: student z rangą Kapitan oraz odznaką Nawigator uzyska zniżkę 25%.'
   end
 
-  # Naming every badge is exactly what the example above exists to avoid.
   test 'the maximum summarises the badges instead of listing them' do
     shop!
     rank(name: 'Kapitan', threshold: 100, discount: 15)
@@ -508,8 +449,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
                   'Maksymalnie: student z rangą Kapitan oraz wszystkimi odznakami uzyska zniżkę 30%.'
   end
 
-  # Randomised, so this pins the rule rather than one pick: at most two badges,
-  # and the saving it quotes is the sum of exactly what it named.
   test 'the example names at most two badges and its saving matches them' do
     shop!
     @poprawa.update!(price: 100)
@@ -532,8 +471,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # A rung below the floor qualifies for nothing, so the example must never
-  # stand a student there — however fat that rung's own discount looks.
   test 'the example never stands on a rung the floor rules out' do
     shop!
     rank(name: 'Rekrut', threshold: 0, discount: 30)
@@ -572,8 +509,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select MAXIMUM, /uzyska zniżkę 40%\./
   end
 
-  # The preview needs both numbers off a rung: the ceiling it implies for the
-  # card's chip, and its own cut for an example student standing on it.
   test 'each rank option carries its own cut as well as the ceiling it implies' do
     shop!
     rank(name: 'Rekrut', threshold: 0, discount: 5)
@@ -589,7 +524,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_equal %w[0 5 20],  own
     assert_equal ['', 'Rekrut', 'Kapitan'], own_names
-    # The ceiling a floor implies is a DIFFERENT rung from the floor itself.
     assert_equal %w[0 20 20], ceiling
     assert_equal ['', 'Kapitan', 'Kapitan'], reach
   end
@@ -606,9 +540,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal %w[Alfa Beta], JSON.parse(form['data-item-form-example-badge-order-value']).sort
   end
 
-  # The one number this screen duplicates across languages, because the preview
-  # has to cap a discount live. A mismatch would have the card promise a saving
-  # the till refuses.
   test 'the discount cap in item_form_controller matches Discount::CAP_VALUE' do
     source = Rails.root.join('app/javascript/controllers/item_form_controller.ts').read
 
@@ -617,26 +548,18 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
                  'item_form_controller.ts and Discount::CAP_VALUE have drifted.'
   end
 
-  # `.gh-art-slot-wrapper` is display:contents, which is what keeps the SVG itself the
-  # grid item of the well — otherwise .gh-card-art-glyph's percentage width resolves
-  # against an indefinite box and the glyph lands off-centre at its intrinsic
-  # size.
   test 'the preview art sits in a slot that does not become the grid item' do
     get new_story_group_item_path(@story_group)
 
     assert_select '.gh-item-preview-card .gh-card-art > .gh-art-slot-wrapper > svg.gh-card-art-glyph'
   end
 
-  # The preview exists to show the button a student will see. `disabled` would
-  # grey it out; tabindex and pointer-events keep it inert without that.
   test 'the preview buy button looks live but is not reachable' do
     get new_story_group_item_path(@story_group)
 
     assert_select '.gh-item-preview-card .gh-item-foot .gh-btn[disabled]', false
     assert_select '.gh-item-preview-card .gh-item-foot .gh-btn[tabindex=?]', '-1'
   end
-
-  # --- artwork is required --------------------------------------------------
 
   test 'an item cannot be saved without a preset or an upload' do
     assert_no_difference -> { Item.count } do
@@ -656,10 +579,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # --- what can actually be sealed ------------------------------------------
-
-  # A rank at threshold 0 is held by every student from the moment they join, so
-  # gating on it gates nobody.
   test 'an item gated only on the starting rank can be bought by anyone' do
     shop!
     @poprawa.update!(unlock_rank: rank(name: 'Rekrut', threshold: 0))
@@ -689,7 +608,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_item_path(@story_group, @poprawa)
 
     assert_select '.gh-segmented-toggle-2 button[value=sealed][disabled]', false
-    # The seal names the badge, not the rank nobody can miss.
     assert_select '.gh-lock-seal span', 'Za odznakę Nawigator'
     assert_select '.gh-item-preview-card .gh-requirement-list li', 1
   end
@@ -704,8 +622,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'select[name=?] option[data-gh-gates=true]', 'item[unlock_rank_id]', 1
     assert_select 'select[name=?] option[data-gh-gates=false]', 'item[unlock_rank_id]', 2
   end
-
-  # --- art ------------------------------------------------------------------
 
   test 'a preset renders as inline SVG so it can take the item colour' do
     shop!
@@ -726,8 +642,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_nil created.icon_glyph
     assert created.upload?
   end
-
-  # --- deleting -------------------------------------------------------------
 
   test 'the delete dialog names the consequence and the copies already sold' do
     shop!
@@ -783,8 +697,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  # Without this, an invisible item would block a rank deletion forever, with
-  # nothing on any screen for the teacher to fix.
   test 'soft delete releases the rank it required, so the rank can go' do
     shop!
     kapitan = rank(name: 'Kapitan', threshold: 100)
@@ -803,8 +715,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
       delete story_group_rank_path(@story_group, kapitan)
     end
   end
-
-  # --- authorization --------------------------------------------------------
 
   test 'a student of the group cannot reach any of these screens' do
     shop!
@@ -830,8 +740,6 @@ class ItemsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
   end
-
-  # --- presentation ---------------------------------------------------------
 
   test 'the screens run inside the app shell' do
     shop!

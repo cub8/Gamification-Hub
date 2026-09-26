@@ -23,11 +23,8 @@ class ItemTest < ActiveSupport::TestCase
   test 'discounted_price_for returns correctly calculated and rounded price' do
     @item.update!(price: 28)
 
-    # 28 * 0.8 = 22.4, .ceil powinno dać 23
     assert_equal 23, @item.discounted_price_for(@student)
   end
-
-  # --- validations ----------------------------------------------------------
 
   test 'an item needs a name and a rule, in Polish' do
     item = Item.new(story_group: @story_group, price: 5)
@@ -66,8 +63,6 @@ class ItemTest < ActiveSupport::TestCase
     assert_equal 'Wybierz gotową grafikę albo wgraj własną.', item.errors[:icon_glyph].first
   end
 
-  # --- art ------------------------------------------------------------------
-
   test 'art prefers the preset and upload? reports which is which' do
     item = FactoryBot.create(:item, story_group: @story_group, icon_glyph: 'flask')
 
@@ -77,8 +72,6 @@ class ItemTest < ActiveSupport::TestCase
     item.icon.attach(io: File.open(file_fixture('rank_art.png')), filename: 'art.png',
                      content_type: 'image/png',)
 
-    # The attachment is kept so a teacher can switch back, but the preset still
-    # wins while its key is set.
     assert_equal 'flask', item.art
 
     item.update!(icon_glyph: nil)
@@ -86,8 +79,6 @@ class ItemTest < ActiveSupport::TestCase
     assert_predicate item, :upload?
   end
 
-  # Records that predate the art rule still have to render, so `art` keeps
-  # answering "neither" rather than assuming one is always there.
   test 'art says neither for a record saved before art was required' do
     item = FactoryBot.create(:item, story_group: @story_group)
     item.update_column(:icon_glyph, nil)
@@ -95,8 +86,6 @@ class ItemTest < ActiveSupport::TestCase
     assert_nil item.reload.art
     assert_not item.upload?
   end
-
-  # --- soft delete ----------------------------------------------------------
 
   test 'kept and deleted split the shelf' do
     kept = FactoryBot.create(:item, story_group: @story_group, name: 'Zostaje')
@@ -120,9 +109,6 @@ class ItemTest < ActiveSupport::TestCase
     item.soft_delete!
     item.reload
 
-    # items.unlock_rank_id is a real foreign key and RanksController refuses
-    # while any item holds one — an invisible item must not block a rank
-    # deletion the teacher has no way to see.
     assert_nil item.unlock_rank_id
     assert_nil item.min_rank_for_discount_id
     assert_empty item.unlock_badges
@@ -148,10 +134,7 @@ class ItemTest < ActiveSupport::TestCase
     assert_predicate item.reload, :deleted?
   end
 
-  # --- ordering -------------------------------------------------------------
-
   test 'by_price reads the shop from cheapest' do
-    # setup's @item costs 100, so it is the dear one here.
     FactoryBot.create(:item, story_group: @story_group, name: 'Drogi', price: 90)
     FactoryBot.create(:item, story_group: @story_group, name: 'Tani', price: 2)
 

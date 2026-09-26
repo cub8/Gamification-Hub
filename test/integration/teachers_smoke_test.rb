@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# The Nauczyciele screen: the list that shows the owner beside the supporting
-# teachers, the search-first add dialog and the removal confirmation
-# (mockup #/t/teachers, 30-rk.js `vTeachers` / `mAddT` / `mRmT`).
 class TeachersSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -22,14 +19,10 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:story_group_teacher, user: teacher(name), story_group: @story_group)
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
   end
-
-  # --- the list -------------------------------------------------------------
 
   test 'the owner heads the list, explained and without a way to remove them' do
     supporting('Adam Adamczyk')
@@ -68,8 +61,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-lead', /Grupę może usunąć tylko właściciel\./
   end
 
-  # --- the add dialog -------------------------------------------------------
-
   test 'every candidate is rendered hidden, with the pool counted in the hint' do
     teacher('Adam Adamczyk')
     teacher('Bogdan Borek')
@@ -107,8 +98,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-teacher-result-row button[aria-label=?]', 'Dodaj Bogdan Borek'
   end
 
-  # One form around the whole list: a form per candidate would be hundreds of
-  # forms for one click.
   test 'the whole list sits in one form and each button carries its own id' do
     person = teacher('Adam Adamczyk')
 
@@ -138,8 +127,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-explainer-note', /Nie ma kogo dodać/
   end
 
-  # --- adding ---------------------------------------------------------------
-
   test 'adding names the person and leaves the dialog' do
     person = teacher('Adam Adamczyk')
 
@@ -164,8 +151,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-field-error span', 'Ta osoba jest już w grupie.'
   end
 
-  # --- removing -------------------------------------------------------------
-
   test 'the removal dialog says what survives and lands on Anuluj' do
     membership = supporting('Adam Adamczyk')
 
@@ -187,8 +172,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'Usunięto z grupy: Adam Adamczyk.', flash[:notice]
   end
 
-  # --- presentation ---------------------------------------------------------
-
   test 'every dialog carries exactly one modal frame, and none as a page' do
     membership = supporting('Adam Adamczyk')
 
@@ -199,7 +182,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
       get path, headers: MODAL
       assert_select 'turbo-frame#modal', 1, "#{path} inside the dialog"
 
-      # As a page the only modal frame is the layout's own, inside <dialog>.
       get path
       assert_select 'main#app-content turbo-frame#modal', false, "#{path} as a page"
       assert_select 'header.gh-topbar', 1, "#{path} keeps the shell as a page"
@@ -232,8 +214,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#flash-messages', false
   end
 
-  # --- authorization --------------------------------------------------------
-
   test 'a supporting teacher reads the list but is offered nothing to change' do
     membership = supporting('Adam Adamczyk')
     sign_in_as membership.user
@@ -250,7 +230,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
                   confirm_destroy_story_group_teacher_path(@story_group, membership), count: 0
   end
 
-  # Hiding the buttons is presentation; this is the part that actually holds.
   test 'a supporting teacher is refused every way of changing the list' do
     membership = supporting('Adam Adamczyk')
     outsider = teacher('Bogdan Borek')
@@ -272,7 +251,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # Admins reach every group, and this list is no exception.
   test 'an organization admin who owns nothing may still add and remove' do
     membership = supporting('Adam Adamczyk')
     person = teacher('Bogdan Borek')
@@ -298,8 +276,6 @@ class TeachersSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_teachers_path(@story_group)
 
-    # ApplicationController rescues Pundit and bounces to the root rather than
-    # confirming the group exists.
     assert_redirected_to root_path
   end
 end

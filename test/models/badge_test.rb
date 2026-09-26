@@ -66,8 +66,6 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal 'Nieznana grafika.', badge.errors[:icon_glyph].first
   end
 
-  # The same three states as Rank#art: a key wins over an attachment, and the
-  # attachment is kept so a teacher can switch back.
   test 'art names the preset, the upload, or neither' do
     badge = FactoryBot.create(:badge, story_group: @story_group)
 
@@ -81,7 +79,6 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal 'crown', badge.art
     assert_predicate badge.icon, :attached?
 
-    # Records saved before art was required still have to render.
     badge.icon.purge
     badge.update_column(:icon_glyph, nil)
     assert_nil badge.reload.art
@@ -109,7 +106,6 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal [badge], @story_group.badges.deleted.to_a
   end
 
-  # A badge written before the rule became required must still be deletable.
   test 'soft delete does not run validations' do
     badge = FactoryBot.build(:badge, story_group: @story_group)
     badge.save!(validate: false)

@@ -18,8 +18,6 @@ class StudentsItemsControllerTest < ActionDispatch::IntegrationTest
     @students_item = FactoryBot.create(:students_item, story_group_student: @student, item: @item, price_paid: 20)
   end
 
-  # There is no per-purchase detail page any more: the card carries the price,
-  # the discount and the date, so there was nothing behind the link.
   test 'owner can access student items index' do
     sign_in @owner_user
 

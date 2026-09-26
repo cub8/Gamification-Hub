@@ -9,8 +9,6 @@ class StarterPackTest < ActiveSupport::TestCase
     assert_equal Pack::CLASS_MAX, Pack.for(pack: 'neutral', classes: 12).categories.sum(&:reward)
   end
 
-  # The numbers the wizard promises for one semester, spelled out so a change to
-  # the rounding rule cannot pass silently.
   test 'a twelve-class neutral set scales to the documented numbers' do
     preset = Pack.for(pack: 'neutral', classes: 12)
 
@@ -38,8 +36,6 @@ class StarterPackTest < ActiveSupport::TestCase
                                       .uniq.size
   end
 
-  # Ranks have a unique index on [story_group_id, required_currency_value], and
-  # rounding to 5 can put two rungs on one number at a low class count.
   test 'rank thresholds strictly increase for every offered class count' do
     Pack::KEYS.each do |key|
       Pack::CLASSES_RANGE.each do |count|
@@ -59,8 +55,6 @@ class StarterPackTest < ActiveSupport::TestCase
     end
   end
 
-  # art_chosen rejects a record whose glyph is not in its entity's own set, so a
-  # typo here would only surface as a failed create halfway through a build.
   test 'every preset glyph is one the entity actually offers' do
     Pack::KEYS.each do |key|
       preset = Pack.for(pack: key, classes: 12)
@@ -71,7 +65,6 @@ class StarterPackTest < ActiveSupport::TestCase
     end
   end
 
-  # The retired stock-photo mascot: a new group should never be handed it.
   test 'no pack uses the rabbit glyph' do
     Pack::KEYS.each do |key|
       assert_not_includes Pack.for(pack: key, classes: 12).badges.map(&:icon_glyph), 'rabbit'

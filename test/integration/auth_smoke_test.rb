@@ -19,7 +19,6 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'i.fa-solid.fa-graduation-cap'
     assert_select 'i.fa-solid.fa-envelope'
     assert_select 'dialog.gh-dialog turbo-frame#modal'
-    # No Bootstrap on this page any more.
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -27,14 +26,11 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     get new_auth_passwordless_path
     assert_response :success
     assert_select 'h1.gh-h1', 'Logowanie e-mailem'
-    # The label lives in its own span so the underline lands on the text only,
-    # not on the chevron (the icon is a flex item and would inherit it).
     assert_select 'a.gh-back-link > span', 'Inne sposoby logowania'
     assert_select 'a.gh-back-link > i.fa-solid.fa-chevron-left'
     assert_select 'form[action=?][method=post]', auth_passwordless_path
     assert_select '.gh-form-field label[for=email]', 'Adres e-mail'
     assert_select '.gh-text-input input#email[name=email][type=email][required]'
-    # Must be a <button>, not <input>: the edge is a ::before.
     assert_select 'button.gh-btn[type=submit]', 'Wyślij link'
     assert_select 'input[type=submit]', false
   end
@@ -48,30 +44,22 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'html[data-gh-theme=dark]'
   end
 
-  # --- the register line, restored on both login screens -------------------
-
   test 'both login screens offer registration as an inert button' do
     [login_path, new_auth_passwordless_path].each do |path|
       get path
       assert_response :success
       assert_select 'p.gh-auth-alt-action', /Nie masz konta\?/
       assert_select 'p.gh-auth-alt-action button.gh-link-button', 'Zarejestruj się'
-      # Never a dead link: a nil/# href is the bug this replaced.
       assert_select 'p.gh-auth-alt-action a', false
     end
   end
 
-  # An ALERT, deliberately: notices rise as toasts now and have no dismiss
-  # button to wire. The inline plate is what an error still gets, and it is the
-  # error that must not fade on a timer.
   test 'a flash alert is fully wired for dismissal' do
     get auth_passwordless_verify_path(token: 'nie-ma-takiego')
     follow_redirect!
 
     assert_select '.gh-inset-plate', /Nieprawidłowy token/
 
-    # The bug this pins: the close button dispatched flash#dismiss but nothing
-    # carried data-controller="flash", so the action had no controller to reach.
     assert_select '#flash-messages[data-controller=flash]' do
       assert_select '[data-flash-target=message]' do
         assert_select 'button.gh-close[data-action=?]', 'flash#dismiss' do
@@ -79,7 +67,6 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
         end
       end
     end
-    # The close control must not be the underlined link style.
     assert_select 'button.gh-close.gh-link-button', false
   end
 
@@ -111,8 +98,6 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-auth-footer button.gh-link-button', 'Jasny motyw'
   end
 
-  # --- the inbox screen ----------------------------------------------------
-
   test 'requesting a link lands on the inbox screen, not a flash notice' do
     user = FactoryBot.create(:user)
 
@@ -127,7 +112,6 @@ class AuthSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-icon-circle-lg i.fa-solid.fa-envelope'
     assert_select 'p.gh-small', /5 minut/
     assert_select 'a.gh-link-button', 'Zmień adres e-mail'
-    # The address must not leak into any URL.
     assert_select 'a[href*=?]', user.email, false
   end
 

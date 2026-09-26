@@ -75,8 +75,6 @@ class CurrencyAdjustmentFormTest < ActiveSupport::TestCase
     assert_equal 'Rekrut', crossing.current_rank.name
     assert_equal 'Kapitan', crossing.new_rank.name
 
-    # Even a clawback big enough to matter leaves the rung alone, because it
-    # never touches the total collected.
     assert_not form(sign: -1, amount: '20').rank_changed?
   end
 

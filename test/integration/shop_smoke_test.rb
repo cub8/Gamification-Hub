@@ -2,12 +2,6 @@
 
 require 'test_helper'
 
-# Sklep, the student's shop (#/s/shop, js-expanded/30-main.js:87-98) and the
-# buy confirmation behind its button (dlgBuy(), :200-207).
-#
-# The card itself is items/_card, the same partial the teacher's form preview
-# renders — what is tested here is that a STUDENT'S answers reach it: their
-# price, their missing requirements, their progress.
 class ShopSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -21,8 +15,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -45,14 +37,12 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     get story_group_shop_index_path(@story_group)
   end
 
-  # The zone a card landed in, by its item name.
   def zone_of(name)
     css_select('.gh-showcase-zone').find do |zone|
       zone.css('.gh-card-name').any? { |title| title.text.strip == name }
     end
   end
 
-  # `> span:first-child` throughout: .gh-showcase-zone-count is a span in the same label.
   def zone_label(zone) = zone.css('.gh-showcase-zone-label > span:first-child').first.text.strip
 
   def zone_labels = css_select('.gh-showcase-zone-label > span:first-child').map { |label| label.text.strip }
@@ -61,8 +51,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
   def requirement_lines(card) = card.css('.gh-requirement-list li').map { |line| line.text.squish }
 
-  # --- who may see it ------------------------------------------------------
-
   test 'a student enrolled in the group gets the shop' do
     visit_shop
 
@@ -70,7 +58,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Sklep'
   end
 
-  # Membership, not role: the owner teaches this group but does not learn in it.
   test "the group's owner is not a shopper here" do
     sign_in_as @owner
     visit_shop
@@ -89,8 +76,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Sklep'
   end
 
-  # --- the zones -----------------------------------------------------------
-
   test 'items are fenced into the three zones, each counted' do
     item(name: 'Tani przedmiot', price: 10)
     item(name: 'Drogi przedmiot', price: 500)
@@ -107,8 +92,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'Zapieczętowane',  zone_label(zone_of('Zamknięty przedmiot'))
   end
 
-  # An empty zone is not rendered at all: a dashed frame around nothing reads
-  # as a fault rather than as an absence.
   test 'a zone with nothing in it is absent, not empty' do
     item(name: 'Tani przedmiot', price: 10)
 
@@ -138,8 +121,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
                   /Twoje odznaki\s+Mechanik\s+i\s+Nawigator\s+obniżają ceny niektórych przedmiotów\./
   end
 
-  # --- an affordable card --------------------------------------------------
-
   test 'an affordable card carries a real buy link into the confirmation' do
     cheap = item(name: 'Tani przedmiot', price: 10)
 
@@ -153,8 +134,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-lock-seal[hidden]', 1
   end
 
-  # --- the price is the student's, not the list ----------------------------
-
   test 'a discounted card strikes the list price and names what the discount is for' do
     nawigator = badge(name: 'Nawigator', discount: 20)
     @student.badges << nawigator
@@ -166,8 +145,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     card = css_select('.gh-card').first
     assert_equal '50', card.css('.gh-price-badge s').first.text.strip
     assert_equal '40', card.css('.gh-price-badge b').first.text.strip
-    # The student's own percentage, NOT ItemCard's "Zniżki do −20%"
-    # ceiling, which is what the teacher's screens show.
     assert_equal '−20% za odznaki', card.css('.gh-tag--discount').first.text.strip
   end
 
@@ -182,8 +159,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_not_nil card.css('.gh-tag--discount[hidden]').first
   end
 
-  # --- saving up -----------------------------------------------------------
-
   test 'a card you cannot yet afford says how much is missing' do
     item(name: 'Drogi przedmiot', price: 160)
 
@@ -192,11 +167,8 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     card = css_select('.gh-card').first
     assert_equal '60', card.css('.gh-requirement-block b').first.text.strip
     assert_includes card.css('.gh-requirement-block .gh-progress-bar i').first['style'], '--gh-p: 63%'
-    # No button: there is nothing to press yet.
     assert_empty card.css('.gh-item-foot')
   end
-
-  # --- sealed --------------------------------------------------------------
 
   test 'a sealed card lists only what THIS student is missing' do
     held    = badge(name: 'Nawigator')
@@ -215,8 +187,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_nil card.css('.gh-lock-seal').first['hidden']
   end
 
-  # A rank the student already holds gates nothing, so it is neither listed nor
-  # stamped — the badge they lack is.
   test 'a rank already held is not a reason the item is sealed' do
     rank(name: 'Rekrut', threshold: 0)
     kapitan = rank(name: 'Kapitan', threshold: 50)
@@ -263,8 +233,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'Niedostępne przy 0 życiach', card.css('.gh-lock-seal span').first.text.strip
   end
 
-  # --- the buy confirmation ------------------------------------------------
-
   test 'the confirmation quotes the price, the remainder and the discount' do
     nawigator = badge(name: 'Nawigator', discount: 20)
     @student.badges << nawigator
@@ -296,7 +264,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-dialog-button-row button', 'Kup za 10'
   end
 
-  # Ctrl-click, or no JavaScript: the same content as a page on the app shell.
   test 'the confirmation renders as a page outside the frame' do
     bought = item(name: 'Poprawa', price: 10)
 
@@ -308,8 +275,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select ".gh-dialog-button-row a[href='#{story_group_shop_index_path(@story_group)}']", 'Anuluj'
   end
 
-  # The dialog quotes a price, so it re-checks the offer rather than trusting
-  # the page the link came off.
   test 'the confirmation refuses an item this student cannot buy' do
     poor = item(name: 'Drogi przedmiot', price: 500)
 
@@ -328,8 +293,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_redirected_to story_group_shop_index_path(@story_group)
   end
 
-  # --- buying --------------------------------------------------------------
-
   test 'buying takes the money, keeps the copy and raises a toast' do
     bought = item(name: 'Poprawa', price: 40)
 
@@ -339,7 +302,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to story_group_shop_index_path(@story_group)
     assert_equal 60, @student.reload.current_currency
-    # Spending never lowers the total collected, so the rank is untouched.
     assert_equal 100, @student.total_currency
 
     follow_redirect!
@@ -357,8 +319,6 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#flash-messages [role=alert]', /za mało waluty/
   end
 
-  # --- soft delete ---------------------------------------------------------
-
   test 'an item withdrawn from the offer is gone from every zone and cannot be bought' do
     gone = item(name: 'Wycofany przedmiot', price: 10)
     gone.soft_delete!
@@ -367,21 +327,13 @@ class ShopSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-card', 0
     assert_select '.gh-empty-state h2', 'Sklep jest jeszcze pusty'
 
-    # `kept` at the finder, so the record is simply not there — the app's own
-    # RecordNotFound rescue sends you home.
     get confirm_buy_story_group_shop_path(@story_group, gone)
     assert_redirected_to root_path
   end
 
-  # --- no detail screen ----------------------------------------------------
-
-  # The card carries everything a detail page would, at every width, so there
-  # is nothing for one to add and nothing links to it.
   test 'the shop has no show route' do
     assert_raises(NoMethodError) { story_group_shop_path(@story_group, 1) }
   end
-
-  # --- the header chip -----------------------------------------------------
 
   test 'the header shows the balance in a group and links to the history' do
     visit_shop

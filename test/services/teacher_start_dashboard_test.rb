@@ -101,8 +101,6 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     assert_equal [1, 1], groups.map(&:students_count)
   end
 
-  # --- "Czeka na ocenę" -----------------------------------------------------
-
   test 'pending is the newest sheet with a category nobody has been awarded in' do
     group = FactoryBot.create(:story_group, owner: @teacher)
     membership = membership_in(group)

@@ -30,8 +30,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # The "Utwórz arkusz" dialog. A GET now, where the Bootstrap screen rendered
-  # three modals into the index whether or not anyone opened them.
   test 'should get the create dialog for a template' do
     get new_story_group_activity_group_url(@story_group, template_id: @template.id)
 
@@ -49,9 +47,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
   end
 
-  # The dialog posts inside the `modal` frame, and the index carries an empty
-  # frame of that name itself — so a plain redirect would swap the dialog for
-  # nothing and never move the page.
   test 'creating leaves the dialog through a turbo-stream redirect' do
     post story_group_activity_groups_url(@story_group),
          params:  { activity_group: { activity_group_template_id: @template.id } },
@@ -80,8 +75,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Custom Name', ActivityGroup.last!.name
   end
 
-  # Bulk creation used to be a route of its own; it is the same form now, with
-  # the mode the dialog's segmented control posts.
   test 'should create several groups when the dialog is in bulk mode' do
     assert_difference('ActivityGroup.count', 3) do
       post story_group_activity_groups_url(@story_group),
@@ -129,8 +122,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_predicate @category.reload, :persisted?
   end
 
-  # The index's "Zmienione kolumny" tag: stamped when this sheet's own columns
-  # change, never when the template behind it does.
   test 'should stamp columns_modified_at only when the columns change' do
     patch story_group_activity_group_url(@story_group, @activity_group),
           params: { activity_group: { name: 'Renamed' } }
@@ -147,9 +138,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil @activity_group.reload.columns_modified_at
   end
 
-  # DECISIONS.md:31. The UI offers hide instead of delete for an awarded
-  # column; this is the rule behind it, because destroying the column would
-  # take its awards with it and leave the currency unaccounted for.
   test 'should hide rather than destroy a column that has already been awarded' do
     student = FactoryBot.create(:story_group_student, story_group: @story_group,
                                                       user:        FactoryBot.create(:user),)
@@ -171,8 +159,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_not other.reload.hidden?
   end
 
-  # Soft (DECISIONS.md:54): the sheet leaves the list, the currency it granted
-  # stays with the students.
   test 'should soft delete activity group' do
     assert_no_difference('ActivityGroup.count') do
       delete story_group_activity_group_url(@story_group, @activity_group)
@@ -189,8 +175,6 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select '.gh-sheet-row-name b', false
 
-    # ApplicationController turns the RecordNotFound into the app's own
-    # "Nie znaleziono." rather than a bare 404.
     get edit_story_group_activity_group_url(@story_group, @activity_group)
     assert_redirected_to root_url
   end

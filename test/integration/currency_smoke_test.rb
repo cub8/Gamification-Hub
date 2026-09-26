@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# The student's own money screens — Historia waluty (#/s/history,
-# js-expanded/30-sp.js:29-33) and Moje przedmioty (#/s/my-items, :19-20) — and
-# the teacher's correction dialog behind them (mAdjust, 30-student.js:49-55).
 class CurrencySmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -19,8 +16,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -55,12 +50,9 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
 
   def rows = css_select('.gh-ledger-row:not(.gh-ledger-row--header)')
 
-  # Trimmed text of every match, so assertions read as data rather than nodes.
   def texts(selector) = css_select(selector).map { |node| node.text.strip }
 
   def balances = texts('.gh-ledger-balance')
-
-  # ---- Historia waluty -------------------------------------------------
 
   test 'the history reads both numbers in its lead' do
     entry(amount: 50, kind: :reward)
@@ -162,8 +154,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  # ---- Moje przedmioty -------------------------------------------------
-
   test 'the inventory counts what is owned and sends you back to the shop' do
     bought(name: 'Poprawa wejściówki', price: 20, paid: 15)
     bought(name: 'Konsultacja', price: 10)
@@ -197,8 +187,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
   end
 
   test 'the grid closes with what the shop can still sell you' do
-    # Owning one does not take it off the shelf — a student may buy the same
-    # thing twice — so the count is everything they can afford today.
     bought(name: 'Poprawa wejściówki')
     item(name: 'Droga rzecz', price: 500)
 
@@ -227,8 +215,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-price-badge b', '15'
   end
 
-  # ---- Koryguj walutę --------------------------------------------------
-
   test 'the correction dialog opens on Dodaj with no preview yet' do
     sign_in_as @owner
 
@@ -242,7 +228,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     assert_select '[data-currency-adjust-target=preview][hidden]'
     assert_select '[data-currency-adjust-target=error][hidden]'
     assert_select '[data-currency-adjust-target=submit]', 'Podaj kwotę'
-    # No reason field: a correction stores none.
     assert_select 'input[name=?]', 'currency_adjustment[reason]', false
   end
 
@@ -301,7 +286,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
     assert_select '.gh-text-input--invalid input[aria-invalid=true]'
     assert_select '.gh-field-error[role=alert] span', 'Student ma tylko 30 do wydania.'
-    # The toggle comes back the way the teacher left it.
     assert_select '.gh-segmented-toggle-3 input[value="-1"][checked]'
     assert_equal 30, @student.reload.current_currency
   end
@@ -323,8 +307,6 @@ class CurrencySmokeTest < ActionDispatch::IntegrationTest
     rank(name: 'Kapitan', threshold: 60)
     sign_in_as @owner
 
-    # A refused submission is the only render that carries a typed amount, so
-    # push one that fails on a different field than the preview.
     post story_group_student_currency_adjustment_path(@story_group, @student),
          params: { currency_adjustment: { sign: '-1', amount: '99' } }
 

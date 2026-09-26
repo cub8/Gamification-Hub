@@ -2,8 +2,6 @@
 
 require 'test_helper'
 
-# The creation wizard: StoryGroupsController#new / #preset_preview / #create /
-# #created. The plain CRUD around it lives in story_groups_controller_test.rb.
 class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
   setup do
     @teacher = FactoryBot.create(:user, role: :teacher)
@@ -13,8 +11,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
   def group_params(overrides = {})
     { name: 'Zakon Algorytmów', currency_name: 'Złotych Monet' }.merge(overrides)
   end
-
-  # ---- the form ------------------------------------------------------------
 
   test 'the wizard renders four steps and its stepper' do
     get new_story_group_path
@@ -33,7 +29,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select 'input[name="story_group[currency_icon_glyph]"]'
   end
 
-  # One name, not the mockup's three declensions (the schema has one column).
   test 'asks for a single currency name' do
     get new_story_group_path
 
@@ -47,8 +42,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select '[data-group-wizard-target="rankingMode"][hidden]'
   end
 
-  # .gh-text-input is the TEXT INPUT shell and stretches a native select across the
-  # form; .gh-select-input is the octagon select the rest of the app uses.
   test 'the ranking mode picker uses the select shell, not the input shell' do
     get new_story_group_path
 
@@ -57,8 +50,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select '.gh-text-input select', false
   end
 
-  # Both themes at once, so a mark that vanishes on one table colour is caught
-  # before the group exists. The "W zdaniach" panel was dropped.
   test 'step 2 previews the currency on a light and a dark table' do
     get new_story_group_path
 
@@ -69,8 +60,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select '.gh-currency-preview .gh-price-badge'
     assert_no_match(/W zdaniach/, response.body)
   end
-
-  # ---- step 4's preset -----------------------------------------------------
 
   test 'preset_preview renders the scaled set' do
     get preset_preview_story_groups_path(pack: 'fantasy', classes: 12, currency_name: 'Monet')
@@ -83,8 +72,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_match 'Giermek', response.body
   end
 
-  # An unchecked box posts nothing, so every row needs its hidden companion or
-  # a removal would be indistinguishable from an untouched row.
   test 'every preset row posts a keep value even when unchecked' do
     get preset_preview_story_groups_path(pack: 'neutral', classes: 12)
 
@@ -92,8 +79,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select 'input[type=checkbox][name="setup[badges][0][keep]"][checked]'
   end
 
-  # .gh-preset-review-grid is two columns filling row-major, so this order is what puts
-  # ranks and badges on the top row and items and categories beneath.
   test 'the preset zones read ranks, badges, items, categories' do
     get preset_preview_story_groups_path(pack: 'neutral', classes: 12)
 
@@ -103,8 +88,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
                  end,)
   end
 
-  # The coin, not the currency's name in words, and no stray leading "+".
-  # The unit still has to be readable, so it moves into the aria-label.
   test 'item and category rows show the coin beside the number' do
     get preset_preview_story_groups_path(pack: 'neutral', classes: 12, currency_name: 'Monet')
 
@@ -118,8 +101,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # The frame arrives after the icon was picked, so nothing would fill those
-  # coins without the controller being told to re-render.
   test 'the preset frame asks the wizard to refresh once it loads' do
     get new_story_group_path
 
@@ -132,8 +113,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
-
-  # ---- creating ------------------------------------------------------------
 
   test 'the manual path creates an empty group' do
     assert_difference('StoryGroup.count', 1) do
@@ -201,8 +180,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_predicate group, :ranking_full?
   end
 
-  # ---- failures ------------------------------------------------------------
-
   test 'a group without a name re-renders the wizard and creates nothing' do
     assert_no_difference('StoryGroup.count') do
       post story_groups_path,
@@ -213,8 +190,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select 'nav.gh-wizard-steps'
   end
 
-  # The group and the pack share one transaction, so a pack that cannot be
-  # built must not leave a group behind.
   test 'a pack that cannot be built takes the group with it' do
     assert_no_difference(['StoryGroup.count', 'Rank.count']) do
       post story_groups_path,
@@ -233,8 +208,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select '.gh-field-error', /tego samego progu/
   end
 
-  # ---- the success screen --------------------------------------------------
-
   test 'the success screen counts what was created and hides the join code' do
     post story_groups_path,
          params: {
@@ -250,7 +223,6 @@ class StoryGroupsWizardTest < ActionDispatch::IntegrationTest
     assert_select '.gh-invite-code-display', false
   end
 
-  # ApplicationController turns a Pundit refusal into a redirect, not a raise.
   test 'a stranger cannot see another teacher s success screen' do
     other = FactoryBot.create(:story_group, owner: FactoryBot.create(:user, role: :teacher))
 

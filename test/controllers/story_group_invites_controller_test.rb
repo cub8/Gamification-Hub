@@ -10,8 +10,6 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
     @invite = FactoryBot.create(:story_group_invite, story_group: @story_group)
   end
 
-  # The form posts switches and a split date/time, not the columns themselves —
-  # InviteForm is what turns them back into max_uses and expires_at.
   def form_params(limit: true, max_uses: 10, expiry: true, on: Time.zone.tomorrow, at: '23:59')
     {
       story_group_invite: {
@@ -70,8 +68,6 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # Submitted from inside the dialog, so it breaks out of the frame with the
-  # turbo_stream redirect action rather than a plain 302.
   test 'should destroy invite' do
     assert_difference('StoryGroupInvite.count', -1) do
       delete story_group_invite_url(@story_group, @invite)

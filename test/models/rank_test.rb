@@ -45,8 +45,6 @@ class RankTest < ActiveSupport::TestCase
     assert_equal 'Podaj nazwę rangi.', rank.errors[:name].first
   end
 
-  # The threshold is what identifies a rung: two ranks at one threshold make
-  # "which rank do I hold" arbitrary. The message names the rank in the way.
   test 'two ranks in a group cannot share a threshold' do
     FactoryBot.create(:rank, story_group: @story_group, name: 'Rekrut',
                              required_currency_value: 40,)
@@ -73,8 +71,6 @@ class RankTest < ActiveSupport::TestCase
     assert rank.update(name: 'Adept')
   end
 
-  # A group need not define a rank at 0 — its lowest rung may sit at 30, and a
-  # student below it simply has no rank.
   test 'zero is a legal threshold but not a required one' do
     at_zero = FactoryBot.create(:rank, story_group: @story_group, name: 'Rekrut',
                                        required_currency_value: 0,)
@@ -95,7 +91,6 @@ class RankTest < ActiveSupport::TestCase
     assert_predicate rank, :valid?
   end
 
-  # nil + attachment -> the upload; key + attachment -> the preset, upload kept.
   test 'art says which of the two images is in use' do
     rank = FactoryBot.create(:rank, story_group: @story_group)
 
@@ -109,7 +104,6 @@ class RankTest < ActiveSupport::TestCase
     assert_equal 'crown', rank.art
     assert_not_predicate rank, :upload?
 
-    # Records saved before art was required still have to render.
     rank.icon.purge
     rank.update_column(:icon_glyph, nil)
     assert_nil rank.reload.art

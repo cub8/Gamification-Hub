@@ -2,11 +2,7 @@
 
 require 'test_helper'
 
-# "Grupa: przegląd" — StoryGroups#show.
-# One action, two screens: the teacher's group front page (mockup #/t/home) and
-# the student's own (#/s/home).
 class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
-  # A 1x1 transparent PNG. The screen only cares whether an icon is attached.
   PNG = Base64.decode64(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   )
@@ -26,7 +22,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
                       }.merge(attrs),)
   end
 
-  # A sheet with one graded column, which is what puts a student on its podium.
   def graded_sheet(story_group, name:, awards: {})
     sheet = FactoryBot.create(:activity_group, story_group: story_group, name: name,
                               activity_group_template: FactoryBot.create(:activity_group_template,
@@ -37,8 +32,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     end
     sheet
   end
-
-  # --- layout ---------------------------------------------------------------
 
   test 'the overview renders inside the app chrome for a teacher' do
     teacher = FactoryBot.create(:user, role: :teacher)
@@ -77,13 +70,9 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, role: :teacher)
     get story_group_path(group)
 
-    # ApplicationController turns Pundit's refusal into a redirect, so a teacher
-    # who is neither owner, supporter nor student never reaches the page.
     assert_redirected_to root_path
   end
 
-  # Membership wins over role: a teacher enrolled as a student reads the
-  # student's screen, exactly as the sidebar beside it does.
   test 'a teacher enrolled in a group reads it as a student' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group
@@ -96,8 +85,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-group-overview-grid .gh-currency-balance-card'
     assert_select '.gh-kpi-row', false
   end
-
-  # --- teacher: hero and KPIs -----------------------------------------------
 
   test 'the hero carries the group and its three openings' do
     teacher = FactoryBot.create(:user, role: :teacher)
@@ -148,8 +135,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(story_group)
 
     assert_response :success
-    # A supporting teacher may edit everything but the group's existence, so
-    # the button stays — this is the policy speaking, not the screen.
     assert_select '.gh-overview-hero a[href=?]', edit_story_group_path(story_group)
   end
 
@@ -194,8 +179,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-kpi-tile:last-child dd', 'Pełny ranking'
   end
 
-  # --- teacher: purchases ---------------------------------------------------
-
   test 'recent purchases name the item, the student and the price' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher)
@@ -209,15 +192,12 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-purchase-list .gh-purchase-row' do
       assert_select 'b', 'Poprawka'
-      # The nickname is what everybody else in the group sees.
       assert_select '.gh-purchase-row-main span', 'Nova'
       assert_select '.gh-price-badge b', '15'
     end
     assert_select 'a[href=?]', home_path(group: story_group.id), 'Wszystkie zakupy w grupie'
   end
 
-  # The item attachment was renamed icon -> image in 20260915090000; the
-  # Bootstrap view this replaced still reached for `.image` and raised here.
   test 'a purchase whose item was hard deleted still renders' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher)
@@ -232,9 +212,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-purchase-row b', 'Przedmiot usunięty z oferty'
   end
 
-  # Four columns, not the Start screen's five: without the modifier the price
-  # chip auto-places into the group chip's 210px track and stretches into a bar,
-  # and its right edge then moves with the length of the date beside it.
   test 'purchase rows carry the four-column variant' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher)
@@ -247,8 +224,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(story_group)
 
     assert_select 'li.gh-purchase-row.gh-purchase-row--group-variant', 1
-    # No group chip in a group: the row has four children, which is what the
-    # modifier's track list is for.
     assert_select '.gh-purchase-row--group-variant .gh-purchase-row-group', false
     assert_select '.gh-purchase-row--group-variant > *', 4
   end
@@ -262,8 +237,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-purchase-list', false
     assert_select '.gh-overview-side-panel .gh-explainer-note', /Nikt jeszcze niczego nie kupił/
   end
-
-  # --- teacher: Wymaga uwagi ------------------------------------------------
 
   test 'a student out of lives is the first thing that needs attention' do
     teacher = FactoryBot.create(:user, role: :teacher)
@@ -280,8 +253,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # A student climbing toward a rung is the system working, not a task. The
-  # panel is a list of things that need doing, and a promotion needs nothing.
   test 'a student close to a promotion is not flagged' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher)
@@ -323,8 +294,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-attention-list', false
   end
 
-  # --- teacher: per-sheet podium --------------------------------------------
-
   test 'the newest sheets carry a podium of this group only' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher)
@@ -339,12 +308,10 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
 
     names = css_select('.gh-sheet-summary-row b').map(&:text)
 
-    # Newest first, and only two of the three.
     assert_equal ['Laboratoria 4', 'Laboratoria 3'], names
 
     assert_select '.gh-sheet-summary-row:first-of-type .gh-leaderboard-top3 li:first-child' do
       assert_select '.gh-position-badge.gh-position-badge--p1', '1'
-      # A nickname where one is set, the real name otherwise.
       assert_select '.gh-leaderboard-score', '+11'
     end
     assert_select '.gh-leaderboard-top3 li', /Meteor/
@@ -384,8 +351,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-overview-column a[href=?]', story_group_activity_groups_path(story_group), 'Utwórz arkusz'
   end
 
-  # --- student: purse and rank ----------------------------------------------
-
   test 'the purse shows the spendable balance, the total and the lives' do
     story_group = group
     membership = student_in(story_group, lives: 2, current_currency: 12, total_currency: 34)
@@ -423,7 +388,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-rank-card-name', 'Królik'
     assert_select '.gh-rank-progress-text span', '30 z 40'
-    # Half of the 20 that separates the two rungs, not three quarters of 40.
     assert_select '.gh-progress-bar[aria-valuenow="10"][aria-valuemax="20"] i[style=?]', '--gh-p: 50%'
     assert_select '.gh-rank-progress .gh-small', 'Jeszcze 10 do rangi Kosmiczny Królik. Ta ranga daje −15% w sklepie.'
   end
@@ -464,9 +428,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-rank-card .gh-card-art', false
   end
 
-  # ranks/_rank_thumb is a mini entity card with its own frame and shadow;
-  # nesting one in an art well leaves a 52px chip floating in a 200px rectangle.
-  # The well gets the bare art, exactly as the rank form's preview does.
   test 'the rank card holds bare art, not a mini card' do
     story_group = group
     FactoryBot.create(:rank, story_group: story_group, name: 'Królik',
@@ -480,9 +441,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-rank-card .gh-card-art > svg.gh-card-art-glyph'
   end
 
-  # A rank always validates with art, so the fallback only fires for a row whose
-  # preset has since been retired — gh_glyph returns nil for a key it no longer
-  # knows. update_column, because that state cannot be reached through the form.
   test 'a rank whose preset was retired falls back to the ranking star' do
     story_group = group
     rank = FactoryBot.create(:rank, story_group: story_group, name: 'Królik',
@@ -496,8 +454,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-rank-card .gh-card-art i.fa-ranking-star'
     assert_select '.gh-rank-card .gh-card-art svg.gh-card-art-glyph', false
   end
-
-  # --- student: ranking place -----------------------------------------------
 
   test 'the place appears only once ranking is enabled' do
     story_group = group
@@ -531,11 +487,8 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in last.user
     get story_group_path(story_group)
 
-    # 4., not 3.: the two on 40 both take second place.
     assert_select '.gh-rank-card-footer a', '4. miejsce w rankingu grupy'
   end
-
-  # --- student: collections and ledger --------------------------------------
 
   test 'the badges zone shows every badge and counts the earned ones' do
     story_group = group
@@ -549,7 +502,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-showcase-zone--badges .gh-showcase-zone-count', '1 z 2'
     assert_select '.gh-showcase-zone--badges .gh-card--badge', 2
-    # The unearned one lies face down: its art is the reward.
     assert_select '.gh-showcase-zone--badges .gh-flip-card--down', 1
   end
 
@@ -579,19 +531,13 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-showcase-zone--hand .gh-showcase-zone-count', '3'
     assert_select '.gh-item-hand .gh-item-hand-card', 3
-    # Middle card straight, the other two splayed either side of it.
     rotations = css_select('.gh-item-hand .gh-item-hand-card').map { |node| node['style'] }
 
     assert_equal ['--gh-rot: -4.0deg', '--gh-rot: 0.0deg', '--gh-rot: 4.0deg'], rotations
 
-    # Everything but "Drogi" is within reach. Owning an item does not take it
-    # out of the count — the shop sells repeats, and "Moje przedmioty" says the
-    # same number for the same reason.
     assert_select '.gh-empty-slot-panel p', 'Dobierz coś w sklepie. Stać cię teraz na 4 przedmioty.'
   end
 
-  # Three is what the span-7 column holds; the counter and "Moje przedmioty"
-  # carry the rest, so the fan never grows past what it can draw.
   test 'the hand holds at most three cards but counts them all' do
     story_group = group
     membership = student_in(story_group)
@@ -607,7 +553,6 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-showcase-zone--hand .gh-showcase-zone-count', '7'
   end
 
-  # A single card is not a fan: it sits straight, not tipped to one side.
   test 'one owned item is not rotated' do
     story_group = group
     membership = student_in(story_group)

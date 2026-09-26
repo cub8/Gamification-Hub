@@ -11,8 +11,6 @@ class CurrencyLedgerTest < ActiveSupport::TestCase
                                                            current_currency: 0, total_currency: 0,)
   end
 
-  # Written oldest first, each moving current_currency the way its own writer
-  # does, so the balance the ledger walks back from is the real one.
   def reward(amount, category: nil, at: Time.current)
     entry = FactoryBot.create(:currency_transaction, student: @student, amount: amount,
                                                      kind: :reward, transactionable: category,
@@ -64,12 +62,9 @@ class CurrencyLedgerTest < ActiveSupport::TestCase
 
     entries = ledger.entries
 
-    # Newest row leaves the balance the student has now, and every row below it
-    # explains the step above.
     assert_equal 30, @student.reload.current_currency
     assert_equal [30, 35, 15, 30], entries.map(&:balance_after)
 
-    # The oldest row minus its own amount is where they came from: zero.
     assert_equal 0, entries.last.balance_after - entries.last.amount
   end
 

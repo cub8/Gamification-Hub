@@ -43,8 +43,6 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
-  # Soft, not gone (DECISIONS.md:54): the row survives so every students_badges
-  # pointing at it stays valid.
   test 'should soft delete badge' do
     badge = FactoryBot.create(:badge, story_group: @story_group)
 

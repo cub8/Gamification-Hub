@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# The example student on the item form. Randomised, so these assert the rules
-# that must hold for EVERY pick rather than freezing one seed's answer — a
-# frozen pick would pass while the rule behind it rotted.
 class DiscountExampleTest < ActiveSupport::TestCase
   SEEDS = (1..25)
 
@@ -64,8 +61,6 @@ class DiscountExampleTest < ActiveSupport::TestCase
     assert_equal [nil], picked.uniq
   end
 
-  # A rung below the floor qualifies for nothing, so an example student standing
-  # there would be quoted a saving they would never get.
   test 'a floor keeps the example on a rung at or above it' do
     rank(name: 'Rekrut', threshold: 0, discount: 30)
     kapitan = rank(name: 'Kapitan', threshold: 100, discount: 10)
@@ -77,7 +72,6 @@ class DiscountExampleTest < ActiveSupport::TestCase
     assert_equal %w[Admirał Kapitan], names.uniq.sort
   end
 
-  # With no floor, holding one of the badges the item lists is the only way in.
   test 'without a floor the example holds one of the badges the item lists' do
     listed = badge(name: 'Nawigator', discount: 10)
     3.times { |i| badge(name: "Inna #{i}", discount: 5) }
@@ -88,7 +82,6 @@ class DiscountExampleTest < ActiveSupport::TestCase
     assert_equal [true], held.uniq
   end
 
-  # A floor is qualification enough, so the badges are free to be anybody's.
   test 'with a floor the listed badges are not forced into the example' do
     kapitan = rank(name: 'Kapitan', threshold: 100, discount: 10)
     listed = badge(name: 'Nawigator', discount: 10)
@@ -123,7 +116,6 @@ class DiscountExampleTest < ActiveSupport::TestCase
     assert_equal [Discount::CAP_VALUE], percents.uniq
   end
 
-  # Naming one puts a name in the sentence and no number behind it.
   test 'it skips rungs and badges worth nothing' do
     rank(name: 'Rekrut', threshold: 0, discount: 0)
     kapitan = rank(name: 'Kapitan', threshold: 100, discount: 15)

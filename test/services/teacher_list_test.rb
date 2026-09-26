@@ -41,7 +41,6 @@ class TeacherListTest < ActiveSupport::TestCase
     assert_equal membership.created_at, row.added_at
   end
 
-  # A byte comparator puts "Łukasz" after "Zofia", which reads as a bug.
   test 'supporting teachers sort by folded name' do
     supporting('Łukasz Lis')
     supporting('Marta Mazur')
@@ -56,7 +55,6 @@ class TeacherListTest < ActiveSupport::TestCase
     assert list.any?
   end
 
-  # The controller hands in the policy-scoped relation rather than the raw one.
   test 'it lists the memberships it is given' do
     supporting('Adam Adamczyk')
     scoped = TeacherList.new(story_group: @story_group,

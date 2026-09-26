@@ -74,8 +74,6 @@ class ActivityGroupBuilderTest < ActiveSupport::TestCase
     end
   end
 
-  # The link back to the template column is what tells "Tylko w tym arkuszu"
-  # apart from a column that was copied.
   test 'build records which template category each column came from' do
     @builder.build(name: 'Lab 1')
     group = ActivityGroup.last!
@@ -92,8 +90,6 @@ class ActivityGroupBuilderTest < ActiveSupport::TestCase
     assert_predicate added, :sheet_only?
   end
 
-  # A run that failed halfway used to leave the sheets before it behind, with
-  # no way to tell how far it got.
   test 'build_many rolls the whole run back when one sheet fails' do
     @template.categories.first.update_column(:didactic_description, nil)
 

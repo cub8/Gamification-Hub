@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# Studenci (#/t/students, js-expanded/30-lists.js:45-48), the student sheet with
-# its three tabs (#/t/student, 30-student.js:19-35) and the three dialogs that
-# hang off it: Edytuj (mEdit), Usuń z grupy and Przyznaj/Odbierz odznakę.
 class StudentsSmokeTest < ActionDispatch::IntegrationTest
   MODAL  = { 'Turbo-Frame' => 'modal' }.freeze
   MODAL2 = { 'Turbo-Frame' => 'modal2' }.freeze
@@ -16,8 +13,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     sign_in @owner
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -55,24 +50,19 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     get story_group_student_path(@story_group, member, **query)
   end
 
-  # Values of one column across every rendered row, header excluded.
   def column(selector) = css_select(".gh-student-row:not(.gh-student-row--header) #{selector}").map do |cell|
     cell.text.strip
   end
 
   def names = css_select('.gh-student-name-cell b').map { |cell| cell.text.strip }
 
-  # Trimmed text of every match, so assertions read as data rather than nodes.
   def texts(selector) = css_select(selector).map { |node| node.text.strip }
 
-  # A tab's own word, without the count that follows it.
   def first_words(selector) = css_select(selector).map { |node| node.text.split.first }
 
   def tab_labels = first_words('.gh-group-tab')
 
   def current_tab = first_words('.gh-group-tab[aria-current=true]').first
-
-  # ---- the list --------------------------------------------------------
 
   test 'the list reads by display name and shows rank, money, lives and badges' do
     rank(name: 'Rekrut', threshold: 0)
@@ -88,7 +78,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h1.gh-h1', 'Studenci'
     assert_equal ['Anna Kowalska', 'Zofia Nowak'], names
     assert_equal %w[Rekrut Kapitan], column('.gh-student-rank-cell')
-    # Do wydania | Zebrane | Odznaki, per row, Anna first.
     assert_equal %w[10 10 0 10 60 1], column('.gh-numeric-cell')
   end
 
@@ -113,8 +102,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-student-row--no-lives', 1
   end
 
-  # The other way round from the ranking, which is the only screen where a
-  # nickname stands in for a person.
   test 'the real name is the name, with the nickname beside it' do
     student(name: 'Sebastian Alejandro', nickname: 'Kapitan Marchewka')
 
@@ -193,14 +180,9 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_equal 0, member.reload.lives
     follow_redirect!
-    # An error stays on the page rather than rising as a toast.
     assert_select '.gh-inset-plate[role=alert] span', /student ma już 0/
   end
 
-  # ---- the sheet -------------------------------------------------------
-
-  # The nickname is shown but does not take the headline: a teacher on this page
-  # is looking at a person, and the pseudonym is one more fact about them.
   test 'the sheet leads with the real name and carries the nickname beside it' do
     member = student(name: 'Sebastian Alejandro', nickname: 'Kapitan Marchewka')
 
@@ -264,7 +246,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     visit_sheet(member, tab: 'hist')
     assert_equal 'Historia', current_tab
 
-    # Anything else falls back rather than rendering an empty panel.
     visit_sheet(member, tab: 'wymyslona')
     assert_equal 'Odznaki', current_tab
   end
@@ -351,8 +332,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-purchase-filter-chip[aria-current=true]', /Korekty/
   end
 
-  # ---- edit and removal ------------------------------------------------
-
   test 'the edit dialog is a lives stepper and a way out of the group' do
     member = student(name: 'Anna Kowalska', lives: 2)
 
@@ -364,7 +343,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-number-stepper output', '2'
     assert_select 'input[type=hidden][name=?][value=?]', 'story_group_student[lives]', '2'
     assert_select '[data-lives-stepper-start-value="2"]'
-    # The removal opens the SECOND dialog, over this one.
     assert_select 'a.gh-remove-student-btn[data-turbo-frame=modal2]', /Usuń z grupy/
   end
 
@@ -434,8 +412,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_turbo_redirected_to story_group_students_path(@story_group)
   end
 
-  # ---- awarding and revoking a badge -----------------------------------
-
   test 'the picker lists every badge and marks the ones already held' do
     member = student(name: 'Anna Kowalska')
     held   = badge(name: 'Nawigator', discount: 5)
@@ -450,7 +426,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-badge-picker-list li', 2
     assert_select '.gh-badge-picker-row--owned input[disabled]'
     assert_equal ['Ma już', '−10%'], texts('.gh-badge-picker-status')
-    # One effect sentence per badge, all hidden until something is picked.
     assert_select '[data-badge-picker-target=effect][hidden]', 2
   end
 
@@ -476,8 +451,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_turbo_redirected_to story_group_student_path(@story_group, member)
 
-    # The redirect is a turbo-stream, so the next page is fetched by hand; the
-    # notice is still in the flash when it arrives.
     get story_group_student_path(@story_group, member)
     assert_select '#gh-toasts template[data-toast-target=seed]', 'Przyznano odznakę „Nawigator”.'
   end
@@ -511,8 +484,6 @@ class StudentsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_turbo_redirected_to story_group_student_path(@story_group, member)
   end
-
-  # ---- who may look ----------------------------------------------------
 
   test 'a student cannot reach the list or anyone else sheet' do
     member = student(name: 'Anna Kowalska')

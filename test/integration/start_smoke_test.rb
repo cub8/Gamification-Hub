@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class StartSmokeTest < ActionDispatch::IntegrationTest
-  # --- chrome ---------------------------------------------------------------
 
   test 'the landing screen renders inside the app chrome' do
     sign_in FactoryBot.create(:user, role: :student)
@@ -11,17 +10,13 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    # The three chrome surfaces the auth screens never had.
     assert_select 'header.gh-topbar'
     assert_select 'aside.gh-sidebar nav.gh-sidebar-nav--primary'
     assert_select 'nav.gh-mobile-tabbar'
 
-    # The texture belongs to the content well, not the whole page: the header
-    # and sidebar sit on flat chrome colour.
     assert_select '.gh-content-well > .gh-cover-pattern.gh-cover-pattern--inset'
     assert_select 'body > .gh-cover-pattern', false
 
-    # No Bootstrap on this page any more.
     assert_no_match(/data-bs-/, response.body)
   end
 
@@ -70,15 +65,10 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, role: :student)
     get home_path
 
-    # Triggers name their dialog; the controller lives on the shell because the
-    # triggers and the dialogs are in different parts of the layout.
     assert_select '.gh-app-shell[data-controller~=menu]'
     assert_select 'button[data-action~=?][data-menu-id-param=?]', 'menu#open', 'gh-account-menu'
     assert_select 'button[data-action~=?][data-menu-id-param=?]', 'menu#open', 'gh-more-sheet'
 
-    # Scoped, not merely present. A Stimulus action only reaches a controller on
-    # an ancestor, and these dialogs originally rendered as SIBLINGS of the
-    # shell: the markup looked right and every control inside them was dead.
     assert_select '.gh-app-shell dialog#gh-account-menu'
     assert_select '.gh-app-shell dialog#gh-more-sheet'
     assert_select '.gh-app-shell dialog#gh-more-sheet button[data-action~=?]', 'menu#close'
@@ -89,13 +79,9 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     get home_path
 
     assert_select '.gh-app-shell[data-controller~=theme]'
-    # Header toggle ships both glyphs; CSS decides which shows, because with no
-    # cookie the server cannot know how prefers-color-scheme resolves.
     assert_select '.gh-topbar-theme-toggle i.gh-theme-icon-moon'
     assert_select '.gh-topbar-theme-toggle i.gh-theme-icon-sun'
 
-    # Both label targets AND both toggle buttons must sit inside the controller
-    # element — the descendant selector is the whole point of this assertion.
     assert_select '.gh-app-shell [data-theme-target=label]', 2, 'Ciemny motyw'
     assert_select '.gh-app-shell dialog button[data-action~=?]', 'theme#toggle', 2
 
@@ -127,8 +113,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     get home_path
 
     assert_select '.gh-topbar i.fa-bell'
-    # The mockup gates joining on the student persona; we do not, because a
-    # teacher here can also be a student in someone else's group.
     assert_select '.gh-topbar .gh-topbar-join-link', 1
   end
 
@@ -145,8 +129,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '#gh-notification-dot .gh-notification-count', '2'
   end
-
-  # --- student start --------------------------------------------------------
 
   test 'a student sees a card per group with balance, lives, rank and badges' do
     student = FactoryBot.create(:user, role: :student)
@@ -176,7 +158,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
       assert_select 'dd small', 'z 3'    # badges earned of total
     end
 
-    # The bar reports real numbers to assistive tech, not just a width.
     assert_select '.gh-progress-bar[role=progressbar][aria-valuenow=?][aria-valuemax=?]', '40', '100'
     assert_select '.gh-card-footer a[href=?]', story_group_path(story_group), 'Otwórz grupę'
     assert_select '.gh-card-footer a[href=?]', story_group_shop_index_path(story_group)
@@ -214,7 +195,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'article.gh-gcard', false
     assert_select 'p.gh-lead', /Nie należysz jeszcze do żadnej grupy/
-    # The join panel is always there — it is the way out of the empty state.
     assert_select '.gh-join-code-card a[href=?]', new_join_path, /Dołącz do grupy/
   end
 
@@ -250,8 +230,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
       assert_select '.gh-activity-feed-row-amount.gh-activity-feed-row-amount--earn', '+3'
     end
   end
-
-  # --- teacher start --------------------------------------------------------
 
   test 'a teacher sees purchases bucketed by day, newest bucket first' do
     teacher, story_group, membership = teacher_with_group
@@ -309,7 +287,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-purchase-row', 1
     assert_select '.gh-purchase-row .gh-price-badge b', '30'
     assert_select 'a.gh-purchase-filter-chip[href=?][aria-current=true]', home_path(group: second.id)
-    # The greeting describes the teacher's whole world, not the filter.
     assert_select 'p.gh-lead', /kupili 2 przedmioty w 2 grupach/
   end
 
@@ -351,7 +328,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'p.gh-lead', /Nie prowadzisz jeszcze żadnej grupy/
     assert_select '.gh-my-groups-panel p.gh-small', 'Nie prowadzisz jeszcze żadnej grupy.'
     assert_select '.gh-my-groups-panel a[href=?]', new_story_group_path, /Utwórz grupę/
-    # No filter row for a teacher who cannot filter by anything.
     assert_select '.gh-purchase-filter-bar', false
   end
 
@@ -368,8 +344,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
       assert_select '.gh-my-groups-list-item-alert', '1 nowy zakup'
     end
   end
-
-  # --- notifications --------------------------------------------------------
 
   test 'notifications are requested in the anchored panel frame' do
     teacher, story_group, membership = teacher_with_group
@@ -395,8 +369,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     get notifications_path, headers: { 'Turbo-Frame' => 'panel' }
 
     assert_select 'li.gh-notification-row' do
-      # The mockup's miniCard: the ITEM as an orange mini entity card. The group
-      # belongs in the caption line, not in the thumbnail.
       assert_select '.gh-mini-thumb .gh-card-inset'
       assert_select '.gh-group-thumb', false
       assert_select '.gh-notification-row-text b', membership.full_name
@@ -414,8 +386,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get notifications_path, headers: { 'Turbo-Frame' => 'panel' }
 
-    # Scoped to the panel frame: the "Więcej" sheet elsewhere on the page
-    # reuses .gh-popover-section-label for its own, unrelated "Konto" section.
     assert_select 'turbo-frame#panel p.gh-popover-section-label', 2     # Nowe + Wcześniej
     assert_select 'li.gh-notification-row', 2
     assert_select 'li.gh-notification-row--unread', 1
@@ -430,10 +400,8 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get notifications_path, headers: { 'Turbo-Frame' => 'panel' }
 
-    # Dismissal is clicking away or Escape, as in the mockup's popover.
     assert_select '.gh-close', false
     assert_no_match(/Wszystkie zakupy w grupie/, response.body)
-    # Mark-all lives in the header, not in a footer.
     assert_select '.gh-popover-header form[action=?][method=post]', mark_as_read_notifications_path do
       assert_select 'button.gh-link-button', /Oznacz wszystkie/
       assert_select 'i.fa-check-double'
@@ -456,8 +424,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, role: :teacher)
     get home_path
 
-    # A native <dialog> does not close on an outside click by itself, so every
-    # dialog has to opt in explicitly or Escape becomes the only way out.
     assert_select 'dialog.gh-dialog--anchored[data-action~=?]', 'click->dialog#closeOnBackdrop'
     assert_select 'dialog.gh-dialog:not(.gh-dialog--anchored)[data-action~=?]',
                   'click->dialog#closeOnBackdrop'
@@ -468,13 +434,10 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get home_path
 
-    # Notifications are a popover in the mockup — corner-pinned and unscrimmed
-    # on desktop — so they must not share the centred modal used by forms.
     assert_select '.gh-topbar a[href=?][data-turbo-frame=panel]', notifications_path
     assert_select '.gh-mobile-tabbar a[href=?][data-turbo-frame=panel]', notifications_path
     assert_select '.gh-app-shell dialog.gh-dialog--anchored turbo-frame#panel'
 
-    # Genuine modals keep the centred dialog.
     assert_select 'a[href=?][data-turbo-frame=modal]', new_story_group_path
     assert_select 'dialog.gh-dialog:not(.gh-dialog--anchored) turbo-frame#modal'
 
@@ -488,8 +451,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     sign_in FactoryBot.create(:user, role: :teacher)
     get home_path
 
-    # Without .gh-icon-button-badge-slot this wrapper is a second in-flow grid item in
-    # .gh-icon-button and shoves the bell glyph out of centre.
     assert_select '.gh-topbar .gh-icon-button #gh-notification-dot.gh-icon-button-badge-slot'
   end
 
@@ -502,8 +463,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_match(/action="update" target="gh-notification-dot"/, response.body)
-    # The panel is open while this runs; without this stream its rows would keep
-    # the "Nowe" heading and their unread dots.
     assert_match(/action="update" target="panel"/, response.body)
     assert_no_match(/gh-notification-unread-dot/, response.body)
     assert_no_match(/Oznacz wszystkie/, response.body)
@@ -513,10 +472,6 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
   end
 
   test 'the badge partial renders outside a controller, as the broadcast needs' do
-    # Notification's after_create_commit renders this partial through
-    # ApplicationController.render, where no view context and no gh_* helpers
-    # are in scope. Rendering it the same way is what catches a partial that
-    # only works inside a request.
     html = ApplicationController.render(partial: 'layouts/notification_dot',
                                         locals:  { count: 3 },)
 
