@@ -202,6 +202,12 @@
     outline-offset: 3px;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .gh-toggle-switch::after {
+      transition: none;
+    }
+  }
+
   .gh-invite-code-display {
     --gh-c: 10px;
     display: inline-block;

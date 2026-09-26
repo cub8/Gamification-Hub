@@ -7,8 +7,6 @@
 @source "../../javascript";
 @source "../../helpers";
 
-@custom-variant dark (&:where([data-gh-theme="dark"], [data-gh-theme="dark"] *));
-
 @import "./font-awesome.css";
 @import "./fonts.css";
 @import "./tokens.css";
