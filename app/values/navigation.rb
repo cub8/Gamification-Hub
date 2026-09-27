@@ -3,10 +3,6 @@
 class Navigation
   include Rails.application.routes.url_helpers
 
-  # `short`  — the tab bar shortens two labels (10-core.js:194-195).
-  # `match`  — path prefix for "still current on a child page", the mockup's
-  #            `sec:`. nil means exact match only.
-  # `frame`  — turbo frame this destination opens into, if any.
   Item = Data.define(:label, :path, :icon, :short, :match, :frame) do
     def initialize(label:, path:, icon:, short: nil, match: nil, frame: nil)
       super
@@ -14,9 +10,6 @@ class Navigation
 
     def tab_label = short || label
 
-    # Exact for an item with no `match`, prefix otherwise. Przegląd is the
-    # reason the distinction exists: story_group_path is a prefix of every
-    # other group path, so a prefix rule there would light it everywhere.
     def current?(current_path)
       return current_path == path if match.nil?
 
@@ -24,8 +17,6 @@ class Navigation
     end
   end
 
-  # Which sections get a tab. "Więcej" is not here — the tab bar renders it
-  # itself (10-core.js:194-195).
   TEACHER_TABS = ['Przegląd', 'Studenci', 'Arkusze ocen'].freeze
   STUDENT_TABS = ['Przegląd', 'Sklep', 'Moje przedmioty', 'Ranking'].freeze
 
@@ -40,9 +31,6 @@ class Navigation
     ]
   end
 
-  # The tab bar is not the sidebar truncated: the mockup gives it its own
-  # shorter set, with "Więcej" always last and notifications promoted to a
-  # tab for teachers (10-core.js:190).
   def tab_items
     items = primary_items
     if @user.teacher?
@@ -53,7 +41,6 @@ class Navigation
     items
   end
 
-  # NAV_T / NAV_S (10-core.js:135-147), against the routes that exist today.
   def group_items(chrome)
     items = chrome.student? ? student_items(chrome) : teacher_items(chrome)
 
@@ -85,9 +72,6 @@ class Navigation
     ]
   end
 
-  # The mockup's eight (10-core.js:141-146). "Ustawienia w grupie" is last,
-  # after Ranking — the group's own settings sit at the bottom of the group's
-  # own list, the same place "Ustawienia grupy" sits in the teacher's.
   def student_items(chrome)
     group = chrome.story_group
     membership = chrome.student_membership
@@ -107,8 +91,6 @@ class Navigation
     ]
   end
 
-  # Rangi and Odznaki are the same screens for everyone — ranks#index and
-  # badges#index authorize with `show?`, so a member sees the group's list.
   def shared_items(group)
     [
       section('Rangi',   story_group_ranks_path(group),  'fa-angles-up'),
@@ -116,22 +98,16 @@ class Navigation
     ]
   end
 
-  # Placed by hand in each list rather than shared: the mockup puts Ranking
-  # straight after Odznaki for a teacher but after Historia waluty for a
-  # student (10-core.js:138-146). Nil when the policy hides the screen.
   def ranking_item(chrome)
     return unless chrome.ranking?
 
     section('Ranking', story_group_ranking_path(chrome.story_group), 'fa-ranking-star')
   end
 
-  # No `match`: every other group path starts with this one.
   def overview(group)
     Item.new(label: 'Przegląd', path: story_group_path(group), icon: 'fa-table-columns')
   end
 
-  # `match` defaults to the item's own path, so a detail or form page under it
-  # keeps the section lit — /invites/5/confirm_destroy lights "Zaproszenia".
   def section(label, path, icon, short: nil)
     Item.new(label: label, path: path, icon: icon, short: short, match: path)
   end

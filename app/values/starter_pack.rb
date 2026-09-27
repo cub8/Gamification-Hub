@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 class StarterPack
-  # Sum of CATEGORIES' rewards. Not written as a literal: the two must agree,
-  # and a category added later should move it.
   CLASS_MAX = 11
 
   KEYS = %w[neutral fantasy scifi].freeze
 
-  # The wizard's stepper offers this range; 12 is one university semester.
   CLASSES_RANGE   = (4..30)
   DEFAULT_CLASSES = 12
 
@@ -23,8 +20,6 @@ class StarterPack
     'scifi'   => 'Statki, załogi i kosmiczne misje.',
   }.freeze
 
-  # What the one template is called. ActivityGroup.next_name_for_template
-  # stamps sheets "Zajęcia 1", "Zajęcia 2", … off the back of it later.
   TEMPLATE_NAME = 'Zajęcia'
 
   Rank     = Data.define(:index, :name, :threshold, :discount, :icon_glyph)
@@ -34,10 +29,6 @@ class StarterPack
                          :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
   Category = Data.define(:index, :didactic_description, :story_description, :reward)
 
-  # ---- the catalogue -------------------------------------------------------
-
-  # didactic_description, reward. These tables have no `name` column — the
-  # label IS the didactic description, exactly as db/seeds writes them.
   CATEGORIES = [
     ['Obecność',                   1],
     ['Punktualność',               1],
@@ -49,12 +40,9 @@ class StarterPack
     ['Ciekawa uwaga',              1],
   ].freeze
 
-  # Fraction of M, then the shop discount the rung grants.
   RANK_FRACTIONS = [0.0, 0.15, 0.30, 0.50, 0.75].freeze
   RANK_DISCOUNTS = [0, 3, 5, 10, 15].freeze
 
-  # How a badge is earned. The model requires this, so it is the didactic
-  # description; the pack's own wording only ever decorates it.
   BADGE_RULES = [
     'Pierwsza wejściówka bez błędów',
     'Obecność na wszystkich zajęciach w miesiącu',
@@ -119,8 +107,6 @@ class StarterPack
       unlock:          nil,
       discount_rank:   4,
       discount_badges: [3, 5, 2],
-      # It gives a life back, so a student on zero lives has to be able to
-      # reach it — the exception DECISIONS.md:34 names.
       at_zero_lives:   true,
       didactic:        'Przywraca jedno utracone życie.',
     },
@@ -134,8 +120,6 @@ class StarterPack
       didactic:        'Podnosi ocenę końcową o pół stopnia.',
     },
   ].freeze
-
-  # ---- per-pack flavour ----------------------------------------------------
 
   RANK_NAMES = {
     'neutral' => %w[Nowicjusz Uczeń Adept Ekspert Mistrz],
@@ -170,16 +154,12 @@ class StarterPack
                   'Głos floty',],
   }.freeze
 
-  # `rabbit` is deliberately unused: it is the retired stock-photo mascot and
-  # the wizard should never hand a new group its artwork.
   BADGE_GLYPHS = {
     'neutral' => %w[starPlus shield heartPlus bolt starTrail crew],
     'fantasy' => %w[starPlus shield heartPlus bolt starTrail crown],
     'scifi'   => %w[starPlus rocket wrench compass starTrail crew],
   }.freeze
 
-  # Optional everywhere. Neutral has none on purpose — it is the pack for a
-  # teacher who does not want a story at all.
   BADGE_STORIES = {
     'neutral' => [nil] * 6,
     'fantasy' => ['Stal bez jednej rysy — pierwszy pojedynek wygrany bez draśnięcia.',
@@ -241,9 +221,6 @@ class StarterPack
 
     def description_for(key) = DESCRIPTIONS.fetch(key.to_s, '')
 
-    # Falls back rather than raising: `pack` and `classes` arrive from the
-    # wizard's own params, and a hand-edited query string should render the
-    # default set instead of a 500.
     def for(pack:, classes:)
       new(pack:    include?(pack) ? pack.to_s : KEYS.first,
           classes: classes.to_i.clamp(CLASSES_RANGE.min, CLASSES_RANGE.max),)
@@ -260,7 +237,6 @@ class StarterPack
   def label       = self.class.label_for(pack)
   def description = self.class.description_for(pack)
 
-  # The most one student can earn over the whole course.
   def total_earnable = classes * CLASS_MAX
 
   def ranks
@@ -268,11 +244,6 @@ class StarterPack
       names  = RANK_NAMES[pack]
       glyphs = RANK_GLYPHS[pack]
 
-      # Strictly increasing, always. The table has a unique index on
-      # [story_group_id, required_currency_value], and at a low class count
-      # two rungs can round onto the same multiple of 5. Folded rather than
-      # mapped so each bump is measured against the CORRECTED predecessor —
-      # otherwise three rungs colliding would still leave two equal.
       thresholds = RANK_FRACTIONS.each_with_object([]) do |fraction, kept|
         value = round_to_five(fraction * total_earnable)
         kept << (kept.empty? ? value : [value, kept.last + 1].max)
@@ -330,9 +301,6 @@ class StarterPack
 
   private
 
-  # Multiples of X are class-sized and stay exact; fractions of M are
-  # course-sized and would otherwise be wildly precise. Never below 1, which
-  # is Item's own floor.
   def price_for(spec)
     raw = spec[:x] ? spec[:x] * CLASS_MAX : spec[:m] * total_earnable
 

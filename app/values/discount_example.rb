@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class DiscountExample
-  # Two is enough to show that badge discounts stack, and short enough to read.
   MAX_BADGES = 2
 
   def initialize(card, random: Random.new)
@@ -11,8 +10,6 @@ class DiscountExample
 
   attr_reader :card, :random
 
-  # The draw both sides walk. Every rank and every badge in the group, so the
-  # browser can re-pick under conditions the server never saw.
   def rank_order = @rank_order ||= card.ranks.map(&:name).shuffle(random: random)
 
   def badge_order = @badge_order ||= card.badges.map(&:name).shuffle(random: random)
@@ -21,13 +18,10 @@ class DiscountExample
 
   def badges = pick.last
 
-  # Through Discount, so an example can never quote a saving the till refuses.
   def percent
     @percent ||= Discount.new(rank&.discount.to_i + badges.sum { |badge| badge.discount.to_i }).value
   end
 
-  # No rank worth naming and no badge worth naming: there is no example to
-  # write, and the maximum line beneath says everything there is to say.
   def any? = percent.positive?
 
   def none? = !any?
@@ -62,9 +56,6 @@ class DiscountExample
     records.sort_by { |badge| badge.name.to_s }
   end
 
-  # With no floor set, holding one of the badges the item lists is the ONLY
-  # way to qualify, so the example student has to hold one. A floor makes the
-  # rank enough and leaves the badges free.
   def forced_badge_name
     return if card.item.min_rank_for_discount.present?
 
