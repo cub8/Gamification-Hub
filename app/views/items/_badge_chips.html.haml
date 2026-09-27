@@ -3,9 +3,6 @@
 %fieldset.gh-chip-group{ data: { controller: 'chip-picker' } }
   %legend.sr-only= legend
 
-  -# Clearing every chip has to post something, or `unlock_badge_ids` would keep
-  -# its old value on update. This is what collection_check_boxes emits, and the
-  -# reason each check_box below passes nil as its unchecked value.
   = hidden_field_tag "#{f.object_name}[#{field}][]", '', id: nil
 
   - badges.each do |badge|
@@ -13,10 +10,6 @@
                             item_form_target:   form_target,
                             gh_name:            badge.name,
                             gh_discount:        badge.discount.to_i } }
-      -# `change->` is written out rather than left to Stimulus's default. The
-      -# default event for an <input> is `input`, and the adder select below
-      -# toggles a box in script — where `change` is the event that carries the
-      -# meaning "this box now has a different value".
       = f.check_box field, { multiple:  true,
                              class:     'sr-only',
                              data:      { chip_picker_target: 'box',
@@ -25,8 +18,6 @@
       %span= badge.name
       - if show_discount
         %small= "−#{badge.discount.to_i}%"
-      -# Decorative: the checkbox is what removes the chip, and clicking
-      -# anywhere on the label toggles it.
       %i.fa-solid.fa-xmark{ 'aria-hidden': 'true' }
 
   - if badges.any?

@@ -1,7 +1,5 @@
 - content_for :title, 'Start'
 
--# Dispatcher, mirroring story_groups/show.html.haml. Role comes from the
--# User enum, the same check this screen used before the conversion.
 - if @current_user.teacher?
   = render 'teacher_start'
 - else

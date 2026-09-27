@@ -13,9 +13,6 @@
   %h2#gh-add-teacher-title.gh-h2 Dodaj nauczyciela
   %p Nauczyciel dostanie dostęp do grupy od razu po dodaniu.
 
-  -# One column under the heading, so the hint, the count and the results all
-  -# start where the search field does. .gh-explainer-note is inset 14px by default,
-  -# which left the hint visibly narrower than the field it explains.
   .gh-teacher-picker
     - if pool.addable?
       %label.gh-search-input.gh-search--full-width
@@ -25,8 +22,6 @@
                 data: { teacher_picker_target: 'input',
                         action: 'input->teacher-picker#filter keydown.enter->teacher-picker#noSubmit', } }
 
-      -# One live region around all four states, so a screen reader hears the
-      -# result of typing and not four separate elements appearing.
       %div{ 'aria-live': 'polite' }
         %p.gh-explainer-note{ data: { teacher_picker_target: 'hint' } }= teacher_pool_hint(pool.size)
 
@@ -43,9 +38,6 @@
                 %b{ data: { teacher_picker_target: 'name' } }= candidate.name
                 %small= teacher_candidate_subtitle(candidate, cross_university: pool.cross_university?)
 
-              -# Already in the group — the owner included. Shown rather than
-              -# filtered out: somebody searching for a name wants to be told
-              -# they are already here, not handed an empty result.
               - if candidate.in_group?
                 %span.gh-badge-picker-status Już w grupie
               - else
@@ -59,8 +51,6 @@
         %p.gh-small{ hidden: true, data: { teacher_picker_target: 'overflow' } }
           Nie widzisz tej osoby? Wpisz więcej liter albo e-mail.
 
-        -# The controller writes the quoted query AND its full stop into the span,
-        -# so the sentence closes without a stray gap before the period.
         %p.gh-explainer-note{ hidden: true, data: { teacher_picker_target: 'empty' } }
           Brak wyników dla
           %span{ data: { teacher_picker_target: 'emptyQuery' } }

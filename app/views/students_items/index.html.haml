@@ -1,8 +1,3 @@
--# Moje przedmioty. Mockup: #/s/my-items, js-expanded/30-sp.js:19-20.
--#
--# The same rows a teacher reads on the Przedmioty tab of the student sheet, so
--# `@own_items` decides the wording — this screen is written for the student and
--# falls back to the teacher's phrasing when they follow the URL here.
 - title = @own_items ? 'Moje przedmioty' : "Przedmioty — #{@student.display_name}"
 - content_for :title, title
 - count = @purchases.size
@@ -29,8 +24,6 @@
       = render 'students_items/card', purchase: purchase, cost: !@own_items,
         foot: (@own_items ? purchase_line(purchase) : purchase_teacher_line(purchase))
 
-    -# Closes the grid rather than sitting under it, exactly as in the mockup:
-    -# the inventory's job is to send you back for more.
     - if @shop
       .gh-panel.gh-empty-slot-panel
         %p= inventory_shop_line(@shop.affordable)

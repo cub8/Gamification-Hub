@@ -1,7 +1,3 @@
--# Historia waluty, the student's own. Mockup: #/s/history, js-expanded/30-sp.js:29-33.
--#
--# Reached from the balance chip in the header — the number there is the answer
--# to "how much can I spend", and this screen is the answer to "where did it go".
 - content_for :title, 'Historia waluty'
 - path_for = ->(kind) { story_group_student_currency_transactions_path(@story_group, @student, kind: kind) }
 
@@ -21,9 +17,6 @@
       path_for: path_for,
       empty_message: 'Nie masz jeszcze wpisów tego typu.'
 - else
-  -# Not the filter-relative sentence: an empty ledger is not "nothing of this
-  -# type", it is a student who has not been to a class yet. The mockup has no
-  -# state for this; the tone is its own states gallery (30-sp.js:43).
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Pierwsze wpisy pojawią się po zajęciach
     %p.gh-lead

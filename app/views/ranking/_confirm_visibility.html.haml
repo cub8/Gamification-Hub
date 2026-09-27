@@ -27,8 +27,6 @@
       - else
         = link_to 'Anuluj', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
 
-      -# Focus on the primary here, unlike the other three: showing the ranking
-      -# is the benign direction and is undone by the same switch.
       %button.gh-btn{ type: 'submit', autofocus: true } Pokaż ranking
 - else
   %h2#gh-rk-title.gh-h2 Ukryć ranking przed studentami?
@@ -37,7 +35,6 @@
     ranking, a zebrana waluta i rangi nie zmieniają się.
 
   .gh-dialog-button-row
-    -# The safe button first and focused, as everywhere else.
     - if @in_modal
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
         Zostaw widoczny

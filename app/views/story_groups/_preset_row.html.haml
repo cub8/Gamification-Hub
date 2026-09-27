@@ -10,9 +10,6 @@
 
   = yield
 
-  -# The hidden companion is load-bearing: an unchecked box posts NOTHING, so
-  -# without it a removed row would look identical to an untouched one and
-  -# StarterPackBuilder would keep it.
   = hidden_field_tag "setup[#{zone}][#{index}][keep]", '0', id: nil
 
   %label.gh-preset-row-remove{ for: row_id }

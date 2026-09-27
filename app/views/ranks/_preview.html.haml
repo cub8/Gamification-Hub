@@ -26,8 +26,6 @@
 
   %section.gh-panel.gh-preview-panel
     %h3 Drabinka rang
-    -# Ascending in the DOM; .gh-rank-form-ladder reverses it visually, so the highest
-    -# rung reads first exactly as it does on both list screens.
     %ol.gh-rank-form-ladder{ data: { rank_form_target: 'ladder' } }
       - entries.each do |entry, draft|
         %li.gh-rank-form-rung{ class: ('gh-rank-form-rung--draft' if draft),

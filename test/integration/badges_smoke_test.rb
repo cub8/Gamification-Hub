@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# The Odznaki screens: the teacher's grid (#/t/badges, js-expanded/30-lists.js:30-33),
-# the student's deck of flip cards (#/s/badges, 30-sp.js:25-28) and the form page
-# behind both (30-br.js:44-69).
 class BadgesSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -14,8 +11,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     sign_in @owner
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -33,7 +28,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
                               discount: discount, icon_glyph: glyph,)
   end
 
-  # Alphabetical, which is the order both screens read in.
   def shelf!
     @mechanik = badge(name: 'Mechanik Załogi', glyph: 'wrench')
     @pokladzie = badge(name: 'Zawsze na pokładzie', glyph: 'rocket', discount: 0)
@@ -70,8 +64,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     css_select("#{selector} .gh-card-name").map { |node| node.text.strip }
   end
 
-  # --- the teacher grid -----------------------------------------------------
-
   test 'the teacher gets a grid of badges with the create action' do
     shelf!
 
@@ -84,8 +76,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-button-row a[href=?]', new_story_group_badge_path(@story_group), 'Nowa odznaka'
   end
 
-  # Przyznaj happens one student at a time, on the students list — that screen
-  # is still on the Bootstrap layout, so this is a plain link out of the deck.
   test 'each card offers Przyznaj and Edytuj' do
     shelf!
 
@@ -105,8 +95,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-lead', /\A3 odznaki\./
   end
 
-  # The teacher has no "not earned yet" side to look at, so these are flat
-  # cards — the flip belongs to the student's deck only.
   test 'the teacher grid does not flip' do
     shelf!
 
@@ -147,8 +135,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-empty-state .gh-h2', 'Nie ma jeszcze żadnych odznak'
   end
 
-  # --- the student deck -----------------------------------------------------
-
   test 'a student sees earned badges face up and the rest turned over' do
     shelf!
     join_as_student(badges: [@mechanik])
@@ -172,8 +158,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-lead', /\AMasz 2 z 3\./
   end
 
-  # Every card carries both faces — the rule is on the back of an unearned one,
-  # which is the only place a student can read it.
   test 'the back of an unearned badge carries the rule and the house mark' do
     shelf!
     join_as_student
@@ -185,8 +169,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-flip-card-face--back .gh-badge-rule-text', /Trzy wejściówki z rzędu/
   end
 
-  # The decision: an earned card can be turned over to re-read how it was won;
-  # an unearned one cannot, because its art is the reward.
   test 'only an earned card mounts the flip controller' do
     shelf!
     join_as_student(badges: [@mechanik])
@@ -199,7 +181,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-flip-card--down .gh-card-flip-btn', false
   end
 
-  # backface-visibility hides the far side from the eye, not from the tab order.
   test 'the turned-away face is inert and aria-hidden' do
     shelf!
     join_as_student(badges: [@mechanik])
@@ -218,8 +199,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-empty-state .gh-h2', 'W tej grupie nie ma jeszcze odznak'
   end
-
-  # --- creating and editing -------------------------------------------------
 
   test 'the new form is a page and offers the badge presets' do
     get new_story_group_badge_path(@story_group)
@@ -241,8 +220,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'form[data-controller=badge-form]', 1
   end
 
-  # The point of this screen (30-br.js:159): both faces at once, with a control
-  # that says which one you are looking at.
   test 'the preview shows both faces and a control to turn between them' do
     get new_story_group_badge_path(@story_group)
 
@@ -250,7 +227,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-preview-flip-card .gh-flip-card-face--back', 1
     assert_select '.gh-segmented-toggle-2 button[aria-pressed=true]', 'Zdobyta'
     assert_select '.gh-segmented-toggle-2 button[aria-pressed=false]', 'Jeszcze niezdobyta'
-    # The teacher turns it with the control, never by clicking the card.
     assert_select '.gh-preview-flip-card .gh-flip-card[data-controller]', false
   end
 
@@ -282,7 +258,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#gh-badge-name-error span', 'Podaj nazwę odznaki.'
   end
 
-  # The rule is the only thing on the back of a badge nobody has earned yet.
   test 'a blank rule is refused on the field' do
     assert_no_difference('Badge.count') do
       post story_group_badges_path(@story_group), params: form_params(rule: '')
@@ -339,8 +314,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'Zapisano odznakę „Mechanik Floty”.', flash[:notice]
   end
 
-  # --- deleting -------------------------------------------------------------
-
   test 'the confirm dialog spells out what happens to the students who have it' do
     shelf!
 
@@ -352,8 +325,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-warning-note', false
   end
 
-  # Not a blocker, unlike ranks: a soft delete breaks no foreign key. The button
-  # stays enabled and the dialog says what stops being buyable.
   test 'an item that unlocks on the badge is named but does not block' do
     shelf!
     FactoryBot.create(:item, story_group: @story_group, name: '0.5% oceny',
@@ -367,8 +338,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_predicate @mechanik.reload, :deleted?
   end
 
-  # An item whose DISCOUNT counts the badge keeps working — nothing about it
-  # breaks — so it is not worth a warning.
   test 'an item that only discounts on the badge raises no warning' do
     shelf!
     FactoryBot.create(:item, story_group: @story_group, name: 'Bezpieczna poprawa',
@@ -395,13 +364,11 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     get story_group_badges_path(@story_group)
     assert_equal ['Perfekcyjny Lot', 'Zawsze na pokładzie'], card_names('.gh-badge-grid--teacher')
 
-    # It is gone from the award picker too.
     get new_story_group_student_badge_path(@story_group, membership)
     assert_select 'option[value=?]', @mechanik.id.to_s, false
 
     sign_in_as student
     get story_group_badges_path(@story_group)
-    # Two live badges plus the one they earned, which is now history.
     assert_select '.gh-card-grid--compact .gh-flip-card', 3
     assert_select '.gh-tag--removed', 'Usunięta z listy'
     assert_select '.gh-lead', /\AMasz 0 z 2\./
@@ -411,29 +378,20 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     shelf!
     @mechanik.soft_delete!
 
-    # ApplicationController turns the RecordNotFound into the app's own
-    # "Nie znaleziono." rather than a bare 404.
     get edit_story_group_badge_path(@story_group, @mechanik)
 
     assert_redirected_to root_path
   end
-
-  # --- art ------------------------------------------------------------------
 
   test 'a preset is inlined so it can take the card colour' do
     shelf!
 
     get story_group_badges_path(@story_group)
 
-    # Inline SVG, not <img>: .gh-card-art-glyph strokes in currentColor, which is what
-    # makes the same shape teal here and gold on a rank.
     assert_select '.gh-badge-grid--teacher .gh-card-art svg.gh-card-art-glyph', 3
     assert_select '.gh-badge-grid--teacher .gh-card-art img', false
   end
 
-  # Neither a preset nor an upload. Art is required of new badges now, so this
-  # can only be a row saved before that rule existed — which still has to
-  # render rather than blow up the list.
   test 'a badge with no art at all falls back to an icon' do
     badge(name: 'Bez grafiki').update_column(:icon_glyph, nil)
 
@@ -456,8 +414,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-art-preset-tile--custom input[checked=checked]', 1
   end
 
-  # Without JavaScript nothing would ever select the upload: the picker's own
-  # tile is hidden until there is something attached.
   test 'uploading a file wins over whatever preset was selected' do
     shelf!
 
@@ -469,8 +425,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_nil @mechanik.reload.icon_glyph
     assert_equal :upload, @mechanik.art
   end
-
-  # --- presentation ---------------------------------------------------------
 
   test 'the confirm dialog carries one modal frame, and none as a page' do
     shelf!
@@ -494,7 +448,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#flash-messages', false
   end
 
-  # The mockup has no badge detail: the card IS the detail and editing is a page.
   test 'there is no badge detail screen' do
     shelf!
 
@@ -504,8 +457,6 @@ class BadgesSmokeTest < ActionDispatch::IntegrationTest
       )
     end
   end
-
-  # --- authorization --------------------------------------------------------
 
   test 'a student cannot open the form or write' do
     shelf!

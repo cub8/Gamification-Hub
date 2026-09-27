@@ -31,8 +31,6 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    # A page now, not the modal frame the old form posted from, so an ordinary
-    # redirect — and it lands on the wizard's success screen.
     assert_redirected_to created_story_group_url(StoryGroup.last)
   end
 
@@ -46,8 +44,6 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # An ordinary redirect, not a turbo-stream one: "Ustawienia grupy" is a page
-  # now, so there is no frame to escape, and it lands back on itself.
   test 'should update story_group' do
     patch story_group_url(@story_group),
           params: {
@@ -65,7 +61,6 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # The typed name is part of the request now — see StoryGroupsController#destroy.
   test 'should destroy story_group' do
     assert_difference('StoryGroup.count', -1) do
       delete story_group_url(@story_group), params: { confirm: @story_group.name }
@@ -74,11 +69,6 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to story_groups_url
   end
 
-  # The delete is raised from a dialog, so it posts inside the `modal` frame.
-  # A plain redirect there is followed INSIDE the frame, and the group list has
-  # no frame by that name — the dialog emptied and the page never moved, so the
-  # group only looked deleted after a reload. The page path above never caught
-  # it because it has no frame at all.
   test 'destroying from the dialog breaks out of the frame' do
     assert_difference('StoryGroup.count', -1) do
       delete story_group_url(@story_group),

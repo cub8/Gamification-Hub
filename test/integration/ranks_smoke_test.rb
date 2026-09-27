@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# The Rangi screens: the teacher's editable ladder (#/t/ranks,
-# js-expanded/30-lists.js:25-29), the student's progress through it (#/s/ranks,
-# 30-sp.js:21-24) and the form page behind both (30-br.js).
 class RanksSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -14,8 +11,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     sign_in @owner
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -27,7 +22,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
                              icon_glyph: glyph,)
   end
 
-  # Rekrut 0, Królik 40, Pilot 80 — the seed ladder, shortened.
   def ladder!
     @rekrut = rank(name: 'Rekrut', min: 0)
     @krolik = rank(name: 'Kosmiczny Królik', min: 40, discount: 3, glyph: 'chev2')
@@ -63,8 +57,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     css_select('.gh-rank-ladder-list .gh-rank-row').map { |row| row.css('b').first.text.strip }
   end
 
-  # --- the teacher ladder ---------------------------------------------------
-
   test 'the teacher gets the ladder highest first, with the create action' do
     ladder!
 
@@ -90,7 +82,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranks_path(@story_group)
 
     gaps = css_select('.gh-rank-ladder-list .gh-rank-gap').map { |gap| gap.text.strip }
-    # Highest first, so the gaps read 80-40 then 40-0.
     assert_equal ['↑ 40 zebranych do awansu', '↑ 40 zebranych do awansu'], gaps
   end
 
@@ -103,8 +94,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-rank-row small', 'Od 40 zebranych, −3% w sklepie'
   end
 
-  # The mockup calls its lowest rung "Ranga startowa" by array index
-  # (30-lists.js:28). A group may define no rank at 0 at all.
   test 'a ladder whose lowest rung is not at zero has no starting rank' do
     rank(name: 'Adept', min: 30)
 
@@ -144,8 +133,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-empty-state .gh-h2', 'Nie ma jeszcze żadnych rang'
   end
 
-  # --- the student ladder ---------------------------------------------------
-
   test 'a student sees their own rank marked and the rest as done or locked' do
     ladder!
     join_as_student(total: 50)
@@ -170,8 +157,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-student-rank-row--current .gh-rank-status', 'Najwyższa ranga'
   end
 
-  # The mockup cannot render this: rankIdx() falls back to index 0, so its
-  # student always holds something.
   test 'a student below every threshold holds no rank and aims at the lowest' do
     rank(name: 'Adept', min: 30)
     rank(name: 'Mistrz', min: 90)
@@ -193,8 +178,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-empty-state .gh-h2', 'W tej grupie nie ma jeszcze rang'
   end
 
-  # --- creating and editing -------------------------------------------------
-
   test 'the new form is a page, starts both numbers at zero and offers presets' do
     get new_story_group_rank_path(@story_group)
 
@@ -205,10 +188,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'input[name=?][value=?]', 'rank[required_currency_value]', '0'
     assert_select 'input[name=?][value=?]', 'rank[discount]', '0'
     assert_select '.gh-art-preset-grid .gh-art-preset-tile--rank input[type=radio]', Glyphs::RANK.size
-    # The "Twoja grafika" tile is always in the markup so JavaScript can reveal
-    # and select it the moment a file is chosen, but there is nothing to show
-    # yet — and no src at all, since an empty one would make the browser
-    # re-request this page as an image.
     assert_select '.gh-art-preset-tile--custom[hidden]', 1
     assert_select '.gh-art-preset-tile--custom img[src]', false
   end
@@ -222,8 +201,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-image-cropper[hidden] .gh-image-cropper-box', 1
   end
 
-  # The crop is cut to the shape of the hole it goes into — .gh-card-art's
-  # `aspect-ratio: 16 / 10` (card.css). A square crop could never fill the card.
   test 'the crop is locked to the shape of the card' do
     get new_story_group_rank_path(@story_group)
 
@@ -233,8 +210,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_equal '1024', field['data-image-crop-width-value']
   end
 
-  # Dragging the crop box has to move the preview card and the drabinka
-  # thumbnail with it, which the form hears as an event off the image field.
   test 'the form listens for the crop so the preview can follow it' do
     get new_story_group_rank_path(@story_group)
 
@@ -298,8 +273,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_content
   end
 
-  # The bug in the mockup's own preview (30-br.js:32): it splices the draft in
-  # at a hardcoded index, so editing any other rank shows it twice.
   test 'editing a threshold moves the rung instead of duplicating it' do
     ladder!
 
@@ -319,14 +292,11 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_rank_path(@story_group, @krolik)
 
     assert_response :success
-    # Three rungs, never four: the draft IS the edited rank.
     assert_select '.gh-rank-form-ladder .gh-rank-form-rung', 3
     assert_select '.gh-rank-form-ladder .gh-rank-form-rung--draft', 1
     assert_select '.gh-rank-form-ladder .gh-rank-form-rung--draft [data-rank-form-target=draftName]', 'Kosmiczny Królik'
     assert_select ".gh-rank-form-ladder .gh-rank-form-rung[data-rank-id=#{@krolik.id}]", false
   end
-
-  # --- deleting -------------------------------------------------------------
 
   test 'the confirm dialog spells out the consequence' do
     ladder!
@@ -360,8 +330,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-warning-note span', /0\.5% oceny i Bezpieczna poprawa/
     assert_select '.gh-dialog-button-row button[disabled]', 'Usuń rangę'
 
-    # Refused server-side too: the disabled button is a courtesy, the foreign
-    # keys on items are the reason.
     assert_no_difference('Rank.count') do
       delete story_group_rank_path(@story_group, @pilot), headers: MODAL
     end
@@ -386,15 +354,11 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-warning-note span', /przypisz im inną rangę/
   end
 
-  # --- art ------------------------------------------------------------------
-
   test 'a preset is inlined so it can take the card colour' do
     ladder!
 
     get story_group_ranks_path(@story_group)
 
-    # Inline SVG, not <img>: .gh-card-art-glyph strokes in currentColor, which is what
-    # makes the same shape gold here and teal on a badge.
     assert_select '.gh-rank-row .gh-mini-thumb svg.gh-card-art-glyph', 3
     assert_select '.gh-rank-row .gh-mini-thumb img', false
   end
@@ -412,8 +376,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-art-preset-tile--custom input[checked=checked]', 1
   end
 
-  # Without JavaScript nothing would ever select the upload: the picker's own
-  # tile is hidden until there is something attached.
   test 'uploading a file wins over whatever preset was selected' do
     ladder!
 
@@ -454,8 +416,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'crown', @pilot.art
   end
 
-  # --- presentation ---------------------------------------------------------
-
   test 'the confirm dialog carries one modal frame, and none as a page' do
     ladder!
     path = confirm_destroy_story_group_rank_path(@story_group, @pilot)
@@ -478,7 +438,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#flash-messages', false
   end
 
-  # The mockup has no rank detail: the row IS the detail and editing is a page.
   test 'there is no rank detail screen' do
     ladder!
 
@@ -488,8 +447,6 @@ class RanksSmokeTest < ActionDispatch::IntegrationTest
       )
     end
   end
-
-  # --- authorization --------------------------------------------------------
 
   test 'a student cannot open the form or write' do
     ladder!

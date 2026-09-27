@@ -40,8 +40,6 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # Submitted from inside the confirmation dialog, so it breaks out of the
-  # frame the same way create does.
   test 'should destroy story_group_teacher' do
     assert_difference('StoryGroupTeacher.count', -1) do
       delete story_group_teacher_url(@story_group, @story_group_teacher)
@@ -97,8 +95,6 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  # The owner has no membership row, so there is nothing to destroy — and no
-  # point offering them in the dialog either.
   test 'the owner is listed but never removable, and is not in the pool' do
     get story_group_teachers_url(@story_group)
     assert_select 'a[href=?]',

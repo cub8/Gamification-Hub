@@ -2,9 +2,6 @@
 
 require 'test_helper'
 
-# The invite codes screen: the list that groups by whether a code still works,
-# the dialogs hanging off it (mockup #/t/invites, 30-isg.js:17-45), and the
-# quick multi-invite dialog reachable from students#index.
 class InvitesSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -14,8 +11,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     sign_in @owner
   end
 
-  # An invite bypassing validation, so a test can set up a code that is already
-  # dead — which the form is not allowed to create.
   def invite(uses: 0, max_uses: nil, expires_at: nil)
     record = FactoryBot.build(:story_group_invite, story_group: @story_group,
                                                    max_uses: max_uses, expires_at: nil,)
@@ -24,8 +19,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     record.reload
   end
 
-  # sign_in is a no-op while a session is live — the magic-link verify refuses
-  # to run for someone already logged in — so switching user needs the sign_out.
   def sign_in_as(user)
     sign_out
     sign_in user
@@ -43,13 +36,9 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     }
   end
 
-  # assert_select cannot select "the row whose code cell says X" — :has with a
-  # nested matcher is beyond its selector support — so pick the row in Ruby.
   def row_for(code)
     css_select('.gh-invite-row').find { |row| row.css('.gh-invite-code').text.strip == code }
   end
-
-  # --- the list -------------------------------------------------------------
 
   test 'active codes are listed and dead ones are folded away with a count' do
     live = invite
@@ -120,8 +109,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-explainer-note', 'Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć.'
   end
 
-  # --- creating -------------------------------------------------------------
-
   test 'both switches off stores no limits at all' do
     assert_difference('StoryGroupInvite.count') do
       post story_group_invites_path(@story_group), params: form_params, headers: MODAL
@@ -165,8 +152,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#gh-expiry-error span', 'Ta data już minęła. Wybierz późniejszą.'
   end
 
-  # Regression: the form's own expiry check used to run before the record's
-  # validations and short-circuit the save, so a limit error never surfaced.
   test 'a bad limit and a bad date are both reported at once' do
     post story_group_invites_path(@story_group),
          params:  form_params(limit: true, max_uses: 0, expiry: true,
@@ -213,12 +198,9 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     get story_group_invites_path(@story_group)
     assert_select '.gh-invite-row--new .gh-invite-code', created.code
 
-    # One render only — a highlight that stuck around would stop meaning "new".
     get story_group_invites_path(@story_group)
     assert_select '.gh-invite-row--new', false
   end
-
-  # --- editing --------------------------------------------------------------
 
   test 'editing keeps the code and says so' do
     existing = invite(uses: 3, max_uses: 30)
@@ -262,8 +244,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_nil existing.expires_at
   end
 
-  # --- showing --------------------------------------------------------------
-
   test 'the code dialog is addressed to the student, with the QR and the stats' do
     existing = invite(uses: 3, max_uses: 30, expires_at: Time.zone.parse('2026-09-30 23:59'))
 
@@ -283,8 +263,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select "[data-controller='clipboard'][data-clipboard-text-value=?]", existing.code
   end
-
-  # --- the quick dialog -------------------------------------------------------
 
   test 'the quick dialog is addressed to the student, like the show dialog' do
     existing = invite
@@ -347,8 +325,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  # --- deleting -------------------------------------------------------------
-
   test 'the delete dialog says who stays in the group' do
     existing = invite(uses: 8)
 
@@ -375,8 +351,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_equal "Usunięto zaproszenie #{existing.code}.", flash[:notice]
   end
 
-  # --- presentation ---------------------------------------------------------
-
   test 'every dialog carries exactly one modal frame, and none as a page' do
     existing = invite
 
@@ -390,7 +364,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
       get path, headers: MODAL
       assert_select 'turbo-frame#modal', 1, "#{path} inside the dialog"
 
-      # As a page the only modal frame is the layout's own, inside <dialog>.
       get path
       assert_select 'main#app-content turbo-frame#modal', false, "#{path} as a page"
       assert_select 'header.gh-topbar', 1, "#{path} keeps the shell as a page"
@@ -410,13 +383,10 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
       get path
       assert_select 'main .gh-panel.gh-dialog-page-panel', 1, "#{path} as a page sits on a panel"
 
-      # In the dialog the <dialog> itself is the surface.
       get path, headers: MODAL
       assert_select '.gh-dialog-page-panel', false, "#{path} in the dialog needs no panel"
     end
   end
-
-  # --- confirmations --------------------------------------------------------
 
   test 'creating says so in a toast, not in a banner' do
     post story_group_invites_path(@story_group), params: form_params, headers: MODAL
@@ -437,7 +407,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     button = row_for(existing.code).css("[data-controller='clipboard']").first
     assert_equal existing.code, button['data-clipboard-text-value']
     assert_equal "Skopiowano kod #{existing.code}.", button['data-clipboard-message-value']
-    # Icon-only in a row, so the tick is its only local acknowledgement.
     assert_equal 1, button.css("[data-clipboard-target='icon']").size
   end
 
@@ -447,8 +416,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
     assert_select '#gh-toasts[popover=manual][aria-live=polite]', 1
     assert_select '.gh-app-shell #gh-toasts', false
   end
-
-  # --- authorization --------------------------------------------------------
 
   test 'a supporting teacher manages invites too' do
     supporter = FactoryBot.create(:user, role: :teacher)
@@ -467,8 +434,6 @@ class InvitesSmokeTest < ActionDispatch::IntegrationTest
 
     get story_group_invites_path(@story_group)
 
-    # ApplicationController rescues Pundit and bounces to the root rather than
-    # confirming the group exists.
     assert_redirected_to root_path
   end
 end

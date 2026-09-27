@@ -23,8 +23,6 @@ class StudentListTest < ActiveSupport::TestCase
 
   def list = StudentList.new(story_group: @story_group)
 
-  # The real name, because that is what the list prints and sorts by — the
-  # nickname only reaches the sub-line.
   def full_names = list.rows.map { |row| row.student.full_name }
 
   def given_names = full_names.map { |name| name.split.first }

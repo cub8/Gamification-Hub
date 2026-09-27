@@ -23,8 +23,6 @@
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:name)
 
-      -# "Opowieść" in the UI, `description` in the schema — the two are
-      -# deliberately different (CLAUDE.md), so do not "fix" either to match.
       .gh-form-field
         = f.label :description, 'Opowieść'
         .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:description)) }
@@ -58,13 +56,8 @@
           %p#gh-group-currency-error.gh-field-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:currency_name)
-        -# The mockup asks for three forms ("Złota Marchewka / Złote Marchewki /
-        -# Złotych Marchewek") so amounts decline. One name for now, so it is
-        -# written in the form every count reads with: "12 Marchewek".
         %span.gh-field-hint Podaj ją w formie, która pasuje do liczby — np. „Marchewek”.
 
-      -# `aspect: 1` — this upload goes into the square coin face, not the 16:10
-      -# card frame the group graphic above is cut to.
       = render 'shared/image_field', form: f, record: story_group,
         attribute: :currency_icon, glyph_attribute: :currency_icon_glyph,
         presets: CurrencyIcons::KEYS, registry: CurrencyIcons,
@@ -76,9 +69,6 @@
                 cropped: 'Przesuń i przeskaluj zaznaczenie. Zapisujemy kwadratowy kadr, bo ikona siada na okrągłym liczmanie.' }
 
     .gh-form-section
-      -# `max: 10` and no `submit` target: the stepper is one field of six here,
-      -# so it must not disable "Zapisz zmiany" the way it does in the student
-      -# dialog, where it is the only control.
       %h2.gh-h3 Życia
       .gh-form-field{ data: { controller: 'lives-stepper', lives_stepper_max_value: 10 } }
         %p#gh-default-lives-label.gh-form-label Życia na start
@@ -111,10 +101,6 @@
     %span.gh-form-actions-spacer
     %button.gh-btn{ type: 'submit' } Zapisz zmiany
 
--# Outside the form on purpose: a <form> inside a <form> is not valid HTML, and
--# this panel's button posts nothing anyway — it opens the confirmation.
--# Owner-only, which is the ONE thing a supporting teacher may not do
--# (DECISIONS.md:40). The policy is the authority; this just hides the door.
 - if policy(story_group).destroy?
   %section.gh-panel.gh-danger-zone
     %h2.gh-h3 Usuń grupę

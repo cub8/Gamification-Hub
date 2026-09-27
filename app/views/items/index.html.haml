@@ -1,8 +1,3 @@
--# Przedmioty, the teacher's price list. Mockup: #/t/items,
--# js-expanded/30-lists.js:34-37.
--#
--# Teacher only, unlike ranks and badges: a student meets items in the shop and
--# in their inventory, both of which are still on the Bootstrap layout.
 - content_for :title, 'Przedmioty'
 
 %section.gh-panel.gh-page-header
@@ -22,8 +17,6 @@
     - @shelf.slots.each do |slot|
       = render 'grid_card', item: slot.item, card: @shelf.card_for(slot.item), bought: slot.bought
 - else
-  -# The mockup has no empty state for this screen. House rule: name the next
-  -# action rather than only reporting the absence.
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Sklep jest jeszcze pusty
     %p.gh-lead

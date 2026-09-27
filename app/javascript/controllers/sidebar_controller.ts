@@ -1,17 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * Desktop sidebar collapse.
- *
- * Writes the same `sidebar_collapsed` cookie the Bootstrap layout already uses
- * (ApplicationController#set_sidebar_state), so the preference carries across
- * both layouts while the migration is in progress, and the server renders the
- * collapsed state on first paint instead of it snapping after JS boots.
- *
- * Collapse is a user choice only — never breakpoint-driven. Below 720px the
- * sidebar is hidden entirely and the tab bar takes over.
- */
 class SidebarController extends Controller {
   static targets = ["sidebar", "label", "icon"]
   static values = {

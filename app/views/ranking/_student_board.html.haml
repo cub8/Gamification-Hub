@@ -1,8 +1,3 @@
--# Mockup: #/s/ranking, js-expanded/30-rk.js `vRS` (:40-43).
--#
--# Three states on one screen: hidden, podium, full. The strip under the head is
--# in all three, because the total and the nickname are the student's own and
--# stay theirs whatever the teacher has switched on.
 - story_group = board.story_group
 
 %section.gh-panel.gh-page-header.gh-page-header--stacked
@@ -16,8 +11,6 @@
       = "Kolejność według łącznie zebranej waluty (#{story_group.currency_name})."
 
   .gh-my-ranking-stats
-    -# No place while the board is hidden: RankingBoard#own_place returns nil,
-    -# so the number is never computed, let alone printed.
     - if board.own_place
       %div
         %b= "#{board.own_place}."

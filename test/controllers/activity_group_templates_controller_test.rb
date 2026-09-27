@@ -19,7 +19,6 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
     get new_story_group_activity_group_template_url(@story_group)
 
     assert_response :success
-    # The mockup opens with two rows, the first already filled in.
     assert_select 'ul.gh-category-list li.gh-category-row', 2
   end
 
@@ -75,8 +74,6 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Updated Lab', @template.reload.base_name
   end
 
-  # DECISIONS.md:30. The sheets hold their own copies of the columns, so
-  # editing the template cannot reach them.
   test 'editing a template leaves the sheets already stamped from it alone' do
     sheet = ActivityGroupBuilder.new(story_group: @story_group, template: @template).build(name: 'Lab 1')
 
@@ -99,7 +96,6 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 10, sheet.activity_group_categories.first.reward
   end
 
-  # Soft (DECISIONS.md:54), and it stops at the template.
   test 'should soft delete activity_group_template and keep its sheets' do
     sheet = ActivityGroupBuilder.new(story_group: @story_group, template: @template).build(name: 'Lab 1')
 

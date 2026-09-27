@@ -55,8 +55,6 @@
                 - categories.each do |category|
                   %th{ scope: 'col' }
                     .gh-grading-column-head
-                      -# The story description is the column's tooltip — the
-                      -# only place it appears on this screen.
                       %span.gh-grading-column-name{ title: category.story_description.presence }
                         = category.didactic_description
                       %span.gh-price-badge
@@ -71,9 +69,6 @@
 
             %tbody
               - students.each do |student|
-                -# The REAL name, never the nickname: grading is the teacher naming a
-                -# person, and a pseudonym in this column is the one thing that could
-                -# make them award the wrong row. The mockup prints `s.name` here too.
                 - name = student.full_name
                 - awarded_total = @sheet.awarded_total(student)
                 %tr{ data: { grading_target: 'row', gh_name: name.to_s.downcase, gh_student: student.id } }
@@ -98,8 +93,6 @@
                         %label.gh-grading-cell{ data: { grading_target: 'cell',
                                                 grading_reward: category.reward.to_i,
                                                 grading_column: category.id } }
-                          -# The label prefix travels as data so the controller
-                          -# rewrites only the state word after it.
                           = check_box_tag "completions[#{student.id}][#{category.id}]", '1', false,
                             id: nil,
                             'aria-label': "#{name}, #{category.didactic_description}: puste",
@@ -123,14 +116,9 @@
               = render 'layouts/currency_token', story_group: @story_group, size: 16
 
         .gh-action-bar-buttons
-          -# Hidden until the controller is running: without JavaScript it has
-          -# nothing to clear that unticking a box would not clear better.
           %button.gh-btn.gh-btn--secondary{ type: 'button', hidden: true,
                                       data: { grading_target: 'clear', action: 'grading#clear' } }
             Wyczyść zaznaczenia
-          -# A real submit. The controller intercepts it to raise the review
-          -# dialog first; with JavaScript off it saves directly, which is what
-          -# the Bootstrap screen did.
           %button.gh-btn{ type: 'submit',
                           data: { grading_target: 'submit', action: 'grading#review' } }
             Przejrzyj i przyznaj
@@ -153,9 +141,6 @@
       .gh-button-row
         = link_to 'Zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'
 
--# Below 720px the table is not shrunk, it is refused: eleven columns and a
--# dozen students do not survive a phone, and a cell misread here grants
--# currency nobody can take back.
 .gh-grading-mobile-fallback
   %section.gh-panel.gh-grading-mobile-panel
     .gh-grading-mobile-icon.gh-octagon-clip

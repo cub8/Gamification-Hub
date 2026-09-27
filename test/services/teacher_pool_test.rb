@@ -33,7 +33,6 @@ class TeacherPoolTest < ActiveSupport::TestCase
     assert_includes names(pool(viewer: admin).candidates), 'Adam Adamczyk'
   end
 
-  # Only then is the university worth printing beside an e-mail.
   test 'only a global admin sees a pool that can span universities' do
     assert_not pool.cross_university?
     assert pool(viewer: teacher('Global Gustaw', role: :global_admin)).cross_university?
@@ -59,8 +58,6 @@ class TeacherPoolTest < ActiveSupport::TestCase
     assert_equal ['Adam Adamczyk', 'Łukasz Lis', 'Marta Mazur', 'Zofia Zawadzka'], names(pool.candidates)
   end
 
-  # What the Stimulus controller matches against: name and e-mail in one
-  # folded string, so a query spanning the two finds nothing.
   test 'the search key folds diacritics and covers name and e-mail' do
     person = teacher('Łukasz Wiśniewski')
     person.update!(email: 'L.Wisniewski@Example.COM')

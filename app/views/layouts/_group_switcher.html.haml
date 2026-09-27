@@ -1,8 +1,3 @@
--# "Zmień grupę". Mockup: js-expanded/10-core.js:271-276.
--#
--# A third plain <dialog> beside the account menu and the "Więcej" sheet, opened
--# by menu#open from the deck and from the mobile header switcher. No new
--# JavaScript — menu_controller already does all of this.
 - groups = user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
 
 %dialog#gh-group-switcher.gh-dialog.gh-dialog--menu.gh-dialog--group-switcher{ data: { action: 'click->menu#closeOnBackdrop' },
@@ -19,7 +14,6 @@
           = link_to story_group_path(story_group), 'aria-current': ('page' if here) do
             = render 'layouts/group_thumb', story_group: story_group, size: nil
             %span= story_group.name
-            -# A label, not a checkmark: the mockup says where you are in words.
             - if here
               %span.gh-current-badge Tu jesteś
 

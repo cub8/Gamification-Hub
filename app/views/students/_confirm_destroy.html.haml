@@ -1,6 +1,3 @@
--# Removing a membership is the one hard delete on these screens: it cascades
--# through the badges, the purchases and the whole currency ledger. Nothing here
--# is recoverable, so the dialog counts what goes rather than saying "na pewno?".
 - losses = student_removal_losses(sheet)
 
 %h2#gh-kick-title.gh-h2 Usunąć studenta z grupy?
@@ -21,9 +18,6 @@
   Jeśli wróci do grupy, dostanie nowe konto uczestnika i zacznie od zera.
 
 .gh-dialog-button-row
-  -# Anuluj first and focused: the safe button is the one you land on. In the
-  -# stacked dialog closing means going back to the edit dialog underneath,
-  -# which is still open.
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       Anuluj

@@ -2,11 +2,6 @@
 
 require 'test_helper'
 
-# "Ocenianie" — the grading table (mockup #/t/grade,
-# js-expanded/30-main.js:169-193 and the review dialog at :215-222).
-#
-# The screen the handoff left for last: sticky columns, three cell states and
-# an action that cannot be undone.
 class GradingSmokeTest < ActionDispatch::IntegrationTest
   setup do
     @teacher = FactoryBot.create(:user, :teacher)
@@ -35,8 +30,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:students_activity_group_category, student: student, activity_group_category: category)
   end
 
-  # --- layout ---------------------------------------------------------------
-
   test 'the grading table renders inside the app chrome' do
     get grade_path
 
@@ -64,8 +57,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-cell-legend', /Przyznane, nie do cofnięcia/
   end
 
-  # --- the grid -------------------------------------------------------------
-
   test 'categories are columns and students are rows' do
     get grade_path
 
@@ -75,14 +66,10 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
       th.text.strip
     end,)
     assert_select 'tbody tr[data-grading-target=row]', 2
-    # The avatar initials share the cell, so read past them.
     assert_equal(['Ada Kowalska', 'Bartek Nowak'],
                  css_select('tbody th.gh-grading-td-student').map { |th| th.text.split("\n").map(&:strip).last },)
   end
 
-  # Never the nickname: the sheet is the teacher naming a person before an award
-  # they cannot take back, so a pseudonym in this column is the one thing that
-  # could put a reward on the wrong row.
   test 'the sheet and its review dialog name students by their real name' do
     @ada.update!(nickname: 'Kapitan Marchewka')
 
@@ -94,7 +81,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_no_match(/Kapitan Marchewka/, response.body)
   end
 
-  # Sorted by the real name too, or the order would not match what is printed.
   test 'a nickname does not move a row in the sheet order' do
     @bartek.update!(nickname: 'Admirał')
 
@@ -119,8 +105,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
                   @obecnosc.id.to_s, 'Zaznacz całą kolumnę'
   end
 
-  # Three states (DECISIONS.md:31). The third is not a control: it has no
-  # input, so there is nothing to post and nothing to take back.
   test 'an empty cell is a checkbox and an awarded cell is not' do
     award!(@obecnosc, @ada)
     get grade_path
@@ -152,12 +136,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'input[name=?]', "completions[#{@ada.id}][#{@pomoc.id}]", false
   end
 
-  # The CSS gives the page its shape through this exact nesting: .gh-grading-screen
-  # is a flex column, the form inside it carries the height down, and the three
-  # bands are its children. The form is easy to overlook as "just a wrapper" —
-  # it is a box in the height chain, and when it was left out of it the award
-  # bar was pushed off the bottom of the screen and grading could not be
-  # submitted at all.
   test 'the three bands are laid out the way the stylesheet expects' do
     get grade_path
 
@@ -167,14 +145,10 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
       assert_select '> section.gh-action-bar'
     end
 
-    # Order matters: the bar is the last band, under the board.
     bands = css_select('.gh-grading-form > section').map { |node| node['class'].split.last }
     assert_equal %w[gh-grading-board gh-action-bar], bands
   end
 
-  # .gh-student-actions-cell belongs to student_list.css, where it is a flex row of buttons.
-  # Reusing the mockup's own class name here turned the two numbers into
-  # stacked blocks.
   test 'the Razem column does not borrow the student list class names' do
     get grade_path
 
@@ -183,8 +157,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'td.gh-grading-td-total .gh-s-p', false
   end
 
-  # --- the award bar --------------------------------------------------------
-
   test 'the award bar starts empty and is a live region' do
     get grade_path
 
@@ -192,14 +164,10 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
       assert_select '[data-grading-target=barEmpty]',
                     'Nic nie jest zaznaczone. Kliknij pola studentów, którzy zdobyli nagrody.'
       assert_select '[data-grading-target=barActive][hidden]'
-      # Useless until the controller is running: without it, unticking a box
-      # is the clearing mechanism.
       assert_select 'button[data-grading-target=clear][hidden]', 'Wyczyść zaznaczenia'
       assert_select 'button[type=submit]', 'Przejrzyj i przyznaj'
     end
   end
-
-  # --- the review dialog ----------------------------------------------------
 
   test 'the review dialog holds the whole matrix, hidden' do
     get grade_path
@@ -230,8 +198,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'span[data-grading-target=reviewChip]', 3
   end
 
-  # --- awarding -------------------------------------------------------------
-
   test 'awarding grants the marked cells and says so' do
     assert_difference('CurrencyTransaction.count', 2) do
       patch story_group_activity_group_students_activity_group_categories_path(@story_group, @sheet),
@@ -244,7 +210,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 5, @ada.total_currency - 1
   end
 
-  # The cells the last save granted play the stamp animation once, staggered.
   test 'the cells just granted are marked for the stamp' do
     patch story_group_activity_group_students_activity_group_categories_path(@story_group, @sheet),
           params: { completions: { @ada.id.to_s => { @obecnosc.id.to_s => '1' } } }
@@ -253,8 +218,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'span.gh-grading-cell--awarded.gh-grading-cell--stamp', 1
   end
 
-  # There is no un-grant, by design: a pair missing from the submission is not
-  # a revocation.
   test 'leaving an awarded cell out of the submission does not take it back' do
     award!(@obecnosc, @ada)
 
@@ -282,8 +245,6 @@ class GradingSmokeTest < ActionDispatch::IntegrationTest
 
     assert_equal 'Nie zaznaczono żadnego pola.', flash[:notice]
   end
-
-  # --- empty states and the phone ------------------------------------------
 
   test 'a sheet with no columns names the next action' do
     @sheet.activity_group_categories.destroy_all

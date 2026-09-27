@@ -1,9 +1,5 @@
--# Nauczyciele. Mockup: #/t/teachers, js-expanded/30-rk.js `vTeachers`.
 - content_for :title, 'Nauczyciele'
 
--# Resolved once and passed down: a supporting teacher may read this list but
--# not change it, and asking the policy again per row would build one policy
--# object per teacher to answer the same question.
 - manage = policy(@story_group).manage_teachers?
 
 %section.gh-panel.gh-page-header
@@ -11,7 +7,6 @@
     %h1.gh-h1 Nauczyciele
     %p.gh-lead= teacher_list_lead(manage: manage)
 
-  -# The policy is the authority; this just hides the door.
   - if manage
     = link_to new_story_group_teacher_path(@story_group), class: 'gh-btn',
       data: { turbo_frame: 'modal' } do
@@ -19,8 +14,6 @@
       Dodaj nauczyciela
 
 %section.gh-panel.gh-teachers-panel
-  -# A header for the grid below, not a <thead>: the rows are grid rows so they
-  -# can reflow into a two-column stack on a phone, where this is hidden.
   .gh-teacher-row.gh-teacher-row--header{ 'aria-hidden': 'true' }
     %span Nauczyciel
     %span Rola

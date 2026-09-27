@@ -1,4 +1,3 @@
--# Step 1: the invite code. Mockup: js-expanded/10-core.js `dlgJoin`.
 - error = local_assigns[:lookup]&.error
 - member_of = local_assigns[:lookup]&.member_of
 
@@ -8,9 +7,6 @@
 
 = form_with url: lookup_join_index_path, method: :get,
   data: { controller: 'join-code', turbo_frame: (@in_modal ? 'modal' : nil) } do
-  -# The six boxes are display only; join_code_controller keeps this one field
-  -# in sync, so the form submits a single value and works the moment the
-  -# characters are pasted rather than typed.
   = hidden_field_tag :code, code, data: { join_code_target: 'code' }
 
   .gh-join-code-inputs{ role: 'group', 'aria-label': 'Kod zaproszenia' }
@@ -27,8 +23,6 @@
                 data: { join_code_target: 'slot', action: 'input->join-code#type keydown->join-code#key paste->join-code#paste' } }
 
   - if member_of
-    -# Not an error: already belonging to the group is a dead end for the form
-    -# but good news for the person, so the mockup offers the way in instead.
     %p.gh-field-hint
       Już należysz do tej grupy.
       = link_to 'Otwórz grupę', story_group_path(member_of), class: 'gh-link-button',

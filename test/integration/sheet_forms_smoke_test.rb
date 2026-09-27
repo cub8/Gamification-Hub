@@ -2,12 +2,6 @@
 
 require 'test_helper'
 
-# The three editor screens: "Nowy szablon arkusza", "Edytuj szablon arkusza"
-# and "Ustawienia arkusza" (mockup #/t/sheet-template-new, -edit and
-# #/t/sheet-settings, all of js-expanded/30-ag.js:42-50).
-#
-# One partial serves all three, so most of what is asserted here is the
-# difference between them.
 class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
   setup do
     @teacher = FactoryBot.create(:user, :teacher)
@@ -30,16 +24,12 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:students_activity_group_category, student: student, activity_group_category: category)
   end
 
-  # --- layout ---------------------------------------------------------------
-
   test 'the editor is a page, not a modal' do
     get new_story_group_activity_group_template_path(@story_group)
 
     assert_response :success
     assert_select '.gh-app-shell header.gh-topbar'
     assert_no_match(/data-bs-/, response.body)
-    # DECISIONS.md:26 — create and edit are pages. The Bootstrap version
-    # rendered both into a shared `modal` frame.
     assert_select '.gh-form-shell .gh-form-column'
     assert_select '.gh-form-shell .gh-preview-column'
   end
@@ -64,8 +54,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # --- the preview column ---------------------------------------------------
-
   test 'the preview shows the grading table header it is describing' do
     get edit_story_group_activity_group_template_path(@story_group, @template)
 
@@ -86,8 +74,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '[data-sheet-form-target=summaryCount]', '2 kolumny'
     assert_select '[data-sheet-form-target=summaryMax]', '5'
   end
-
-  # --- the category rows ----------------------------------------------------
 
   test 'a new template opens with two rows, the first filled in' do
     get new_story_group_activity_group_template_path(@story_group)
@@ -114,19 +100,14 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'button[aria-label=?]', 'Przesuń niżej'
   end
 
-  # Removal is a checkbox, so it posts whether or not the controller ran — and
-  # it is pending until save either way.
   test 'an unawarded column offers removal and nothing else' do
     get edit_story_group_activity_group_path(@story_group, sheet!)
 
-    # Scoped to the list: the blank row the "Dodaj" button clones lives in a
-    # <template> beside it and carries the same markup.
     assert_select 'ul.gh-category-list input[data-sheet-form-target=destroy]', 2
     assert_select 'ul.gh-category-list input[data-sheet-form-target=hide]', false
     assert_select '.gh-category-lock-note', false
   end
 
-  # DECISIONS.md:31 — a column that has paid out can be hidden, never removed.
   test 'an awarded column offers hiding instead, and says why' do
     sheet = sheet!
     awarded = sheet.activity_group_categories.first
@@ -155,7 +136,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '[data-sheet-form-target=summaryCount]', '1 kolumna'
   end
 
-  # A column added in sheet settings has no template category behind it.
   test 'a column that exists only in this sheet is tagged' do
     sheet = sheet!
     sheet.activity_group_categories.create!(didactic_description: 'Prezentacja', reward: 3, position: 2)
@@ -163,8 +143,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_activity_group_path(@story_group, sheet)
     assert_select '.gh-tag--sheet-only', 'Tylko w tym arkuszu'
   end
-
-  # --- the banners ----------------------------------------------------------
 
   test 'editing a template says which sheets it will not touch' do
     sheet!('Laboratoria 1')
@@ -191,8 +169,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-info-banner', false
   end
 
-  # --- the action bar and the discard guard ---------------------------------
-
   test 'the action bar reports its state and offers a way out' do
     get edit_story_group_activity_group_template_path(@story_group, @template)
 
@@ -213,13 +189,10 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select 'dialog[data-sheet-form-target=discard]' do
       assert_select 'h2', 'Odrzucić zmiany?'
-      # The safe button comes first and takes the focus.
       assert_select '.gh-dialog-button-row button:first-child[autofocus]', 'Wróć do edycji'
       assert_select '.gh-dialog-button-row button:last-child', 'Odrzuć zmiany'
     end
   end
-
-  # --- deletion -------------------------------------------------------------
 
   test 'the sheet delete confirmation promises the awards survive' do
     sheet = sheet!
@@ -230,8 +203,6 @@ class SheetFormsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h2', 'Usunąć arkusz „Laboratoria 1”?'
     assert_select 'p', 'Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii.'
     assert_select '.gh-info-banner', /Przyznano z niego 1 nagrodę\./
-    # As a page the safe way out is a link back to the settings screen; in the
-    # dialog it is a button that closes it.
     assert_select '.gh-dialog-button-row a.gh-btn--secondary', 'Anuluj'
   end
 

@@ -7,8 +7,6 @@
 
   - board.visible_rows.each do |row|
     - if row.gap?
-      -# Two cells in a four-column grid, on purpose: the row stands for the
-      -# places nobody is allowed to see, so it shows nothing but that.
       .gh-ranking-row.gh-ranking-row--hidden-gap{ role: 'row' }
         %span.gh-ranking-gap-label{ role: 'cell' } …
         %span.gh-ranking-name{ role: 'cell' }
@@ -22,15 +20,9 @@
         %span.gh-ranking-name{ role: 'cell' }
           %b
             = row.student.display_name
-            -# The mockup tags the viewer's own row; the teacher's board has no
-            -# row of their own, so this only ever appears for a student.
             - if row.mine
               %span.gh-you-badge.gh-octagon-clip Ty
           - if reveal_names
-            -# Ours diverges from the mockup here, which makes a nickname
-            -# mandatory. A blank one already falls back to the real name
-            -# (StoryGroupStudent#display_name), so repeating it below would
-            -# print the same string twice; the marker says why instead.
             - if row.student.nickname.present?
               %small= row.student.full_name
             - else

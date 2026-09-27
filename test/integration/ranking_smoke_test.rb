@@ -2,10 +2,6 @@
 
 require 'test_helper'
 
-# "Ranking" — RankingController.
-# One action, two screens: the teacher's full board (mockup #/t/ranking) and the
-# student's own view of it (#/s/ranking), plus the four dialogs that change what
-# students see.
 class RankingSmokeTest < ActionDispatch::IntegrationTest
   def group(**attrs)
     FactoryBot.create(:story_group,
@@ -30,8 +26,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     css_select('.gh-ranking-row .gh-position-badge').map { |node| node.text.strip }
   end
 
-  # --- layout ---------------------------------------------------------------
-
   test 'the ranking renders inside the app chrome for a teacher' do
     story_group = group(ranking_enabled: true)
 
@@ -54,8 +48,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-app-shell header.gh-topbar'
   end
 
-  # --- the two perspectives -------------------------------------------------
-
   test 'the teacher sees the nickname over the real name' do
     story_group = group(ranking_enabled: true)
     student_in(story_group, name: 'Sebastian Alejandro', nickname: 'Rakietowy Seba', total: 40)
@@ -68,9 +60,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-ranking-row--header span', 'Pseudonim i student'
   end
 
-  # Ours diverges from the mockup, whose nickname is mandatory: a blank one
-  # already falls back to the real name, so the marker replaces the second line
-  # rather than the first.
   test 'the teacher sees a marker instead of a second line for a student with no nickname' do
     story_group = group(ranking_enabled: true)
     student_in(story_group, name: 'Adam Pawłowski', total: 10)
@@ -94,14 +83,10 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-ranking-row .gh-ranking-name b', /Nova/
     assert_no_match(/Barbara Kowalewska/, response.body)
     assert_select '.gh-ranking-row--header span', 'Pseudonim'
-    # Their own row is marked, and nobody else's is.
     assert_select '.gh-ranking-row--me .gh-you-badge', 'Ty'
     assert_select '.gh-ranking-row--me', 1
   end
 
-  # The ranking is the ONE screen where a nickname stands in for a person. The
-  # grading sheet and the students list went the other way, so this guards the
-  # two rules against drifting into each other.
   test 'the ranking still leads with the nickname, unlike every teacher list' do
     story_group = group(ranking_enabled: true)
     student_in(story_group, name: 'Sebastian Alejandro', nickname: 'Rakietowy Seba', total: 40)
@@ -112,8 +97,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-ranking-row .gh-ranking-name b', /Rakietowy Seba/
     assert_select '.gh-ranking-row .gh-ranking-name small', 'Sebastian Alejandro'
   end
-
-  # --- placement ------------------------------------------------------------
 
   test 'ties share a place and the next place skips' do
     story_group = group(ranking_enabled: true)
@@ -138,8 +121,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-ranking-row .gh-ranking-rank-cell', 'Pilot'
   end
-
-  # --- what the mode hides --------------------------------------------------
 
   test 'podium mode gives a student the top three, a gap and their own row' do
     story_group = group(ranking_enabled: true, ranking_mode: :podium_and_own)
@@ -192,8 +173,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_equal %w[1 2 3 4], places
   end
 
-  # --- the hidden state -----------------------------------------------------
-
   test 'a student reaches the screen with the ranking off and gets the panel' do
     story_group = group(ranking_enabled: false)
     membership = student_in(story_group, name: 'Sebastian Alejandro', nickname: 'Seba', total: 40)
@@ -204,7 +183,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select '.gh-empty-state h2', 'Ranking jest teraz ukryty'
     assert_select '.gh-ranking-row', false
-    # Their own total and nickname stay theirs; the place does not exist.
     assert_select '.gh-my-ranking-stats b', '40'
     assert_no_match(/Twoje miejsce/, response.body)
   end
@@ -230,8 +208,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_no_match(/miejsce w rankingu grupy/, response.body)
   end
 
-  # --- the teacher's controls -----------------------------------------------
-
   test 'the switch points at the opposite of the current visibility' do
     story_group = group(ranking_enabled: false)
 
@@ -241,7 +217,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'a.gh-toggle-switch[role=switch][aria-checked=false]' do
       assert_select '[href=?]', confirm_visibility_story_group_ranking_path(story_group, enabled: true)
     end
-    # Nothing for the mode to describe while the board is off.
     assert_select '.gh-segmented-toggle-2', false
   end
 
@@ -268,8 +243,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     get story_group_ranking_path(story_group)
     assert_select '.gh-ranking-visibility-note', false
   end
-
-  # --- the dialogs ----------------------------------------------------------
 
   test 'enabling asks for the mode in the same dialog' do
     story_group = group(ranking_enabled: false)
@@ -327,8 +300,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-app-shell', false
   end
 
-  # --- writing --------------------------------------------------------------
-
   test 'the teacher turns the ranking on with a mode' do
     story_group = group(ranking_enabled: false)
 
@@ -384,8 +355,6 @@ class RankingSmokeTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
   end
-
-  # --- the nickname dialog --------------------------------------------------
 
   test 'the student ranking screen offers the nickname dialog' do
     story_group = group(ranking_enabled: true)

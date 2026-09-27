@@ -2,8 +2,6 @@
 
 require 'test_helper'
 
-# "Arkusze ocen" — the sheet index (mockup #/t/sheets) and the "Utwórz arkusz"
-# dialog (30-ag.js:57-65).
 class SheetsSmokeTest < ActionDispatch::IntegrationTest
   setup do
     @teacher = FactoryBot.create(:user, :teacher)
@@ -33,8 +31,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     FactoryBot.create(:students_activity_group_category, student: student, activity_group_category: category)
   end
 
-  # --- layout ---------------------------------------------------------------
-
   test 'the sheet index renders inside the app chrome' do
     template!
     get story_group_activity_groups_path(@story_group)
@@ -51,8 +47,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
                   story_group_activity_groups_path(@story_group), 'Arkusze ocen'
   end
 
-  # The screen is called "Arkusze ocen" now, not "Grupy aktywności"
-  # (DECISIONS.md:29). The models keep their names.
   test 'the page head carries the settled wording' do
     get story_group_activity_groups_path(@story_group)
 
@@ -61,8 +55,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-button-row a', 'Nowy szablon'
     assert_no_match(/Grupy aktywności/i, response.body)
   end
-
-  # --- template panels ------------------------------------------------------
 
   test 'each template is a flat panel with its reward ceiling' do
     template = template!(rewards: [2, 3])
@@ -76,8 +68,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # No accordion and no dropdown menus: the Bootstrap screen hid the sheets
-  # behind a collapse whose open panel was remembered in a cookie.
   test 'the sheets are listed without a collapse' do
     template = template!
     sheet!(template, 'Laboratoria 1')
@@ -119,8 +109,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-sheet-row-stats', 'Jeszcze nic nie przyznano'
   end
 
-  # "Zmienione kolumny" — this sheet's own columns were edited, which is not
-  # the same thing as the template having changed since.
   test 'only a sheet whose own columns were edited carries the modified tag' do
     template = template!
     sheet = sheet!(template, 'Laboratoria 1')
@@ -157,8 +145,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 1, @story_group.activity_groups.kept.count
   end
 
-  # --- the create dialog ----------------------------------------------------
-
   test 'the create dialog offers both modes in one form' do
     template = template!
     get new_story_group_activity_group_path(@story_group, template_id: template.id)
@@ -173,8 +159,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # The chips come from the same call that names the records, so the preview
-  # cannot promise a name the save does not use.
   test 'the dialog previews the names the sheets will actually get' do
     template = template!
     sheet!(template, 'Laboratoria 1')
@@ -185,28 +169,22 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'Laboratoria 2', names.first
     assert_equal 'Laboratoria 3', names.second
 
-    # Only the first few are shown; the rest wait for the stepper.
     shown = css_select('.gh-sample-name-chips span').reject { |chip| chip.attributes.key?('hidden') }
     assert_equal 3, shown.size
   end
 
-  # The rows the last request created are highlighted once, so a run of eight
-  # shows you which eight are new.
   test 'sheets just created are highlighted on the way back' do
     template = template!
 
     post story_group_activity_groups_path(@story_group),
          params: { activity_group: { activity_group_template_id: template.id, mode: 'many' }, count: 2 }
 
-    # The dialog leaves through a turbo-stream redirect, so the index is
-    # fetched by hand; the flash is still there when it arrives.
     assert_turbo_redirected_to story_group_activity_groups_path(@story_group)
     get story_group_activity_groups_path(@story_group)
 
     assert_select 'li.gh-sheet-row--fresh', 2
     assert_select '.gh-toasts template', /Utworzono: Laboratoria 1 – Laboratoria 2\./
 
-    # Only once: a reload is not a creation.
     get story_group_activity_groups_path(@story_group)
     assert_select 'li.gh-sheet-row--fresh', false
   end
@@ -215,8 +193,6 @@ class SheetsSmokeTest < ActionDispatch::IntegrationTest
     template = template!
     get new_story_group_activity_group_path(@story_group, template_id: template.id)
 
-    # The layout's own empty `modal` frame is always there; what matters is
-    # that the dialog's body is not inside it.
     assert_select 'section.gh-panel.gh-dialog-page-panel'
     assert_select '.gh-app-shell'
     assert_select 'turbo-frame#modal h2', false

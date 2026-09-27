@@ -2,17 +2,11 @@
 
 require 'test_helper'
 
-# The "Grupy" screen (mockup #/s/groups and #/t/groups). One view, two
-# personas.
 class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
-  # A 1x1 transparent PNG. The app has no fixture files directory and this
-  # screen only cares whether an icon is attached, not what is in it.
   PNG = Base64.decode64(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   )
 
-  # A teacher who holds all three roles at once: owns one group, supports a
-  # second, learns in a third. Every tab and every role tag on one screen.
   def teacher_in_every_role
     teacher = FactoryBot.create(:user, role: :teacher)
 
@@ -25,14 +19,10 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     [teacher, owned, supported, learned]
   end
 
-  # css_select inside an assert_select block is not scoped to the block here,
-  # so the card is addressed by its link in one selector instead.
   def card_meta(story_group)
     css_select("article.gh-group-index-card:has(a[href='#{story_group_path(story_group)}']) .gh-group-index-meta span")
       .map(&:text)
   end
-
-  # --- layout ---------------------------------------------------------------
 
   test 'the group index renders inside the app chrome' do
     sign_in FactoryBot.create(:user, role: :teacher)
@@ -43,8 +33,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     assert_no_match(/data-bs-/, response.body)
   end
 
-  # The creation wizard was the last action here on Bootstrap. Nothing in this
-  # controller loads the old bundle any more, which is what this now guards.
   test 'the creation wizard renders inside the app chrome' do
     sign_in FactoryBot.create(:user, role: :teacher)
     get new_story_group_path
@@ -61,8 +49,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'aside.gh-sidebar a.gh-sidebar-link.gh-sidebar-link--active[href=?][aria-current=page]',
                   story_groups_path, 'Grupy'
   end
-
-  # --- tabs -----------------------------------------------------------------
 
   test 'a user in every role gets three role tabs whose counts sum to the total' do
     teacher, = teacher_in_every_role
@@ -100,8 +86,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path
 
-    # "Moje" would repeat "Wszystkie" exactly, so only one tab survives and the
-    # strip does not render.
     assert_select 'nav.gh-group-tabs', false
     assert_select 'article.gh-group-index-card', 2
   end
@@ -119,8 +103,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', new_story_group_path, false
     assert_select 'a[href=?]', new_join_path, 'Dołącz do grupy'
   end
-
-  # --- filtering ------------------------------------------------------------
 
   test 'each filter selects exactly its own role' do
     teacher, owned, supported, learned = teacher_in_every_role
@@ -144,8 +126,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'article.gh-group-index-card', 3
     assert_select 'a.gh-group-tab[aria-current=true][href=?]', story_groups_path
   end
-
-  # --- cards ----------------------------------------------------------------
 
   test 'every role gets its own tag and meta line' do
     teacher, owned, supported, learned = teacher_in_every_role
@@ -184,12 +164,8 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_groups_path
 
-    # Two, not four: the older purchase is outside the window and a reward is
-    # not a purchase.
     assert_select '.gh-group-index-meta span', '2 nowe zakupy'
   end
-
-  # --- artwork --------------------------------------------------------------
 
   test 'a group without artwork falls back to a monogram of its long words' do
     teacher = FactoryBot.create(:user, role: :teacher)
@@ -214,8 +190,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-art--monogram', false
   end
 
-  # --- search ---------------------------------------------------------------
-
   test 'the grid is wired for client-side search' do
     teacher, owned, = teacher_in_every_role
 
@@ -229,8 +203,6 @@ class StoryGroupsSmokeTest < ActionDispatch::IntegrationTest
       assert_select '.gh-empty-state[hidden][data-group-search-target=empty]'
     end
   end
-
-  # --- empty states ---------------------------------------------------------
 
   test 'a user with no groups gets the empty panel and no search bar' do
     sign_in FactoryBot.create(:user, role: :teacher)

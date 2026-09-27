@@ -2,16 +2,7 @@
 
 require 'test_helper'
 
-# The two settings screens: the teacher's "Ustawienia grupy" (mockup
-# #/t/group-settings) and the student's "Ustawienia w grupie"
-# (#/s/group-settings).
-#
-# One record, two screens, and the line between them is what most of this is
-# about — a teacher has no membership to edit, a student may not touch the
-# group, and only the OWNER may delete it (DECISIONS.md:40).
 class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
-  # A 1x1 transparent PNG. These screens only care whether an icon is attached,
-  # not what is in it.
   PNG = Base64.decode64(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   )
@@ -35,8 +26,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
                       }.merge(attrs),)
   end
 
-  # The settings form posts every field at once, so a partial update would look
-  # like a pass while quietly dropping the rest.
   def settings_params(**overrides)
     {
       story_group: {
@@ -49,8 +38,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
       }.merge(overrides),
     }
   end
-
-  # --- teacher: layout ------------------------------------------------------
 
   test 'the settings page renders inside the app chrome' do
     story_group = group
@@ -67,8 +54,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_path(story_group)
 
-    # The old screen wrapped itself in the shared modal frame. A page must not:
-    # the layout already carries one inside its <dialog>.
     assert_select 'turbo-frame#modal form', false
     assert_select '.gh-form-actions-bar button[type=submit]', 'Zapisz zmiany'
   end
@@ -92,8 +77,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # --- teacher: the pickers -------------------------------------------------
-
   test 'the graphic picker offers every group preset, named in Polish' do
     story_group = group(icon_glyph: 'tables')
     sign_in owner_of(story_group)
@@ -101,11 +84,9 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     tiles = css_select('.gh-art-preset-grid--group .gh-art-preset-tile input[type=radio]')
 
-    # Five presets plus the upload tile, whose value is the empty string.
     assert_equal([*GroupArt::KEYS, ''], tiles.map { |tile| tile['value'] })
     assert_select '.gh-art-preset-grid--group input[aria-label=?]', 'Grafika grupy: Zamek'
     assert_select '.gh-art-preset-grid--group input[value=tables][checked]'
-    # Scenes carry their own palette, so they are <img>, not inlined glyphs.
     assert_select '.gh-art-preset-grid--group .gh-art-preset-tile img'
   end
 
@@ -119,7 +100,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal([*CurrencyIcons::KEYS, ''], tiles.map { |tile| tile['value'] })
     assert_select '.gh-art-preset-grid--currency input[aria-label=?]', 'Ikona waluty: Marchewka'
     assert_select '.gh-art-preset-grid--currency input[value=pearl][checked]'
-    # Marks are inlined, so currentColor can tint them on the cream coin face.
     assert_select '.gh-art-preset-grid--currency .gh-art-preset-tile svg.gh-coin-mark'
   end
 
@@ -144,8 +124,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-art-preset-grid--group .gh-art-preset-tile--custom img[src]'
   end
 
-  # --- teacher: saving ------------------------------------------------------
-
   test 'saving writes every field and comes back to the settings page' do
     story_group = group
     sign_in owner_of(story_group)
@@ -169,7 +147,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     patch story_group_path(story_group), params: settings_params(icon_glyph: '')
 
-    # NULL, not "", is how the record says "use my upload".
     assert_nil story_group.reload.icon_glyph
   end
 
@@ -210,8 +187,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-field-error[role=alert] span', 'Nieznana grafika.'
   end
 
-  # --- teacher: who may do what --------------------------------------------
-
   test 'a supporting teacher may change the settings but not delete the group' do
     story_group = group
     supporting = FactoryBot.create(:user, role: :teacher)
@@ -221,7 +196,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     get edit_story_group_path(story_group)
 
     assert_response :success
-    # DECISIONS.md:40 — everything except deleting the group.
     assert_select '.gh-form-actions-bar button[type=submit]'
     assert_select '.gh-danger-zone', false
     assert_select "a[href='#{confirm_destroy_story_group_path(story_group)}']", false
@@ -262,8 +236,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_path
   end
 
-  # --- teacher: deleting ----------------------------------------------------
-
   test 'the delete confirmation counts who loses access and asks for the name' do
     story_group = group
     2.times { student_in(story_group, user: FactoryBot.create(:user, role: :student)) }
@@ -276,8 +248,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'turbo-frame#modal'
     assert_select 'h2.gh-h2', 'Usunąć grupę na zawsze?'
-    # Two supporting-or-owning teachers: the list holds one, the owner is held
-    # separately and loses access just the same.
     assert_match(/2 studenci i 2 nauczycieli stracą dostęp/, response.body.gsub(/\s+/, ' '))
     assert_select 'form[data-controller=confirm-name][data-confirm-name-expected-value=?]',
                   'Kosmiczne króliki'
@@ -304,7 +274,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
       delete story_group_path(story_group), params: { confirm: 'kosmiczne króliki' }
     end
 
-    # Case-sensitive on purpose: the point is to make you read the name.
     assert_response :unprocessable_content
     assert_select '.gh-field-error[role=alert] span', /nie zgadza się z nazwą grupy/
   end
@@ -335,8 +304,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_redirected_to story_groups_path
     assert_equal 'Usunięto grupę Kosmiczne króliki.', flash[:notice]
   end
-
-  # --- student: the screen --------------------------------------------------
 
   test 'the student settings page renders inside the app chrome' do
     story_group = group
@@ -372,8 +339,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal ['Imię i nazwisko Sebastian Alejandro',
                   "E-mail #{student.email}",
                   'Numer indeksu 123456',], rows
-    # The mockup has a fourth row for currency, badges, items and history; it is
-    # deliberately left out.
     assert_no_match(/Waluta, odznaki/, response.body)
   end
 
@@ -387,8 +352,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_select '.gh-visible-fields-list li:last-child b', 'Brak'
   end
-
-  # --- student: the nickname ------------------------------------------------
 
   test 'the nickname saves and is confirmed by name' do
     story_group = group
@@ -457,8 +420,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 10, mine.current_currency
   end
 
-  # --- student: leaving -----------------------------------------------------
-
   test 'the leave confirmation counts what goes and does not promise it back' do
     story_group = group
     mine = student_in(story_group, current_currency: 120)
@@ -472,8 +433,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'turbo-frame#modal h2.gh-h2', 'Opuścić grupę Kosmiczne króliki?'
     assert_match(/120 Marchewek, 1 odznaka i 0 przedmiotów/, response.body.gsub(/\s+/, ' '))
     assert_select '.gh-warning-note[role=alert] span', /Tego nie da się cofnąć/
-    # DECISIONS.md:44 wants rejoining to restore everything; ours is a hard
-    # delete, so the dialog must not say that.
     assert_no_match(/wszystko wróci|Nic nie przepada/, response.body)
   end
 
@@ -501,7 +460,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to story_groups_path
     assert_equal 'Opuszczono grupę Kosmiczne króliki.', flash[:notice]
-    # The group itself is untouched — this is one person leaving, not a delete.
     assert_predicate StoryGroup.where(id: story_group.id), :exists?
   end
 
@@ -510,8 +468,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
     sign_in owner_of(story_group)
     get edit_story_group_membership_path(story_group)
 
-    # 404, turned into a redirect by ApplicationController: this screen is not
-    # theirs, and saying "forbidden" would imply there is something here.
     assert_redirected_to root_path
   end
 
@@ -533,8 +489,6 @@ class GroupSettingsSmokeTest < ActionDispatch::IntegrationTest
 
     sign_in mine.user
 
-    # There is no id in the route at all — the membership comes from the
-    # session — so the only membership this can destroy is the caller's own.
     assert_difference('StoryGroupStudent.count', -1) do
       delete story_group_membership_path(story_group)
     end

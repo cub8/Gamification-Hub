@@ -1,17 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/**
- * The badge picker in "Przyznaj odznakę" (mockup 30-student.js:43-48).
- *
- * NEVER WRITES HTML. Every effect sentence is server-rendered, one per badge,
- * all hidden — this reveals the one that matches the selected radio. The
- * mockup rebuilds the whole dialog on every keystroke and then has to restore
- * focus and caret by hand (30-student.js:69-72); nothing here moves focus,
- * because nothing here is replaced.
- *
- * No Polish in this file. The submit label arrives as a value.
- */
 class BadgePickerController extends Controller<HTMLFormElement> {
   static targets = ["input", "row", "radio", "effect", "empty", "submit"]
   static values = { pick: String, blank: String }
@@ -46,9 +35,6 @@ class BadgePickerController extends Controller<HTMLFormElement> {
   pick() {
     const chosen = this.radioTargets.find((radio) => radio.checked)
 
-    // At most one effect sentence is visible, and none until something is
-    // chosen: a dialog that opens already explaining a badge nobody picked
-    // reads as a mistake.
     this.effectTargets.forEach((effect) => {
       effect.hidden = effect.dataset.badgePickerFor !== chosen?.value
     })
@@ -60,7 +46,6 @@ class BadgePickerController extends Controller<HTMLFormElement> {
   }
 }
 
-/** Diacritics folded, so "zawsze" finds "Zawsze" and "lot" finds "Łot". */
 function fold(text: string): string {
   return text
     .toLowerCase()

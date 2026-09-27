@@ -1,8 +1,3 @@
--# Mockup: 30-rk.js `mFull` (:61-62), which confirms only the switch TO the full
--# ranking. Both directions are confirmed here: widening the board exposes the
--# bottom of the list, and narrowing it takes places away from people who could
--# see them a moment ago. Either way a student's view changes without them
--# touching anything, which is what is worth a sentence.
 - full = mode == 'full'
 
 - if full
@@ -17,8 +12,6 @@
     jest na końcu listy.
 
 .gh-dialog-button-row
-  -# The safe button is the one that keeps the current setting, and it is the
-  -# one you land on.
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       = full ? 'Zostaw podium' : 'Anuluj'

@@ -38,8 +38,6 @@ class StarterPackBuilderTest < ActiveSupport::TestCase
                  @story_group.activity_group_templates.first.categories.map(&:didactic_description)
   end
 
-  # The whole point of the preset: an item is gated by a rank it can actually
-  # name, and discounts come from the rank and badges rather than the item.
   test 'wires item requirements to the ranks and badges it created' do
     build
 
@@ -81,8 +79,6 @@ class StarterPackBuilderTest < ActiveSupport::TestCase
     assert_nil @story_group.badges.find_by(name: 'Bez skazy')
   end
 
-  # A dropped rank must not leave an item pointing at nothing — the item stays,
-  # simply without that requirement.
   test 'an item whose required rank was removed loses the requirement' do
     build(selection: { ranks: { 1 => { keep: false } } })
 
@@ -102,7 +98,6 @@ class StarterPackBuilderTest < ActiveSupport::TestCase
     assert_equal 4, @story_group.activity_group_templates.first.categories.first.reward
   end
 
-  # A cleared field is not a zero: the preset's own number stands.
   test 'a blank override falls back to the preset value' do
     build(selection: { items: { 0 => { value: '' } } })
 

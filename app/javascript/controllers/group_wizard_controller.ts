@@ -1,33 +1,11 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-/** Index of the last step; step 4 in the copy, 3 here. */
 const LAST_STEP = 3
 
-/** The planned-classes stepper's bounds — StarterPack::CLASSES_RANGE. */
 const CLASSES_MIN = 4
 const CLASSES_MAX = 30
 
-/**
- * "Nowa grupa" — the four-step creation wizard (mockup js-expanded/30-form.js).
- *
- * The whole wizard is ONE form and nothing is written until the last submit, so
- * this controller only ever shows and hides what is already in the page. Two
- * consequences worth knowing:
- *
- *   * pressing Enter in a field on steps 1-3 would otherwise submit the whole
- *     form and create a half-configured group, so `keydown` swallows it and
- *     advances a step instead — the mockup's behaviour (30-form.js:113) and,
- *     here, a correctness fix rather than a nicety;
- *   * step 4's quick-start table is fetched from the server into a frame that
- *     lives INSIDE the form, which is what keeps the starter-pack arithmetic in
- *     Ruby while still letting its rows post with everything else.
- *
- * Previews clone whatever the checked picker tile shows, exactly as
- * rank_form_controller does, so there is nowhere for the two to disagree — and
- * it follows a crop, because image_crop_controller redraws that tile as you
- * drag and this listens for its `gh:image-crop`.
- */
 class GroupWizardController extends Controller<HTMLElement> {
   static targets = [
     "form", "grid", "panel", "preview",
@@ -93,21 +71,15 @@ class GroupWizardController extends Controller<HTMLElement> {
 
   private step = 0
 
-  /** High-water mark: visited steps stay clickable, later ones do not. */
   private max = 0
 
-  /** What the last preset fetch asked for, so we do not refetch identically. */
   private fetched = ""
 
   connect() {
-    // The server re-renders this page on a validation failure, so the step
-    // carrying the error is where the teacher should land — not step 1.
     this.step = this.erroredStep
     this.max = this.step
     this.render()
   }
-
-  // ---- navigation ----------------------------------------------------------
 
   goto(event: ActionEvent) {
     const index = Number(event.params.index)
@@ -140,28 +112,12 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.scrollToTop()
   }
 
-  /**
-   * A step change is a page change, so it starts at the top. Step 1 is long
-   * enough that "Dalej" sits well below the fold, and without this the next
-   * step opens scrolled past its own heading.
-   *
-   * The scroller is #app-content (.gh-main-content is `overflow: auto`), NOT the
-   * window — window.scrollTo is a no-op inside this shell. Called only from
-   * the three navigation actions, never from render(), so a re-render for a
-   * field edit leaves the scroll position alone; and never on connect(), so a
-   * server-rendered error keeps the field it just focused in view.
-   */
   private scrollToTop() {
     const scroller = this.element.closest("#app-content") ?? document.getElementById("app-content")
 
     scroller?.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  /**
-   * Enter must never reach the form itself before the last step. Textareas keep
-   * it (a story is multi-line), and so does anything inside the preset frame,
-   * where Enter in a number field should do nothing at all.
-   */
   keydown(event: KeyboardEvent) {
     if (event.key !== "Enter") return
 
@@ -172,8 +128,6 @@ class GroupWizardController extends Controller<HTMLElement> {
     event.preventDefault()
     this.next()
   }
-
-  // ---- the planned-classes stepper ----------------------------------------
 
   classesUp() {
     this.writeClasses(this.classCount + 1)
@@ -194,18 +148,13 @@ class GroupWizardController extends Controller<HTMLElement> {
     return Number.isFinite(parsed) ? parsed : CLASSES_MIN
   }
 
-  // ---- reacting to the fields ---------------------------------------------
-
   refresh() {
     this.render()
   }
 
-  /** The picker changed, or a crop was dragged. */
   art() {
     this.renderArt()
   }
-
-  // ---- rendering -----------------------------------------------------------
 
   private render() {
     this.renderSteps()
@@ -231,7 +180,6 @@ class GroupWizardController extends Controller<HTMLElement> {
       this.stepTickTargets[index].hidden = !done
     })
 
-    // Only the last step's name depends on the chosen path.
     this.stepLabelTargets[LAST_STEP].textContent = this.quick ? "Przegląd zestawu" : "Podsumowanie"
   }
 
@@ -240,8 +188,6 @@ class GroupWizardController extends Controller<HTMLElement> {
       panel.hidden = index !== this.step
     })
 
-    // The preview column is only meaningful while there is something to
-    // preview; steps 3 and 4 take the full width, as `.wiz.full` does.
     const withPreview = this.step <= 1
 
     this.previewTarget.hidden = !withPreview
@@ -259,8 +205,6 @@ class GroupWizardController extends Controller<HTMLElement> {
 
     this.nextIconTarget.hidden = last
     this.nextLabelTarget.textContent = last ? this.createLabel : "Dalej"
-    // The short label is what CSS shows below 720px, where the long one cannot
-    // fit beside the back chevron. Both are written; the stylesheet chooses.
     this.nextLabelShortTarget.textContent = last ? "Utwórz grupę" : "Dalej"
   }
 
@@ -274,7 +218,6 @@ class GroupWizardController extends Controller<HTMLElement> {
 
     const art = this.chosen("[icon_glyph]")
 
-    // Drop whatever was cloned last time, keeping the monogram node itself.
     this.artBoxTarget.querySelectorAll("[data-wizard-clone]").forEach((node) => node.remove())
     this.artBoxTarget.classList.toggle("gh-art--monogram", art === null)
     this.artMonoTarget.hidden = art !== null
@@ -285,12 +228,6 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.paintBackground(art)
   }
 
-  /**
-   * The group's artwork is also the table under the page, so picking a tile
-   * changes the background behind the wizard itself — the mockup's `bg()`
-   * (30-form.js:124) and its live `refresh()` (:95). Preset tiles and the
-   * upload tile are both <img>, so one branch covers them.
-   */
   private paintBackground(art: Element | null) {
     const layer = document.querySelector<HTMLElement>("[data-group-art-layer]")
     if (!layer) return
@@ -309,8 +246,6 @@ class GroupWizardController extends Controller<HTMLElement> {
       echo.classList.toggle("gh-placeholder-text", name === "")
     })
 
-    // One chosen mark, several tokens showing it — the preview renders the
-    // same coin at three sizes in each of the two themes.
     const glyph = this.chosen("[currency_icon_glyph]")
     const letter = (name[0] ?? "").toUpperCase()
 
@@ -343,9 +278,6 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.manualSummaryTarget.hidden = quick
     this.presetFrameTarget.hidden = !quick
 
-    // A frame left over from a switch to "Od zera" must not post its rows.
-    // The server ignores them when the path is manual, but a disabled field is
-    // the honest way to say the teacher is no longer choosing them.
     this.presetFrameTarget
       .querySelectorAll<HTMLInputElement>("input")
       .forEach((input) => {
@@ -356,18 +288,12 @@ class GroupWizardController extends Controller<HTMLElement> {
     else this.fillManualSummary()
   }
 
-  /**
-   * Fetched only once per (pack, classes, currency) combination, and only from
-   * step 4 — the teacher may step back and forth over step 3 several times
-   * before landing here.
-   */
   private loadPreset() {
     if (this.step !== LAST_STEP) return
 
     const params = new URLSearchParams({
       pack: this.checked(this.packTargets) ?? "",
       classes: String(this.classCount),
-      // Rails' own param name, so it stays snake_case.
       "currency_name": this.currencyTarget.value.trim(),
     })
     const url = `${this.presetUrlValue}?${params}`
@@ -396,14 +322,6 @@ class GroupWizardController extends Controller<HTMLElement> {
     return this.formTarget.querySelector<HTMLInputElement>('input[name$="[default_lives]"]')
   }
 
-  // ---- validation ----------------------------------------------------------
-
-  /**
-   * Mirrors the model, not a second opinion of it: name and currency name are
-   * both `presence` on StoryGroup, and the path is required because the last
-   * step cannot be drawn without it. The server still decides — this only
-   * stops the teacher reaching step 4 with a group that cannot be saved.
-   */
   private validate(): boolean {
     const checks: [number, HTMLElement, boolean, HTMLElement | null][] = [
       [0, this.nameErrorTarget, this.nameTarget.value.trim() === "", this.nameTarget],
@@ -429,15 +347,12 @@ class GroupWizardController extends Controller<HTMLElement> {
     return ok
   }
 
-  /** Which step the server's own errors belong to, so a reload lands there. */
   private get erroredStep(): number {
     if (this.nameTarget.getAttribute("aria-invalid") === "true") return 0
     if (this.currencyTarget.getAttribute("aria-invalid") === "true") return 1
 
     return 0
   }
-
-  // ---- small helpers -------------------------------------------------------
 
   private get quick(): boolean {
     return this.checked(this.pathTargets) === "quick"
@@ -447,11 +362,6 @@ class GroupWizardController extends Controller<HTMLElement> {
     return radios.find((radio) => radio.checked)?.value ?? null
   }
 
-  /**
-   * The artwork inside the checked tile of one picker — an inline <svg>, or the
-   * <img> for "Twoja grafika" and for every group-art preset. Same lookup
-   * rank_form_controller makes.
-   */
   private chosen(suffix: string): Element | null {
     const radio = this.element.querySelector<HTMLInputElement>(
       `input[type="radio"][name$="${suffix}"]:checked`,
@@ -461,7 +371,6 @@ class GroupWizardController extends Controller<HTMLElement> {
   }
 }
 
-/** A clone tagged so the next render can find and drop it again. */
 function mark(node: Element): Element {
   const copy = node.cloneNode(true) as Element
 
@@ -470,10 +379,6 @@ function mark(node: Element): Element {
   return copy
 }
 
-/**
- * Two initials, skipping short words — "Wstęp do algorytmiki" reads "WA".
- * Mirrors ApplicationHelper#gh_monogram, which draws the server-rendered cards.
- */
 function monogram(name: string): string {
   const all = name.trim().split(/\s+/u).filter(Boolean)
   const words = all.filter((word) => word.length > 2)

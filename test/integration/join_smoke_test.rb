@@ -2,8 +2,6 @@
 
 require 'test_helper'
 
-# Joining a group: the mockup's three-step flow (code -> pseudonim -> done),
-# in the shared modal and as the full page a QR scan lands on.
 class JoinSmokeTest < ActionDispatch::IntegrationTest
   MODAL = { 'Turbo-Frame' => 'modal' }.freeze
 
@@ -19,8 +17,6 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
   def join(nickname: nil, code: nil)
     post join_index_path, params: { code: code || @invite.code, nickname: nickname }, headers: MODAL
   end
-
-  # --- invite codes ---------------------------------------------------------
 
   test 'a generated code is six characters with no confusable letters' do
     codes = Array.new(30) { FactoryBot.create(:story_group_invite).code }
@@ -41,8 +37,6 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'h2', 'Dołączasz do grupy Zakon Algorytmów'
   end
 
-  # --- step 1 ---------------------------------------------------------------
-
   test 'step 1 asks for six characters and submits one hidden value' do
     get new_join_path, headers: MODAL
 
@@ -58,8 +52,6 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
   test 'a step rendered in the modal ships exactly one frame with that id' do
     get new_join_path, headers: MODAL
 
-    # The layout carries a <turbo-frame id="modal"> of its own inside the
-    # dialog, so rendering it here too would give Turbo two to choose from.
     assert_select 'turbo-frame#modal', 1
     assert_select 'header.gh-topbar', false
   end
@@ -100,8 +92,6 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-field-hint a[href=?]', story_group_path(@story_group), 'Otwórz grupę'
   end
 
-  # --- step 2 ---------------------------------------------------------------
-
   test 'a good code moves on to the nickname step' do
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
@@ -115,13 +105,10 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
   test 'the nickname field says it may be left blank' do
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
-    # Deliberately unlike the mockup, which makes the nickname mandatory.
     assert_select '.gh-field-hint', /Zostaw puste/
     assert_select 'input[name=nickname][required]', false
     assert_select 'button[type=submit][disabled]', false
   end
-
-  # --- joining --------------------------------------------------------------
 
   test 'a nickname is stored and shown' do
     assert_difference('StoryGroupStudent.count') do
@@ -180,8 +167,6 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # --- step 3 ---------------------------------------------------------------
-
   test 'the confirmation names the group, its owner and its currency' do
     join(nickname: 'Nova')
 
@@ -196,16 +181,11 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-dialog-button-row a[href=?][data-turbo-frame=_top]', story_group_path(@story_group), 'Gotowe'
   end
 
-  # --- the QR landing page --------------------------------------------------
-
   test 'a scanned code lands on the nickname step as a full page' do
     get join_path(code: @invite.code)
 
     assert_response :success
-    # The layout always carries one modal frame in its dialog; what matters is
-    # that the step rendered as page content rather than inside it.
     assert_select 'main.gh-auth-page turbo-frame#modal', false
-    # The focused, navigation-less shell: no chrome to distract from one task.
     assert_select 'main.gh-auth-page .gh-auth-card'
     assert_select 'header.gh-topbar', false
     assert_select 'h2', 'Dołączasz do grupy Zakon Algorytmów'
@@ -225,8 +205,6 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'main.gh-auth-page input[data-join-code-target=slot]', 6
     assert_select '.gh-field-error span', 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.'
   end
-
-  # --- chrome ---------------------------------------------------------------
 
   test 'both roles can reach the join dialog from the header' do
     [@user, FactoryBot.create(:user, role: :teacher)].each do |user|

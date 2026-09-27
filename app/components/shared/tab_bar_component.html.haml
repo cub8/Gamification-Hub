@@ -5,7 +5,6 @@
       'aria-current': ('page' if on),
       data: (item.frame ? { turbo_frame: item.frame } : {}) do
       %i.fa-solid{ class: item.icon }
-      -# The tab bar has less room than the sidebar, so two labels shorten.
       %span= item.tab_label
 
   %button.gh-mobile-tab{ type: 'button',

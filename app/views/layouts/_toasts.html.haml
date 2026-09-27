@@ -3,8 +3,5 @@
 #gh-toasts.gh-toasts{ popover: 'manual',
                       'aria-live': 'polite',
                       data: { controller: 'toast' } }
-  -# Seeds, drained and discarded by the controller on connect. A <template>
-  -# rather than a data attribute so the message needs no escaping dance and
-  -# more than one can be handed over.
   - messages.each do |message|
     %template{ data: { toast_target: 'seed' } }= message

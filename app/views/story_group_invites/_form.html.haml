@@ -24,8 +24,6 @@
           invite_form_people_forms_value: %w[osoby osób osób].to_json,
           invite_form_unit_forms_value: %w[osoba osoby osób].to_json } do
 
-  -# Create only: on an existing code the presets would silently discard limits
-  -# the teacher set on purpose (30-isg.js:35).
   - unless editing
     .gh-invite-presets
       %button.gh-purchase-filter-chip{ type: 'button',
@@ -37,8 +35,6 @@
 
   .gh-invite-limits
     .gh-toggle-switch-row
-      -# The companion hidden field is what makes "off" arrive at all: an
-      -# unchecked checkbox posts nothing.
       = hidden_field_tag scope.call(:limit_enabled), '0', id: nil
       = check_box_tag scope.call(:limit_enabled), '1', form.limit_enabled?,
         id: 'gh-limit-switch', class: 'gh-toggle-switch gh-octagon-clip', role: 'switch',
@@ -87,8 +83,6 @@
           data: { invite_form_target: 'time', end_of_day: InviteForm::DEFAULT_TIME,
                   action: 'invite-form#refresh' }
 
-    -# The mockup leaves this paragraph without an id, so its expiry error is
-    -# never announced with the field (30-isg.js:39). Wired here.
     - if expiry_error
       %p#gh-expiry-error.gh-field-error{ role: 'alert' }
         %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }

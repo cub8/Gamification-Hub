@@ -12,9 +12,6 @@
   %p.gh-lead
     Podgląd obok pokazuje obie strony karty: zdobytą i jeszcze niezdobytą.
 
--# The crop event bubbles up from the image field, and #art re-reads the artwork
--# out of the picker tile the cropper just redrew — so dragging the crop box
--# moves the preview card and the thumbnail with it.
 - form_data = { controller: 'badge-form', action: 'gh:image-crop->badge-form#art' }
 
 = form_with model: [@story_group, badge], data: form_data do |f|

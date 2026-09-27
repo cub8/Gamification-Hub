@@ -1,6 +1,4 @@
 - student = row.student
--# The real name, as the mockup has it (sRow, 30-lists.js:40). The nickname is
--# the sub-line's job: this list is how a teacher finds a particular person.
 - name    = student.full_name
 - lives   = student.lives.to_i
 
@@ -21,9 +19,6 @@
   %span
     %span.gh-mobile-field-label Życia
     .gh-lives-control
-      -# Each step is its own POST. The minus disappears at zero rather than
-      -# failing there, so the only way to reach the controller's guard is a
-      -# hand-built request.
       = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
         method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
         disabled: lives.zero?,
@@ -31,7 +26,6 @@
         'aria-label': "Odbierz życie: #{name}" do
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
 
-      -# One heart and a number, never one heart per life (DECISIONS.md:35).
       %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if lives.zero?) }
         %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
         %b= lives
@@ -53,9 +47,6 @@
     %span.gh-numeric-cell= row.badge_count
 
   .gh-student-actions-cell
-    -# The mockup carries a tab name on each of these and opens the sheet;
-    -# these go straight to the thing, which is one click less and a URL that
-    -# can be shared.
     = link_to new_story_group_student_badge_path(@story_group, student),
       class: 'gh-icon-button', title: 'Przyznaj odznakę',
       'aria-label': "Przyznaj odznakę: #{name}",

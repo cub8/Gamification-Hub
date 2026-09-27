@@ -7,8 +7,6 @@
         %i.fa-solid{ class: item.icon }
         %span= item.label
 
-  -# In a group the deck takes this slot; the group list does not survive
-  -# alongside it (10-core.js:171-183). You leave through "Zmień grupę".
   - if group_chrome
     = render 'layouts/deck', chrome: group_chrome, current_path: current_path
   - elsif groups.any?
