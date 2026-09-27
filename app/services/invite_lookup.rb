@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class InviteLookup
-  # The mockup's own copy (design/mockup-src/js-expanded/30-sp.js:39). Each
-  # case gets its own sentence because each has a different remedy.
   MESSAGES = {
     missing:   'Podaj kod zaproszenia.',
     not_found: 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.',
@@ -11,9 +9,6 @@ class InviteLookup
                'Poproś prowadzącego o nowy.',
   }.freeze
 
-  # `member_of` is deliberately not an error: already belonging to the group is
-  # a dead end for the form but good news for the user, so the mockup shows it
-  # as a hint with a link into the group rather than as a red field error.
   Result = Data.define(:invite, :reason, :member_of) do
     def initialize(invite: nil, reason: nil, member_of: nil)
       super
@@ -46,8 +41,6 @@ class InviteLookup
 
   private
 
-  # `usable?` folds both conditions into one boolean; the two have different
-  # remedies, so they are asked separately here.
   def unusable_reason(invite)
     return :expired   unless invite.expire_time_condition
     return :exhausted unless invite.use_count_condition

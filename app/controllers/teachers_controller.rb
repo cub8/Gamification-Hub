@@ -3,14 +3,7 @@
 class TeachersController < ApplicationController
   include StoryGroupAuthorization
 
-  # Inside the dialog only the frame is used, and the layout already carries a
-  # <turbo-frame id="modal"> of its own. Rendering it too would put two frames
-  # with the same id in one response and let Turbo pick whichever came first.
-
   before_action :set_story_group
-  # Reaching the screen is "do you help run this group"; changing who is on it
-  # is the owner's alone. The list itself stays readable to a supporting
-  # teacher — knowing who else is here is not a privilege.
   before_action :authorize_story_group_manage!
   before_action :authorize_story_group_teachers!, only: %i[new create destroy confirm_destroy]
   before_action :set_presentation
@@ -32,8 +25,6 @@ class TeachersController < ApplicationController
     @teacher = @story_group.teacher_memberships.build(teacher_params)
 
     if @teacher.save
-      # Named, like every other confirmation in the app — and the mockup's
-      # own wording (30-rk.js `doAddT`).
       redirect_outside_turbo_frame story_group_teachers_path(@story_group),
                                    notice: "Dodano: #{@teacher.full_name}."
     else
@@ -46,8 +37,6 @@ class TeachersController < ApplicationController
     name = @teacher.full_name
     @teacher.destroy
 
-    # Submitted from inside the confirmation dialog, so it has to break out of
-    # the frame the same way create does.
     redirect_outside_turbo_frame story_group_teachers_path(@story_group),
                                  notice: "Usunięto z grupy: #{name}."
   end

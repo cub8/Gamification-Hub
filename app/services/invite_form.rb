@@ -1,20 +1,15 @@
 # frozen_string_literal: true
 
 class InviteForm
-  include ApplicationHelper # gh_plural, for the summary sentence
+  include ApplicationHelper
 
   PERMITTED = %i[limit_enabled max_uses expiry_enabled expires_on expires_time].freeze
-
-  # Pre-seeded but hidden (30-isg.js:78), so flipping a switch on never reveals
-  # an empty field.
   DEFAULT_MAX_USES = 30
   DEFAULT_TIME     = '23:59'
 
   attr_reader :invite, :max_uses, :expires_on, :expires_time
 
   class << self
-    # The form as the record currently stands: both switches reflect whether
-    # the matching column is set.
     def for(invite)
       expires_at = invite.expires_at
 
@@ -55,15 +50,10 @@ class InviteForm
   def expiry_enabled? = @expiry_enabled
   def persisted? = invite.persisted?
 
-  # A switch that is off writes NULL — not zero, not a sentinel (30-isg.js:87).
   def save
     invite.max_uses   = limit_enabled? ? max_uses : nil
     invite.expires_at = expiry_enabled? ? combined_expiry : nil
 
-    # The record's own rules run FIRST. Adding the form's error before that and
-    # then calling save would have hidden every model error behind it, since a
-    # save that never runs never validates. Both sets are wanted at once: a
-    # teacher who got the limit and the date wrong should be told both.
     invite.validate
     reject_past_expiry
 
@@ -72,14 +62,10 @@ class InviteForm
 
   def error_for(attribute) = invite.errors[attribute].first
 
-  # The live sentence under the switches (30-isg.js:32). Rendered here first so
-  # it is right before Stimulus boots; invite_form_controller reproduces it.
   def summary
     "Kod będzie działał #{limit_phrase} #{expiry_phrase}."
   end
 
-  # The unit beside the number field. Nominative here, genitive in the sentence
-  # above — Polish declines the two differently and the mockup gets it right.
   def unit_label = gh_plural(max_uses.to_i, 'osoba', 'osoby', 'osób')
 
   private
@@ -98,15 +84,10 @@ class InviteForm
     "do #{gh_stamp(combined_expiry)}"
   end
 
-  # The mockup builds a naive local string, `M.date + 'T' + M.time`, and never
-  # says which zone that is. The app has one, so parse in it.
   def combined_expiry
     @combined_expiry ||= Time.zone.parse("#{expires_on} #{expires_time}")
   end
 
-  # Form-time, not a record rule: a code that expired yesterday is a valid row,
-  # but choosing a past date on this form never is. Editing an expired code is
-  # how you revive it, so this fires even when the date was not touched.
   def reject_past_expiry
     return unless expiry_enabled?
     return if combined_expiry&.future?

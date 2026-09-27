@@ -1,25 +1,23 @@
 # frozen_string_literal: true
 
 class Shop
-  # Zone order is the mockup's, and it is a reading order: what you can have,
-  # what you are working toward, what is still shut.
   ZONES = [
     [:afford, 'Stać cię teraz'],
     [:save,   'Zbierasz na to'],
     [:sealed, 'Zapieczętowane'],
   ].freeze
 
+  KIND_ORDER = { rank: 0, badge: 1, lives: 2 }.freeze
+
   Zone = Data.define(:key, :label, :offers)
+
+  attr_reader :story_group, :student
 
   def initialize(story_group:, student:)
     @story_group = story_group
     @student     = student
   end
 
-  attr_reader :story_group, :student
-
-  # Empty zones are dropped rather than rendered empty — the mockup's zone()
-  # returns '' for them, and a dashed frame around nothing reads as a fault.
   def zones
     @zones ||= ZONES.filter_map do |key, label|
       found = offers.select { |offer| state_of(offer.item) == key }
@@ -32,9 +30,6 @@ class Shop
 
   def size = items.size
 
-  # How many items this student could buy right now. The inventory screen
-  # closes its grid with a slot saying so, which is the only reason that
-  # screen knows the shop exists.
   def affordable = offers.count { |offer| state_of(offer.item) == :afford }
 
   def balance = student.current_currency.to_i
@@ -45,8 +40,6 @@ class Shop
 
   def offer_for(item) = offers_by_item_id[item.id]
 
-  # The student's own badges that carry a discount, for the head's sentence.
-  # Not the items' discount_badges: this says what YOU bring to the shop.
   def discount_badges
     return @discount_badges if defined?(@discount_badges)
 
@@ -73,18 +66,11 @@ class Shop
                   student:  student,)
   end
 
-  # Mirrors itemState() (10-core.js:24): a requirement you fail beats a price
-  # you cannot meet, because the price is not the thing standing in your way.
   def state_of(item)
     return :sealed if unmet_for(item).any?
 
     offers_by_item_id[item.id].price <= balance ? :afford : :save
   end
-
-  # Rank first, then badges, then lives — the mockup's order, which is not
-  # the order the service checks them in.
-  KIND_ORDER = { rank: 0, badge: 1, lives: 2 }.freeze
-  private_constant :KIND_ORDER
 
   def unmet_for(item)
     @unmet_for ||= {}

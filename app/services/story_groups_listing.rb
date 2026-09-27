@@ -1,18 +1,10 @@
 # frozen_string_literal: true
 
 class StoryGroupsListing
-  # gh_plural only formats a number; it touches no view context. Including the
-  # helper keeps the Polish plural rule in one place instead of giving the view
-  # a `case` on role just to assemble a string the service already knows.
   include ApplicationHelper
 
-  # Role -> the tag printed on the card. Owner-first: owning implies teaching,
-  # so a group you own is never "Wspierasz".
   ROLE_LABELS = { own: 'Prowadzisz', sup: 'Wspierasz', lrn: 'Uczysz się' }.freeze
 
-  # Filter param -> [tab label, role it selects]. `nil` is "everything" and is
-  # always present. The param values are the ones the Bootstrap screen already
-  # used, so links and bookmarks into this screen keep working.
   TABS = {
     nil       => ['Wszystkie', nil],
     'mine'    => ['Moje',      :own],
@@ -28,12 +20,9 @@ class StoryGroupsListing
 
   attr_reader :groups, :tabs, :filter
 
-  # `scope` is the Pundit scope — authorization stays in the controller.
   def initialize(scope:, user:, filter: nil)
     @scope = scope
     @user = user
-    # An unknown ?filter= falls back to everything rather than to an empty
-    # screen, which is what a stale or hand-edited URL deserves.
     @filter = filter if TABS.key?(filter)
   end
 
@@ -51,8 +40,6 @@ class StoryGroupsListing
     role.nil? || group.role == role
   end
 
-  # Every group, in every tab: the tab counts describe the whole list, so they
-  # must not be recomputed per filter.
   def all_groups
     @all_groups ||= begin
       summaries = records.map do |story_group|
@@ -81,8 +68,6 @@ class StoryGroupsListing
     :lrn
   end
 
-  # The mockup's second meta item (30-gh.js:17): what matters about a group
-  # depends entirely on what you are in it.
   def meta_for(story_group, role)
     case role
     when :own then owner_meta(story_group)
@@ -134,17 +119,10 @@ class StoryGroupsListing
                                             .count
   end
 
-  # "New" is the window the teacher start screen already calls recent — today
-  # and yesterday. Derived from that constant so the two cannot drift.
   def recent_window
     (Date.current - (TeacherStartDashboard::RECENT_DAYS.size - 1)).beginning_of_day..
   end
 
-  # A tab is worth showing only when it narrows the list: never at zero, and
-  # never when it selects everything (a lone "Wszystkie" filters nothing, and a
-  # "Moje" identical to "Wszystkie" is noise). The strip then renders only when
-  # more than one tab survives — which is why a student, who can only ever be
-  # `lrn`, sees no strip at all.
   def build_tabs
     total   = all_groups.size
     by_role = all_groups.group_by(&:role)
