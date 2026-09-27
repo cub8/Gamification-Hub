@@ -20,17 +20,9 @@ class StoryGroupStudent < ApplicationRecord
   validates :user_id, uniqueness: { scope: :story_group_id }
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  # Optional on purpose: leaving it blank means "show my real name", which the
-  # join screen offers explicitly. The mockup makes a nickname mandatory; we do
-  # not. Unique per group and case-insensitively so two people cannot be told
-  # apart only by capitals — backed by a partial functional index.
+
   validates :nickname,
             length:      { in: 2..24, message: 'Pseudonim musi mieć od 2 do 24 znaków.' },
-            allow_blank: true
-  # The mockup's own sentence (30-gh.js:60). Written out rather than left as
-  # Rails' default because it surfaces in two places — the join dialog and
-  # "Ustawienia w grupie" — and both are Polish.
-  validates :nickname,
             uniqueness:  {
               scope:          :story_group_id,
               case_sensitive: false,
@@ -64,8 +56,6 @@ class StoryGroupStudent < ApplicationRecord
     @rank
   end
 
-  # The rank being worked toward. Nil once the top rank is reached, and also
-  # nil when the group defines no ranks at all — callers must handle both.
   def next_rank
     unless @next_rank_at == total_currency
       @next_rank_at = total_currency

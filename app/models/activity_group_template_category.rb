@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# One category of a template — the thing each sheet column is stamped from.
-# Templates have no `hidden`: nothing has been awarded against them, so a
-# category you no longer want is simply removed.
 class ActivityGroupTemplateCategory < ApplicationRecord
   default_scope { order(position: :asc) }
 

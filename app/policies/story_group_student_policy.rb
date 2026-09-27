@@ -61,11 +61,6 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
-  # "Ustawienia w grupie" — the student's own membership, and only ever their
-  # own. Deliberately NOT widening #edit?/#update?/#destroy?, which
-  # StudentsController shares: those mean "a teacher managing somebody", and a
-  # student who could reach them would be able to remove themselves through the
-  # teacher's screen, skipping the confirmation that tells them what it costs.
   def edit_own?
     own_record?
   end

@@ -22,8 +22,6 @@ class Item < ApplicationRecord
   validates :name, presence: { message: 'Podaj nazwę przedmiotu.' },
                    length:   { maximum: 50 }
 
-  # The mockup calls this "Co daje studentowi" and requires it (30-item.js:75):
-  # an item whose card does not say what it does is unbuyable in practice.
   validates :didactic_description, presence: { message: 'Napisz, co przedmiot daje studentowi.' },
                                    length:   { maximum: 255 }
 
@@ -35,23 +33,14 @@ class Item < ApplicationRecord
     message:                  'Cena musi wynosić co najmniej 1.',
   }
 
-  # The picker's own set, not every glyph on disk: an item should carry item
-  # art. Rendering is looser on purpose (ApplicationHelper#gh_glyph accepts
-  # anything in the directory), so a record whose key is later retired still
-  # shows it.
   validates :icon_glyph, inclusion: { in: Glyphs::ITEM, message: 'Nieznana grafika.' },
                          allow_nil: true
 
   validate :acceptable_icon
   validate :art_chosen
 
-  # No default_scope, on purpose: students_items, the currency ledger and the
-  # purchase history must go on resolving a deleted item. `kept` is applied at
-  # the list, shop and picker call sites instead.
   scope :kept,    -> { where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
-
-  # "od najtańszego" (30-lists.js:34) — the shop and the teacher list share it.
   scope :by_price, -> { order(:price, :name, :id) }
 
   def acceptable_icon
@@ -61,17 +50,12 @@ class Item < ApplicationRecord
     errors.add(:icon, 'Grafika musi być plikiem GIF, JPG lub PNG.')
   end
 
-  # Every entity card shows art, so "no art" is not a state the design has — a
-  # record without it falls through to a generic fallback icon that says
-  # nothing. The picker always has a tile selected, so in practice this only
-  # fires on a record that predates the rule or on a hand-built request.
   def art_chosen
     return if icon_glyph.present? || icon.attached?
 
     errors.add(:icon_glyph, 'Wybierz gotową grafikę albo wgraj własną.')
   end
 
-  # `:upload` or a glyph key. One accessor so no view has to re-derive the rule.
   def art
     icon_glyph.presence || (icon.attached? ? :upload : nil)
   end
