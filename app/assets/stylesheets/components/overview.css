@@ -28,42 +28,42 @@
     margin-top: 16px;
   }
 
-  .gh-kpi-row {
+  .gh-stat-row {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     margin-top: 22px;
     padding: 4px 8px;
   }
 
-  .gh-kpi-row dl {
+  .gh-stat-row dl {
     display: contents;
   }
 
-  .gh-kpi-tile {
+  .gh-stat-tile {
     padding: 14px 16px;
   }
 
-  .gh-kpi-tile+.gh-kpi-tile {
+  .gh-stat-tile+.gh-stat-tile {
     border-left: 1px solid var(--gh-line);
   }
 
-  .gh-kpi-tile dt {
+  .gh-stat-tile dt {
     font: 620 12.5px var(--gh-f-ui);
     color: var(--gh-ink-2);
   }
 
-  .gh-kpi-tile dd {
+  .gh-stat-tile dd {
     margin: 6px 0 0;
     font: 800 26px/1 var(--gh-f-ui);
     font-variant-numeric: tabular-nums;
   }
 
-  .gh-kpi-row .gh-kpi-tile:last-child dd {
+  .gh-stat-row .gh-stat-tile:last-child dd {
     font-size: 17px;
     line-height: 1.25;
   }
 
-  .gh-kpi-tile dd small {
+  .gh-stat-tile dd small {
     margin-left: 4px;
     font: 560 13px var(--gh-f-ui);
     color: var(--gh-ink-2);
@@ -449,11 +449,11 @@
       grid-template-columns: 52px minmax(0, 1fr) auto 76px;
     }
 
-    .gh-kpi-row {
+    .gh-stat-row {
       grid-template-columns: 1fr 1fr;
     }
 
-    .gh-kpi-tile:nth-child(3) {
+    .gh-stat-tile:nth-child(3) {
       border-left: 0;
     }
   }
@@ -473,7 +473,7 @@
       font-size: 26px;
     }
 
-    .gh-kpi-tile {
+    .gh-stat-tile {
       padding: 12px 10px;
     }
 

@@ -83,7 +83,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     get story_group_path(story_group)
 
     assert_select '.gh-group-overview-grid .gh-currency-balance-card'
-    assert_select '.gh-kpi-row', false
+    assert_select '.gh-stat-row', false
   end
 
   test 'the hero carries the group and its three openings' do
@@ -138,7 +138,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-overview-hero a[href=?]', edit_story_group_path(story_group)
   end
 
-  test 'the KPI strip counts only this week and only this group' do
+  test 'the stat strip counts only this week and only this group' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher)
     membership = student_in(story_group)
@@ -155,7 +155,7 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     sign_in teacher
     get story_group_path(story_group)
 
-    values = css_select('.gh-kpi-tile').map { |kpi| [kpi.css('dt').text, kpi.css('dd').text.strip] }
+    values = css_select('.gh-stat-tile').map { |tile| [tile.css('dt').text, tile.css('dd').text.strip] }
 
     assert_equal '1', values[0].last
     assert_equal 'Studenci', values[0].first
@@ -164,19 +164,19 @@ class GroupOverviewSmokeTest < ActionDispatch::IntegrationTest
     assert_equal 'Wyłączony', values[3].last
   end
 
-  test 'the ranking KPI names the mode once ranking is on' do
+  test 'the ranking stat names the mode once ranking is on' do
     teacher = FactoryBot.create(:user, role: :teacher)
     story_group = group(owner: teacher, ranking_enabled: true)
 
     sign_in teacher
     get story_group_path(story_group)
 
-    assert_select '.gh-kpi-tile:last-child dd', 'Podium i własne miejsce'
+    assert_select '.gh-stat-tile:last-child dd', 'Podium i własne miejsce'
 
     story_group.update!(ranking_mode: :full)
     get story_group_path(story_group)
 
-    assert_select '.gh-kpi-tile:last-child dd', 'Pełny ranking'
+    assert_select '.gh-stat-tile:last-child dd', 'Pełny ranking'
   end
 
   test 'recent purchases name the item, the student and the price' do

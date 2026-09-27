@@ -21,15 +21,15 @@
               %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }
               Ustawienia grupy
 
-%section.gh-panel.gh-kpi-row{ 'aria-label': 'Podsumowanie grupy' }
+%section.gh-panel.gh-stat-row{ 'aria-label': 'Podsumowanie grupy' }
   %dl
-    - overview.kpis.each do |kpi|
-      .gh-kpi-tile
-        %dt= kpi.label
+    - overview.stat_tiles.each do |tile|
+      .gh-stat-tile
+        %dt= tile.label
         %dd
-          = kpi.value
-          - if kpi.note
-            %small= kpi.note
+          = tile.value
+          - if tile.note
+            %small= tile.note
 
 .gh-overview-grid
   %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-purchases-title' }

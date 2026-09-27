@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
-# The teacher landing screen (mockup `#/t/dash`).
-#
-# The cross-group counterpart to TeacherOverview, which is scoped to
-# a single group: recent purchases across every group the teacher owns or
-# supports, the groups themselves, and the sheet most in need of grading.
 class TeacherStartDashboard
   PURCHASE_LIMIT = 30
-
-  # Buckets in render order. "Recent" — what the greeting counts and what the
-  # per-group "nowe zakupy" badge counts — is today plus yesterday.
   DAYS = %w[Dziś Wczoraj Wcześniej].freeze
   RECENT_DAYS = DAYS.first(2).freeze
 
@@ -25,8 +17,6 @@ class TeacherStartDashboard
 
   attr_reader :purchases, :groups, :pending, :filter
 
-  # `filter` is a story group id, or nil for "all groups". Filtering is
-  # server-side (a link, not a click handler) so the choice survives a refresh.
   def initialize(user:, filter: nil)
     @user = user
     @filter = filter.presence&.to_i
@@ -39,8 +29,6 @@ class TeacherStartDashboard
     self
   end
 
-  # The greeting counts only the recent window, across all groups — it
-  # describes the teacher's world, not the current filter.
   def recent_purchases
     @recent_purchases ||= all_purchases.select { |purchase| RECENT_DAYS.include?(purchase.day) }
   end
@@ -50,7 +38,6 @@ class TeacherStartDashboard
                     .uniq.count
   end
 
-  # Rows for one day bucket, honouring the filter.
   def purchases_on(day)
     purchases.select { |purchase| purchase.day == day }
   end
@@ -110,9 +97,6 @@ class TeacherStartDashboard
             transaction: transaction,
             student:     transaction.student,
             story_group: groups_by_id[transaction.student.story_group_id],
-            # Nil when the item was hard-deleted. Soft delete (D1) will make
-            # this always present; until then the row renders without art
-            # rather than raising.
             item:        transaction.transactionable,
             day:         bucket_for(transaction.created_at),
           )

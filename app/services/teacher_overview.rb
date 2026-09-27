@@ -3,16 +3,11 @@
 class TeacherOverview
   include Rails.application.routes.url_helpers
 
-  # The KPI strip's window. A week, because a teaching group's rhythm is
-  # weekly — "since yesterday" is the Start screen's window, not a group's.
   WINDOW = 7.days
-
-  # How many sheets carry a podium, and how many rows "Wymaga uwagi" holds
-  # before it stops being a list and starts being a backlog.
   SHEETS = 2
   ATTENTION = 4
 
-  Kpi = Data.define(:label, :value, :note) do
+  StatTile = Data.define(:label, :value, :note) do
     def initialize(label:, value:, note: nil)
       super
     end
@@ -23,17 +18,18 @@ class TeacherOverview
     def time         = transaction.created_at
     def student_name = student.display_name
   end
+
   Sheet    = Data.define(:activity_group, :podium)
   Place    = Data.define(:student, :points)
+
+  attr_reader :story_group, :stat_tiles, :purchases, :attention, :recent_sheets
 
   def initialize(story_group:)
     @story_group = story_group
   end
 
-  attr_reader :story_group, :kpis, :purchases, :attention, :recent_sheets
-
   def load
-    @kpis          = build_kpis
+    @stat_tiles    = build_stat_tiles
     @purchases     = build_purchases
     @attention     = build_attention
     @recent_sheets = build_recent_sheets
@@ -46,18 +42,16 @@ class TeacherOverview
 
   private
 
-  # ---- KPIs --------------------------------------------------------------
-
-  def build_kpis
+  def build_stat_tiles
     spent = purchase_scope.sum(:amount).abs
     bought = purchase_scope.count
     earned = window_scope.reward.sum(:amount)
 
     [
-      Kpi.new(label: 'Studenci', value: students_count),
-      Kpi.new(label: 'Zakupy w tym tygodniu', value: bought, note: (spent.positive? ? "za #{spent}" : nil)),
-      Kpi.new(label: 'Nagrody w tym tygodniu', value: earned),
-      Kpi.new(label: 'Ranking', value: story_group.ranking_summary),
+      StatTile.new(label: 'Studenci', value: students_count),
+      StatTile.new(label: 'Zakupy w tym tygodniu', value: bought, note: (spent.positive? ? "za #{spent}" : nil)),
+      StatTile.new(label: 'Nagrody w tym tygodniu', value: earned),
+      StatTile.new(label: 'Ranking', value: story_group.ranking_summary),
     ]
   end
 
@@ -68,8 +62,6 @@ class TeacherOverview
 
   def purchase_scope = @purchase_scope ||= window_scope.purchase
 
-  # ---- Recent purchases --------------------------------------------------
-
   def build_purchases
     CurrencyTransaction.purchase
                        .where(student_id: membership_ids)
@@ -77,15 +69,10 @@ class TeacherOverview
                        .order(created_at: :desc)
                        .limit(8)
                        .map do |transaction|
-      # Nil when the item was hard-deleted — soft delete keeps it, but rows
-      # predating that migration still exist, so the row renders without art
-      # rather than raising.
       Purchase.new(transaction: transaction, student: transaction.student,
                    item: transaction.transactionable,)
     end
   end
-
-  # ---- Wymaga uwagi ------------------------------------------------------
 
   def build_attention
     (out_of_lives + [ungraded_sheet]).compact.first(ATTENTION)
@@ -131,8 +118,6 @@ class TeacherOverview
                          .where.missing(:students_activity_group_categories)
   end
 
-  # ---- Ostatnie arkusze --------------------------------------------------
-
   def build_recent_sheets
     sheets = story_group.activity_groups.order(created_at: :desc).limit(SHEETS).to_a
     return [] if sheets.empty?
@@ -147,9 +132,6 @@ class TeacherOverview
     end
   end
 
-  # One grouped sum per sheet, scoped to THIS group's students in SQL: summing
-  # every holder of those categories and discarding the strangers afterwards
-  # both over-counts nothing and reads more rows than it has to.
   def podium_for(category_ids)
     return [] if category_ids.blank?
 
@@ -166,11 +148,7 @@ class TeacherOverview
           end
   end
 
-  # ---- Shared loads ------------------------------------------------------
-
   def memberships = @memberships ||= story_group.student_memberships.with_user.to_a
-
   def memberships_by_id = @memberships_by_id ||= memberships.index_by(&:id)
-
   def membership_ids = @membership_ids ||= memberships.map(&:id)
 end
