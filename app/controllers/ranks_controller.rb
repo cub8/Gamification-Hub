@@ -3,10 +3,6 @@
 class RanksController < ApplicationController
   include StoryGroupAuthorization
 
-  # Only the delete confirmation is a dialog. Creating and editing are PAGES
-  # (DECISIONS.md:26, "Forms: pages (not modals) for create/edit") — the form
-  # carries a live preview column beside it, which no dialog is wide enough for.
-
   before_action :set_story_group
   before_action :authorize_story_group_read!,   only: :index
   before_action :authorize_story_group_manage!, except: :index
@@ -18,27 +14,21 @@ class RanksController < ApplicationController
                              membership:  gh_group_chrome&.student_membership,)
   end
 
-  # GET /story_groups/:story_group_id/ranks/new
   def new
-    # Both numbers start at 0. A group need not have a rank at 0 — its first
-    # rung may well sit at 20 or 30 — so 0 is an offer, not a reservation.
     @rank = @story_group.ranks.build(required_currency_value: 0,
                                      discount:                0,
                                      icon_glyph:              Glyphs::RANK.first,)
     set_ladder
   end
 
-  # GET /story_groups/:story_group_id/ranks/:id/edit
   def edit
     set_ladder
   end
 
-  # GET /story_groups/:story_group_id/ranks/:id/confirm_destroy
   def confirm_destroy
     @dependent_items = @rank.dependent_items.order(:name).to_a
   end
 
-  # POST /story_groups/:story_group_id/ranks
   def create
     @rank = @story_group.ranks.build(rank_params)
 
@@ -50,7 +40,6 @@ class RanksController < ApplicationController
     end
   end
 
-  # PATCH/PUT /story_groups/:story_group_id/ranks/:id
   def update
     if @rank.update(rank_params)
       redirect_to story_group_ranks_path(@story_group), notice: "Zapisano rangę „#{@rank.name}”."
@@ -89,14 +78,10 @@ class RanksController < ApplicationController
     @in_modal = turbo_frame_request_id == 'modal'
   end
 
-  # The form's preview needs the rungs the draft will land among. Built here
-  # rather than in the view so a re-render after a validation error gets it too.
   def set_ladder
     @ladder = RankLadder.new(story_group: @story_group)
   end
 
-  # Assigns ApplicationHelper's own memo, so the layout's chrome and this action
-  # resolve the membership once between them rather than twice.
   def gh_group_chrome
     @gh_group_chrome ||= GroupChrome.for(user:        @current_user,
                                          story_group: @story_group,)
@@ -105,15 +90,7 @@ class RanksController < ApplicationController
   def rank_params
     permitted = params.expect(rank: %i[name discount required_currency_value icon_glyph icon])
 
-    # An empty key means "use my upload" — the picker's eleventh tile. NULL is
-    # how the record says that, so normalise here rather than teaching the model
-    # about a blank string.
     permitted[:icon_glyph] = permitted[:icon_glyph].presence if permitted.key?(:icon_glyph)
-
-    # A file in this submission always wins. You just chose it, so it is the
-    # art — and without JavaScript nothing else would ever select it, because
-    # the picker's own tile only appears once there is something attached.
-    # Choosing a preset later switches back without losing the upload.
     permitted[:icon_glyph] = nil if permitted[:icon].present?
     permitted
   end

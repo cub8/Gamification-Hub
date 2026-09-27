@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class StarterPackBuilder
-  # Raised when the teacher's own numbers cannot become records — today only
-  # two rank thresholds edited onto the same value, which the unique index on
-  # [story_group_id, required_currency_value] refuses. Carries the Polish
-  # sentence the wizard puts in its error slot.
   class InvalidSelection < StandardError; end
 
   Result = Data.define(:ranks, :badges, :items, :categories)
@@ -15,9 +11,6 @@ class StarterPackBuilder
     @selection   = selection || {}
   end
 
-  # One transaction for everything: a group left with three of its five ranks
-  # is worse than a group left empty, and the teacher cannot tell the
-  # difference from the outside.
   def call
     ActiveRecord::Base.transaction do
       ranks  = create_ranks
@@ -34,8 +27,6 @@ class StarterPackBuilder
 
   attr_reader :story_group, :preset, :selection
 
-  # Kept rows only, indexed by the preset's own index so items can look their
-  # requirements up even when the rows around them were dropped.
   def create_ranks
     thresholds = {}
 
@@ -62,10 +53,6 @@ class StarterPackBuilder
     end
   end
 
-  # A requirement whose rank or badge the teacher deleted is simply dropped:
-  # the item stays buyable rather than pointing at nothing. `compact` on the
-  # badge lists does that for the two has_many sides, and `[]` on the hashes
-  # for the two belongs_to sides.
   def create_items(ranks, badges)
     kept(:items, preset.items).map do |item|
       story_group.items.create!(
@@ -82,10 +69,6 @@ class StarterPackBuilder
     end
   end
 
-  # One template, not sheets: a sheet is stamped per class afterwards, through
-  # ActivityGroupBuilder, and DECISIONS.md:30 makes a template edit affect only
-  # sheets created later — so creating them up front would freeze the preset in
-  # place before the teacher has read it.
   def create_template
     template = story_group.activity_group_templates.new(base_name: StarterPack::TEMPLATE_NAME)
 
@@ -100,14 +83,10 @@ class StarterPackBuilder
     template.categories
   end
 
-  # ---- the teacher's edits -------------------------------------------------
-
   def kept(zone, rows)
     rows.reject { |row| row_for(zone, row.index)&.fetch(:keep, true) == false }
   end
 
-  # Blank means "I cleared the field", which is not a number and must not
-  # silently become 0 — the preset's own value stands.
   def override(zone, index, fallback)
     raw = row_for(zone, index)&.dig(:value)
     return fallback if raw.nil? || raw.to_s.strip.empty?

@@ -9,27 +9,20 @@ class GradeSheet
 
   def story_group = activity_group.story_group
 
-  # Hidden columns are out of the table entirely (DECISIONS.md:31). The
-  # awards they already made stay on the students; they just take no new ones.
   def categories
     @categories ||= activity_group.activity_group_categories.visible.to_a
   end
 
-  # Same order as the students list, for the same reason: it is the order the
-  # teacher is reading off their own screen.
   def students
     @students ||= story_group.student_memberships.with_user.sort_by { |student| sort_key(student) }
   end
 
   def awarded?(student, category) = awarded_pairs.include?([category.id, student.id])
 
-  # What this student has already collected from this sheet — the dark half
-  # of the "Razem" column, the half that cannot change.
   def awarded_total(student)
     categories.sum { |category| awarded?(student, category) ? category.reward.to_i : 0 }
   end
 
-  # The most one student can take away from this sheet.
   def max_reward = categories.sum { |category| category.reward.to_i }
 
   def gradeable? = categories.any? && students.any?
@@ -43,8 +36,6 @@ class GradeSheet
                        .to_set
   end
 
-  # By the real name, which is what the sheet prints: a teacher scanning for
-  # somebody looks for the name they know.
   def sort_key(student)
     name = student.full_name.to_s
     [ActiveSupport::Inflector.transliterate(name).downcase, name, student.id]

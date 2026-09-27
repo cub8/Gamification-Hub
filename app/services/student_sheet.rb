@@ -26,14 +26,9 @@ class StudentSheet
   def balance = student.current_currency.to_i
   def total   = student.total_currency.to_i
   def lives   = student.lives.to_i
-
-  # The rung they stand on and the one above it. Both memoised on the record
-  # against total_currency, so asking twice costs one query.
   def rank      = student.rank
   def next_rank = student.next_rank
 
-  # How far along the current rung they are, 0..100. Nil at the top rung and
-  # in a group with no ranks — there is no bar to draw for either.
   def rank_progress
     return if next_rank.nil?
 
@@ -45,8 +40,6 @@ class StudentSheet
     (((total - floor).to_f / span) * 100).clamp(0, 100).round
   end
 
-  # Held badges, newest award first — the one just given is the one the
-  # teacher is looking for.
   def badges
     @badges ||= student.students_badges
                        .with_badge
@@ -55,9 +48,6 @@ class StudentSheet
                        .to_a
   end
 
-  # Every purchase, including items since withdrawn from the shop: soft
-  # delete keeps history (DECISIONS.md:28), and a row that vanished would
-  # make the ledger below disagree with this tab.
   def purchases
     @purchases ||= student.students_items
                           .includes(item: { icon_attachment: :blob })

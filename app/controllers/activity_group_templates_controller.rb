@@ -3,36 +3,26 @@
 class ActivityGroupTemplatesController < ApplicationController
   include StoryGroupAuthorization
 
-  # Same split as ranks and sheets: the delete confirmation is a dialog,
-  # creating and editing are pages carrying a preview column.
-
   before_action :set_story_group
   before_action :authorize_story_group_manage!
   before_action :set_presentation, only: :confirm_destroy
   before_action :set_template, only: %i[edit update destroy confirm_destroy]
 
-  # GET /story_groups/:story_group_id/activity_group_templates/new
   def new
     @activity_group_template = @story_group.activity_group_templates.build
 
-    # The mockup opens with two rows, the first already filled in: a template
-    # with one category is not a grading table, and an empty first row gives
-    # nothing to copy the shape from.
     @activity_group_template.categories.build(didactic_description: 'Obecność', reward: 2, position: 0)
     @activity_group_template.categories.build(reward: 1, position: 1)
   end
 
-  # GET /story_groups/:story_group_id/activity_group_templates/:id/edit
   def edit
     @sheet_names = sheet_names_for(@activity_group_template)
   end
 
-  # GET /story_groups/:story_group_id/activity_group_templates/:id/confirm_destroy
   def confirm_destroy
     @sheet_names = sheet_names_for(@activity_group_template)
   end
 
-  # POST /story_groups/:story_group_id/activity_group_templates
   def create
     @activity_group_template = @story_group.activity_group_templates.build(template_params)
 
@@ -44,11 +34,6 @@ class ActivityGroupTemplatesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /story_groups/:story_group_id/activity_group_templates/:id
-  #
-  # Nothing here reaches into sheets that already exist (DECISIONS.md:30) —
-  # they hold their own copies of the columns. This only changes what the next
-  # "Utwórz arkusz" stamps out.
   def update
     @activity_group_template.assign_attributes(template_params)
 
@@ -83,8 +68,6 @@ class ActivityGroupTemplatesController < ApplicationController
     @in_modal = turbo_frame_request_id == 'modal'
   end
 
-  # Named in the edit screen's info banner ("Laboratoria 1–5 zostają bez
-  # zmian"), so the teacher can see exactly what the edit is NOT touching.
   def sheet_names_for(template)
     template.activity_groups.kept.order(:id).pluck(:name)
   end

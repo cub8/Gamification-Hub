@@ -4,9 +4,6 @@ class CurrencyAdjustmentForm
   include ActiveModel::Model
 
   PERMITTED = %i[sign amount].freeze
-
-  # Dodaj is the default: a correction is far more often a make-good than a
-  # clawback, and the destructive direction should be the deliberate one.
   DEFAULT_SIGN = 1
 
   attr_reader :student, :sign, :amount
@@ -33,9 +30,6 @@ class CurrencyAdjustmentForm
 
   def positive? = sign.positive?
 
-  # What the teacher typed, as an integer. Nil rather than 0 when the field is
-  # blank or holds something that is not a number, so "nothing entered yet" and
-  # "entered a zero" stay different questions.
   def value
     return @value if defined?(@value)
 
@@ -56,8 +50,6 @@ class CurrencyAdjustmentForm
   def new_rank     = @new_rank ||= rank_at(new_total)
   def rank_changed? = current_rank&.id != new_rank&.id
 
-  # ---- validation --------------------------------------------------------
-
   def valid_amount?
     validate
     errors.empty?
@@ -71,7 +63,6 @@ class CurrencyAdjustmentForm
     elsif value.zero?
       errors.add(:amount, 'Podaj kwotę większą od zera.')
     elsif new_balance.negative?
-      # DECISIONS.md:32 — a correction may never take the balance below zero.
       errors.add(:amount, "Student ma tylko #{balance} do wydania.")
     end
 
@@ -90,8 +81,6 @@ class CurrencyAdjustmentForm
 
   private
 
-  # The rung a student standing on `collected` would hold — the same rule as
-  # StoryGroupStudent#rank, but asked of a total that does not exist yet.
   def rank_at(collected)
     ladder.reverse_each.find { |rank| rank.required_currency_value.to_i <= collected }
   end
