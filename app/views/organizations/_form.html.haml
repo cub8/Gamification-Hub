@@ -1,0 +1,25 @@
+= form_with model: organization do |form|
+  - if organization.errors.any?
+    .form-errors.p-3.mb-3
+      %h2= "#{pluralize(organization.errors.count, "błąd", "błędy")} uniemożliwił zapisanie organizacji:"
+      %ul
+        - organization.errors.each do |error|
+          %li= error.full_message
+
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Nazwa
+
+    .field-group.mb-3
+      = form.label :name, "Nazwa"
+      = form.text_field :name, class: "form-control"
+
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Maksymalna ilość członków
+
+    .field-group.mb-3
+      = form.label :max_members, "Maksymalna ilość członków"
+      = form.number_field :max_members, min: 1, step: 1, class: "form-control"
+
+  .form-actions.gap-3.mt-4
+    = link_to "Anuluj", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
+    = form.submit 'Zapisz', class: "btn-submit py-2 px-4"

@@ -41,7 +41,12 @@ Rails.application.routes.draw do
     post :mark_as_read, on: :collection
   end
 
-  resources :organizations
+  resources :organizations do
+    member do
+      get :new_admin
+      post :add_admin
+    end
+  end
 
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback

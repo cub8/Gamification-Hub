@@ -1,2 +1,7 @@
-%h1 Organizations#edit
-%p Find me in app/views/organizations/edit.html.haml
+- content_for :title, "Edytuj organizację — #{@organization.name}"
+
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Edytuj organizację
+      = render "form", organization: @organization, cancel_path: organization_path(@organization), submit_label: "Save"

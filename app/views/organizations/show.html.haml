@@ -1,2 +1,3 @@
-%h1 Organizations#show
-%p Find me in app/views/organizations/show.html.haml
+- content_for :title, @organization.name
+
+= render 'global_admin_show'

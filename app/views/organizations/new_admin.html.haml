@@ -1,0 +1,7 @@
+- content_for :title, "Dodaj administratora organizacji"
+
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Dodaj administratora organizacji
+      = render "user_form", user: @org_admin, cancel_path: organization_path(@organization), submit_label: "Add"

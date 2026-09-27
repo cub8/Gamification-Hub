@@ -36,4 +36,12 @@ class OrganizationPolicy < ApplicationPolicy
   def destroy?
     user.global_admin?
   end
+
+  def new_admin?
+    user.global_admin?
+  end
+
+  def add_admin?
+    user.global_admin?
+  end
 end
