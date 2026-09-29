@@ -92,6 +92,25 @@ class JoinSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-field-hint a[href=?]', story_group_path(@story_group), 'Otwórz grupę'
   end
 
+  test 'already belonging to the group wins even when the same code has since run out or expired' do
+    FactoryBot.create(:story_group_student, user: @user, story_group: @story_group)
+    @invite.update!(uses: 1, max_uses: 1)
+
+    get lookup_join_index_path(code: @invite.code), headers: MODAL
+
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', false
+    assert_select '.gh-field-hint a[href=?]', story_group_path(@story_group), 'Otwórz grupę'
+
+    @invite.update!(uses: 0, max_uses: nil, expires_at: 1.hour.ago)
+
+    get lookup_join_index_path(code: @invite.code), headers: MODAL
+
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', false
+    assert_select '.gh-field-hint a[href=?]', story_group_path(@story_group), 'Otwórz grupę'
+  end
+
   test 'a good code moves on to the nickname step' do
     get lookup_join_index_path(code: @invite.code), headers: MODAL
 
