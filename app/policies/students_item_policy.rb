@@ -17,7 +17,7 @@ class StudentsItemPolicy < ApplicationPolicy
   def index?
     target_student = record.respond_to?(:story_group_student) ? record.story_group_student : record
 
-    user.teacher? || target_student.story_group.owner_id == user.id || target_student.user_id == user.id
+    StoryGroupStudentPolicy.new(user, target_student).show?
   end
 
   def show?
