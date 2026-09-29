@@ -328,6 +328,7 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     assert_select 'p.gh-lead', /Nie prowadzisz jeszcze żadnej grupy/
     assert_select '.gh-my-groups-panel p.gh-small', 'Nie prowadzisz jeszcze żadnej grupy.'
     assert_select '.gh-my-groups-panel a[href=?]', new_story_group_path, /Utwórz grupę/
+    assert_select '.gh-my-groups-panel a[data-turbo-frame]', false
     assert_select '.gh-purchase-filter-bar', false
   end
 
@@ -438,7 +439,7 @@ class StartSmokeTest < ActionDispatch::IntegrationTest
     assert_select '.gh-mobile-tabbar a[href=?][data-turbo-frame=panel]', notifications_path
     assert_select '.gh-app-shell dialog.gh-dialog--anchored turbo-frame#panel'
 
-    assert_select 'a[href=?][data-turbo-frame=modal]', new_story_group_path
+    assert_select 'a[href=?][data-turbo-frame]', new_story_group_path, false
     assert_select 'dialog.gh-dialog:not(.gh-dialog--anchored) turbo-frame#modal'
 
     sign_out
