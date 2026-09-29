@@ -9,9 +9,9 @@ class CurrencyAdjusterService
   end
 
   def adjust(amount)
-    raise Overdrawn if (@student.current_currency.to_i + amount.to_i).negative?
+    @student.with_lock do
+      raise Overdrawn if (@student.current_currency.to_i + amount.to_i).negative?
 
-    ActiveRecord::Base.transaction do
       @student.increment!(:current_currency, amount)
       @student.increment!(:total_currency, amount) if amount.positive?
       CurrencyTransaction.create!(

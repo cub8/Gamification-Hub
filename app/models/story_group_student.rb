@@ -39,9 +39,9 @@ class StoryGroupStudent < ApplicationRecord
   end
 
   def update_lives(change)
-    new_lives = lives + change
-
-    update(lives: new_lives)
+    with_lock do
+      update(lives: lives + change)
+    end
   end
 
   def rank

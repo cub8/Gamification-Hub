@@ -20,17 +20,20 @@ class ItemPurchaseService
   end
 
   def call
-    eligibility = PurchaseEligibilityService.new(student: @student, item: @item).call
-    return Result.new(eligibility.errors) unless eligibility.eligible?
+    @student.with_lock do
+      eligibility = PurchaseEligibilityService.new(student: @student, item: @item).call
+      return Result.new(eligibility.errors) unless eligibility.eligible?
 
-    discount_info = @item.discount_info_for(@student)
-    price = PriceCalculatorService.new(price: @item.price, discount: discount_info).calculate
+      discount_info = @item.discount_info_for(@student)
+      price = PriceCalculatorService.new(price: @item.price, discount: discount_info).calculate
 
-    if @student.current_currency < price
-      return Result.new(['Masz za mało waluty, aby kupić ten przedmiot.'])
+      if @student.current_currency < price
+        return Result.new(['Masz za mało waluty, aby kupić ten przedmiot.'])
+      end
+
+      execute_purchase!(price, discount_info.value)
     end
 
-    execute_purchase!(price, discount_info.value)
     notify_teachers!
 
     Result.new
