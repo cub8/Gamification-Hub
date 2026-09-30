@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ActivityGroup < ApplicationRecord
+  include SoftDeletable
+
   belongs_to :story_group
   belongs_to :activity_group_template
 
@@ -11,16 +13,7 @@ class ActivityGroup < ApplicationRecord
   validates :name, presence: { message: 'Podaj nazwę arkusza.' }, length: { maximum: 100 }
   validate :at_least_one_visible_category, on: :settings
 
-  scope :kept,    -> { where(deleted_at: nil) }
-  scope :deleted, -> { where.not(deleted_at: nil) }
-
   scope :newest_first, -> { order(created_at: :desc, id: :desc) }
-
-  def deleted? = deleted_at.present?
-
-  def soft_delete!
-    update_column(:deleted_at, Time.current)
-  end
 
   def columns_modified? = columns_modified_at.present?
 

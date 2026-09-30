@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Item < ApplicationRecord
-  has_one_attached :icon
+  include Iconable
+  include SoftDeletable
 
   belongs_to :story_group
   has_many :currency_transactions, as: :transactionable
@@ -17,7 +18,7 @@ class Item < ApplicationRecord
 
   has_many :students_items, dependent: :destroy
 
-  ACCEPTABLE_ICON_TYPES = ['image/gif', 'image/jpeg', 'image/png'].freeze
+  has_icon_art :icon, glyphs: Glyphs::ITEM
 
   validates :name, presence: { message: 'Podaj nazwę przedmiotu.' },
                    length:   { maximum: 50 }
@@ -33,40 +34,7 @@ class Item < ApplicationRecord
     message:                  'Cena musi wynosić co najmniej 1.',
   }
 
-  validates :icon_glyph, inclusion: { in: Glyphs::ITEM, message: 'Nieznana grafika.' },
-                         allow_nil: true
-
-  validate :acceptable_icon
-  validate :art_chosen
-
-  scope :kept,    -> { where(deleted_at: nil) }
-  scope :deleted, -> { where.not(deleted_at: nil) }
   scope :by_price, -> { order(:price, :name, :id) }
-
-  def acceptable_icon
-    return unless icon.attached?
-    return if ACCEPTABLE_ICON_TYPES.include?(icon.content_type)
-
-    errors.add(:icon, 'Grafika musi być plikiem GIF, JPG lub PNG.')
-  end
-
-  def art_chosen
-    return if icon_glyph.present? || icon.attached?
-
-    errors.add(:icon_glyph, 'Wybierz gotową grafikę albo wgraj własną.')
-  end
-
-  def art
-    icon_glyph.presence || (icon.attached? ? :upload : nil)
-  end
-
-  def upload?
-    art == :upload
-  end
-
-  def deleted?
-    deleted_at.present?
-  end
 
   def soft_delete!
     transaction do

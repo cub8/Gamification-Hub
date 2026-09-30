@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Rank < ApplicationRecord
-  ACCEPTABLE_ICON_TYPES = ['image/gif', 'image/jpeg', 'image/png'].freeze
-
-  has_one_attached :icon
+  include Iconable
 
   belongs_to :story_group
+
+  has_icon_art :icon, glyphs: Glyphs::RANK
 
   validates :name, presence: { message: 'Podaj nazwę rangi.' },
                    length:   { maximum: 40 }
@@ -22,26 +22,9 @@ class Rank < ApplicationRecord
     message:                  'Próg nie może być ujemny.',
   }
 
-  validates :icon_glyph, inclusion: { in: Glyphs::RANK, message: 'Nieznana grafika.' }, allow_nil: true
-
-  validate :acceptable_icon
-  validate :art_chosen
   validate :threshold_free_in_group
 
   scope :by_threshold, -> { order(:required_currency_value, :id) }
-
-  def acceptable_icon
-    return unless icon.attached?
-    return if ACCEPTABLE_ICON_TYPES.include?(icon.content_type)
-
-    errors.add(:icon, 'Grafika musi być plikiem GIF, JPG lub PNG.')
-  end
-
-  def art_chosen
-    return if icon_glyph.present? || icon.attached?
-
-    errors.add(:icon_glyph, 'Wybierz gotową grafikę albo wgraj własną.')
-  end
 
   def threshold_free_in_group
     return if story_group.nil? || required_currency_value.nil?
@@ -53,14 +36,6 @@ class Rank < ApplicationRecord
 
     errors.add(:required_currency_value,
                "Ranga #{clash.name} ma już próg #{clash.required_currency_value}. Wybierz inny.",)
-  end
-
-  def art
-    icon_glyph.presence || (icon.attached? ? :upload : nil)
-  end
-
-  def upload?
-    art == :upload
   end
 
   def starting?
