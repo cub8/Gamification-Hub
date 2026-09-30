@@ -30,11 +30,11 @@ class InviteLookup
     invite = StoryGroupInvite.find_by_code(@code)
     return Result.new(reason: :not_found) unless invite
 
-    reason = unusable_reason(invite)
-    return Result.new(invite: invite, reason: reason) if reason
-
     member = membership_in(invite.story_group)
     return Result.new(invite: invite, member_of: invite.story_group) if member
+
+    reason = unusable_reason(invite)
+    return Result.new(invite: invite, reason: reason) if reason
 
     Result.new(invite: invite)
   end
