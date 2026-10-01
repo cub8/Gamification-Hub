@@ -7,6 +7,7 @@ FactoryBot.define do
     story_description { 'An achievement badge' }
     didactic_description { 'A didactic description for the achievement badge' }
     discount { 10 }
+    icon_glyph { 'rabbit' }
     icon { nil }
   end
 end

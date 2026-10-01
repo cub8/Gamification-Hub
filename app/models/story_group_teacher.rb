@@ -7,5 +7,5 @@ class StoryGroupTeacher < ApplicationRecord
   delegate :full_name, :university_number, :email, to: :user
   scope :with_user, -> { includes(:user) }
 
-  validates :user_id, uniqueness: { scope: :story_group_id }
+  validates :user_id, uniqueness: { scope: :story_group_id, message: 'Ta osoba jest już w grupie.' }
 end

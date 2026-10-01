@@ -61,8 +61,24 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     story_group_teacher? || admin?
   end
 
+  def edit_own?
+    own_record?
+  end
+
+  def update_own?
+    own_record?
+  end
+
+  def leave?
+    own_record?
+  end
+
   def adjust_currency?
     story_group_teacher? || admin?
+  end
+
+  def own_record?
+    record.user == user
   end
 
   private
@@ -74,9 +90,4 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   def story_group_teacher?
     record.story_group.owner == user || user.teacher_story_groups.include?(record.story_group)
   end
-
-  def own_record?
-    record.user == user
-  end
-
 end

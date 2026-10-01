@@ -8,5 +8,6 @@ FactoryBot.define do
     price { 20 }
     story_description { 'Story Description' }
     didactic_description { 'Didactic description' }
+    icon_glyph { 'shield' }
   end
 end

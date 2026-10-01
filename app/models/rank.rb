@@ -1,24 +1,48 @@
 # frozen_string_literal: true
 
 class Rank < ApplicationRecord
-  has_one_attached :icon
+  include Iconable
 
   belongs_to :story_group
 
-  validates :name, length: { maximum: 40 }
+  has_icon_art :icon, glyphs: Glyphs::RANK
 
-  validates :discount, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+  validates :name, presence: { message: 'Podaj nazwę rangi.' },
+                   length:   { maximum: 40 }
 
-  validates :required_currency_value, numericality: { greater_than_or_equal_to: 0 }
+  validates :discount, numericality: {
+    greater_than_or_equal_to: 0,
+    less_than_or_equal_to:    100,
+    message:                  'Zniżka musi mieścić się między 0 a 100%.',
+  }
 
-  validate :acceptable_icon
+  validates :required_currency_value, numericality: {
+    only_integer:             true,
+    greater_than_or_equal_to: 0,
+    message:                  'Próg nie może być ujemny.',
+  }
 
-  def acceptable_icon
-    return unless icon.attached?
+  validate :threshold_free_in_group
 
-    acceptable_types = ['image/gif', 'image/jpeg', 'image/png']
-    return if acceptable_types.include?(icon.content_type)
+  scope :by_threshold, -> { order(:required_currency_value, :id) }
 
-    errors.add(:icon, 'must be a GIF, JPG or PNG image')
+  def threshold_free_in_group
+    return if story_group.nil? || required_currency_value.nil?
+
+    clash = story_group.ranks.where(required_currency_value: required_currency_value)
+                       .where.not(id: id)
+                       .first
+    return if clash.nil?
+
+    errors.add(:required_currency_value,
+               "Ranga #{clash.name} ma już próg #{clash.required_currency_value}. Wybierz inny.",)
+  end
+
+  def starting?
+    required_currency_value&.zero? || false
+  end
+
+  def dependent_items
+    Item.where(unlock_rank: self).or(Item.where(min_rank_for_discount: self))
   end
 end

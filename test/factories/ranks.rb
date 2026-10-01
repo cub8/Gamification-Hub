@@ -6,6 +6,7 @@ FactoryBot.define do
     name { 'Gold' }
     discount { 10 }
     required_currency_value { 100 }
+    icon_glyph { 'chev1' }
     icon { nil }
   end
 end

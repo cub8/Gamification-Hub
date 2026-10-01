@@ -1,0 +1,53 @@
+@layer components {
+
+  .gh-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 24px 18px;
+    margin-top: 22px;
+  }
+
+  .gh-card--consumed .gh-card-art .gh-card-art-glyph,
+  .gh-card--consumed .gh-card-art img {
+    opacity: 0.4;
+  }
+
+  .gh-empty-slot-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    min-height: 250px;
+    padding: 18px;
+    text-align: left;
+  }
+
+  .gh-empty-slot-panel::after {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 2px dashed var(--gh-line-2);
+    pointer-events: none;
+  }
+
+  .gh-empty-slot-panel p {
+    margin: 0;
+    font: 560 15px/1.4 var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-empty-slot-panel .gh-btn {
+    align-self: flex-start;
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+    .gh-inventory-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .gh-empty-slot-panel {
+      min-height: 0;
+    }
+  }
+}

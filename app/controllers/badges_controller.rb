@@ -4,52 +4,57 @@ class BadgesController < ApplicationController
   include StoryGroupAuthorization
 
   before_action :set_story_group
-  before_action :authorize_story_group_read!, only: %i[index show]
-  before_action :authorize_story_group_manage!, except: %i[index show]
-  before_action :set_badge, only: %i[show edit update destroy]
+  before_action :authorize_story_group_read!,   only: :index
+  before_action :authorize_story_group_manage!, except: :index
+  before_action :set_presentation, only: :confirm_destroy
+  before_action :set_badge, only: %i[edit update destroy confirm_destroy]
 
-  # GET /story_groups/:story_group_id/badges
   def index
-    @badges = policy_scope(@story_group.badges).with_attached_icon
+    @shelf = BadgeShelf.new(story_group: @story_group,
+                            membership:  gh_group_chrome&.student_membership,)
   end
 
-  # GET /story_groups/:story_group_id/badges/:id
-  def show; end
-
-  # GET /story_groups/:story_group_id/badges/new
   def new
-    @badge = @story_group.badges.build
+    @badge = @story_group.badges.build(discount:   0,
+                                       icon_glyph: Glyphs::BADGE.first,)
+    set_shelf
   end
 
-  # GET /story_groups/:story_group_id/badges/:id/edit
-  def edit; end
+  def edit
+    set_shelf
+  end
 
-  # POST /story_groups/:story_group_id/badges
+  def confirm_destroy
+    @unlocking_items = @badge.unlocking_items.order(:name).to_a
+  end
+
   def create
     @badge = @story_group.badges.build(badge_params)
 
     if @badge.save
-      redirect_outside_turbo_frame story_group_badges_path(@story_group),
-                                   notice: 'Pomyślnie utworzono odznakę.'
+      redirect_to story_group_badges_path(@story_group), notice: "Dodano odznakę „#{@badge.name}”."
     else
+      set_shelf
       render :new, status: :unprocessable_content
     end
   end
 
-  # PATCH/PUT /story_groups/:story_group_id/badges/:id
   def update
     if @badge.update(badge_params)
-      redirect_outside_turbo_frame story_group_badges_path(@story_group),
-                                   notice: 'Pomyślnie zaktualizowano odznakę.'
+      redirect_to story_group_badges_path(@story_group), notice: "Zapisano odznakę „#{@badge.name}”."
     else
+      set_shelf
       render :edit, status: :unprocessable_content
     end
   end
 
-  # DELETE /story_groups/:story_group_id/badges/:id
   def destroy
-    @badge.destroy
-    redirect_to story_group_badges_path(@story_group), notice: 'Pomyślnie usunięto odznakę.'
+    name = @badge.name
+    @badge.soft_delete!
+
+    redirect_outside_turbo_frame story_group_badges_path(@story_group),
+                                 notice: "Usunięto odznakę „#{name}”. Studenci, " \
+                                         'którzy ją mają, zachowują ją w historii.'
   end
 
   private
@@ -59,18 +64,29 @@ class BadgesController < ApplicationController
   end
 
   def set_badge
-    @badge = @story_group.badges.find(params.expect(:id))
+    @badge = @story_group.badges.kept.find(params.expect(:id))
+  end
+
+  def set_presentation
+    @in_modal = turbo_frame_request_id == 'modal'
+  end
+
+  def set_shelf
+    @shelf = BadgeShelf.new(story_group: @story_group)
+  end
+
+  def gh_group_chrome
+    @gh_group_chrome ||= GroupChrome.for(user:        @current_user,
+                                         story_group: @story_group,)
   end
 
   def badge_params
-    params.expect(
-      badge: %i[
-        name
-        story_description
-        didactic_description
-        discount
-        icon
-      ],
+    permitted = params.expect(
+      badge: %i[name story_description didactic_description discount icon_glyph icon],
     )
+
+    permitted[:icon_glyph] = permitted[:icon_glyph].presence if permitted.key?(:icon_glyph)
+    permitted[:icon_glyph] = nil if permitted[:icon].present?
+    permitted
   end
 end

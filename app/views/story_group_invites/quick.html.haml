@@ -1,0 +1,8 @@
+- content_for :title, 'Kod dla studentów'
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'quick', active: @active
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'quick', active: @active

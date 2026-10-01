@@ -1,0 +1,72 @@
+# frozen_string_literal: true
+
+class DiscountExample
+  MAX_BADGES = 2
+
+  def initialize(card, random: Random.new)
+    @card   = card
+    @random = random
+  end
+
+  attr_reader :card, :random
+
+  def rank_order = @rank_order ||= card.ranks.map(&:name).shuffle(random: random)
+
+  def badge_order = @badge_order ||= card.badges.map(&:name).shuffle(random: random)
+
+  def rank = pick.first
+
+  def badges = pick.last
+
+  def percent
+    @percent ||= Discount.new(rank&.discount.to_i + badges.sum { |badge| badge.discount.to_i }).value
+  end
+
+  def any? = percent.positive?
+
+  def none? = !any?
+
+  private
+
+  def pick
+    @pick ||= [pick_rank, pick_badges]
+  end
+
+  def pick_rank
+    pool    = card.discount_rank_pool.select { |rank| rank.discount.to_i.positive? }
+    earning = pool.index_by { |rank| rank.name.to_s }
+    name    = rank_order.find { |candidate| earning.key?(candidate) }
+
+    earning[name]
+  end
+
+  def pick_badges
+    picked  = [forced_badge_name].compact
+    earning = card.discount_badges.index_by { |badge| badge.name.to_s }
+
+    badge_order.each do |candidate|
+      break if picked.size >= MAX_BADGES
+
+      picked << candidate if earning.key?(candidate) && picked.exclude?(candidate)
+    end
+
+    by_name = card.badges.index_by { |badge| badge.name.to_s }
+    records = picked.filter_map { |name| by_name[name] }
+
+    records.sort_by { |badge| badge.name.to_s }
+  end
+
+  def forced_badge_name
+    return if card.item.min_rank_for_discount.present?
+
+    listed = card.item.discount_badges.map { |badge| badge.name.to_s }
+    return if listed.empty?
+
+    listed  = listed.to_set
+    earning = card.discount_badges.map { |badge| badge.name.to_s }
+    earning = earning.to_set
+
+    badge_order.find { |name| listed.include?(name) && earning.include?(name) } ||
+      badge_order.find { |name| listed.include?(name) }
+  end
+end

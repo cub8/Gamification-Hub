@@ -5,56 +5,58 @@ class TeachersController < ApplicationController
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!
-  before_action :set_teacher, only: %i[destroy]
+  before_action :authorize_story_group_teachers!, only: %i[new create destroy confirm_destroy]
+  before_action :set_presentation
+  before_action :set_teacher, only: %i[destroy confirm_destroy]
 
   def index
-    @teachers = policy_scope(@story_group.teacher_memberships)
+    @list = TeacherList.new(story_group: @story_group,
+                            memberships: policy_scope(@story_group.teacher_memberships),)
   end
 
   def new
     @teacher = @story_group.teacher_memberships.build
-    set_teachers_for_select
+    set_pool
   end
+
+  def confirm_destroy; end
 
   def create
     @teacher = @story_group.teacher_memberships.build(teacher_params)
 
     if @teacher.save
       redirect_outside_turbo_frame story_group_teachers_path(@story_group),
-                                   notice: 'Pomyślnie dodano nauczyciela do grupy.'
+                                   notice: "Dodano: #{@teacher.full_name}."
     else
-      set_teachers_for_select
+      set_pool
       render :new, status: :unprocessable_content
     end
   end
 
   def destroy
+    name = @teacher.full_name
     @teacher.destroy
 
-    redirect_to story_group_teachers_path(@story_group),
-                notice: 'Pomyślnie usunięto nauczyciela z grupy.'
+    redirect_outside_turbo_frame story_group_teachers_path(@story_group),
+                                 notice: "Usunięto z grupy: #{name}."
   end
 
   private
 
   def set_story_group
-    @story_group = StoryGroup.find(params[:story_group_id])
+    @story_group = StoryGroup.find(params.expect(:story_group_id))
   end
 
   def set_teacher
-    @teacher = @story_group.teacher_memberships.find(params[:id])
+    @teacher = @story_group.teacher_memberships.find(params.expect(:id))
   end
 
-  def set_teachers_for_select
-    @teachers =
-      if @current_user.global_admin?
-        User.where(role: %i[teacher organization_admin global_admin])
-      else
-        User.where(
-          role:            %i[teacher organization_admin global_admin],
-          university_name: @current_user.university_name,
-        )
-      end
+  def set_presentation
+    @in_modal = turbo_frame_request_id == 'modal'
+  end
+
+  def set_pool
+    @pool = TeacherPool.new(story_group: @story_group, viewer: @current_user)
   end
 
   def teacher_params

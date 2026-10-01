@@ -1,0 +1,7 @@
+linters:
+  LineLength:
+    max: 120
+  UnnecessaryStringOutput:
+    enabled: false
+  SpaceInsideHashAttributes:
+    enabled: false

@@ -1,0 +1,44 @@
+@layer components {
+
+  .gh-btn i {
+    font-size: 18px;
+  }
+
+  .gh-back-link i {
+    font-size: 16px;
+  }
+
+  .gh-icon-circle-lg i {
+    font-size: 30px;
+  }
+
+  .gh-close i {
+    font-size: 14px;
+  }
+
+  .gh-sidebar-link i {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+  }
+
+  .gh-mobile-tab i {
+    font-size: 20px;
+  }
+
+  .gh-icon-button i {
+    font-size: 19px;
+  }
+
+  .gh-topbar-join-link i {
+    font-size: 15px;
+  }
+
+  .gh-sidebar-collapse-toggle i {
+    font-size: 15px;
+  }
+
+  .gh-mini-thumb i {
+    font-size: 20px;
+  }
+}

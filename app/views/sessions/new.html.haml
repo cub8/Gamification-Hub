@@ -1,16 +1,19 @@
-%h1.fs-2 Witaj w Gamification Hub!
+- content_for :title, 'Zaloguj się'
 
-#login-actions.d-flex.flex-column.align-items-center.gap-2
-  = button_to '/auth/uam_usos', data: { turbo: false }, class: 'btn btn-primary' do
-    %i.fa-solid.fa-fw.fa-graduation-cap
-    Zaloguj się przez usos
+%h1.gh-h1 Zaloguj się
+%p.gh-lead Wybierz sposób, z którego korzystasz na swojej uczelni lub w szkole.
 
-  %span lub
+.gh-button-stack
+  = button_to '/auth/uam_usos', class: 'gh-btn', data: { turbo: false } do
+    %i.fa-solid.fa-graduation-cap
+    Zaloguj się przez USOS
+  %p.gh-signed-in-as Studenci i nauczyciele uczelni
 
-  = link_to new_auth_passwordless_path, class: 'btn btn-secondary' do
-    %i.fa-solid.fa-fw.fa-at
-    Zaloguj się przez email
+  .gh-auth-divider albo
 
-  %span.text-dimmed
-    Nie masz konta?
-    = link_to 'Zarejestruj się', ''
+  = link_to new_auth_passwordless_path, class: 'gh-btn gh-btn--secondary' do
+    %i.fa-solid.fa-envelope
+    Zaloguj się e-mailem
+  %p.gh-signed-in-as Uczniowie szkół i osoby dodane przez administratora
+
+= render 'shared/register_prompt'

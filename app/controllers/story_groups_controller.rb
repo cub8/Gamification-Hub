@@ -1,106 +1,180 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
-  before_action :set_story_group, only: %i[show edit update destroy]
+  # #show renders the same owned-item card and the same badge cards as the
+  # inventory and the badge deck; under `include_all_helpers = false` their
+  # helpers do not arrive on their own.
+  helper StudentsItemsHelper, BadgesHelper
+
+  before_action :set_presentation, only: %i[confirm_destroy destroy]
+  before_action :set_story_group, only: %i[show edit update destroy confirm_destroy created]
 
   # GET /story_groups
   def index
-    all_groups = policy_scope(StoryGroup)
+    scope = policy_scope(StoryGroup)
 
-    @story_groups = case params[:filter]
-                    when 'mine'    then all_groups.where(owner_id: current_user.id)
-                    when 'student' then all_groups.where(id: current_user.student_story_groups.select(:id))
-                    when 'teacher' then all_groups.where(id: current_user.teacher_story_groups.select(:id))
-                    else                all_groups
-                    end.with_attached_icon
-
-    @show_mine_tab    = all_groups.exists?(owner_id: current_user.id)
-    @show_student_tab = current_user.student_story_groups.exists?
-    @show_teacher_tab = current_user.teacher_story_groups.exists?
+    @listing = StoryGroupsListing.new(scope: scope, user: current_user, filter: params[:filter]).load
   end
 
-  # GET /story_groups/1
   def show
     authorize @story_group
     @student = @story_group.student_memberships.find_by(user_id: @current_user.id)
 
-    if @student
-      dashboard       = StoryGroupStudentDashboard.new(student: @student).load
-      @rank           = dashboard.rank
-      @badges         = dashboard.badges
-      @students_items = dashboard.students_items
-    else
-      dashboard                = StoryGroupTeacherDashboard.new(story_group: @story_group).load
-      @recent_transactions     = dashboard.recent_transactions
-      @recent_activity_groups  = dashboard.recent_activity_groups
-      @activity_group_rankings = dashboard.activity_group_rankings
-    end
+    @overview = if @student
+                  StudentOverview.new(student: @student).load
+                else
+                  TeacherOverview.new(story_group: @story_group).load
+                end
   end
 
-  # GET /story_groups/new
   def new
-    @story_group = StoryGroup.new
+    @story_group     = StoryGroup.new(default_lives: 3, ranking_mode: :podium_and_own)
+    @focused         = true
+    @group_art_layer = true
+
     authorize @story_group
   end
 
-  # GET /story_groups/1/edit
+  def preset_preview
+    authorize StoryGroup, :new?
+
+    @preset = StarterPack.for(pack: params[:pack], classes: params[:classes])
+    @currency_name = params[:currency_name]
+
+    render partial: 'preset_review', layout: false
+  end
+
   def edit
     authorize @story_group
   end
 
-  # POST /story_groups
   def create
     @story_group = StoryGroup.new(story_group_params)
     @story_group.owner_id = @current_user.id
+    @focused              = true
+    @group_art_layer      = true
 
     authorize @story_group
 
-    if @story_group.save
-      redirect_outside_turbo_frame story_group_path(@story_group),
-                                   notice: 'Pomyślnie utworzono grupę fabularną.'
+    if save_with_starter_pack
+      redirect_to created_story_group_path(@story_group)
     else
       render :new, status: :unprocessable_content
     end
   end
 
-  # PATCH/PUT /story_groups/1
+  def created
+    authorize @story_group, :edit?
+
+    @focused = true
+    @counts  = {
+      ranks:      @story_group.ranks.count,
+      badges:     @story_group.badges.kept.count,
+      items:      @story_group.items.kept.count,
+      categories: @story_group.activity_group_templates.kept
+                  .sum { |template| template.categories.size },
+    }
+  end
+
   def update
     authorize @story_group
 
     if @story_group.update(story_group_params)
-      redirect_outside_turbo_frame story_group_path(@story_group),
-                                   notice: 'Pomyślnie zaktualizowano grupę fabularną.'
+      redirect_to edit_story_group_path(@story_group), notice: 'Zapisano ustawienia grupy.'
     else
       render :edit, status: :unprocessable_content
     end
   end
 
-  # DELETE /story_groups/1
+  def confirm_destroy
+    authorize @story_group, :destroy?
+  end
+
   def destroy
     authorize @story_group
 
+    unless params[:confirm].to_s.strip == @story_group.name.to_s
+      @confirm_failed = true
+      return render :confirm_destroy, status: :unprocessable_content
+    end
+
+    name = @story_group.name
     @story_group.destroy!
-    redirect_to story_groups_path, notice: 'Pomyślnie usunięto grupę fabularną.', status: :see_other
+    notice = "Usunięto grupę #{name}."
+
+    return redirect_outside_turbo_frame(story_groups_path, notice: notice) if @in_modal
+
+    redirect_to story_groups_path, notice: notice, status: :see_other
   end
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
+  def quick_start?
+    params.dig(:setup, :path) == 'quick'
+  end
+
+  def save_with_starter_pack
+    ActiveRecord::Base.transaction do
+      raise ActiveRecord::Rollback unless @story_group.save
+
+      next true unless quick_start?
+
+      StarterPackBuilder.new(story_group: @story_group,
+                             pack:        params.dig(:setup, :pack),
+                             classes:     params.dig(:setup, :classes),
+                             selection:   starter_selection,).call
+      true
+    end
+  rescue StarterPackBuilder::InvalidSelection => e
+    @story_group.errors.add(:base, e.message)
+    false
+  end
+
+  def starter_selection
+    setup = params[:setup]
+    return {} if setup.blank?
+
+    %i[ranks badges items cats].index_with do |zone|
+      rows = setup[zone]
+      next {} if rows.blank?
+
+      rows.to_unsafe_h.to_h do |index, row|
+        [index.to_i, { keep: row[:keep].to_s != '0', value: row[:value] }]
+      end
+    end
+  end
+
+  def set_presentation
+    @in_modal = turbo_frame_request_id == 'modal'
+  end
+
   def set_story_group
     @story_group = StoryGroup.find(params.expect(:id))
   end
 
-  # Only allow a list of trusted parameters through.
   def story_group_params
-    params.expect(
+    permitted = params.expect(
       story_group: %i[
         name
         description
         icon
+        icon_glyph
         currency_name
         currency_icon
+        currency_icon_glyph
         default_lives
+        ranking_enabled
+        ranking_mode
       ],
     )
+
+    normalize_art(permitted, :icon, :icon_glyph)
+    normalize_art(permitted, :currency_icon, :currency_icon_glyph)
+    permitted
+  end
+
+  def normalize_art(permitted, attachment, glyph)
+    permitted[glyph] = permitted[glyph].presence if permitted.key?(glyph)
+    permitted[glyph] = nil if permitted[attachment].present?
   end
 end
