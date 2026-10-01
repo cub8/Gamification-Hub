@@ -36,10 +36,10 @@ gem 'rack-attack', '~> 6.8.0' # For throttling incoming request in authenticatio
 gem 'rondo_form', '~> 1.0' # For nested forms
 gem 'rqrcode', '~> 3.0' # For generating QR codes
 gem 'tzinfo-data', '~> 1', platforms: %i[windows jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'view_component', '~> 4.9' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
+gem 'view_component', '~> 4.15' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
 
 group :development, :test do
-  gem 'brakeman', '~> 8.0', require: false # Static analysis for security vulnerabilities
+  gem 'brakeman', '~> 8.1', require: false # Static analysis for security vulnerabilities
   gem 'bundler-audit', '~> 0.9', require: false # Audits gems for known security defects
   gem 'debug', '~> 1.11', platforms: %i[mri windows] # Debugger
   gem 'factory_bot_rails', '~> 6.5' # For factories [https://github.com/thoughtbot/factory_bot_rails]
