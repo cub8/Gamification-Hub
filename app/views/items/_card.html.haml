@@ -1,0 +1,77 @@
+- offer    = local_assigns.fetch(:offer, nil) || ItemOffer.preview(card)
+- state    = local_assigns.fetch(:state, :afford)
+- price    = local_assigns.fetch(:price, nil) || offer.price
+- need     = local_assigns.fetch(:need, 0).to_i
+- progress = local_assigns.fetch(:progress, 0).to_f
+- targets  = local_assigns.fetch(:targets, {})
+- all_feet = local_assigns.fetch(:all_feet, false)
+- hide     = ->(foot) { all_feet && state != foot }
+
+- modifier = 'gh-card--sealed' if state == :sealed
+- modifier = 'gh-card--affordable' if state == :afford && local_assigns[:buy]
+
+%article.gh-card{ class: modifier, data: targets[:card] }
+  .gh-card-frame
+    .gh-card-inset
+      .gh-card-header
+        %h3.gh-card-name{ class: ('gh-placeholder-text' if item.name.blank?), data: targets[:name] }
+          = item_name(item)
+        %span.gh-price-badge.gh-price-badge--lg
+          - if offer.discounted?
+            %s= offer.list_price
+          %b{ data: targets[:cost] }= price
+
+      .gh-card-art{ data: targets[:art_well] }
+        %span.gh-art-slot-wrapper{ data: targets[:art] }
+          = render 'items/art', item: item
+
+        %span.gh-lock-seal.gh-octagon-clip{ hidden: state != :sealed, data: targets[:seal] }
+          %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+          %span{ data: targets[:seal_label] }= offer.seal_label
+
+      .gh-card-tags{ data: targets[:tags] }
+        %span.gh-tag.gh-tag--discount{ hidden: offer.discount_label.nil?, data: targets[:tag_disc] }
+          = offer.discount_label
+        %span.gh-tag.gh-tag--no-lives{ hidden: !offer.zero_lives?, data: targets[:tag_life] }
+          %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
+          Działa przy 0 życiach
+
+      %p.gh-rule-text{ class: ('gh-placeholder-text' if item.didactic_description.blank?), data: targets[:rules] }
+        = item_rules(item)
+
+      %p.gh-card-flavor{ hidden: item.story_description.blank?, data: targets[:flavor] }
+        = item.story_description
+
+      .gh-card-footer
+        - if all_feet || state == :afford
+          %span.gh-item-foot.flex.items-center{ class: 'gap-3.5', hidden: hide.call(:afford), data: targets[:foot_afford] }
+            - if local_assigns[:buy]
+              = buy
+            - else
+              %button.gh-btn{ type: 'button', tabindex: -1 }
+                %span{ data: targets[:buy_label] }= "Kup za #{price}"
+
+        - if all_feet || state == :save
+          .gh-requirement-block{ hidden: hide.call(:save), data: targets[:foot_save] }
+            .gh-requirement-title
+              Zbierz jeszcze
+              %b{ data: targets[:need] }= need
+            .gh-progress-bar.gh-octagon-clip
+              %i.gh-octagon-clip{ style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%", data: targets[:bar] }
+
+        - if all_feet || state == :sealed
+          .gh-requirement-list{ hidden: hide.call(:sealed), data: targets[:foot_sealed] }
+            %ul{ data: targets[:req_list] }
+              - offer.requirement_lines.each do |lead, name|
+                %li
+                  = lead
+                  - if name
+                    %b= name
+
+            - if (rp = offer.rank_progress)
+              .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
+                       'aria-valuemin': 0,
+                       'aria-valuemax': rp.target,
+                       'aria-valuenow': rp.collected,
+                       'aria-label': "Postęp do rangi #{rp.rank_name}" }
+                %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(rp.collected, rp.target)}%" }

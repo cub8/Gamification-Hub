@@ -31,7 +31,7 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
            }
     end
 
-    assert_turbo_redirected_to story_group_url(StoryGroup.last)
+    assert_redirected_to created_story_group_url(StoryGroup.last)
   end
 
   test 'should show story_group' do
@@ -53,14 +53,37 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
               name:          @story_group.name,
             },
           }
-    assert_turbo_redirected_to story_group_url(@story_group)
+    assert_redirected_to edit_story_group_url(@story_group)
+  end
+
+  test 'should get confirm_destroy' do
+    get confirm_destroy_story_group_url(@story_group)
+    assert_response :success
   end
 
   test 'should destroy story_group' do
     assert_difference('StoryGroup.count', -1) do
-      delete story_group_url(@story_group)
+      delete story_group_url(@story_group), params: { confirm: @story_group.name }
     end
 
     assert_redirected_to story_groups_url
+  end
+
+  test 'destroying from the dialog breaks out of the frame' do
+    assert_difference('StoryGroup.count', -1) do
+      delete story_group_url(@story_group),
+             params:  { confirm: @story_group.name },
+             headers: { 'Turbo-Frame' => 'modal' }
+    end
+
+    assert_turbo_redirected_to story_groups_url
+  end
+
+  test 'should not destroy story_group without the typed name' do
+    assert_no_difference('StoryGroup.count') do
+      delete story_group_url(@story_group), params: { confirm: 'coś innego' }
+    end
+
+    assert_response :unprocessable_content
   end
 end

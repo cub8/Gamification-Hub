@@ -1,0 +1,8 @@
+- content_for :title, "Usunąć #{@teacher.full_name} z grupy?"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_destroy', teacher: @teacher
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_destroy', teacher: @teacher

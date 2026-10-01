@@ -1,7 +1,8 @@
-- content_for :title, "Edytuj zaproszenie"
+- content_for :title, "Edytuj zaproszenie #{@invite.code}"
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Edytuj zaproszenie
-      = render "form", invite: @invite, url: story_group_invite_path(@story_group, @invite)
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'form', form: @form
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'form', form: @form

@@ -1,0 +1,8 @@
+- content_for :title, "Ranking - #{StoryGroup::RANKING_MODE_LABELS.fetch(@mode)}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_mode', story_group: @story_group, mode: @mode
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_mode', story_group: @story_group, mode: @mode

@@ -1,0 +1,4 @@
+- if @in_modal
+  %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+- else
+  = link_to 'Anuluj', story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary'

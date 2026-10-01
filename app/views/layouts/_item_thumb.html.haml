@@ -1,0 +1,7 @@
+%span.gh-card.gh-mini-thumb
+  %span.gh-card-frame
+    %span.gh-card-inset{ data: local_assigns[:inner_data] }
+      - if item
+        = render 'items/art', item: item
+      - else
+        %i.fa-solid.fa-flask{ 'aria-hidden': 'true' }

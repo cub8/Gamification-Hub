@@ -1,0 +1,9 @@
+- item  = offer.item
+- price = offer.price
+- need  = [price - @shop.balance, 0].max
+- buy   = render('shop/buy_button', item: item, price: price) if state == :afford
+
+= render 'items/card', item: item, card: offer.card, offer: offer, state: state,
+  price: price, need: need,
+  progress: (price.positive? ? @shop.balance.to_f / price : 1.0),
+  buy: buy

@@ -1,0 +1,41 @@
+%dialog.gh-dialog.gh-dialog--grading-review{ 'aria-labelledby': 'gh-review-title',
+                                     data: { grading_target: 'dialog',
+                                             action: 'close->grading#closeReview click->grading#closeOnBackdrop' } }
+  .gh-dialog-body.gh-octagon-clip
+    %h2#gh-review-title.gh-h2
+      Przyznajesz
+      %span{ data: { grading_target: 'reviewSum' } }
+      = @story_group.currency_name
+      %span{ data: { grading_target: 'reviewStudents' } }
+
+    %p.gh-warning-note{ role: 'alert' }
+      %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
+      Po zatwierdzeniu nie da się tego cofnąć. Sprawdź listę, zanim przyznasz nagrody.
+
+    %ul.gh-review-list
+      - students.each do |student|
+        - name = student.full_name
+        - open_categories = categories.reject { |category| @sheet.awarded?(student, category) }
+        - next if open_categories.empty?
+        %li{ hidden: true, data: { grading_target: 'reviewRow', gh_student: student.id } }
+          %span.gh-review-row-name
+            %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+              = gh_initials(name)
+            = name
+          %span.gh-review-row-chips
+            - open_categories.each do |category|
+              %span.gh-review-chip.gh-octagon-clip{ hidden: true,
+                                      data: { grading_target: 'reviewChip',
+                                              gh_student: student.id, gh_column: category.id } }
+                = category.didactic_description
+                %b= "+#{category.reward.to_i}"
+          %span.gh-review-row-sum{ data: { grading_target: 'reviewRowSum' } }
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{ type: 'button', autofocus: true,
+                                  data: { action: 'grading#closeReview' } }
+        Wróć do edycji
+      %button.gh-btn.gh-btn--gold{ type: 'submit', form: 'gh-grade-form' }
+        Przyznaj
+        %span{ data: { grading_target: 'reviewConfirmSum' } }
+        = @story_group.currency_name

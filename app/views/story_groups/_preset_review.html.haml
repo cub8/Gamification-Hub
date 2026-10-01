@@ -1,0 +1,72 @@
+- preset = @preset
+- currency = @currency_name.presence || 'waluty'
+
+= turbo_frame_tag 'starter_pack' do
+  .gh-form-section.gh-form-section--first
+    %h2.gh-h3= "Zestaw „#{preset.label}” dla #{preset.classes} zajęć"
+    %p.gh-field-hint
+      Usuń, czego nie potrzebujesz, i popraw liczby. Nazwy i opisy zmienisz po
+      utworzeniu grupy.
+
+    = hidden_field_tag 'setup[pack]', preset.pack, id: nil
+    = hidden_field_tag 'setup[classes]', preset.classes, id: nil
+
+    .gh-preset-review-grid
+      %section.gh-preset-review-section
+        %h3.gh-h3
+          Rangi
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.ranks.size
+        - preset.ranks.each do |rank|
+          = render layout: 'preset_row', locals: { zone: 'ranks', index: rank.index, icon: 'fa-ranking-star',
+            name: rank.name,
+            note: (rank.discount.positive? ? "−#{rank.discount}% w sklepie" : 'Ranga startowa') } do
+            - if rank.index.zero?
+              %span.gh-preset-row-value od 0
+              = hidden_field_tag "setup[ranks][#{rank.index}][value]", rank.threshold, id: nil
+            - else
+              %span.gh-preset-row-value
+                od
+                .gh-text-input.gh-input--compact
+                  = number_field_tag "setup[ranks][#{rank.index}][value]", rank.threshold,
+                    min: 0, step: 1, id: nil, 'aria-label': "#{rank.name}: próg"
+
+      %section.gh-preset-review-section
+        %h3.gh-h3
+          Odznaki
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.badges.size
+        - preset.badges.each do |badge|
+          = render layout: 'preset_row', locals: { zone: 'badges', index: badge.index, icon: 'fa-award',
+            name: badge.name, note: badge.didactic_description } do
+            %span.gh-preset-row-value= "−#{badge.discount}% w sklepie"
+
+      %section.gh-preset-review-section
+        %h3.gh-h3
+          Przedmioty w sklepie
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.items.size
+        - preset.items.each do |item|
+          = render layout: 'preset_row', locals: { zone: 'items', index: item.index, icon: 'fa-bag-shopping',
+            name: item.name, note: item.didactic_description } do
+            %span.gh-preset-row-value
+              .gh-text-input.gh-input--compact
+                = number_field_tag "setup[items][#{item.index}][value]", item.price,
+                  min: 1, step: 1, id: nil, 'aria-label': "#{item.name}: cena w #{currency}"
+              %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
+                %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
+                  %span{ data: { group_wizard_target: 'markLetter' } }
+
+      %section.gh-preset-review-section
+        %h3.gh-h3
+          Kategorie zajęć
+          %small.gh-page-kicker= "(szablon „#{StarterPack::TEMPLATE_NAME}”)"
+          %span.gh-showcase-zone-count.gh-octagon-clip= preset.categories.size
+        - preset.categories.each do |category|
+          = render layout: 'preset_row', locals: { zone: 'cats', index: category.index, icon: 'fa-table-cells',
+            name: category.didactic_description, note: nil } do
+            %span.gh-preset-row-value
+              .gh-text-input.gh-input--compact
+                = number_field_tag "setup[cats][#{category.index}][value]", category.reward,
+                  min: 1, step: 1, id: nil,
+                  'aria-label': "#{category.didactic_description}: nagroda w #{currency}"
+              %span.gh-currency-token.gh-octagon-clip{ style: '--gh-s: 20px', 'aria-hidden': 'true' }
+                %span.gh-octagon-clip{ data: { group_wizard_target: 'markBox' } }
+                  %span{ data: { group_wizard_target: 'markLetter' } }

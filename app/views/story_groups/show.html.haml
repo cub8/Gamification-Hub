@@ -1,6 +1,6 @@
 - content_for :title, @story_group.name
 
 - if @student
-  = render 'student_show'
+  = render 'student_show', overview: @overview
 - else
-  = render 'teacher_show'
+  = render 'teacher_show', overview: @overview

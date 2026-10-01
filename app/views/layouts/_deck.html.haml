@@ -1,0 +1,27 @@
+- story_group = chrome.story_group
+
+%section.gh-current-group-card{ 'aria-label': "Grupa #{chrome.name}" }
+  .gh-current-group-card-frame.gh-octagon-clip
+    .gh-current-group-card-inner.gh-octagon-clip
+      - cover = gh_group_cover(story_group)
+      %span.gh-current-group-card-cover.gh-octagon-clip{ class: ('gh-current-group-card-cover--fallback' if cover.nil?), 'aria-hidden': 'true' }
+        = cover || gh_monogram(story_group.name)
+
+      .gh-current-group-card-header
+        %h2.gh-current-group-card-name= chrome.name
+        %p.gh-current-group-card-role= chrome.role_label
+
+      %button.gh-link-button.gh-current-group-card-switch-trigger{ type: 'button',
+                                     title: 'Zmień grupę',
+                                     data: { action: 'menu#open',
+                                             menu_id_param: 'gh-group-switcher' } }
+        %i.fa-solid.fa-right-left{ 'aria-hidden': 'true' }
+        %span Zmień grupę
+
+      %nav.gh-sidebar-nav{ 'aria-label': 'Sekcje grupy' }
+        - chrome.items.each do |item|
+          - on = item.current?(current_path)
+          = link_to item.path, class: "gh-sidebar-link #{'gh-sidebar-link--active' if on}",
+            title: item.label, 'aria-current': ('page' if on) do
+            %i.fa-solid{ class: item.icon }
+            %span= item.label

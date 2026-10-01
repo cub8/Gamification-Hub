@@ -1,0 +1,30 @@
+- show_discount = local_assigns.fetch(:show_discount, false)
+
+%fieldset.gh-chip-group{ data: { controller: 'chip-picker' } }
+  %legend.sr-only= legend
+
+  = hidden_field_tag "#{f.object_name}[#{field}][]", '', id: nil
+
+  - badges.each do |badge|
+    %label.gh-choice-chip.gh-octagon-clip{ data: { chip_picker_target: 'chip',
+                            item_form_target:   form_target,
+                            gh_name:            badge.name,
+                            gh_discount:        badge.discount.to_i } }
+      = f.check_box field, { multiple:  true,
+                             class:     'sr-only',
+                             data:      { chip_picker_target: 'box',
+                                          action: 'change->chip-picker#sync change->item-form#refresh' } },
+        badge.id, nil
+      %span= badge.name
+      - if show_discount
+        %small= "−#{badge.discount.to_i}%"
+      %i.fa-solid.fa-xmark{ 'aria-hidden': 'true' }
+
+  - if badges.any?
+    %span.gh-select-input{ data: { chip_picker_target: 'adder' }, hidden: true }
+      %select{ 'aria-label': legend, data: { chip_picker_target: 'select', action: 'chip-picker#add' } }
+        %option{ value: '' }= placeholder
+        - badges.each do |badge|
+          %option{ value: badge.id, data: { chip_picker_target: 'option' } }
+            = show_discount ? "#{badge.name} (−#{badge.discount.to_i}%)" : badge.name
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }

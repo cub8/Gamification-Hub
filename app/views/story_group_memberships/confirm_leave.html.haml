@@ -1,0 +1,8 @@
+- content_for :title, "Opuść grupę #{@story_group.name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_leave', membership: @membership
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_leave', membership: @membership

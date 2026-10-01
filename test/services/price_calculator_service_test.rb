@@ -20,7 +20,6 @@ class PriceCalculatorServiceTest < ActiveSupport::TestCase
   test 'rounds up the final price using ceil' do
     discount = Discount.new(16)
     service = PriceCalculatorService.new(price: 30, discount: discount)
-    # 30 * 0.84 = 25.2, .ceil powinno dać 26.
     assert_equal 26, service.calculate
   end
 end

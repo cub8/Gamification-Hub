@@ -1,0 +1,4 @@
+- cover = gh_group_cover(story_group)
+
+.gh-card-art{ class: ('gh-art--monogram' if cover.nil?) }
+  = cover || gh_monogram(story_group.name)
