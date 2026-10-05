@@ -2,10 +2,6 @@
 
 require 'test_helper'
 
-# Runs two purchases on separate DB connections (real threads) to prove the
-# student row is actually locked for the balance check, not just checked in
-# Ruby. Needs real commits to be visible across connections, hence no
-# transactional fixtures here.
 class ItemPurchaseServiceConcurrencyTest < ActiveSupport::TestCase
   self.use_transactional_tests = false
 
