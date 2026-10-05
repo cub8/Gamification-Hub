@@ -21,7 +21,9 @@ class StudentsBadgesController < ApplicationController
   def create
     @students_badge = @student.students_badges.build(badge_params)
 
-    if @students_badge.save
+    saved = @student.with_lock { @students_badge.save }
+
+    if saved
       redirect_outside_turbo_frame story_group_student_path(@story_group, @student),
                                    notice: "Przyznano odznakę „#{@students_badge.name}”."
     else
