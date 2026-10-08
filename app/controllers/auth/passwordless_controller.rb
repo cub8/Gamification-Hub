@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Auth::PasswordlessController < ApplicationController
-  include Authentication
   include Auth::SignIn
+  include LoggedUserRedirector
 
   RESEND_COOLDOWN = 60
 

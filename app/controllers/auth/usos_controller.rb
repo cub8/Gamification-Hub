@@ -3,8 +3,8 @@
 class Auth::UsosController < ApplicationController
   class InvalidProviderError < StandardError; end
 
-  include Authentication
   include Auth::SignIn
+  include LoggedUserRedirector
 
   skip_before_action :authenticate!
   before_action :redirect_logged_user

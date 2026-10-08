@@ -3,7 +3,6 @@
 class RankingController < ApplicationController
   include StoryGroupAuthorization
 
-
   before_action :set_story_group
   before_action :set_presentation,              only: %i[confirm_visibility confirm_mode]
   before_action :authorize_story_group_manage!, except: :show
