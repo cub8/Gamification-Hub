@@ -3,7 +3,8 @@
 class Auth::UsosController < ApplicationController
   class InvalidProviderError < StandardError; end
 
-  include LoggedUserRedirector
+  include Authentication
+  include Auth::SignIn
 
   skip_before_action :authenticate!
   before_action :redirect_logged_user
@@ -13,10 +14,7 @@ class Auth::UsosController < ApplicationController
     builder = SessionUserBuilder.new(provider)
     user = builder.build
 
-    reset_session
-    session[:user_id] = user.id
-
-    redirect_to home_path
+    sign_in_and_redirect(user)
   rescue InvalidProviderError
     redirect_to root_path, alert: 'Nieprawidłowy dostawca logowania.'
   rescue Providers::InvalidAuthError
