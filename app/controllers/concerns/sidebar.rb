@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Sidebar
+  extend ActiveSupport::Concern
+
   included do
     before_action :set_sidebar_state
   end
