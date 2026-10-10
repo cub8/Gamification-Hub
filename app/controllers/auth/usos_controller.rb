@@ -21,6 +21,10 @@ class Auth::UsosController < ApplicationController
     redirect_to root_path, alert: 'Nieprawidłowy dostawca logowania.'
   rescue Providers::InvalidAuthError
     redirect_to root_path, alert: 'Nieprawidłowa próba autoryzacji.'
+  rescue SessionUserBuilder::OrganizationNotFoundError
+    redirect_to root_path, alert: 'Twoja uczelnia nie jest zarejestrowana jako organizacja.'
+  rescue SessionUserBuilder::OrganizationFullError
+    redirect_to root_path, alert: 'Organizacja Twojej uczelni osiągnęła limit członków.'
   end
 
   private

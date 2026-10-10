@@ -1,0 +1,14 @@
+%h2.gh-h2= "Usunąć konto #{user.full_name}?"
+%p
+  Konto zostanie usunięte na stałe, razem z członkostwem w grupach, walutą,
+  odznakami i przedmiotami. Zwolni się jedno miejsce w organizacji.
+
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Anuluj
+  - else
+    = link_to 'Anuluj', organization_path(@organization), class: 'gh-btn gh-btn--secondary'
+
+  = button_to 'Usuń konto', organization_user_path(@organization, user),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

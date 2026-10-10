@@ -1,0 +1,17 @@
+- editing = organization.persisted?
+
+= form_with model: organization, data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |form|
+  %h2.gh-h2= editing ? 'Edytuj organizację' : 'Nowa organizacja'
+  %p
+    Nazwa musi być taka sama jak nazwa uczelni u dostawcy logowania —
+    po niej nowe konta trafiają do organizacji.
+
+  = render 'organizations/field', form: form, record: organization, attribute: :name, label: 'Nazwa',
+                                  options: { maxlength: 100, autofocus: true }
+  = render 'organizations/field', form: form, record: organization, attribute: :max_members,
+                                  label: 'Limit członków', input: :number_field,
+                                  options: { min: 1, step: 1 }
+
+  = render 'organizations/dialog_actions',
+    cancel_path: (editing ? organization_path(organization) : organizations_path),
+    submit_label: (editing ? 'Zapisz' : 'Utwórz organizację')

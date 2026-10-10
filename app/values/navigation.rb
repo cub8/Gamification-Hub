@@ -27,8 +27,9 @@ class Navigation
   def primary_items
     [
       Item.new(label: 'Start',  path: home_path,         icon: 'fa-house'),
-      Item.new(label: 'Grupy',  path: story_groups_path, icon: 'fa-book'),
-    ]
+      (Item.new(label: 'Grupy', path: story_groups_path, icon: 'fa-book') unless @user.global_admin?),
+      organization_item,
+    ].compact
   end
 
   def tab_items
@@ -102,6 +103,18 @@ class Navigation
     return unless chrome.ranking?
 
     section('Ranking', story_group_ranking_path(chrome.story_group), 'fa-ranking-star')
+  end
+
+  # Global admins manage every organization; an organization admin goes
+  # straight to their own.
+  def organization_item
+    if @user.global_admin?
+      Item.new(label: 'Organizacje', path: organizations_path, icon: 'fa-briefcase', match: organizations_path)
+    elsif @user.organization_admin? && @user.organization
+      path = organization_path(@user.organization)
+      Item.new(label: @user.organization.name, path: path, icon: 'fa-briefcase',
+               short: 'Organizacja', match: path,)
+    end
   end
 
   def overview(group)

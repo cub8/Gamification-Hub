@@ -1,0 +1,8 @@
+- content_for :title, "Usunąć konto #{@user.full_name}?"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_destroy', user: @user
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_destroy', user: @user

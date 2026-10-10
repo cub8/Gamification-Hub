@@ -1,0 +1,8 @@
+- name = user.full_name.presence || user.email
+
+%span.gh-student-name-cell
+  %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+    = gh_initials(name)
+  %span.gh-name-cell
+    %b= name
+    %small= user.email

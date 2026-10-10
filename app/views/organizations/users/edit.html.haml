@@ -1,0 +1,8 @@
+- content_for :title, "Edytuj użytkownika — #{@user.full_name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'organizations/user_form', user: @user
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'organizations/user_form', user: @user

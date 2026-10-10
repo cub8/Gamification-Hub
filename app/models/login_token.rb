@@ -33,6 +33,6 @@ class LoginToken < ApplicationRecord
 
     @raw_token = raw_token
     self.token_digest = self.class.digest(raw_token)
-    self.expires_at = EXPIRES_IN.from_now
+    self.expires_at ||= EXPIRES_IN.from_now
   end
 end

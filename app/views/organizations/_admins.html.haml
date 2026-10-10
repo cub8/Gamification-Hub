@@ -1,0 +1,13 @@
+%section.gh-panel.gh-organizations-panel
+  %h2.gh-h3.gh-organizations-panel-title Administratorzy
+
+  - if admins.any?
+    - admins.each do |admin|
+      .gh-organization-member-row
+        = render 'organizations/person', user: admin
+        %span.gh-teacher-role
+          Administrator
+          - if admin.first_login?
+            %small Zaproszenie wysłane
+  - else
+    %p.gh-explainer-note Organizacja nie ma jeszcze administratora.

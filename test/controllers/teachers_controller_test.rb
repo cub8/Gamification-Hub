@@ -67,17 +67,6 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     assert_select '.gh-teacher-result-row button[value=?]', elsewhere.id.to_s, count: 0
   end
 
-  test 'a global admin sees every university in the pool' do
-    elsewhere = FactoryBot.create(:user, role: :teacher, university_name: 'Somewhere else')
-    admin = FactoryBot.create(:user, role: :global_admin)
-    sign_out
-    sign_in admin
-
-    get new_story_group_teacher_url(@story_group)
-
-    assert_select '.gh-teacher-result-row button[value=?]', elsewhere.id.to_s, count: 1
-  end
-
   test 'a supporting teacher may read the list but not change it' do
     sign_out
     sign_in @teacher1

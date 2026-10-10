@@ -25,7 +25,7 @@ class StoryGroupStudentPolicy < ApplicationPolicy
     private
 
     def admin?
-      user.organization_admin? || user.global_admin?
+      user.organization_admin?
     end
   end
 
@@ -84,7 +84,7 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   private
 
   def admin?
-    user.organization_admin? || user.global_admin?
+    user.organization_admin?
   end
 
   def story_group_teacher?

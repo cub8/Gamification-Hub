@@ -1,6 +1,10 @@
 - content_for :title, 'Start'
 
-- if @current_user.teacher?
+- if @current_user.global_admin?
+  = render 'global_admin_start'
+- elsif @current_user.organization_admin?
+  = render 'organization_admin_start'
+- elsif @current_user.teacher?
   = render 'teacher_start'
 - else
   = render 'student_start'

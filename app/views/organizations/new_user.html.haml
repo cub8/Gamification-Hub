@@ -1,0 +1,8 @@
+- content_for :title, 'Dodaj użytkownika organizacji'
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'user_form', user: @new_user
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'user_form', user: @new_user

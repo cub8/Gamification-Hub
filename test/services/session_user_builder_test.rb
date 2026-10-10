@@ -30,10 +30,34 @@ class SessionUserBuilderTest < ActiveSupport::TestCase
   end
 
   test 'create new user if no user in database' do
+    organization = FactoryBot.create(:organization, name: 'Example university')
+
     assert_difference 'User.count', 1 do
       user = SessionUserBuilder.new(@provider).build
 
       assert_equal 'jan.nowak@gmail.com', user.email
+      assert_equal organization, user.organization
+    end
+  end
+
+  test 'do not create new user if no organization matches university name' do
+    FactoryBot.create(:organization, name: 'Other university')
+
+    assert_no_difference 'User.count' do
+      assert_raises SessionUserBuilder::OrganizationNotFoundError do
+        SessionUserBuilder.new(@provider).build
+      end
+    end
+  end
+
+  test 'do not create new user if organization is full' do
+    organization = FactoryBot.create(:organization, name: 'Example university', max_members: 1)
+    FactoryBot.create(:user, organization: organization)
+
+    assert_no_difference 'User.count' do
+      assert_raises SessionUserBuilder::OrganizationFullError do
+        SessionUserBuilder.new(@provider).build
+      end
     end
   end
 

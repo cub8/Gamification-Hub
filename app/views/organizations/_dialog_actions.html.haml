@@ -1,0 +1,8 @@
+-# Cancel closes the dialog when the form opened in one, otherwise it goes
+-# back to `cancel_path`.
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+  - else
+    = link_to 'Anuluj', cancel_path, class: 'gh-btn gh-btn--secondary'
+  %button.gh-btn{ type: 'submit' }= submit_label
