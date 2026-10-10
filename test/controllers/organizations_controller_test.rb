@@ -33,7 +33,8 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
     assert_difference 'User.count', 1 do
       assert_enqueued_emails 1 do
         post add_admin_organization_url(@organization),
-             params: { user: { email: 'admin@example.com', full_name: 'Anna Kowalska' } }
+             params:  { user: { email: 'admin@example.com', full_name: 'Anna Kowalska' } },
+             headers: { 'Turbo-Frame' => 'modal' }
       end
     end
 
@@ -99,5 +100,31 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :unprocessable_content
     end
+  end
+
+  test '#show - global admin sees admins and capacity' do
+    FactoryBot.create(:user, :organization_admin, organization: @organization, full_name: 'Anna Kowalska')
+
+    get organization_url(@organization)
+
+    assert_response :success
+    assert_select '.gh-organization-member-row', text: /Anna Kowalska/
+    assert_select '.gh-lead', text: /1 z #{@organization.max_members} miejsc/
+  end
+
+  test '#destroy - requires the organization name to be typed' do
+    assert_no_difference 'Organization.count' do
+      delete organization_url(@organization), params: { confirm: 'wrong name' }
+    end
+
+    assert_response :unprocessable_content
+  end
+
+  test '#destroy - deletes organization when name matches' do
+    assert_difference 'Organization.count', -1 do
+      delete organization_url(@organization), params: { confirm: @organization.name }
+    end
+
+    assert_redirected_to organizations_url
   end
 end

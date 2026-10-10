@@ -9,11 +9,12 @@ class PasswordlessMailerTest < ActionMailer::TestCase
       email:      'jan.nowak@example.com',
       user_name:  'Jan Nowak',
     ).token_email
-    assert_equal 'Logowanie do systemu GamificationHub', mail.subject
+    assert_equal 'Logowanie do systemu Gamification Hub', mail.subject
     assert_equal ['jan.nowak@example.com'], mail.to
     assert_equal ['from@example.com'], mail.from
-    assert_match 'Witaj Jan Nowak!', mail.html_part.body.decoded
-    assert_match 'Twój link logujący do GamificationHub to', mail.html_part.body.decoded
+    assert_match 'Cześć, Jan!', mail.html_part.body.decoded
     assert_match 'http://example.com/test', mail.html_part.body.decoded
+    assert_match 'Cześć, Jan!', mail.text_part.body.decoded
+    assert_match 'http://example.com/test', mail.text_part.body.decoded
   end
 end

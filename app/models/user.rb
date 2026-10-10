@@ -45,7 +45,7 @@ class User < ApplicationRecord
     organization_admin? && first_login?
   end
 
-  def create_login_token!(expires_in: LoginToken::DEFAULT_EXPIRES_IN)
+  def create_login_token!(expires_in: LoginToken::EXPIRES_IN)
     consume_login_token!
     LoginToken.create!(user: self, expires_at: expires_in.from_now)
   end

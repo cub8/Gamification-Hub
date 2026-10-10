@@ -1,7 +1,8 @@
-- content_for :title, "Nowa organizacja"
+- content_for :title, 'Nowa organizacja'
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Nowa organizacja
-      = render "form", organization: @organization, cancel_path: organizations_path, submit_label: "Create"
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'form', organization: @organization
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'form', organization: @organization

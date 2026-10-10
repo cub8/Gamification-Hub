@@ -1,0 +1,25 @@
+- earned      = local_assigns.fetch(:earned, true)
+- interactive = local_assigns.fetch(:interactive, false)
+- withdrawn   = local_assigns.fetch(:withdrawn, false)
+- targets     = local_assigns.fetch(:targets, {})
+
+- label = earned ? "Odznaka #{badge.name}" : "Odznaka #{badge.name}, jeszcze niezdobyta"
+- card_data = targets[:flip].to_h
+- card_data.merge!(controller: 'badge-flip', action: 'click->badge-flip#toggle') if interactive
+
+%article.gh-card.gh-card--badge.gh-flip-card{ class: ('gh-flip-card--down' unless earned),
+                                         'aria-label': label,
+                                         data: card_data }
+  .gh-flip-card-inner
+    .gh-flip-card-face.gh-flip-card-face--front{ 'aria-hidden': (earned ? nil : 'true'), inert: !earned,
+                             data: { badge_flip_target: 'front' } }
+      .gh-card-frame
+        .gh-card-inset
+          = render 'badges/front', badge: badge, targets: targets,
+            flipper: interactive, withdrawn: withdrawn
+
+    .gh-flip-card-face.gh-flip-card-face--back{ 'aria-hidden': (earned ? 'true' : nil), inert: earned,
+                            data: { badge_flip_target: 'back' } }
+      .gh-card-frame
+        .gh-card-inset.gh-flip-card-back-body
+          = render 'badges/back', badge: badge, targets: targets, flipper: interactive

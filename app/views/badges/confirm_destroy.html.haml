@@ -1,0 +1,8 @@
+- content_for :title, "Usuń odznakę #{@badge.name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_destroy', badge: @badge, unlocking_items: @unlocking_items
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_destroy', badge: @badge, unlocking_items: @unlocking_items

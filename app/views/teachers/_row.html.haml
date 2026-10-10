@@ -1,0 +1,30 @@
+- person = row.person
+- name   = person.full_name
+
+.gh-teacher-row
+  %span.gh-student-name-cell
+    %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+      = gh_initials(name)
+    %span.gh-name-cell
+      %b= name
+      %small= person.email
+
+  %span.gh-teacher-role
+    - if row.owner?
+      Właściciel
+      %small Utworzył grupę
+    - else
+      Nauczyciel wspomagający
+
+  %span
+    %span.gh-mobile-field-label Dodano
+    %span.gh-small= teacher_added_on(row.added_at)
+
+  %span.gh-teacher-row-actions
+    - if manage && row.removable?
+      = link_to confirm_destroy_story_group_teacher_path(@story_group, row.membership),
+        class: 'gh-btn gh-btn--secondary gh-btn--small',
+        'aria-label': "Usuń z grupy: #{name}",
+        data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
+        Usuń

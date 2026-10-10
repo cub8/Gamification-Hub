@@ -1,6 +1,43 @@
 - content_for :title, @organization.name
 
-- if @current_user.global_admin?
-  = render 'global_admin_show'
-- if @current_user.organization_admin?
-  = render 'organization_admin_show'
+- manage_users = policy(@organization).manage_users? && @users
+
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    - if @current_user.global_admin?
+      %p.gh-breadcrumbs
+        = link_to 'Organizacje', organizations_path
+        %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
+        %span= @organization.name
+    %h1.gh-h1= @organization.name
+    %p.gh-lead= organization_capacity_lead(@organization, @member_count)
+
+  .gh-button-row
+    - if policy(@organization).edit?
+      = link_to edit_organization_path(@organization), class: 'gh-btn gh-btn--secondary',
+                                                       data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
+        Edytuj
+    - if policy(@organization).new_admin?
+      = link_to new_admin_organization_path(@organization), class: 'gh-btn', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-user-shield{ 'aria-hidden': 'true' }
+        Dodaj administratora
+    - if manage_users
+      = link_to new_user_organization_path(@organization), class: 'gh-btn', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-user-plus{ 'aria-hidden': 'true' }
+        Dodaj użytkownika
+
+= render 'admins', admins: @admins
+
+- if manage_users
+  = render 'members', users: @users
+
+- if policy(@organization).destroy?
+  %section.gh-panel.gh-danger-zone
+    %h2.gh-h3 Usuń organizację
+    %p.gh-small Razem z organizacją znikną wszystkie jej konta. Tej operacji nie można cofnąć.
+    .gh-button-row
+      = link_to confirm_destroy_organization_path(@organization),
+        class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
+        Usuń organizację

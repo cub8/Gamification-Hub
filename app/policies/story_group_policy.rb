@@ -4,7 +4,7 @@ class StoryGroupPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
       if user.global_admin?
-        scope.all.includes(:owner)
+        scope.none
       elsif user.organization_admin?
         scope.where(owner_id: user.organization.users.select(:id))
       elsif user.teacher?
@@ -48,7 +48,15 @@ class StoryGroupPolicy < ApplicationPolicy
     owner? || admin?
   end
 
+  def manage_teachers?
+    owner? || admin?
+  end
+
   def view_ranking?
+    admin? || owner? || assistant? || student?
+  end
+
+  def see_ranking_standings?
     admin? || owner? || assistant? || (student? && record.ranking_enabled?)
   end
 
@@ -63,11 +71,9 @@ class StoryGroupPolicy < ApplicationPolicy
   private
 
   def admin?
-    user.global_admin? || user.organization_admin?
+    user.organization_admin?
   end
 
-  # For teachers and students belonging
-  # to the story group
   def member?
     assistant? || student?
   end

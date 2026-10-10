@@ -1,0 +1,24 @@
+- groups = user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
+
+%dialog#gh-group-switcher.gh-dialog.gh-dialog--menu.gh-dialog--group-switcher{ data: { action: 'click->menu#closeOnBackdrop' },
+                                                                         'aria-labelledby': 'gh-switch-title' }
+  .gh-dialog-body.gh-octagon-clip
+    %span.gh-sheet-drag-handle{ 'aria-hidden': 'true' }
+    .gh-popover-header
+      %h2#gh-switch-title.gh-h3 Zmień grupę
+
+    %ul.gh-menu-list
+      - groups.each do |story_group|
+        - here = chrome && chrome.story_group.id == story_group.id
+        %li
+          = link_to story_group_path(story_group), 'aria-current': ('page' if here) do
+            = render 'layouts/group_thumb', story_group: story_group, size: nil
+            %span= story_group.name
+            - if here
+              %span.gh-current-badge Tu jesteś
+
+    .gh-popover-footer
+      = link_to new_join_path, class: 'gh-btn gh-btn--secondary',
+        data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-plus
+        Dołącz do grupy

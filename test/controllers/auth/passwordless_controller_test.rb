@@ -22,8 +22,8 @@ class Auth::PasswordlessControllerTest < ActionDispatch::IntegrationTest
       post auth_passwordless_path, params: { email: user.email }
     end
 
-    assert_redirected_to new_auth_passwordless_path
-    assert_equal 'Wysłaliśmy na Twój adres email link logujący!', flash[:notice]
+    assert_redirected_to auth_passwordless_inbox_path
+    assert_nil flash[:notice], 'first send shows no notice - the inbox screen is the confirmation'
   end
 
   test '#create - does not send an email if user does not exist' do
@@ -33,8 +33,8 @@ class Auth::PasswordlessControllerTest < ActionDispatch::IntegrationTest
       post auth_passwordless_path, params: { email: 'test@example.com' }
     end
 
-    assert_redirected_to new_auth_passwordless_path
-    assert_equal 'Wysłaliśmy na Twój adres email link logujący!', flash[:notice]
+    assert_redirected_to auth_passwordless_inbox_path
+    assert_nil flash[:notice]
   end
 
   test '#verify - sign in with valid token' do

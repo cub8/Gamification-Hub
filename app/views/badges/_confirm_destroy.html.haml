@@ -1,0 +1,24 @@
+%h2#gh-del-title.gh-h2= "Usunąć odznakę „#{badge.name}”?"
+%p
+  Studenci, którzy mają tę odznakę, zachowają ją w historii, ale nikt nowy jej
+  nie dostanie.
+
+- if unlocking_items.any?
+  - one = unlocking_items.one?
+  %p.gh-warning-note{ role: 'alert' }
+    %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+    %span
+      = "#{one ? 'Przedmiot' : 'Przedmioty'} #{gh_and_list(unlocking_items.map(&:name))}"
+      = one ? 'odblokowuje się tą odznaką' : 'odblokowują się tą odznaką'
+      = "i po usunięciu #{one ? 'kupi go' : 'kupią je'} tylko ci, którzy już ją mają."
+
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Anuluj
+  - else
+    = link_to 'Anuluj', edit_story_group_badge_path(@story_group, badge), class: 'gh-btn gh-btn--secondary'
+
+  = button_to 'Usuń odznakę', story_group_badge_path(@story_group, badge),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class AccountSetupsController < ApplicationController
-  layout 'public'
-
   skip_before_action :require_account_setup!
   before_action :redirect_configured_user
+  before_action -> { @chrome = false }
 
   def edit; end
 

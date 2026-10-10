@@ -1,13 +1,7 @@
-- if !user_in_group(@current_user, @invite.story_group)
-  %h3= "Dołączasz do grupy #{@invite.story_group.name}"
+- content_for :title, 'Dołącz do grupy'
 
-  %p
-    = button_to "Dołącz",
-      join_index_path(code: @invite.code),
-      method: :post
-
-  %p
-    = link_to "Wróć", home_path
-
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'join/step_nickname', story_group: @story_group, code: @code, result: @result
 - else
-  %h3= "Jesteś już członkiem tej grupy"
+  = render 'join/step_nickname', story_group: @story_group, code: @code, result: @result

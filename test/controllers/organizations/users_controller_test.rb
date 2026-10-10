@@ -14,8 +14,8 @@ class Organizations::UsersControllerTest < ActionDispatch::IntegrationTest
     get organization_url(@organization)
 
     assert_response :success
-    assert_select "tr#user_#{@student.id}"
-    assert_select "tr#user_#{@admin.id}", count: 0
+    assert_select "#user_#{@student.id}"
+    assert_select "#user_#{@admin.id}", count: 0
   end
 
   test '#edit - renders form' do
@@ -25,7 +25,8 @@ class Organizations::UsersControllerTest < ActionDispatch::IntegrationTest
 
   test '#update - updates user' do
     patch organization_user_url(@organization, @student),
-          params: { user: { full_name: 'Jan Kowalski', role: 'teacher' } }
+          params:  { user: { full_name: 'Jan Kowalski', role: 'teacher' } },
+          headers: { 'Turbo-Frame' => 'modal' }
 
     assert_turbo_redirected_to organization_url(@organization)
     @student.reload
@@ -38,6 +39,11 @@ class Organizations::UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_content
     assert @student.reload.student?
+  end
+
+  test '#confirm_destroy - renders confirmation' do
+    get confirm_destroy_organization_user_url(@organization, @student)
+    assert_response :success
   end
 
   test '#destroy - removes user' do

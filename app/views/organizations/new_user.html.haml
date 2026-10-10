@@ -1,8 +1,8 @@
-- content_for :title, "Dodaj użytkownika organizacji"
+- content_for :title, 'Dodaj użytkownika organizacji'
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Dodaj użytkownika organizacji
-      = render "user_form", user: @new_user, url: add_user_organization_path(@organization),
-                             cancel_path: organization_path(@organization)
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'user_form', user: @new_user
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'user_form', user: @new_user

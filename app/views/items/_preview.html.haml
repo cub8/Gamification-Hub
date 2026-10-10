@@ -1,0 +1,56 @@
+- targets = { card:        { item_form_target: 'card' },
+              name:        { item_form_target: 'frontName' },
+              cost:        { item_form_target: 'frontCost' },
+              art:         { item_form_target: 'frontArt' },
+              seal:        { item_form_target: 'seal' },
+              seal_label:  { item_form_target: 'sealLabel' },
+              tag_disc:    { item_form_target: 'tagDisc' },
+              tag_life:    { item_form_target: 'tagLife' },
+              rules:       { item_form_target: 'frontRules' },
+              flavor:      { item_form_target: 'frontFlavor' },
+              foot_afford: { item_form_target: 'footAfford' },
+              foot_save:   { item_form_target: 'footSave' },
+              foot_sealed: { item_form_target: 'footSealed' },
+              buy_label:   { item_form_target: 'buyLabel' },
+              need:        { item_form_target: 'need' },
+              bar:         { item_form_target: 'bar' },
+              req_list:    { item_form_target: 'reqList' }, }
+
+- price = item.price.to_i
+- need  = [(price * 0.4).ceil, 1].max
+
+%details.gh-preview-details{ open: true }
+  %summary
+    Podgląd karty
+    %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+
+  %section.gh-panel.gh-preview-panel
+    %h3 Tak zobaczą to studenci
+
+    .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': 'Stan karty' }
+      %button{ type: 'button', 'aria-pressed': 'true', value: 'afford',
+               data: { action: 'item-form#state', item_form_target: 'state' } }
+        Dostępny
+      %button{ type: 'button', 'aria-pressed': 'false', value: 'save',
+               data: { action: 'item-form#state', item_form_target: 'state' } }
+        Zbierasz
+      %button{ type: 'button', 'aria-pressed': 'false', value: 'sealed',
+               disabled: !card.requires?,
+               data: { action: 'item-form#state', item_form_target: 'state' } }
+        Zapieczętowany
+
+    %span.gh-field-hint{ hidden: card.requires?, data: { item_form_target: 'sealHint' } }
+      Bez wymagań przedmiot nigdy nie będzie zapieczętowany.
+
+    .gh-item-preview-card
+      = render 'card', item: item, card: card, state: :afford,
+        need: need, progress: 0.6, targets: targets, all_feet: true
+
+  %section.gh-panel.gh-preview-panel
+    %h3 Miniatura w powiadomieniach
+    .gh-preview-thumb-row
+      = render 'layouts/item_thumb', item: item,
+        inner_data: { item_form_target: 'thumbArt' }
+      %span
+        %b{ data: { item_form_target: 'thumbName' } }= item_name(item)
+        %span.gh-small Zakup studenta, dziś 10:21

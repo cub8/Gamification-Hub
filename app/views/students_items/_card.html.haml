@@ -1,0 +1,26 @@
+- item = purchase.item
+- cost = local_assigns.fetch(:cost, false)
+
+%article.gh-card{ class: ('gh-card--consumed' if item.deleted?) }
+  .gh-card-frame
+    .gh-card-inset
+      .gh-card-header
+        %h3.gh-card-name= item.name
+        - if cost
+          %span.gh-price-badge.gh-price-badge--lg
+            %b= purchase.price_paid
+
+      .gh-card-art
+        %span.gh-art-slot-wrapper
+          = render 'items/art', item: item
+
+      - if item.deleted?
+        .gh-card-tags
+          %span.gh-tag.gh-tag--removed Usunięty z oferty
+
+      %p.gh-rule-text= item.didactic_description
+      - if item.story_description.present?
+        %p.gh-card-flavor= item.story_description
+
+      .gh-card-footer
+        %span.gh-card-meta.gh-small= foot

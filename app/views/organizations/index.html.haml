@@ -1,19 +1,35 @@
-- content_for :title, "Organizacje"
+- content_for :title, 'Organizacje'
 
-.dark-page
-  - if @organizations.empty?
-    %p.text-dimmed Brak organizacji.
-  - else
-    .row.g-3
-      - @organizations.each do |organization|
-        .col-12.col-sm-6.col-md-4.col-xl-3
-          = link_to organization_path(organization), class: "text-decoration-none d-block h-100" do
-            .dark-card.cursor-pointer
-
-              .dark-card-body
-                .dark-card-title= organization.name
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1 Organizacje
+    %p.gh-lead Uczelnie korzystające z aplikacji. Nowe konta trafiają do organizacji o nazwie swojej uczelni.
 
   - if policy(:organization).create?
-    = link_to new_organization_path, class: "btn btn-primary position-fixed bottom-0 end-0 mb-4 me-4", data: { turbo_frame: "modal" } do
-      %i.fa-solid.fa-plus.me-2
+    = link_to new_organization_path, class: 'gh-btn', data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
       Utwórz organizację
+
+- if @organizations.any?
+  %section.gh-panel.gh-organizations-panel
+    .gh-organization-row.gh-organization-row--header{ 'aria-hidden': 'true' }
+      %span Organizacja
+      %span Członkowie
+      %span Administratorzy
+
+    - @organizations.each do |organization|
+      - members = @member_counts.fetch(organization.id, 0)
+      = link_to organization_path(organization), class: 'gh-organization-row gh-organization-row--link' do
+        %b.gh-organization-name= organization.name
+        %span
+          %span.gh-mobile-field-label Członkowie
+          %span.gh-numeric-cell= "#{members} / #{organization.max_members}"
+        %span
+          %span.gh-mobile-field-label Administratorzy
+          %span.gh-numeric-cell= @admin_counts.fetch(organization.id, 0)
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2 Nie ma jeszcze żadnej organizacji
+    %p.gh-lead
+      Utwórz organizację o nazwie uczelni, a potem dodaj jej administratora —
+      on zaprosi resztę osób.

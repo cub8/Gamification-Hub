@@ -1,0 +1,17 @@
+- error = membership.errors[:nickname].first
+- autofocus = local_assigns.fetch(:autofocus, false)
+
+.gh-form-field
+  = f.label :nickname, 'Twój pseudonim'
+  .gh-nickname-field-row
+    .gh-text-input{ class: ('gh-text-input--invalid' if error) }
+      = f.text_field :nickname, maxlength: 24, autocomplete: 'off', autofocus: autofocus,
+        'aria-invalid': (error ? 'true' : nil),
+        'aria-describedby': (error ? 'gh-nickname-error' : nil)
+    - if submit_label
+      %button.gh-btn{ type: 'submit' }= submit_label
+  - if error
+    %p#gh-nickname-error.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+  %span.gh-field-hint Do 24 znaków. Zostaw puste, żeby pokazywać imię i nazwisko.

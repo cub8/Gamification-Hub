@@ -1,0 +1,19 @@
+-# Labelled input with its first error underneath. `input` is the form
+-# builder method (text_field, email_field, number_field).
+- input   ||= :text_field
+- options ||= {}
+- error   = record.errors[attribute].first
+- dom_id  = "gh-#{record.model_name.param_key}-#{attribute}"
+
+.gh-form-field
+  = form.label attribute, label
+  .gh-text-input{ class: ('gh-text-input--invalid' if error) }
+    = form.public_send input, attribute,
+      autocomplete: 'off',
+      'aria-invalid': (error ? 'true' : nil),
+      'aria-describedby': (error ? "#{dom_id}-error" : nil),
+      **options
+  - if error
+    %p.gh-field-error{ id: "#{dom_id}-error", role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error

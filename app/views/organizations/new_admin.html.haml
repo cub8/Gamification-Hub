@@ -1,7 +1,8 @@
-- content_for :title, "Dodaj administratora organizacji"
+- content_for :title, 'Dodaj administratora organizacji'
 
-= turbo_frame_tag 'modal' do
-  .modal-overlay.py-5.px-3
-    .form-card.p-4
-      %h1.page-title.mb-4 Dodaj administratora organizacji
-      = render "admin_form", user: @org_admin, cancel_path: organization_path(@organization), submit_label: "Add"
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'admin_form', user: @org_admin
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'admin_form', user: @org_admin

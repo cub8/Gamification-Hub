@@ -1,0 +1,4 @@
+- size = local_assigns[:size]
+
+%span{ class: "gh-group-thumb gh-octagon-clip #{'gh-group-thumb--lg' if size == :lg}", 'aria-hidden': 'true' }
+  = gh_group_cover(story_group) || gh_initials(story_group.name)

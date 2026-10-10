@@ -1,0 +1,30 @@
+- story_group = membership.story_group
+- badges = membership.students_badges.count
+- items  = membership.students_items.count
+- balance = membership.current_currency.to_i
+
+%h2#gh-leave-title.gh-h2= "Opuścić grupę #{story_group.name}?"
+%p
+  = succeed ':' do
+    Stracisz dostęp do sklepu, rankingu i swojej historii w tej grupie
+  = "#{balance} #{story_group.currency_name},"
+  = "#{badges} #{gh_plural(badges, 'odznaka', 'odznaki', 'odznak')}"
+  = "i #{items} #{gh_plural(items, 'przedmiot', 'przedmioty', 'przedmiotów')}."
+
+%p.gh-warning-note{ role: 'alert' }
+  %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+  %span
+    Tego nie da się cofnąć. Jeśli wrócisz do tej grupy z nowym kodem od
+    prowadzącego, zaczniesz od zera.
+
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+      Zostań w grupie
+  - else
+    = link_to 'Zostań w grupie', edit_story_group_membership_path(story_group),
+      class: 'gh-btn gh-btn--secondary'
+
+  = button_to 'Opuść grupę', story_group_membership_path(story_group),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

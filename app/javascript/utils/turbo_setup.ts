@@ -1,13 +1,15 @@
 import "@hotwired/turbo-rails"
 
-Turbo.StreamActions.redirect = function() {
+Turbo.StreamActions.redirect = function () {
   Turbo.visit(this.target)
 }
 
 document.addEventListener("turbo:before-cache", () => {
-  const modal = document.getElementById("modal")
+  document.querySelectorAll<HTMLDialogElement>("dialog[open]").forEach((dialog) => {
+    dialog.close()
+  })
 
-  if (modal) {
-    modal.innerHTML = ""
-  }
+  document.querySelectorAll("#modal, #modal2").forEach((frame) => {
+    frame.innerHTML = ""
+  })
 })

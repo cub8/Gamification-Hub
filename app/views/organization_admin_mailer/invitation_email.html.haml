@@ -1,6 +1,3 @@
-%h1 Zaproszenie
-
-%p= "Zostałeś dodany jako administrator organizacji #{@organization_name} w GamificationHub."
-
-%p Aby dokończyć zakładanie konta i uzupełnić swoje dane, kliknij w link:
-%a{href: @token_link}= @token_link
+= render 'shared/invitation_email',
+  lead:       "Zostałeś dodany jako administrator organizacji #{@organization_name} w Gamification Hub.",
+  token_link: @token_link

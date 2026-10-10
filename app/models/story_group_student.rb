@@ -15,22 +15,55 @@ class StoryGroupStudent < ApplicationRecord
 
   before_validation :set_default_lives_from_group, on: :create
 
+  normalizes :nickname, with: ->(nickname) { nickname&.strip.presence }
+
   validates :user_id, uniqueness: { scope: :story_group_id }
   validates :lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+
+
+  validates :nickname,
+            length:      { in: 2..24, message: 'Pseudonim musi mieć od 2 do 24 znaków.' },
+            uniqueness:  {
+              scope:          :story_group_id,
+              case_sensitive: false,
+              message:        'Ten pseudonim jest już zajęty w tej grupie.',
+            },
+            allow_blank: true
 
   def set_default_lives_from_group
     self.lives ||= story_group.default_lives
   end
 
-  def update_lives(change)
-    new_lives = lives + change
+  def display_name
+    nickname.presence || full_name
+  end
 
-    update(lives: new_lives)
+  def update_lives(change)
+    with_lock do
+      update(lives: lives + change)
+    end
   end
 
   def rank
-    story_group.ranks.where('required_currency_value <= ?', total_currency)
-               .order(required_currency_value: :desc)
-               .first
+    unless @rank_at == total_currency
+      @rank_at = total_currency
+      @rank    = story_group.ranks
+                            .where('required_currency_value <= ?', total_currency)
+                            .order(required_currency_value: :desc)
+                            .first
+    end
+
+    @rank
+  end
+
+  def next_rank
+    unless @next_rank_at == total_currency
+      @next_rank_at = total_currency
+      @next_rank    = story_group.ranks.where('required_currency_value > ?', total_currency)
+                                 .order(required_currency_value: :asc)
+                                 .first
+    end
+
+    @next_rank
   end
 end

@@ -13,16 +13,9 @@ class Notification < ApplicationRecord
     broadcast_update_to(
       user,
       :notifications,
-      target: 'notification-dot-container',
-      html:   "<div class='notification-dot rounded-circle position-absolute' id='notification-dot'></div>".html_safe,
-    )
-
-    broadcast_prepend_to(
-      user,
-      :notifications,
-      target:  'unread-notifications-list',
-      partial: 'notifications/notification',
-      locals:  { notification: self },
+      target:  'gh-notification-dot',
+      partial: 'layouts/notification_dot',
+      locals:  { count: user.notifications.unread.count },
     )
   }
 end

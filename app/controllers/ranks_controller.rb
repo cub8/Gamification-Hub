@@ -4,52 +4,64 @@ class RanksController < ApplicationController
   include StoryGroupAuthorization
 
   before_action :set_story_group
-  before_action :authorize_story_group_read!, only: %i[index show]
-  before_action :authorize_story_group_manage!, except: %i[index show]
-  before_action :set_rank, only: %i[show edit update destroy]
+  before_action :authorize_story_group_read!,   only: :index
+  before_action :authorize_story_group_manage!, except: :index
+  before_action :set_presentation, only: :confirm_destroy
+  before_action :set_rank, only: %i[edit update destroy confirm_destroy]
 
-  # GET /story_groups/:story_group_id/ranks
   def index
-    @ranks = policy_scope(@story_group.ranks).with_attached_icon.order(:required_currency_value)
+    @ladder = RankLadder.new(story_group: @story_group,
+                             membership:  gh_group_chrome&.student_membership,)
   end
 
-  # GET /story_groups/:story_group_id/ranks/:id
-  def show; end
-
-  # GET /story_groups/:story_group_id/ranks/new
   def new
-    @rank = @story_group.ranks.build
+    @rank = @story_group.ranks.build(required_currency_value: 0,
+                                     discount:                0,
+                                     icon_glyph:              Glyphs::RANK.first,)
+    set_ladder
   end
 
-  # GET /story_groups/:story_group_id/ranks/:id/edit
-  def edit; end
+  def edit
+    set_ladder
+  end
 
-  # POST /story_groups/:story_group_id/ranks
+  def confirm_destroy
+    @dependent_items = @rank.dependent_items.order(:name).to_a
+  end
+
   def create
     @rank = @story_group.ranks.build(rank_params)
 
     if @rank.save
-      redirect_outside_turbo_frame story_group_ranks_path(@story_group),
-                                   notice: 'Pomyślnie utworzono rangę.'
+      redirect_to story_group_ranks_path(@story_group), notice: "Dodano rangę „#{@rank.name}”."
     else
+      set_ladder
       render :new, status: :unprocessable_content
     end
   end
 
-  # PATCH/PUT /story_groups/:story_group_id/ranks/:id
   def update
     if @rank.update(rank_params)
-      redirect_outside_turbo_frame story_group_ranks_path(@story_group),
-                                   notice: 'Pomyślnie zaktualizowano rangę.'
+      redirect_to story_group_ranks_path(@story_group), notice: "Zapisano rangę „#{@rank.name}”."
     else
+      set_ladder
       render :edit, status: :unprocessable_content
     end
   end
 
-  # DELETE /story_groups/:story_group_id/ranks/:id
   def destroy
+    name = @rank.name
+    blockers = @rank.dependent_items.order(:name).pluck(:name)
+
+    if blockers.any?
+      return redirect_outside_turbo_frame story_group_ranks_path(@story_group),
+                                          alert: "Nie można usunąć rangi „#{name}”: wymagają jej " \
+                                                 "przedmioty #{helpers.gh_and_list(blockers)}."
+    end
+
     @rank.destroy
-    redirect_to story_group_ranks_path(@story_group), notice: 'Pomyślnie usunięto rangę.'
+    redirect_outside_turbo_frame story_group_ranks_path(@story_group),
+                                 notice: "Usunięto rangę „#{name}”."
   end
 
   private
@@ -62,14 +74,24 @@ class RanksController < ApplicationController
     @rank = @story_group.ranks.find(params.expect(:id))
   end
 
+  def set_presentation
+    @in_modal = turbo_frame_request_id == 'modal'
+  end
+
+  def set_ladder
+    @ladder = RankLadder.new(story_group: @story_group)
+  end
+
+  def gh_group_chrome
+    @gh_group_chrome ||= GroupChrome.for(user:        @current_user,
+                                         story_group: @story_group,)
+  end
+
   def rank_params
-    params.expect(
-      rank: %i[
-        name
-        discount
-        required_currency_value
-        icon
-      ],
-    )
+    permitted = params.expect(rank: %i[name discount required_currency_value icon_glyph icon])
+
+    permitted[:icon_glyph] = permitted[:icon_glyph].presence if permitted.key?(:icon_glyph)
+    permitted[:icon_glyph] = nil if permitted[:icon].present?
+    permitted
   end
 end

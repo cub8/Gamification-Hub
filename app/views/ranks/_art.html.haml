@@ -1,0 +1,6 @@
+- if rank.upload?
+  = image_tag rank.icon, alt: ''
+- elsif (glyph = gh_glyph(rank.icon_glyph))
+  = glyph
+- else
+  %i.fa-solid.fa-ranking-star{ 'aria-hidden': 'true' }

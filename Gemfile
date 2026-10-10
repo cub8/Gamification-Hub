@@ -8,7 +8,7 @@ source 'https://rubygems.org'
 gem 'kamal', '~> 2.10', require: false # Deploy this application anywhere as a Docker container [https://kamal-deploy.org]
 gem 'pg', '~> 1.6' # Use postgresql as the database for Active Record
 gem 'puma', '~> 7.2' # Use the Puma web server [https://github.com/puma/puma]
-gem 'rails', '~> 8.1.2.1' # Base framework
+gem 'rails', '~> 8.1.3.1' # Base framework
 gem 'thruster', '~> 0.1', require: false # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 
 # CSS and JS related
@@ -36,13 +36,14 @@ gem 'rack-attack', '~> 6.8.0' # For throttling incoming request in authenticatio
 gem 'rondo_form', '~> 1.0' # For nested forms
 gem 'rqrcode', '~> 3.0' # For generating QR codes
 gem 'tzinfo-data', '~> 1', platforms: %i[windows jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'view_component', '~> 4.9' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
+gem 'view_component', '~> 4.15' # Reusable, testable & encapsulated view components [https://viewcomponent.org/]
 
 group :development, :test do
-  gem 'brakeman', '~> 8.0', require: false # Static analysis for security vulnerabilities
+  gem 'brakeman', '~> 8.1', require: false # Static analysis for security vulnerabilities
   gem 'bundler-audit', '~> 0.9', require: false # Audits gems for known security defects
   gem 'debug', '~> 1.11', platforms: %i[mri windows] # Debugger
   gem 'factory_bot_rails', '~> 6.5' # For factories [https://github.com/thoughtbot/factory_bot_rails]
+  gem 'haml_lint', '~> 0.78.0' # Linter for haml
   gem 'rubocop', '~> 1.84' # Linter
   gem 'rubocop-espago', '~> 1.2', require: false # Linter rules from Espago
   gem 'ruby-lsp', '~> 0.26' # Ruby LSP

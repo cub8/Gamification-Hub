@@ -13,6 +13,7 @@ class Auth::UsosController < ApplicationController
     builder = SessionUserBuilder.new(provider)
     user = builder.build
 
+    reset_session
     session[:user_id] = user.id
 
     redirect_to home_path

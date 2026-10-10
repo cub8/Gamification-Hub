@@ -1,0 +1,8 @@
+- content_for :title, @enabled ? 'Pokaż ranking' : 'Ukryj ranking'
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'confirm_visibility', story_group: @story_group, enabled: @enabled, mode: @mode
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'confirm_visibility', story_group: @story_group, enabled: @enabled, mode: @mode

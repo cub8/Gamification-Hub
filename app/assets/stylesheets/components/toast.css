@@ -1,0 +1,80 @@
+@layer components {
+  .gh-toasts {
+    position: fixed;
+    inset: auto;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    overflow: visible;
+  }
+
+  .gh-toast {
+    --gh-c: 10px;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    max-width: 560px;
+    color: var(--gh-card);
+    font: 620 14.5px/1.3 var(--gh-f-ui);
+    animation: gh-rise 0.2s ease-out;
+  }
+
+  .gh-toast::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: var(--gh-ink);
+    clip-path: polygon(var(--gh-c) 0,
+        calc(100% - var(--gh-c)) 0,
+        100% var(--gh-c),
+        100% calc(100% - var(--gh-c)),
+        calc(100% - var(--gh-c)) 100%,
+        var(--gh-c) 100%,
+        0 calc(100% - var(--gh-c)),
+        0 var(--gh-c));
+  }
+
+  .gh-toast i {
+    flex: 0 0 auto;
+    color: var(--gh-rank);
+  }
+
+  @keyframes gh-rise {
+    from {
+      transform: translateY(10px);
+      opacity: 0.4;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gh-toast {
+      animation: none;
+    }
+  }
+
+  @media (width <= theme(--breakpoint-mobile)) {
+
+    .gh-toasts {
+      bottom: 80px;
+      width: calc(100% - 24px);
+    }
+
+    .gh-toast {
+      width: 100%;
+    }
+  }
+}

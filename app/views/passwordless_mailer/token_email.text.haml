@@ -1,3 +1,11 @@
-Logowanie
-= "Witaj #{@user_name}!"
-= "Twój link logujący do GamificationHub to #{@token_link}"
+Gamification Hub
+
+= "Cześć, #{@first_name}!"
+
+Aby zalogować się, otwórz poniższy link. Hasło nie jest potrzebne.
+
+= @token_link
+
+= "Link jest ważny przez #{gh_minutes(@expires_in_minutes)}."
+
+Jeśli to nie Ty próbowałeś się zalogować, możesz zignorować tę wiadomość.

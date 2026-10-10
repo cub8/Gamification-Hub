@@ -1,0 +1,7 @@
+- messages = [flash[:notice] || notice].compact
+
+#gh-toasts.gh-toasts{ popover: 'manual',
+                      'aria-live': 'polite',
+                      data: { controller: 'toast' } }
+  - messages.each do |message|
+    %template{ data: { toast_target: 'seed' } }= message

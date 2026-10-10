@@ -3,11 +3,10 @@
 class SessionsController < ApplicationController
   include LoggedUserRedirector
 
-  layout 'public'
-
   skip_before_action :authenticate!, only: :new
   skip_before_action :require_account_setup!, only: :destroy
   before_action :redirect_logged_user, only: :new
+  before_action -> { @chrome = false }, only: :new
 
   def new; end
 

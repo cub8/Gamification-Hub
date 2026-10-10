@@ -1,18 +1,17 @@
-= form_with model: user, url: add_admin_organization_path(@organization) do |form|
-  - if user.errors.any?
-    .form-errors.p-3.mb-3
-      %h2= "#{pluralize(user.errors.count, "błąd", "błędy")} uniemożliwił dodanie administratora:"
-      %ul
-        - user.errors.each do |error|
-          %li= error.full_message
+= form_with model: user, url: add_admin_organization_path(@organization),
+  data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |form|
+  %h2.gh-h2 Dodaj administratora
+  %p
+    Wyślemy zaproszenie na podany adres. Po pierwszym logowaniu administrator
+    uzupełni swoje dane.
 
-  .form-section.p-4.mb-3
-    %h2.section-title.mb-3 Email
+  = render 'organizations/field', form: form, record: user, attribute: :email, label: 'Adres e-mail',
+                                  input: :email_field,
+                                  options: { placeholder: 'jan.nowak@example.com', autofocus: true }
+  - if (error = user.errors[:organization].first)
+    %p.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
 
-    .field-group.mb-3
-      = form.label :email, "Email"
-      = form.text_field :email, class: "form-control"
-
-  .form-actions.gap-3.mt-4
-    = link_to "Anuluj", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
-    = form.submit 'Zapisz', class: "btn-submit py-2 px-4"
+  = render 'organizations/dialog_actions', cancel_path: organization_path(@organization),
+                                           submit_label: 'Wyślij zaproszenie'

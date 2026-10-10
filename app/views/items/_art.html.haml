@@ -1,0 +1,6 @@
+- if item.upload?
+  = image_tag item.icon, alt: ''
+- elsif (glyph = gh_glyph(item.icon_glyph))
+  = glyph
+- else
+  %i.fa-solid.fa-flask{ 'aria-hidden': 'true' }

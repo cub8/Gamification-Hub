@@ -1,0 +1,162 @@
+:root,
+.gh-theme--light {
+  color-scheme: light;
+
+  --gh-f-ui: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --gh-f-text: "Literata", Georgia, serif;
+  --gh-f-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --gh-table: #E7E0EE;
+  --gh-tint: rgba(231, 224, 238, .86);
+  --gh-zone: rgba(53, 32, 74, .26);
+  --gh-pat: rgba(53, 32, 74, .075);
+
+  --gh-chrome: #FBF8FC;
+  --gh-card: #FFFDF9;
+  --gh-card-2: #F3EEF6;
+  --gh-card-3: #E6DEEC;
+
+  --gh-ink: #221A2B;
+  --gh-ink-2: #584C64;
+  --gh-ink-3: #85798F;
+
+  --gh-line: #E4DCEA;
+  --gh-line-2: #CFC3DA;
+
+  --gh-item: #FF7A1A;
+  --gh-item-edge: #C45A10;
+  --gh-on-item: #221A2B;
+
+  --gh-badge: #16A394;
+  --gh-badge-edge: #0B7166;
+  --gh-badge-ink: #0B665C;
+
+  --gh-rank: #E9B53B;
+  --gh-rank-edge: #AE8418;
+  --gh-on-rank: #221A2B;
+
+  --gh-lock: #BDB6C8;
+  --gh-lock-edge: #948BA2;
+
+  --gh-neutral: #CFC3DA;
+  --gh-neutral-edge: #A597B3;
+
+  --gh-earn: #1C7F48;
+  --gh-spend: #B4500B;
+  --gh-heart: #E0385F;
+  --gh-heart-ink: #B3264A;
+
+  --gh-focus: #6B3FD1;
+  --gh-edge: rgba(34, 26, 43, .14);
+  --gh-scrim: rgba(34, 26, 43, .45);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-gh-theme="light"]) {
+    color-scheme: dark;
+
+    --gh-table: #1B1224;
+    --gh-tint: rgba(27, 18, 36, .83);
+    --gh-zone: rgba(242, 236, 246, .22);
+    --gh-pat: rgba(242, 236, 246, .05);
+
+    --gh-chrome: #221A2C;
+    --gh-card: #2A2135;
+    --gh-card-2: #342A40;
+    --gh-card-3: #40354D;
+
+    --gh-ink: #F2ECF6;
+    --gh-ink-2: #C0B4CD;
+    --gh-ink-3: #958A9F;
+
+    --gh-line: #3B3149;
+    --gh-line-2: #56496A;
+
+    --gh-item: #FF8A33;
+    --gh-item-edge: #B5570F;
+    --gh-on-item: #1B1224;
+
+    --gh-badge: #2BC2B1;
+    --gh-badge-edge: #137A6F;
+    --gh-badge-ink: #6FE3D5;
+
+    --gh-rank: #F2C24E;
+    --gh-rank-edge: #A57C16;
+    --gh-on-rank: #1B1224;
+
+    --gh-lock: #5E536C;
+    --gh-lock-edge: #3F3649;
+
+    --gh-neutral: #56496A;
+    --gh-neutral-edge: #3B3149;
+
+    --gh-earn: #63D6A0;
+    --gh-spend: #FF9A4D;
+    --gh-heart: #FF6B86;
+    --gh-heart-ink: #FF9CB0;
+
+    --gh-focus: #C6A8FF;
+    --gh-edge: rgba(0, 0, 0, .42);
+    --gh-scrim: rgba(8, 4, 12, .62);
+  }
+}
+
+:root[data-gh-theme="dark"],
+.gh-theme--dark {
+  color-scheme: dark;
+
+  --gh-table: #1B1224;
+  --gh-tint: rgba(27, 18, 36, .83);
+  --gh-zone: rgba(242, 236, 246, .22);
+  --gh-pat: rgba(242, 236, 246, .05);
+
+  --gh-chrome: #221A2C;
+  --gh-card: #2A2135;
+  --gh-card-2: #342A40;
+  --gh-card-3: #40354D;
+
+  --gh-ink: #F2ECF6;
+  --gh-ink-2: #C0B4CD;
+  --gh-ink-3: #958A9F;
+
+  --gh-line: #3B3149;
+  --gh-line-2: #56496A;
+
+  --gh-item: #FF8A33;
+  --gh-item-edge: #B5570F;
+  --gh-on-item: #1B1224;
+
+  --gh-badge: #2BC2B1;
+  --gh-badge-edge: #137A6F;
+  --gh-badge-ink: #6FE3D5;
+
+  --gh-rank: #F2C24E;
+  --gh-rank-edge: #A57C16;
+  --gh-on-rank: #1B1224;
+
+  --gh-lock: #5E536C;
+  --gh-lock-edge: #3F3649;
+
+  --gh-neutral: #56496A;
+  --gh-neutral-edge: #3B3149;
+
+  --gh-earn: #63D6A0;
+  --gh-spend: #FF9A4D;
+  --gh-heart: #FF6B86;
+  --gh-heart-ink: #FF9CB0;
+
+  --gh-focus: #C6A8FF;
+  --gh-edge: rgba(0, 0, 0, .42);
+  --gh-scrim: rgba(8, 4, 12, .62);
+}
+
+:root {
+  --gh-coin-face: #FFF8E6;
+  --gh-coin-ink: #221A2B;
+
+  --gh-silver: #CDD3DC;
+  --gh-bronze: #D99E63;
+  --gh-metal-ink: #221A2B;
+
+  --gh-shadow: rgb(0 0 0 / 22%);
+}

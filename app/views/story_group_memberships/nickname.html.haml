@@ -1,0 +1,8 @@
+- content_for :title, "Pseudonim w grupie #{@story_group.name}"
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'nickname', membership: @membership
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'nickname', membership: @membership

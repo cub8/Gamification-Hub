@@ -1,0 +1,6 @@
+.gh-invite-qr-box
+  .gh-invite-qr= invite_qr_code(invite)
+  %div
+    .gh-invite-code-display.gh-octagon-clip{ 'aria-label': invite_code_aria_label(invite) }= invite.code
+    %p.gh-small= invite_stat_sentence(invite)
+    = render 'copy_button', invite: invite

@@ -1,0 +1,21 @@
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1 Odznaki
+    %p.gh-lead
+      = "Masz #{shelf.earned_count} z #{shelf.size}."
+      Odznaki przyznaje prowadzący. Na odwrocie każdej niezdobytej znajdziesz,
+      jak ją zdobyć.
+
+- if shelf.any?
+  .gh-card-grid.gh-card-grid--compact
+    - shelf.slots.each do |slot|
+      = render 'flip_card', badge: slot.badge,
+        earned: slot.earned?,
+        interactive: slot.earned?,
+        withdrawn: slot.withdrawn?
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2 W tej grupie nie ma jeszcze odznak
+    %p.gh-lead
+      Prowadzący ich nie dodał. Kiedy się pojawią, zobaczysz tu, co trzeba
+      zrobić, żeby je zdobyć.

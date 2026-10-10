@@ -1,0 +1,6 @@
+- if badge.upload?
+  = image_tag badge.icon, alt: ''
+- elsif (glyph = gh_glyph(badge.icon_glyph))
+  = glyph
+- else
+  %i.fa-solid.fa-award{ 'aria-hidden': 'true' }

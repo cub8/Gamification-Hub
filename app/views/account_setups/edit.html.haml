@@ -1,23 +1,20 @@
-- content_for :title, "Konfiguracja konta"
+- content_for :title, 'Konfiguracja konta'
 
-%h1.fs-2 Uzupełnij swoje dane
+%h1.gh-h1 Uzupełnij swoje dane
+%p.gh-lead To jednorazowy krok. Imię i nazwisko zobaczą prowadzący w Twoich grupach.
 
-= form_with model: @current_user, url: account_setup_path, method: :patch, class: 'w-75' do |f|
-  - if @current_user.errors.any?
-    .form-errors.p-3.mb-3
-      %h2 Popraw poniższe błędy:
-      %ul
-        - @current_user.errors.full_messages.each do |message|
-          %li= message
+= form_with model: @current_user, url: account_setup_path, method: :patch do |f|
+  .gh-form-field
+    = f.label :email, 'Adres e-mail'
+    .gh-text-input
+      = f.email_field :email, disabled: true
 
-  .d-block.field-group.mb-2
-    = f.label :email, "Email"
-    = f.email_field :email, class: 'form-control', disabled: true
+  = render 'organizations/field', form: f, record: @current_user, attribute: :full_name,
+                                  label: 'Imię i nazwisko',
+                                  options: { maxlength: 80, autofocus: true, required: true,
+                                             autocomplete: 'name', placeholder: 'Jan Nowak' }
 
-  .d-block.field-group.mb-2
-    = f.label :full_name, "Imię i nazwisko"
-    = f.text_field :full_name, class: 'form-control', required: true
+  .gh-button-stack
+    %button.gh-btn{ type: 'submit' } Zapisz i przejdź dalej
 
-  = f.submit 'Zapisz', class: 'btn btn-primary w-100 fw-medium'
-
-= button_to 'Wyloguj', logout_path, method: :delete, class: 'btn-link text-dimmed border-0 bg-transparent'
+= button_to 'Wyloguj', logout_path, method: :delete, class: 'gh-link-button'

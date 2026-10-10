@@ -1,0 +1,39 @@
+- if users.any?
+  %div{ data: { controller:              'list-search',
+                list_search_total_value: users.size,
+                list_search_of_value:    'z', } }
+    .gh-student-list-toolbar
+      %label.gh-search-input
+        %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
+        %input{ type:         'search',
+                placeholder:  'Szukaj po nazwisku lub e-mailu',
+                'aria-label': 'Szukaj użytkownika',
+                data:         { list_search_target: 'input', action: 'input->list-search#filter' }, }
+      %span.gh-select-input
+        = select_tag :role, options_for_select(user_role_options), include_blank: 'Wszystkie role',
+          'aria-label': 'Filtruj po roli',
+          data: { list_search_target: 'filter', action: 'change->list-search#filter' }
+        %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+      %span.gh-card-meta{ data: { list_search_target: 'count' } }
+        = "#{users.size} z #{users.size}"
+
+    %section.gh-panel.gh-organizations-panel
+      .gh-organization-member-row.gh-organization-member-row--header{ 'aria-hidden': 'true' }
+        %span Użytkownik
+        %span Rola
+        %span Numer indeksu
+        %span.gh-ledger-cell--right Akcje
+
+      = render partial: 'organizations/member_row', collection: users, as: :user
+
+    %section.gh-panel.gh-empty-state{ hidden: true, data: { list_search_target: 'empty' } }
+      %h2.gh-h2
+        Brak użytkowników pasujących do
+        %span{ data: { list_search_target: 'emptyQuery' } }
+      %p.gh-lead Wyczyść wyszukiwanie, zmień rolę albo sprawdź pisownię.
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2 Nie ma jeszcze użytkowników
+    %p.gh-lead
+      Dodaj studentów i nauczycieli — dostaną zaproszenie e-mailem. Konta
+      zakładane przez logowanie z uczelni pojawią się tu same.
