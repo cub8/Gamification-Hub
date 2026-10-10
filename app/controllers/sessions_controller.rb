@@ -6,6 +6,7 @@ class SessionsController < ApplicationController
   layout 'public'
 
   skip_before_action :authenticate!, only: :new
+  skip_before_action :require_account_setup!, only: :destroy
   before_action :redirect_logged_user, only: :new
 
   def new; end

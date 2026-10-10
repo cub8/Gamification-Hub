@@ -45,8 +45,14 @@ Rails.application.routes.draw do
     member do
       get :new_admin
       post :add_admin
+      get :new_user
+      post :add_user
     end
+
+    resources :users, only: %i[edit update destroy], module: :organizations
   end
+
+  resource :account_setup, only: %i[edit update]
 
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback

@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_user
   before_action :authenticate!
+  before_action :require_account_setup!
   before_action :set_sidebar_state
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
@@ -34,6 +35,10 @@ class ApplicationController < ActionController::Base
 
   def authenticate!
     redirect_to login_path, alert: 'Zaloguj się, aby kontynuować.' unless @current_user
+  end
+
+  def require_account_setup!
+    redirect_to edit_account_setup_path if @current_user&.needs_account_setup?
   end
 
   def record_not_found

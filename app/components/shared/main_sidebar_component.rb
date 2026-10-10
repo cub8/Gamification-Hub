@@ -49,6 +49,11 @@ class Shared::MainSidebarComponent < ViewComponent::Base
            text: 'Organizacje', path: helpers.organizations_path, icon: 'fa-briefcase',
          }
        end),
+      (if user.organization_admin?
+         {
+           text: @user.organization.name, path: helpers.organization_path(@user.organization), icon: 'fa-briefcase',
+         }
+       end),
     ].compact
   end
 

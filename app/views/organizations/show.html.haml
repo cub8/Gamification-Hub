@@ -1,3 +1,6 @@
 - content_for :title, @organization.name
 
-= render 'global_admin_show'
+- if @current_user.global_admin?
+  = render 'global_admin_show'
+- if @current_user.organization_admin?
+  = render 'organization_admin_show'

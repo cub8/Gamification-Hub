@@ -1,0 +1,18 @@
+= form_with model: user, url: add_admin_organization_path(@organization) do |form|
+  - if user.errors.any?
+    .form-errors.p-3.mb-3
+      %h2= "#{pluralize(user.errors.count, "błąd", "błędy")} uniemożliwił dodanie administratora:"
+      %ul
+        - user.errors.each do |error|
+          %li= error.full_message
+
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Email
+
+    .field-group.mb-3
+      = form.label :email, "Email"
+      = form.text_field :email, class: "form-control"
+
+  .form-actions.gap-3.mt-4
+    = link_to "Anuluj", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }
+    = form.submit 'Zapisz', class: "btn-submit py-2 px-4"

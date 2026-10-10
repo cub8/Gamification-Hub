@@ -1,7 +1,8 @@
-= form_with model: user, url: add_admin_organization_path(@organization) do |form|
+
+= form_with model: user, url: url do |form|
   - if user.errors.any?
     .form-errors.p-3.mb-3
-      %h2= "#{pluralize(user.errors.count, "błąd", "błędy")} uniemożliwił dodanie administratora:"
+      %h2= "#{pluralize(user.errors.count, "błąd", "błędy")} uniemożliwił zapisanie użytkownika:"
       %ul
         - user.errors.each do |error|
           %li= error.full_message
@@ -14,11 +15,32 @@
       = form.text_field :email, class: "form-control"
 
   .form-section.p-4.mb-3
-    %h2.section-title.mb-3 Imię i nazwisko
+    %h2.section-title.mb-3 Imię i Nazwisko
 
     .field-group.mb-3
-      = form.label :full_name, "Imię i nazwisko"
+      = form.label :full_name, "Imię i Nazwisko"
       = form.text_field :full_name, class: "form-control"
+
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Numer uniwersytecki (opcjonalnie)
+
+    .field-group.mb-3
+      = form.label :university_number, "Numer uniwersytecki (opcjonalnie)"
+      = form.text_field :university_number, class: "form-control"
+
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 ID USOS (opcjonalnie)
+
+    .field-group.mb-3
+      = form.label :usos_id, "ID USOS (opcjonalnie)"
+      = form.text_field :usos_id, class: "form-control"
+
+  .form-section.p-4.mb-3
+    %h2.section-title.mb-3 Rola
+
+    .field-group.mb-3
+      = form.label :role, "Rola"
+      = form.select :role, user_role_options, {}, class: "form-control"
 
   .form-actions.gap-3.mt-4
     = link_to "Anuluj", cancel_path, class: "btn-cancel py-2 px-3", data: { turbo_frame: "_top" }

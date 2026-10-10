@@ -1,0 +1,8 @@
+- content_for :title, "Edytuj użytkownika — #{@user.full_name}"
+
+= turbo_frame_tag 'modal' do
+  .modal-overlay.py-5.px-3
+    .form-card.p-4
+      %h1.page-title.mb-4 Edytuj użytkownika
+      = render "organizations/user_form", user: @user, url: organization_user_path(@organization, @user),
+                                          cancel_path: organization_path(@organization)

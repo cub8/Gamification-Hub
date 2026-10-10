@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_25_121911) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_10_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -170,6 +170,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_25_121911) do
     t.integer "max_members"
     t.string "name"
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_organizations_on_name", unique: true
   end
 
   create_table "ranks", force: :cascade do |t|
@@ -197,10 +198,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_25_121911) do
     t.datetime "created_at", null: false
     t.integer "current_currency", default: 0
     t.integer "lives"
+    t.string "nickname"
     t.integer "story_group_id"
     t.integer "total_currency", default: 0
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.index "story_group_id, lower((nickname)::text)", name: "index_story_group_students_on_group_and_lower_nickname", unique: true, where: "(nickname IS NOT NULL)"
     t.index ["user_id", "story_group_id"], name: "index_story_group_students_on_user_id_and_story_group_id", unique: true
   end
 

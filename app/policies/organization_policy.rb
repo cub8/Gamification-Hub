@@ -14,7 +14,7 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def show?
-    user.global_admin? || user.organization_admin?
+    user.global_admin? || own_organization_admin?
   end
 
   def new?
@@ -43,5 +43,23 @@ class OrganizationPolicy < ApplicationPolicy
 
   def add_admin?
     user.global_admin?
+  end
+
+  def new_user?
+    manage_users?
+  end
+
+  def add_user?
+    manage_users?
+  end
+
+  def manage_users?
+    user.global_admin? || own_organization_admin?
+  end
+
+  private
+
+  def own_organization_admin?
+    user.organization_admin? && user.organization_id == record.id
   end
 end

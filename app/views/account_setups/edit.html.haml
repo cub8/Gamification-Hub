@@ -1,0 +1,23 @@
+- content_for :title, "Konfiguracja konta"
+
+%h1.fs-2 Uzupełnij swoje dane
+
+= form_with model: @current_user, url: account_setup_path, method: :patch, class: 'w-75' do |f|
+  - if @current_user.errors.any?
+    .form-errors.p-3.mb-3
+      %h2 Popraw poniższe błędy:
+      %ul
+        - @current_user.errors.full_messages.each do |message|
+          %li= message
+
+  .d-block.field-group.mb-2
+    = f.label :email, "Email"
+    = f.email_field :email, class: 'form-control', disabled: true
+
+  .d-block.field-group.mb-2
+    = f.label :full_name, "Imię i nazwisko"
+    = f.text_field :full_name, class: 'form-control', required: true
+
+  = f.submit 'Zapisz', class: 'btn btn-primary w-100 fw-medium'
+
+= button_to 'Wyloguj', logout_path, method: :delete, class: 'btn-link text-dimmed border-0 bg-transparent'
