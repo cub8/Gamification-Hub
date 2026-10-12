@@ -742,7 +742,7 @@
     outline-offset: 2px;
   }
 
-  @media (width <= theme(--breakpoint-tablet)) {
+  @media (width <=theme(--breakpoint-tablet)) {
     .gh-form-shell {
       grid-template-columns: minmax(0, 1fr);
     }
@@ -771,7 +771,7 @@
     }
   }
 
-  @media (width <= theme(--breakpoint-mobile)) {
+  @media (width <=theme(--breakpoint-mobile)) {
     .gh-search-input--wide {
       width: 100%;
     }

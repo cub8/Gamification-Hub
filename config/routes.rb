@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     collection do
       post :create
       get :lookup
+      get :done
     end
   end
   resources :story_groups do
