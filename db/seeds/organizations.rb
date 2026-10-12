@@ -3,17 +3,14 @@
 module Seeds
   class Organizations < Base
     ORGANIZATIONS = [
-      # Same name as the seeded users' university_name - all of them (except global admins) become its members.
       { name: 'Example university', max_members: 50 },
       { name: 'Politechnika Przykładowa', max_members: 20 },
-      # Matches Providers::UsosAdapter#university_name, so new USOS sign-ups have an organization to join.
       { name: 'Uniwersytet im. Adama Mickiewicza', max_members: 1000 },
     ].freeze
 
     ADMINS = {
       'Example university' => [
         { email: 'pawel.wisniewski@example.com' },
-        # Invited but not yet set up - logging in leads to the account setup form.
         { email: 'zofia.nowicka@example.com', full_name: nil, first_login: true },
       ],
     }.freeze
