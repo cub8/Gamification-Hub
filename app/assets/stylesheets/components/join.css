@@ -62,8 +62,13 @@
   .gh-join-hint {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .gh-join-icon {
+    flex: none;
+    width: 16px;
     text-align: center;
   }
 
@@ -76,7 +81,7 @@
     letter-spacing: 0.04em;
   }
 
-  @media (width <= theme(--breakpoint-mobile)) {
+  @media (width <=theme(--breakpoint-mobile)) {
     .gh-join-code-inputs {
       gap: 7px;
     }

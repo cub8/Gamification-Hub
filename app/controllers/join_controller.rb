@@ -1,16 +1,10 @@
 # frozen_string_literal: true
 
 class JoinController < ApplicationController
-  # Inside the dialog only the frame is used, and the layout already carries a
-  # <turbo-frame id="modal"> of its own. Rendering it too would put two frames
-  # with the same id in one response and let Turbo pick whichever came first.
-
   before_action :set_presentation
 
-  # Step 1.
   def new; end
 
-  # Step 1 submitted. A bad code falls back to step 1 carrying its reason.
   def lookup
     @code = params[:code]
     @lookup = InviteLookup.new(user: current_user, code: @code).call
@@ -21,8 +15,6 @@ class JoinController < ApplicationController
     render :show
   end
 
-  # The QR landing page. Same step, same failure handling — only the wrapper
-  # differs, and `set_presentation` has already chosen it.
   def show
     @code = params[:code]
     @lookup = InviteLookup.new(user: current_user, code: @code).call
@@ -32,19 +24,25 @@ class JoinController < ApplicationController
     @story_group = @lookup.story_group
   end
 
-  # Step 2 submitted.
   def create
     @code = params[:code]
     @lookup = InviteLookup.new(user: current_user, code: @code).call
 
     return render :new, status: :unprocessable_content unless @lookup.ok?
 
-    accept
+    accept!
+  end
+
+  def done
+    @story_group = current_user.student_story_groups.find(params[:story_group_id])
+    @membership = current_user.student_memberships.find_by!(story_group: @story_group)
+
+    render :create
   end
 
   private
 
-  def accept
+  def accept!
     service = AcceptInviteService.new(
       user:     current_user,
       invite:   @lookup.invite,
@@ -56,13 +54,9 @@ class JoinController < ApplicationController
 
     return render :show, status: :unprocessable_content unless @result.success?
 
-    @membership = @result.membership
+    redirect_to done_join_index_path(story_group_id: @story_group.id)
   end
 
-  # A step renders inside the layout's `modal` dialog when it was requested
-  # from one, and as a focused, navigation-less page otherwise — which is how
-  # the QR link lands. The branch mirrors NotificationsController's `panel`
-  # check.
   def set_presentation
     @in_modal = turbo_frame_request_id == 'modal'
     @chrome = false unless @in_modal

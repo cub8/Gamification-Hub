@@ -17,7 +17,9 @@ class JoinControllerTest < ActionDispatch::IntegrationTest
       post join_index_url, params: { code: @invite.code }
     end
 
-    assert_response :success
+    assert_redirected_to done_join_index_path(story_group_id: @story_group.id)
+    follow_redirect!
+
     assert_select '.gh-dialog-button-row a[href=?]', story_group_path(@story_group), 'Gotowe'
   end
 
