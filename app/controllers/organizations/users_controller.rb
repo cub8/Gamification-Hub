@@ -46,7 +46,6 @@ class Organizations::UsersController < ApplicationController
     authorize @organization, :manage_users?
   end
 
-  # Admins are managed separately, so only students and teachers are reachable here.
   def set_user
     @user = @organization.users.where(role: User::INVITABLE_ROLES).find(params.expect(:id))
   end

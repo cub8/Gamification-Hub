@@ -1,8 +1,6 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
-// An optional `filter` select narrows rows further by their
-// data-list-search-filter value; an empty selection shows every row.
 class ListSearchController extends Controller<HTMLElement> {
   static targets = ["input", "filter", "row", "count", "empty", "emptyQuery"]
   static values = { total: Number, of: String }

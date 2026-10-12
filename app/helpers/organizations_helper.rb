@@ -7,14 +7,15 @@ module OrganizationsHelper
   }.freeze
 
   def user_role_label(role)
-    USER_ROLE_LABELS.fetch(role.to_s, role.to_s.humanize)
+    str_role = role.to_s
+    USER_ROLE_LABELS.fetch(str_role, str_role.humanize)
   end
 
   def organization_capacity_lead(organization, members)
     free = [organization.max_members - members, 0].max
+    free_text = gh_plural(free, 'wolne', 'wolne', 'wolnych')
 
-    "#{members} z #{organization.max_members} miejsc zajętych · " \
-      "#{free} #{gh_plural(free, 'wolne', 'wolne', 'wolnych')}"
+    "#{members} z #{organization.max_members} miejsc zajętych · #{free} #{free_text}"
   end
 
   def user_role_options

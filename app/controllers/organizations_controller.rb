@@ -62,8 +62,6 @@ class OrganizationsController < ApplicationController
     authorize @organization, :destroy?
   end
 
-  # Destroying an organization takes all of its users with it, so the name has
-  # to be typed back, the same as when deleting a group.
   def destroy
     authorize @organization
 
