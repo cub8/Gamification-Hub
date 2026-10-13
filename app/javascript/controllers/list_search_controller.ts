@@ -2,10 +2,12 @@ import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
 class ListSearchController extends Controller<HTMLElement> {
-  static targets = ["input", "row", "count", "empty", "emptyQuery"]
+  static targets = ["input", "filter", "row", "count", "empty", "emptyQuery"]
   static values = { total: Number, of: String }
 
   declare readonly inputTarget: HTMLInputElement
+  declare readonly filterTarget: HTMLSelectElement
+  declare readonly hasFilterTarget: boolean
   declare readonly rowTargets: HTMLElement[]
   declare readonly countTarget: HTMLElement
   declare readonly emptyTarget: HTMLElement
@@ -16,9 +18,11 @@ class ListSearchController extends Controller<HTMLElement> {
   filter() {
     const typed = this.inputTarget.value.trim()
     const query = fold(typed)
+    const selected = this.hasFilterTarget ? this.filterTarget.value : ""
 
     const shown = this.rowTargets.filter((row) => {
-      const hit = fold(row.dataset.listSearchName ?? "").includes(query)
+      const hit = fold(row.dataset.listSearchName ?? "").includes(query) &&
+        (selected === "" || row.dataset.listSearchFilter === selected)
 
       row.hidden = !hit
 

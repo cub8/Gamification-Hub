@@ -6,6 +6,7 @@ require_relative 'seeds/base'
 Dir[Rails.root.join('db/seeds/*.rb')].each { |file| require file }
 
 Seeds::Users.call
+Seeds::Organizations.call
 Seeds::StoryGroups.call
 Seeds::Ranks.call
 Seeds::Badges.call

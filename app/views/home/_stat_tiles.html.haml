@@ -1,0 +1,9 @@
+%section.gh-panel.gh-stat-row.gh-stat-row--numeric{ 'aria-label': label }
+  %dl
+    - tiles.each do |tile|
+      .gh-stat-tile
+        %dt= tile.label
+        %dd
+          = tile.value
+          - if tile.note
+            %small= tile.note
