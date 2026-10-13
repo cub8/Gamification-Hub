@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# Start screen for an organization admin: who is in their organization, how
-# many seats are left, and which invitations nobody has accepted yet.
 class OrganizationAdminStartDashboard
   RECENT_LIMIT = 6
 

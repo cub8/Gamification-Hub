@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# Start screen for a global admin: every organization with its fill level, and
-# the ones that need a hand - no admin yet, or (nearly) out of seats.
 class GlobalAdminStartDashboard
   NEARLY_FULL = 0.9
 
