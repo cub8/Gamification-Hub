@@ -25,7 +25,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       redirect_uri:       uam_usos_credentials.callback_url!,
     },
     request_params:  {
-      scopes: 'email|personal|cards|change_all_preferences|other_emails|studies|staff_perspective',
+      scopes: 'email|studies',
     },
   }
 end
