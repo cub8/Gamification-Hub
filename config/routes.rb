@@ -67,6 +67,10 @@ Rails.application.routes.draw do
       get :nickname
     end
 
+    resource :export, only: %i[show], controller: :story_group_exports do
+      get :download
+    end
+
     resources :story_group_invites, path: :invites, as: :invites do
       get :confirm_destroy, on: :member
       get :quick, on: :collection
