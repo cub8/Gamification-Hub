@@ -68,6 +68,7 @@ class Navigation
       ranking_item(chrome),
       section('Zaproszenia',  story_group_invites_path(group),          'fa-qrcode'),
       section('Nauczyciele',  story_group_teachers_path(group),         'fa-briefcase'),
+      section('Eksport', story_group_export_path(group), 'fa-file-export'),
       section('Ustawienia grupy', edit_story_group_path(group),         'fa-gear'),
     ]
   end
