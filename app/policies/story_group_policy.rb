@@ -3,8 +3,10 @@
 class StoryGroupPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      if user.organization_admin? || user.global_admin?
-        scope.all.includes(:owner)
+      if user.global_admin?
+        scope.none
+      elsif user.organization_admin?
+        scope.where(owner_id: user.organization.users.select(:id))
       elsif user.teacher?
         owner = scope.where(owner_id: user.id) # and also those to which they belong as teacher and student
         teaching = scope.where(id: user.teacher_story_groups.select(:id))
@@ -69,7 +71,7 @@ class StoryGroupPolicy < ApplicationPolicy
   private
 
   def admin?
-    user.global_admin? || user.organization_admin?
+    user.organization_admin?
   end
 
   def member?

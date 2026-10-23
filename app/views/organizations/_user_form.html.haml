@@ -1,0 +1,36 @@
+- editing = user.persisted?
+- url     = editing ? organization_user_path(@organization, user) : add_user_organization_path(@organization)
+
+= form_with model: user, url: url, data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |form|
+  %h2.gh-h2= editing ? 'Edytuj użytkownika' : 'Dodaj użytkownika'
+  - unless editing
+    %p Wyślemy zaproszenie na podany adres. Konto zajmie jedno miejsce w organizacji.
+
+  = render 'organizations/field', form: form, record: user, attribute: :email, label: 'Adres e-mail',
+                                  input: :email_field,
+                                  options: { placeholder: 'jan.nowak@example.com', autofocus: !editing }
+  = render 'organizations/field', form: form, record: user, attribute: :full_name, label: 'Imię i nazwisko',
+                                  options: { maxlength: 80 }
+
+  .gh-form-field
+    = form.label :role, 'Rola'
+    %span.gh-select-input
+      = form.select :role, user_role_options
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+    - if (error = user.errors[:role].first)
+      %p.gh-field-error{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= error
+
+  .gh-form-row-2col
+    = render 'organizations/field', form: form, record: user, attribute: :university_number,
+                                    label: 'Numer indeksu (opcjonalnie)', options: { maxlength: 20 }
+    = render 'organizations/field', form: form, record: user, attribute: :usos_id, label: 'ID USOS (opcjonalnie)'
+
+  - if (error = user.errors[:organization].first)
+    %p.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  = render 'organizations/dialog_actions', cancel_path: organization_path(@organization),
+                                           submit_label: (editing ? 'Zapisz' : 'Wyślij zaproszenie')

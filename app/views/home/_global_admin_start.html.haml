@@ -1,0 +1,79 @@
+- organizations = @dashboard.organizations
+
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1= home_greeting(@current_user)
+    %p.gh-lead
+      - if organizations.empty?
+        Nie ma jeszcze żadnej organizacji. Utwórz pierwszą, żeby nowe konta miały gdzie trafić.
+      - elsif @dashboard.attention?
+        = "#{organizations.size} #{gh_plural(organizations.size, 'organizacja', 'organizacje', 'organizacji')} —"
+        część z nich potrzebuje Twojej uwagi.
+      - else
+        = "#{organizations.size} #{gh_plural(organizations.size, 'organizacja', 'organizacje', 'organizacji')}."
+        Wszystkie mają administratora i wolne miejsca.
+
+  = link_to new_organization_path, class: 'gh-btn', data: { turbo_frame: 'modal' } do
+    %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+    Utwórz organizację
+
+- if organizations.any?
+  = render 'stat_tiles', tiles: @dashboard.stat_tiles, label: 'Podsumowanie organizacji'
+
+  .gh-dashboard-layout
+    %section.gh-panel.gh-recent-purchases-panel{ 'aria-labelledby': 'gh-orgs-title' }
+      %h2#gh-orgs-title.gh-h2 Organizacje
+      .gh-start-org-list
+        - organizations.each do |org|
+          = link_to organization_path(org.organization), class: 'gh-start-org-row' do
+            %span.gh-name-cell
+              %b= org.organization.name
+              %small
+                = "#{org.admins} #{gh_plural(org.admins, 'administrator', 'administratorów', 'administratorów')}"
+                - if org.pending_admins.positive?
+                  = "· #{org.pending_admins} #{gh_plural(org.pending_admins, 'zaproszenie czeka', 'zaproszenia czekają', 'zaproszeń czeka')}"
+            = render 'capacity_bar', members: org.member_count, max: org.organization.max_members,
+                                     percent: org.fill_percent, full: org.full?
+      = link_to 'Wszystkie organizacje', organizations_path, class: 'gh-btn gh-btn--secondary gh-start-more'
+
+    .gh-dashboard-side-column
+      - if @dashboard.attention?
+        %section.gh-card.gh-todo-card
+          .gh-card-frame
+            .gh-card-inset
+              %p.gh-page-kicker Wymaga uwagi
+              %ul.gh-start-attention-list
+                - @dashboard.without_admin.each do |org|
+                  %li
+                    = link_to org.organization.name, organization_path(org.organization)
+                    %small Brak administratora
+                    = link_to new_admin_organization_path(org.organization), class: 'gh-btn gh-btn--secondary gh-btn--small',
+                      data: { turbo_frame: 'modal' } do
+                      %i.fa-solid.fa-user-shield{ 'aria-hidden': 'true' }
+                      Dodaj
+                - @dashboard.nearly_full.each do |org|
+                  %li
+                    = link_to org.organization.name, organization_path(org.organization)
+                    %small= org.full? ? 'Brak wolnych miejsc' : "Zostało #{org.free} #{gh_plural(org.free, 'miejsce', 'miejsca', 'miejsc')}"
+                    = link_to edit_organization_path(org.organization), class: 'gh-btn gh-btn--secondary gh-btn--small',
+                      data: { turbo_frame: 'modal' } do
+                      %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
+                      Limit
+      - else
+        %section.gh-panel.gh-my-groups-panel
+          %h2.gh-h2 Wszystko w porządku
+          %p.gh-small Każda organizacja ma administratora i wolne miejsca.
+
+      %section.gh-panel.gh-my-groups-panel
+        %h2.gh-h2 Jak to działa
+        %p.gh-small
+          Konto zakładane przez logowanie z uczelni trafia do organizacji o tej
+          samej nazwie co uczelnia. Jeśli takiej nie ma, logowanie się nie uda.
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2 Zacznij od pierwszej organizacji
+    %p.gh-lead
+      Nazwij ją tak jak uczelnię u dostawcy logowania, ustaw limit kont i dodaj
+      administratora — on zaprosi resztę osób.
+    .gh-button-row
+      = link_to 'Utwórz organizację', new_organization_path, class: 'gh-btn', data: { turbo_frame: 'modal' }

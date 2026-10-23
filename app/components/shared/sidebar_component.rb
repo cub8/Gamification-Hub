@@ -20,9 +20,14 @@ class Shared::SidebarComponent < ViewComponent::Base
   end
 
   # `all_story_groups` already unions owned, taught and joined groups and
-  # uniques them, which is exactly the mockup's "Twoje grupy" list.
+  # uniques them, which is exactly the mockup's "Twoje grupy" list. Global
+  # admins manage organizations only, so they get no group list.
   def groups
-    @groups ||= user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
+    @groups ||= if user.global_admin?
+                  []
+                else
+                  user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
+                end
   end
 
   # "Prowadzisz" for a group you own, "Wspierasz" for one you co-teach,
