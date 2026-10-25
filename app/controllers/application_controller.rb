@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
+  include Localization
   include Authentication
   include Sidebar
   include StatusRedirects
