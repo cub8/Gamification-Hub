@@ -7,7 +7,7 @@ class Dashboard::GlobalAdmin
     include Dashboard::Capacity
 
     def max_members = organization.max_members
-    def nearly_full? = member_count >= max_members * NEARLY_FULL
+    def nearly_full? = !unlimited? && member_count >= max_members * NEARLY_FULL
     def no_admin? = admins.zero?
   end
 
@@ -24,7 +24,7 @@ class Dashboard::GlobalAdmin
     [
       Dashboard::Tile.new(label: 'Organizacje', value: organizations.size, note: nil),
       Dashboard::Tile.new(label: 'Konta w organizacjach', value: organizations.sum(&:member_count), note: nil),
-      Dashboard::Tile.new(label: 'Wolne miejsca', value: organizations.sum(&:free), note: nil),
+      Dashboard::Tile.new(label: 'Wolne miejsca', value: organizations.sum { |org| org.free.to_i }, note: nil),
       Dashboard::Tile.new(label: 'Niezaakceptowane zaproszenia', value: organizations.sum(&:pending_admins), note: nil),
     ]
   end

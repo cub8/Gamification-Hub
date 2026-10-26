@@ -34,7 +34,7 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.global_admin?
+    user.global_admin? && !record.usos?
   end
 
   def new_admin?

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class SessionUserBuilder
-  class OrganizationNotFoundError < StandardError; end
-  class OrganizationFullError < StandardError; end
-
   attr_reader :provider
 
   def initialize(provider)
@@ -11,14 +8,14 @@ class SessionUserBuilder
   end
 
   def build
-    # Also populates the provider's attributes (email, usos_id, university_name) used below.
     @user_params = @provider.user_params
     user = find_or_initialize_user
+    join_usos_organization(user)
 
-    if user.new_record?
-      create_in_organization(user)
-    elsif user.first_login?
+    if user.new_record? || user.first_login?
       complete_setup(user)
+    elsif user.organization_id_changed?
+      user.save!
     end
 
     user
@@ -26,18 +23,10 @@ class SessionUserBuilder
 
   private
 
-  # New accounts join the organization named after the provider's university.
-  # The lock keeps concurrent sign-ups from overfilling it.
-  def create_in_organization(user)
-    organization = Organization.find_by(name: @provider.university_name)
-    raise OrganizationNotFoundError unless organization
+  def join_usos_organization(user)
+    return if user.organization_admin? || user.global_admin?
 
-    organization.with_lock do
-      raise OrganizationFullError if organization.full?
-
-      user.organization = organization
-      complete_setup(user)
-    end
+    user.organization = Organization.usos
   end
 
   def complete_setup(user)

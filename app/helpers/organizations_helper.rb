@@ -12,6 +12,8 @@ module OrganizationsHelper
   end
 
   def organization_capacity_lead(organization, members)
+    return "#{members} #{gh_plural(members, 'konto', 'konta', 'kont')} · bez limitu miejsc" if organization.unlimited?
+
     free = [organization.max_members - members, 0].max
     free_text = gh_plural(free, 'wolne', 'wolne', 'wolnych')
 

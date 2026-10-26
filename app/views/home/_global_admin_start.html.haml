@@ -67,13 +67,13 @@
       %section.gh-panel.gh-my-groups-panel
         %h2.gh-h2 Jak to działa
         %p.gh-small
-          Konto zakładane przez logowanie z uczelni trafia do organizacji o tej
-          samej nazwie co uczelnia. Jeśli takiej nie ma, logowanie się nie uda.
+          Każdy, kto zaloguje się przez USOS, trafia do organizacji
+          #{Organization::USOS_NAME}. Nie ma ona limitu miejsc i nie można jej
+          usunąć. Do pozostałych organizacji konta dodają ich administratorzy.
 - else
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Zacznij od pierwszej organizacji
     %p.gh-lead
-      Nazwij ją tak jak uczelnię u dostawcy logowania, ustaw limit kont i dodaj
-      administratora — on zaprosi resztę osób.
+      Ustaw limit kont i dodaj administratora — on zaprosi resztę osób.
     .gh-button-row
       = link_to 'Utwórz organizację', new_organization_path, class: 'gh-btn', data: { turbo_frame: 'modal' }

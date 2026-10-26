@@ -55,4 +55,24 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_select '.gh-sidebar-link', text: 'Grupy', count: 0
     assert_select '.gh-sidebar-group-list', count: 0
   end
+
+  test 'global admin dashboard shows the unlimited USOS organization' do
+    FactoryBot.create(:user, :student, organization: Organization.usos)
+    sign_in FactoryBot.create(:user, :global_admin)
+
+    get home_url
+
+    assert_response :success
+    assert_match '1 konto · bez limitu', response.body
+  end
+
+  test 'USOS organization admin sees no member limit' do
+    sign_in FactoryBot.create(:user, :organization_admin, organization: Organization.usos)
+
+    get home_url
+
+    assert_response :success
+    assert_match 'Bez limitu', response.body
+    assert_match 'nie ma limitu miejsc', response.body
+  end
 end

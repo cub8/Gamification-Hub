@@ -1,9 +1,12 @@
-.gh-capacity-bar
-  .gh-progress-bar.gh-octagon-clip{ class: ('gh-progress-bar--full' if full),
-                     role:            'progressbar',
-                     'aria-valuemin': 0,
-                     'aria-valuemax': max,
-                     'aria-valuenow': members,
-                     'aria-label':    'Zajęte miejsca', }
-    %i.gh-octagon-clip{ style: "--gh-p: #{percent}%" }
-  %span.gh-small= "#{members} / #{max}"
+- if max.nil?
+  %span.gh-small= "#{members} #{gh_plural(members, 'konto', 'konta', 'kont')} · bez limitu"
+- else
+  .gh-capacity-bar
+    .gh-progress-bar.gh-octagon-clip{ class: ('gh-progress-bar--full' if full),
+                       role:            'progressbar',
+                       'aria-valuemin': 0,
+                       'aria-valuemax': max,
+                       'aria-valuenow': members,
+                       'aria-label':    'Zajęte miejsca', }
+      %i.gh-octagon-clip{ style: "--gh-p: #{percent}%" }
+    %span.gh-small= "#{members} / #{max}"

@@ -3,7 +3,9 @@
 %section.gh-panel.gh-page-header
   .gh-page-header-text
     %h1.gh-h1 Organizacje
-    %p.gh-lead Uczelnie korzystające z aplikacji. Nowe konta trafiają do organizacji o nazwie swojej uczelni.
+    %p.gh-lead
+      Uczelnie korzystające z aplikacji. Konta logujące się przez USOS trafiają
+      do organizacji #{Organization::USOS_NAME}.
 
   - if policy(:organization).create?
     = link_to new_organization_path, class: 'gh-btn', data: { turbo_frame: 'modal' } do
@@ -23,7 +25,7 @@
         %b.gh-organization-name= organization.name
         %span
           %span.gh-mobile-field-label Członkowie
-          %span.gh-numeric-cell= "#{members} / #{organization.max_members}"
+          %span.gh-numeric-cell= "#{members} / #{organization.max_members || '-'}"
         %span
           %span.gh-mobile-field-label Administratorzy
           %span.gh-numeric-cell= @admin_counts.fetch(organization.id, 0)
@@ -31,5 +33,5 @@
   %section.gh-panel.gh-empty-state
     %h2.gh-h2 Nie ma jeszcze żadnej organizacji
     %p.gh-lead
-      Utwórz organizację o nazwie uczelni, a potem dodaj jej administratora —
+      Utwórz organizację, a potem dodaj jej administratora —
       on zaprosi resztę osób.

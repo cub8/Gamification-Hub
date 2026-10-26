@@ -5,8 +5,10 @@ module Seeds
     ORGANIZATIONS = [
       { name: 'Example university', max_members: 50 },
       { name: 'Politechnika Przykładowa', max_members: 20 },
-      { name: 'Uniwersytet im. Adama Mickiewicza', max_members: 1000 },
     ].freeze
+
+    # University name the USOS adapter stamps on accounts.
+    USOS_UNIVERSITY_NAME = 'Uniwersytet im. Adama Mickiewicza'
 
     ADMINS = {
       'Example university' => [
@@ -24,16 +26,18 @@ module Seeds
         end
 
         build_admins(organization)
-        assign_members(organization)
+        assign_members(organization, university_name: organization.name)
       end
+
+      assign_members(Organization.usos, university_name: USOS_UNIVERSITY_NAME)
 
       log_finish 'organizations'
     end
 
     private
 
-    def assign_members(organization)
-      User.where(university_name: organization.name, organization_id: nil)
+    def assign_members(organization, university_name:)
+      User.where(university_name: university_name, organization_id: nil)
           .where.not(role: :global_admin)
           .find_each { |user| user.update!(organization: organization) }
     end

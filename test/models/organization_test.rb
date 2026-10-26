@@ -40,4 +40,33 @@ class OrganizationTest < ActiveSupport::TestCase
     assert_not organization.valid?
     assert organization.errors[:name].any?
   end
+
+  test 'USOS organization has no member limit' do
+    organization = Organization.usos
+    FactoryBot.create_list(:user, 3, :student, organization: organization)
+
+    assert organization.unlimited?
+    assert_not organization.full?
+  end
+
+  test 'USOS organization rejects a member limit' do
+    organization = Organization.usos
+
+    assert_not organization.update(max_members: 10)
+  end
+
+  test 'USOS organization cannot be deleted' do
+    organization = Organization.usos
+
+    assert_not organization.destroy
+    assert Organization.exists?(organization.id)
+  end
+
+  test 'there is only one USOS organization' do
+    Organization.usos
+
+    assert_raises(ActiveRecord::RecordNotUnique) do
+      Organization.create!(name: 'Druga', usos: true)
+    end
+  end
 end

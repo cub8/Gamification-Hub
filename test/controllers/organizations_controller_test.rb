@@ -127,4 +127,18 @@ class OrganizationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to organizations_url
   end
+
+  test 'USOS organization cannot be deleted and hides the limit field' do
+    usos = Organization.usos
+
+    get organization_url(usos)
+    assert_select 'a[href=?]', confirm_destroy_organization_path(usos), count: 0
+
+    get edit_organization_url(usos)
+    assert_select 'input[name=?]', 'organization[max_members]', count: 0
+
+    assert_no_difference 'Organization.count' do
+      delete organization_url(usos), params: { confirm: usos.name }
+    end
+  end
 end

@@ -29,12 +29,18 @@ class Dashboard::OrganizationAdmin
     [
       Dashboard::Tile.new(label: 'Studenci', value: @counts.fetch('student', 0), note: nil),
       Dashboard::Tile.new(label: 'Nauczyciele', value: @counts.fetch('teacher', 0), note: nil),
-      Dashboard::Tile.new(label: 'Wolne miejsca', value: free, note: "z #{organization.max_members}"),
+      free_tile,
       Dashboard::Tile.new(label: 'Oczekujące zaproszenia', value: pending_users.size, note: nil),
     ]
   end
 
   private
+
+  def free_tile
+    return Dashboard::Tile.new(label: 'Wolne miejsca', value: 'Bez limitu', note: nil) if unlimited?
+
+    Dashboard::Tile.new(label: 'Wolne miejsca', value: free, note: "z #{organization.max_members}")
+  end
 
   def invitable
     organization.users.where(role: User::INVITABLE_ROLES)

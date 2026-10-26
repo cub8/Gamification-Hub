@@ -54,8 +54,12 @@
         = render 'capacity_bar', members: @dashboard.member_count, max: organization.max_members,
                                  percent: @dashboard.fill_percent, full: @dashboard.full?
         %p.gh-small
-          Limit ustala administrator systemu. Każde konto, także administratora,
-          zajmuje jedno miejsce.
+          - if organization.unlimited?
+            Ta organizacja nie ma limitu miejsc. Każdy, kto zaloguje się przez
+            USOS, trafia tutaj automatycznie.
+          - else
+            Limit ustala administrator systemu. Każde konto, także administratora,
+            zajmuje jedno miejsce.
 
       - if @dashboard.pending_users.any?
         %section.gh-card.gh-todo-card
