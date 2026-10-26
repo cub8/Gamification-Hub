@@ -7,7 +7,6 @@ module Seeds
       { name: 'Politechnika Przykładowa', max_members: 20 },
     ].freeze
 
-    # University name the USOS adapter stamps on accounts.
     USOS_UNIVERSITY_NAME = 'Uniwersytet im. Adama Mickiewicza'
 
     ADMINS = {

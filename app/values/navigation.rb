@@ -105,8 +105,6 @@ class Navigation
     section('Ranking', story_group_ranking_path(chrome.story_group), 'fa-ranking-star')
   end
 
-  # Global admins manage every organization; an organization admin goes
-  # straight to their own.
   def organization_item
     if @user.global_admin?
       Item.new(label: 'Organizacje', path: organizations_path, icon: 'fa-briefcase', match: organizations_path)

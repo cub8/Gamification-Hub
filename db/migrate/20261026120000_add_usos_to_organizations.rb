@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# One organization is linked to USOS logins: every USOS account lands in it,
-# it has no member limit and cannot be deleted. An organization already named
-# after the university keeps its members and becomes that organization.
 class AddUsosToOrganizations < ActiveRecord::Migration[8.1]
   NAME = 'Uniwersytet im. Adama Mickiewicza w Poznaniu'
   LEGACY_NAME = 'Uniwersytet im. Adama Mickiewicza'

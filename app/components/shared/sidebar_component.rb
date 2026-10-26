@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Desktop sidebar. The primary nav and the collapse toggle are constant; the
-# middle slot is either the in-group deck or the list of your groups, never
-# both.
 class Shared::SidebarComponent < ViewComponent::Base
   attr_reader :user, :current_path, :collapsed, :group_chrome
 
@@ -19,9 +16,6 @@ class Shared::SidebarComponent < ViewComponent::Base
     @nav_items ||= Navigation.new(user).primary_items
   end
 
-  # `all_story_groups` already unions owned, taught and joined groups and
-  # uniques them, which is exactly the mockup's "Twoje grupy" list. Global
-  # admins manage organizations only, so they get no group list.
   def groups
     @groups ||= if user.global_admin?
                   []
@@ -30,10 +24,6 @@ class Shared::SidebarComponent < ViewComponent::Base
                 end
   end
 
-  # "Prowadzisz" for a group you own, "Wspierasz" for one you co-teach,
-  # "Uczysz się" for one you joined as a student. Owner is checked first:
-  # owning implies teaching. The labels come from StoryGroupsListing so this
-  # list and the "Grupy" screen cannot disagree about what you are in a group.
   def role_label(story_group)
     StoryGroupsListing::ROLE_LABELS[role_for(story_group)]
   end
@@ -49,8 +39,6 @@ class Shared::SidebarComponent < ViewComponent::Base
     @teacher_group_ids ||= user.teacher_story_groups.ids
   end
 
-  # The primary nav matches exactly; section items carry their own rule, since
-  # a detail page has to keep its section lit.
   def current?(path)
     current_path == path
   end
