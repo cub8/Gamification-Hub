@@ -12,10 +12,13 @@ class User < ApplicationRecord
 
   has_many :student_memberships, class_name: 'StoryGroupStudent', foreign_key: 'user_id', dependent: :destroy
   has_many :teacher_memberships, class_name: 'StoryGroupTeacher', foreign_key: 'user_id', dependent: :destroy
-  has_many :owner_story_groups, class_name: 'StoryGroup', foreign_key: 'owner_id'
+  has_many :owner_story_groups, class_name: 'StoryGroup', foreign_key: 'owner_id', dependent: :destroy
   has_many :student_story_groups, through: :student_memberships, source: :story_group
   has_many :teacher_story_groups, through: :teacher_memberships, source: :story_group
   has_many :notifications, dependent: :destroy
+  # Currency history outlives whoever granted it.
+  has_many :granted_currency_transactions, class_name: 'CurrencyTransaction', foreign_key: 'granted_by_user_id',
+                                           dependent: :nullify, inverse_of: :granted_by_user
   has_one :login_token, dependent: :destroy
 
   belongs_to :organization, optional: true
@@ -39,6 +42,11 @@ class User < ApplicationRecord
 
   def all_story_groups
     (owner_story_groups + student_story_groups + teacher_story_groups).uniq
+  end
+
+  def administers?(story_group)
+    organization_admin? && organization_id.present? &&
+      story_group.owner&.organization_id == organization_id
   end
 
   def needs_account_setup?

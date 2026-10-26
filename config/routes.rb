@@ -86,8 +86,13 @@ Rails.application.routes.draw do
       post :add_user
     end
 
+    resources :admins, only: :destroy, module: :organizations do
+      get :confirm_destroy, on: :member
+    end
+
     resources :users, only: %i[edit update destroy], module: :organizations do
       get :confirm_destroy, on: :member
+      resource :invitation, only: :create
     end
   end
 

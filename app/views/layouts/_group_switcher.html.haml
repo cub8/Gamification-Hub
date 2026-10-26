@@ -1,4 +1,5 @@
-- groups = user.all_story_groups.sort_by { |group| group.name.to_s.downcase }
+- groups = user.organization_admin? ? StoryGroupPolicy::Scope.new(user, StoryGroup).resolve.to_a : user.all_story_groups
+- groups = groups.sort_by { |group| group.name.to_s.downcase }
 
 %dialog#gh-group-switcher.gh-dialog.gh-dialog--menu.gh-dialog--group-switcher{ data: { action: 'click->menu#closeOnBackdrop' },
                                                                          'aria-labelledby': 'gh-switch-title' }

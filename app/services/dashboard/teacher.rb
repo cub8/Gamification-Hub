@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TeacherStartDashboard
+class Dashboard::Teacher
   PURCHASE_LIMIT = 30
   DAYS = %w[Dziś Wczoraj Wcześniej].freeze
   RECENT_DAYS = DAYS.first(2).freeze
@@ -28,6 +28,8 @@ class TeacherStartDashboard
     @pending   = build_pending
     self
   end
+
+  def to_partial_path = 'home/teacher_start'
 
   def recent_purchases
     @recent_purchases ||= all_purchases.select { |purchase| RECENT_DAYS.include?(purchase.day) }

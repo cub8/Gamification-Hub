@@ -27,7 +27,7 @@
         %i.fa-solid.fa-user-plus{ 'aria-hidden': 'true' }
         Dodaj użytkownika
 
-= render 'admins', admins: @admins
+= render 'admins', admins: @admins, manage_admins: policy(@organization).manage_admins?
 
 - if manage_users
   = render 'members', users: @users

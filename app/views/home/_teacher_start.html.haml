@@ -29,7 +29,7 @@
             = group.story_group.name
 
     - if @dashboard.purchases.any?
-      - TeacherStartDashboard::DAYS.each do |day|
+      - Dashboard::Teacher::DAYS.each do |day|
         - rows = @dashboard.purchases_on(day)
         - next if rows.empty?
         %h3.gh-purchase-day-label= day

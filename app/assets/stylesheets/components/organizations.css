@@ -28,7 +28,8 @@
   }
 
   .gh-organization-member-row {
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 140px 96px;
+    /* Actions fit three 42px icon buttons with 6px gaps. */
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) 140px 138px;
   }
 
   .gh-organizations-panel-title + .gh-organization-member-row {

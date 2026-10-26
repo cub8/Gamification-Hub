@@ -17,6 +17,8 @@
     %span.gh-small= user.university_number.presence || '—'
 
   %span.gh-organization-member-actions
+    - if user.first_login?
+      = render 'organizations/resend_invitation_button', organization: @organization, user: user, name: name
     = link_to edit_organization_user_path(@organization, user),
       class: 'gh-icon-button', title: 'Edytuj',
       'aria-label': "Edytuj: #{name}",

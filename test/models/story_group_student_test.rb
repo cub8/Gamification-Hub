@@ -59,4 +59,17 @@ class StoryGroupStudentTest < ActiveSupport::TestCase
     assert_equal gold, student.rank
     assert_nil student.next_rank
   end
+
+  test 'removing a student who bought something clears their purchase notifications' do
+    story_group = FactoryBot.create(:story_group)
+    student = FactoryBot.create(:story_group_student, story_group: story_group,
+                                                      user:        FactoryBot.create(:user, :student),)
+    item = FactoryBot.create(:item, story_group: story_group)
+    FactoryBot.create(:notification, user: story_group.owner, story_group: story_group,
+                                     story_group_student: student, item: item,)
+
+    assert_difference 'Notification.count', -1 do
+      student.destroy!
+    end
+  end
 end

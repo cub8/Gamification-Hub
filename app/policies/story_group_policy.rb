@@ -29,7 +29,7 @@ class StoryGroupPolicy < ApplicationPolicy
   end
 
   def create?
-    user.teacher? || admin?
+    user.teacher? || user.organization_admin?
   end
 
   def new?
@@ -71,7 +71,7 @@ class StoryGroupPolicy < ApplicationPolicy
   private
 
   def admin?
-    user.organization_admin?
+    user.administers?(record)
   end
 
   def member?

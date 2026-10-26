@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-# The student landing screen (mockup `#/s/start`).
-#
-# The cross-group counterpart to StudentOverview, which is scoped to
-# a single group. Currency, ranks and badges are separate in every group, so
-# this loads one summary per membership rather than one total.
-class StudentStartDashboard
-  # How many rows the "Ostatnio we wszystkich grupach" feed shows.
+class Dashboard::Student
   FEED_LIMIT = 8
 
   Group = Data.define(
@@ -16,12 +10,8 @@ class StudentStartDashboard
     def total = membership.total_currency.to_i
     def lives = membership.lives.to_i
 
-    # A group you have joined but never earned in. The mockup calls this
-    # `fresh` and shows an explanation instead of a meaningless zero.
     def fresh? = total.zero?
 
-    # Progress toward the next rank. Full when there is no next rank, so a
-    # maxed-out student sees a complete bar rather than an empty one.
     def next_threshold = next_rank&.required_currency_value.to_i
   end
 
@@ -30,6 +20,8 @@ class StudentStartDashboard
   def initialize(user:)
     @user = user
   end
+
+  def to_partial_path = 'home/student_start'
 
   def load
     @groups = build_groups
@@ -67,9 +59,6 @@ class StudentStartDashboard
     summaries.sort_by { |group| group.story_group.name.to_s.downcase }
   end
 
-  # Every currency movement across every group the student belongs to. The
-  # mockup's feed is hard-coded sample copy, so the shape here is ours: the
-  # same ledger rows the per-group history screen shows, merged and re-sorted.
   def load_feed
     CurrencyTransaction.where(student_id: memberships.map(&:id))
                        .includes(:transactionable, student: :story_group)

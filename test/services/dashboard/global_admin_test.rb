@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class GlobalAdminStartDashboardTest < ActiveSupport::TestCase
+class Dashboard::GlobalAdminTest < ActiveSupport::TestCase
   setup do
     @full = FactoryBot.create(:organization, name: 'Pełna', max_members: 2)
     FactoryBot.create(:user, :organization_admin, organization: @full)
@@ -16,7 +16,7 @@ class GlobalAdminStartDashboardTest < ActiveSupport::TestCase
   end
 
   test 'summarizes every organization' do
-    dashboard = GlobalAdminStartDashboard.new.load
+    dashboard = Dashboard::GlobalAdmin.new.load
 
     names = dashboard.organizations.map { |org| org.organization.name }
     assert_equal ['Bez admina', 'Pełna', 'W porządku'], names
@@ -24,7 +24,7 @@ class GlobalAdminStartDashboardTest < ActiveSupport::TestCase
   end
 
   test 'flags organizations without admin and nearly full ones' do
-    dashboard = GlobalAdminStartDashboard.new.load
+    dashboard = Dashboard::GlobalAdmin.new.load
 
     assert_equal [@orphan], dashboard.without_admin.map(&:organization)
     assert_equal [@full], dashboard.nearly_full.map(&:organization)
@@ -32,7 +32,7 @@ class GlobalAdminStartDashboardTest < ActiveSupport::TestCase
   end
 
   test 'fill level' do
-    org = GlobalAdminStartDashboard.new.load.organizations.find { |o| o.organization == @full }
+    org = Dashboard::GlobalAdmin.new.load.organizations.find { |o| o.organization == @full }
 
     assert_equal 100, org.fill_percent
     assert org.full?

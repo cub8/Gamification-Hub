@@ -45,6 +45,10 @@ class OrganizationPolicy < ApplicationPolicy
     user.global_admin?
   end
 
+  def manage_admins?
+    user.global_admin?
+  end
+
   def new_user?
     manage_users?
   end

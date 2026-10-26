@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class OrganizationsController < ApplicationController
-  ADMIN_INVITATION_EXPIRES_IN = 7.days
-  USER_INVITATION_EXPIRES_IN = 7.days
+  include InvitationDelivery
 
   before_action :set_presentation
   before_action :set_organization,
@@ -91,11 +90,11 @@ class OrganizationsController < ApplicationController
 
     token = User.transaction do
       @org_admin.save(context: :admin_invitation) &&
-        @org_admin.create_login_token!(expires_in: ADMIN_INVITATION_EXPIRES_IN)
+        create_invitation_token(@org_admin)
     end
 
     if token
-      send_admin_invitation(token)
+      send_invitation(@org_admin, token)
       redirect_after_save organization_path(@organization),
                           notice: 'Pomyślnie dodano administratora organizacji. Wysłano zaproszenie na email.'
     else
@@ -119,11 +118,11 @@ class OrganizationsController < ApplicationController
 
     token = User.transaction do
       @new_user.save(context: :user_invitation) &&
-        @new_user.create_login_token!(expires_in: USER_INVITATION_EXPIRES_IN)
+        create_invitation_token(@new_user)
     end
 
     if token
-      send_user_invitation(token)
+      send_invitation(@new_user, token)
       redirect_after_save organization_path(@organization),
                           notice: 'Pomyślnie dodano użytkownika do organizacji. Wysłano zaproszenie na email.'
     else
@@ -154,22 +153,6 @@ class OrganizationsController < ApplicationController
         max_members
       ],
     )
-  end
-
-  def send_admin_invitation(token)
-    OrganizationAdminMailer.with(
-      token_link:        auth_passwordless_verify_url(token: token.raw_token),
-      email:             @org_admin.email,
-      organization_name: @organization.name,
-    ).invitation_email.deliver_later
-  end
-
-  def send_user_invitation(token)
-    NewUserMailer.with(
-      token_link:        auth_passwordless_verify_url(token: token.raw_token),
-      email:             @new_user.email,
-      organization_name: @organization.name,
-    ).invitation_email.deliver_later
   end
 
   def admin_params

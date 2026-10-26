@@ -6,7 +6,7 @@ class StoryGroupStudentPolicy < ApplicationPolicy
 
     def resolve
       if admin?
-        scope.all.includes(:user)
+        scope.where(story_group_id: organization_story_groups.select(:id)).includes(:user)
       elsif user.teacher?
         owned = scope.joins(:story_group)
                      .where(story_groups: { owner_id: user.id })
@@ -26,6 +26,12 @@ class StoryGroupStudentPolicy < ApplicationPolicy
 
     def admin?
       user.organization_admin?
+    end
+
+    def organization_story_groups
+      return StoryGroup.none if user.organization_id.nil?
+
+      StoryGroup.where(owner_id: User.where(organization_id: user.organization_id).select(:id))
     end
   end
 
@@ -84,7 +90,7 @@ class StoryGroupStudentPolicy < ApplicationPolicy
   private
 
   def admin?
-    user.organization_admin?
+    user.administers?(record.story_group)
   end
 
   def story_group_teacher?

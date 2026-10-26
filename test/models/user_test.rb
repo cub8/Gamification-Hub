@@ -34,4 +34,23 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.valid?(:user_invitation)
     assert user.errors[:role].any?
   end
+
+  test 'destroying an owner removes their groups with everything in them' do
+    owner = FactoryBot.create(:user, :teacher)
+    story_group = FactoryBot.create(:story_group, owner: owner)
+    student = FactoryBot.create(:story_group_student, story_group: story_group,
+                                                      user:        FactoryBot.create(:user, :student),)
+    item = FactoryBot.create(:item, story_group: story_group)
+    FactoryBot.create(:students_item, story_group_student: student, item: item)
+    FactoryBot.create(:currency_transaction, student: student, kind: :purchase, transactionable: item)
+    FactoryBot.create(:notification, user: owner, story_group: story_group, story_group_student: student, item: item)
+    template = FactoryBot.create(:activity_group_template, story_group: story_group)
+    FactoryBot.create(:activity_group, story_group: story_group, activity_group_template: template)
+
+    owner.destroy!
+
+    assert_not StoryGroup.exists?(story_group.id)
+    assert_not StoryGroupStudent.exists?(student.id)
+    assert student.user.reload, 'the student account itself stays'
+  end
 end

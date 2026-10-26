@@ -2,6 +2,7 @@
 %p
   Konto zostanie usunięte na stałe, razem z członkostwem w grupach, walutą,
   odznakami i przedmiotami. Zwolni się jedno miejsce w organizacji.
+= render 'organizations/owned_groups_notice', user: user
 
 .gh-dialog-button-row
   - if @in_modal

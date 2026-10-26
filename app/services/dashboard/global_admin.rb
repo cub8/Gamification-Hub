@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-class GlobalAdminStartDashboard
+class Dashboard::GlobalAdmin
   NEARLY_FULL = 0.9
 
   Org = Data.define(:organization, :member_count, :admins, :pending_admins) do
-    def free = [organization.max_members - member_count, 0].max
-    def fill_percent = (member_count * 100.0 / organization.max_members).clamp(0, 100).round
-    def full? = member_count >= organization.max_members
-    def nearly_full? = member_count >= organization.max_members * NEARLY_FULL
+    include Dashboard::Capacity
+
+    def max_members = organization.max_members
+    def nearly_full? = member_count >= max_members * NEARLY_FULL
     def no_admin? = admins.zero?
   end
-
-  Tile = Data.define(:label, :value, :note)
 
   attr_reader :organizations
 
@@ -20,12 +18,14 @@ class GlobalAdminStartDashboard
     self
   end
 
+  def to_partial_path = 'home/global_admin_start'
+
   def stat_tiles
     [
-      Tile.new(label: 'Organizacje', value: organizations.size, note: nil),
-      Tile.new(label: 'Konta w organizacjach', value: organizations.sum(&:member_count), note: nil),
-      Tile.new(label: 'Wolne miejsca', value: organizations.sum(&:free), note: nil),
-      Tile.new(label: 'Niezaakceptowane zaproszenia', value: organizations.sum(&:pending_admins), note: nil),
+      Dashboard::Tile.new(label: 'Organizacje', value: organizations.size, note: nil),
+      Dashboard::Tile.new(label: 'Konta w organizacjach', value: organizations.sum(&:member_count), note: nil),
+      Dashboard::Tile.new(label: 'Wolne miejsca', value: organizations.sum(&:free), note: nil),
+      Dashboard::Tile.new(label: 'Niezaakceptowane zaproszenia', value: organizations.sum(&:pending_admins), note: nil),
     ]
   end
 

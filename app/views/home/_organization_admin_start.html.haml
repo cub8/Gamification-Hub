@@ -19,7 +19,7 @@
           - pending = @dashboard.pending_users.size
           = "#{pending} #{gh_plural(pending, 'osoba jeszcze nie przyjęła', 'osoby jeszcze nie przyjęły', 'osób jeszcze nie przyjęło')} zaproszenia."
         - else
-          = organization_capacity_lead(organization, @dashboard.members)
+          = organization_capacity_lead(organization, @dashboard.member_count)
 
     .gh-button-row
       = link_to organization_path(organization), class: 'gh-btn gh-btn--secondary' do
@@ -51,7 +51,7 @@
     .gh-dashboard-side-column
       %section.gh-panel.gh-my-groups-panel
         %h2.gh-h2 Miejsca
-        = render 'capacity_bar', members: @dashboard.members, max: organization.max_members,
+        = render 'capacity_bar', members: @dashboard.member_count, max: organization.max_members,
                                  percent: @dashboard.fill_percent, full: @dashboard.full?
         %p.gh-small
           Limit ustala administrator systemu. Każde konto, także administratora,
@@ -63,7 +63,7 @@
             .gh-card-inset
               %p.gh-page-kicker Czeka na przyjęcie zaproszenia
               %ul.gh-start-attention-list
-                - @dashboard.pending_users.first(OrganizationAdminStartDashboard::RECENT_LIMIT).each do |user|
+                - @dashboard.pending_users.first(Dashboard::OrganizationAdmin::RECENT_LIMIT).each do |user|
                   %li
                     %span= user.full_name.presence || user.email
                     %small= user.email
