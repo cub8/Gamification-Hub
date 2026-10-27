@@ -1,14 +1,12 @@
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Odznaki
-    %p.gh-lead
-      = "#{shelf.size} #{gh_plural(shelf.size, 'odznaka', 'odznaki', 'odznak')}."
-      Przyznajesz je ręcznie, z tej listy albo z listy studentów.
+    %h1.gh-h1= t('.title')
+    %p.gh-lead= t('.lead', count: shelf.size)
 
   .gh-button-row
     = link_to new_story_group_badge_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
-      Nowa odznaka
+      = t('.new')
 
 - if shelf.any?
   .gh-badge-grid--teacher
@@ -34,14 +32,12 @@
             .gh-card-footer
               %span.gh-card-meta= badge_holders_line(slot.holders)
               .gh-card-actions
-                = link_to 'Przyznaj', story_group_students_path(@story_group),
+                = link_to t('.award'), story_group_students_path(@story_group),
                   class: 'gh-btn gh-btn--small'
                 = link_to edit_story_group_badge_path(@story_group, badge),
-                  class: 'gh-icon-button', 'aria-label': "Edytuj odznakę #{badge.name}" do
+                  class: 'gh-icon-button', 'aria-label': t('.edit_label', name: badge.name) do
                   %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Nie ma jeszcze żadnych odznak
-    %p.gh-lead
-      Dodaj odznaki, żeby mieć czym nagradzać to, czego nie widać w punktach.
-      Przyznajesz je ręcznie, a każda może dawać zniżkę w sklepie.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')

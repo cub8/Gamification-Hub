@@ -8,10 +8,10 @@
   = badge_name(badge)
 
 %p.gh-badge-rule-text
-  %span Jak zdobyć
+  %span= t('.how')
   %span{ data: targets[:how] }= badge_rule(badge)
 
 - if flipper
-  %button.gh-card-flip-btn{ type: 'button', 'aria-label': "Pokaż odznakę #{badge.name}" }
+  %button.gh-card-flip-btn{ type: 'button', 'aria-label': t('.flip_label', name: badge.name) }
     %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
-    Pokaż odznakę
+    = t('.flip')

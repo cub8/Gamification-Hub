@@ -32,7 +32,7 @@ class BadgesController < ApplicationController
     @badge = @story_group.badges.build(badge_params)
 
     if @badge.save
-      redirect_to story_group_badges_path(@story_group), notice: "Dodano odznakę „#{@badge.name}”."
+      redirect_to story_group_badges_path(@story_group), notice: t('badges.flash.created', name: @badge.name)
     else
       set_shelf
       render :new, status: :unprocessable_content
@@ -41,7 +41,7 @@ class BadgesController < ApplicationController
 
   def update
     if @badge.update(badge_params)
-      redirect_to story_group_badges_path(@story_group), notice: "Zapisano odznakę „#{@badge.name}”."
+      redirect_to story_group_badges_path(@story_group), notice: t('badges.flash.updated', name: @badge.name)
     else
       set_shelf
       render :edit, status: :unprocessable_content
@@ -53,8 +53,7 @@ class BadgesController < ApplicationController
     @badge.soft_delete!
 
     redirect_outside_turbo_frame story_group_badges_path(@story_group),
-                                 notice: "Usunięto odznakę „#{name}”. Studenci, " \
-                                         'którzy ją mają, zachowują ją w historii.'
+                                 notice: t('badges.flash.destroyed', name: name)
   end
 
   private
