@@ -63,25 +63,25 @@ class InviteForm
   def error_for(attribute) = invite.errors[attribute].first
 
   def summary
-    "Kod będzie działał #{limit_phrase} #{expiry_phrase}."
+    text(:sentence, limit: limit_phrase, expiry: expiry_phrase)
   end
 
-  def unit_label = gh_plural(max_uses.to_i, 'osoba', 'osoby', 'osób')
+  def unit_label = text(:unit, count: max_uses.to_i)
 
   private
 
+  def text(key, **) = I18n.t("story_group_invites.summary.#{key}", **)
+
   def limit_phrase
-    return 'bez limitu osób' unless limit_enabled?
+    return text(:no_limit) unless limit_enabled?
 
-    count = max_uses.to_i
-
-    "dla #{count} #{gh_plural(count, 'osoby', 'osób', 'osób')}"
+    text(:limit, count: max_uses.to_i)
   end
 
   def expiry_phrase
-    return 'i bez daty ważności' unless expiry_enabled?
+    return text(:no_expiry) unless expiry_enabled?
 
-    "do #{gh_stamp(combined_expiry)}"
+    text(:expiry, date: gh_stamp(combined_expiry))
   end
 
   def combined_expiry
@@ -92,6 +92,6 @@ class InviteForm
     return unless expiry_enabled?
     return if combined_expiry&.future?
 
-    invite.errors.add(:expires_at, 'Ta data już minęła. Wybierz późniejszą.')
+    invite.errors.add(:expires_at, :past)
   end
 end
