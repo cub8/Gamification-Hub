@@ -1,0 +1,38 @@
+pl:
+  currency_transactions:
+    # CurrencyLedger::KINDS — the filter chips name a set of rows.
+    filters:
+      all: "Wszystkie"
+      reward: "Nagrody"
+      purchase: "Zakupy"
+      adjustment: "Korekty"
+    # LedgerEntry#label — the pill on a single row.
+    kinds:
+      reward: "Nagroda"
+      purchase: "Zakup"
+      adjustment: "Korekta"
+    # CurrencyLedger#title_for, when the row has no name of its own.
+    entry_titles:
+      reward: "Nagroda"
+      adjustment: "Korekta waluty"
+
+    helpers:
+      balance_sentence_html: "Masz %{balance} do wydania i %{total} zebrane łącznie."
+      summary_sentence_html: "Saldo: %{balance}, zebrane łącznie: %{total}."
+
+    ledger:
+      table_label: "Historia waluty"
+      columns:
+        amount: "Kwota"
+        kind: "Typ"
+        source: "Za co"
+        when: "Kiedy"
+        balance_after: "Saldo po"
+      withdrawn: "Usunięty z oferty"
+
+    index:
+      title: "Historia waluty"
+      go_to_shop: "Przejdź do sklepu"
+      empty_kind: "Nie masz jeszcze wpisów tego typu."
+      empty_title: "Pierwsze wpisy pojawią się po zajęciach"
+      empty_body: "Prowadzący przyznaje walutę za obecność, punktualność i aktywność. Wszystko, co zdobędziesz i wydasz, zapisze się tutaj."

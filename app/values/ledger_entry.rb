@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 class LedgerEntry
-  KIND_LABELS = {
-    'reward'     => 'Nagroda',
-    'purchase'   => 'Zakup',
-    'adjustment' => 'Korekta',
-  }.freeze
-
   KIND_TONES = {
     'reward'     => 'earn',
     'purchase'   => 'spend',
@@ -28,7 +22,7 @@ class LedgerEntry
   def kind        = transaction.kind.to_s
   def occurred_at = transaction.created_at
 
-  def label = KIND_LABELS.fetch(kind, kind)
+  def label = I18n.t("currency_transactions.kinds.#{kind}", default: kind)
   def tone  = KIND_TONES.fetch(kind, 'corr')
 
   def reward?     = kind == 'reward'

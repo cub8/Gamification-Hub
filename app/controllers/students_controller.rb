@@ -97,7 +97,7 @@ class StudentsController < ApplicationController
 
   # The ledger tab's filter, as a kind or nil for "Wszystkie".
   def ledger_kind
-    kinds = CurrencyLedger::KINDS.map(&:first).compact
+    kinds = CurrencyLedger::KINDS.compact
     kinds.include?(params[:kind]) ? params[:kind] : nil
   end
 

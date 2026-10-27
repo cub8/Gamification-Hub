@@ -2,14 +2,7 @@
 
 class CurrencyLedger
   # The filter chips, in the order they are shown. `nil` is "Wszystkie".
-  # Plural, unlike LedgerEntry::KIND_LABELS — a chip names a set of rows, a
-  # chip on a row names one.
-  KINDS = [
-    [nil, 'Wszystkie'],
-    %w[reward Nagrody],
-    %w[purchase Zakupy],
-    %w[adjustment Korekty],
-  ].freeze
+  KINDS = [nil, 'reward', 'purchase', 'adjustment'].freeze
 
   def initialize(student:)
     @student = student
@@ -76,9 +69,13 @@ class CurrencyLedger
   def title_for(transaction, subject)
     case subject
     when Item                  then subject.name
-    when ActivityGroupCategory then subject.didactic_description.presence || 'Nagroda'
-    else                            transaction.reward? ? 'Nagroda' : 'Korekta waluty'
+    when ActivityGroupCategory then subject.didactic_description.presence || entry_title(:reward)
+    else                            entry_title(transaction.reward? ? :reward : :adjustment)
     end
+  end
+
+  def entry_title(key)
+    I18n.t("currency_transactions.entry_titles.#{key}")
   end
 
   # The second, smaller line. It answers "where did this come from" — the
