@@ -1,42 +1,40 @@
-- content_for :title, "Ustawienia w grupie - #{@story_group.name}"
+- content_for :title, t('.page_title', name: @story_group.name)
 
 %section.gh-panel.gh-page-header
   %p.gh-breadcrumbs
     = link_to @story_group.name, story_group_path(@story_group)
     %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
-    %span Ustawienia w grupie
-  %h1.gh-h1 Ustawienia w grupie
-  %p.gh-lead= "Te ustawienia dotyczą tylko grupy #{@story_group.name}."
+    %span= t('.title')
+  %h1.gh-h1= t('.title')
+  %p.gh-lead= t('.lead', name: @story_group.name)
 
 %section.gh-panel.gh-settings-section
-  %h2.gh-h3 Pseudonim
-  %p.gh-field-hint Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
+  %h2.gh-h3= t('.nickname')
+  %p.gh-field-hint= t('.nickname_hint')
 
   = form_with model: @membership, url: story_group_membership_path(@story_group), method: :patch do |f|
-    = render 'nickname_field', f: f, membership: @membership, submit_label: 'Zapisz'
+    = render 'nickname_field', f: f, membership: @membership, submit_label: t('shared.actions.save')
 
 %section.gh-panel.gh-settings-section
-  %h2.gh-h3 Co widzi prowadzący
-  %p.gh-field-hint Pozostali studenci widzą tylko Twój pseudonim, i to tylko w rankingu.
+  %h2.gh-h3= t('.teacher_sees')
+  %p.gh-field-hint= t('.teacher_sees_hint')
 
   %ul.gh-visible-fields-list
     %li
-      %span Imię i nazwisko
+      %span= t('.full_name')
       %b= @membership.full_name
     %li
-      %span E-mail
+      %span= t('.email')
       %b= @membership.email
     %li
-      %span Numer indeksu
-      %b= @membership.university_number.presence || 'Brak'
+      %span= t('.university_number')
+      %b= @membership.university_number.presence || t('.none')
 
 %section.gh-panel.gh-danger-zone
-  %h2.gh-h3 Opuść grupę
-  %p.gh-small
-    Stracisz dostęp do grupy, a Twoja waluta, odznaki i przedmioty w niej
-    przepadną. Żeby wrócić, potrzebujesz nowego kodu od prowadzącego.
+  %h2.gh-h3= t('.leave_title')
+  %p.gh-small= t('.leave_body')
   .gh-button-row
     = link_to confirm_leave_story_group_membership_path(@story_group),
       class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-right-from-bracket{ 'aria-hidden': 'true' }
-      Opuść grupę
+      = t('.leave')

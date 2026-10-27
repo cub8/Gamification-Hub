@@ -23,7 +23,7 @@ class StoryGroupMembershipsController < ApplicationController
       return render(from_dialog? ? :nickname : :edit, status: :unprocessable_content)
     end
 
-    notice = "Twój pseudonim w tej grupie: #{@membership.display_name}."
+    notice = t('story_group_memberships.flash.nickname', name: @membership.display_name)
     return redirect_to(edit_story_group_membership_path(@story_group), notice: notice) unless from_dialog?
 
     redirect_outside_turbo_frame story_group_ranking_path(@story_group), notice: notice
@@ -39,7 +39,7 @@ class StoryGroupMembershipsController < ApplicationController
     name = @story_group.name
     @membership.destroy!
 
-    redirect_to story_groups_path, notice: "Opuszczono grupę #{name}.", status: :see_other
+    redirect_to story_groups_path, notice: t('story_group_memberships.flash.left', name: name), status: :see_other
   end
 
   private
