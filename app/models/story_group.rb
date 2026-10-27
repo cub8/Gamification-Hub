@@ -5,11 +5,6 @@ class StoryGroup < ApplicationRecord
 
   enum :ranking_mode, { podium_and_own: 0, full: 1 }, prefix: :ranking
 
-  RANKING_MODE_LABELS = {
-    'podium_and_own' => 'Podium i własne miejsce',
-    'full'           => 'Pełny ranking',
-  }.freeze
-
   class << self
     def ranking_mode_label(mode) = I18n.t("story_groups.ranking_modes.#{mode}")
   end

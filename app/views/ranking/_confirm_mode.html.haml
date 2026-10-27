@@ -1,25 +1,21 @@
 - full = mode == 'full'
 
 - if full
-  %h2#gh-rk-title.gh-h2 Pokazać pełny ranking?
-  %p
-    Każdy student zobaczy miejsca i pseudonimy wszystkich, także osób na końcu
-    listy.
+  %h2#gh-rk-title.gh-h2= t('.full_title')
+  %p= t('.full_body')
 - else
-  %h2#gh-rk-title.gh-h2 Ograniczyć ranking do podium?
-  %p
-    Studentom zostaną pierwsze 3 miejsca i ich własne. Nikt nie zobaczy, kto
-    jest na końcu listy.
+  %h2#gh-rk-title.gh-h2= t('.podium_title')
+  %p= t('.podium_body')
 
 .gh-dialog-button-row
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
-      = full ? 'Zostaw podium' : 'Anuluj'
+      = full ? t('.keep_podium') : t('shared.actions.cancel')
   - else
-    = link_to (full ? 'Zostaw podium' : 'Anuluj'), story_group_ranking_path(story_group),
+    = link_to (full ? t('.keep_podium') : t('shared.actions.cancel')), story_group_ranking_path(story_group),
       class: 'gh-btn gh-btn--secondary'
 
-  = button_to (full ? 'Pokaż pełny ranking' : 'Pokaż tylko podium'),
+  = button_to (full ? t('.show_full') : t('.show_podium')),
     story_group_ranking_path(story_group),
     method: :patch, class: 'gh-btn',
     params: { story_group: { ranking_mode: mode } },

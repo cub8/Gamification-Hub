@@ -46,10 +46,10 @@ class RankingController < ApplicationController
   end
 
   def notice_for_update
-    return 'Ranking ukryty przed studentami.' unless @story_group.ranking_enabled?
-    return 'Ranking widoczny w całości.' if @story_group.ranking_full?
+    return t('ranking.flash.hidden') unless @story_group.ranking_enabled?
+    return t('ranking.flash.full') if @story_group.ranking_full?
 
-    'Ranking widoczny: podium i własne miejsce.'
+    t('ranking.flash.podium')
   end
 
   def gh_group_chrome

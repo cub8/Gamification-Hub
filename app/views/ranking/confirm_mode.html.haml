@@ -1,4 +1,4 @@
-- content_for :title, "Ranking - #{StoryGroup::RANKING_MODE_LABELS.fetch(@mode)}"
+- content_for :title, t('.page_title', mode: StoryGroup.ranking_mode_label(@mode))
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

@@ -1,4 +1,4 @@
-- content_for :title, @enabled ? 'Pokaż ranking' : 'Ukryj ranking'
+- content_for :title, @enabled ? t('.show_page_title') : t('.hide_page_title')
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

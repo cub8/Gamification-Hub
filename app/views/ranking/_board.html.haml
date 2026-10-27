@@ -1,32 +1,32 @@
-%section.gh-panel.gh-ranking-table{ role: 'table', 'aria-label': 'Ranking' }
+%section.gh-panel.gh-ranking-table{ role: 'table', 'aria-label': t('.table_label') }
   .gh-ranking-row.gh-ranking-row--header{ role: 'row' }
-    %span{ role: 'columnheader' } Miejsce
-    %span{ role: 'columnheader' }= reveal_names ? 'Pseudonim i student' : 'Pseudonim'
-    %span{ role: 'columnheader' } Ranga
-    %span.gh-ranking-score{ role: 'columnheader' } Zebrane
+    %span{ role: 'columnheader' }= t('.place')
+    %span{ role: 'columnheader' }= reveal_names ? t('.nickname_and_student') : t('.nickname')
+    %span{ role: 'columnheader' }= t('.rank')
+    %span.gh-ranking-score{ role: 'columnheader' }= t('.collected')
 
   - board.visible_rows.each do |row|
     - if row.gap?
       .gh-ranking-row.gh-ranking-row--hidden-gap{ role: 'row' }
         %span.gh-ranking-gap-label{ role: 'cell' } …
         %span.gh-ranking-name{ role: 'cell' }
-          %span.gh-empty-note Pozostałe miejsca są ukryte
+          %span.gh-empty-note= t('.hidden_rows')
     - else
       .gh-ranking-row{ class: ('gh-ranking-row--me' if row.mine), role: 'row' }
         %span{ role: 'cell' }
           %span.gh-position-badge.gh-octagon-clip{ class: ("gh-position-badge--p#{row.place}" if row.place <= 3),
-                        'aria-label': "Miejsce #{row.place}" }= row.place
+                        'aria-label': t('.place_label', place: row.place) }= row.place
 
         %span.gh-ranking-name{ role: 'cell' }
           %b
             = row.student.display_name
             - if row.mine
-              %span.gh-you-badge.gh-octagon-clip Ty
+              %span.gh-you-badge.gh-octagon-clip= t('.you')
           - if reveal_names
             - if row.student.nickname.present?
               %small= row.student.full_name
             - else
-              %small.gh-empty-note Bez pseudonimu
+              %small.gh-empty-note= t('.no_nickname')
 
         %span.gh-ranking-rank-cell{ role: 'cell' }= row.rank&.name || '—'
         %span.gh-ranking-score{ role: 'cell' }= row.student.total_currency
