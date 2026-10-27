@@ -1,5 +1,11 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { pluralize, type PluralForms } from "@utils/i18n"
+
+interface Wording {
+  create_one: string
+  create_many: PluralForms
+}
 
 class SheetCreateController extends Controller<HTMLElement> {
   static targets = [
@@ -7,7 +13,7 @@ class SheetCreateController extends Controller<HTMLElement> {
   ]
 
   static values = {
-    sheets: Array,
+    i18n: Object,
     min: { type: Number, default: 2 },
   }
 
@@ -20,7 +26,7 @@ class SheetCreateController extends Controller<HTMLElement> {
   declare readonly downTarget: HTMLButtonElement
   declare readonly nameTargets: HTMLElement[]
   declare readonly submitLabelTarget: HTMLElement
-  declare readonly sheetsValue: string[]
+  declare readonly i18nValue: Wording
   declare readonly minValue: number
 
   connect() {
@@ -42,9 +48,7 @@ class SheetCreateController extends Controller<HTMLElement> {
       chip.hidden = index >= count
     })
 
-    this.submitLabelTarget.textContent = many
-      ? `Utwórz ${count} ${plural(count, this.sheetsValue)}`
-      : `Utwórz ${plural(1, this.sheetsValue)}`
+    this.submitLabelTarget.textContent = many ? pluralize(this.i18nValue.create_many, count) : this.i18nValue.create_one
   }
 
   up() {
@@ -75,17 +79,6 @@ class SheetCreateController extends Controller<HTMLElement> {
   private get max(): number {
     return this.nameTargets.length
   }
-}
-
-function plural(count: number, forms: string[]): string {
-  const [one, few, many] = forms
-  const last = count % 10
-  const teens = count % 100
-
-  if (count === 1) return one
-  if (last >= 2 && last <= 4 && (teens < 12 || teens > 14)) return few
-
-  return many
 }
 
 application.register("sheet-create", SheetCreateController)

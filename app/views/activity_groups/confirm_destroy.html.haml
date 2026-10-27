@@ -1,4 +1,4 @@
-- content_for :title, "Usuń arkusz #{@activity_group.name}"
+- content_for :title, t('.page_title', name: @activity_group.name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

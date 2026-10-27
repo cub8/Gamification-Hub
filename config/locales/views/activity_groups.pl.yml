@@ -1,0 +1,94 @@
+pl:
+  activity_groups:
+    flash:
+      created_one: "Utworzono: %{name}."
+      created_many: "Utworzono: %{first} – %{last}."
+      updated: "Zapisano ustawienia arkusza %{name}."
+      destroyed: "Usunięto arkusz %{name}. Przyznane nagrody zostają w historii studentów."
+
+    index:
+      title: "Arkusze ocen"
+      lead: "Arkusze pogrupowane według szablonów. Najnowsze są na górze."
+      new_template: "Nowy szablon"
+      empty_title: "Nie masz jeszcze żadnego szablonu"
+      empty_body: "Szablon to zestaw kategorii, za które nagradzasz studentów. Z jednego szablonu tworzysz potem kolejne arkusze — po jednym na zajęcia."
+
+    template_panel:
+      meta:
+        one: "Szablon: %{count} kategoria, do %{max} %{currency} na studenta za arkusz."
+        few: "Szablon: %{count} kategorie, do %{max} %{currency} na studenta za arkusz."
+        many: "Szablon: %{count} kategorii, do %{max} %{currency} na studenta za arkusz."
+        other: "Szablon: %{count} kategorii, do %{max} %{currency} na studenta za arkusz."
+      edit: "Edytuj szablon"
+      create_sheet: "Utwórz arkusz"
+      no_sheets: "Z tego szablonu nie utworzono jeszcze arkuszy."
+
+    sheet_row:
+      modified: "Zmienione kolumny"
+      awarded:
+        one: "Przyznano %{count} nagrodę"
+        few: "Przyznano %{count} nagrody"
+        many: "Przyznano %{count} nagród"
+        other: "Przyznano %{count} nagrody"
+      nothing: "Jeszcze nic nie przyznano"
+      grade: "Oceń"
+      settings: "Ustawienia arkusza"
+      settings_label: "Ustawienia: %{name}"
+
+    new:
+      page_title: "Nowy arkusz z szablonu %{name}"
+
+    new_form:
+      title: "Nowy arkusz z szablonu %{name}"
+      columns:
+        one: "Każdy arkusz dostanie %{count} kategorię z szablonu."
+        few: "Każdy arkusz dostanie %{count} kategorie z szablonu."
+        many: "Każdy arkusz dostanie %{count} kategorii z szablonu."
+        other: "Każdy arkusz dostanie %{count} kategorii z szablonu."
+      columns_note: "Kolumny zmienisz później w ustawieniach arkusza."
+      how_many: "Ile arkuszy"
+      one: "Jeden arkusz"
+      many: "Kilka naraz"
+      name_hint: "Możesz dopisać datę, np. %{example} (14.10)."
+      count: "Ile arkuszy utworzyć"
+      names: "Nazwy"
+      # sheet_create_controller.ts
+      js:
+        create_one: "Utwórz arkusz"
+        create_many:
+          one: "Utwórz %{count} arkusz"
+          few: "Utwórz %{count} arkusze"
+          many: "Utwórz %{count} arkuszy"
+          other: "Utwórz %{count} arkusza"
+
+    edit:
+      page_title: "Ustawienia arkusza %{name}"
+
+    confirm_destroy:
+      page_title: "Usuń arkusz %{name}"
+      title: "Usunąć arkusz „%{name}”?"
+      body: "Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii."
+      awarded:
+        one: "Przyznano z niego %{count} nagrodę."
+        few: "Przyznano z niego %{count} nagrody."
+        many: "Przyznano z niego %{count} nagród."
+        other: "Przyznano z niego %{count} nagrody."
+      nothing_undone: "Usunięcie arkusza niczego nie cofa."
+      remove: "Usuń arkusz"
+
+  activerecord:
+    errors:
+      models:
+        activity_group:
+          attributes:
+            name:
+              blank: "Podaj nazwę arkusza."
+            base:
+              no_visible_category: "Dodaj co najmniej jedną widoczną kategorię."
+        # RewardCategory — a column of a sheet.
+        activity_group_category:
+          attributes:
+            didactic_description:
+              blank: "Podaj, za co jest nagroda."
+            reward:
+              too_low: "Nagroda musi wynosić co najmniej 1."
