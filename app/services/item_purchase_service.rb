@@ -28,7 +28,7 @@ class ItemPurchaseService
       price = PriceCalculatorService.new(price: @item.price, discount: discount_info).calculate
 
       if @student.current_currency < price
-        return Result.new(['Masz za mało waluty, aby kupić ten przedmiot.'])
+        return Result.new([I18n.t('shop.errors.not_enough')])
       end
 
       execute_purchase!(price, discount_info.value)
@@ -38,7 +38,7 @@ class ItemPurchaseService
 
     Result.new
   rescue StandardError => e
-    Result.new(["Wystąpił błąd podczas zakupu: #{e.message}"])
+    Result.new([I18n.t('shop.errors.failed', message: e.message)])
   end
 
   private

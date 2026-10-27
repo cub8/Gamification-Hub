@@ -1,0 +1,47 @@
+pl:
+  shop:
+    flash:
+      unavailable: "Nie możesz teraz kupić „%{name}”."
+      bought: "Kupione: „%{name}”. Zostało Ci %{balance}."
+
+    # Shop::ZONES
+    zones:
+      afford: "Stać cię teraz"
+      save: "Zbierasz na to"
+      sealed: "Zapieczętowane"
+
+    # PurchaseEligibilityService and ItemPurchaseService.
+    errors:
+      no_lives: "Wymagane jest posiadanie przynajmniej jednego życia."
+      rank_required: "Wymagana ranga: %{rank}."
+      badges_missing: "Brakujące odznaki: %{badges}."
+      not_enough: "Masz za mało waluty, aby kupić ten przedmiot."
+      failed: "Wystąpił błąd podczas zakupu: %{message}"
+
+    helpers:
+      balance_html: "Masz %{balance} do wydania."
+      discount_badges_html:
+        one: "Twoja odznaka %{badges} obniża ceny niektórych przedmiotów."
+        few: "Twoje odznaki %{badges} obniżają ceny niektórych przedmiotów."
+        many: "Twoje odznaki %{badges} obniżają ceny niektórych przedmiotów."
+        other: "Twoje odznaki %{badges} obniżają ceny niektórych przedmiotów."
+
+    index:
+      title: "Sklep"
+      to_spend: "do wydania"
+      collected: "zebrane łącznie"
+      empty_title: "Sklep jest jeszcze pusty"
+      empty_body: "Prowadzący nie dodał jeszcze przedmiotów. Zbieraj walutę — przyda się, kiedy sklep się otworzy."
+
+    buy_button:
+      label: "Kup %{name} za %{price}"
+      buy: "Kup za %{price}"
+
+    confirm_buy:
+      page_title: "Kup %{name}"
+      title: "Kupić „%{name}”?"
+      price: "Cena"
+      left: "Zostanie Ci"
+      discount: "Zniżka %{label}."
+      notice: "Prowadzący dostanie powiadomienie o zakupie."
+      buy: "Kup za %{price}"

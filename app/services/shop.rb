@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class Shop
-  ZONES = [
-    [:afford, 'Stać cię teraz'],
-    [:save,   'Zbierasz na to'],
-    [:sealed, 'Zapieczętowane'],
-  ].freeze
+  ZONES = %i[afford save sealed].freeze
 
   KIND_ORDER = { rank: 0, badge: 1, lives: 2 }.freeze
 
@@ -19,10 +15,10 @@ class Shop
   end
 
   def zones
-    @zones ||= ZONES.filter_map do |key, label|
+    @zones ||= ZONES.filter_map do |key|
       found = offers.select { |offer| state_of(offer.item) == key }
 
-      Zone.new(key: key, label: label, offers: found) if found.any?
+      Zone.new(key: key, label: I18n.t("shop.zones.#{key}"), offers: found) if found.any?
     end
   end
 
