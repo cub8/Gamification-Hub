@@ -1,0 +1,43 @@
+en:
+  join:
+    # InviteLookup::Result#error
+    errors:
+      missing: "Enter the invite code."
+      not_found: "We couldn't find that code. Check it with your teacher."
+      expired: "This code has expired. Ask your teacher for a new one."
+      exhausted: "The maximum number of people have already used this code. Ask your teacher for a new one."
+
+    new:
+      page_title: "Join a group"
+
+    show:
+      page_title: "Join a group"
+
+    create:
+      page_title: "Joined the group"
+
+    step_code:
+      step: "Step 1 of 2"
+      title: "Join a group"
+      hint: "Enter the 6-character code your teacher gave you."
+      code_label: "Invite code"
+      slot_label: "Character %{index} of %{total}"
+      member: "You're already in this group."
+      open_group: "Open the group"
+      qr_hint: "Got a QR code? Scan it with your phone's camera and the code fills in by itself."
+
+    step_nickname:
+      step: "Step 2 of 2"
+      title: "You're joining the group %{name}"
+      hint: "In this group others will see you under a nickname — in the ranking too. You can change it later in the group settings."
+      nickname: "Nickname in this group"
+      nickname_hint: "Leave it empty to use your full name. You can set a nickname later."
+      join: "Join the group"
+
+    step_done:
+      title: "Joined the group %{name}"
+      led_by: "Led by %{name}."
+      you_are_html: "You're there as %{name}."
+      currency: "The currency in this group is %{currency}."
+      done: "Done"
+
