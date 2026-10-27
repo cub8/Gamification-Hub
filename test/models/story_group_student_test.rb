@@ -59,4 +59,15 @@ class StoryGroupStudentTest < ActiveSupport::TestCase
     assert_equal gold, student.rank
     assert_nil student.next_rank
   end
+
+  test 'a student who bought something can still be removed, with the purchase notifications' do
+    group        = StoryGroup.create!(name: 'Shop Group', currency_name: 'Gold', owner: @owner)
+    student      = StoryGroupStudent.create!(user: @student_user, story_group: group)
+    notification = ::FactoryBot.create(:notification, user: @owner, story_group: group, story_group_student: student,
+                                                      item: ::FactoryBot.create(:item, story_group: group),)
+
+    student.destroy!
+
+    assert_not Notification.exists?(notification.id)
+  end
 end

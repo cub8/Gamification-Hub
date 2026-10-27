@@ -17,6 +17,7 @@ class Item < ApplicationRecord
   has_many :discount_badges, through: :items_min_badges_for_discounts, source: :badge
 
   has_many :students_items, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   has_icon_art :icon, glyphs: Glyphs::ITEM
 

@@ -10,6 +10,7 @@ class StoryGroup < ApplicationRecord
   end
 
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
+  has_many :notifications, dependent: :destroy
   has_many :items, dependent: :destroy
   has_many :ranks, dependent: :destroy
   has_many :badges, dependent: :destroy

@@ -140,4 +140,13 @@ class ItemTest < ActiveSupport::TestCase
 
     assert_equal %w[Tani Drogi Item], @story_group.items.by_price.pluck(:name)
   end
+
+  test 'destroying an item takes its purchase notifications with it' do
+    notification = FactoryBot.create(:notification, story_group: @story_group, story_group_student: @student,
+                                                    item:        @item,)
+
+    @item.destroy!
+
+    assert_not Notification.exists?(notification.id)
+  end
 end
