@@ -11,17 +11,19 @@ module RequirementPhrasing
 
   def seal_label_for(requirement)
     return if requirement.nil?
-    return 'Niedostępne przy 0 życiach' if requirement.lives?
+    return I18n.t('items.labels.seal_lives') if requirement.lives?
 
-    requirement.rank? ? "Od rangi #{requirement.name}" : "Za odznakę #{requirement.name}"
+    key = requirement.rank? ? 'items.labels.seal_rank' : 'items.labels.seal_badge'
+    I18n.t(key, name: requirement.name)
   end
 
+  # [lead, name] pairs; the view sets the name in bold after the lead.
   def requirement_lines_for(requirements)
     requirements.map do |requirement|
       case requirement.kind
-      when :rank  then ['Wymaga rangi ',   requirement.name]
-      when :badge then ['Wymaga odznaki ', requirement.name]
-      else             ['Masz 0 żyć. Najpierw odzyskaj życie.', nil]
+      when :rank  then [I18n.t('items.labels.requires_rank'),  requirement.name]
+      when :badge then [I18n.t('items.labels.requires_badge'), requirement.name]
+      else             [I18n.t('items.labels.requires_life'),  nil]
       end
     end
   end

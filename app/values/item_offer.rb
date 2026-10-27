@@ -37,7 +37,7 @@ class ItemOffer
     return card.discount_label if discount.nil?
     return if discount.value.zero?
 
-    "−#{discount.value}% #{discount_source}"
+    I18n.t('items.labels.discount', discount: discount.value, source: discount_source)
   end
 
   def rank_progress
@@ -53,10 +53,10 @@ class ItemOffer
   private
 
   def discount_source
-    return 'za rangę i odznaki' if rank_discount? && badge_discount?
-    return 'za rangę'           if rank_discount?
+    return I18n.t('items.labels.source_rank_and_badges') if rank_discount? && badge_discount?
+    return I18n.t('items.labels.source_rank')            if rank_discount?
 
-    'za odznaki'
+    I18n.t('items.labels.source_badges')
   end
 
   def rank_discount? = student&.rank&.discount.to_i.positive?

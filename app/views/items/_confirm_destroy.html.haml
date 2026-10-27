@@ -1,22 +1,18 @@
-%h2#gh-del-title.gh-h2= "Usunąć „#{item.name}” ze sklepu?"
-%p
-  Przedmiot zniknie ze sklepu i z list. Studenci, którzy go kupili, zachowają
-  go, a w historii zostanie oznaczony jako „Usunięty z oferty”.
+%h2#gh-del-title.gh-h2= t('.title', name: item.name)
+%p= t('.body')
 
 - if bought.positive?
   %p.gh-warning-note{ role: 'alert' }
     %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
-    %span
-      = "#{bought} #{gh_plural(bought, 'student ma', 'studentów ma', 'studentów ma')} ten przedmiot"
-      i zachowa go po usunięciu.
+    %span= t('.owners', count: bought)
 
 .gh-dialog-button-row
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
-      Anuluj
+      = t('shared.actions.cancel')
   - else
-    = link_to 'Anuluj', edit_story_group_item_path(@story_group, item), class: 'gh-btn gh-btn--secondary'
+    = link_to t('shared.actions.cancel'), edit_story_group_item_path(@story_group, item), class: 'gh-btn gh-btn--secondary'
 
-  = button_to 'Usuń z oferty', story_group_item_path(@story_group, item),
+  = button_to t('.remove'), story_group_item_path(@story_group, item),
     method: :delete, class: 'gh-btn',
     form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

@@ -2,75 +2,68 @@
 
 module ItemsHelper
   def item_bought_line(count)
-    return 'Jeszcze nikt nie kupił' if count.zero?
+    return t('items.helpers.nobody_bought') if count.zero?
 
-    "Kupiono #{count} #{gh_plural(count, 'raz', 'razy', 'razy')}"
+    t('items.helpers.bought', count: count)
   end
 
   def item_name(item)
-    item.name.presence || 'Nazwa przedmiotu'
+    item.name.presence || t('items.helpers.name_placeholder')
   end
 
   def item_rules(item)
-    item.didactic_description.presence || 'Co daje studentowi…'
+    item.didactic_description.presence || t('items.helpers.rules_placeholder')
   end
 
   def item_unlock_sentence(item)
     rank   = item.unlock_rank&.starting? ? nil : item.unlock_rank
     badges = item.unlock_badges.map(&:name).sort
+    lives  = t(item.can_buy_at_0_lives ? 'items.sentences.lives_yes' : 'items.sentences.lives_no')
 
-    parts = if rank.nil? && badges.empty?
-              ['Każdy student może kupić ten przedmiot']
-            else
-              ['Kupią tylko studenci', *unlock_rank_clause(rank), *unlock_badges_clause(badges)]
-            end
+    return gh_fill(t('items.sentences.unlock_everyone'), lives: lives) if rank.nil? && badges.empty?
 
-    safe_join(parts + [item_lives_clause(item)])
+    gh_fill(t('items.sentences.unlock_restricted'),
+            rank:   unlock_rank_clause(rank),
+            badges: unlock_badges_clause(badges),
+            lives:  lives,)
   end
 
   def item_discount_sentence(item, card, example)
     price = item.price.to_i
-    return safe_join(['Bez zniżek. Każdy kupujący zapłaci ', tag.b(price), '.']) if card.max_discount.zero?
+    return gh_fill(t('items.sentences.no_discount'), price: tag.b(price)) if card.max_discount.zero?
     return if example.none?
 
     paid = PriceCalculatorService.new(price: price, discount: Discount.new(example.percent)).calculate
 
-    saving = tag.b("#{example.percent}%")
-    tail   = [' zaoszczędzi ', saving, ' i zapłaci ', tag.b(paid), " zamiast #{price}."]
-
-    safe_join(['Przykładowo: student', *example_holder_clause(example), *tail])
+    gh_fill(t('items.sentences.example'),
+            holder:  example_holder_clause(example),
+            percent: tag.b("#{example.percent}%"),
+            paid:    tag.b(paid),
+            price:   price,)
   end
 
   def item_discount_max_sentence(card)
     return if card.max_discount.zero?
 
-    saving = tag.b("#{card.max_discount}%")
-
-    safe_join(['Maksymalnie: student', *max_holder_clause(card), ' uzyska zniżkę ', saving, '.'])
+    gh_fill(t('items.sentences.max'), holder: max_holder_clause(card), percent: tag.b("#{card.max_discount}%"))
   end
 
   def item_overlap_warnings(item, card = nil)
     warnings = []
 
-    if card&.capped?
-      warnings << "Zniżki sumują się do #{card.raw_discount}%, a sklep odejmie najwyżej " \
-                  "#{Discount::CAP_VALUE}%. Nadwyżka przepada — rozważ niższe zniżki " \
-                  'przy rangach i odznakach.'
-    end
+    warnings << t('items.sentences.warn_cap', raw: card.raw_discount, cap: Discount::CAP_VALUE) if card&.capped?
 
     if discount_rank_covers_everyone?(item)
       warnings << if item.unlock_rank.starting?
-                    'Zniżka dla rang obejmie każdego kupującego.'
+                    t('items.sentences.warn_rank_everyone')
                   else
-                    "Kupić mogą tylko studenci od rangi #{item.unlock_rank.name}, " \
-                      'więc zniżka dla rang obejmie każdego kupującego.'
+                    t('items.sentences.warn_rank_gate', rank: item.unlock_rank.name)
                   end
     end
 
     overlapping = (item.discount_badges & item.unlock_badges).sort_by { |badge| badge.name.to_s }
     overlapping.each do |badge|
-      warnings << "Odznaka #{badge.name} jest wymagana do zakupu, " \
-                  'więc jej zniżka obejmie każdego kupującego.'
+      warnings << t('items.sentences.warn_badge_required', name: badge.name)
     end
 
     warnings
@@ -79,10 +72,10 @@ module ItemsHelper
   def item_unlock_rank_options(ranks, selected)
     options = ranks.map do |rank|
       data = { gh_name: rank.name, gh_gates: rank.starting? ? 'false' : 'true' }
-      ["od rangi #{rank.name}", rank.id, { data: data }]
+      [t('items.helpers.unlock_option_rank', name: rank.name), rank.id, { data: data }]
     end
 
-    blank = ['każdy student', '', { data: { gh_name: '', gh_gates: 'false' } }]
+    blank = [t('items.helpers.unlock_option_everyone'), '', { data: { gh_name: '', gh_gates: 'false' } }]
 
     options_for_select([blank] + options, selected)
   end
@@ -92,7 +85,7 @@ module ItemsHelper
       above = ranks.select { |other| other.required_currency_value.to_i >= rank.required_currency_value.to_i }
       best  = above.max_by { |other| other.discount.to_i }
 
-      label = "od #{rank.name} (−#{rank.discount.to_i}% i więcej)"
+      label = t('items.helpers.discount_option_rank', name: rank.name, discount: rank.discount.to_i)
       data  = {
         gh_discount: best&.discount.to_i,
         gh_name:     best&.name.to_s,
@@ -102,37 +95,42 @@ module ItemsHelper
       [label, rank.id, { data: data }]
     end
 
-    blank = ['brak', '', { data: { gh_discount: 0, gh_name: '', gh_own: 0, gh_own_name: '' } }]
+    blank_data = { data: { gh_discount: 0, gh_name: '', gh_own: 0, gh_own_name: '' } }
+    blank      = [t('items.helpers.discount_option_none'), '', blank_data]
 
     options_for_select([blank] + options, selected)
+  end
+
+  # The templates and plural forms item_form_controller.ts needs to rebuild
+  # the same sentences while the teacher types.
+  def item_form_wording
+    t('items.sentences').merge(
+      t('items.labels').slice(:discount_up_to, :seal_rank, :seal_badge),
+      t('items.helpers').slice(:name_placeholder, :rules_placeholder),
+      buy: t('items.card.buy'),
+    )
   end
 
   private
 
   def unlock_rank_clause(rank)
-    return [] if rank.nil?
+    return '' if rank.nil?
 
-    [' z rangą ', tag.b(rank.name), ' lub wyższą']
+    gh_fill(t('items.sentences.unlock_rank'), rank: tag.b(rank.name))
   end
 
   def unlock_badges_clause(badges)
-    return [] if badges.empty?
+    return '' if badges.empty?
 
-    noun = badges.size > 1 ? 'wszystkie odznaki' : 'odznakę'
-    [", którzy mają #{noun} ", tag.b(gh_and_list(badges))]
-  end
-
-  def item_lives_clause(item)
-    item.can_buy_at_0_lives ? '. Także przy 0 życiach.' : ', jeśli mają co najmniej 1 życie.'
+    gh_fill(plural_template('items.sentences.unlock_badges', badges.size), badges: tag.b(gh_and_list(badges)))
   end
 
   def example_holder_clause(example)
     names = example.badges.map(&:name)
     return holder_clause(example.rank&.name, nil) if names.empty?
 
-    noun = names.size > 1 ? 'odznakami ' : 'odznaką '
-
-    holder_clause(example.rank&.name, [noun, tag.b(gh_and_list(names))])
+    phrase = gh_fill(plural_template('items.sentences.holder_badges', names.size), badges: tag.b(gh_and_list(names)))
+    holder_clause(example.rank&.name, phrase)
   end
 
   def max_holder_clause(card)
@@ -140,19 +138,27 @@ module ItemsHelper
 
     phrase = case badges.size
              when 0 then nil
-             when 1 then ['odznaką ', tag.b(badges.first.name)]
-             else        ['wszystkimi odznakami']
+             when 1 then gh_fill(plural_template('items.sentences.holder_badges', 1), badges: tag.b(badges.first.name))
+             else        t('items.sentences.holder_all_badges')
              end
 
     holder_clause(card.best_discount_rank&.name, phrase)
   end
 
   def holder_clause(rank_name, badge_phrase)
-    clause = []
-    clause += [' z rangą ', tag.b(rank_name)] if rank_name
-    return clause if badge_phrase.nil?
+    rank = rank_name ? gh_fill(t('items.sentences.holder_rank'), rank: tag.b(rank_name)) : ''
+    return rank if badge_phrase.nil?
 
-    clause + [rank_name ? ' oraz ' : ' z ', *badge_phrase]
+    join = rank_name ? 'items.sentences.holder_join_and' : 'items.sentences.holder_join_with'
+    safe_join([rank, gh_fill(t(join), phrase: badge_phrase)])
+  end
+
+  # The raw template of a pluralised key, with its other slots left in place
+  # for gh_fill.
+  def plural_template(key, count)
+    slots = t(key).values.join.scan(/%\{(\w+)\}/).flatten.uniq - ['count']
+
+    t(key, count: count, **slots.to_h { |slot| [slot.to_sym, "%{#{slot}}"] })
   end
 
   def discount_rank_covers_everyone?(item)
