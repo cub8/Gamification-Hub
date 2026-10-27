@@ -8,7 +8,7 @@
     = render 'layouts/item_thumb', item: notification.item
     %span.gh-notification-row-text
       %b= student.full_name
-      %span= "Zakup: #{notification.item.name}"
-      %small= "#{story_group.name}, #{gh_when(notification.created_at)}"
+      %span= t('.purchase', name: notification.item.name)
+      %small= t('.meta', group: story_group.name, when: gh_when(notification.created_at))
     - if unread
-      %span.gh-notification-unread-dot.gh-octagon-clip{ 'aria-label': 'nowe' }
+      %span.gh-notification-unread-dot.gh-octagon-clip{ 'aria-label': t('.unread') }

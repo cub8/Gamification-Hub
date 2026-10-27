@@ -1,0 +1,83 @@
+en:
+  home:
+    index:
+      title: "Home"
+
+    # TeacherStartDashboard::DAYS
+    days:
+      today: "Today"
+      yesterday: "Yesterday"
+      earlier: "Earlier"
+
+    teacher_start:
+      greeting: "Good morning, %{name}"
+      recent_lead: "Since yesterday students have bought %{items} %{groups}."
+      recent_items:
+        one: "%{count} item"
+        other: "%{count} items"
+      recent_groups:
+        one: "in %{count} group"
+        other: "in %{count} groups"
+      quiet_lead: "Nobody has bought anything since yesterday. Look into your groups below."
+      no_groups_lead: "You don't lead any groups yet. Create your first one to get started."
+      purchases: "Recent purchases"
+      filter: "Show purchases from group"
+      all_groups: "All groups"
+      removed_item: "Item removed from the shop"
+      no_group_purchases: "There are no purchases in this group yet."
+      no_purchases: "Nobody has bought anything yet. Purchases will show up here on their own."
+      pending: "Waiting to be graded"
+      pending_left: "%{categories} left for %{students}."
+      pending_categories:
+        one: "%{count} category"
+        other: "%{count} categories"
+      pending_students:
+        one: "%{count} student"
+        other: "%{count} students"
+      grade: "Grade"
+      your_groups: "Your groups"
+      group_meta: "%{role}, %{students}"
+      students:
+        one: "%{count} student"
+        other: "%{count} students"
+      new_purchases:
+        one: "%{count} new purchase"
+        other: "%{count} new purchases"
+      no_groups: "You don't lead any groups yet."
+      create_group: "Create a group"
+
+    student_start:
+      greeting: "Hi, %{name}"
+      groups_lead:
+        one: "You're in %{count} group. Currency, ranks and badges are separate in each one."
+        other: "You're in %{count} groups. Currency, ranks and badges are separate in each one."
+      no_groups_lead: "You're not in any group yet. Ask your teacher for a code and join below."
+      fresh: "You're just starting out. You'll earn your first %{currency} in class."
+      to_spend: "To spend"
+      lives: "Lives"
+      rank: "Rank:"
+      no_rank: "none"
+      to_next: "%{total} of %{needed} to the %{rank} rank"
+      top: "%{total} collected. This is the highest rank."
+      progress_label: "Progress to the next rank in the group %{name}"
+      badges: "Badges"
+      badges_of: "of %{total}"
+      open_group: "Open the group"
+      shop: "Shop"
+      have_code: "Got a code from your teacher?"
+      code_hint: "The code has 6 characters. You can also scan the QR code with your phone's camera."
+      join: "Join a group"
+      feed: "Recently across all groups"
+      feed_meta: "%{group}, %{when}"
+
+  notifications:
+    panel:
+      title: "Notifications"
+      mark_all: "Mark all as read"
+      new: "New"
+      earlier: "Earlier"
+      empty: "No notifications."
+    notification:
+      purchase: "Purchase: %{name}"
+      meta: "%{group}, %{when}"
+      unread: "new"

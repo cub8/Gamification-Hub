@@ -1,0 +1,97 @@
+pl:
+  home:
+    index:
+      title: "Start"
+
+    # TeacherStartDashboard::DAYS
+    days:
+      today: "Dziś"
+      yesterday: "Wczoraj"
+      earlier: "Wcześniej"
+
+    teacher_start:
+      greeting: "Dzień dobry, %{name}"
+      recent_lead: "Od wczoraj studenci kupili %{items} %{groups}."
+      recent_items:
+        one: "%{count} przedmiot"
+        few: "%{count} przedmioty"
+        many: "%{count} przedmiotów"
+        other: "%{count} przedmiotu"
+      recent_groups:
+        one: "w %{count} grupie"
+        few: "w %{count} grupach"
+        many: "w %{count} grupach"
+        other: "w %{count} grupy"
+      quiet_lead: "Od wczoraj nikt nic nie kupił. Zajrzyj do swoich grup poniżej."
+      no_groups_lead: "Nie prowadzisz jeszcze żadnej grupy. Utwórz pierwszą, żeby zacząć."
+      purchases: "Ostatnie zakupy"
+      filter: "Pokaż zakupy z grupy"
+      all_groups: "Wszystkie grupy"
+      removed_item: "Przedmiot usunięty z oferty"
+      no_group_purchases: "W tej grupie nie ma jeszcze żadnych zakupów."
+      no_purchases: "Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same."
+      pending: "Czeka na ocenę"
+      pending_left: "Zostało %{categories} dla %{students}."
+      pending_categories:
+        one: "%{count} kategoria"
+        few: "%{count} kategorie"
+        many: "%{count} kategorii"
+        other: "%{count} kategorii"
+      pending_students:
+        one: "%{count} studenta"
+        few: "%{count} studentów"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+      grade: "Oceń"
+      your_groups: "Twoje grupy"
+      group_meta: "%{role}, %{students}"
+      students:
+        one: "%{count} student"
+        few: "%{count} studentów"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+      new_purchases:
+        one: "%{count} nowy zakup"
+        few: "%{count} nowe zakupy"
+        many: "%{count} nowych zakupów"
+        other: "%{count} nowego zakupu"
+      no_groups: "Nie prowadzisz jeszcze żadnej grupy."
+      create_group: "Utwórz grupę"
+
+    student_start:
+      greeting: "Cześć, %{name}"
+      groups_lead:
+        one: "Należysz do %{count} grupy. Waluta, rangi i odznaki są osobne w każdej z nich."
+        few: "Należysz do %{count} grup. Waluta, rangi i odznaki są osobne w każdej z nich."
+        many: "Należysz do %{count} grup. Waluta, rangi i odznaki są osobne w każdej z nich."
+        other: "Należysz do %{count} grupy. Waluta, rangi i odznaki są osobne w każdej z nich."
+      no_groups_lead: "Nie należysz jeszcze do żadnej grupy. Poproś prowadzącego o kod i dołącz poniżej."
+      fresh: "Dopiero zaczynasz. Pierwsze %{currency} zdobędziesz na zajęciach."
+      to_spend: "Do wydania"
+      lives: "Życia"
+      rank: "Ranga:"
+      no_rank: "brak"
+      to_next: "%{total} z %{needed} do rangi %{rank}"
+      top: "%{total} zebranych. To najwyższa ranga."
+      progress_label: "Postęp do następnej rangi w grupie %{name}"
+      badges: "Odznaki"
+      badges_of: "z %{total}"
+      open_group: "Otwórz grupę"
+      shop: "Sklep"
+      have_code: "Masz kod od prowadzącego?"
+      code_hint: "Kod ma 6 znaków. Możesz też zeskanować kod QR aparatem telefonu."
+      join: "Dołącz do grupy"
+      feed: "Ostatnio we wszystkich grupach"
+      feed_meta: "%{group}, %{when}"
+
+  notifications:
+    panel:
+      title: "Powiadomienia"
+      mark_all: "Oznacz wszystkie"
+      new: "Nowe"
+      earlier: "Wcześniej"
+      empty: "Brak powiadomień."
+    notification:
+      purchase: "Zakup: %{name}"
+      meta: "%{group}, %{when}"
+      unread: "nowe"

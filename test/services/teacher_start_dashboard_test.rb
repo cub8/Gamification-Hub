@@ -30,9 +30,9 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
 
     dashboard = TeacherStartDashboard.new(user: @teacher).load
 
-    assert_equal 1, dashboard.purchases_on('Dziś').size
-    assert_equal 1, dashboard.purchases_on('Wczoraj').size
-    assert_equal 1, dashboard.purchases_on('Wcześniej').size
+    assert_equal 1, dashboard.purchases_on(:today).size
+    assert_equal 1, dashboard.purchases_on(:yesterday).size
+    assert_equal 1, dashboard.purchases_on(:earlier).size
     assert_equal 2, dashboard.recent_purchases.size
     assert_equal 1, dashboard.recent_group_count
   end
