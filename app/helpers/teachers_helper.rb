@@ -2,29 +2,22 @@
 
 module TeachersHelper
   def teacher_list_lead(manage:)
-    opening = 'Nauczyciele wspomagający pomagają prowadzić tę grupę.'
+    tail = manage ? t('teachers.helpers.lead_manage') : t('teachers.helpers.lead_read_only')
 
-    return "#{opening} Grupę może usunąć tylko właściciel." if manage
-
-    "#{opening} Dodawać i usuwać nauczycieli może tylko właściciel grupy."
+    "#{t('teachers.helpers.lead')} #{tail}"
   end
 
   def teacher_added_on(time)
-    time.to_date.strftime('%d.%m.%Y')
+    l(time.to_date, format: :default)
   end
 
   def teacher_pool_hint(size)
-    count = gh_plural(size,
-                      "jest #{size} nauczyciel",
-                      "są #{size} nauczyciele",
-                      "jest #{size} nauczycieli",)
-
-    "Wpisz co najmniej 2 znaki imienia, nazwiska albo e-maila. W Twojej uczelni #{count}."
+    t('teachers.helpers.pool_hint', count: size)
   end
 
   def teacher_candidate_subtitle(candidate, cross_university:)
     return candidate.email unless cross_university && candidate.person.university_name.present?
 
-    "#{candidate.email}, #{candidate.person.university_name}"
+    t('teachers.helpers.candidate', email: candidate.email, university: candidate.person.university_name)
   end
 end

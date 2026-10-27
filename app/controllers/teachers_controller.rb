@@ -26,7 +26,7 @@ class TeachersController < ApplicationController
 
     if @teacher.save
       redirect_outside_turbo_frame story_group_teachers_path(@story_group),
-                                   notice: "Dodano: #{@teacher.full_name}."
+                                   notice: t('teachers.flash.added', name: @teacher.full_name)
     else
       set_pool
       render :new, status: :unprocessable_content
@@ -38,7 +38,7 @@ class TeachersController < ApplicationController
     @teacher.destroy
 
     redirect_outside_turbo_frame story_group_teachers_path(@story_group),
-                                 notice: "Usunięto z grupy: #{name}."
+                                 notice: t('teachers.flash.removed', name: name)
   end
 
   private

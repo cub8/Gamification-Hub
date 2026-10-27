@@ -1,0 +1,68 @@
+pl:
+  teachers:
+    flash:
+      added: "Dodano: %{name}."
+      removed: "Usunięto z grupy: %{name}."
+
+    helpers:
+      lead: "Nauczyciele wspomagający pomagają prowadzić tę grupę."
+      lead_manage: "Grupę może usunąć tylko właściciel."
+      lead_read_only: "Dodawać i usuwać nauczycieli może tylko właściciel grupy."
+      pool_hint:
+        one: "Wpisz co najmniej 2 znaki imienia, nazwiska albo e-maila. W Twojej uczelni jest %{count} nauczyciel."
+        few: "Wpisz co najmniej 2 znaki imienia, nazwiska albo e-maila. W Twojej uczelni są %{count} nauczyciele."
+        many: "Wpisz co najmniej 2 znaki imienia, nazwiska albo e-maila. W Twojej uczelni jest %{count} nauczycieli."
+        other: "Wpisz co najmniej 2 znaki imienia, nazwiska albo e-maila. W Twojej uczelni jest %{count} nauczyciela."
+      candidate: "%{email}, %{university}"
+
+    index:
+      title: "Nauczyciele"
+      add: "Dodaj nauczyciela"
+      teacher: "Nauczyciel"
+      role: "Rola"
+      added: "Dodano"
+
+    row:
+      owner: "Właściciel"
+      created_group: "Utworzył grupę"
+      assistant: "Nauczyciel wspomagający"
+      added: "Dodano"
+      remove_label: "Usuń z grupy: %{name}"
+
+    new:
+      page_title: "Dodaj nauczyciela"
+
+    form:
+      title: "Dodaj nauczyciela"
+      hint: "Nauczyciel dostanie dostęp do grupy od razu po dodaniu."
+      placeholder: "Imię, nazwisko albo e-mail"
+      search: "Szukaj nauczyciela"
+      in_group: "Już w grupie"
+      add_label: "Dodaj %{name}"
+      overflow_hint: "Nie widzisz tej osoby? Wpisz więcej liter albo e-mail."
+      no_results: "Brak wyników dla"
+      no_results_hint: "Sprawdź pisownię albo wpisz e-mail."
+      nobody: "Nie ma kogo dodać: w Twojej uczelni nie ma jeszcze innych kont nauczycieli."
+      # teacher_picker_controller.ts
+      js:
+        results:
+          one: "%{count} wynik"
+          few: "%{count} wyniki"
+          many: "%{count} wyników"
+          other: "%{count} wyniku"
+        overflow: ", pokazujemy %{max} pierwszych"
+        query: "„%{query}”."
+
+    confirm_destroy:
+      page_title: "Usunąć %{name} z grupy?"
+      title: "Usunąć %{name} z grupy?"
+      body: "Straci dostęp do grupy. Nagrody, które przyznał, zostają u studentów."
+      remove: "Usuń z grupy"
+
+  activerecord:
+    errors:
+      models:
+        story_group_teacher:
+          attributes:
+            user_id:
+              taken: "Ta osoba jest już w grupie."
