@@ -3,10 +3,9 @@
 class PresetSet
   class << self
     def dir = raise(NotImplementedError, "#{name} must define .dir")
-    def labels = {}.freeze
 
     def label_for(key)
-      labels.fetch(key.to_s, key.to_s)
+      I18n.t("application.presets.#{dir}.#{key}", default: key.to_s)
     end
 
     def all

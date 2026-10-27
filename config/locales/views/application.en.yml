@@ -1,0 +1,79 @@
+en:
+  # ApplicationHelper and ApplicationController concerns — wording shared by many screens.
+  application:
+    flash:
+      log_in_first: "Log in to continue."
+      already_signed_in: "You're already logged in."
+      not_found: "Not found."
+    helpers:
+      today: "today %{time}"
+      yesterday: "yesterday %{time}"
+      minutes:
+        one: "%{count} minute"
+        other: "%{count} minutes"
+      feed:
+        purchase: "Purchase: %{name}"
+        purchase_fallback: "Purchase"
+        reward_fallback: "Activity reward"
+        adjustment: "Currency adjustment"
+      transaction:
+        purchase: "%{student} bought %{item} for %{amount} %{currency}"
+        item_fallback: "an item"
+        reward: "%{student} earned a reward for: %{category}"
+        category_fallback: "activity"
+        adjustment: "%{adjuster} adjusted %{student}'s currency (%{amount})"
+        adjuster_fallback: "the teacher"
+    # PresetSet.label_for — names of the ready-made images, read out by screen readers.
+    presets:
+      glyphs:
+        bolt: "Lightning bolt"
+        carrot: "Carrot"
+        carrotStar: "Carrot with a star"
+        chat: "Conversation"
+        chev1: "Chevron"
+        chev2: "Double chevron"
+        clock: "Clock"
+        compass: "Compass"
+        crew: "Crew"
+        crown: "Crown"
+        flask: "Flask"
+        heartPlus: "Heart with a plus"
+        hourglass: "Hourglass"
+        note: "Envelope"
+        paperCheck: "Sheet with a tick"
+        papers3: "Three sheets"
+        papers3shield: "Three sheets with a shield"
+        percent: "Percent"
+        rabbit: "Rabbit"
+        retake: "Sheet with an arrow"
+        rocket: "Rocket"
+        shield: "Shield"
+        starPlus: "Star with a sparkle"
+        starTrail: "Shooting star"
+        wrench: "Wrench"
+      art:
+        brackets: "Code"
+        castle: "Castle"
+        flow: "Algorithm"
+        tables: "Tables"
+        waves: "Sea"
+      currency:
+        bit: "Bit"
+        carrot: "Carrot"
+        coin: "Coin"
+        gem: "Gem"
+        pearl: "Pearl"
+
+  # Iconable — shared by every model with a picture.
+  activerecord:
+    errors:
+      messages:
+        unknown_art: "Unknown image."
+        unknown_icon: "Unknown icon."
+        art_type: "The image must be a GIF, JPG or PNG file."
+        art_missing: "Choose a ready-made image or upload your own."
+
+  time:
+    formats:
+      gh_time: "%H:%M"
+      gh_day_time: "%b %-d, %H:%M"
