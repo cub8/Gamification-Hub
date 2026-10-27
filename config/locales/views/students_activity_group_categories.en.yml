@@ -1,0 +1,65 @@
+en:
+  # The grading table ("Ocenianie").
+  students_activity_group_categories:
+    flash:
+      nothing: "No cells were marked."
+      awarded:
+        one: "Awarded %{total} %{currency} to %{count} student."
+        other: "Awarded %{total} %{currency} to %{count} students."
+
+    edit:
+      lead:
+        one: "%{categories}, %{count} student. Mark who earned rewards — you'll review everything once more before awarding."
+        other: "%{categories}, %{count} students. Mark who earned rewards — you'll review everything once more before awarding."
+      categories:
+        one: "%{count} category"
+        other: "%{count} categories"
+      search: "Search for a student"
+      legend: "Legend"
+      empty: "Empty"
+      marked_now: "Marked now"
+      awarded_locked: "Awarded, can't be undone"
+      student: "Student"
+      select_column: "Mark the whole column"
+      everyone: "Everyone"
+      total: "Total"
+      locked_title: "Awarded, can't be undone"
+      cell_awarded: "%{label}: awarded"
+      cell_empty: "%{label}: empty"
+      nothing_marked: "Nothing is marked. Click the cells of students who earned rewards."
+      clear: "Clear marks"
+      review: "Review and award"
+      no_columns_title: "This sheet has no columns"
+      no_columns_body: "Add columns in the sheet settings so there's something to reward."
+      sheet_settings: "Sheet settings"
+      no_students_title: "There are no students in this group yet"
+      no_students_body: "Invite students to the group — the sheet is ready and nothing in it gets lost."
+      invites: "Invites"
+      mobile_body: "Grading in the table works on a computer. This table has %{categories} and %{students}, so it would be unreadable on a phone."
+      mobile_categories:
+        one: "%{count} category"
+        other: "%{count} categories"
+      mobile_students:
+        one: "%{count} student"
+        other: "%{count} students"
+      mobile_hint: "On your phone you can check recent purchases and notifications."
+      back_home: "Back to home"
+      # grading_controller.ts
+      js:
+        cells:
+          one: "Marked now: %{count} cell"
+          other: "Marked now: %{count} cells"
+        students:
+          one: "for %{count} student, total"
+          other: "for %{count} students, total"
+        recipients:
+          one: "to %{count} student"
+          other: "to %{count} students"
+        cell_empty: "%{label}: empty"
+        cell_marked: "%{label}: marked"
+        locked: "This cell is already awarded and can't be undone."
+
+    review_dialog:
+      awarding: "You're awarding"
+      warning: "Once confirmed, this can't be undone. Check the list before awarding rewards."
+      confirm: "Award"

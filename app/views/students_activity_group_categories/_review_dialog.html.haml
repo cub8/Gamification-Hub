@@ -3,14 +3,14 @@
                                              action: 'close->grading#closeReview click->grading#closeOnBackdrop' } }
   .gh-dialog-body.gh-octagon-clip
     %h2#gh-review-title.gh-h2
-      Przyznajesz
+      = t('.awarding')
       %span{ data: { grading_target: 'reviewSum' } }
       = @story_group.currency_name
       %span{ data: { grading_target: 'reviewStudents' } }
 
     %p.gh-warning-note{ role: 'alert' }
       %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
-      Po zatwierdzeniu nie da się tego cofnąć. Sprawdź listę, zanim przyznasz nagrody.
+      = t('.warning')
 
     %ul.gh-review-list
       - students.each do |student|
@@ -34,8 +34,8 @@
     .gh-dialog-button-row
       %button.gh-btn.gh-btn--secondary{ type: 'button', autofocus: true,
                                   data: { action: 'grading#closeReview' } }
-        Wróć do edycji
+        = t('shared.actions.back_to_editing')
       %button.gh-btn.gh-btn--gold{ type: 'submit', form: 'gh-grade-form' }
-        Przyznaj
+        = t('.confirm')
         %span{ data: { grading_target: 'reviewConfirmSum' } }
         = @story_group.currency_name

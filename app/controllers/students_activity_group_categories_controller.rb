@@ -41,10 +41,11 @@ class StudentsActivityGroupCategoriesController < ApplicationController
   end
 
   def award_notice(result)
-    return 'Nie zaznaczono żadnego pola.' if result.pairs.none?
+    return t('students_activity_group_categories.flash.nothing') if result.pairs.none?
 
-    students = helpers.gh_plural(result.students, 'studentowi', 'studentom', 'studentom')
-    "Przyznano #{result.total} #{@story_group.currency_name} #{result.students} #{students}."
+    t('students_activity_group_categories.flash.awarded', total:    result.total,
+                                                          currency: @story_group.currency_name,
+                                                          count:    result.students,)
   end
 
   # `completions[student_id][category_id]`. A missing key is not a revocation —

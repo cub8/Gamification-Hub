@@ -1,0 +1,81 @@
+pl:
+  # The grading table ("Ocenianie").
+  students_activity_group_categories:
+    flash:
+      nothing: "Nie zaznaczono żadnego pola."
+      awarded:
+        one: "Przyznano %{total} %{currency} %{count} studentowi."
+        few: "Przyznano %{total} %{currency} %{count} studentom."
+        many: "Przyznano %{total} %{currency} %{count} studentom."
+        other: "Przyznano %{total} %{currency} %{count} studenta."
+
+    edit:
+      lead:
+        one: "%{categories}, %{count} student. Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz."
+        few: "%{categories}, %{count} studentów. Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz."
+        many: "%{categories}, %{count} studentów. Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz."
+        other: "%{categories}, %{count} studenta. Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz."
+      categories:
+        one: "%{count} kategoria"
+        few: "%{count} kategorie"
+        many: "%{count} kategorii"
+        other: "%{count} kategorii"
+      search: "Szukaj studenta"
+      legend: "Legenda"
+      empty: "Puste"
+      marked_now: "Zaznaczone teraz"
+      awarded_locked: "Przyznane, nie do cofnięcia"
+      student: "Student"
+      select_column: "Zaznacz całą kolumnę"
+      everyone: "Wszyscy"
+      total: "Razem"
+      locked_title: "Przyznane, nie można cofnąć"
+      cell_awarded: "%{label}: przyznane"
+      cell_empty: "%{label}: puste"
+      nothing_marked: "Nic nie jest zaznaczone. Kliknij pola studentów, którzy zdobyli nagrody."
+      clear: "Wyczyść zaznaczenia"
+      review: "Przejrzyj i przyznaj"
+      no_columns_title: "Ten arkusz nie ma żadnej kolumny"
+      no_columns_body: "Dodaj kolumny w ustawieniach arkusza, żeby było za co nagradzać."
+      sheet_settings: "Ustawienia arkusza"
+      no_students_title: "W tej grupie nie ma jeszcze studentów"
+      no_students_body: "Zaproś studentów do grupy — arkusz czeka gotowy i nic w nim nie przepada."
+      invites: "Zaproszenia"
+      mobile_body: "Ocenianie w tabeli działa na komputerze. Ta tabela ma %{categories} i %{students}, więc na telefonie byłaby nieczytelna."
+      mobile_categories:
+        one: "%{count} kategorię"
+        few: "%{count} kategorie"
+        many: "%{count} kategorii"
+        other: "%{count} kategorii"
+      mobile_students:
+        one: "%{count} studenta"
+        few: "%{count} studentów"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+      mobile_hint: "Na telefonie sprawdzisz ostatnie zakupy i powiadomienia."
+      back_home: "Wróć na start"
+      # grading_controller.ts
+      js:
+        cells:
+          one: "Zaznaczone teraz: %{count} pole"
+          few: "Zaznaczone teraz: %{count} pola"
+          many: "Zaznaczone teraz: %{count} pól"
+          other: "Zaznaczone teraz: %{count} pola"
+        students:
+          one: "u %{count} studenta, razem"
+          few: "u %{count} studentów, razem"
+          many: "u %{count} studentów, razem"
+          other: "u %{count} studenta, razem"
+        recipients:
+          one: "%{count} studentowi"
+          few: "%{count} studentom"
+          many: "%{count} studentom"
+          other: "%{count} studenta"
+        cell_empty: "%{label}: puste"
+        cell_marked: "%{label}: zaznaczone"
+        locked: "To pole jest już przyznane i nie można go cofnąć."
+
+    review_dialog:
+      awarding: "Przyznajesz"
+      warning: "Po zatwierdzeniu nie da się tego cofnąć. Sprawdź listę, zanim przyznasz nagrody."
+      confirm: "Przyznaj"
