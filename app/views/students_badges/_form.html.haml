@@ -5,16 +5,16 @@
   method: :post, scope: :students_badge,
   data: { controller: 'badge-picker',
           turbo_frame: (@in_modal ? 'modal' : nil),
-          badge_picker_pick_value: 'Przyznaj',
-          badge_picker_blank_value: 'Wybierz odznakę', } do |f|
+          badge_picker_pick_value: t('.pick'),
+          badge_picker_blank_value: t('.blank'), } do |f|
 
-  %h2#gh-assign-title.gh-h2 Przyznaj odznakę
+  %h2#gh-assign-title.gh-h2= t('.title')
   %p= badge_assign_lead(@student, held, @badges.size)
 
   - if @badges.any?
     %label.gh-search-input.gh-search--full-width
       %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
-      %input{ type: 'search', placeholder: 'Szukaj odznaki', 'aria-label': 'Szukaj odznaki',
+      %input{ type: 'search', placeholder: t('.search'), 'aria-label': t('.search'),
               data: { badge_picker_target: 'input', action: 'input->badge-picker#filter' } }
 
     %ul.gh-badge-picker-list
@@ -38,12 +38,9 @@
                                     badge_picker_for: badge.id } }
         = badge_effect_sentence(badge)
 
-    %p.gh-explainer-note{ hidden: true, data: { badge_picker_target: 'empty' } }
-      Brak odznak o tej nazwie.
+    %p.gh-explainer-note{ hidden: true, data: { badge_picker_target: 'empty' } }= t('.no_match')
   - else
-    %p.gh-explainer-note
-      W tej grupie nie ma jeszcze odznak. Dodaj je w zakładce Odznaki, a potem
-      wróć tutaj.
+    %p.gh-explainer-note= t('.empty')
 
   - if error
     %p.gh-field-error{ role: 'alert' }
@@ -52,9 +49,9 @@
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
     - else
-      = link_to 'Anuluj', story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--secondary'
+      = link_to t('shared.actions.cancel'), story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--secondary'
     %button.gh-btn{ type: 'submit', disabled: @badges.empty?,
                     data: { badge_picker_target: 'submit' } }
-      Wybierz odznakę
+      = t('.submit')

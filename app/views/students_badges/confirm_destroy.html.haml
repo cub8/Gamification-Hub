@@ -1,4 +1,4 @@
-- content_for :title, "Odbierz odznakę #{@students_badge.name}"
+- content_for :title, t('.page_title', name: @students_badge.name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

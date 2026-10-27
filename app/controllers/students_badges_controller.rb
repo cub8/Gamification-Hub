@@ -25,7 +25,7 @@ class StudentsBadgesController < ApplicationController
 
     if saved
       redirect_outside_turbo_frame story_group_student_path(@story_group, @student),
-                                   notice: "Przyznano odznakę „#{@students_badge.name}”."
+                                   notice: t('students_badges.flash.awarded', name: @students_badge.name)
     else
       set_badges
       render :new, status: :unprocessable_content
@@ -37,7 +37,7 @@ class StudentsBadgesController < ApplicationController
     @students_badge.destroy
 
     redirect_outside_turbo_frame story_group_student_path(@story_group, @student),
-                                 notice: "Odebrano odznakę „#{name}”."
+                                 notice: t('students_badges.flash.revoked', name: name)
   end
 
   private

@@ -1,16 +1,16 @@
 - badge = students_badge.badge
 
-%h2#gh-revoke-title.gh-h2= "Odebrać odznakę „#{badge.name}”?"
+%h2#gh-revoke-title.gh-h2= t('.title', name: badge.name)
 %p= badge_revoke_sentence(@student, badge)
 
 .gh-dialog-button-row
   - if @in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
-      Anuluj
+      = t('shared.actions.cancel')
   - else
-    = link_to 'Anuluj', story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--secondary'
+    = link_to t('shared.actions.cancel'), story_group_student_path(@story_group, @student), class: 'gh-btn gh-btn--secondary'
 
-  = button_to 'Odbierz odznakę',
+  = button_to t('.revoke'),
     story_group_student_badge_path(@story_group, @student, students_badge),
     method: :delete, class: 'gh-btn',
     form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }
