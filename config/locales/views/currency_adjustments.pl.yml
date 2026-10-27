@@ -1,0 +1,37 @@
+pl:
+  currency_adjustments:
+    flash:
+      added: "Dodano %{value}. Saldo: %{balance}."
+      taken: "Odjęto %{value}. Saldo: %{balance}."
+
+    new:
+      page_title: "Koryguj walutę - %{name}"
+
+    form:
+      title: "Koryguj walutę"
+      lead: "%{name} ma teraz %{balance} do wydania."
+      kind_label: "Rodzaj korekty"
+      take: "Odejmij"
+      amount: "Ile"
+      balance: "Do wydania"
+      total: "Zebrane łącznie"
+      rank: "Ranga"
+      unchanged: "bez zmian"
+      total_unchanged: "%{total} (bez zmian)"
+      blank: "Podaj kwotę"
+      over: "Student ma tylko %{balance} do wydania."
+      add_note: "Dodanie podnosi też sumę zebranych, więc może podnieść rangę."
+      take_note: "Odjęcie zmniejsza tylko to, co student ma do wydania. Suma zebranych i ranga zostają bez zmian."
+      submit_add: "Dodaj %{value}"
+      submit_take: "Odejmij %{value}"
+
+  # CurrencyAdjustmentForm#validate (errors.add(:amount, :key)).
+  activemodel:
+    errors:
+      models:
+        currency_adjustment_form:
+          attributes:
+            amount:
+              missing: "Podaj kwotę."
+              not_positive: "Podaj kwotę większą od zera."
+              overdrawn: "Student ma tylko %{balance} do wydania."
