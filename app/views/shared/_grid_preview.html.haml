@@ -1,18 +1,18 @@
-- sample = local_assigns[:sample_names].presence || ['Adam Pawłowski', 'Barbara Kowalewska']
+- sample = local_assigns[:sample_names].presence || t('shared.sheet_form.sample_names')
 
 %details.gh-preview-details{ open: true }
   %summary
-    Podgląd tabeli ocen
+    = t('.summary')
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
   %section.gh-panel.gh-preview-panel
-    %h3.gh-h3 Nagłówek tabeli ocen
+    %h3.gh-h3= t('.header')
 
     .gh-grading-table-preview
       %table.gh-grading-table
         %thead
           %tr{ data: { sheet_form_target: 'previewHead' } }
-            %th.gh-grading-th-student{ scope: 'col' } Student
+            %th.gh-grading-th-student{ scope: 'col' }= t('.student')
             - categories.each do |category|
               %th{ scope: 'col' }
                 .gh-grading-column-head
@@ -28,7 +28,7 @@
                 %td
                   %span.gh-grading-cell.gh-grading-cell--sm
 
-    %span.gh-field-hint Najedź na nagłówek w prawdziwej tabeli, żeby zobaczyć opis fabularny.
+    %span.gh-field-hint= t('.hint')
 
 %template{ data: { sheet_form_target: 'previewHeadCell' } }
   %th{ scope: 'col' }

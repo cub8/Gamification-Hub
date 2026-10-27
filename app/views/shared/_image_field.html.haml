@@ -2,13 +2,7 @@
 - glyph_attribute = local_assigns.fetch(:glyph_attribute, :icon_glyph)
 - registry        = local_assigns.fetch(:registry, Glyphs)
 - tile            = local_assigns.fetch(:tile, :glyph)
-- defaults        = { label: 'Grafika',
-                      presets: 'Gotowe grafiki',
-                      own: 'Twoja grafika',
-                      upload: 'Albo wgraj własną grafikę',
-                      hint: 'JPG lub PNG, najlepiej co najmniej 400 px.',
-                      crop: 'Przytnij grafikę',
-                      cropped: 'Przesuń i przeskaluj zaznaczenie — podgląd obok zmienia się na bieżąco. Zapisujemy kadr w kształcie karty, więc wypełni ją w całości. Na listach zobaczysz go w kwadratowej miniaturze, też w całości.', }
+- defaults        = t('shared.image_field').slice(:label, :presets, :own, :upload, :hint, :crop, :cropped)
 - copy            = defaults.merge(local_assigns.fetch(:copy, {}))
 
 - field_id  = ->(suffix) { "gh-#{kind}-art-#{suffix}" }
@@ -19,7 +13,8 @@
 
 .gh-form-field{ data: { controller: 'image-crop',
                  image_crop_aspect_value: local_assigns.fetch(:aspect, 1.6),
-                 image_crop_width_value: 1024, } }
+                 image_crop_width_value: 1024,
+                 image_crop_alt_value: copy[:own], } }
   %p.gh-form-label= copy[:label]
 
   .gh-art-preset-grid{ class: "gh-art-preset-grid--#{kind}", role: 'radiogroup', 'aria-label': copy[:presets],
@@ -29,7 +24,7 @@
       %label.gh-art-preset-tile{ class: "gh-art-preset-tile--#{kind}" }
         = form.radio_button glyph_attribute, key, class: 'sr-only',
           id: field_id.call(key),
-          'aria-label': "#{copy[:label]}: #{registry.label_for(key)}",
+          'aria-label': t('.preset_label', label: copy[:label], name: registry.label_for(key)),
           data: { action: ['image-crop#pickPreset', refresh].compact.join(' ') }
         %i.gh-octagon-clip
           - case tile
@@ -63,7 +58,7 @@
       %b= copy[:upload]
       %small= copy[:hint]
     %label.gh-btn.gh-btn--secondary.gh-btn--small
-      Wybierz plik
+      = t('.choose_file')
       = form.file_field attribute, class: 'sr-only',
         accept: 'image/png,image/jpeg,image/gif',
         data: { image_crop_target: 'input', action: 'image-crop#choose' }
