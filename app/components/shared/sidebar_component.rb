@@ -30,7 +30,7 @@ class Shared::SidebarComponent < ViewComponent::Base
   # owning implies teaching. The labels come from StoryGroupsListing so this
   # list and the "Grupy" screen cannot disagree about what you are in a group.
   def role_label(story_group)
-    StoryGroupsListing::ROLE_LABELS[role_for(story_group)]
+    t("story_groups.listing.roles.#{role_for(story_group)}")
   end
 
   def role_for(story_group)

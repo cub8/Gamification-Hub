@@ -1,5 +1,20 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { interpolate } from "@utils/i18n"
+
+interface Wording {
+  review_step: string
+  summary_step: string
+  counter: string
+  next: string
+  create_short: string
+  create_quick: string
+  create_empty: string
+  name_placeholder: string
+  currency_placeholder: string
+  ranking_off: string
+  ranking_on: string
+}
 
 const LAST_STEP = 3
 
@@ -22,7 +37,7 @@ class GroupWizardController extends Controller<HTMLElement> {
     "back", "cancel", "next", "nextLabel", "nextLabelShort", "nextIcon", "submit", "counter",
   ]
 
-  static values = { presetUrl: String }
+  static values = { presetUrl: String, i18n: Object }
 
   declare readonly formTarget: HTMLFormElement
   declare readonly gridTarget: HTMLElement
@@ -68,6 +83,7 @@ class GroupWizardController extends Controller<HTMLElement> {
   declare readonly submitTarget: HTMLInputElement
   declare readonly counterTarget: HTMLElement
   declare readonly presetUrlValue: string
+  declare readonly i18nValue: Wording
 
   private step = 0
 
@@ -180,7 +196,7 @@ class GroupWizardController extends Controller<HTMLElement> {
       this.stepTickTargets[index].hidden = !done
     })
 
-    this.stepLabelTargets[LAST_STEP].textContent = this.quick ? "Przegląd zestawu" : "Podsumowanie"
+    this.stepLabelTargets[LAST_STEP].textContent = this.quick ? this.i18nValue.review_step : this.i18nValue.summary_step
   }
 
   private renderPanels() {
@@ -197,23 +213,23 @@ class GroupWizardController extends Controller<HTMLElement> {
   }
 
   private renderBar() {
-    this.counterTarget.textContent = `Krok ${this.step + 1} z ${LAST_STEP + 1}`
+    this.counterTarget.textContent = interpolate(this.i18nValue.counter, { step: this.step + 1, total: LAST_STEP + 1 })
     this.backTarget.hidden = this.step === 0
     this.cancelTarget.hidden = this.step !== 0
 
     const last = this.step === LAST_STEP
 
     this.nextIconTarget.hidden = last
-    this.nextLabelTarget.textContent = last ? this.createLabel : "Dalej"
-    this.nextLabelShortTarget.textContent = last ? "Utwórz grupę" : "Dalej"
+    this.nextLabelTarget.textContent = last ? this.createLabel : this.i18nValue.next
+    this.nextLabelShortTarget.textContent = last ? this.i18nValue.create_short : this.i18nValue.next
   }
 
   private get createLabel(): string {
-    return this.quick ? "Utwórz grupę z zestawem" : "Utwórz pustą grupę"
+    return this.quick ? this.i18nValue.create_quick : this.i18nValue.create_empty
   }
 
   private renderArt() {
-    this.nameEchoTarget.textContent = this.nameTarget.value.trim() || "Nazwa grupy"
+    this.nameEchoTarget.textContent = this.nameTarget.value.trim() || this.i18nValue.name_placeholder
     this.nameEchoTarget.classList.toggle("gh-placeholder-text", this.nameTarget.value.trim() === "")
 
     const art = this.chosen("[icon_glyph]")
@@ -242,7 +258,7 @@ class GroupWizardController extends Controller<HTMLElement> {
     const name = this.currencyTarget.value.trim()
 
     this.currencyEchoTargets.forEach((echo) => {
-      echo.textContent = name || "Marchewek"
+      echo.textContent = name || this.i18nValue.currency_placeholder
       echo.classList.toggle("gh-placeholder-text", name === "")
     })
 
@@ -309,13 +325,13 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.sumLivesTarget.textContent = this.livesField?.value ?? ""
     this.sumRankingTarget.textContent = this.rankingTarget.checked ?
       this.rankingLabel :
-      "Wyłączony"
+      this.i18nValue.ranking_off
   }
 
   private get rankingLabel(): string {
     const select = this.rankingModeTarget.querySelector<HTMLSelectElement>("select")
 
-    return select?.selectedOptions[0]?.textContent?.trim() ?? "Widoczny dla studentów"
+    return select?.selectedOptions[0]?.textContent?.trim() ?? this.i18nValue.ranking_on
   }
 
   private get livesField(): HTMLInputElement | null {

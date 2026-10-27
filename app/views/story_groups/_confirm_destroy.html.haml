@@ -1,12 +1,12 @@
 - students = story_group.students.count
 - teachers = story_group.teachers.count + 1
 
-%h2#gh-del-group-title.gh-h2 Usunąć grupę na zawsze?
+%h2#gh-del-group-title.gh-h2= t('.title')
 %p
-  = "#{students} #{gh_plural(students, 'student', 'studenci', 'studentów')}"
-  = "i #{teachers} #{gh_plural(teachers, 'nauczyciel', 'nauczycieli', 'nauczycieli')}"
-  = "#{gh_plural(students + teachers, 'straci', 'stracą', 'straci')} dostęp."
-  Historia, przedmioty i ranking znikną.
+  = t('.lose_access', count:    students + teachers,
+                      students: t('.students', count: students),
+                      teachers: t('.teachers', count: teachers))
+  = t('.gone')
 
 = form_with url: story_group_path(story_group), method: :delete,
   data: { controller: 'confirm-name',
@@ -15,7 +15,7 @@
 
   .gh-form-field
     = label_tag :confirm do
-      Wpisz nazwę grupy, żeby potwierdzić:
+      = t('.confirm')
       %b= story_group.name
     .gh-text-input{ class: ('gh-text-input--invalid' if @confirm_failed) }
       = text_field_tag :confirm, nil, autocomplete: 'off', autofocus: true,
@@ -25,14 +25,14 @@
     - if @confirm_failed
       %p#gh-del-group-error.gh-field-error{ role: 'alert' }
         %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
-        %span Wpisana nazwa nie zgadza się z nazwą grupy. Grupa nie została usunięta.
+        %span= t('.mismatch')
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
     - else
-      = link_to 'Anuluj', edit_story_group_path(story_group), class: 'gh-btn gh-btn--secondary'
+      = link_to t('shared.actions.cancel'), edit_story_group_path(story_group), class: 'gh-btn gh-btn--secondary'
 
     %button.gh-btn{ type: 'submit', disabled: true,
                     data: { confirm_name_target: 'submit' } }
-      Usuń grupę
+      = t('.remove')

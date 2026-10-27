@@ -1,26 +1,18 @@
 # frozen_string_literal: true
 
+# The quick-start set. Numbers and icons live here; every name and description
+# comes from story_groups.starter_pack in config/locales/views/story_groups.*.yml,
+# in the language of whoever creates the group — the builder writes them to the
+# database as plain text, so a group keeps the language it was created in.
 class StarterPack
+  I18N_SCOPE = 'story_groups.starter_pack'
+
   CLASS_MAX = 11
 
   KEYS = %w[neutral fantasy scifi].freeze
 
   CLASSES_RANGE   = (4..30)
   DEFAULT_CLASSES = 12
-
-  LABELS = {
-    'neutral' => 'Neutralny',
-    'fantasy' => 'Fantasy',
-    'scifi'   => 'Sci-fi',
-  }.freeze
-
-  DESCRIPTIONS = {
-    'neutral' => 'Bez fabularnego klimatu. Pasuje do każdego przedmiotu.',
-    'fantasy' => 'Zamki, zakony i rycerskie tytuły.',
-    'scifi'   => 'Statki, załogi i kosmiczne misje.',
-  }.freeze
-
-  TEMPLATE_NAME = 'Zajęcia'
 
   Rank     = Data.define(:index, :name, :threshold, :discount, :icon_glyph)
   Badge    = Data.define(:index, :name, :didactic_description, :story_description, :discount,
@@ -29,129 +21,29 @@ class StarterPack
                          :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
   Category = Data.define(:index, :didactic_description, :story_description, :reward)
 
-  CATEGORIES = [
-    ['Obecność',                   1],
-    ['Punktualność',               1],
-    ['Wejściówka zaliczona',       1],
-    ['Wejściówka ≥ średnia grupy', 2],
-    ['Zgłoszenie do zadania',      2],
-    ['Zadanie zrobione poprawnie', 1],
-    ['Pomoc innym',                2],
-    ['Ciekawa uwaga',              1],
-  ].freeze
+  # Reward per category, in the order of starter_pack.categories.
+  CATEGORY_REWARDS = [1, 1, 1, 2, 2, 1, 2, 1].freeze
 
   RANK_FRACTIONS = [0.0, 0.15, 0.30, 0.50, 0.75].freeze
   RANK_DISCOUNTS = [0, 3, 5, 10, 15].freeze
 
-  BADGE_RULES = [
-    'Pierwsza wejściówka bez błędów',
-    'Obecność na wszystkich zajęciach w miesiącu',
-    'Co najmniej 3 razy pomógł innym',
-    'Co najmniej 3 ciekawe uwagi',
-    '3 wejściówki z rzędu ≥ średniej grupy',
-    'Wyjaśnienie trudnego zadania całej grupie',
-  ].freeze
-
   BADGE_DISCOUNTS = [2, 5, 5, 3, 5, 7].freeze
 
+  # In the order of starter_pack.items.
   ITEMS = [
-    {
-      name:            '+5 minut do wejściówki',
-      x:               1.0,
-      glyph:           'clock',
-      unlock:          nil,
-      discount_rank:   2,
-      discount_badges: [],
-      didactic:        'Dodaje 5 minut do czasu na najbliższą wejściówkę.',
-    },
-    {
-      name:            'Konsultacja',
-      x:               1.5,
-      glyph:           'chat',
-      unlock:          nil,
-      discount_rank:   2,
-      discount_badges: [],
-      didactic:        'Kwadrans konsultacji z prowadzącym poza zajęciami.',
-    },
-    {
-      name:            'Poprawa wejściówki',
-      x:               1.0,
-      glyph:           'retake',
-      unlock:          1,
-      discount_rank:   3,
-      discount_badges: [],
-      didactic:        'Pozwala napisać jedną wejściówkę jeszcze raz.',
-    },
-    {
-      name:            'Bezpieczna poprawa',
-      x:               2.0,
-      glyph:           'shield',
-      unlock:          2,
-      discount_rank:   3,
-      discount_badges: [1, 3],
-      didactic:        'Poprawa wejściówki bez ryzyka — liczy się lepszy z dwóch wyników.',
-    },
-    {
-      name:            'Usprawiedliwienie',
-      x:               2.5,
-      glyph:           'note',
-      unlock:          2,
-      discount_rank:   3,
-      discount_badges: [],
-      didactic:        'Usprawiedliwia jedną nieobecność, bez utraty życia.',
-    },
-    {
-      name:            '1up: odzyskanie życia',
-      m:               0.25,
-      glyph:           'heartPlus',
-      unlock:          nil,
-      discount_rank:   4,
-      discount_badges: [3, 5, 2],
-      at_zero_lives:   true,
-      didactic:        'Przywraca jedno utracone życie.',
-    },
-    {
-      name:            '+0.5 oceny końcowej',
-      m:               0.60,
-      glyph:           'percent',
-      unlock:          3,
-      discount_rank:   4,
-      discount_badges: [5, 1],
-      didactic:        'Podnosi ocenę końcową o pół stopnia.',
-    },
+    { x: 1.0,  glyph: 'clock',     unlock: nil, discount_rank: 2, discount_badges: [] },
+    { x: 1.5,  glyph: 'chat',      unlock: nil, discount_rank: 2, discount_badges: [] },
+    { x: 1.0,  glyph: 'retake',    unlock: 1,   discount_rank: 3, discount_badges: [] },
+    { x: 2.0,  glyph: 'shield',    unlock: 2,   discount_rank: 3, discount_badges: [1, 3] },
+    { x: 2.5,  glyph: 'note',      unlock: 2,   discount_rank: 3, discount_badges: [] },
+    { m: 0.25, glyph: 'heartPlus', unlock: nil, discount_rank: 4, discount_badges: [3, 5, 2], at_zero_lives: true },
+    { m: 0.60, glyph: 'percent',   unlock: 3,   discount_rank: 4, discount_badges: [5, 1] },
   ].freeze
-
-  RANK_NAMES = {
-    'neutral' => %w[Nowicjusz Uczeń Adept Ekspert Mistrz],
-    'fantasy' => %w[Giermek Rycerz Kasztelan Hetman Król],
-    'scifi'   => %w[Kadet Pilot Nawigator Komandor Admirał],
-  }.freeze
 
   RANK_GLYPHS = {
     'neutral' => %w[chev1 chev2 shield starPlus crown],
     'fantasy' => %w[chev1 chev2 shield crown carrotStar],
     'scifi'   => %w[chev1 chev2 rocket compass crown],
-  }.freeze
-
-  BADGE_NAMES = {
-    'neutral' => ['Bez skazy',
-                  'Stała obecność',
-                  'Pomocna dłoń',
-                  'Iskra ciekawości',
-                  'Seria sukcesów',
-                  'Głos grupy',],
-    'fantasy' => ['Czysta klinga',
-                  'Wierna straż',
-                  'Tarcza drużyny',
-                  'Księga mądrości',
-                  'Pasmo zwycięstw',
-                  'Bard drużyny',],
-    'scifi'   => ['Czysty lot',
-                  'Zawsze na pokładzie',
-                  'Mechanik załogi',
-                  'Sygnał z kosmosu',
-                  'Seria misji',
-                  'Głos floty',],
   }.freeze
 
   BADGE_GLYPHS = {
@@ -160,71 +52,29 @@ class StarterPack
     'scifi'   => %w[starPlus rocket wrench compass starTrail crew],
   }.freeze
 
-  BADGE_STORIES = {
-    'neutral' => [nil] * 6,
-    'fantasy' => ['Stal bez jednej rysy — pierwszy pojedynek wygrany bez draśnięcia.',
-                  'Stałeś na posterunku każdej nocy tego miesiąca.',
-                  'Trzykrotnie zasłoniłeś towarzysza własną tarczą.',
-                  'Trzy razy dopisałeś coś, czego w księgach jeszcze nie było.',
-                  'Trzy potyczki z rzędu rozstrzygnięte na twoją korzyść.',
-                  'Wytłumaczyłeś całej drużynie to, czego nikt inny nie potrafił nazwać.',],
-    'scifi'   => ['Pierwszy lot bez jednego odczytu w czerwieni.',
-                  'Ani jednej zmiany opuszczonej w tym cyklu.',
-                  'Trzy razy postawiłeś na nogi cudzy sprzęt.',
-                  'Trzy razy wychwyciłeś sygnał, który inni przegapili.',
-                  'Trzy misje z rzędu zaliczone powyżej normy floty.',
-                  'Twoje wyjaśnienie poszło na cały kanał i wszyscy zrozumieli.',],
-  }.freeze
-
-  ITEM_STORIES = {
-    'neutral' => [nil] * 7,
-    'fantasy' => ['Klepsydra sypie piaskiem wolniej, niż powinna.',
-                  'Audiencja u mistrza zakonu.',
-                  'Drugie podejście do pojedynku.',
-                  'Pojedynek na tępe klingi — przegrana nic nie kosztuje.',
-                  'List żelazny tłumaczący twoją nieobecność.',
-                  'Eliksir przywracający życie.',
-                  'Pieczęć króla na twoim świadectwie.',],
-    'scifi'   => ['Chwilowe spowolnienie zegara pokładowego.',
-                  'Połączenie z komandorem poza godzinami służby.',
-                  'Drugie podejście do symulacji.',
-                  'Lot treningowy — awaria nic nie kosztuje.',
-                  'Wpis do dziennika usprawiedliwiający nieobecność.',
-                  'Regeneracja w kapsule medycznej.',
-                  'Awans wpisany do akt floty.',],
-  }.freeze
-
-  CATEGORY_STORIES = {
-    'neutral' => [nil] * 8,
-    'fantasy' => ['Stawiłeś się na zbiórce.',
-                  'Na miejscu, zanim zabrzmiał róg.',
-                  'Próba sprawności zaliczona.',
-                  'Wynik powyżej średniej drużyny.',
-                  'Zgłosiłeś się na ochotnika.',
-                  'Zadanie wykonane bez zarzutu.',
-                  'Podałeś rękę towarzyszowi.',
-                  'Rzuciłeś światło na rzecz, której nikt nie dostrzegł.',],
-    'scifi'   => ['Zameldowałeś się na pokładzie.',
-                  'Na stanowisku przed odliczaniem.',
-                  'Test kwalifikacyjny zaliczony.',
-                  'Wynik powyżej średniej załogi.',
-                  'Zgłosiłeś się do zadania.',
-                  'Zadanie wykonane zgodnie z procedurą.',
-                  'Wsparłeś innego członka załogi.',
-                  'Zauważyłeś coś, co umknęło czujnikom.',],
-  }.freeze
-
   class << self
     def include?(key) = KEYS.include?(key.to_s)
 
-    def label_for(key) = LABELS.fetch(key.to_s, key.to_s)
+    def label_for(key) = text("packs.#{key}.label", default: key.to_s)
 
-    def description_for(key) = DESCRIPTIONS.fetch(key.to_s, '')
+    def description_for(key) = text("packs.#{key}.description", default: '')
+
+    def rank_names(key) = list("packs.#{key}.ranks")
+
+    def template_name = text('template_name')
+
+    def category_names = text('categories')
 
     def for(pack:, classes:)
       new(pack:    include?(pack) ? pack.to_s : KEYS.first,
           classes: classes.to_i.clamp(CLASSES_RANGE.min, CLASSES_RANGE.max),)
     end
+
+    def text(key, **) = I18n.t("#{I18N_SCOPE}.#{key}", **)
+
+    # An array key, or [] when absent. Not `default: []` — I18n reads an Array
+    # default as fallback keys, and an empty list of them is still missing.
+    def list(key) = I18n.exists?("#{I18N_SCOPE}.#{key}") ? text(key) : []
   end
 
   def initialize(pack:, classes:)
@@ -241,7 +91,7 @@ class StarterPack
 
   def ranks
     @ranks ||= begin
-      names  = RANK_NAMES[pack]
+      names  = self.class.rank_names(pack)
       glyphs = RANK_GLYPHS[pack]
 
       thresholds = RANK_FRACTIONS.each_with_object([]) do |fraction, kept|
@@ -258,13 +108,14 @@ class StarterPack
 
   def badges
     @badges ||= begin
-      names   = BADGE_NAMES[pack]
+      names   = pack_text(:badges)
+      rules   = self.class.text('badge_rules')
       glyphs  = BADGE_GLYPHS[pack]
-      stories = BADGE_STORIES[pack]
+      stories = pack_text(:badge_stories)
 
       names.each_with_index.map do |name, index|
         Badge.new(index: index, name: name,
-                  didactic_description: BADGE_RULES[index],
+                  didactic_description: rules[index],
                   story_description: stories[index],
                   discount: BADGE_DISCOUNTS[index], icon_glyph: glyphs[index],)
       end
@@ -273,11 +124,12 @@ class StarterPack
 
   def items
     @items ||= begin
-      stories = ITEM_STORIES[pack]
+      texts   = self.class.text('items')
+      stories = pack_text(:item_stories)
 
       ITEMS.each_with_index.map do |spec, index|
-        Item.new(index: index, name: spec[:name], price: price_for(spec),
-                 didactic_description: spec[:didactic],
+        Item.new(index: index, name: texts[index][:name], price: price_for(spec),
+                 didactic_description: texts[index][:didactic],
                  story_description: stories[index],
                  icon_glyph: spec[:glyph],
                  unlock_rank: spec[:unlock],
@@ -290,16 +142,19 @@ class StarterPack
 
   def categories
     @categories ||= begin
-      stories = CATEGORY_STORIES[pack]
+      stories = pack_text(:category_stories)
 
-      CATEGORIES.each_with_index.map do |(label, reward), index|
+      self.class.category_names.each_with_index.map do |label, index|
         Category.new(index: index, didactic_description: label,
-                     story_description: stories[index], reward: reward,)
+                     story_description: stories[index], reward: CATEGORY_REWARDS[index],)
       end
     end
   end
 
   private
+
+  # A pack without story lines (neutral) simply has no such key.
+  def pack_text(key) = self.class.list("packs.#{pack}.#{key}")
 
   def price_for(spec)
     raw = spec[:x] ? spec[:x] * CLASS_MAX : spec[:m] * total_earnable
