@@ -1,0 +1,27 @@
+pl:
+  # Auth::PasswordlessController, Auth::UsosController and Auth::SignIn.
+  auth:
+    flash:
+      signed_in: "Zalogowano pomyślnie."
+      invalid_token: "Nieprawidłowy token"
+      resent: "Wysłaliśmy nowy link. Poprzedni już nie działa."
+      invalid_provider: "Nieprawidłowy dostawca logowania."
+      invalid_auth: "Nieprawidłowa próba autoryzacji."
+
+    passwordless:
+      new:
+        title: "Logowanie e-mailem"
+        back: "Inne sposoby logowania"
+        lead: "Wyślemy Ci link do logowania. Hasło nie jest potrzebne."
+        email: "Adres e-mail"
+        placeholder: "jan.nowak@example.com"
+        send: "Wyślij link"
+      inbox:
+        title: "Sprawdź skrzynkę"
+        sent_to: "Wysłaliśmy link na adres"
+        valid_for: "Link działa przez %{minutes}."
+        spam: "Jeśli go nie widzisz, zajrzyj do folderu Spam."
+        # %{time} is filled in by countdown_controller.ts.
+        waiting: "Wyślij ponownie za %{time}"
+        resend: "Wyślij link ponownie"
+        change_email: "Zmień adres e-mail"
