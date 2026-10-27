@@ -51,7 +51,7 @@ class Shared::SidebarComponent < ViewComponent::Base
   end
 
   def toggle_label
-    collapsed ? 'Rozwiń' : 'Zwiń panel'
+    collapsed ? t('layouts.sidebar.expand') : t('layouts.sidebar.collapse')
   end
 
   def toggle_icon

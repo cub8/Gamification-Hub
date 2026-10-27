@@ -1,6 +1,6 @@
 %aside.gh-sidebar{ class: ('gh-sidebar--collapsed' if collapsed),
               data: { sidebar_target: 'sidebar' } }
-  %nav.gh-sidebar-nav.gh-sidebar-nav--primary{ 'aria-label': 'Główna' }
+  %nav.gh-sidebar-nav.gh-sidebar-nav--primary{ 'aria-label': t('layouts.sidebar.main') }
     - nav_items.each do |item|
       = link_to item.path, class: "gh-sidebar-link #{'gh-sidebar-link--active' if current?(item.path)}",
         title: item.label, 'aria-current': ('page' if current?(item.path)) do
@@ -10,7 +10,7 @@
   - if group_chrome
     = render 'layouts/deck', chrome: group_chrome, current_path: current_path
   - elsif groups.any?
-    %p.gh-sidebar-section-label Twoje grupy
+    %p.gh-sidebar-section-label= t('layouts.sidebar.your_groups')
     .gh-sidebar-group-list
       - groups.each do |story_group|
         = link_to story_group_path(story_group), class: 'gh-sidebar-group-list-item', title: story_group.name do

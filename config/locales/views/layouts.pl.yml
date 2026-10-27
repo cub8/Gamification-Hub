@@ -1,0 +1,89 @@
+pl:
+  layouts:
+    # Navigation (app/values/navigation.rb) — sidebar, deck, tab bar.
+    navigation:
+      start: "Start"
+      groups: "Grupy"
+      notifications: "Powiadomienia"
+      overview: "Przegląd"
+      students: "Studenci"
+      sheets: "Arkusze ocen"
+      items: "Przedmioty"
+      ranks: "Rangi"
+      badges: "Odznaki"
+      ranking: "Ranking"
+      invites: "Zaproszenia"
+      teachers: "Nauczyciele"
+      settings: "Ustawienia grupy"
+      shop: "Sklep"
+      my_items: "Moje przedmioty"
+      history: "Historia waluty"
+      membership: "Ustawienia w grupie"
+      short:
+        sheets: "Arkusze"
+        my_items: "Przedmioty"
+
+    # GroupChrome#role_label
+    chrome_roles:
+      own: "Prowadzisz tę grupę"
+      sup: "Wspierasz tę grupę"
+      lrn: "Jesteś uczestnikiem"
+
+    theme:
+      light: "Jasny motyw"
+      dark: "Ciemny motyw"
+      toggle: "Przełącz motyw"
+
+    header:
+      home: "Gamification Hub, start"
+      switch_group: "Grupa %{name}, zmień grupę"
+      balance_title: "%{balance} do wydania, %{total} zebrane łącznie"
+      balance_label: "Masz %{balance} do wydania, pokaż historię waluty"
+      to_spend: "do wydania"
+      join: "Dołącz do grupy"
+      notifications: "Powiadomienia"
+      notifications_unread:
+        one: "Powiadomienia, %{count} nowe"
+        few: "Powiadomienia, %{count} nowe"
+        many: "Powiadomienia, %{count} nowych"
+        other: "Powiadomienia, %{count} nowego"
+      account: "Konto: %{name}"
+
+    sidebar:
+      main: "Główna"
+      your_groups: "Twoje grupy"
+      expand: "Rozwiń"
+      collapse: "Zwiń panel"
+
+    tab_bar:
+      label: "Nawigacja"
+
+    deck:
+      group: "Grupa %{name}"
+      switch: "Zmień grupę"
+      sections: "Sekcje grupy"
+
+    group_switcher:
+      title: "Zmień grupę"
+      here: "Tu jesteś"
+      join: "Dołącz do grupy"
+
+    more_sheet:
+      create_group: "Utwórz grupę"
+      account: "Konto"
+      account_settings: "Ustawienia konta"
+      logout: "Wyloguj się"
+
+    account_menu:
+      label: "Konto"
+      account_settings: "Ustawienia konta"
+      logout: "Wyloguj się"
+
+
+    theme_toggle:
+      help: "Pomoc:"
+      contact: "kontakt"
+
+    locale_switcher:
+      switch_to: "English"
+      label: "Zmień język na angielski"
