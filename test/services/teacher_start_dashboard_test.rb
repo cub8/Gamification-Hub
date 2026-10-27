@@ -4,6 +4,9 @@ require 'test_helper'
 
 class TeacherStartDashboardTest < ActiveSupport::TestCase
   setup do
+    # Purchases are bucketed by calendar day, so "1.hour.ago" must not cross
+    # midnight — pin the clock to midday. travel_back runs after each test.
+    travel_to Time.current.noon
     @teacher = FactoryBot.create(:user, role: :teacher)
   end
 
