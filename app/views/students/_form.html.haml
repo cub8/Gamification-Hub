@@ -7,30 +7,28 @@
           turbo_frame: (@in_modal ? 'modal' : nil),
           lives_stepper_start_value: lives } do |f|
 
-  %h2#gh-student-title.gh-h2 Edytuj studenta
+  %h2#gh-student-title.gh-h2= t('.title')
   %p
     = "#{student.display_name}."
-    Imię, nazwisko i e-mail pochodzą z konta studenta.
+    = t('.account_note')
 
   .gh-form-field
-    %p#gh-lives-label.gh-form-label Życia
+    %p#gh-lives-label.gh-form-label= t('.lives')
     .gh-number-stepper{ role: 'group', 'aria-labelledby': 'gh-lives-label' }
-      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Odbierz życie',
+      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('.take_life'),
                           disabled: lives.zero?,
                           data: { lives_stepper_target: 'down',
                                   action: 'lives-stepper#down' } }
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
       %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= lives
-      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Dodaj życie',
+      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('.add_life'),
                           data: { lives_stepper_target: 'up',
                                   action: 'lives-stepper#up' } }
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
 
     = f.hidden_field :lives, value: lives, data: { lives_stepper_target: 'field' }
 
-    %span.gh-field-hint
-      Życie odbierasz za nieusprawiedliwioną nieobecność. Przy 0 życiach
-      student kupi tylko przedmioty dostępne przy 0 życiach.
+    %span.gh-field-hint= t('.lives_hint')
 
   - if error
     %p.gh-field-error{ role: 'alert' }
@@ -38,19 +36,17 @@
       %span= error
 
   .gh-form-section.gh-form-section--divider
-    %p.gh-form-label Usuń z grupy
-    %p.gh-small
-      Student straci dostęp do grupy, a jego odznaki, przedmioty i historia
-      waluty przepadną. Dołączy ponownie tylko z nowym kodem.
+    %p.gh-form-label= t('.remove_label')
+    %p.gh-small= t('.remove_hint')
     = link_to confirm_destroy_story_group_student_path(@story_group, student),
       class: 'gh-btn gh-btn--secondary gh-btn--small gh-remove-student-btn',
       data: { turbo_frame: 'modal2' } do
       %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
-      Usuń z grupy
+      = t('.remove')
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
     - else
-      = link_to 'Anuluj', story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
-    %button.gh-btn{ type: 'submit', data: { lives_stepper_target: 'submit' } } Zapisz
+      = link_to t('shared.actions.cancel'), story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
+    %button.gh-btn{ type: 'submit', data: { lives_stepper_target: 'submit' } }= t('shared.actions.save')

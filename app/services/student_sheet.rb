@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
 class StudentSheet
-  TABS = [
-    ['badges', 'Odznaki'],
-    ['items',  'Przedmioty'],
-    ['hist',   'Historia waluty'],
-  ].freeze
+  TABS = %w[badges items hist].freeze
 
   DEFAULT_TAB = 'badges'
 
   class << self
     def tab_for(param)
-      TABS.map(&:first).include?(param.to_s) ? param.to_s : DEFAULT_TAB
+      TABS.include?(param.to_s) ? param.to_s : DEFAULT_TAB
     end
   end
 
