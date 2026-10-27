@@ -42,10 +42,6 @@ module ApplicationHelper
     @gh_group_chrome = GroupChrome.for(user: @current_user, story_group: @story_group)
   end
 
-  def gh_plural(count, one, few, many)
-    Plural.pick(count, one, few, many)
-  end
-
   def gh_minutes(count)
     t('application.helpers.minutes', count: count)
   end
