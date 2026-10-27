@@ -1,8 +1,7 @@
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Rangi
-    %p.gh-lead
-      Ranga rośnie razem z łącznie zebraną walutą. Wydawanie jej nie obniża rangi.
+    %h1.gh-h1= t('.title')
+    %p.gh-lead= t('.lead')
 
 - if ladder.any?
   %ol.gh-panel.gh-student-ladder-list
@@ -13,36 +12,34 @@
           %b
             = rung.rank.name
             - if rung.current?
-              %span.gh-you-badge.gh-octagon-clip Twoja ranga
+              %span.gh-you-badge.gh-octagon-clip= t('.yours')
           %small.gh-small= rank_summary_sentences(rung.rank)
 
         %div
           - if rung.done?
             %span.gh-rank-status.gh-rank-status--achieved
               %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
-              Zdobyta
+              = t('.achieved')
           - elsif rung.progressing?
             - collected, needed = rung.progress
             %span.gh-rank-status
               - if rung.next?
-                = "#{collected} z #{needed} do pierwszej rangi"
+                = t('.to_first', collected: collected, needed: needed)
               - else
-                = "#{ladder.collected} z #{rung.next_threshold} do następnej"
+                = t('.to_next', collected: ladder.collected, needed: rung.next_threshold)
             .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                      'aria-valuemin': 0,
                      'aria-valuemax': needed,
                      'aria-valuenow': collected,
-                     'aria-label': "Postęp do rangi wyżej niż #{rung.rank.name}" }
+                     'aria-label': t('.progress_label', name: rung.rank.name) }
               %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(collected, needed)}%" }
           - elsif rung.current?
-            %span.gh-rank-status.gh-rank-status--achieved Najwyższa ranga
+            %span.gh-rank-status.gh-rank-status--achieved= t('.top')
           - else
             %span.gh-rank-status
               %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
-              = "Brakuje #{rung.remaining}"
+              = t('.missing', count: rung.remaining)
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 W tej grupie nie ma jeszcze rang
-    %p.gh-lead
-      Prowadzący ich nie dodał. Zbieraj walutę — kiedy rangi się pojawią, zaliczy
-      się wszystko, co zebrałeś do tej pory.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')

@@ -4,11 +4,11 @@
 
 %details.gh-preview-details{ open: true }
   %summary
-    Podgląd rangi
+    = t('.summary')
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
   %section.gh-panel.gh-preview-panel
-    %h3 Karta rangi
+    %h3= t('.card')
     .gh-preview-flip-card
       %article.gh-card.gh-card--rank
         .gh-card-frame
@@ -16,7 +16,7 @@
             .gh-card-header
               %h4.gh-card-name{ class: ('gh-placeholder-text' if rank.name.blank?),
                                 data: { rank_form_target: 'cardName' } }
-                = rank.name.presence || 'Nazwa rangi'
+                = rank.name.presence || t('ranks.helpers.name_placeholder')
             .gh-card-art{ data: { rank_form_target: 'cardArt' } }
               - if rank.upload?
                 = image_tag rank.icon, alt: ''
@@ -25,7 +25,7 @@
             %p.gh-rule-text{ data: { rank_form_target: 'cardRules' } }= rank_reward_line(rank)
 
   %section.gh-panel.gh-preview-panel
-    %h3 Drabinka rang
+    %h3= t('.ladder')
     %ol.gh-rank-form-ladder{ data: { rank_form_target: 'ladder' } }
       - entries.each do |entry, draft|
         %li.gh-rank-form-rung{ class: ('gh-rank-form-rung--draft' if draft),
@@ -36,10 +36,10 @@
           %span
             %b
               %span{ data: (draft ? { rank_form_target: 'draftName' } : {}) }
-                = entry.name.presence || 'Nowa ranga'
+                = entry.name.presence || t('ranks.helpers.new_rank')
               - if draft
-                %small (ta ranga)
+                %small= t('.this_rank')
             %small{ data: (draft ? { rank_form_target: 'draftTerms' } : {}) }
               = rank_ladder_terms(entry)
           %span.gh-rank-form-rung-value{ data: (draft ? { rank_form_target: 'draftValue' } : {}) }
-            = "od #{entry.required_currency_value.to_i}"
+            = t('ranks.helpers.from_short', min: entry.required_currency_value.to_i)

@@ -7,19 +7,18 @@ class Rank < ApplicationRecord
 
   has_icon_art :icon, glyphs: Glyphs::RANK
 
-  validates :name, presence: { message: 'Podaj nazwę rangi.' },
-                   length:   { maximum: 40 }
+  validates :name, presence: true, length: { maximum: 40 }
 
   validates :discount, numericality: {
     greater_than_or_equal_to: 0,
     less_than_or_equal_to:    100,
-    message:                  'Zniżka musi mieścić się między 0 a 100%.',
+    message:                  :out_of_range,
   }
 
   validates :required_currency_value, numericality: {
     only_integer:             true,
     greater_than_or_equal_to: 0,
-    message:                  'Próg nie może być ujemny.',
+    message:                  :negative,
   }
 
   validate :threshold_free_in_group
@@ -34,8 +33,8 @@ class Rank < ApplicationRecord
                        .first
     return if clash.nil?
 
-    errors.add(:required_currency_value,
-               "Ranga #{clash.name} ma już próg #{clash.required_currency_value}. Wybierz inny.",)
+    errors.add(:required_currency_value, :threshold_taken,
+               rank: clash.name, threshold: clash.required_currency_value,)
   end
 
   def starting?

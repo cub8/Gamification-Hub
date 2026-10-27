@@ -33,7 +33,7 @@ class RanksController < ApplicationController
     @rank = @story_group.ranks.build(rank_params)
 
     if @rank.save
-      redirect_to story_group_ranks_path(@story_group), notice: "Dodano rangę „#{@rank.name}”."
+      redirect_to story_group_ranks_path(@story_group), notice: t('ranks.flash.created', name: @rank.name)
     else
       set_ladder
       render :new, status: :unprocessable_content
@@ -42,7 +42,7 @@ class RanksController < ApplicationController
 
   def update
     if @rank.update(rank_params)
-      redirect_to story_group_ranks_path(@story_group), notice: "Zapisano rangę „#{@rank.name}”."
+      redirect_to story_group_ranks_path(@story_group), notice: t('ranks.flash.updated', name: @rank.name)
     else
       set_ladder
       render :edit, status: :unprocessable_content
@@ -55,13 +55,13 @@ class RanksController < ApplicationController
 
     if blockers.any?
       return redirect_outside_turbo_frame story_group_ranks_path(@story_group),
-                                          alert: "Nie można usunąć rangi „#{name}”: wymagają jej " \
-                                                 "przedmioty #{helpers.gh_and_list(blockers)}."
+                                          alert: t('ranks.flash.blocked', name:  name,
+                                                                          items: helpers.gh_and_list(blockers),)
     end
 
     @rank.destroy
     redirect_outside_turbo_frame story_group_ranks_path(@story_group),
-                                 notice: "Usunięto rangę „#{name}”."
+                                 notice: t('ranks.flash.destroyed', name: name)
   end
 
   private

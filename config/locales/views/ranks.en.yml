@@ -1,0 +1,125 @@
+en:
+  ranks:
+    flash:
+      created: "Added the “%{name}” rank."
+      updated: "Saved the “%{name}” rank."
+      destroyed: "Deleted the “%{name}” rank."
+      blocked: "Can't delete the “%{name}” rank: the items %{items} require it."
+
+    # RanksHelper; rank_form_controller.ts gets the same keys through the form.
+    helpers:
+      starting: "Starting rank"
+      starting_sentence: "Starting rank."
+      from: "From %{min} collected"
+      from_sentence: "From %{min} collected."
+      summary_no_discount: "%{opening}, no discount"
+      summary_discount: "%{opening}, −%{discount}% in the shop"
+      gives_discount: "Gives −%{discount}% in the shop."
+      discount: "−%{discount}% in the shop"
+      no_discount: "No discount"
+      required: "Required: %{min} collected."
+      name_placeholder: "Rank name"
+      new_rank: "New rank"
+      from_short: "from %{min}"
+
+    index:
+      title: "Ranks"
+
+    new:
+      page_title: "New rank"
+
+    edit:
+      page_title: "Edit rank - %{name}"
+
+    teacher_ladder:
+      title: "Ranks"
+      lead:
+        one: "%{count} rank. A rank depends on the total currency collected, so spending it doesn't lower the rank."
+        other: "%{count} ranks. A rank depends on the total currency collected, so spending it doesn't lower the rank."
+      new: "New rank"
+      gap: "↑ %{count} collected to promote"
+      required_by: "Required to buy: %{items}"
+      holders:
+        one: "student"
+        other: "students"
+      progress_label: "Students with the %{name} rank"
+      empty_title: "There are no ranks yet"
+      empty_body: "Add ranks so students can see what they are working towards. A rank depends on the total currency collected, and each can give a discount in the shop."
+
+    student_ladder:
+      title: "Ranks"
+      lead: "Your rank grows with the total currency you collect. Spending it doesn't lower your rank."
+      yours: "Your rank"
+      achieved: "Earned"
+      to_first: "%{collected} of %{needed} to the first rank"
+      to_next: "%{collected} of %{needed} to the next one"
+      progress_label: "Progress to the rank above %{name}"
+      top: "Highest rank"
+      missing: "%{count} to go"
+      empty_title: "This group has no ranks yet"
+      empty_body: "The teacher hasn't added any. Keep collecting currency — once ranks appear, everything you've collected so far will count."
+
+    preview:
+      summary: "Rank preview"
+      card: "Rank card"
+      ladder: "Rank ladder"
+      this_rank: "(this rank)"
+
+    form:
+      breadcrumb: "Ranks"
+      new_title: "New rank"
+      edit_title: "Edit rank"
+      lead: "The preview shows where the rank lands on the ladder and how many students it covers."
+      holders:
+        one: "%{count} student has this rank."
+        other: "%{count} students have this rank."
+      holders_note: "Changing the threshold may move students up or down. The preview shows the effect."
+      card: "Rank card"
+      card_hint: "This is how the rank looks on the group page and in the ranking."
+      name_placeholder: "e.g. Fleet Admiral"
+      threshold_section: "Threshold and reward"
+      threshold_hint: "A rank depends on the total currency collected, so spending it doesn't lower the rank."
+      threshold: "Collected required"
+      discount: "Shop discount"
+      removal_hint: "Students with this rank will drop to the rank below. Items that require it must first be assigned to another rank."
+      remove: "Delete rank"
+      create: "Add rank"
+      # rank_form_controller.ts
+      js:
+        impact_got_lead: "Right away it goes to "
+        impact_got:
+          one: "%{count} student"
+          other: "%{count} students"
+        impact_got_tail: ". Everyone else will see it as their next goal."
+        impact_nobody: "Nobody has collected that much yet. Students will see it as their next goal."
+        impact_unchanged: "No student will change rank."
+        impact_changed_lead: "After saving, "
+        impact_changed:
+          one: "%{count} student will change rank"
+          other: "%{count} students will change rank"
+        impact_up: "%{count} promoted"
+        impact_down: "%{count} demoted"
+        warn_below: "The rank below (%{name}) gives −%{other}%, but this one only −%{discount}%. A promotion would lower the discount."
+        warn_above: "The rank above (%{name}) only gives −%{other}%. A promotion to it would lower the discount."
+
+    confirm_destroy:
+      page_title: "Delete rank %{name}"
+      title: "Delete the “%{name}” rank?"
+      body: "Students with this rank will drop to the rank below."
+      blocked:
+        one: "The item %{items} requires this rank. Before deleting it, assign that item another rank."
+        other: "The items %{items} require this rank. Before deleting it, assign those items another rank."
+      remove: "Delete rank"
+
+  activerecord:
+    errors:
+      models:
+        rank:
+          attributes:
+            name:
+              blank: "Enter the rank name."
+            discount:
+              out_of_range: "The discount must be between 0 and 100%."
+            required_currency_value:
+              negative: "The threshold can't be negative."
+              threshold_taken: "The %{rank} rank already has the threshold %{threshold}. Choose another one."
