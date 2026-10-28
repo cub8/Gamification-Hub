@@ -1,0 +1,28 @@
+-# Same frame as passwordless_mailer/token_email, for organization invitations.
+- content_for :email_styles, Rails.root.join('app/assets/stylesheets/components/invitation_email.css').read.html_safe
+
+%table.gh-invitation-email{ cellpadding: 0, cellspacing: 0, border: 0, width: '100%' }
+  %tr
+    %td{ align: 'center' }
+      %table.gh-invitation-email-card{ cellpadding: 0, cellspacing: 0, border: 0, width: '480' }
+        %tr
+          %td.gh-invitation-email-body
+            %p.gh-invitation-email-brand Gamification Hub
+
+            %h1.gh-invitation-email-title Zaproszenie
+            %p.gh-invitation-email-lead= lead
+            %p.gh-invitation-email-text
+              Kliknij przycisk poniżej, aby dokończyć zakładanie konta i uzupełnić swoje dane.
+
+            %table{ cellpadding: 0, cellspacing: 0, border: 0 }
+              %tr
+                %td.gh-invitation-email-button{ align: 'center' }
+                  %a.gh-invitation-email-button-link{ href: token_link } Dokończ zakładanie konta
+
+            %p.gh-invitation-email-note
+              Link jest ważny przez 7 dni. Jeśli przycisk nie działa, skopiuj ten adres do przeglądarki:
+            %p.gh-invitation-email-url
+              %a{ href: token_link }= token_link
+
+            %p.gh-invitation-email-footer
+              Jeśli nie spodziewałeś się tego zaproszenia, możesz zignorować tę wiadomość.

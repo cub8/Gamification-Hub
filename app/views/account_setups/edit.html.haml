@@ -1,0 +1,20 @@
+- content_for :title, 'Konfiguracja konta'
+
+%h1.gh-h1 Uzupełnij swoje dane
+%p.gh-lead To jednorazowy krok. Imię i nazwisko zobaczą prowadzący w Twoich grupach.
+
+= form_with model: @current_user, url: account_setup_path, method: :patch do |f|
+  .gh-form-field
+    = f.label :email, 'Adres e-mail'
+    .gh-text-input
+      = f.email_field :email, disabled: true
+
+  = render 'organizations/field', form: f, record: @current_user, attribute: :full_name,
+                                  label: 'Imię i nazwisko',
+                                  options: { maxlength: 80, autofocus: true, required: true,
+                                             autocomplete: 'name', placeholder: 'Jan Nowak' }
+
+  .gh-button-stack
+    %button.gh-btn{ type: 'submit' } Zapisz i przejdź dalej
+
+= button_to 'Wyloguj', logout_path, method: :delete, class: 'gh-link-button'

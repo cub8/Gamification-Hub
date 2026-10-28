@@ -11,6 +11,7 @@ class StoryGroup < ApplicationRecord
   }.freeze
 
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
+  has_many :notifications, dependent: :destroy
   has_many :items, dependent: :destroy
   has_many :ranks, dependent: :destroy
   has_many :badges, dependent: :destroy
@@ -31,6 +32,8 @@ class StoryGroup < ApplicationRecord
                             length:   { maximum: 40 }
   validates :description, length: { maximum: 1024 }
   validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+
+  delegate :organization, to: :owner
 
   def ranking_summary
     return 'Wyłączony' unless ranking_enabled?
