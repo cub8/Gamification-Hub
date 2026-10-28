@@ -2,6 +2,7 @@
 
 class BadgesController < ApplicationController
   include StoryGroupAuthorization
+  include CsvImportable
 
   before_action :set_story_group
   before_action :authorize_story_group_read!,   only: :index
@@ -74,6 +75,9 @@ class BadgesController < ApplicationController
   def set_shelf
     @shelf = BadgeShelf.new(story_group: @story_group)
   end
+
+  def import_resource_key = :badges
+  def import_redirect_path = story_group_badges_path(@story_group)
 
   def gh_group_chrome
     @gh_group_chrome ||= GroupChrome.for(user:        @current_user,

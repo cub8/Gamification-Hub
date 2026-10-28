@@ -5,9 +5,9 @@ class StarterPackBuilder
 
   Result = Data.define(:ranks, :badges, :items, :categories)
 
-  def initialize(story_group:, pack:, classes:, selection: {})
+  def initialize(story_group:, pack: nil, classes: nil, preset: nil, selection: {})
     @story_group = story_group
-    @preset      = StarterPack.for(pack: pack, classes: classes)
+    @preset      = preset || StarterPack.for(pack: pack, classes: classes)
     @selection   = selection || {}
   end
 
@@ -19,7 +19,7 @@ class StarterPackBuilder
       Result.new(ranks:      ranks.values,
                  badges:     badges.values,
                  items:      create_items(ranks, badges),
-                 categories: create_template,)
+                 categories: create_templates,)
     end
   end
 
@@ -62,17 +62,26 @@ class StarterPackBuilder
         story_description:     item.story_description,
         icon_glyph:            item.icon_glyph,
         can_buy_at_0_lives:    item.can_buy_at_0_lives,
-        unlock_rank:           ranks[item.unlock_rank],
-        min_rank_for_discount: ranks[item.min_rank_for_discount],
-        discount_badges:       item.discount_badges.filter_map { |index| badges[index] },
+        unlock_rank:           resolve(item.unlock_rank, ranks),
+        min_rank_for_discount: resolve(item.min_rank_for_discount, ranks),
+        unlock_badges:         item.unlock_badges.filter_map { |ref| resolve(ref, badges) },
+        discount_badges:       item.discount_badges.filter_map { |ref| resolve(ref, badges) },
       )
     end
   end
 
-  def create_template
-    template = story_group.activity_group_templates.new(base_name: StarterPack::TEMPLATE_NAME)
+  def resolve(ref, freshly_created)
+    ref.is_a?(Integer) ? freshly_created[ref] : ref
+  end
 
-    kept(:cats, preset.categories).each_with_index do |category, position|
+  def create_templates
+    preset.templates.flat_map { |group| create_template(group) }
+  end
+
+  def create_template(group)
+    template = story_group.activity_group_templates.new(base_name: group.name)
+
+    kept(:cats, group.categories).each_with_index do |category, position|
       template.categories.new(didactic_description: category.didactic_description,
                               story_description:    category.story_description,
                               reward:               override(:cats, category.index, category.reward),

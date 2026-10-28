@@ -11,6 +11,10 @@
     = link_to new_story_group_item_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       Nowy przedmiot
+    - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
+    = link_to new_import_story_group_items_path(@story_group), import_link_options do
+      %i.fa-solid.fa-file-import
+      Importuj z CSV
 
 - if @shelf.any?
   .gh-badge-grid--teacher

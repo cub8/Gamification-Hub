@@ -9,6 +9,10 @@
     = link_to new_story_group_activity_group_template_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
       Nowy szablon
+    - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
+    = link_to new_import_story_group_activity_group_templates_path(@story_group), import_link_options do
+      %i.fa-solid.fa-file-import{ 'aria-hidden': 'true' }
+      Importuj z CSV
 
 - if @index.any?
   - @index.templates.each do |template|

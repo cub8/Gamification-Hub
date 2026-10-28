@@ -1,0 +1,6 @@
+- content_for :title, 'Importuj przedmioty'
+- import_hint = 'Mogą odwoływać się do rang/odznak już istniejących w grupie albo z tego samego importu.'
+
+= render 'shared/csv_import_dialog', title: 'Importuj przedmioty z CSV',
+                                     url:   import_story_group_items_path(@story_group),
+                                     hint:  import_hint

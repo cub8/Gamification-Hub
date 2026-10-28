@@ -1,0 +1,6 @@
+- content_for :title, 'Importuj studentów'
+- import_hint = 'Dopasowuje po emailu do kont, które już istnieją. Kolumny: email, pseudonim (opcjonalnie).'
+
+= render 'shared/csv_import_dialog', title: 'Importuj studentów z CSV',
+                                     url:   import_story_group_students_path(@story_group),
+                                     hint:  import_hint

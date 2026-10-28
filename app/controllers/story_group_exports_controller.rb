@@ -6,8 +6,6 @@ class StoryGroupExportsController < ApplicationController
   before_action :set_story_group
   before_action :authorize_story_group_manage!
 
-  UTF8_BOM = [0xEF, 0xBB, 0xBF].pack('C*').force_encoding(Encoding::UTF_8).freeze
-
   def show
     @export_form_data = {
       controller:                'csv-export',
@@ -22,7 +20,7 @@ class StoryGroupExportsController < ApplicationController
 
     csv = Csv::StoryGroupExport.new(story_group: @story_group).csv_for(resource)
 
-    send_data csv + UTF8_BOM,
+    send_data "#{Csv::Utf8Bom}#{csv}",
               filename:    "#{resource}.csv",
               type:        'text/csv; charset=utf-8',
               disposition: 'attachment'

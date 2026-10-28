@@ -22,10 +22,20 @@ Rails.application.routes.draw do
 
     resources :items, except: :show do
       get :confirm_destroy, on: :member
+
+      collection do
+        get :new_import
+        post :import
+      end
     end
 
     resources :activity_group_templates, except: %i[index show] do
       get :confirm_destroy, on: :member
+
+      collection do
+        get :new_import
+        post :import
+      end
     end
     resources :activity_groups, except: :show do
       get :confirm_destroy, on: :member
@@ -33,9 +43,19 @@ Rails.application.routes.draw do
     end
     resources :ranks, except: :show do
       get :confirm_destroy, on: :member
+
+      collection do
+        get :new_import
+        post :import
+      end
     end
     resources :badges, except: :show do
       get :confirm_destroy, on: :member
+
+      collection do
+        get :new_import
+        post :import
+      end
     end
     resources :teachers, only: %i[new index create destroy] do
       get :confirm_destroy, on: :member
@@ -44,6 +64,11 @@ Rails.application.routes.draw do
       member do
         post :update_lives
         get :confirm_destroy
+      end
+
+      collection do
+        get :new_import
+        post :import
       end
 
       resource :currency_adjustment, only: %i[new create]

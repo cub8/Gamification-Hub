@@ -69,4 +69,28 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
            }
     end
   end
+
+  test 'should get new_import' do
+    get new_import_story_group_badges_url(@story_group)
+    assert_response :success
+  end
+
+  test 'import creates badges from a valid file' do
+    assert_difference('Badge.count', 2) do
+      post import_story_group_badges_url(@story_group),
+           params: { file: fixture_file_upload('badges_import.csv', 'text/csv') }
+    end
+
+    assert_turbo_redirected_to story_group_badges_url(@story_group)
+  end
+
+  test 'import redirects back with an alert for an unparseable file' do
+    assert_no_difference('Badge.count') do
+      post import_story_group_badges_url(@story_group),
+           params: { file: fixture_file_upload('malformed_import.csv', 'text/csv') }
+    end
+
+    assert_turbo_redirected_to story_group_badges_url(@story_group)
+    assert_match(/nie udało się odczytać/i, flash[:alert])
+  end
 end

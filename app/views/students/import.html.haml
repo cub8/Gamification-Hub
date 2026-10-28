@@ -1,0 +1,17 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2 Wyniki importu studentów
+  %p.gh-lead
+    = "Dodano #{@result.added.size} #{gh_plural(@result.added.size, 'studenta', 'studentów', 'studentów')}."
+    - if @result.failures.any?
+      = "Pominięto #{@result.failures.size} #{gh_plural(@result.failures.size, 'wiersz', 'wiersze', 'wierszy')}."
+
+  - if @result.failures.any?
+    %ul
+      - @result.failures.each do |failure|
+        %li.gh-field-error{ role: 'alert' }
+          %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+          %span= "Wiersz #{failure.row}: #{failure.message}"
+
+  .gh-dialog-button-row
+    %button.gh-btn{ type: 'button', data: { action: 'dialog#close' } }
+      Zamknij

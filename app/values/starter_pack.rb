@@ -26,8 +26,14 @@ class StarterPack
   Badge    = Data.define(:index, :name, :didactic_description, :story_description, :discount,
                          :icon_glyph,)
   Item     = Data.define(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
-                         :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
+                         :unlock_rank, :min_rank_for_discount, :unlock_badges, :discount_badges,
+                         :can_buy_at_0_lives,) do
+    def initialize(unlock_badges: [], **rest)
+      super
+    end
+  end
   Category = Data.define(:index, :didactic_description, :story_description, :reward)
+  TemplateGroup = Data.define(:index, :name, :categories)
 
   CATEGORIES = [
     ['Obecność',                   1],
@@ -297,6 +303,10 @@ class StarterPack
                      story_description: stories[index], reward: reward,)
       end
     end
+  end
+
+  def templates
+    @templates ||= [TemplateGroup.new(index: 0, name: TEMPLATE_NAME, categories: categories)]
   end
 
   private

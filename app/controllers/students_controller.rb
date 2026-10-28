@@ -19,6 +19,19 @@ class StudentsController < ApplicationController
     @list = StudentList.new(story_group: @story_group)
   end
 
+  def new_import; end
+
+  def import
+    file = params[:file]
+    return redirect_with_alert('Wybierz plik CSV.') unless file
+
+    @result = Csv::StudentsImporter.new(story_group: @story_group, file: file).call
+
+    render :import
+  rescue Csv::MalformedFile
+    redirect_with_alert('Nie udało się odczytać pliku CSV.')
+  end
+
   # GET /story_groups/:story_group_id/students/:id
   def show
     @tab   = StudentSheet.tab_for(params[:tab])
@@ -112,5 +125,9 @@ class StudentsController < ApplicationController
 
   def update_student_params
     params.expect(story_group_student: %i[lives])
+  end
+
+  def redirect_with_alert(message)
+    redirect_to new_import_story_group_students_path(@story_group), alert: message
   end
 end

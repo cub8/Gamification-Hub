@@ -1,0 +1,5 @@
+- content_for :title, 'Importuj rangi'
+
+= render 'shared/csv_import_dialog', title: 'Importuj rangi z CSV',
+                                     url:   import_story_group_ranks_path(@story_group),
+                                     hint:  'Kolumny: nazwa, próg_waluty, zniżka, ikona.'

@@ -2,6 +2,7 @@
 
 class ActivityGroupTemplatesController < ApplicationController
   include StoryGroupAuthorization
+  include CsvImportable
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!
@@ -71,6 +72,9 @@ class ActivityGroupTemplatesController < ApplicationController
   def sheet_names_for(template)
     template.activity_groups.kept.order(:id).pluck(:name)
   end
+
+  def import_resource_key = :templates
+  def import_redirect_path = story_group_activity_groups_path(@story_group)
 
   def template_params
     params.expect(

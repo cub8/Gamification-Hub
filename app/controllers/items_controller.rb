@@ -2,6 +2,7 @@
 
 class ItemsController < ApplicationController
   include StoryGroupAuthorization
+  include CsvImportable
 
   before_action :set_story_group
 
@@ -75,6 +76,9 @@ class ItemsController < ApplicationController
   def set_shelf
     @shelf = ItemShelf.new(story_group: @story_group)
   end
+
+  def import_resource_key = :items
+  def import_redirect_path = story_group_items_path(@story_group)
 
   def item_params
     permitted = params.expect(

@@ -123,4 +123,29 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
            params: { activity_group_template: { base_name: 'Lab' } }
     end
   end
+
+  test 'should get new_import' do
+    get new_import_story_group_activity_group_templates_url(@story_group)
+    assert_response :success
+  end
+
+  test 'import creates a template with its categories from a valid file' do
+    assert_difference('ActivityGroupTemplate.count', 1) do
+      post import_story_group_activity_group_templates_url(@story_group),
+           params: { file: fixture_file_upload('templates_import.csv', 'text/csv') }
+    end
+
+    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
+    assert_equal 2, ActivityGroupTemplate.order(:id).last.categories.count
+  end
+
+  test 'import redirects back with an alert for an unparseable file' do
+    assert_no_difference('ActivityGroupTemplate.count') do
+      post import_story_group_activity_group_templates_url(@story_group),
+           params: { file: fixture_file_upload('malformed_import.csv', 'text/csv') }
+    end
+
+    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
+    assert_match(/nie udało się odczytać/i, flash[:alert])
+  end
 end
