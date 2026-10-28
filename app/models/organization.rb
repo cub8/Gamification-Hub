@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
-  USOS_NAME = 'Uniwersytet im. Adama Mickiewicza w Poznaniu'
+  USOS_NAME = 'Uniwersytet im. Adama Mickiewicza'
 
   has_many :users, dependent: :destroy
 

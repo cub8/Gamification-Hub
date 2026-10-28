@@ -24,7 +24,7 @@ class SessionUserBuilder
   private
 
   def join_usos_organization(user)
-    return if user.organization_admin? || user.global_admin?
+    return if user.organization_id.present? || user.organization_admin? || user.global_admin?
 
     user.organization = Organization.usos
   end

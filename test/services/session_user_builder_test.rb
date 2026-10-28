@@ -49,9 +49,17 @@ class SessionUserBuilderTest < ActiveSupport::TestCase
     end
   end
 
-  test 'existing student is moved from another organization' do
+  test 'existing student keeps their organization' do
     other = FactoryBot.create(:organization, max_members: 5)
     user = FactoryBot.create(:user, :student, email: 'jan.nowak@gmail.com', organization: other)
+
+    SessionUserBuilder.new(@provider).build
+
+    assert_equal other, user.reload.organization
+  end
+
+  test 'existing student without an organization joins the USOS organization' do
+    user = FactoryBot.create(:user, :student, email: 'jan.nowak@gmail.com', organization: nil)
 
     SessionUserBuilder.new(@provider).build
 
