@@ -29,12 +29,50 @@ class SessionUserBuilderTest < ActiveSupport::TestCase
     )
   end
 
-  test 'create new user if no user in database' do
+  test 'new user joins the USOS organization' do
     assert_difference 'User.count', 1 do
       user = SessionUserBuilder.new(@provider).build
 
       assert_equal 'jan.nowak@gmail.com', user.email
+      assert_equal Organization.usos, user.organization
     end
+  end
+
+  test 'the USOS organization is created on first login if missing' do
+    assert_difference -> { Organization.where(usos: true).count }, 1 do
+      SessionUserBuilder.new(@provider).build
+    end
+
+    second = TestAdapter.new({ email: 'anna@example.com', full_name: 'Anna Nowak', role: 'student' })
+    assert_no_difference 'Organization.count' do
+      SessionUserBuilder.new(second).build
+    end
+  end
+
+  test 'existing student keeps their organization' do
+    other = FactoryBot.create(:organization, max_members: 5)
+    user = FactoryBot.create(:user, :student, email: 'jan.nowak@gmail.com', organization: other)
+
+    SessionUserBuilder.new(@provider).build
+
+    assert_equal other, user.reload.organization
+  end
+
+  test 'existing student without an organization joins the USOS organization' do
+    user = FactoryBot.create(:user, :student, email: 'jan.nowak@gmail.com', organization: nil)
+
+    SessionUserBuilder.new(@provider).build
+
+    assert_equal Organization.usos, user.reload.organization
+  end
+
+  test 'organization admin keeps their organization' do
+    other = FactoryBot.create(:organization, max_members: 5)
+    admin = FactoryBot.create(:user, :organization_admin, email: 'jan.nowak@gmail.com', organization: other)
+
+    SessionUserBuilder.new(@provider).build
+
+    assert_equal other, admin.reload.organization
   end
 
   test 'do not create new user if user exists' do

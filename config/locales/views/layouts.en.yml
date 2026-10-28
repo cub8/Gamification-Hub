@@ -19,7 +19,9 @@ en:
       my_items: "My items"
       history: "Currency history"
       membership: "Group settings"
+      organizations: "Organizations"
       short:
+        organization: "Organization"
         sheets: "Sheets"
         my_items: "Items"
 
@@ -28,6 +30,7 @@ en:
       own: "You lead this group"
       sup: "You assist this group"
       lrn: "You're a participant"
+      adm: "You oversee this group"
 
     theme:
       light: "Light theme"
@@ -76,7 +79,6 @@ en:
       label: "Account"
       account_settings: "Account settings"
       logout: "Log out"
-
 
     theme_toggle:
       help: "Help:"

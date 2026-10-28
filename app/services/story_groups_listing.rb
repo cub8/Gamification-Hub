@@ -116,7 +116,7 @@ class StoryGroupsListing
   end
 
   def recent_window
-    (Date.current - (TeacherStartDashboard::RECENT_DAYS.size - 1)).beginning_of_day..
+    (Date.current - (Dashboard::Teacher::RECENT_DAYS.size - 1)).beginning_of_day..
   end
 
   def build_tabs

@@ -28,8 +28,9 @@ class Navigation
   def primary_items
     [
       item(:start,  home_path,         'fa-house'),
-      item(:groups, story_groups_path, 'fa-book'),
-    ]
+      (item(:groups, story_groups_path, 'fa-book') unless @user.global_admin?),
+      organization_item,
+    ].compact
   end
 
   def tab_items
@@ -100,6 +101,16 @@ class Navigation
     return unless chrome.ranking?
 
     section(:ranking, story_group_ranking_path(chrome.story_group), 'fa-ranking-star')
+  end
+
+  def organization_item
+    if @user.global_admin?
+      section(:organizations, organizations_path, 'fa-briefcase')
+    elsif @user.organization_admin? && @user.organization
+      path = organization_path(@user.organization)
+      Item.new(key: :organization, label: @user.organization.name, path: path, icon: 'fa-briefcase',
+               short: label('short.organization'), match: path,)
+    end
   end
 
   def overview(group)

@@ -1,6 +1,3 @@
 - content_for :title, t('.title')
 
-- if @current_user.teacher?
-  = render 'teacher_start'
-- else
-  = render 'student_start'
+= render @dashboard

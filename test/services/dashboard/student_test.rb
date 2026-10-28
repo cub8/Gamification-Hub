@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class StudentStartDashboardTest < ActiveSupport::TestCase
+class Dashboard::StudentTest < ActiveSupport::TestCase
   setup do
     @student = FactoryBot.create(:user, role: :student)
   end
@@ -13,7 +13,7 @@ class StudentStartDashboardTest < ActiveSupport::TestCase
       FactoryBot.create(:story_group_student, user: @student, story_group: group)
     end
 
-    dashboard = StudentStartDashboard.new(user: @student).load
+    dashboard = Dashboard::Student.new(user: @student).load
 
     assert_equal(%w[Alfa Beta Gamma], dashboard.groups.map { |group| group.story_group.name })
   end
@@ -26,7 +26,7 @@ class StudentStartDashboardTest < ActiveSupport::TestCase
     membership = FactoryBot.create(:story_group_student, user: @student, story_group: mine)
     FactoryBot.create(:students_badge, story_group_student: membership, badge: mine.badges.first)
 
-    group = StudentStartDashboard.new(user: @student).load.groups.sole
+    group = Dashboard::Student.new(user: @student).load.groups.sole
 
     assert_equal 1, group.badges_earned
     assert_equal 4, group.badges_total
@@ -37,11 +37,11 @@ class StudentStartDashboardTest < ActiveSupport::TestCase
     membership = FactoryBot.create(:story_group_student, user: @student, story_group: group,
                                                          current_currency: 0, total_currency: 0,)
 
-    assert_predicate StudentStartDashboard.new(user: @student).load.groups.sole, :fresh?
+    assert_predicate Dashboard::Student.new(user: @student).load.groups.sole, :fresh?
 
     membership.update!(total_currency: 1)
 
-    assert_not_predicate StudentStartDashboard.new(user: @student).load.groups.sole, :fresh?
+    assert_not_predicate Dashboard::Student.new(user: @student).load.groups.sole, :fresh?
   end
 
   test 'a student who spent everything is not fresh — lifetime total is what counts' do
@@ -49,7 +49,7 @@ class StudentStartDashboardTest < ActiveSupport::TestCase
     FactoryBot.create(:story_group_student, user: @student, story_group: group,
                                             current_currency: 0, total_currency: 50,)
 
-    assert_not_predicate StudentStartDashboard.new(user: @student).load.groups.sole, :fresh?
+    assert_not_predicate Dashboard::Student.new(user: @student).load.groups.sole, :fresh?
   end
 
   test 'the feed merges groups, sorts newest first and stops at the limit' do
@@ -58,14 +58,14 @@ class StudentStartDashboardTest < ActiveSupport::TestCase
     in_first = FactoryBot.create(:story_group_student, user: @student, story_group: first)
     in_second = FactoryBot.create(:story_group_student, user: @student, story_group: second)
 
-    (StudentStartDashboard::FEED_LIMIT + 3).times do |index|
+    (Dashboard::Student::FEED_LIMIT + 3).times do |index|
       CurrencyTransaction.create!(student: index.even? ? in_first : in_second,
                                   amount: index, kind: :reward, created_at: index.minutes.ago,)
     end
 
-    feed = StudentStartDashboard.new(user: @student).load.feed
+    feed = Dashboard::Student.new(user: @student).load.feed
 
-    assert_equal StudentStartDashboard::FEED_LIMIT, feed.size
+    assert_equal Dashboard::Student::FEED_LIMIT, feed.size
     assert_equal feed.map(&:created_at).sort.reverse, feed.map(&:created_at)
     assert_equal [0, 1, 2, 3, 4, 5, 6, 7], feed.map(&:amount)
   end
@@ -79,13 +79,13 @@ class StudentStartDashboardTest < ActiveSupport::TestCase
     CurrencyTransaction.create!(student: mine, amount: 5, kind: :reward)
     CurrencyTransaction.create!(student: theirs, amount: 99, kind: :reward)
 
-    feed = StudentStartDashboard.new(user: @student).load.feed
+    feed = Dashboard::Student.new(user: @student).load.feed
 
     assert_equal [5], feed.map(&:amount)
   end
 
   test 'a student in no groups loads empty rather than raising' do
-    dashboard = StudentStartDashboard.new(user: @student).load
+    dashboard = Dashboard::Student.new(user: @student).load
 
     assert_empty dashboard.groups
     assert_empty dashboard.feed

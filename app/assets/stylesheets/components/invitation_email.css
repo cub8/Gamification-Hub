@@ -1,0 +1,86 @@
+.gh-invitation-email {
+  background: #f3eef6;
+  padding: 32px 16px;
+}
+
+.gh-invitation-email-card {
+  max-width: 480px;
+  width: 100%;
+  background: #fffdf9;
+}
+
+.gh-invitation-email-body {
+  padding: 32px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.gh-invitation-email-brand {
+  margin: 0 0 28px;
+  font:
+    800 18px/1 Helvetica,
+    Arial,
+    sans-serif;
+  color: #221a2b;
+}
+
+.gh-invitation-email-title {
+  margin: 0 0 16px;
+  font-size: 22px;
+  color: #221a2b;
+}
+
+.gh-invitation-email-lead,
+.gh-invitation-email-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #584c64;
+}
+
+.gh-invitation-email-lead {
+  margin: 0 0 12px;
+}
+
+.gh-invitation-email-text {
+  margin: 0 0 24px;
+}
+
+.gh-invitation-email-button {
+  background: #ff7a1a;
+  border-bottom: 3px solid #c45a10;
+}
+
+.gh-invitation-email-button-link {
+  display: inline-block;
+  padding: 14px 28px;
+  font:
+    700 15px Helvetica,
+    Arial,
+    sans-serif;
+  color: #221a2b;
+  text-decoration: none;
+}
+
+.gh-invitation-email-note {
+  margin: 24px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #85798f;
+}
+
+.gh-invitation-email-url {
+  margin: 8px 0 0;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.gh-invitation-email-url a {
+  color: #584c64;
+}
+
+.gh-invitation-email-footer {
+  margin: 28px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #e4dcea;
+  font-size: 12.5px;
+  color: #85798f;
+}

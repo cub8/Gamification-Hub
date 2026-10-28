@@ -19,7 +19,9 @@ pl:
       my_items: "Moje przedmioty"
       history: "Historia waluty"
       membership: "Ustawienia w grupie"
+      organizations: "Organizacje"
       short:
+        organization: "Organizacja"
         sheets: "Arkusze"
         my_items: "Przedmioty"
 
@@ -28,6 +30,7 @@ pl:
       own: "Prowadzisz tę grupę"
       sup: "Wspierasz tę grupę"
       lrn: "Jesteś uczestnikiem"
+      adm: "Nadzorujesz tę grupę"
 
     theme:
       light: "Jasny motyw"

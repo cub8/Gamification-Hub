@@ -30,6 +30,8 @@ class StoryGroup < ApplicationRecord
   validates :description, length: { maximum: 1024 }
   validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
+  delegate :organization, to: :owner
+
   def ranking_summary
     return I18n.t('story_groups.ranking_off') unless ranking_enabled?
 

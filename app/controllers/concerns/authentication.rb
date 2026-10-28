@@ -6,6 +6,7 @@ module ::Authentication
   included do
     before_action :set_current_user
     before_action :authenticate!
+    before_action :require_account_setup!
   end
 
   protected
@@ -29,5 +30,9 @@ module ::Authentication
 
   def full_page_navigation?
     request.get? && !request.xhr? && !turbo_frame_request?
+  end
+
+  def require_account_setup!
+    redirect_to edit_account_setup_path if @current_user&.needs_account_setup?
   end
 end

@@ -1,0 +1,8 @@
+- content_for :title, 'Dodaj administratora organizacji'
+
+- if @in_modal
+  = turbo_frame_tag 'modal' do
+    = render 'admin_form', user: @org_admin
+- else
+  %section.gh-panel.gh-dialog-page-panel
+    = render 'admin_form', user: @org_admin

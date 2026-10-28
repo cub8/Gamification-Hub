@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class StoryGroupStudentTest < ActiveSupport::TestCase
-
   setup do
     @owner = ::FactoryBot.create(:user)
     @student_user = ::FactoryBot.create(:user)
