@@ -7,8 +7,9 @@ ssh:
     - ~/.ssh/id_gamification_hub
 
 proxy:
-  ssl: true
+  ssl: false
   host: gamificationhub.projektstudencki.pl
+  forward_headers: true
   buffering:
     requests: true
     max_request_body: 30_000_000 # 30 MB in bytes
@@ -17,10 +18,10 @@ proxy:
 servers:
   web:
     hosts:
-      - 150.254.78.144
+      - gamificationhub.vm.wmi.amu.edu.pl
   job:
     hosts:
-      - 150.254.78.144
+      - gamificationhub.vm.wmi.amu.edu.pl
     cmd: bin/jobs
 
 registry:
@@ -52,7 +53,7 @@ builder:
 accessories:
   db:
     image: postgres:18.4-alpine
-    host: 150.254.78.144
+    host: gamificationhub.vm.wmi.amu.edu.pl
     port: "127.0.0.1:5432:5432"
     env:
       secret:
