@@ -1,18 +1,7 @@
 = turbo_frame_tag 'modal' do
   %h2.gh-h2= title
   = form_with url: url, method: :post, multipart: true, local: true, data: { turbo_frame: 'modal' } do
-    - dropzone_actions = 'dragover->file-dropzone#dragOver dragleave->file-dropzone#dragLeave drop->file-dropzone#drop'
-    - dropzone_options = { controller: 'file-dropzone', action: dropzone_actions }
-    .gh-file-dropzone{ data: dropzone_options }
-      %span.gh-file-dropzone-icon
-        %i.fa-solid.fa-upload{ 'aria-hidden': 'true' }
-      %span
-        %b Wybierz plik CSV
-        %small{ data: { file_dropzone_target: 'hint' } }= hint
-      %label.gh-btn.gh-btn--secondary.gh-btn--small
-        Wybierz plik
-        = file_field_tag :file, class: 'sr-only', accept: 'text/csv,.csv',
-          data: { file_dropzone_target: 'input', action: 'file-dropzone#show' }
+    = render 'shared/csv_dropzone_field', name: :file, hint: hint
 
     .gh-dialog-button-row
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }

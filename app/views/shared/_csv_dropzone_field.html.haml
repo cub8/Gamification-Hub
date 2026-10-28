@@ -1,0 +1,13 @@
+- label = local_assigns.fetch(:label, 'Wybierz plik CSV')
+- drop_actions = 'dragover->file-dropzone#dragOver dragleave->file-dropzone#dragLeave drop->file-dropzone#drop'
+.gh-file-dropzone{ data: { controller: 'file-dropzone', action: drop_actions } }
+  %span.gh-file-dropzone-icon
+    %i.fa-solid.fa-upload{ 'aria-hidden': 'true' }
+  %span
+    %b= label
+    %small{ data: { file_dropzone_target: 'hint' } }= hint
+  %label.gh-btn.gh-btn--secondary.gh-btn--small
+    Wybierz plik
+    - field_data = local_assigns.fetch(:field_data, {})
+    - input_data = { file_dropzone_target: 'input', action: 'file-dropzone#show' }.merge(field_data)
+    = file_field_tag name, class: 'sr-only', accept: 'text/csv,.csv', data: input_data

@@ -34,6 +34,48 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to created_story_group_url(StoryGroup.last)
   end
 
+  test 'creates a story group from uploaded CSV files when the setup path is csv' do
+    assert_difference('StoryGroup.count') do
+      assert_difference('Rank.count', 2) do
+        post story_groups_url,
+             params: {
+               story_group: { currency_name: 'Grosze', description: '', name: 'Zakon CSV' },
+               setup:       { path: 'csv', csv: { ranks: fixture_file_upload('ranks_import.csv', 'text/csv') } },
+             }
+      end
+    end
+
+    assert_redirected_to created_story_group_url(StoryGroup.last)
+  end
+
+  test 'creates an empty story group when the csv path is chosen but no files are uploaded' do
+    assert_difference('StoryGroup.count') do
+      assert_no_difference('Rank.count') do
+        post story_groups_url,
+             params: {
+               story_group: { currency_name: 'Grosze', description: '', name: 'Zakon pusty' },
+               setup:       { path: 'csv' },
+             }
+      end
+    end
+
+    assert_redirected_to created_story_group_url(StoryGroup.last)
+  end
+
+  test 'rerenders new with an alert when a CSV file in the wizard is unparseable' do
+    assert_no_difference('StoryGroup.count') do
+      post story_groups_url,
+           params: {
+             story_group: { currency_name: 'Grosze', description: '', name: 'Zakon CSV' },
+             setup:       { path: 'csv', csv: { ranks: fixture_file_upload('malformed_import.csv', 'text/csv') } },
+           }
+    end
+
+    assert_response :unprocessable_content
+    assert_select 'input[name="setup[path]"][value="csv"][checked]'
+    assert_select '[data-group-wizard-target="baseError"]'
+  end
+
   test 'should show story_group' do
     get story_group_url(@story_group)
     assert_response :success

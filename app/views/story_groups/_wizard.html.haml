@@ -1,5 +1,6 @@
 - error  = ->(attribute) { story_group.errors[attribute].first }
 - packs  = StarterPack
+- setup_path = local_assigns[:setup_path]
 
 - steps = ['Grupa i opowieść', 'Waluta i zasady', 'Jak zaczynasz', 'Podsumowanie']
 
@@ -32,11 +33,6 @@
 
   = form_with model: story_group, data: { group_wizard_target: 'form',
                                           action: 'keydown->group-wizard#keydown' } do |f|
-
-    - if story_group.errors[:base].any?
-      %p.gh-field-error{ role: 'alert' }
-        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
-        %span= story_group.errors[:base].first
 
     .gh-form-shell{ data: { group_wizard_target: 'grid' } }
       %section.gh-panel.gh-form-column
@@ -183,7 +179,7 @@
 
             .gh-choice-grid{ role: 'radiogroup', 'aria-label': 'Sposób startu' }
               %label.gh-choice-card
-                = radio_button_tag 'setup[path]', 'quick', false, class: 'sr-only',
+                = radio_button_tag 'setup[path]', 'quick', setup_path == 'quick', class: 'sr-only',
                   id: 'gh-wiz-path-quick',
                   data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
                 %span.gh-tag.gh-tag--discount Polecane na pierwszą grupę
@@ -192,13 +188,21 @@
                   Gotowe rangi, odznaki, przedmioty i kategorie zajęć.
                   Przejrzysz je i poprawisz przed utworzeniem grupy.
               %label.gh-choice-card
-                = radio_button_tag 'setup[path]', 'manual', false, class: 'sr-only',
+                = radio_button_tag 'setup[path]', 'manual', setup_path == 'manual', class: 'sr-only',
                   id: 'gh-wiz-path-manual',
                   data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
                 %b Od zera
                 %span
                   Pusta grupa. Rangi, odznaki i przedmioty dodasz później,
                   krok po kroku.
+              %label.gh-choice-card
+                = radio_button_tag 'setup[path]', 'csv', setup_path == 'csv', class: 'sr-only',
+                  id: 'gh-wiz-path-csv',
+                  data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
+                %b Z plików CSV
+                %span
+                  Wgraj rangi, odznaki, przedmioty i szablony z wcześniej
+                  wyeksportowanych plików.
 
             %p.gh-field-error{ role: 'alert', hidden: true,
                        data: { group_wizard_target: 'pathError' } }
@@ -242,12 +246,45 @@
               = hidden_field_tag 'setup[classes]', packs::DEFAULT_CLASSES, id: 'gh-wiz-classes',
                 data: { group_wizard_target: 'classes' }
 
+          .gh-form-section{ hidden: true, data: { group_wizard_target: 'csvOnly' } }
+            %h2.gh-h3 Pliki CSV
+            %p.gh-field-hint
+              Wszystkie są opcjonalne — zaimportujemy tylko te, które wgrasz.
+              Resztę dodasz później, krok po kroku.
+
+            - csv_action = 'file-dropzone#show group-wizard#refresh'
+
+            - ranks_data = { group_wizard_target: 'csvFile', resource: 'ranks', label: 'Rangi', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][ranks]', label: 'Rangi',
+              hint: 'Kolumny: nazwa, próg_waluty, zniżka, ikona.',
+              field_data: ranks_data
+
+            - badges_data = { group_wizard_target: 'csvFile', resource: 'badges', label: 'Odznaki', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][badges]', label: 'Odznaki',
+              hint: 'Kolumny: nazwa, opis_dydaktyczny, opis_fabularny, zniżka, ikona.',
+              field_data: badges_data
+
+            - items_data = { group_wizard_target: 'csvFile', resource: 'items', label: 'Przedmioty', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][items]', label: 'Przedmioty',
+              hint: 'Mogą odwoływać się do rang/odznak z tego samego importu (wgraj je razem).',
+              field_data: items_data
+
+            - templates_data = { group_wizard_target: 'csvFile', resource: 'templates', label: 'Szablony', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][templates]', label: 'Szablony',
+              hint: 'Kolumny: nr_szablonu, szablon, pozycja, opis_dydaktyczny, opis_fabularny, nagroda.',
+              field_data: templates_data
+
         %section{ data: { group_wizard_target: 'panel' }, hidden: true }
           %h2.sr-only Podsumowanie
 
+          - if story_group.errors[:base].any?
+            %p.gh-field-error{ role: 'alert', data: { group_wizard_target: 'baseError' } }
+              %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+              %span= story_group.errors[:base].first
+
           .gh-form-section.gh-form-section--first{ hidden: true, data: { group_wizard_target: 'manualSummary' } }
             %h2.gh-h3 Podsumowanie
-            %p.gh-field-hint
+            %p.gh-field-hint{ data: { group_wizard_target: 'summaryHint' } }
               Grupa powstanie pusta. Po utworzeniu zobaczysz listę kroków do
               uzupełnienia.
 
@@ -260,6 +297,10 @@
               %dd{ data: { group_wizard_target: 'sumLives' } }
               %dt Ranking
               %dd{ data: { group_wizard_target: 'sumRanking' } }
+
+          .gh-form-section{ hidden: true, data: { group_wizard_target: 'csvFilesSection' } }
+            %h2.gh-h3 Pliki do zaimportowania
+            %dl.gh-summary-list{ data: { group_wizard_target: 'csvSummary' } }
 
           = turbo_frame_tag 'starter_pack',
             data: { group_wizard_target: 'presetFrame',

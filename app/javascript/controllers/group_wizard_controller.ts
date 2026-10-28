@@ -14,7 +14,8 @@ class GroupWizardController extends Controller<HTMLElement> {
     "ranking", "rankingMode",
     "path", "pathError", "pack", "quickOnly",
     "classes", "classesOutput", "classesUp", "classesDown",
-    "manualSummary", "sumName", "sumCurrency", "sumLives", "sumRanking",
+    "manualSummary", "summaryHint", "sumName", "sumCurrency", "sumLives", "sumRanking",
+    "csvOnly", "csvFile", "csvFilesSection", "csvSummary", "baseError",
     "presetFrame",
     "previewGroup", "previewCurrency",
     "artBox", "artMono", "markBox", "markLetter",
@@ -47,6 +48,12 @@ class GroupWizardController extends Controller<HTMLElement> {
   declare readonly classesUpTarget: HTMLButtonElement
   declare readonly classesDownTarget: HTMLButtonElement
   declare readonly manualSummaryTarget: HTMLElement
+  declare readonly summaryHintTarget: HTMLElement
+  declare readonly csvOnlyTargets: HTMLElement[]
+  declare readonly csvFileTargets: HTMLInputElement[]
+  declare readonly csvFilesSectionTarget: HTMLElement
+  declare readonly csvSummaryTarget: HTMLElement
+  declare readonly hasBaseErrorTarget: boolean
   declare readonly sumNameTarget: HTMLElement
   declare readonly sumCurrencyTarget: HTMLElement
   declare readonly sumLivesTarget: HTMLElement
@@ -209,7 +216,10 @@ class GroupWizardController extends Controller<HTMLElement> {
   }
 
   private get createLabel(): string {
-    return this.quick ? "Utwórz grupę z zestawem" : "Utwórz pustą grupę"
+    if (this.quick) return "Utwórz grupę z zestawem"
+    if (this.csv) return "Utwórz grupę z importu"
+
+    return "Utwórz pustą grupę"
   }
 
   private renderArt() {
@@ -266,6 +276,9 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.quickOnlyTargets.forEach((section) => {
       section.hidden = !this.quick
     })
+    this.csvOnlyTargets.forEach((section) => {
+      section.hidden = !this.csv
+    })
 
     this.classesOutputTarget.textContent = String(this.classCount)
     this.classesDownTarget.disabled = this.classCount <= CLASSES_MIN
@@ -274,9 +287,11 @@ class GroupWizardController extends Controller<HTMLElement> {
 
   private renderStepFour() {
     const quick = this.quick
+    const csv = this.csv
 
     this.manualSummaryTarget.hidden = quick
     this.presetFrameTarget.hidden = !quick
+    this.csvFilesSectionTarget.hidden = !csv
 
     this.presetFrameTarget
       .querySelectorAll<HTMLInputElement>("input")
@@ -284,8 +299,12 @@ class GroupWizardController extends Controller<HTMLElement> {
         input.disabled = !quick
       })
 
-    if (quick) this.loadPreset()
-    else this.fillManualSummary()
+    if (quick) {
+      this.loadPreset()
+    } else {
+      this.fillManualSummary()
+      if (csv) this.fillCsvSummary()
+    }
   }
 
   private loadPreset() {
@@ -304,12 +323,30 @@ class GroupWizardController extends Controller<HTMLElement> {
   }
 
   private fillManualSummary() {
+    this.summaryHintTarget.textContent = this.csv ?
+      "Dane z wybranych plików CSV zostaną zaimportowane po utworzeniu grupy." :
+      "Grupa powstanie pusta. Po utworzeniu zobaczysz listę kroków do uzupełnienia."
+
     this.sumNameTarget.textContent = this.nameTarget.value.trim()
     this.sumCurrencyTarget.textContent = this.currencyTarget.value.trim()
     this.sumLivesTarget.textContent = this.livesField?.value ?? ""
     this.sumRankingTarget.textContent = this.rankingTarget.checked ?
       this.rankingLabel :
       "Wyłączony"
+  }
+
+  private fillCsvSummary() {
+    this.csvSummaryTarget.innerHTML = ""
+
+    this.csvFileTargets.forEach((input) => {
+      const dt = document.createElement("dt")
+      dt.textContent = input.dataset.label ?? input.dataset.resource ?? ""
+
+      const dd = document.createElement("dd")
+      dd.textContent = input.files?.[0]?.name ?? "Nie wybrano"
+
+      this.csvSummaryTarget.append(dt, dd)
+    })
   }
 
   private get rankingLabel(): string {
@@ -350,12 +387,17 @@ class GroupWizardController extends Controller<HTMLElement> {
   private get erroredStep(): number {
     if (this.nameTarget.getAttribute("aria-invalid") === "true") return 0
     if (this.currencyTarget.getAttribute("aria-invalid") === "true") return 1
+    if (this.hasBaseErrorTarget) return LAST_STEP
 
     return 0
   }
 
   private get quick(): boolean {
     return this.checked(this.pathTargets) === "quick"
+  }
+
+  private get csv(): boolean {
+    return this.checked(this.pathTargets) === "csv"
   }
 
   private checked(radios: HTMLInputElement[]): string | null {

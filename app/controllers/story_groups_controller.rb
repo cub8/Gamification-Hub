@@ -57,8 +57,10 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     if save_with_starter_pack
-      redirect_to created_story_group_path(@story_group)
+      options = @csv_warnings.present? ? { alert: @csv_warnings.join(' ') } : {}
+      redirect_to created_story_group_path(@story_group), **options
     else
+      @setup_path = params.dig(:setup, :path)
       render :new, status: :unprocessable_content
     end
   end
@@ -113,21 +115,48 @@ class StoryGroupsController < ApplicationController
     params.dig(:setup, :path) == 'quick'
   end
 
+  def csv_start?
+    params.dig(:setup, :path) == 'csv'
+  end
+
   def save_with_starter_pack
     ActiveRecord::Base.transaction do
       raise ActiveRecord::Rollback unless @story_group.save
 
-      next true unless quick_start?
+      if quick_start?
+        StarterPackBuilder.new(story_group: @story_group,
+                               pack:        params.dig(:setup, :pack),
+                               classes:     params.dig(:setup, :classes),
+                               selection:   starter_selection,).call
+      elsif csv_start?
+        build_from_csv
+      end
 
-      StarterPackBuilder.new(story_group: @story_group,
-                             pack:        params.dig(:setup, :pack),
-                             classes:     params.dig(:setup, :classes),
-                             selection:   starter_selection,).call
       true
     end
   rescue StarterPackBuilder::InvalidSelection => e
     @story_group.errors.add(:base, e.message)
     false
+  rescue Csv::MalformedFile
+    @story_group.errors.add(:base, 'Nie udało się odczytać jednego z wgranych plików CSV.')
+    false
+  rescue ActiveRecord::RecordInvalid => e
+    @story_group.errors.add(:base, "Import się nie powiódł: #{e.record.errors.full_messages.to_sentence}")
+    false
+  end
+
+  def build_from_csv
+    preset = Csv::GroupPresetParser.new(csv_files, story_group: @story_group).call
+    StarterPackBuilder.new(story_group: @story_group, preset: preset).call
+    @csv_warnings = preset.warnings
+  end
+
+  def csv_files
+    files = params.dig(:setup, :csv) || {}
+
+    %i[ranks badges items templates]
+      .index_with { |key| files[key] }
+      .compact
   end
 
   def starter_selection
