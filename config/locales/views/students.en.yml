@@ -1,0 +1,135 @@
+en:
+  students:
+    flash:
+      lives_notice:
+        one: "%{name} now has %{count} life."
+        other: "%{name} now has %{count} lives."
+      cannot_take_life: "Can't take a life — the student already has 0."
+      removed: "%{name} is no longer in the group."
+
+    helpers:
+      list_lead: "You take a life for an unexcused absence."
+      zero_lives:
+        one: "%{count} student has 0 lives"
+        other: "%{count} students have 0 lives"
+      zero_lives_tail: "and can only buy items available at 0 lives."
+      nickname_quoted: "“%{nickname}”"
+      nickname: "Nickname: %{nickname}"
+      university_number: "student no. %{number}"
+      rank_progress: "%{total} of %{required} to the %{rank} rank"
+      losses:
+        badges:
+          one: "%{count} badge"
+          other: "%{count} badges"
+        items:
+          one: "%{count} item"
+          other: "%{count} items"
+        ledger:
+          one: "the whole currency history (%{count} entry)"
+          other: "the whole currency history (%{count} entries)"
+
+    index:
+      title: "Students"
+      invites: "Codes and invites"
+      show_code: "Show code to students"
+      search: "Search for a student"
+      of: "of"
+      count: "%{shown} of %{total}"
+      columns:
+        student: "Student"
+        rank: "Rank"
+        lives: "Lives"
+        balance: "To spend"
+        total: "Collected"
+        badges: "Badges"
+        actions: "Actions"
+      no_match: "No students named"
+      no_match_hint: "Clear the search or check the spelling."
+      empty_title: "Nobody has joined the group yet"
+      empty_body: "Send students a code or an invite — once they join, they will show up here with their rank, currency and lives."
+
+    new_import:
+      title: "Import students"
+      dialog_title: "Import students from CSV"
+      hint: "Matches existing accounts by email. Columns: email, pseudonim (optional)."
+
+    import:
+      title: "Student import results"
+      added:
+        one: "Added %{count} student."
+        other: "Added %{count} students."
+      skipped:
+        one: "Skipped %{count} row."
+        other: "Skipped %{count} rows."
+      row_failure: "Row %{row}: %{message}"
+
+    csv_import:
+      no_account: "No account found for “%{email}”."
+
+    row:
+      rank: "Rank"
+      lives: "Lives"
+      balance: "To spend"
+      total: "Collected"
+      badges: "Badges"
+      take_life: "Take a life: %{name}"
+      add_life: "Add a life: %{name}"
+      award_badge: "Award a badge"
+      award_badge_for: "Award a badge: %{name}"
+      adjust_currency: "Adjust currency"
+      adjust_currency_for: "Adjust currency: %{name}"
+      history: "Transaction history"
+      history_for: "History: %{name}"
+
+    show:
+      breadcrumb: "Students"
+      award_badge: "Award a badge"
+      adjust_currency: "Adjust currency"
+      rank: "Rank"
+      rank_progress_label: "Progress to the %{rank} rank"
+      balance: "To spend"
+      total: "Collected in total"
+      lives: "Lives"
+      sections: "Student sections"
+      tabs:
+        badges: "Badges"
+        items: "Items"
+        hist: "Currency history"
+
+    edit:
+      page_title: "Edit student - %{name}"
+
+    form:
+      title: "Edit student"
+      account_note: "The name and e-mail come from the student's account."
+      lives: "Lives"
+      take_life: "Take a life"
+      add_life: "Add a life"
+      lives_hint: "You take a life for an unexcused absence. At 0 lives the student can only buy items available at 0 lives."
+      remove_label: "Remove from group"
+      remove_hint: "The student will lose access to the group, and their badges, items and currency history will be lost. They can only rejoin with a new code."
+      remove: "Remove from group"
+
+    confirm_destroy:
+      page_title: "Remove from group - %{name}"
+      title: "Remove the student from the group?"
+      access_lost: "%{name} will lose access to the group and disappear from lists, the ranking and grade sheets."
+      losses: "Lost: %{list}."
+      irreversible: "This can't be undone."
+      nothing_to_lose: "This student has no badges, items or currency history yet."
+      rejoin_note: "If they rejoin the group, they will get a new member account and start from scratch."
+      remove: "Remove from group"
+
+    tab_badges:
+      removed: "Removed from the list"
+      awarded: "Awarded %{when}"
+      revoke: "Revoke"
+      revoke_label: "Revoke badge %{name}"
+      empty: "The student has no badges yet."
+
+    tab_history:
+      empty: "No entries of this type."
+
+    tab_items:
+      intro: "Items bought in the shop. You settle the use of an item (e.g. a quiz retake) in class."
+      empty: "The student hasn't bought anything yet. Items will show up here with the price they paid."

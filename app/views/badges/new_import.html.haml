@@ -1,6 +1,7 @@
-- content_for :title, 'Importuj odznaki'
+- content_for :title, t('.title')
+- columns = tag.code('nazwa, opis_dydaktyczny, opis_fabularny, zniżka, ikona')
 
-= render 'shared/csv_import_dialog', title: 'Importuj odznaki z CSV',
+= render 'shared/csv_import_dialog', title: t('.dialog_title'),
                                      url:   import_story_group_badges_path(@story_group),
-                                     hint:  'Kolumny: nazwa, opis_dydaktyczny, opis_fabularny, zniżka, ikona.',
+                                     hint:  t('.hint_html', columns: columns),
                                      error: @upload_error

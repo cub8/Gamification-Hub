@@ -1,0 +1,148 @@
+pl:
+  ranks:
+    flash:
+      created: "Dodano rangę „%{name}”."
+      updated: "Zapisano rangę „%{name}”."
+      destroyed: "Usunięto rangę „%{name}”."
+      blocked: "Nie można usunąć rangi „%{name}”: wymagają jej przedmioty %{items}."
+
+    # RanksHelper; rank_form_controller.ts gets the same keys through the form.
+    helpers:
+      starting: "Ranga startowa"
+      starting_sentence: "Ranga startowa."
+      from: "Od %{min} zebranych"
+      from_sentence: "Od %{min} zebranych."
+      summary_no_discount: "%{opening}, bez zniżki"
+      summary_discount: "%{opening}, −%{discount}% w sklepie"
+      gives_discount: "Daje −%{discount}% w sklepie."
+      discount: "−%{discount}% w sklepie"
+      no_discount: "Bez zniżki"
+      required: "Wymagane: %{min} zebranych."
+      name_placeholder: "Nazwa rangi"
+      new_rank: "Nowa ranga"
+      from_short: "od %{min}"
+
+    index:
+      title: "Rangi"
+
+    new:
+      page_title: "Nowa ranga"
+
+    new_import:
+      title: "Importuj rangi"
+      dialog_title: "Importuj rangi z CSV"
+      hint_html: "Kolumny: %{columns}."
+
+    import_preview:
+      title: "Podgląd importu rang"
+      count:
+        one: "Zostanie dodanych: %{count} ranga."
+        few: "Zostanie dodanych: %{count} rangi."
+        many: "Zostanie dodanych: %{count} rang."
+        other: "Zostanie dodanych: %{count} rangi."
+
+    edit:
+      page_title: "Edytuj rangę - %{name}"
+
+    teacher_ladder:
+      title: "Rangi"
+      lead:
+        one: "%{count} ranga. Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi."
+        few: "%{count} rangi. Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi."
+        many: "%{count} rang. Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi."
+        other: "%{count} rangi. Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi."
+      new: "Nowa ranga"
+      gap: "↑ %{count} zebranych do awansu"
+      required_by: "Wymagana do zakupu: %{items}"
+      holders:
+        one: "student"
+        few: "studentów"
+        many: "studentów"
+        other: "studenta"
+      progress_label: "Studenci z rangą %{name}"
+      empty_title: "Nie ma jeszcze żadnych rang"
+      empty_body: "Dodaj rangi, żeby studenci widzieli, do czego dążą. Ranga zależy od łącznie zebranej waluty, a każda może dawać zniżkę w sklepie."
+
+    student_ladder:
+      title: "Rangi"
+      lead: "Ranga rośnie razem z łącznie zebraną walutą. Wydawanie jej nie obniża rangi."
+      yours: "Twoja ranga"
+      achieved: "Zdobyta"
+      to_first: "%{collected} z %{needed} do pierwszej rangi"
+      to_next: "%{collected} z %{needed} do następnej"
+      progress_label: "Postęp do rangi wyżej niż %{name}"
+      top: "Najwyższa ranga"
+      missing: "Brakuje %{count}"
+      empty_title: "W tej grupie nie ma jeszcze rang"
+      empty_body: "Prowadzący ich nie dodał. Zbieraj walutę — kiedy rangi się pojawią, zaliczy się wszystko, co zebrałeś do tej pory."
+
+    preview:
+      summary: "Podgląd rangi"
+      card: "Karta rangi"
+      ladder: "Drabinka rang"
+      this_rank: "(ta ranga)"
+
+    form:
+      breadcrumb: "Rangi"
+      new_title: "Nowa ranga"
+      edit_title: "Edytuj rangę"
+      lead: "Podgląd obok pokazuje, gdzie ranga trafi na drabince i ilu studentów obejmie."
+      holders:
+        one: "%{count} student ma tę rangę."
+        few: "%{count} studentów ma tę rangę."
+        many: "%{count} studentów ma tę rangę."
+        other: "%{count} studenta ma tę rangę."
+      holders_note: "Zmiana progu może przesunąć studentów w górę lub w dół. Podgląd obok pokazuje skutki."
+      card: "Karta rangi"
+      card_hint: "Tak ranga wygląda na stronie grupy i w rankingu."
+      name_placeholder: "np. Admirał Floty"
+      threshold_section: "Próg i nagroda"
+      threshold_hint: "Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi."
+      threshold: "Wymagane zebrane"
+      discount: "Zniżka w sklepie"
+      removal_hint: "Studenci z tą rangą spadną do rangi niżej. Przedmioty, które jej wymagają, trzeba będzie najpierw przypisać do innej rangi."
+      remove: "Usuń rangę"
+      create: "Dodaj rangę"
+      # rank_form_controller.ts
+      js:
+        impact_got_lead: "Od razu dostanie ją "
+        impact_got:
+          one: "%{count} student"
+          few: "%{count} studentów"
+          many: "%{count} studentów"
+          other: "%{count} studenta"
+        impact_got_tail: ". Pozostali zobaczą ją jako kolejny cel."
+        impact_nobody: "Na razie nikt nie ma tylu zebranych. Studenci zobaczą ją jako kolejny cel."
+        impact_unchanged: "Żaden student nie zmieni rangi."
+        impact_changed_lead: "Po zapisaniu "
+        impact_changed:
+          one: "%{count} student zmieni rangę"
+          few: "%{count} studentów zmieni rangę"
+          many: "%{count} studentów zmieni rangę"
+          other: "%{count} studenta zmieni rangę"
+        impact_up: "%{count} awansuje"
+        impact_down: "%{count} spadnie"
+        warn_below: "Ranga niżej (%{name}) daje −%{other}%, a ta tylko −%{discount}%. Awans obniżyłby zniżkę."
+        warn_above: "Ranga wyżej (%{name}) daje tylko −%{other}%. Awans na nią obniżyłby zniżkę."
+
+    confirm_destroy:
+      page_title: "Usuń rangę %{name}"
+      title: "Usunąć rangę „%{name}”?"
+      body: "Studenci z tą rangą spadną do rangi niżej."
+      blocked:
+        one: "Przedmiot %{items} wymaga tej rangi. Zanim ją usuniesz, przypisz mu inną rangę."
+        other: "Przedmioty %{items} wymagają tej rangi. Zanim ją usuniesz, przypisz im inną rangę."
+      remove: "Usuń rangę"
+
+  activerecord:
+    errors:
+      models:
+        rank:
+          attributes:
+            name:
+              blank: "Podaj nazwę rangi."
+            discount:
+              out_of_range: "Zniżka musi mieścić się między 0 a 100%."
+            required_currency_value:
+              negative: "Próg nie może być ujemny."
+              threshold_taken: "Ranga %{rank} ma już próg %{threshold}. Wybierz inny."

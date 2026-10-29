@@ -2,6 +2,6 @@
 
 module LoggedUserRedirector
   def redirect_logged_user
-    redirect_to root_path, alert: 'Jesteś już zalogowany.' if @current_user
+    redirect_to root_path, alert: t('application.flash.already_signed_in') if @current_user
   end
 end

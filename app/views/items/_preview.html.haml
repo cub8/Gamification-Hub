@@ -21,36 +21,36 @@
 
 %details.gh-preview-details{ open: true }
   %summary
-    Podgląd karty
+    = t('.summary')
     %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
 
   %section.gh-panel.gh-preview-panel
-    %h3 Tak zobaczą to studenci
+    %h3= t('.students_view')
 
-    .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': 'Stan karty' }
+    .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': t('.state') }
       %button{ type: 'button', 'aria-pressed': 'true', value: 'afford',
                data: { action: 'item-form#state', item_form_target: 'state' } }
-        Dostępny
+        = t('.afford')
       %button{ type: 'button', 'aria-pressed': 'false', value: 'save',
                data: { action: 'item-form#state', item_form_target: 'state' } }
-        Zbierasz
+        = t('.save')
       %button{ type: 'button', 'aria-pressed': 'false', value: 'sealed',
                disabled: !card.requires?,
                data: { action: 'item-form#state', item_form_target: 'state' } }
-        Zapieczętowany
+        = t('.sealed')
 
     %span.gh-field-hint{ hidden: card.requires?, data: { item_form_target: 'sealHint' } }
-      Bez wymagań przedmiot nigdy nie będzie zapieczętowany.
+      = t('.seal_hint')
 
     .gh-item-preview-card
       = render 'card', item: item, card: card, state: :afford,
         need: need, progress: 0.6, targets: targets, all_feet: true
 
   %section.gh-panel.gh-preview-panel
-    %h3 Miniatura w powiadomieniach
+    %h3= t('.thumb')
     .gh-preview-thumb-row
       = render 'layouts/item_thumb', item: item,
         inner_data: { item_form_target: 'thumbArt' }
       %span
         %b{ data: { item_form_target: 'thumbName' } }= item_name(item)
-        %span.gh-small Zakup studenta, dziś 10:21
+        %span.gh-small= t('.thumb_sample')

@@ -1,21 +1,19 @@
 - error = ->(attribute) { story_group.errors[attribute].first }
 
 %section.gh-panel.gh-page-header
-  %h1.gh-h1 Ustawienia grupy
-  %p.gh-lead
-    Zmienią je wszyscy prowadzący tę grupę. Tylko właściciel może usunąć grupę.
-    Ranking ustawiasz w zakładce Ranking.
+  %h1.gh-h1= t('.title')
+  %p.gh-lead= t('.lead')
 
 = form_with model: story_group do |f|
   %section.gh-panel.gh-settings-section
     .gh-form-section.gh-form-section--first
-      %h2.gh-h3 Grupa i opowieść
+      %h2.gh-h3= t('.group_section')
 
       .gh-form-field
-        = f.label :name, 'Nazwa grupy'
+        = f.label :name, t('.name')
         .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:name)) }
           = f.text_field :name, maxlength: 40, autocomplete: 'off',
-            placeholder: 'np. Kosmiczne króliki',
+            placeholder: t('.name_placeholder'),
             'aria-invalid': (error.call(:name) ? 'true' : nil),
             'aria-describedby': (error.call(:name) ? 'gh-group-name-error' : nil)
         - if error.call(:name)
@@ -24,7 +22,7 @@
             %span= error.call(:name)
 
       .gh-form-field
-        = f.label :description, 'Opowieść'
+        = f.label :description, t('.story')
         .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:description)) }
           = f.text_area :description, rows: 3, maxlength: 1024,
             'aria-invalid': (error.call(:description) ? 'true' : nil),
@@ -33,53 +31,49 @@
           %p#gh-group-story-error.gh-field-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:description)
-        %span.gh-field-hint Widzą ją wszyscy w grupie, na stronie głównej grupy.
+        %span.gh-field-hint= t('.story_hint')
 
       = render 'shared/image_field', form: f, record: story_group,
         presets: GroupArt::KEYS, registry: GroupArt,
         kind: 'group', tile: :art,
-        copy: { label: 'Grafika grupy',
-                hint: 'JPG lub PNG, najlepiej co najmniej 1200 px szerokości.' }
+        copy: { label: t('.art_label'),
+                hint: t('.art_hint') }
 
     .gh-form-section
-      %h2.gh-h3 Waluta
-      %p.gh-field-hint Nowa nazwa pojawi się wszędzie, także w historii studentów.
+      %h2.gh-h3= t('.currency_section')
+      %p.gh-field-hint= t('.currency_hint')
 
       .gh-form-field
-        = f.label :currency_name, 'Nazwa waluty'
+        = f.label :currency_name, t('.currency_name')
         .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:currency_name)) }
           = f.text_field :currency_name, maxlength: 40, autocomplete: 'off',
-            placeholder: 'np. Marchewek',
+            placeholder: t('.currency_placeholder'),
             'aria-invalid': (error.call(:currency_name) ? 'true' : nil),
             'aria-describedby': (error.call(:currency_name) ? 'gh-group-currency-error' : nil)
         - if error.call(:currency_name)
           %p#gh-group-currency-error.gh-field-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:currency_name)
-        %span.gh-field-hint Podaj ją w formie, która pasuje do liczby — np. „Marchewek”.
+        %span.gh-field-hint= t('.currency_name_hint')
 
       = render 'shared/image_field', form: f, record: story_group,
         attribute: :currency_icon, glyph_attribute: :currency_icon_glyph,
         presets: CurrencyIcons::KEYS, registry: CurrencyIcons,
         kind: 'currency', tile: :currency, aspect: 1,
-        copy: { label: 'Ikona waluty', presets: 'Gotowe ikony',
-                own: 'Twoja ikona', upload: 'Albo wgraj własną ikonę',
-                hint: 'Najlepiej PNG z przezroczystym tłem, co najmniej 128 px.',
-                crop: 'Przytnij ikonę',
-                cropped: 'Przesuń i przeskaluj zaznaczenie. Zapisujemy kwadratowy kadr, bo ikona siada na okrągłym liczmanie.' }
+        copy: t('story_groups.currency_icon')
 
     .gh-form-section
-      %h2.gh-h3 Życia
+      %h2.gh-h3= t('.lives_section')
       .gh-form-field{ data: { controller: 'lives-stepper', lives_stepper_max_value: 10 } }
-        %p#gh-default-lives-label.gh-form-label Życia na start
+        %p#gh-default-lives-label.gh-form-label= t('.lives')
         .gh-number-stepper{ role: 'group', 'aria-labelledby': 'gh-default-lives-label' }
-          %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Mniej',
+          %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('shared.actions.fewer'),
                               disabled: story_group.default_lives.to_i.zero?,
                               data: { lives_stepper_target: 'down',
                                       action: 'lives-stepper#down' } }
             %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
           %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= story_group.default_lives
-          %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Więcej',
+          %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('shared.actions.more'),
                               disabled: story_group.default_lives.to_i >= 10,
                               data: { lives_stepper_target: 'up',
                                       action: 'lives-stepper#up' } }
@@ -92,23 +86,19 @@
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:default_lives)
 
-        %span.gh-field-hint
-          Dotyczy tylko studentów, którzy dołączą od teraz. Obecnym zmieniasz
-          życia na liście studentów.
+        %span.gh-field-hint= t('.lives_hint')
 
   .gh-panel.gh-form-actions-bar
-    = link_to 'Wróć do grupy', story_group_path(story_group), class: 'gh-link-button'
+    = link_to t('.back'), story_group_path(story_group), class: 'gh-link-button'
     %span.gh-form-actions-spacer
-    %button.gh-btn{ type: 'submit' } Zapisz zmiany
+    %button.gh-btn{ type: 'submit' }= t('shared.actions.save_changes')
 
 - if policy(story_group).destroy?
   %section.gh-panel.gh-danger-zone
-    %h2.gh-h3 Usuń grupę
-    %p.gh-small
-      Usunięcie zabiera wszystkim dostęp do grupy, jej sklepu, rankingu
-      i historii. Tego nie da się cofnąć.
+    %h2.gh-h3= t('.delete_title')
+    %p.gh-small= t('.delete_body')
     .gh-button-row
       = link_to confirm_destroy_story_group_path(story_group),
         class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
-        Usuń grupę
+        = t('.delete')

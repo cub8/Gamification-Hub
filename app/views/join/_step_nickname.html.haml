@@ -1,10 +1,8 @@
 - nickname_error = local_assigns[:result]&.nickname_error
 
-%p.gh-small.mb-1 Krok 2 z 2
-%h2.gh-h2#gh-join-title= "Dołączasz do grupy #{story_group.name}"
-%p
-  W tej grupie inni zobaczą Cię pod pseudonimem — także w rankingu.
-  Możesz go później zmienić w ustawieniach w grupie.
+%p.gh-small.mb-1= t('.step')
+%h2.gh-h2#gh-join-title= t('.title', name: story_group.name)
+%p= t('.hint')
 
 = form_with url:    join_index_path,
             method: :post,
@@ -12,7 +10,7 @@
   = hidden_field_tag :code, code
 
   .gh-form-field
-    = label_tag :nickname, 'Pseudonim w tej grupie'
+    = label_tag :nickname, t('.nickname')
     .gh-text-input{ class: ('gh-text-input--invalid' if nickname_error) }
       = text_field_tag :nickname, params[:nickname],
                        maxlength:          24,
@@ -27,11 +25,9 @@
         %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
         %span= nickname_error
     - else
-      %span.gh-field-hint#gh-nick-note
-        Zostaw puste, jeśli chcesz używać imienia i nazwiska.
-        Pseudonim możesz ustawić później.
+      %span.gh-field-hint#gh-nick-note= t('.nickname_hint')
     -# haml-lint:enable RepeatedId
 
   .gh-dialog-button-row
     = render 'join/cancel'
-    %button.gh-btn{ type: 'submit' } Dołącz do grupy
+    %button.gh-btn{ type: 'submit' }= t('.join')

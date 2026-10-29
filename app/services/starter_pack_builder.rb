@@ -110,7 +110,7 @@ class StarterPackBuilder
   def guard_threshold!(seen, value, name)
     if seen.key?(value)
       raise InvalidSelection,
-            "Dwie rangi nie mogą mieć tego samego progu: #{seen[value]} i #{name} mają #{value}."
+            I18n.t('story_groups.flash.duplicate_threshold', first: seen[value], second: name, value: value)
     end
 
     seen[value] = name

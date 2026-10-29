@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
 class StoryGroupsListing
-  include ApplicationHelper
-
-  ROLE_LABELS = { own: 'Prowadzisz', sup: 'Wspierasz', lrn: 'Uczysz się' }.freeze
-
   TABS = {
-    nil       => ['Wszystkie', nil],
-    'mine'    => ['Moje',      :own],
-    'teacher' => ['Nauczam',   :sup],
-    'student' => ['Uczę się',  :lrn],
+    nil       => nil,
+    'mine'    => :own,
+    'teacher' => :sup,
+    'student' => :lrn,
   }.freeze
 
   Group = Data.define(:story_group, :role, :students_count, :meta) do
-    def role_label = ROLE_LABELS[role]
+    def role_label = I18n.t("story_groups.listing.roles.#{role}")
   end
 
   Tab = Data.define(:key, :label, :total)
@@ -35,7 +31,7 @@ class StoryGroupsListing
   private
 
   def matches_filter?(group)
-    role = TABS[filter].last
+    role = TABS[filter]
 
     role.nil? || group.role == role
   end
@@ -71,22 +67,22 @@ class StoryGroupsListing
   def meta_for(story_group, role)
     case role
     when :own then owner_meta(story_group)
-    when :sup then "Właściciel: #{story_group.owner.full_name}"
+    when :sup then I18n.t('story_groups.listing.owner', name: story_group.owner.full_name)
     else           student_meta(story_group)
     end
   end
 
   def owner_meta(story_group)
     count = purchase_counts.fetch(story_group.id, 0)
-    return 'Brak nowych zakupów' if count.zero?
+    return I18n.t('story_groups.listing.no_purchases') if count.zero?
 
-    "#{count} #{gh_plural(count, 'nowy zakup', 'nowe zakupy', 'nowych zakupów')}"
+    I18n.t('story_groups.listing.purchases', count: count)
   end
 
   def student_meta(story_group)
     balance = memberships[story_group.id]&.current_currency.to_i
 
-    "Masz #{balance} #{story_group.currency_name}"
+    I18n.t('story_groups.listing.balance', balance: balance, currency: story_group.currency_name)
   end
 
   def teacher_group_ids
@@ -120,18 +116,18 @@ class StoryGroupsListing
   end
 
   def recent_window
-    (Date.current - (TeacherStartDashboard::RECENT_DAYS.size - 1)).beginning_of_day..
+    (Date.current - (Dashboard::Teacher::RECENT_DAYS.size - 1)).beginning_of_day..
   end
 
   def build_tabs
     total   = all_groups.size
     by_role = all_groups.group_by(&:role)
 
-    TABS.filter_map do |key, (label, role)|
+    TABS.filter_map do |key, role|
       count = role.nil? ? total : by_role.fetch(role, []).size
       next if role && !count.between?(1, total - 1)
 
-      Tab.new(key: key, label: label, total: count)
+      Tab.new(key: key, label: I18n.t("story_groups.listing.tabs.#{key || 'all'}"), total: count)
     end
   end
 end

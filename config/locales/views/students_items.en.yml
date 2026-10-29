@@ -1,0 +1,28 @@
+en:
+  students_items:
+    helpers:
+      inventory_lead:
+        one: "%{count} item. Tell the teacher in class when you want to use an item."
+        other: "%{count} items. Tell the teacher in class when you want to use an item."
+      purchase_line: "Bought %{when}, for %{price}"
+      purchase_teacher_line: "Bought %{when}"
+      purchase_teacher_discount: "Bought %{when}, discounted from %{list}"
+      shop_line:
+        one: "You can afford %{count} item in the shop right now."
+        other: "You can afford %{count} items in the shop right now."
+
+    index:
+      own_title: "My items"
+      title: "Items — %{name}"
+      teacher_lead:
+        one: "%{count} item. The student settles using an item with you in class."
+        other: "%{count} items. The student settles using an item with you in class."
+      go_to_shop: "Go to the shop"
+      see_shop: "See the shop"
+      own_empty_title: "You don't have any items yet"
+      own_empty_body: "Collect currency in class and spend it in the shop — the items you buy will stay here with their purchase date."
+      empty_title: "The student hasn't bought anything yet"
+      empty_body: "Items will show up here with the price they paid and the purchase date."
+
+    card:
+      removed: "Removed from the shop"

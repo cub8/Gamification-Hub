@@ -1,0 +1,19 @@
+en:
+  invitation_mailer:
+    roles:
+      admin: "an administrator"
+      member: "a member"
+    invitation_email:
+      subject: "Invitation to Gamification Hub"
+      lead: "You've been added as %{role} of the organization %{organization} in Gamification Hub."
+
+  # shared/_invitation_email.{html,text}
+  shared:
+    invitation_email:
+      title: "Invitation"
+      text: "Click the button below to finish setting up your account and fill in your details."
+      text_plain: "To finish setting up your account and fill in your details, open the link below."
+      button: "Finish setting up your account"
+      note: "The link is valid for 7 days. If the button doesn't work, copy this address into your browser:"
+      valid_for: "The link is valid for 7 days."
+      footer: "If you weren't expecting this invitation, you can ignore this message."

@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: '/letter_opener' if Rails.env.development?
 
+  resource :locale, only: :update
+
   resources :join, param: :code, only: %i[show new] do
     collection do
       post :create
@@ -110,6 +112,27 @@ Rails.application.routes.draw do
   resources :notifications, only: %i[index] do
     post :mark_as_read, on: :collection
   end
+
+  resources :organizations do
+    member do
+      get :confirm_destroy
+      get :new_admin
+      post :add_admin
+      get :new_user
+      post :add_user
+    end
+
+    resources :admins, only: :destroy, module: :organizations do
+      get :confirm_destroy, on: :member
+    end
+
+    resources :users, only: %i[edit update destroy], module: :organizations do
+      get :confirm_destroy, on: :member
+      resource :invitation, only: :create
+    end
+  end
+
+  resource :account_setup, only: %i[edit update]
 
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback

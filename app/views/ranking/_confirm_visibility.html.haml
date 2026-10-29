@@ -1,47 +1,41 @@
-
 - if enabled
-  %h2#gh-rk-title.gh-h2 Pokazać ranking studentom?
-  %p Studenci zobaczą ranking od razu. Wybierz, ile mają widzieć.
+  %h2#gh-rk-title.gh-h2= t('.show_title')
+  %p= t('.show_body')
 
   = form_with model: story_group, url: story_group_ranking_path(story_group), method: :patch,
     data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |f|
     = f.hidden_field :ranking_enabled, value: true
 
-    .gh-choice-grid.gh-ranking-mode-options{ role: 'radiogroup', 'aria-label': 'Co widzą studenci' }
+    .gh-choice-grid.gh-ranking-mode-options{ role: 'radiogroup', 'aria-label': t('.modes_label') }
       %label.gh-choice-card
         = f.radio_button :ranking_mode, 'podium_and_own', checked: mode == 'podium_and_own',
           class: 'sr-only'
-        %b= StoryGroup::RANKING_MODE_LABELS.fetch('podium_and_own')
-        %span
-          Wszyscy widzą pierwsze 3 miejsca. Każdy widzi też swoje miejsce, ale
-          nie cudze.
+        %b= StoryGroup.ranking_mode_label('podium_and_own')
+        %span= t('.podium_body')
       %label.gh-choice-card
         = f.radio_button :ranking_mode, 'full', checked: mode == 'full', class: 'sr-only'
-        %b= StoryGroup::RANKING_MODE_LABELS.fetch('full')
-        %span
-          Wszyscy widzą miejsca i pseudonimy wszystkich, także na końcu listy.
+        %b= StoryGroup.ranking_mode_label('full')
+        %span= t('.full_body')
 
     .gh-dialog-button-row
       - if @in_modal
-        %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+        %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
       - else
-        = link_to 'Anuluj', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
+        = link_to t('shared.actions.cancel'), story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
 
-      %button.gh-btn{ type: 'submit', autofocus: true } Pokaż ranking
+      %button.gh-btn{ type: 'submit', autofocus: true }= t('.show')
 - else
-  %h2#gh-rk-title.gh-h2 Ukryć ranking przed studentami?
-  %p
-    Studenci przestaną widzieć miejsca i pseudonimy. Ty nadal widzisz cały
-    ranking, a zebrana waluta i rangi nie zmieniają się.
+  %h2#gh-rk-title.gh-h2= t('.hide_title')
+  %p= t('.hide_body')
 
   .gh-dialog-button-row
     - if @in_modal
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
-        Zostaw widoczny
+        = t('.keep_visible')
     - else
-      = link_to 'Zostaw widoczny', story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
+      = link_to t('.keep_visible'), story_group_ranking_path(story_group), class: 'gh-btn gh-btn--secondary'
 
-    = button_to 'Ukryj ranking', story_group_ranking_path(story_group),
+    = button_to t('.hide'), story_group_ranking_path(story_group),
       method: :patch, class: 'gh-btn',
       params: { story_group: { ranking_enabled: false } },
       form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

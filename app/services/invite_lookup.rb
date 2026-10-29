@@ -1,21 +1,13 @@
 # frozen_string_literal: true
 
 class InviteLookup
-  MESSAGES = {
-    missing:   'Podaj kod zaproszenia.',
-    not_found: 'Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym.',
-    expired:   'Ten kod wygasł. Poproś prowadzącego o nowy.',
-    exhausted: 'Z tego kodu skorzystała już maksymalna liczba osób. ' \
-               'Poproś prowadzącego o nowy.',
-  }.freeze
-
   Result = Data.define(:invite, :reason, :member_of) do
     def initialize(invite: nil, reason: nil, member_of: nil)
       super
     end
 
     def ok? = reason.nil? && member_of.nil?
-    def error = reason && MESSAGES[reason]
+    def error = reason && I18n.t("join.errors.#{reason}")
     def story_group = invite&.story_group
   end
 

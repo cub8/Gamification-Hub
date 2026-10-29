@@ -1,7 +1,5 @@
-%h2#gh-nick-title.gh-h2= "Pseudonim w grupie #{membership.story_group.name}"
-%p
-  Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny.
-  Prowadzący widzi też Twoje imię i nazwisko.
+%h2#gh-nick-title.gh-h2= t('.title', name: membership.story_group.name)
+%p= t('.hint')
 
 = form_with model: membership, url: story_group_membership_path(membership.story_group),
   method: :patch, data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |f|
@@ -10,9 +8,9 @@
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
     - else
-      = link_to 'Anuluj', story_group_ranking_path(membership.story_group),
+      = link_to t('shared.actions.cancel'), story_group_ranking_path(membership.story_group),
         class: 'gh-btn gh-btn--secondary'
 
-    %button.gh-btn{ type: 'submit' } Zapisz pseudonim
+    %button.gh-btn{ type: 'submit' }= t('.save')

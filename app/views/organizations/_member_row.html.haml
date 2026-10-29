@@ -1,0 +1,31 @@
+- name = user.full_name.presence || user.email
+
+.gh-organization-member-row{ id: dom_id(user),
+                 data: { list_search_target: 'row',
+                         list_search_name:   [user.full_name, user.email].compact.join(' ').downcase,
+                         list_search_filter: user.role, } }
+  = render 'organizations/person', user: user
+
+  %span.gh-teacher-role
+    %span.gh-mobile-field-label= t('.role')
+    = user_role_label(user.role)
+    - if user.first_login?
+      %small= t('.invited')
+
+  %span
+    %span.gh-mobile-field-label= t('.index_number')
+    %span.gh-small= user.university_number.presence || '—'
+
+  %span.gh-organization-member-actions
+    - if user.first_login?
+      = render 'organizations/resend_invitation_button', organization: @organization, user: user, name: name
+    = link_to edit_organization_user_path(@organization, user),
+      class: 'gh-icon-button', title: t('.edit'),
+      'aria-label': t('.edit_label', name: name),
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
+    = link_to confirm_destroy_organization_user_path(@organization, user),
+      class: 'gh-icon-button', title: t('.remove'),
+      'aria-label': t('.remove_label', name: name),
+      data: { turbo_frame: 'modal' } do
+      %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }

@@ -16,11 +16,11 @@
               %i.fa-solid.fa-lock{ 'aria-hidden': 'true' }
               = label
           - if card.discounts?
-            %span.gh-tag.gh-tag--discount Zniżka
+            %span.gh-tag.gh-tag--discount= t('.discount')
           - if card.zero_lives?
             %span.gh-tag.gh-tag--no-lives
               %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
-              Przy 0 życiach
+              = t('.zero_lives')
 
       %p.gh-rule-text= item.didactic_description
       - if item.story_description.present?
@@ -30,5 +30,5 @@
         %span.gh-card-meta= item_bought_line(bought)
         .gh-card-actions
           = link_to edit_story_group_item_path(@story_group, item),
-            class: 'gh-icon-button', 'aria-label': "Edytuj przedmiot #{item.name}" do
+            class: 'gh-icon-button', 'aria-label': t('.edit_label', name: item.name) do
             %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }

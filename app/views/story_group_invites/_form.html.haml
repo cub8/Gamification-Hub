@@ -5,33 +5,23 @@
 - scope = ->(field) { "story_group_invite[#{field}]" }
 
 %h2#gh-invite-title.gh-h2
-  = editing ? "Edytuj zaproszenie #{invite.code}" : 'Nowe zaproszenie'
-%p
-  - if editing
-    Kod zostaje ten sam. Zmieniasz tylko ograniczenia.
-  - else
-    Oba ograniczenia są opcjonalne.
+  = editing ? t('.edit_title', code: invite.code) : t('.new_title')
+%p= editing ? t('.edit_hint') : t('.new_hint')
 
 = form_with url: (editing ? story_group_invite_path(@story_group, invite) : story_group_invites_path(@story_group)),
   method: (editing ? :patch : :post),
   data: { controller: 'invite-form',
           turbo_frame: (@in_modal ? 'modal' : nil),
-          invite_form_summary_prefix_value: 'Kod będzie działał',
-          invite_form_limit_prefix_value: 'dla',
-          invite_form_no_limit_value: 'bez limitu osób',
-          invite_form_expiry_prefix_value: 'do',
-          invite_form_no_expiry_value: 'i bez daty ważności',
-          invite_form_people_forms_value: %w[osoby osób osób].to_json,
-          invite_form_unit_forms_value: %w[osoba osoby osób].to_json } do
+          invite_form_i18n_value: invite_form_wording.to_json } do
 
   - unless editing
     .gh-invite-presets
       %button.gh-purchase-filter-chip{ type: 'button',
                         data: { preset: 'today', action: 'invite-form#preset' } }
-        Na dzisiejsze zajęcia
+        = t('.today')
       %button.gh-purchase-filter-chip{ type: 'button',
                         data: { preset: 'none', action: 'invite-form#preset' } }
-        Bez ograniczeń
+        = t('.no_limits')
 
   .gh-invite-limits
     .gh-toggle-switch-row
@@ -41,13 +31,13 @@
         data: { invite_form_target: 'limitSwitch', action: 'invite-form#refresh' }
       %span
         %b
-          = label_tag 'gh-limit-switch', 'Limit użyć'
-        %span.gh-field-hint Kod przestanie działać, gdy dołączy tyle osób.
+          = label_tag 'gh-limit-switch', t('.limit')
+        %span.gh-field-hint= t('.limit_hint')
 
     .gh-limit-fields-row
       .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if limit_error) }
         = number_field_tag scope.call(:max_uses), form.max_uses, min: 1, step: 1,
-          id: 'gh-max-uses', 'aria-label': 'Limit użyć',
+          id: 'gh-max-uses', 'aria-label': t('.limit'),
           'aria-invalid': limit_error ? 'true' : nil,
           'aria-describedby': (limit_error ? 'gh-limit-error' : nil),
           data: { invite_form_target: 'maxUses', action: 'invite-form#refresh' }
@@ -66,20 +56,20 @@
         data: { invite_form_target: 'expirySwitch', action: 'invite-form#refresh' }
       %span
         %b
-          = label_tag 'gh-expiry-switch', 'Data ważności'
-        %span.gh-field-hint Po tej chwili kod przestanie działać.
+          = label_tag 'gh-expiry-switch', t('.expiry')
+        %span.gh-field-hint= t('.expiry_hint')
 
     .gh-limit-fields-row
       .gh-text-input{ class: ('gh-text-input--invalid' if expiry_error) }
         = date_field_tag scope.call(:expires_on), form.expires_on,
-          id: 'gh-expires-on', 'aria-label': 'Data',
+          id: 'gh-expires-on', 'aria-label': t('.date'),
           'aria-invalid': expiry_error ? 'true' : nil,
           'aria-describedby': (expiry_error ? 'gh-expiry-error' : nil),
           data: { invite_form_target: 'date', today: Time.zone.today.to_fs(:iso8601),
                   action: 'invite-form#refresh' }
       .gh-text-input
         = time_field_tag scope.call(:expires_time), form.expires_time,
-          id: 'gh-expires-time', 'aria-label': 'Godzina',
+          id: 'gh-expires-time', 'aria-label': t('.time'),
           data: { invite_form_target: 'time', end_of_day: InviteForm::DEFAULT_TIME,
                   action: 'invite-form#refresh' }
 
@@ -92,4 +82,4 @@
 
   .gh-dialog-button-row
     = render 'cancel'
-    %button.gh-btn{ type: 'submit' }= editing ? 'Zapisz zmiany' : 'Utwórz zaproszenie'
+    %button.gh-btn{ type: 'submit' }= editing ? t('shared.actions.save_changes') : t('.create')

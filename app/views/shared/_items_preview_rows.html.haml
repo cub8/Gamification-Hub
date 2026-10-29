@@ -12,7 +12,7 @@
         %b= item.name
         %small= item.didactic_description
         - if requirement.present?
-          %small= "Wymaga: #{requirement}"
+          %small= t('.requirement', requirement: requirement)
       %span.gh-preset-row-value
         = item.price
-        = item.can_buy_at_0_lives ? '(także przy 0 życiach)' : ''
+        = t('.also_at_zero_lives') if item.can_buy_at_0_lives

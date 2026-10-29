@@ -30,7 +30,7 @@ class Auth::PasswordlessController < ApplicationController
     token = params.expect(:token)
     login_token = LoginToken.find_by_token(token)
 
-    return redirect_to login_path, alert: 'Nieprawidłowy token' if login_token.nil? || login_token.expired?
+    return redirect_to login_path, alert: t('auth.flash.invalid_token') if login_token.nil? || login_token.expired?
 
     user = login_token.user
     user.consume_login_token!
@@ -61,7 +61,7 @@ class Auth::PasswordlessController < ApplicationController
     session[:pending_login_email]   = email
     session[:pending_login_sent_at] = Time.current.to_i
 
-    notice = 'Wysłaliśmy nowy link. Poprzedni już nie działa.' if resend
+    notice = t('auth.flash.resent') if resend
     redirect_to auth_passwordless_inbox_path, notice: notice
   end
 

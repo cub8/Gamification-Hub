@@ -2,8 +2,11 @@
 
 require 'test_helper'
 
-class TeacherStartDashboardTest < ActiveSupport::TestCase
+class Dashboard::TeacherTest < ActiveSupport::TestCase
   setup do
+    # Purchases are bucketed by calendar day, so "1.hour.ago" must not cross
+    # midnight — pin the clock to midday. travel_back runs after each test.
+    travel_to Time.current.noon
     @teacher = FactoryBot.create(:user, role: :teacher)
   end
 
@@ -14,7 +17,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     learning = FactoryBot.create(:story_group, name: 'Gamma')
     FactoryBot.create(:story_group_student, user: @teacher, story_group: learning)
 
-    groups = TeacherStartDashboard.new(user: @teacher).load.groups
+    groups = Dashboard::Teacher.new(user: @teacher).load.groups
 
     assert_equal(%w[Alfa Beta], groups.map { |group| group.story_group.name })
     assert_equal %w[Prowadzisz Wspierasz], groups.map(&:role)
@@ -28,11 +31,11 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     purchase(membership, amount: 2, at: 1.day.ago)
     purchase(membership, amount: 3, at: 9.days.ago)
 
-    dashboard = TeacherStartDashboard.new(user: @teacher).load
+    dashboard = Dashboard::Teacher.new(user: @teacher).load
 
-    assert_equal 1, dashboard.purchases_on('Dziś').size
-    assert_equal 1, dashboard.purchases_on('Wczoraj').size
-    assert_equal 1, dashboard.purchases_on('Wcześniej').size
+    assert_equal 1, dashboard.purchases_on(:today).size
+    assert_equal 1, dashboard.purchases_on(:yesterday).size
+    assert_equal 1, dashboard.purchases_on(:earlier).size
     assert_equal 2, dashboard.recent_purchases.size
     assert_equal 1, dashboard.recent_group_count
   end
@@ -44,7 +47,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     CurrencyTransaction.create!(student: membership, amount: 10, kind: :reward)
     CurrencyTransaction.create!(student: membership, amount: -2, kind: :adjustment)
 
-    dashboard = TeacherStartDashboard.new(user: @teacher).load
+    dashboard = Dashboard::Teacher.new(user: @teacher).load
 
     assert_equal 1, dashboard.purchases.size
     assert_equal 5, dashboard.purchases.sole.price
@@ -54,7 +57,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     membership = membership_in(FactoryBot.create(:story_group, owner: @teacher))
     purchase(membership, amount: 12)
 
-    assert_equal 12, TeacherStartDashboard.new(user: @teacher).load.purchases.sole.price
+    assert_equal 12, Dashboard::Teacher.new(user: @teacher).load.purchases.sole.price
   end
 
   test 'the filter narrows the list but not the greeting' do
@@ -63,7 +66,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     purchase(membership_in(first), amount: 1)
     purchase(membership_in(second), amount: 2)
 
-    dashboard = TeacherStartDashboard.new(user: @teacher, filter: second.id).load
+    dashboard = Dashboard::Teacher.new(user: @teacher, filter: second.id).load
 
     assert_equal [2], dashboard.purchases.map(&:price)
     assert_equal 2, dashboard.recent_purchases.size, 'Powitanie opisuje wszystkie grupy, nie filtr'
@@ -74,8 +77,8 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     group = FactoryBot.create(:story_group, owner: @teacher)
     purchase(membership_in(group), amount: 1)
 
-    assert_nil TeacherStartDashboard.new(user: @teacher, filter: '').load.filter
-    assert_equal 1, TeacherStartDashboard.new(user: @teacher, filter: '').load.purchases.size
+    assert_nil Dashboard::Teacher.new(user: @teacher, filter: '').load.filter
+    assert_equal 1, Dashboard::Teacher.new(user: @teacher, filter: '').load.purchases.size
   end
 
   test 'a group never sees another group purchases' do
@@ -84,7 +87,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     purchase(membership_in(mine), amount: 1)
     purchase(membership_in(theirs), amount: 99)
 
-    assert_equal [1], TeacherStartDashboard.new(user: @teacher).load.purchases.map(&:price)
+    assert_equal [1], Dashboard::Teacher.new(user: @teacher).load.purchases.map(&:price)
   end
 
   test 'new purchase counts are per group and only count the recent window' do
@@ -95,7 +98,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     purchase(in_first, amount: 2, at: 1.day.ago)
     purchase(membership_in(second), amount: 3, at: 8.days.ago)
 
-    groups = TeacherStartDashboard.new(user: @teacher).load.groups
+    groups = Dashboard::Teacher.new(user: @teacher).load.groups
 
     assert_equal [2, 0], groups.map(&:new_purchases)
     assert_equal [1, 1], groups.map(&:students_count)
@@ -113,7 +116,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     FactoryBot.create_list(:activity_group_category, 2, activity_group: newer, position: 1)
     StudentsActivityGroupCategory.create!(student: membership, activity_group_category: awarded)
 
-    pending = TeacherStartDashboard.new(user: @teacher).load.pending
+    pending = Dashboard::Teacher.new(user: @teacher).load.pending
 
     assert_equal newer, pending.activity_group
     assert_equal 2, pending.categories_count, 'Liczy tylko kategorie bez żadnej przyznanej nagrody'
@@ -129,7 +132,7 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
       StudentsActivityGroupCategory.create!(student: membership, activity_group_category: category)
     end
 
-    assert_nil TeacherStartDashboard.new(user: @teacher).load.pending
+    assert_nil Dashboard::Teacher.new(user: @teacher).load.pending
   end
 
   test 'a sheet in someone else group is never pending here' do
@@ -138,11 +141,11 @@ class TeacherStartDashboardTest < ActiveSupport::TestCase
     FactoryBot.create(:activity_group_category,
                       activity_group: FactoryBot.create(:activity_group, story_group: other),)
 
-    assert_nil TeacherStartDashboard.new(user: @teacher).load.pending
+    assert_nil Dashboard::Teacher.new(user: @teacher).load.pending
   end
 
   test 'a teacher with no groups loads empty rather than raising' do
-    dashboard = TeacherStartDashboard.new(user: @teacher).load
+    dashboard = Dashboard::Teacher.new(user: @teacher).load
 
     assert_empty dashboard.groups
     assert_empty dashboard.purchases

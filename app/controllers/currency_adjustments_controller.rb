@@ -38,8 +38,8 @@ class CurrencyAdjustmentsController < ApplicationController
   end
 
   def notice_for(form)
-    verb = form.positive? ? 'Dodano' : 'Odjęto'
+    key = form.positive? ? 'added' : 'taken'
 
-    "#{verb} #{form.value}. Saldo: #{@student.reload.current_currency}."
+    t("currency_adjustments.flash.#{key}", value: form.value, balance: @student.reload.current_currency)
   end
 end

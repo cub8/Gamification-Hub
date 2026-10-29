@@ -1,10 +1,10 @@
-%h2#gh-code-title.gh-h2= "Dołącz do grupy #{@story_group.name}"
-%p Wpisz kod w aplikacji („Dołącz do grupy”) albo zeskanuj kod QR.
+%h2#gh-code-title.gh-h2= t('.title', name: @story_group.name)
+%p= t('.hint')
 
 = render 'qr_stat', invite: invite
 
 .gh-dialog-button-row
   - if @in_modal
-    %button.gh-btn{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Zamknij
+    %button.gh-btn{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }= t('shared.actions.close')
   - else
-    = link_to 'Zamknij', story_group_invites_path(@story_group), class: 'gh-btn'
+    = link_to t('shared.actions.close'), story_group_invites_path(@story_group), class: 'gh-btn'

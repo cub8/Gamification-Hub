@@ -48,12 +48,15 @@ class TeacherOverview
     earned = window_scope.reward.sum(:amount)
 
     [
-      StatTile.new(label: 'Studenci', value: students_count),
-      StatTile.new(label: 'Zakupy w tym tygodniu', value: bought, note: (spent.positive? ? "za #{spent}" : nil)),
-      StatTile.new(label: 'Nagrody w tym tygodniu', value: earned),
-      StatTile.new(label: 'Ranking', value: story_group.ranking_summary),
+      StatTile.new(label: stat(:students), value: students_count),
+      StatTile.new(label: stat(:purchases), value: bought,
+                   note:  (spent.positive? ? stat(:purchases_note, amount: spent) : nil),),
+      StatTile.new(label: stat(:rewards), value: earned),
+      StatTile.new(label: stat(:ranking), value: story_group.ranking_summary),
     ]
   end
+
+  def stat(key, **) = I18n.t("story_groups.overview.stats.#{key}", **)
 
   def window_scope
     CurrencyTransaction.where(student_id: membership_ids)
@@ -83,9 +86,9 @@ class TeacherOverview
                .map do |membership|
       AttentionItem.new(
         icon: 'fa-heart', tone: 'zero',
-        title: "#{membership.display_name} ma 0 żyć",
-        detail: 'Kupi tylko przedmioty dostępne przy 0 życiach.',
-        action_label: 'Otwórz',
+        title: I18n.t('story_groups.overview.zero_lives_title', name: membership.display_name),
+        detail: I18n.t('story_groups.overview.zero_lives_detail'),
+        action_label: I18n.t('story_groups.overview.open'),
         action_path: story_group_student_path(story_group, membership),
       )
     end
@@ -104,10 +107,10 @@ class TeacherOverview
 
     AttentionItem.new(
       icon: 'fa-table', emphasis: true,
-      title: "#{activity_group.name} w trakcie",
-      detail: "Przyznano #{awarded} #{Plural.pick(awarded, 'nagrodę', 'nagrody', 'nagród')}, " \
-              "#{pending} #{Plural.pick(pending, 'kolumna', 'kolumny', 'kolumn')} bez ocen.",
-      action_label: 'Oceń',
+      title: I18n.t('story_groups.overview.sheet_in_progress', name: activity_group.name),
+      detail: "#{I18n.t('story_groups.overview.sheet_awarded', count: awarded)}, " \
+              "#{I18n.t('story_groups.overview.sheet_pending', count: pending)}",
+      action_label: I18n.t('story_groups.overview.grade'),
       action_path: edit_story_group_activity_group_students_activity_group_categories_path(story_group,
                                                                                            activity_group,),
     )

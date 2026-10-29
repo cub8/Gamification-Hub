@@ -1,0 +1,36 @@
+- editing = user.persisted?
+- url     = editing ? organization_user_path(@organization, user) : add_user_organization_path(@organization)
+
+= form_with model: user, url: url, data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |form|
+  %h2.gh-h2= editing ? t('.edit_title') : t('.new_title')
+  - unless editing
+    %p= t('.hint')
+
+  = render 'organizations/field', form: form, record: user, attribute: :email, label: t('.email'),
+                                  input: :email_field,
+                                  options: { placeholder: t('.email_placeholder'), autofocus: !editing }
+  = render 'organizations/field', form: form, record: user, attribute: :full_name, label: t('.full_name'),
+                                  options: { maxlength: 80 }
+
+  .gh-form-field
+    = form.label :role, t('.role')
+    %span.gh-select-input
+      = form.select :role, user_role_options
+      %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
+    - if (error = user.errors[:role].first)
+      %p.gh-field-error{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= error
+
+  .gh-form-row-2col
+    = render 'organizations/field', form: form, record: user, attribute: :university_number,
+                                    label: t('.university_number'), options: { maxlength: 20 }
+    = render 'organizations/field', form: form, record: user, attribute: :usos_id, label: t('.usos_id')
+
+  - if (error = user.errors[:organization].first)
+    %p.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  = render 'organizations/dialog_actions', cancel_path: organization_path(@organization),
+                                           submit_label: (editing ? t('.submit_edit') : t('.submit_new'))

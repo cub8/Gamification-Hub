@@ -8,19 +8,32 @@ class SessionUserBuilder
   end
 
   def build
-    user_params = @provider.user_params
+    @user_params = @provider.user_params
     user = find_or_initialize_user
+    join_usos_organization(user)
 
     if user.new_record? || user.first_login?
-      user.assign_attributes(user_params)
-      user.first_login = false
-      user.save!(context: :account_setup)
+      complete_setup(user)
+    elsif user.organization_id_changed?
+      user.save!
     end
 
     user
   end
 
   private
+
+  def join_usos_organization(user)
+    return if user.organization_id.present? || user.organization_admin? || user.global_admin?
+
+    user.organization = Organization.usos
+  end
+
+  def complete_setup(user)
+    user.assign_attributes(@user_params)
+    user.first_login = false
+    user.save!(context: :account_setup)
+  end
 
   def find_or_initialize_user
     if @provider.usos_id

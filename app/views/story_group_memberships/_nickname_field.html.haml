@@ -2,7 +2,7 @@
 - autofocus = local_assigns.fetch(:autofocus, false)
 
 .gh-form-field
-  = f.label :nickname, 'Twój pseudonim'
+  = f.label :nickname, t('.label')
   .gh-nickname-field-row
     .gh-text-input{ class: ('gh-text-input--invalid' if error) }
       = f.text_field :nickname, maxlength: 24, autocomplete: 'off', autofocus: autofocus,
@@ -14,4 +14,4 @@
     %p#gh-nickname-error.gh-field-error{ role: 'alert' }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= error
-  %span.gh-field-hint Do 24 znaków. Zostaw puste, żeby pokazywać imię i nazwisko.
+  %span.gh-field-hint= t('.hint')

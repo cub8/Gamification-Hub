@@ -10,7 +10,7 @@ class ActivityGroup < ApplicationRecord
 
   accepts_nested_attributes_for :activity_group_categories, allow_destroy: true
 
-  validates :name, presence: { message: 'Podaj nazwę arkusza.' }, length: { maximum: 100 }
+  validates :name, presence: true, length: { maximum: 100 }
   validate :at_least_one_visible_category, on: :settings
 
   scope :newest_first, -> { order(created_at: :desc, id: :desc) }
@@ -51,6 +51,6 @@ class ActivityGroup < ApplicationRecord
   def at_least_one_visible_category
     return if activity_group_categories.any? { |category| !category.marked_for_destruction? && !category.hidden? }
 
-    errors.add(:base, 'Dodaj co najmniej jedną widoczną kategorię.')
+    errors.add(:base, :no_visible_category)
   end
 end

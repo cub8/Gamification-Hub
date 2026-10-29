@@ -9,9 +9,9 @@
     .gh-dialog-button-row
       - if result[:ok]
         %button.gh-btn.gh-btn--secondary{ type: 'button', data: cancel_data }
-          Anuluj
+          = t('shared.actions.cancel')
         %button.gh-btn{ type: 'button', data: { action: 'dialog#close' } }
-          Zatwierdź
+          = t('shared.actions.confirm')
       - else
         %button.gh-btn{ type: 'button', data: cancel_data }
-          OK
+          = t('shared.actions.ok')

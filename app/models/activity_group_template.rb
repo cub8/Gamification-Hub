@@ -9,7 +9,7 @@ class ActivityGroupTemplate < ApplicationRecord
 
   accepts_nested_attributes_for :categories, allow_destroy: true
 
-  validates :base_name, presence: { message: 'Podaj nazwę szablonu.' }, length: { maximum: 100 }
+  validates :base_name, presence: true, length: { maximum: 100 }
   validate :at_least_one_category, on: :settings
 
   scope :newest_first, -> { order(created_at: :desc, id: :desc) }
@@ -21,6 +21,6 @@ class ActivityGroupTemplate < ApplicationRecord
   def at_least_one_category
     return if categories.any? { |category| !category.marked_for_destruction? }
 
-    errors.add(:base, 'Dodaj co najmniej jedną widoczną kategorię.')
+    errors.add(:base, :no_category)
   end
 end

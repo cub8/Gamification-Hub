@@ -1,0 +1,84 @@
+en:
+  activity_groups:
+    flash:
+      created_one: "Created: %{name}."
+      created_many: "Created: %{first} – %{last}."
+      updated: "Saved the settings of the sheet %{name}."
+      destroyed: "Deleted the sheet %{name}. Awarded rewards stay in the students' history."
+
+    index:
+      title: "Grade sheets"
+      lead: "Sheets grouped by template. The newest are at the top."
+      new_template: "New template"
+      empty_title: "You don't have any templates yet"
+      empty_body: "A template is a set of categories you reward students for. From one template you then create sheets — one per class."
+
+    template_panel:
+      meta:
+        one: "Template: %{count} category, up to %{max} %{currency} per student per sheet."
+        other: "Template: %{count} categories, up to %{max} %{currency} per student per sheet."
+      edit: "Edit template"
+      create_sheet: "Create a sheet"
+      no_sheets: "No sheets have been created from this template yet."
+
+    sheet_row:
+      modified: "Columns changed"
+      awarded:
+        one: "Awarded %{count} reward"
+        other: "Awarded %{count} rewards"
+      nothing: "Nothing awarded yet"
+      grade: "Grade"
+      settings: "Sheet settings"
+      settings_label: "Settings: %{name}"
+
+    new:
+      page_title: "New sheet from the template %{name}"
+
+    new_form:
+      title: "New sheet from the template %{name}"
+      columns:
+        one: "Each sheet gets %{count} category from the template."
+        other: "Each sheet gets %{count} categories from the template."
+      columns_note: "You'll change the columns later in the sheet settings."
+      how_many: "How many sheets"
+      one: "One sheet"
+      many: "Several at once"
+      name_hint: "You can add a date, e.g. %{example} (14.10)."
+      count: "How many sheets to create"
+      names: "Names"
+      # sheet_create_controller.ts
+      js:
+        create_one: "Create sheet"
+        create_many:
+          one: "Create %{count} sheet"
+          other: "Create %{count} sheets"
+
+    edit:
+      page_title: "Sheet settings %{name}"
+
+    confirm_destroy:
+      page_title: "Delete sheet %{name}"
+      title: "Delete the sheet “%{name}”?"
+      body: "The sheet will disappear from the list, and awarded rewards stay with the students and in their history."
+      awarded:
+        one: "%{count} reward was awarded from it."
+        other: "%{count} rewards were awarded from it."
+      nothing_undone: "Deleting the sheet doesn't undo anything."
+      remove: "Delete sheet"
+
+  activerecord:
+    errors:
+      models:
+        activity_group:
+          attributes:
+            name:
+              blank: "Enter the sheet name."
+            base:
+              no_visible_category: "Add at least one visible category."
+        # RewardCategory — a column of a sheet.
+        activity_group_category:
+          attributes:
+            didactic_description:
+              blank: "Say what the reward is for."
+            reward:
+              too_low: "The reward must be at least 1."

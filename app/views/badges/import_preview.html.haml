@@ -1,7 +1,6 @@
 = turbo_frame_tag 'modal' do
-  %h2.gh-h2 Podgląd importu odznak
-  - badges_count = @preset.badges.size
-  %p.gh-field-hint= "Zostanie dodanych: #{badges_count} #{gh_plural(badges_count, 'odznaka', 'odznaki', 'odznak')}."
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.badges.size)
 
   = render 'shared/badges_preview_rows', badges: @preset.badges
 
@@ -16,6 +15,6 @@
 
     .gh-dialog-button-row
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        Anuluj
+        = t('shared.actions.cancel')
       %button.gh-btn{ type: 'submit' }
-        Zatwierdź import
+        = t('shared.actions.confirm_import')

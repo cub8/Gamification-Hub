@@ -1,7 +1,7 @@
-- content_for :title, 'Importuj szablony'
-- import_hint = 'Kolumny: nr_szablonu, szablon, pozycja, opis_dydaktyczny, opis_fabularny, nagroda.'
+- content_for :title, t('.title')
+- columns = tag.code('nr_szablonu, szablon, pozycja, opis_dydaktyczny, opis_fabularny, nagroda')
 
-= render 'shared/csv_import_dialog', title: 'Importuj szablony kategorii zajęć z CSV',
+= render 'shared/csv_import_dialog', title: t('.dialog_title'),
                                      url:   import_story_group_activity_group_templates_path(@story_group),
-                                     hint:  import_hint,
+                                     hint:  t('.hint_html', columns: columns),
                                      error: @upload_error

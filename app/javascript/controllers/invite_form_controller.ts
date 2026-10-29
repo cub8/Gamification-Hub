@@ -1,18 +1,24 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { interpolate, pluralize, pluralTemplate, type PluralForms } from "@utils/i18n"
+
+// StoryGroupInvitesHelper#invite_form_wording — story_group_invites.summary.*
+// plus the locale's short month names, so the date reads like gh_stamp's.
+interface Wording {
+  sentence: string
+  limit: PluralForms
+  no_limit: string
+  expiry: string
+  no_expiry: string
+  unit: PluralForms
+  stamp: string
+  month_names: (string | null)[]
+}
 
 class InviteFormController extends Controller {
   static targets = ["limitSwitch", "expirySwitch", "maxUses", "unit", "date", "time", "summary"]
 
-  static values = {
-    summaryPrefix: String,
-    limitPrefix: String,
-    noLimit: String,
-    expiryPrefix: String,
-    noExpiry: String,
-    peopleForms: Array,
-    unitForms: Array,
-  }
+  static values = { i18n: Object }
 
   declare readonly limitSwitchTarget: HTMLInputElement
   declare readonly expirySwitchTarget: HTMLInputElement
@@ -22,20 +28,14 @@ class InviteFormController extends Controller {
   declare readonly timeTarget: HTMLInputElement
   declare readonly summaryTarget: HTMLElement
 
-  declare readonly summaryPrefixValue: string
-  declare readonly limitPrefixValue: string
-  declare readonly noLimitValue: string
-  declare readonly expiryPrefixValue: string
-  declare readonly noExpiryValue: string
-  declare readonly peopleFormsValue: string[]
-  declare readonly unitFormsValue: string[]
+  declare readonly i18nValue: Wording
 
   connect() {
     this.refresh()
   }
 
   refresh() {
-    this.unitTarget.textContent = this.plural(this.unitFormsValue, this.maxUses)
+    this.unitTarget.textContent = pluralTemplate(this.i18nValue.unit, this.maxUses)
     this.summaryTarget.textContent = this.summary()
   }
 
@@ -55,21 +55,19 @@ class InviteFormController extends Controller {
   }
 
   private summary(): string {
-    return `${this.summaryPrefixValue} ${this.limitPhrase()} ${this.expiryPhrase()}.`
+    return interpolate(this.i18nValue.sentence, { limit: this.limitPhrase(), expiry: this.expiryPhrase() })
   }
 
   private limitPhrase(): string {
-    if (!this.limitSwitchTarget.checked) return this.noLimitValue
+    if (!this.limitSwitchTarget.checked) return this.i18nValue.no_limit
 
-    const count = this.maxUses
-
-    return `${this.limitPrefixValue} ${count} ${this.plural(this.peopleFormsValue, count)}`
+    return pluralize(this.i18nValue.limit, this.maxUses)
   }
 
   private expiryPhrase(): string {
-    if (!this.expirySwitchTarget.checked) return this.noExpiryValue
+    if (!this.expirySwitchTarget.checked) return this.i18nValue.no_expiry
 
-    return `${this.expiryPrefixValue} ${this.stamp()}`
+    return interpolate(this.i18nValue.expiry, { date: this.stamp() })
   }
 
   private stamp(): string {
@@ -77,23 +75,17 @@ class InviteFormController extends Controller {
 
     if (!year || !month || !day) return ""
 
-    return `${day}.${month}, ${this.timeTarget.value}`
+    return interpolate(this.i18nValue.stamp, {
+      day,
+      month,
+      dayNumber: Number(day),
+      monthName: this.i18nValue.month_names[Number(month)] ?? month,
+      time: this.timeTarget.value,
+    })
   }
 
   private get maxUses(): number {
     return Number.parseInt(this.maxUsesTarget.value, 10) || 0
-  }
-
-  private plural(forms: string[], count: number): string {
-    const [one, few, many] = forms
-    const n = Math.abs(count)
-    const lastTwo = n % 100
-    const lastOne = n % 10
-
-    if (n === 1) return one
-    if (lastOne >= 2 && lastOne <= 4 && (lastTwo < 12 || lastTwo > 14)) return few
-
-    return many
   }
 }
 

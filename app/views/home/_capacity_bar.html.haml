@@ -1,0 +1,12 @@
+- if max.nil?
+  %span.gh-small= t('home.capacity_bar.unlimited', count: members)
+- else
+  .gh-capacity-bar
+    .gh-progress-bar.gh-octagon-clip{ class: ('gh-progress-bar--full' if full),
+                       role:            'progressbar',
+                       'aria-valuemin': 0,
+                       'aria-valuemax': max,
+                       'aria-valuenow': members,
+                       'aria-label':    t('home.capacity_bar.label'), }
+      %i.gh-octagon-clip{ style: "--gh-p: #{percent}%" }
+    %span.gh-small= "#{members} / #{max}"

@@ -1,4 +1,4 @@
-- content_for :title, "Usuń odznakę #{@badge.name}"
+- content_for :title, t('.page_title', name: @badge.name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

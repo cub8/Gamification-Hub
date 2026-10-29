@@ -16,7 +16,9 @@ class StoryGroupExportsController < ApplicationController
 
   def download
     resource = params[:resource].to_s
-    raise ActionController::BadRequest, 'Nieznany typ eksportu.' unless Csv::StoryGroupExport.supports?(resource)
+    unless Csv::StoryGroupExport.supports?(resource)
+      raise ActionController::BadRequest, t('story_group_exports.flash.unknown_resource')
+    end
 
     csv = Csv::StoryGroupExport.new(story_group: @story_group).csv_for(resource)
 

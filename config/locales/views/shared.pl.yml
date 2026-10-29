@@ -1,0 +1,145 @@
+pl:
+  shared:
+    # Generic buttons and labels used across screens.
+    actions:
+      add: "Dodaj"
+      back_to_editing: "Wróć do edycji"
+      cancel: "Anuluj"
+      close: "Zamknij"
+      confirm: "Zatwierdź"
+      confirm_import: "Zatwierdź import"
+      edit: "Edytuj"
+      fewer: "Mniej"
+      import: "Importuj"
+      import_csv: "Importuj z CSV"
+      more: "Więcej"
+      name: "Nazwa"
+      next: "Dalej"
+      ok: "OK"
+      optional: "(opcjonalnie)"
+      preview: "Podgląd"
+      removal: "Usuwanie"
+      remove: "Usuń"
+      save: "Zapisz"
+      save_changes: "Zapisz zmiany"
+    # shared/_sheet_form — template (new, edit) and sheet settings.
+    sheet_form:
+      template_new_title: "Nowy szablon arkusza"
+      template_edit_title: "Edytuj szablon arkusza"
+      sheet_title: "Ustawienia arkusza"
+      breadcrumb: "Arkusze ocen"
+      new_template: "Nowy szablon"
+      sheet_lead: "Zmiany dotyczą tylko tego arkusza."
+      template_lead: "Podgląd obok pokazuje nagłówek tabeli ocen."
+      template_changes: "Zmiany dotyczą tylko arkuszy utworzonych od teraz."
+      sheets_range_unchanged: "%{first} – %{last} zostają bez zmian."
+      sheet_unchanged: "%{name} zostaje bez zmian."
+      awarded:
+        one: "W tym arkuszu przyznano już %{count} nagrodę."
+        few: "W tym arkuszu przyznano już %{count} nagrody."
+        many: "W tym arkuszu przyznano już %{count} nagród."
+        other: "W tym arkuszu przyznano już %{count} nagrody."
+      awarded_note: "Zmiany kolumn dotyczą tylko przyszłych nagród. Szablon %{name} się nie zmienia."
+      sheet_name: "Nazwa arkusza"
+      template_name: "Nazwa szablonu"
+      sheet_name_placeholder: "np. Laboratoria 5 (14.10)"
+      template_name_placeholder: "np. Laboratoria"
+      name_example: "Laboratoria"
+      template_name_hint: "Nowe arkusze dostaną nazwę szablonu z kolejnym numerem, np. %{example} 6."
+      sheet_columns: "Kolumny w tabeli ocen"
+      template_categories: "Kategorie nagród"
+      columns_hint: "Każda kategoria to kolumna w tabeli ocen. Kolejność tutaj to kolejność kolumn."
+      add_column: "Dodaj kolumnę"
+      add_category: "Dodaj kategorię"
+      summary: "%{count} w tabeli ocen. Student może zdobyć do %{max} %{currency} za arkusz."
+      sheet_removal_hint: "Arkusz zniknie z listy, a przyznane nagrody zostają u studentów i w ich historii."
+      template_removal_hint: "Szablon zniknie z listy, a utworzone z niego arkusze zostają."
+      remove_sheet: "Usuń arkusz"
+      remove_template: "Usuń szablon"
+      no_changes: "Brak zmian"
+      create: "Utwórz szablon"
+      discard_title: "Odrzucić zmiany?"
+      discard_body: "Niezapisane zmiany zostaną utracone."
+      discard: "Odrzuć zmiany"
+      sample_names: ["Adam Pawłowski", "Barbara Kowalewska"]
+      # sheet_form_controller.ts
+      js:
+        columns:
+          one: "%{count} kolumna"
+          few: "%{count} kolumny"
+          many: "%{count} kolumn"
+          other: "%{count} kolumny"
+        dirty: "Niezapisane zmiany"
+        clean: "Brak zmian"
+        name_label: "Kategoria %{number}: za co"
+        reward_label: "Nagroda za kategorię %{number}"
+        story_label: "Opis fabularny kategorii %{number}"
+        destroy_column: "Usuń kolumnę %{number}"
+        destroy_category: "Usuń kategorię %{number}"
+
+    category_row:
+      drag: "Przeciągnij, aby zmienić kolejność"
+      name_placeholder: "Za co, np. Pomoc innym"
+      add_story: "Dodaj opis fabularny"
+      story_placeholder: "Opis fabularny, np. Holowanie uszkodzonego statku"
+      sheet_only: "Tylko w tym arkuszu"
+      hidden_column: "Ukryta w tabeli ocen"
+      awarded:
+        one: "Przyznano %{count} nagrodę."
+        few: "Przyznano %{count} nagrody."
+        many: "Przyznano %{count} nagród."
+        other: "Przyznano %{count} nagrody."
+      locked_note: "Kolumny nie można usunąć, można ją ukryć."
+      reward_note: "Nowa wartość obejmie tylko przyszłe nagrody."
+      move_up: "Przesuń wyżej"
+      move_down: "Przesuń niżej"
+      show: "Pokaż w tabeli ocen"
+      hide: "Ukryj w tabeli ocen"
+
+    grid_preview:
+      summary: "Podgląd tabeli ocen"
+      header: "Nagłówek tabeli ocen"
+      student: "Student"
+      hint: "Najedź na nagłówek w prawdziwej tabeli, żeby zobaczyć opis fabularny."
+
+    # shared/_image_field — the defaults, overridden per form.
+    image_field:
+      label: "Grafika"
+      presets: "Gotowe grafiki"
+      own: "Twoja grafika"
+      upload: "Albo wgraj własną grafikę"
+      hint: "JPG lub PNG, najlepiej co najmniej 400 px."
+      crop: "Przytnij grafikę"
+      cropped: "Przesuń i przeskaluj zaznaczenie — podgląd obok zmienia się na bieżąco. Zapisujemy kadr w kształcie karty, więc wypełni ją w całości. Na listach zobaczysz go w kwadratowej miniaturze, też w całości."
+      preset_label: "%{label}: %{name}"
+      choose_file: "Wybierz plik"
+
+    register_prompt:
+      no_account: "Nie masz konta?"
+      register: "Zarejestruj się"
+
+    csv_import:
+      select_file: "Wybierz plik CSV."
+      empty_file: "Plik nie zawierał żadnych danych."
+      malformed_file: "Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV."
+      malformed_files: "Nie udało się odczytać jednego z wgranych plików - sprawdź, czy to poprawne pliki CSV."
+      invalid_data: "Plik zawiera nieprawidłowe dane: %{errors}"
+      imported: "Zaimportowano dane z pliku CSV."
+
+    csv_dropzone_field:
+      default_label: "Wybierz plik CSV"
+      choose_file: "Wybierz plik"
+      remove: "Usuń wybrany plik"
+
+    ranks_preview_rows:
+      meta: "Próg: %{threshold}, zniżka: %{discount}%."
+
+    badges_preview_rows:
+      meta: "%{description} Zniżka: %{discount}%."
+
+    items_preview_rows:
+      requirement: "Wymaga: %{requirement}"
+      also_at_zero_lives: "(także przy 0 życiach)"
+
+    templates_preview_rows:
+      no_categories: "Bez kategorii."

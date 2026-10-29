@@ -46,7 +46,7 @@ module Csv
     end
 
     def no_account(row)
-      Failure.new(row: row.index + 2, message: "Nie znaleziono konta dla „#{row.email}”.")
+      Failure.new(row: row.index + 2, message: I18n.t('students.csv_import.no_account', email: row.email))
     end
   end
 end

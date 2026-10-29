@@ -1,5 +1,17 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { interpolate, pluralize, type PluralForms } from "@utils/i18n"
+
+interface Wording {
+  columns: PluralForms
+  dirty: string
+  clean: string
+  name_label: string
+  reward_label: string
+  story_label: string
+  destroy_column: string
+  destroy_category: string
+}
 
 class SheetFormController extends Controller<HTMLElement> {
   static targets = [
@@ -10,9 +22,8 @@ class SheetFormController extends Controller<HTMLElement> {
   ]
 
   static values = {
-    columns: Array,
-    currency: String,
-    categoryLabel: String,
+    i18n: Object,
+    sheet: Boolean,
     editing: String,
   }
 
@@ -30,9 +41,8 @@ class SheetFormController extends Controller<HTMLElement> {
   declare readonly previewRowTargets: HTMLElement[]
   declare readonly previewHeadCellTarget: HTMLTemplateElement
   declare readonly previewBodyCellTarget: HTMLTemplateElement
-  declare readonly columnsValue: string[]
-  declare readonly currencyValue: string
-  declare readonly categoryLabelValue: string
+  declare readonly i18nValue: Wording
+  declare readonly sheetValue: boolean
   declare readonly editingValue: string
 
   private destination = ""
@@ -167,7 +177,7 @@ class SheetFormController extends Controller<HTMLElement> {
     const count = columns.length
     const max = columns.reduce((total, row) => total + this.reward(row), 0)
 
-    this.summaryCountTarget.textContent = `${count} ${plural(count, this.columnsValue)}`
+    this.summaryCountTarget.textContent = pluralize(this.i18nValue.columns, count)
     this.summaryMaxTarget.textContent = String(max)
   }
 
@@ -176,7 +186,7 @@ class SheetFormController extends Controller<HTMLElement> {
 
     const dirty = this.dirty
 
-    this.dirtyTarget.textContent = dirty ? "Niezapisane zmiany" : "Brak zmian"
+    this.dirtyTarget.textContent = dirty ? this.i18nValue.dirty : this.i18nValue.clean
     this.submitTarget.disabled = !dirty
   }
 
@@ -189,12 +199,14 @@ class SheetFormController extends Controller<HTMLElement> {
       const position = row.querySelector<HTMLInputElement>("[data-sheet-form-target='position']")
       if (position) position.value = String(number - 1)
 
-      this.relabel(row, "name", `Kategoria ${number}: za co`)
-      this.relabel(row, "reward", `Nagroda za kategorię ${number}`)
-      this.relabel(row, "destroy", `Usuń ${this.categoryLabelValue} ${number}`)
+      const t = this.i18nValue
+
+      this.relabel(row, "name", interpolate(t.name_label, { number }))
+      this.relabel(row, "reward", interpolate(t.reward_label, { number }))
+      this.relabel(row, "destroy", interpolate(this.sheetValue ? t.destroy_column : t.destroy_category, { number }))
 
       const story = row.querySelector<HTMLElement>("textarea")
-      story?.setAttribute("aria-label", `Opis fabularny kategorii ${number}`)
+      story?.setAttribute("aria-label", interpolate(t.story_label, { number }))
     })
 
     const rows = this.liveRows
@@ -267,17 +279,6 @@ class SheetFormController extends Controller<HTMLElement> {
 
     return Number.isFinite(parsed) && parsed > 0 ? parsed : 0
   }
-}
-
-function plural(count: number, forms: string[]): string {
-  const [one, few, many] = forms
-  const last = count % 10
-  const teens = count % 100
-
-  if (count === 1) return one
-  if (last >= 2 && last <= 4 && (teens < 12 || teens > 14)) return few
-
-  return many
 }
 
 application.register("sheet-form", SheetFormController)

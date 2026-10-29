@@ -1,0 +1,33 @@
+en:
+  students_badges:
+    flash:
+      awarded: "Awarded the “%{name}” badge."
+      revoked: "Revoked the “%{name}” badge."
+
+    helpers:
+      assign_lead:
+        one: "%{name} has %{held} of %{count} badge."
+        other: "%{name} has %{held} of %{count} badges."
+      owned: "Already has it"
+      effect_html: "Once awarded: %{discount} on items that count this badge%{discounting}.%{unlocks} They will see it in their deck."
+      effect_discounting: " (%{items})"
+      effect_unlocks_html: " Unlocks buying: %{items}."
+      revoke_html: "%{name} will lose the %{discount} discount%{unlocking}. Items bought earlier stay."
+      revoke_unlocking: " and the option to buy: %{items}"
+
+    new:
+      page_title: "Award a badge - %{name}"
+
+    form:
+      pick: "Award"
+      blank: "Choose a badge"
+      title: "Award a badge"
+      search: "Search for a badge"
+      no_match: "No badges with that name."
+      empty: "This group has no badges yet. Add them in the Badges tab, then come back here."
+      submit: "Choose a badge"
+
+    confirm_destroy:
+      page_title: "Revoke badge %{name}"
+      title: "Revoke the “%{name}” badge?"
+      revoke: "Revoke badge"

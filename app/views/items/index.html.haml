@@ -1,20 +1,18 @@
-- content_for :title, 'Przedmioty'
+- content_for :title, t('.title')
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Przedmioty
-    %p.gh-lead
-      = "#{@shelf.size} #{gh_plural(@shelf.size, 'przedmiot', 'przedmioty', 'przedmiotów')} w sklepie,"
-      od najtańszego.
+    %h1.gh-h1= t('.title')
+    %p.gh-lead= t('.lead', count: @shelf.size)
 
   .gh-button-row
     = link_to new_story_group_item_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
-      Nowy przedmiot
+      = t('.new')
     - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
     = link_to new_import_story_group_items_path(@story_group), import_link_options do
       %i.fa-solid.fa-file-import
-      Importuj z CSV
+      = t('shared.actions.import_csv')
 
 - if @shelf.any?
   .gh-badge-grid--teacher
@@ -22,7 +20,5 @@
       = render 'grid_card', item: slot.item, card: @shelf.card_for(slot.item), bought: slot.bought
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Sklep jest jeszcze pusty
-    %p.gh-lead
-      Dodaj przedmioty, żeby zebrana waluta miała na co iść. Każdy może mieć
-      wymagania i zniżki, więc sklep otwiera się stopniowo wraz z postępami.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')

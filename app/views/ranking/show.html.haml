@@ -1,4 +1,4 @@
-- content_for :title, "Ranking - #{@story_group.name}"
+- content_for :title, t('.page_title', group: @story_group.name)
 
 - if @board.teacher?
   = render 'teacher_board', board: @board

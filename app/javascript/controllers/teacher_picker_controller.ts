@@ -1,15 +1,19 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { interpolate, pluralize, type PluralForms } from "@utils/i18n"
+
+interface Wording {
+  results: PluralForms
+  overflow: string
+  query: string
+}
 
 class TeacherPickerController extends Controller<HTMLFormElement> {
   static targets = ["input", "row", "name", "count", "hint", "results", "overflow", "empty", "emptyQuery"]
   static values = {
     min: { type: Number, default: 2 },
     max: { type: Number, default: 8 },
-    one: String,
-    few: String,
-    many: String,
-    overflow: String,
+    i18n: Object,
   }
 
   declare readonly inputTarget: HTMLInputElement
@@ -22,10 +26,7 @@ class TeacherPickerController extends Controller<HTMLFormElement> {
   declare readonly emptyQueryTarget: HTMLElement
   declare readonly minValue: number
   declare readonly maxValue: number
-  declare readonly oneValue: string
-  declare readonly fewValue: string
-  declare readonly manyValue: string
-  declare readonly overflowValue: string
+  declare readonly i18nValue: Wording
 
   noSubmit(event: KeyboardEvent) {
     event.preventDefault()
@@ -46,7 +47,7 @@ class TeacherPickerController extends Controller<HTMLFormElement> {
 
     if (hits.length === 0) {
       this.rowTargets.forEach((row) => this.plain(row))
-      this.emptyQueryTarget.textContent = `„${typed}”.`
+      this.emptyQueryTarget.textContent = interpolate(this.i18nValue.query, { query: typed })
       this.show({ empty: true })
 
       return
@@ -62,7 +63,9 @@ class TeacherPickerController extends Controller<HTMLFormElement> {
 
     const over = hits.length > this.maxValue
 
-    this.countTarget.textContent = `${hits.length} ${this.plural(hits.length)}${over ? this.overflowValue : ""}`
+    const overflow = over ? interpolate(this.i18nValue.overflow, { max: this.maxValue }) : ""
+
+    this.countTarget.textContent = `${pluralize(this.i18nValue.results, hits.length)}${overflow}`
     this.show({ count: true, results: true, overflow: over })
   }
 
@@ -101,17 +104,6 @@ class TeacherPickerController extends Controller<HTMLFormElement> {
     this.countTarget.hidden = !state.count
     this.resultsTarget.hidden = !state.results
     this.overflowTarget.hidden = !state.overflow
-  }
-
-  private plural(count: number): string {
-    const n = Math.abs(count)
-
-    if (n === 1) return this.oneValue
-
-    const lastOne = n % 10
-    const lastTwo = n % 100
-
-    return lastOne >= 2 && lastOne <= 4 && (lastTwo < 12 || lastTwo > 14) ? this.fewValue : this.manyValue
   }
 }
 

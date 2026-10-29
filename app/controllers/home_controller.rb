@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
-  # The landing screen after login. Two different screens behind one route,
-  # mirroring StoryGroupsController#show: the view dispatches on the role, the
-  # controller loads the matching dashboard.
+  helper OrganizationsHelper
+
   def index
-    @dashboard =
-      if current_user.teacher?
-        TeacherStartDashboard.new(user: current_user, filter: params[:group]).load
-      else
-        StudentStartDashboard.new(user: current_user).load
-      end
+    @dashboard = Dashboard.for(current_user, params: params)
   end
 end

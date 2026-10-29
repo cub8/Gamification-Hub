@@ -1,0 +1,8 @@
+- other_locale = (I18n.available_locales - [I18n.locale]).first
+- menu = local_assigns.fetch(:menu, false)
+
+= button_to locale_path, method: :patch, params: { locale: other_locale },
+  class: (menu ? nil : 'gh-link-button'), lang: other_locale, 'aria-label': t('.label') do
+  - if menu
+    %i.fa-solid.fa-language{ 'aria-hidden': 'true' }
+  %span= t('.switch_to')

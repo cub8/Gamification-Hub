@@ -1,12 +1,12 @@
 %header.gh-topbar
-  = link_to home_path, class: 'gh-topbar-logo', 'aria-label': 'Gamification Hub, start' do
+  = link_to home_path, class: 'gh-topbar-logo', 'aria-label': t('layouts.header.home') do
     = image_tag 'logo.png', alt: ''
     %span.gh-topbar-logo-word Gamification Hub
 
   - if group_chrome
     %button.gh-group-switcher{ type: 'button',
                     data: { action: 'menu#open', menu_id_param: 'gh-group-switcher' },
-                    'aria-label': "Grupa #{group_chrome.name}, zmień grupę" }
+                    'aria-label': t('layouts.header.switch_group', name: group_chrome.name) }
       = render 'layouts/group_thumb', story_group: group_chrome.story_group, size: nil
       %span.gh-group-switcher-name= group_chrome.name
       %i.fa-solid.fa-chevron-down{ 'aria-hidden': 'true' }
@@ -17,21 +17,21 @@
     - purse = group_chrome.student_membership
     = link_to story_group_student_currency_transactions_path(group_chrome.story_group, purse),
       class: 'gh-balance-button',
-      title: "#{purse.current_currency} do wydania, #{purse.total_currency} zebrane łącznie",
-      'aria-label': "Masz #{purse.current_currency} do wydania, pokaż historię waluty" do
+      title: t('layouts.header.balance_title', balance: purse.current_currency, total: purse.total_currency),
+      'aria-label': t('layouts.header.balance_label', balance: purse.current_currency) do
       = render 'layouts/currency_token', story_group: group_chrome.story_group, size: 32
       %span
         %b= purse.current_currency
-        %small do wydania
+        %small= t('layouts.header.to_spend')
 
   = link_to new_join_path, class: 'gh-btn gh-btn--secondary gh-btn--small gh-topbar-join-link',
     data: { turbo_frame: 'modal' } do
     %i.fa-solid.fa-plus
-    %span Dołącz do grupy
+    %span= t('layouts.header.join')
 
   %button.gh-icon-button.gh-topbar-theme-toggle{ type: 'button',
                                   data: { action: 'theme#toggle' },
-                                  'aria-label': 'Przełącz motyw' }
+                                  'aria-label': t('layouts.theme.toggle') }
     %i.fa-solid.fa-moon.gh-theme-icon-moon
     %i.fa-solid.fa-sun.gh-theme-icon-sun
 
@@ -44,6 +44,6 @@
 
   %button.gh-avatar-button{ type: 'button',
                     data: { action: 'menu#open', menu_id_param: 'gh-account-menu' },
-                    'aria-label': "Konto: #{user.full_name}" }
+                    'aria-label': t('layouts.header.account', name: user.full_name) }
     %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': helpers.gh_avatar_hue(user.full_name), 'aria-hidden': 'true' }
       = helpers.gh_initials(user.full_name)

@@ -4,4 +4,4 @@
       %i.fa-solid.fa-angles-up{ 'aria-hidden': 'true' }
       %span.gh-preset-row-name
         %b= rank.name
-        %small= "Próg: #{rank.threshold}, zniżka: #{rank.discount}%."
+        %small= t('.meta', threshold: rank.threshold, discount: rank.discount)

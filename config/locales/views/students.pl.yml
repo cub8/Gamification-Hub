@@ -1,0 +1,149 @@
+pl:
+  students:
+    flash:
+      lives_notice:
+        one: "%{name} ma teraz %{count} życie."
+        few: "%{name} ma teraz %{count} życia."
+        many: "%{name} ma teraz %{count} żyć."
+        other: "%{name} ma teraz %{count} życia."
+      cannot_take_life: "Nie można odebrać życia — student ma już 0."
+      removed: "%{name} nie należy już do grupy."
+
+    helpers:
+      list_lead: "Życie odbierasz za nieusprawiedliwioną nieobecność."
+      zero_lives:
+        one: "%{count} student ma 0 żyć"
+        few: "%{count} studentów ma 0 żyć"
+        many: "%{count} studentów ma 0 żyć"
+        other: "%{count} studentów ma 0 żyć"
+      zero_lives_tail: "i kupi tylko przedmioty dostępne przy 0 życiach."
+      nickname_quoted: "„%{nickname}”"
+      nickname: "Pseudonim: %{nickname}"
+      university_number: "indeks %{number}"
+      rank_progress: "%{total} z %{required} do rangi %{rank}"
+      losses:
+        badges:
+          one: "%{count} odznakę"
+          few: "%{count} odznaki"
+          many: "%{count} odznak"
+          other: "%{count} odznaki"
+        items:
+          one: "%{count} przedmiot"
+          few: "%{count} przedmioty"
+          many: "%{count} przedmiotów"
+          other: "%{count} przedmiotu"
+        ledger:
+          one: "całą historię waluty (%{count} wpis)"
+          few: "całą historię waluty (%{count} wpisy)"
+          many: "całą historię waluty (%{count} wpisów)"
+          other: "całą historię waluty (%{count} wpisu)"
+
+    index:
+      title: "Studenci"
+      invites: "Kody i zaproszenia"
+      show_code: "Pokaż kod dla studentów"
+      search: "Szukaj studenta"
+      of: "z"
+      count: "%{shown} z %{total}"
+      columns:
+        student: "Student"
+        rank: "Ranga"
+        lives: "Życia"
+        balance: "Do wydania"
+        total: "Zebrane"
+        badges: "Odznaki"
+        actions: "Akcje"
+      no_match: "Brak studentów o nazwie"
+      no_match_hint: "Wyczyść wyszukiwanie albo sprawdź pisownię."
+      empty_title: "Nie ma jeszcze nikogo w grupie"
+      empty_body: "Wyślij studentom kod albo zaproszenie — kiedy dołączą, pojawią się tutaj razem z rangą, walutą i życiami."
+
+    new_import:
+      title: "Importuj studentów"
+      dialog_title: "Importuj studentów z CSV"
+      hint: "Dopasowuje po emailu do kont, które już istnieją. Kolumny: email, pseudonim (opcjonalnie)."
+
+    import:
+      title: "Wyniki importu studentów"
+      added:
+        one: "Dodano %{count} studenta."
+        few: "Dodano %{count} studentów."
+        many: "Dodano %{count} studentów."
+        other: "Dodano %{count} studentów."
+      skipped:
+        one: "Pominięto %{count} wiersz."
+        few: "Pominięto %{count} wiersze."
+        many: "Pominięto %{count} wierszy."
+        other: "Pominięto %{count} wiersze."
+      row_failure: "Wiersz %{row}: %{message}"
+
+    csv_import:
+      no_account: "Nie znaleziono konta dla „%{email}”."
+
+    row:
+      rank: "Ranga"
+      lives: "Życia"
+      balance: "Do wydania"
+      total: "Zebrane"
+      badges: "Odznaki"
+      take_life: "Odbierz życie: %{name}"
+      add_life: "Dodaj życie: %{name}"
+      award_badge: "Przyznaj odznakę"
+      award_badge_for: "Przyznaj odznakę: %{name}"
+      adjust_currency: "Koryguj walutę"
+      adjust_currency_for: "Koryguj walutę: %{name}"
+      history: "Historia transakcji"
+      history_for: "Historia: %{name}"
+
+    show:
+      breadcrumb: "Studenci"
+      award_badge: "Przyznaj odznakę"
+      adjust_currency: "Koryguj walutę"
+      rank: "Ranga"
+      rank_progress_label: "Postęp do rangi %{rank}"
+      balance: "Do wydania"
+      total: "Zebrane łącznie"
+      lives: "Życia"
+      sections: "Sekcje studenta"
+      tabs:
+        badges: "Odznaki"
+        items: "Przedmioty"
+        hist: "Historia waluty"
+
+    edit:
+      page_title: "Edytuj studenta - %{name}"
+
+    form:
+      title: "Edytuj studenta"
+      account_note: "Imię, nazwisko i e-mail pochodzą z konta studenta."
+      lives: "Życia"
+      take_life: "Odbierz życie"
+      add_life: "Dodaj życie"
+      lives_hint: "Życie odbierasz za nieusprawiedliwioną nieobecność. Przy 0 życiach student kupi tylko przedmioty dostępne przy 0 życiach."
+      remove_label: "Usuń z grupy"
+      remove_hint: "Student straci dostęp do grupy, a jego odznaki, przedmioty i historia waluty przepadną. Dołączy ponownie tylko z nowym kodem."
+      remove: "Usuń z grupy"
+
+    confirm_destroy:
+      page_title: "Usuń z grupy - %{name}"
+      title: "Usunąć studenta z grupy?"
+      access_lost: "%{name} straci dostęp do grupy i zniknie z list, rankingu i arkuszy ocen."
+      losses: "Przepadną: %{list}."
+      irreversible: "Tego nie da się cofnąć."
+      nothing_to_lose: "Ten student nie ma jeszcze odznak, przedmiotów ani historii waluty."
+      rejoin_note: "Jeśli wróci do grupy, dostanie nowe konto uczestnika i zacznie od zera."
+      remove: "Usuń z grupy"
+
+    tab_badges:
+      removed: "Usunięta z listy"
+      awarded: "Przyznana %{when}"
+      revoke: "Odbierz"
+      revoke_label: "Odbierz odznakę %{name}"
+      empty: "Student nie ma jeszcze żadnej odznaki."
+
+    tab_history:
+      empty: "Brak wpisów tego typu."
+
+    tab_items:
+      intro: "Przedmioty kupione w sklepie. Wykorzystanie przedmiotu (np. poprawę wejściówki) rozliczasz na zajęciach."
+      empty: "Student nic jeszcze nie kupił. Przedmioty pojawią się tu razem z ceną, jaką zapłacił."

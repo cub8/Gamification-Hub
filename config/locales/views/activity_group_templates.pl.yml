@@ -1,0 +1,55 @@
+pl:
+  activity_group_templates:
+    flash:
+      created: "Utworzono szablon „%{name}”."
+      updated: "Zapisano szablon. Nowe arkusze dostaną te kategorie."
+      destroyed: "Usunięto szablon „%{name}”. Utworzone z niego arkusze zostają."
+    # The first category a new template starts with.
+    default_category: "Obecność"
+
+    new:
+      page_title: "Nowy szablon arkusza"
+
+    new_import:
+      title: "Importuj szablony"
+      dialog_title: "Importuj szablony kategorii zajęć z CSV"
+      hint_html: "Kolumny: %{columns}."
+
+    import_preview:
+      title: "Podgląd importu szablonów"
+      count:
+        one: "Zostanie dodanych: %{count} szablon."
+        few: "Zostanie dodanych: %{count} szablony."
+        many: "Zostanie dodanych: %{count} szablonów."
+        other: "Zostanie dodanych: %{count} szablonu."
+
+    edit:
+      page_title: "Edytuj szablon %{name}"
+
+    confirm_destroy:
+      page_title: "Usuń szablon %{name}"
+      title: "Usunąć szablon „%{name}”?"
+      body: "Szablon zniknie z listy, a utworzone z niego arkusze zostają."
+      sheets:
+        one: "%{count} arkusz zostaje bez zmian: %{names}"
+        few: "%{count} arkusze zostają bez zmian: %{names}"
+        many: "%{count} arkuszy zostaje bez zmian: %{names}"
+        other: "%{count} arkusza zostaje bez zmian: %{names}"
+      remove: "Usuń szablon"
+
+  activerecord:
+    errors:
+      models:
+        activity_group_template:
+          attributes:
+            base_name:
+              blank: "Podaj nazwę szablonu."
+            base:
+              no_category: "Dodaj co najmniej jedną widoczną kategorię."
+        # RewardCategory — a category of a template.
+        activity_group_template_category:
+          attributes:
+            didactic_description:
+              blank: "Podaj, za co jest nagroda."
+            reward:
+              too_low: "Nagroda musi wynosić co najmniej 1."

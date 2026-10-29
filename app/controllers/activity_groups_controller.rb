@@ -43,7 +43,7 @@ class ActivityGroupsController < ApplicationController
 
     if @activity_group.save(context: :settings)
       redirect_to story_group_activity_groups_path(@story_group),
-                  notice: "Zapisano ustawienia arkusza #{@activity_group.name}.", status: :see_other
+                  notice: t('activity_groups.flash.updated', name: @activity_group.name), status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -54,8 +54,7 @@ class ActivityGroupsController < ApplicationController
     @activity_group.soft_delete!
 
     redirect_outside_turbo_frame story_group_activity_groups_path(@story_group),
-                                 notice: "Usunięto arkusz #{name}. " \
-                                         'Przyznane nagrody zostają w historii studentów.'
+                                 notice: t('activity_groups.flash.destroyed', name: name)
   end
 
   private
@@ -87,9 +86,9 @@ class ActivityGroupsController < ApplicationController
   end
 
   def created_notice(sheets)
-    return "Utworzono: #{sheets.first.name}." if sheets.one?
+    return t('activity_groups.flash.created_one', name: sheets.first.name) if sheets.one?
 
-    "Utworzono: #{sheets.first.name} – #{sheets.last.name}."
+    t('activity_groups.flash.created_many', first: sheets.first.name, last: sheets.last.name)
   end
 
   def columns_changed?

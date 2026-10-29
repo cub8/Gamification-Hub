@@ -7,15 +7,15 @@ module CsvImportable
 
   def import
     file = params[:file]
-    return render_upload_error('Wybierz plik CSV.') unless file
+    return render_upload_error(t('shared.csv_import.select_file')) unless file
 
     @preset = Csv::GroupPresetParser.new({ import_resource_key => file }, story_group: @story_group).call
-    return render_upload_error('Plik nie zawierał żadnych danych.') if @preset.none?
+    return render_upload_error(t('shared.csv_import.empty_file')) if @preset.none?
 
     dry_run_build(@preset)
     render :import_preview
   rescue Csv::MalformedFile
-    render_upload_error(malformed_file_message)
+    render_upload_error(t('shared.csv_import.malformed_file'))
   rescue StarterPackBuilder::InvalidSelection => e
     render_upload_error(e.message)
   rescue ActiveRecord::RecordInvalid => e
@@ -26,7 +26,7 @@ module CsvImportable
     preset = Csv::PresetParams.new(params[:setup], story_group: @story_group).call
     StarterPackBuilder.new(story_group: @story_group, preset: preset).call
 
-    flash_options = { notice: 'Zaimportowano dane z pliku CSV.', alert: warning_message(preset.warnings) }
+    flash_options = { notice: t('shared.csv_import.imported'), alert: warning_message(preset.warnings) }
     redirect_outside_turbo_frame import_redirect_path, **flash_options
   rescue StarterPackBuilder::InvalidSelection => e
     redirect_with_import_alert(e.message)
@@ -56,11 +56,7 @@ module CsvImportable
     warnings.join(' ') if warnings.any?
   end
 
-  def malformed_file_message
-    'Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV.'
-  end
-
   def record_invalid_message(record)
-    "Plik zawiera nieprawidłowe dane: #{helpers.gh_and_list(record.errors.full_messages)}"
+    t('shared.csv_import.invalid_data', errors: helpers.gh_and_list(record.errors.full_messages))
   end
 end

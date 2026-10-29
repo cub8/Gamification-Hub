@@ -11,15 +11,12 @@ module Csv
 
     RESOURCES = EXPORTERS.keys.freeze
 
-    LABELS = {
-      'ranks'     => 'Rangi',
-      'badges'    => 'Odznaki',
-      'items'     => 'Przedmioty',
-      'templates' => 'Szablony kategorii zajęć',
-    }.freeze
-
     class << self
       def supports?(resource) = EXPORTERS.key?(resource.to_s)
+
+      def labels
+        RESOURCES.index_with { |resource| I18n.t("story_group_exports.resources.#{resource}") }
+      end
     end
 
     def initialize(story_group:)

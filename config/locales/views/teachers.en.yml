@@ -1,0 +1,64 @@
+en:
+  teachers:
+    flash:
+      added: "Added: %{name}."
+      removed: "Removed from the group: %{name}."
+
+    helpers:
+      lead: "Assistant teachers help run this group."
+      lead_manage: "Only the owner can delete the group."
+      lead_read_only: "Only the group owner can add and remove teachers."
+      pool_hint:
+        one: "Type at least 2 characters of a name or e-mail. There is %{count} teacher at your university."
+        other: "Type at least 2 characters of a name or e-mail. There are %{count} teachers at your university."
+      candidate: "%{email}, %{university}"
+
+    index:
+      title: "Teachers"
+      add: "Add a teacher"
+      teacher: "Teacher"
+      role: "Role"
+      added: "Added"
+
+    row:
+      owner: "Owner"
+      created_group: "Created the group"
+      assistant: "Assistant teacher"
+      added: "Added"
+      remove_label: "Remove from the group: %{name}"
+
+    new:
+      page_title: "Add a teacher"
+
+    form:
+      title: "Add a teacher"
+      hint: "The teacher gets access to the group as soon as they're added."
+      placeholder: "Name or e-mail"
+      search: "Search for a teacher"
+      in_group: "Already in the group"
+      add_label: "Add %{name}"
+      overflow_hint: "Can't see the person? Type more letters or the e-mail."
+      no_results: "No results for"
+      no_results_hint: "Check the spelling or type the e-mail."
+      nobody: "Nobody to add: there are no other teacher accounts at your university yet."
+      # teacher_picker_controller.ts
+      js:
+        results:
+          one: "%{count} result"
+          other: "%{count} results"
+        overflow: ", showing the first %{max}"
+        query: "“%{query}”."
+
+    confirm_destroy:
+      page_title: "Remove %{name} from the group?"
+      title: "Remove %{name} from the group?"
+      body: "They'll lose access to the group. Rewards they awarded stay with the students."
+      remove: "Remove from group"
+
+  activerecord:
+    errors:
+      models:
+        story_group_teacher:
+          attributes:
+            user_id:
+              taken: "This person is already in the group."

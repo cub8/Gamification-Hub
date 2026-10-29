@@ -1,8 +1,8 @@
-- content_for :title, 'Sklep'
+- content_for :title, t('.title')
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Sklep
+    %h1.gh-h1= t('.title')
     %p.gh-lead
       = shop_balance_sentence(@shop.balance)
       = shop_discount_sentence(@shop.discount_badges)
@@ -11,11 +11,11 @@
     = render 'layouts/currency_token', story_group: @story_group, size: 32
     %div
       %b= @shop.balance
-      %small do wydania
+      %small= t('.to_spend')
     %span.gh-wallet-divider{ 'aria-hidden': 'true' }
     %div
       %b= @shop.total
-      %small zebrane łącznie
+      %small= t('.collected')
 
 - if @shop.any?
   - @shop.zones.each do |zone|
@@ -28,7 +28,5 @@
           = render 'shop/card', offer: offer, state: zone.key
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Sklep jest jeszcze pusty
-    %p.gh-lead
-      Prowadzący nie dodał jeszcze przedmiotów. Zbieraj walutę — przyda się,
-      kiedy sklep się otworzy.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')

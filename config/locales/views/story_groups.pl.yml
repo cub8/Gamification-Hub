@@ -1,0 +1,472 @@
+pl:
+  story_groups:
+    flash:
+      updated: "Zapisano ustawienia grupy."
+      destroyed: "Usunięto grupę %{name}."
+      duplicate_threshold: "Dwie rangi nie mogą mieć tego samego progu: %{first} i %{second} mają %{value}."
+
+    # StoryGroup.ranking_mode_label / #ranking_summary
+    ranking_modes:
+      podium_and_own: "Podium i własne miejsce"
+      full: "Pełny ranking"
+    ranking_off: "Wyłączony"
+
+    # StoryGroupsListing
+    listing:
+      roles:
+        own: "Prowadzisz"
+        sup: "Wspierasz"
+        lrn: "Uczysz się"
+      tabs:
+        all: "Wszystkie"
+        mine: "Moje"
+        teacher: "Nauczam"
+        student: "Uczę się"
+      owner: "Właściciel: %{name}"
+      no_purchases: "Brak nowych zakupów"
+      purchases:
+        one: "%{count} nowy zakup"
+        few: "%{count} nowe zakupy"
+        many: "%{count} nowych zakupów"
+        other: "%{count} nowego zakupu"
+      balance: "Masz %{balance} %{currency}"
+
+    # TeacherOverview
+    overview:
+      stats:
+        students: "Studenci"
+        purchases: "Zakupy w tym tygodniu"
+        purchases_note: "za %{amount}"
+        rewards: "Nagrody w tym tygodniu"
+        ranking: "Ranking"
+      zero_lives_title: "%{name} ma 0 żyć"
+      zero_lives_detail: "Kupi tylko przedmioty dostępne przy 0 życiach."
+      open: "Otwórz"
+      sheet_in_progress: "%{name} w trakcie"
+      sheet_awarded:
+        one: "Przyznano %{count} nagrodę"
+        few: "Przyznano %{count} nagrody"
+        many: "Przyznano %{count} nagród"
+        other: "Przyznano %{count} nagrody"
+      sheet_pending:
+        one: "%{count} kolumna bez ocen."
+        few: "%{count} kolumny bez ocen."
+        many: "%{count} kolumn bez ocen."
+        other: "%{count} kolumny bez ocen."
+      grade: "Oceń"
+
+    helpers:
+      teacher_lead:
+        one: "%{count} student w tej grupie. Dodaj opis w ustawieniach, żeby powitać nowe osoby."
+        few: "%{count} studenci w tej grupie. Dodaj opis w ustawieniach, żeby powitać nowe osoby."
+        many: "%{count} studentów w tej grupie. Dodaj opis w ustawieniach, żeby powitać nowe osoby."
+        other: "%{count} studenta w tej grupie. Dodaj opis w ustawieniach, żeby powitać nowe osoby."
+      next_rank: "Jeszcze %{missing} do rangi %{rank}."
+      next_rank_discount: "Ta ranga daje −%{discount}% w sklepie."
+      ranking_off: "Ranking jest wyłączony — studenci nie widzą tego podium."
+      ranking_full: "Studenci widzą pełny ranking, pod pseudonimami."
+      ranking_podium: "Studenci widzą podium i własne miejsce, pod pseudonimami."
+      place: "%{place}. miejsce w rankingu grupy"
+      hand:
+        one: "Dobierz coś w sklepie. Stać cię teraz na %{count} przedmiot."
+        few: "Dobierz coś w sklepie. Stać cię teraz na %{count} przedmioty."
+        many: "Dobierz coś w sklepie. Stać cię teraz na %{count} przedmiotów."
+        other: "Dobierz coś w sklepie. Stać cię teraz na %{count} przedmiotu."
+
+    index:
+      title: "Grupy"
+      student_lead: "Grupy, w których się uczysz."
+      teacher_lead: "Grupy, które prowadzisz, wspierasz albo w których się uczysz."
+      join: "Dołącz do grupy"
+      create: "Utwórz grupę"
+      filter: "Filtr grup"
+      search: "Szukaj grupy"
+      no_match: "Brak grup o nazwie"
+      no_match_hint: "Wyczyść wyszukiwanie albo sprawdź pisownię."
+      empty_tab_title: "Brak grup w tej zakładce"
+      empty_student_title: "Nie należysz jeszcze do żadnej grupy"
+      empty_title: "Nie masz jeszcze żadnej grupy"
+      empty_tab_body: "Zmień zakładkę, żeby zobaczyć pozostałe grupy."
+      empty_body: "Masz kod od prowadzącego? Dołącz do grupy jako uczestnik."
+
+    group_card:
+      students:
+        one: "%{count} student"
+        few: "%{count} studentów"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+
+    teacher_show:
+      show_code: "Pokaż kod dla studentów"
+      create_sheet: "Utwórz arkusz"
+      settings: "Ustawienia grupy"
+      summary: "Podsumowanie grupy"
+      purchases: "Ostatnie zakupy"
+      removed_item: "Przedmiot usunięty z oferty"
+      all_purchases: "Wszystkie zakupy w grupie"
+      no_purchases: "Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same, gdy studenci zaczną wydawać walutę w sklepie."
+      attention: "Wymaga uwagi"
+      recent_sheets: "Ostatnie arkusze"
+      open: "Otwórz"
+      no_rewards: "Nikt nie ma jeszcze nagród z tego arkusza."
+      no_sheets_title: "Nie masz jeszcze arkuszy ocen"
+      no_sheets_body: "Arkusz to jedne zajęcia: kolumny z nagrodami i lista studentów. Utwórz pierwszy, żeby zacząć przyznawać walutę."
+
+    student_show:
+      led_by: "Prowadzi %{name}"
+      balance_label: "Twoje %{currency}"
+      to_spend: "Do wydania"
+      collected: "Zebrane łącznie"
+      lives: "Życia"
+      open_shop: "Otwórz sklep"
+      your_rank: "Twoja ranga"
+      no_rank: "Brak rangi"
+      progress: "%{total} z %{needed}"
+      progress_label: "Postęp do następnej rangi"
+      top_rank: "%{total} zebranych. To najwyższa ranga w tej grupie."
+      no_ranks: "Prowadzący nie dodał jeszcze rang. Waluta, którą zbierasz, liczy się mimo to — rangi przyznają się same, gdy się pojawią."
+      badges: "Odznaki"
+      badges_count: "%{earned} z %{total}"
+      items: "Twoje przedmioty"
+      go_to_shop: "Przejdź do sklepu"
+      recent: "Ostatnie zmiany"
+      entry_meta: "%{label}, %{when}"
+      full_history: "Pokaż całą historię"
+      no_entries: "Pierwsze wpisy pojawią się po zajęciach. Prowadzący przyznaje walutę za obecność, punktualność i aktywność."
+
+    new:
+      page_title: "Nowa grupa"
+
+    edit:
+      page_title: "Ustawienia grupy - %{name}"
+
+    created:
+      page_title: "Grupa %{name} jest gotowa"
+      title: "Grupa „%{name}” jest gotowa"
+      ranks:
+        one: "%{count} rangę"
+        few: "%{count} rangi"
+        many: "%{count} rang"
+        other: "%{count} rangi"
+      badges:
+        one: "%{count} odznakę"
+        few: "%{count} odznaki"
+        many: "%{count} odznak"
+        other: "%{count} odznaki"
+      items:
+        one: "%{count} przedmiot"
+        few: "%{count} przedmioty"
+        many: "%{count} przedmiotów"
+        other: "%{count} przedmiotu"
+      categories:
+        one: "%{count} kategorię w szablonie arkusza"
+        few: "%{count} kategorie w szablonie arkusza"
+        many: "%{count} kategorii w szablonie arkusza"
+        other: "%{count} kategorii w szablonie arkusza"
+      quick_lead: "Utworzono %{list}."
+      empty_lead: "Grupa jest pusta. Poniżej znajdziesz kolejne kroki."
+      invites_note_html: "Kod do dołączenia utworzysz w zakładce %{tab}, kiedy będziesz go potrzebować. Możesz mieć kilka kodów naraz, z limitem osób albo datą ważności."
+      invites_tab: "Zaproszenia"
+      next: "Co dalej"
+      quick_steps:
+        - "Zaproś studentów: pokaż im kod albo kod QR."
+        - "Po pierwszych zajęciach utwórz arkusz ocen i oceń studentów."
+        - "Zajrzyj do sklepu i dopasuj opisy przedmiotów do swojej opowieści."
+      empty_steps:
+        - "Dodaj rangi, żeby studenci widzieli, do czego dążą."
+        - "Dodaj przedmioty do sklepu."
+        - "Dodaj odznaki za szczególne osiągnięcia."
+        - "Utwórz szablon arkusza ocen."
+        - "Zaproś studentów: pokaż im kod albo kod QR."
+      go_to_group: "Przejdź do grupy"
+      create_invite: "Utwórz zaproszenie"
+
+    confirm_destroy:
+      page_title: "Usuń grupę %{name}"
+      title: "Usunąć grupę na zawsze?"
+      students:
+        one: "%{count} student"
+        few: "%{count} studenci"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+      teachers:
+        one: "%{count} nauczyciel"
+        few: "%{count} nauczycieli"
+        many: "%{count} nauczycieli"
+        other: "%{count} nauczyciela"
+      lose_access:
+        one: "%{students} i %{teachers} straci dostęp."
+        few: "%{students} i %{teachers} stracą dostęp."
+        many: "%{students} i %{teachers} straci dostęp."
+        other: "%{students} i %{teachers} straci dostęp."
+      gone: "Historia, przedmioty i ranking znikną."
+      confirm: "Wpisz nazwę grupy, żeby potwierdzić:"
+      mismatch: "Wpisana nazwa nie zgadza się z nazwą grupy. Grupa nie została usunięta."
+      remove: "Usuń grupę"
+
+    settings:
+      title: "Ustawienia grupy"
+      lead: "Zmienią je wszyscy prowadzący tę grupę. Tylko właściciel może usunąć grupę. Ranking ustawiasz w zakładce Ranking."
+      group_section: "Grupa i opowieść"
+      name: "Nazwa grupy"
+      name_placeholder: "np. Kosmiczne króliki"
+      story: "Opowieść"
+      story_hint: "Widzą ją wszyscy w grupie, na stronie głównej grupy."
+      art_label: "Grafika grupy"
+      art_hint: "JPG lub PNG, najlepiej co najmniej 1200 px szerokości."
+      currency_section: "Waluta"
+      currency_hint: "Nowa nazwa pojawi się wszędzie, także w historii studentów."
+      currency_name: "Nazwa waluty"
+      currency_placeholder: "np. Marchewek"
+      currency_name_hint: "Podaj ją w formie, która pasuje do liczby — np. „Marchewek”."
+      lives_section: "Życia"
+      lives: "Życia na start"
+      lives_hint: "Dotyczy tylko studentów, którzy dołączą od teraz. Obecnym zmieniasz życia na liście studentów."
+      back: "Wróć do grupy"
+      delete_title: "Usuń grupę"
+      delete_body: "Usunięcie zabiera wszystkim dostęp do grupy, jej sklepu, rankingu i historii. Tego nie da się cofnąć."
+      delete: "Usuń grupę"
+
+    # Shared by the wizard and the settings form (shared/_image_field).
+    currency_icon:
+      label: "Ikona waluty"
+      presets: "Gotowe ikony"
+      own: "Twoja ikona"
+      upload: "Albo wgraj własną ikonę"
+      hint: "Najlepiej PNG z przezroczystym tłem, co najmniej 128 px."
+      crop: "Przytnij ikonę"
+      cropped: "Przesuń i przeskaluj zaznaczenie. Zapisujemy kwadratowy kadr, bo ikona siada na okrągłym liczmanie."
+
+    wizard:
+      steps:
+        - "Grupa i opowieść"
+        - "Waluta i zasady"
+        - "Jak zaczynasz"
+        - "Podsumowanie"
+      breadcrumb: "Grupy"
+      title: "Nowa grupa"
+      lead: "Zajmie to kilka minut. Wszystko zmienisz później w ustawieniach grupy."
+      steps_label: "Kroki"
+      name_section: "Nazwa i opowieść"
+      name_hint: "Studenci zobaczą je na liście grup i na stronie grupy."
+      name: "Nazwa grupy"
+      name_placeholder: "np. Zakon Algorytmów"
+      name_missing: "Podaj nazwę grupy."
+      story: "Opowieść"
+      story_placeholder: "Dawno, dawno temu…"
+      story_hint: "Krótki wstęp fabularny. Zmienisz go w każdej chwili."
+      art_section: "Grafika grupy"
+      art_hint: "Pojawia się na karcie grupy, w panelu bocznym i jako tło grupy."
+      currency_section: "Nazwa waluty"
+      currency_hint: "Czytamy ją po każdej liczbie, więc podaj formę, która pasuje do liczby mnogiej — np. „Marchewek”."
+      currency_name: "Nazwa waluty"
+      currency_placeholder: "np. Złotych Monet"
+      currency_missing: "Podaj nazwę waluty."
+      lives_section: "Życia"
+      lives: "Życia na start"
+      fewer_lives: "Mniej żyć"
+      more_lives: "Więcej żyć"
+      lives_hint: "Przy 0 życiach student kupi tylko przedmioty oznaczone jako dostępne przy 0 życiach."
+      ranking_section: "Ranking"
+      ranking: "Pokazuj ranking studentom"
+      ranking_hint: "Domyślnie wyłączony. Możesz go włączyć w każdej chwili w zakładce Ranking."
+      ranking_mode: "Co widzą studenci"
+      ranking_mode_hint: "„Podium i własne miejsce” pokazuje tylko najlepszą trójkę i miejsce studenta. „Pełny ranking” pokazuje całą listę."
+      start_section: "Jak chcesz zacząć?"
+      start_hint: "Obie drogi dają pełną grupę. Wszystko zmienisz później."
+      start_label: "Sposób startu"
+      recommended: "Polecane na pierwszą grupę"
+      quick: "Szybki start"
+      quick_body: "Gotowe rangi, odznaki, przedmioty i kategorie zajęć. Przejrzysz je i poprawisz przed utworzeniem grupy."
+      manual: "Od zera"
+      manual_body: "Pusta grupa. Rangi, odznaki i przedmioty dodasz później, krok po kroku."
+      csv: "Z plików CSV"
+      csv_body: "Wgraj rangi, odznaki, przedmioty i szablony z wcześniej wyeksportowanych plików."
+      path_missing: "Wybierz, jak chcesz zacząć."
+      pack_section: "Klimat zestawu"
+      pack_hint: "Zmienia tylko nazwy rang i odznak. Zasady są wszędzie takie same."
+      pack_label: "Klimat"
+      classes_section: "Ile zajęć planujesz?"
+      classes_hint: "Dopasujemy progi rang i ceny tak, żeby najwyższa ranga była osiągalna w semestrze."
+      classes_label: "Liczba zajęć"
+      fewer_classes: "Mniej zajęć"
+      more_classes: "Więcej zajęć"
+      csv_title: "Pliki CSV"
+      csv_hint: "Wszystkie są opcjonalne — zaimportujemy tylko te, które wgrasz. Resztę dodasz później, krok po kroku."
+      csv_ranks_label: "Rangi"
+      csv_ranks_hint_html: "Kolumny: %{columns}."
+      csv_badges_label: "Odznaki"
+      csv_badges_hint_html: "Kolumny: %{columns}."
+      csv_items_label: "Przedmioty"
+      csv_items_hint: "Mogą odwoływać się do rang/odznak z tego samego importu (wgraj je razem)."
+      csv_templates_label: "Szablony"
+      csv_templates_hint_html: "Kolumny: %{columns}."
+      summary: "Podsumowanie"
+      summary_hint: "Grupa powstanie pusta. Po utworzeniu zobaczysz listę kroków do uzupełnienia."
+      summary_currency: "Waluta"
+      summary_lives: "Życia na start"
+      summary_ranking: "Ranking"
+      card_preview: "Karta na liście grup"
+      you_lead: "Prowadzisz tę grupę"
+      background_hint: "Tło za formularzem pokazuje, jak grafika wygląda jako tło grupy."
+      currency_preview: "Tak zobaczą walutę studenci"
+      back: "Wstecz"
+      step_counter: "Krok %{step} z %{total}"
+      submit: "Utwórz grupę"
+      # group_wizard_controller.ts
+      js:
+        review_step: "Przegląd zestawu"
+        summary_step: "Podsumowanie"
+        counter: "Krok %{step} z %{total}"
+        next: "Dalej"
+        create_short: "Utwórz grupę"
+        create_quick: "Utwórz grupę z zestawem"
+        create_empty: "Utwórz pustą grupę"
+        create_csv: "Utwórz grupę z importu"
+        summary_hint_empty: "Grupa powstanie pusta. Po utworzeniu zobaczysz listę kroków do uzupełnienia."
+        summary_hint_csv: "Dane z wybranych plików CSV zostaną zaimportowane po utworzeniu grupy."
+        name_placeholder: "Nazwa grupy"
+        currency_placeholder: "Marchewek"
+        ranking_off: "Wyłączony"
+        ranking_on: "Widoczny dla studentów"
+      csv_preview_titles:
+        default: "Podgląd importu"
+        ranks: "Podgląd importu rang"
+        badges: "Podgląd importu odznak"
+        items: "Podgląd importu przedmiotów"
+        templates: "Podgląd importu szablonów"
+
+    currency_mini:
+      to_spend: "do wydania"
+
+    preset_review:
+      title: "Zestaw „%{pack}” dla %{classes} zajęć"
+      hint: "Usuń, czego nie potrzebujesz, i popraw liczby. Nazwy i opisy zmienisz po utworzeniu grupy."
+      ranks: "Rangi"
+      starting_rank: "Ranga startowa"
+      shop_discount: "−%{discount}% w sklepie"
+      from: "od"
+      from_zero: "od 0"
+      threshold_label: "%{name}: próg"
+      badges: "Odznaki"
+      items: "Przedmioty w sklepie"
+      price_label: "%{name}: cena w %{currency}"
+      currency_fallback: "waluty"
+      categories: "Kategorie zajęć"
+      template: "(szablon „%{name}”)"
+      reward_label: "%{name}: nagroda w %{currency}"
+
+    preset_row:
+      remove: "Usuń: %{name}"
+      restore: "Przywróć: %{name}"
+
+    # StarterPack — written to the database in the teacher's language when the
+    # group is created. Numbers and icons stay in app/values/starter_pack.rb;
+    # every list here must keep its length and order.
+    starter_pack:
+      template_name: "Zajęcia"
+      categories:
+        - "Obecność"
+        - "Punktualność"
+        - "Wejściówka zaliczona"
+        - "Wejściówka ≥ średnia grupy"
+        - "Zgłoszenie do zadania"
+        - "Zadanie zrobione poprawnie"
+        - "Pomoc innym"
+        - "Ciekawa uwaga"
+      badge_rules:
+        - "Pierwsza wejściówka bez błędów"
+        - "Obecność na wszystkich zajęciach w miesiącu"
+        - "Co najmniej 3 razy pomógł innym"
+        - "Co najmniej 3 ciekawe uwagi"
+        - "3 wejściówki z rzędu ≥ średniej grupy"
+        - "Wyjaśnienie trudnego zadania całej grupie"
+      items:
+        - name: "+5 minut do wejściówki"
+          didactic: "Dodaje 5 minut do czasu na najbliższą wejściówkę."
+        - name: "Konsultacja"
+          didactic: "Kwadrans konsultacji z prowadzącym poza zajęciami."
+        - name: "Poprawa wejściówki"
+          didactic: "Pozwala napisać jedną wejściówkę jeszcze raz."
+        - name: "Bezpieczna poprawa"
+          didactic: "Poprawa wejściówki bez ryzyka — liczy się lepszy z dwóch wyników."
+        - name: "Usprawiedliwienie"
+          didactic: "Usprawiedliwia jedną nieobecność, bez utraty życia."
+        - name: "1up: odzyskanie życia"
+          didactic: "Przywraca jedno utracone życie."
+        - name: "+0.5 oceny końcowej"
+          didactic: "Podnosi ocenę końcową o pół stopnia."
+      packs:
+        neutral:
+          label: "Neutralny"
+          description: "Bez fabularnego klimatu. Pasuje do każdego przedmiotu."
+          ranks: ["Nowicjusz", "Uczeń", "Adept", "Ekspert", "Mistrz"]
+          badges: ["Bez skazy", "Stała obecność", "Pomocna dłoń", "Iskra ciekawości", "Seria sukcesów", "Głos grupy"]
+        fantasy:
+          label: "Fantasy"
+          description: "Zamki, zakony i rycerskie tytuły."
+          ranks: ["Giermek", "Rycerz", "Kasztelan", "Hetman", "Król"]
+          badges: ["Czysta klinga", "Wierna straż", "Tarcza drużyny", "Księga mądrości", "Pasmo zwycięstw", "Bard drużyny"]
+          badge_stories:
+            - "Stal bez jednej rysy — pierwszy pojedynek wygrany bez draśnięcia."
+            - "Stałeś na posterunku każdej nocy tego miesiąca."
+            - "Trzykrotnie zasłoniłeś towarzysza własną tarczą."
+            - "Trzy razy dopisałeś coś, czego w księgach jeszcze nie było."
+            - "Trzy potyczki z rzędu rozstrzygnięte na twoją korzyść."
+            - "Wytłumaczyłeś całej drużynie to, czego nikt inny nie potrafił nazwać."
+          item_stories:
+            - "Klepsydra sypie piaskiem wolniej, niż powinna."
+            - "Audiencja u mistrza zakonu."
+            - "Drugie podejście do pojedynku."
+            - "Pojedynek na tępe klingi — przegrana nic nie kosztuje."
+            - "List żelazny tłumaczący twoją nieobecność."
+            - "Eliksir przywracający życie."
+            - "Pieczęć króla na twoim świadectwie."
+          category_stories:
+            - "Stawiłeś się na zbiórce."
+            - "Na miejscu, zanim zabrzmiał róg."
+            - "Próba sprawności zaliczona."
+            - "Wynik powyżej średniej drużyny."
+            - "Zgłosiłeś się na ochotnika."
+            - "Zadanie wykonane bez zarzutu."
+            - "Podałeś rękę towarzyszowi."
+            - "Rzuciłeś światło na rzecz, której nikt nie dostrzegł."
+        scifi:
+          label: "Sci-fi"
+          description: "Statki, załogi i kosmiczne misje."
+          ranks: ["Kadet", "Pilot", "Nawigator", "Komandor", "Admirał"]
+          badges: ["Czysty lot", "Zawsze na pokładzie", "Mechanik załogi", "Sygnał z kosmosu", "Seria misji", "Głos floty"]
+          badge_stories:
+            - "Pierwszy lot bez jednego odczytu w czerwieni."
+            - "Ani jednej zmiany opuszczonej w tym cyklu."
+            - "Trzy razy postawiłeś na nogi cudzy sprzęt."
+            - "Trzy razy wychwyciłeś sygnał, który inni przegapili."
+            - "Trzy misje z rzędu zaliczone powyżej normy floty."
+            - "Twoje wyjaśnienie poszło na cały kanał i wszyscy zrozumieli."
+          item_stories:
+            - "Chwilowe spowolnienie zegara pokładowego."
+            - "Połączenie z komandorem poza godzinami służby."
+            - "Drugie podejście do symulacji."
+            - "Lot treningowy — awaria nic nie kosztuje."
+            - "Wpis do dziennika usprawiedliwiający nieobecność."
+            - "Regeneracja w kapsule medycznej."
+            - "Awans wpisany do akt floty."
+          category_stories:
+            - "Zameldowałeś się na pokładzie."
+            - "Na stanowisku przed odliczaniem."
+            - "Test kwalifikacyjny zaliczony."
+            - "Wynik powyżej średniej załogi."
+            - "Zgłosiłeś się do zadania."
+            - "Zadanie wykonane zgodnie z procedurą."
+            - "Wsparłeś innego członka załogi."
+            - "Zauważyłeś coś, co umknęło czujnikom."
+
+  activerecord:
+    errors:
+      models:
+        story_group:
+          attributes:
+            name:
+              blank: "Podaj nazwę grupy."
+            currency_name:
+              blank: "Podaj nazwę waluty."

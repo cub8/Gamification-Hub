@@ -1,5 +1,5 @@
 !!!
-%html{ lang: 'pl', data: { gh_theme: gh_theme } }
+%html{ lang: I18n.locale, data: { gh_theme: gh_theme } }
   %head
     %meta{ charset: 'utf-8' }/
     %title= content_for(:title) || 'Gamification Hub'
@@ -29,9 +29,11 @@
           = yield
         = render 'layouts/theme_toggle'
     - else
-      .gh-app-shell{data: { controller:              'theme menu sidebar',
-                            theme_light_label_value: 'Jasny motyw',
-                            theme_dark_label_value:  'Ciemny motyw', }}
+      .gh-app-shell{data: { controller:                   'theme menu sidebar',
+                            theme_light_label_value:      t('layouts.theme.light'),
+                            theme_dark_label_value:       t('layouts.theme.dark'),
+                            sidebar_expand_label_value:   t('layouts.sidebar.expand'),
+                            sidebar_collapse_label_value: t('layouts.sidebar.collapse'), }}
         = render Shared::HeaderComponent.new(user:         @current_user,
                                              group_chrome: gh_group_chrome,)
 

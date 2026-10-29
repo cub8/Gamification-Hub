@@ -1,24 +1,22 @@
-- content_for :title, 'Historia waluty'
+- content_for :title, t('.title')
 - path_for = ->(kind) { story_group_student_currency_transactions_path(@story_group, @student, kind: kind) }
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Historia waluty
+    %h1.gh-h1= t('.title')
     %p.gh-lead= ledger_balance_sentence(@ledger)
 
   .gh-button-row
     = link_to story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
-      Przejdź do sklepu
+      = t('.go_to_shop')
 
 - if @ledger.any?
   %section.gh-panel.gh-tab-panel
     = render 'currency_transactions/ledger', ledger: @ledger, kind: @kind,
       path_for: path_for,
-      empty_message: 'Nie masz jeszcze wpisów tego typu.'
+      empty_message: t('.empty_kind')
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Pierwsze wpisy pojawią się po zajęciach
-    %p.gh-lead
-      Prowadzący przyznaje walutę za obecność, punktualność i aktywność.
-      Wszystko, co zdobędziesz i wydasz, zapisze się tutaj.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')

@@ -1,0 +1,73 @@
+en:
+  ranking:
+    flash:
+      hidden: "The ranking is hidden from students."
+      full: "The full ranking is visible."
+      podium: "The ranking is visible: podium and own place."
+
+    show:
+      page_title: "Ranking - %{group}"
+
+    confirm_mode:
+      page_title: "Ranking - %{mode}"
+      full_title: "Show the full ranking?"
+      full_body: "Every student will see everyone's places and nicknames, including those at the bottom of the list."
+      podium_title: "Limit the ranking to the podium?"
+      podium_body: "Students will keep the top 3 places and their own. Nobody will see who is at the bottom of the list."
+      keep_podium: "Keep the podium"
+      show_full: "Show the full ranking"
+      show_podium: "Show only the podium"
+
+    confirm_visibility:
+      show_page_title: "Show ranking"
+      hide_page_title: "Hide ranking"
+      show_title: "Show the ranking to students?"
+      show_body: "Students will see the ranking right away. Choose how much they see."
+      modes_label: "What students see"
+      podium_body: "Everyone sees the top 3 places. Each student also sees their own place, but not anyone else's."
+      full_body: "Everyone sees everyone's places and nicknames, including at the bottom of the list."
+      show: "Show ranking"
+      hide_title: "Hide the ranking from students?"
+      hide_body: "Students will stop seeing places and nicknames. You still see the whole ranking, and collected currency and ranks don't change."
+      keep_visible: "Keep it visible"
+      hide: "Hide ranking"
+
+    board:
+      table_label: "Ranking"
+      place: "Place"
+      nickname_and_student: "Nickname and student"
+      nickname: "Nickname"
+      rank: "Rank"
+      collected: "Collected"
+      hidden_rows: "The other places are hidden"
+      place_label: "Place %{place}"
+      you: "You"
+      no_nickname: "No nickname"
+
+    teacher_board:
+      title: "Ranking"
+      lead: "Ordered by total currency collected (%{currency}). Students only see nicknames; you also see full names."
+      visible: "Visible to students"
+      modes_label: "What students see"
+      hidden_note: "The ranking is hidden from students."
+      hidden_note_tail: "You can still see it."
+      podium_note: "Students only see the podium and their own place."
+      podium_note_tail: "Nobody will see who is at the bottom of the list. You see everyone."
+      footnote: "A tie gives the same place. Students without a nickname are shown by their full name."
+      empty_title: "Nobody has joined the group yet"
+      empty_body: "The ranking will build itself once students join and start collecting currency."
+      invites: "Invites"
+
+    student_board:
+      title: "Ranking"
+      hidden_lead: "The teacher has hidden the ranking for now."
+      podium_lead: "The teacher only shows the podium. Only you can see your own place."
+      full_lead: "Ordered by total currency collected (%{currency})."
+      own_place: "#%{place}"
+      own_place_label: "Your place out of %{count}"
+      collected: "Collected in total"
+      nickname: "Your nickname in this group:"
+      no_nickname: "none"
+      change: "Change"
+      hidden_title: "The ranking is hidden right now"
+      hidden_body: "Keep collecting currency. Once the teacher turns the ranking on, you'll see your place here."

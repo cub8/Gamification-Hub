@@ -5,20 +5,17 @@
           turbo_frame: (@in_modal ? 'modal' : nil),
           teacher_picker_min_value: 2,
           teacher_picker_max_value: 8,
-          teacher_picker_one_value: 'wynik',
-          teacher_picker_few_value: 'wyniki',
-          teacher_picker_many_value: 'wyników',
-          teacher_picker_overflow_value: ', pokazujemy 8 pierwszych', } do
+          teacher_picker_i18n_value: t('.js').to_json, } do
 
-  %h2#gh-add-teacher-title.gh-h2 Dodaj nauczyciela
-  %p Nauczyciel dostanie dostęp do grupy od razu po dodaniu.
+  %h2#gh-add-teacher-title.gh-h2= t('.title')
+  %p= t('.hint')
 
   .gh-teacher-picker
     - if pool.addable?
       %label.gh-search-input.gh-search--full-width
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
-        %input{ type: 'search', placeholder: 'Imię, nazwisko albo e-mail',
-                'aria-label': 'Szukaj nauczyciela', autocomplete: 'off', autofocus: true,
+        %input{ type: 'search', placeholder: t('.placeholder'),
+                'aria-label': t('.search'), autocomplete: 'off', autofocus: true,
                 data: { teacher_picker_target: 'input',
                         action: 'input->teacher-picker#filter keydown.enter->teacher-picker#noSubmit', } }
 
@@ -39,26 +36,23 @@
                 %small= teacher_candidate_subtitle(candidate, cross_university: pool.cross_university?)
 
               - if candidate.in_group?
-                %span.gh-badge-picker-status Już w grupie
+                %span.gh-badge-picker-status= t('.in_group')
               - else
                 %button.gh-btn.gh-btn--secondary.gh-btn--small{ type: 'submit',
                                                        name: 'story_group_teacher[user_id]',
                                                        value: candidate.person.id,
-                                                       'aria-label': "Dodaj #{candidate.name}" }
+                                                       'aria-label': t('.add_label', name: candidate.name) }
                   %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-                  Dodaj
+                  = t('shared.actions.add')
 
-        %p.gh-small{ hidden: true, data: { teacher_picker_target: 'overflow' } }
-          Nie widzisz tej osoby? Wpisz więcej liter albo e-mail.
+        %p.gh-small{ hidden: true, data: { teacher_picker_target: 'overflow' } }= t('.overflow_hint')
 
         %p.gh-explainer-note{ hidden: true, data: { teacher_picker_target: 'empty' } }
-          Brak wyników dla
+          = t('.no_results')
           %span{ data: { teacher_picker_target: 'emptyQuery' } }
-          Sprawdź pisownię albo wpisz e-mail.
+          = t('.no_results_hint')
     - else
-      %p.gh-explainer-note
-        Nie ma kogo dodać: w Twojej uczelni nie ma jeszcze innych kont
-        nauczycieli.
+      %p.gh-explainer-note= t('.nobody')
 
   - if error
     %p.gh-field-error{ role: 'alert' }
@@ -67,6 +61,6 @@
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Zamknij
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.close')
     - else
-      = link_to 'Zamknij', story_group_teachers_path(@story_group), class: 'gh-btn gh-btn--secondary'
+      = link_to t('shared.actions.close'), story_group_teachers_path(@story_group), class: 'gh-btn gh-btn--secondary'

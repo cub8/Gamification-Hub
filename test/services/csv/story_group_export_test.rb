@@ -25,8 +25,8 @@ module Csv
       assert_includes csv, 'Złoto'
     end
 
-    test 'LABELS has a Polish label for every supported resource' do
-      assert_equal StoryGroupExport::RESOURCES.sort, StoryGroupExport::LABELS.keys.sort
+    test 'labels has a translated label for every supported resource' do
+      assert_equal StoryGroupExport::RESOURCES.sort, StoryGroupExport.labels.keys.sort
     end
   end
 end

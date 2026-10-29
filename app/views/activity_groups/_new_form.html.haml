@@ -1,53 +1,53 @@
 - count   = ActivityGroupsController::BULK_RANGE.min + 1
 - columns = template.categories.size
 
-%h2#gh-new-sheet-title.gh-h2= "Nowy arkusz z szablonu #{template.base_name}"
+%h2#gh-new-sheet-title.gh-h2= t('.title', name: template.base_name)
 %p
-  = "Każdy arkusz dostanie #{columns} #{gh_plural(columns, 'kategorię', 'kategorie', 'kategorii')} z szablonu."
-  Kolumny zmienisz później w ustawieniach arkusza.
+  = t('.columns', count: columns)
+  = t('.columns_note')
 
 - form_data = { controller: 'sheet-create',
-                sheet_create_sheets_value: %w[arkusz arkusze arkuszy].to_json,
+                sheet_create_i18n_value: t('.js').to_json,
                 turbo_frame: (@in_modal ? 'modal' : nil) }
 
 = form_with url: story_group_activity_groups_path(@story_group), method: :post, data: form_data do |f|
   = hidden_field_tag 'activity_group[activity_group_template_id]', template.id
 
-  .gh-segmented-toggle-3.gh-octagon-clip{ role: 'radiogroup', 'aria-label': 'Ile arkuszy' }
-    - [%w[one Jeden\ arkusz], %w[many Kilka\ naraz]].each do |value, label|
+  .gh-segmented-toggle-3.gh-octagon-clip{ role: 'radiogroup', 'aria-label': t('.how_many') }
+    - [['one', t('.one')], ['many', t('.many')]].each do |value, label|
       %label.gh-segmented-toggle-3-option
         = radio_button_tag 'activity_group[mode]', value, value == 'one',
           data: { sheet_create_target: 'mode', action: 'sheet-create#refresh' }
         %span= label
 
   .gh-form-field{ data: { sheet_create_target: 'onePane' } }
-    = label_tag 'gh-sheet-name', 'Nazwa'
+    = label_tag 'gh-sheet-name', t('shared.actions.name')
     .gh-text-input
       = text_field_tag 'activity_group[name]', suggested_names.first, id: 'gh-sheet-name',
         autocomplete: 'off', autofocus: true
-    %span.gh-field-hint= "Możesz dopisać datę, np. #{suggested_names.first} (14.10)."
+    %span.gh-field-hint= t('.name_hint', example: suggested_names.first)
 
   .gh-form-field{ data: { sheet_create_target: 'manyPane' } }
-    %p#gh-sheet-count-label.gh-form-label Ile arkuszy utworzyć
+    %p#gh-sheet-count-label.gh-form-label= t('.count')
     .gh-number-stepper{ role: 'group', 'aria-labelledby': 'gh-sheet-count-label' }
-      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Mniej',
+      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('shared.actions.fewer'),
                           data: { sheet_create_target: 'down', action: 'sheet-create#down' } }
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
       %output{ 'aria-live': 'polite', data: { sheet_create_target: 'output' } }= count
-      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': 'Więcej',
+      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('shared.actions.more'),
                           data: { sheet_create_target: 'up', action: 'sheet-create#up' } }
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
     = hidden_field_tag :count, count, data: { sheet_create_target: 'count' }
 
-    .gh-sample-name-chips{ 'aria-label': 'Nazwy' }
+    .gh-sample-name-chips{ 'aria-label': t('.names') }
       - suggested_names.each_with_index do |name, index|
         %span.gh-octagon-clip{ hidden: index >= count, data: { sheet_create_target: 'name' } }= name
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
     - else
-      = link_to 'Anuluj', story_group_activity_groups_path(@story_group), class: 'gh-btn gh-btn--secondary'
+      = link_to t('shared.actions.cancel'), story_group_activity_groups_path(@story_group), class: 'gh-btn gh-btn--secondary'
     %button.gh-btn{ type: 'submit', data: { sheet_create_target: 'submit' } }
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      %span{ data: { sheet_create_target: 'submitLabel' } } Utwórz arkusz
+      %span{ data: { sheet_create_target: 'submitLabel' } }= t('.js.create_one')

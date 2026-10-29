@@ -12,7 +12,7 @@
 
 - if local_assigns[:withdrawn]
   .gh-card-tags
-    %span.gh-tag.gh-tag--removed Usunięta z listy
+    %span.gh-tag.gh-tag--removed= t('.removed')
 
 %p.gh-rule-text{ class: ('gh-placeholder-text' if badge.didactic_description.blank?), data: targets[:rules] }
   = badge_rule(badge)
@@ -24,6 +24,6 @@
   %span.gh-tag.gh-tag--discount{ hidden: discount.nil?, data: targets[:tag] }= discount
   - if flipper
     %button.gh-card-flip-btn{ type: 'button',
-                        'aria-label': "Pokaż, jak zdobyć odznakę #{badge.name}" }
+                        'aria-label': t('.flip_label', name: badge.name) }
       %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
-      Jak zdobyć
+      = t('.flip')

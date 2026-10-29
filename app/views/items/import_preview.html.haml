@@ -1,8 +1,6 @@
 = turbo_frame_tag 'modal' do
-  %h2.gh-h2 Podgląd importu przedmiotów
-  - items_count = @preset.items.size
-  %p.gh-field-hint
-    = "Zostanie dodanych: #{items_count} #{gh_plural(items_count, 'przedmiot', 'przedmioty', 'przedmiotów')}."
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.items.size)
 
   = render 'shared/items_preview_rows', preset: @preset
 
@@ -27,6 +25,6 @@
 
     .gh-dialog-button-row
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        Anuluj
+        = t('shared.actions.cancel')
       %button.gh-btn{ type: 'submit' }
-        Zatwierdź import
+        = t('shared.actions.confirm_import')

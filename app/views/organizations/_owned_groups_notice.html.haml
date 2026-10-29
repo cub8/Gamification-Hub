@@ -1,0 +1,7 @@
+- owned = user.owner_story_groups.order(:name).pluck(:name)
+
+- if owned.any?
+  %p.gh-explainer-note
+    = t('.lead', count: owned.size)
+    %b= owned.to_sentence
+    = t('.rest')

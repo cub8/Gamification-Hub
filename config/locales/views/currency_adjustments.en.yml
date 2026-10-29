@@ -1,0 +1,37 @@
+en:
+  currency_adjustments:
+    flash:
+      added: "Added %{value}. Balance: %{balance}."
+      taken: "Subtracted %{value}. Balance: %{balance}."
+
+    new:
+      page_title: "Adjust currency - %{name}"
+
+    form:
+      title: "Adjust currency"
+      lead: "%{name} now has %{balance} to spend."
+      kind_label: "Adjustment type"
+      take: "Subtract"
+      amount: "Amount"
+      balance: "To spend"
+      total: "Collected in total"
+      rank: "Rank"
+      unchanged: "unchanged"
+      total_unchanged: "%{total} (unchanged)"
+      blank: "Enter an amount"
+      over: "The student only has %{balance} to spend."
+      add_note: "Adding also raises the collected total, so it may raise the rank."
+      take_note: "Subtracting only lowers what the student has to spend. The collected total and the rank stay the same."
+      submit_add: "Add %{value}"
+      submit_take: "Subtract %{value}"
+
+  # CurrencyAdjustmentForm#validate (errors.add(:amount, :key)).
+  activemodel:
+    errors:
+      models:
+        currency_adjustment_form:
+          attributes:
+            amount:
+              missing: "Enter an amount."
+              not_positive: "Enter an amount greater than zero."
+              overdrawn: "The student only has %{balance} to spend."

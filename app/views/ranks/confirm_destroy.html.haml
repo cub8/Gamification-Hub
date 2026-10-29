@@ -1,4 +1,4 @@
-- content_for :title, "Usuń rangę #{@rank.name}"
+- content_for :title, t('.page_title', name: @rank.name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

@@ -39,4 +39,5 @@ class StudentsBadgesControllerTest < ActionDispatch::IntegrationTest
 
     assert_turbo_redirected_to story_group_student_url(@story_group, @story_group_student)
   end
+
 end

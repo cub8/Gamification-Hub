@@ -1,6 +1,6 @@
 - story_group = chrome.story_group
 
-%section.gh-current-group-card{ 'aria-label': "Grupa #{chrome.name}" }
+%section.gh-current-group-card{ 'aria-label': t('.group', name: chrome.name) }
   .gh-current-group-card-frame.gh-octagon-clip
     .gh-current-group-card-inner.gh-octagon-clip
       - cover = gh_group_cover(story_group)
@@ -12,13 +12,13 @@
         %p.gh-current-group-card-role= chrome.role_label
 
       %button.gh-link-button.gh-current-group-card-switch-trigger{ type: 'button',
-                                     title: 'Zmień grupę',
+                                     title: t('.switch'),
                                      data: { action: 'menu#open',
                                              menu_id_param: 'gh-group-switcher' } }
         %i.fa-solid.fa-right-left{ 'aria-hidden': 'true' }
-        %span Zmień grupę
+        %span= t('.switch')
 
-      %nav.gh-sidebar-nav{ 'aria-label': 'Sekcje grupy' }
+      %nav.gh-sidebar-nav{ 'aria-label': t('.sections') }
         - chrome.items.each do |item|
           - on = item.current?(current_path)
           = link_to item.path, class: "gh-sidebar-link #{'gh-sidebar-link--active' if on}",

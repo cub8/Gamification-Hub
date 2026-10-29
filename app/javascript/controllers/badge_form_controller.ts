@@ -10,6 +10,16 @@ class BadgeFormController extends Controller<HTMLFormElement> {
     "flip", "side",
   ]
 
+  static values = {
+    namePlaceholder: String,
+    rulePlaceholder: String,
+    discountLabel: String,
+  }
+
+  declare readonly namePlaceholderValue: string
+  declare readonly rulePlaceholderValue: string
+  declare readonly discountLabelValue: string
+
   declare readonly nameTarget: HTMLInputElement
   declare readonly ruleTarget: HTMLTextAreaElement
   declare readonly storyTarget: HTMLTextAreaElement
@@ -37,18 +47,18 @@ class BadgeFormController extends Controller<HTMLFormElement> {
     const story = this.storyTarget.value.trim()
     const discount = Math.max(0, parseInt(this.discountTarget.value, 10) || 0)
 
-    this.placeholder(this.frontNameTarget, name, "Nazwa odznaki")
-    this.placeholder(this.backNameTarget, name, "Nazwa odznaki")
-    this.placeholder(this.frontRulesTarget, rule, "Jak zdobyć…")
-    this.backHowTarget.textContent = rule || "Jak zdobyć…"
+    this.placeholder(this.frontNameTarget, name, this.namePlaceholderValue)
+    this.placeholder(this.backNameTarget, name, this.namePlaceholderValue)
+    this.placeholder(this.frontRulesTarget, rule, this.rulePlaceholderValue)
+    this.backHowTarget.textContent = rule || this.rulePlaceholderValue
 
     this.frontFlavorTarget.textContent = story
     this.frontFlavorTarget.hidden = story === ""
 
-    this.frontTagTarget.textContent = `−${discount}% w sklepie`
+    this.frontTagTarget.textContent = this.discountLabelValue.replace("%{discount}", String(discount))
     this.frontTagTarget.hidden = discount === 0
 
-    this.thumbNameTarget.textContent = name || "Nazwa odznaki"
+    this.thumbNameTarget.textContent = name || this.namePlaceholderValue
     this.thumbSubTarget.textContent = story || rule
 
     this.renderArt()

@@ -11,20 +11,20 @@
 
   %span.gh-teacher-role
     - if row.owner?
-      Właściciel
-      %small Utworzył grupę
+      = t('.owner')
+      %small= t('.created_group')
     - else
-      Nauczyciel wspomagający
+      = t('.assistant')
 
   %span
-    %span.gh-mobile-field-label Dodano
+    %span.gh-mobile-field-label= t('.added')
     %span.gh-small= teacher_added_on(row.added_at)
 
   %span.gh-teacher-row-actions
     - if manage && row.removable?
       = link_to confirm_destroy_story_group_teacher_path(@story_group, row.membership),
         class: 'gh-btn gh-btn--secondary gh-btn--small',
-        'aria-label': "Usuń z grupy: #{name}",
+        'aria-label': t('.remove_label', name: name),
         data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
-        Usuń
+        = t('shared.actions.remove')

@@ -1,12 +1,7 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
-  CSV_PREVIEW_TITLES = {
-    'ranks'     => 'Podgląd importu rang',
-    'badges'    => 'Podgląd importu odznak',
-    'items'     => 'Podgląd importu przedmiotów',
-    'templates' => 'Podgląd importu szablonów',
-  }.freeze
+  CSV_PREVIEW_RESOURCES = %w[ranks badges items templates].freeze
 
   # #show renders the same owned-item card and the same badge cards as the
   # inventory and the badge deck; under `include_all_helpers = false` their
@@ -55,7 +50,7 @@ class StoryGroupsController < ApplicationController
     authorize StoryGroup, :new?
 
     resource = params[:resource].to_s
-    return head :not_found unless %w[ranks badges items templates].include?(resource)
+    return head :not_found unless CSV_PREVIEW_RESOURCES.include?(resource)
 
     locals = { resource: resource, title: csv_preview_title(resource), result: resource_preview(resource.to_sym) }
     render partial: 'csv_resource_preview', layout: false, locals: locals
@@ -99,7 +94,7 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     if @story_group.update(story_group_params)
-      redirect_to edit_story_group_path(@story_group), notice: 'Zapisano ustawienia grupy.'
+      redirect_to edit_story_group_path(@story_group), notice: t('story_groups.flash.updated')
     else
       render :edit, status: :unprocessable_content
     end
@@ -119,7 +114,7 @@ class StoryGroupsController < ApplicationController
 
     name = @story_group.name
     @story_group.destroy!
-    notice = "Usunięto grupę #{name}."
+    notice = t('story_groups.flash.destroyed', name: name)
 
     return redirect_outside_turbo_frame(story_groups_path, notice: notice) if @in_modal
 
@@ -155,7 +150,7 @@ class StoryGroupsController < ApplicationController
     @story_group.errors.add(:base, e.message)
     false
   rescue Csv::MalformedFile
-    @story_group.errors.add(:base, malformed_files_message)
+    @story_group.errors.add(:base, t('shared.csv_import.malformed_files'))
     false
   rescue ActiveRecord::RecordInvalid => e
     @story_group.errors.add(:base, record_invalid_message(e.record))
@@ -177,7 +172,8 @@ class StoryGroupsController < ApplicationController
   end
 
   def csv_preview_title(resource)
-    CSV_PREVIEW_TITLES.fetch(resource, 'Podgląd importu')
+    default = t('story_groups.wizard.csv_preview_titles.default')
+    t("story_groups.wizard.csv_preview_titles.#{resource}", default: default)
   end
 
   def resource_preview(resource)
@@ -190,13 +186,13 @@ class StoryGroupsController < ApplicationController
 
   def preview_for(resource, files)
     preset = dry_run_csv_preset(files)
-    return preview_error('Plik nie zawierał żadnych danych.') if preset.public_send(resource).empty?
+    return preview_error(t('shared.csv_import.empty_file')) if preset.public_send(resource).empty?
 
     html = render_to_string(partial: "shared/#{resource}_preview_rows", locals: preview_locals(resource, preset),
                             layout: false,)
     { html: html, ok: true }
   rescue Csv::MalformedFile
-    preview_error(malformed_file_message)
+    preview_error(t('shared.csv_import.malformed_file'))
   rescue StarterPackBuilder::InvalidSelection => e
     preview_error(e.message)
   rescue ActiveRecord::RecordInvalid => e
@@ -208,16 +204,8 @@ class StoryGroupsController < ApplicationController
     { html: html, ok: false }
   end
 
-  def malformed_file_message
-    'Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV.'
-  end
-
-  def malformed_files_message
-    'Nie udało się odczytać jednego z wgranych plików - sprawdź, czy to poprawne pliki CSV.'
-  end
-
   def record_invalid_message(record)
-    "Plik zawiera nieprawidłowe dane: #{helpers.gh_and_list(record.errors.full_messages)}"
+    t('shared.csv_import.invalid_data', errors: helpers.gh_and_list(record.errors.full_messages))
   end
 
   def preview_locals(resource, preset)

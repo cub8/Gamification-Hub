@@ -9,6 +9,7 @@ class PasswordlessMailer < ApplicationMailer
     @first_name          = params[:user_name].to_s.split(' ').first
     @expires_in_minutes  = LoginToken::EXPIRES_IN.in_minutes.to_i
 
-    mail to: @email, subject: 'Logowanie do systemu Gamification Hub'
+    # Subject: passwordless_mailer.token_email.subject (default_i18n_subject).
+    mail to: @email
   end
 end

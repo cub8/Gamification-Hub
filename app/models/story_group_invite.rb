@@ -1,17 +1,9 @@
 # frozen_string_literal: true
 
 class StoryGroupInvite < ApplicationRecord
-  include ApplicationHelper
-
   CODE_LENGTH = 6
 
   CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
-
-  STATUS_LABELS = {
-    active:    'Aktywne',
-    expired:   'Wygasło',
-    exhausted: 'Wyczerpane',
-  }.freeze
 
   before_create :generate_code
 
@@ -24,7 +16,7 @@ class StoryGroupInvite < ApplicationRecord
             numericality: {
               only_integer:             true,
               greater_than_or_equal_to: 1,
-              message:                  'Limit musi wynosić co najmniej 1.',
+              message:                  :too_low,
             },
             allow_nil:    true
 
@@ -73,7 +65,7 @@ class StoryGroupInvite < ApplicationRecord
 
   def active? = status == :active
 
-  def status_label = STATUS_LABELS[status]
+  def status_label = I18n.t("story_group_invites.statuses.#{status}")
 
   def use!
     return unless usable?
@@ -86,10 +78,6 @@ class StoryGroupInvite < ApplicationRecord
   def max_uses_covers_existing_uses
     return if max_uses.blank? || uses.to_i.zero? || max_uses >= uses
 
-    errors.add(
-      :max_uses,
-      "Z tego kodu skorzystało już #{uses} #{gh_plural(uses, 'osoba', 'osoby', 'osób')}. " \
-      'Limit nie może być mniejszy.',
-    )
+    errors.add(:max_uses, :below_uses, count: uses)
   end
 end

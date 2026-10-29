@@ -1,20 +1,18 @@
-- content_for :title, "Eksport konfiguracji – #{@story_group.name}"
+- content_for :title, t('.title', name: @story_group.name)
 - content_for :head do
   %meta{ name: 'turbo-cache-control', content: 'no-cache' }
 
 %section.gh-panel.gh-page-header
-  %h1.gh-h1 Eksport konfiguracji grupy
-  %p.gh-lead
-    Pobierz rangi, odznaki, przedmioty i szablony kategorii zajęć jako pliki CSV -
-    przydadzą się przy tworzeniu kolejnej grupy albo do przekazania innemu nauczycielowi.
+  %h1.gh-h1= t('.heading')
+  %p.gh-lead= t('.lead')
 
 = form_with url: story_group_export_path(@story_group), method: :get, local: true,
             data: @export_form_data do
   %section.gh-panel.gh-settings-section
     .gh-form-section.gh-form-section--first
-      %h2.gh-h3 Elementy do eksportu:
+      %h2.gh-h3= t('.resources_label')
       %fieldset.gh-form-field
-        - Csv::StoryGroupExport::LABELS.each do |value, label|
+        - Csv::StoryGroupExport.labels.each do |value, label|
           .gh-toggle-switch-row
             - checkbox_data = { csv_export_target: 'checkbox', resource: value, action: 'change->csv-export#refresh' }
             = check_box_tag 'resources[]', value, false,
@@ -24,4 +22,4 @@
               %b= label_tag "gh-export-#{value}", label
 
   .gh-panel.gh-form-actions-bar
-    %button.gh-btn{ type: 'submit', disabled: true, data: { csv_export_target: 'submit' } } Eksportuj
+    %button.gh-btn{ type: 'submit', disabled: true, data: { csv_export_target: 'submit' } }= t('.submit')

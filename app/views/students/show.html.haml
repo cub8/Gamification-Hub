@@ -6,7 +6,7 @@
     %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }= gh_initials(name)
     %div
       %p.gh-breadcrumbs
-        = link_to 'Studenci', story_group_students_path(@story_group)
+        = link_to t('.breadcrumb'), story_group_students_path(@story_group)
         %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
         %span= name
       %h1.gh-h1= name
@@ -16,19 +16,19 @@
       = link_to new_story_group_student_badge_path(@story_group, @student), class: 'gh-btn',
         data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
-        Przyznaj odznakę
+        = t('.award_badge')
       = link_to new_story_group_student_currency_adjustment_path(@story_group, @student),
         class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-coins{ 'aria-hidden': 'true' }
-        Koryguj walutę
+        = t('.adjust_currency')
       = link_to edit_story_group_student_path(@story_group, @student),
         class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
-        Edytuj
+        = t('shared.actions.edit')
 
   %dl.gh-student-stats
     .gh-student-stat
-      %dt Ranga
+      %dt= t('.rank')
       %dd
         = @sheet.rank&.name || '—'
         - if (line = student_rank_progress_line(@sheet))
@@ -36,27 +36,27 @@
       - if (progress = @sheet.rank_progress)
         .gh-progress-bar.gh-octagon-clip{ role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100,
                  'aria-valuenow': progress,
-                 'aria-label': "Postęp do rangi #{@sheet.next_rank.name}" }
+                 'aria-label': t('.rank_progress_label', rank: @sheet.next_rank.name) }
           %i.gh-octagon-clip{ style: "--gh-p: #{progress}%" }
 
     .gh-student-stat
-      %dt Do wydania
+      %dt= t('.balance')
       %dd= @sheet.balance
     .gh-student-stat
-      %dt Zebrane łącznie
+      %dt= t('.total')
       %dd= @sheet.total
     .gh-student-stat
-      %dt Życia
+      %dt= t('.lives')
       %dd
         %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if @sheet.lives.zero?) }
           %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
         = @sheet.lives
 
-%nav.gh-group-tabs{ 'aria-label': 'Sekcje studenta' }
-  - StudentSheet::TABS.each do |key, label|
+%nav.gh-group-tabs{ 'aria-label': t('.sections') }
+  - StudentSheet::TABS.each do |key|
     = link_to story_group_student_path(@story_group, @student, tab: key), class: 'gh-group-tab',
       'aria-current': (@tab == key).to_s do
-      = label
+      = t(".tabs.#{key}")
       %span.gh-count-label= @sheet.count_for(key)
 
 %section.gh-panel.gh-tab-panel

@@ -1,0 +1,60 @@
+pl:
+  story_group_memberships:
+    flash:
+      nickname: "Twój pseudonim w tej grupie: %{name}."
+      left: "Opuszczono grupę %{name}."
+
+    edit:
+      page_title: "Ustawienia w grupie - %{name}"
+      title: "Ustawienia w grupie"
+      lead: "Te ustawienia dotyczą tylko grupy %{name}."
+      nickname: "Pseudonim"
+      nickname_hint: "Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny."
+      teacher_sees: "Co widzi prowadzący"
+      teacher_sees_hint: "Pozostali studenci widzą tylko Twój pseudonim, i to tylko w rankingu."
+      full_name: "Imię i nazwisko"
+      email: "E-mail"
+      university_number: "Numer indeksu"
+      none: "Brak"
+      leave_title: "Opuść grupę"
+      leave_body: "Stracisz dostęp do grupy, a Twoja waluta, odznaki i przedmioty w niej przepadną. Żeby wrócić, potrzebujesz nowego kodu od prowadzącego."
+      leave: "Opuść grupę"
+
+    nickname:
+      page_title: "Pseudonim w grupie %{name}"
+      title: "Pseudonim w grupie %{name}"
+      hint: "Widoczny w rankingu tylko w tej grupie. W innych grupach możesz mieć inny. Prowadzący widzi też Twoje imię i nazwisko."
+      save: "Zapisz pseudonim"
+
+    nickname_field:
+      label: "Twój pseudonim"
+      hint: "Do 24 znaków. Zostaw puste, żeby pokazywać imię i nazwisko."
+
+    confirm_leave:
+      page_title: "Opuść grupę %{name}"
+      title: "Opuścić grupę %{name}?"
+      lose: "Stracisz dostęp do sklepu, rankingu i swojej historii w tej grupie: %{balance} %{currency}, %{badges} i %{items}."
+      badges:
+        one: "%{count} odznaka"
+        few: "%{count} odznaki"
+        many: "%{count} odznak"
+        other: "%{count} odznaki"
+      items:
+        one: "%{count} przedmiot"
+        few: "%{count} przedmioty"
+        many: "%{count} przedmiotów"
+        other: "%{count} przedmiotu"
+      warning: "Tego nie da się cofnąć. Jeśli wrócisz do tej grupy z nowym kodem od prowadzącego, zaczniesz od zera."
+      stay: "Zostań w grupie"
+      leave: "Opuść grupę"
+
+  # StoryGroupStudent — the nickname is written both when joining and in the
+  # group settings.
+  activerecord:
+    errors:
+      models:
+        story_group_student:
+          attributes:
+            nickname:
+              length: "Pseudonim musi mieć od 2 do 24 znaków."
+              taken: "Ten pseudonim jest już zajęty w tej grupie."

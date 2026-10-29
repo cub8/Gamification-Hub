@@ -1,64 +1,62 @@
-- content_for :title, 'Studenci'
+- content_for :title, t('.title')
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Studenci
+    %h1.gh-h1= t('.title')
     %p.gh-lead= student_list_lead(@list)
 
   .gh-button-row
     = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
-      Kody i zaproszenia
+      = t('.invites')
     = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn',
                                                             data:  { turbo_frame: 'modal' } do
       %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
-      Pokaż kod dla studentów
+      = t('.show_code')
     - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
     = link_to new_import_story_group_students_path(@story_group), import_link_options do
       %i.fa-solid.fa-file-import{ 'aria-hidden': 'true' }
-      Importuj z CSV
+      = t('shared.actions.import_csv')
 
 - if @list.any?
   %div{data: { controller:              'list-search',
                list_search_total_value: @list.size,
-               list_search_of_value:    'z',  }}
+               list_search_of_value:    t('.of'),  }}
     .gh-student-list-toolbar
       %label.gh-search-input
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
         %input{type:         'search',
-               placeholder:  'Szukaj studenta',
-               'aria-label': 'Szukaj studenta',
+               placeholder:  t('.search'),
+               'aria-label': t('.search'),
                data:         { list_search_target: 'input', action: 'input->list-search#filter' },}
       %span.gh-card-meta{ data: { list_search_target: 'count' } }
-        = "#{@list.size} z #{@list.size}"
+        = t('.count', shown: @list.size, total: @list.size)
 
     %section.gh-panel.gh-student-list-panel
       %ul.gh-student-rows{ role: 'list' }
         %li.gh-student-row.gh-student-row--header{ 'aria-hidden': 'true' }
-          %span Student
-          %span Ranga
-          %span Życia
-          %span Do wydania
-          %span Zebrane
-          %span Odznaki
-          %span.gh-ledger-cell--right Akcje
+          %span= t('.columns.student')
+          %span= t('.columns.rank')
+          %span= t('.columns.lives')
+          %span= t('.columns.balance')
+          %span= t('.columns.total')
+          %span= t('.columns.badges')
+          %span.gh-ledger-cell--right= t('.columns.actions')
 
         = render partial: 'students/row', collection: @list.rows, as: :row
 
     %section.gh-panel.gh-empty-state{ hidden: true, data: { list_search_target: 'empty' } }
       %h2.gh-h2
-        Brak studentów o nazwie
+        = t('.no_match')
         %span{ data: { list_search_target: 'emptyQuery' } }
-      %p.gh-lead Wyczyść wyszukiwanie albo sprawdź pisownię.
+      %p.gh-lead= t('.no_match_hint')
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Nie ma jeszcze nikogo w grupie
-    %p.gh-lead
-      Wyślij studentom kod albo zaproszenie — kiedy dołączą, pojawią się tutaj
-      razem z rangą, walutą i życiami.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')
     .gh-button-row
-      = link_to 'Kody i zaproszenia', story_group_invites_path(@story_group), class: 'gh-btn'
+      = link_to t('.invites'), story_group_invites_path(@story_group), class: 'gh-btn'
       = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary',
                                                               data:  { turbo_frame: 'modal' } do
         %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
-        Pokaż kod dla studentów
+        = t('.show_code')

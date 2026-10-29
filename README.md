@@ -154,6 +154,21 @@ Studentami w grupie są:
 - `lukasz.krawczyk@example.com`
 - `barbara.kaczmarek@example.com`
 
+### Organizacja USOS
+
+Jedna organizacja jest powiązana z logowaniem przez USOS (kolumna `usos` w tabeli `organizations`). Obecnie jest to **Uniwersytet im. Adama Mickiewicza**, aczkolwiek nazwę można zmienić w seedach lub w modelu organizacji (`app/models/organization.rb`, wartość `USOS_NAME`). Taka organizacja:
+- nie ma limitu członków (`max_members` jest puste),
+- nie może zostać usunięta,
+- może istnieć tylko jedna (unikalny indeks na `usos`).
+
+Użytkownik logujący się przez USOS, który nie należy jeszcze do żadnej organizacji, jest do niej przypisywany (z pominięciem adminów organizacji i adminów globalnych). Użytkownicy, którzy mają już organizację, zostają w niej.
+
+Jeśli organizacja USOS nie istnieje, zostanie utworzona automatycznie (`Organization.usos`) przy pierwszym logowaniu przez USOS lub przy seedowaniu bazy. Można ją też utworzyć wcześniej ręcznie w konsoli Rails (na produkcji `bin/kamal console`):
+
+```ruby
+Organization.create!(usos: true, name: [WŁASNA NAZWA])
+```
+
 ### Konfiguracja credentiali
 
 Credentiale służą do tego, aby w bezpieczny sposób przechowywać ukryte dane w formacie **YAML** w plikach konfiguracyjnych. Wszystkie wrażliwe dane, klucze itd. zarówno testowe jak i produkcyjne powinny właśnie tam być umieszczane.

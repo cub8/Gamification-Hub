@@ -34,7 +34,7 @@
           = offer.discount_label
         %span.gh-tag.gh-tag--no-lives{ hidden: !offer.zero_lives?, data: targets[:tag_life] }
           %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
-          Działa przy 0 życiach
+          = t('.zero_lives')
 
       %p.gh-rule-text{ class: ('gh-placeholder-text' if item.didactic_description.blank?), data: targets[:rules] }
         = item_rules(item)
@@ -49,12 +49,12 @@
               = buy
             - else
               %button.gh-btn{ type: 'button', tabindex: -1 }
-                %span{ data: targets[:buy_label] }= "Kup za #{price}"
+                %span{ data: targets[:buy_label] }= t('.buy', price: price)
 
         - if all_feet || state == :save
           .gh-requirement-block{ hidden: hide.call(:save), data: targets[:foot_save] }
             .gh-requirement-title
-              Zbierz jeszcze
+              = t('.collect_more')
               %b{ data: targets[:need] }= need
             .gh-progress-bar.gh-octagon-clip
               %i.gh-octagon-clip{ style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%", data: targets[:bar] }
@@ -73,5 +73,5 @@
                        'aria-valuemin': 0,
                        'aria-valuemax': rp.target,
                        'aria-valuenow': rp.collected,
-                       'aria-label': "Postęp do rangi #{rp.rank_name}" }
+                       'aria-label': t('.progress_label', rank: rp.rank_name) }
                 %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(rp.collected, rp.target)}%" }

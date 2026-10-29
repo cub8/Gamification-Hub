@@ -1,0 +1,10 @@
+pl:
+  sessions:
+    new:
+      title: "Zaloguj się"
+      lead: "Wybierz sposób, z którego korzystasz na swojej uczelni lub w szkole."
+      usos: "Zaloguj się przez USOS"
+      usos_hint: "Studenci i nauczyciele uczelni"
+      or: "albo"
+      email: "Zaloguj się e-mailem"
+      email_hint: "Uczniowie szkół i osoby dodane przez administratora"

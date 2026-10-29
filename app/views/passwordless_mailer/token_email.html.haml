@@ -6,21 +6,21 @@
           %td{ style: 'padding:32px;font-family:Helvetica,Arial,sans-serif;' }
             %p{ style: 'margin:0 0 28px;font:800 18px/1 Helvetica,Arial,sans-serif;color:#221A2B;' } Gamification Hub
 
-            %h1{ style: 'margin:0 0 16px;font-size:22px;color:#221A2B;' } Zaloguj się
+            %h1{ style: 'margin:0 0 16px;font-size:22px;color:#221A2B;' }= t('.title')
             %p{ style: 'margin:0 0 12px;font-size:15px;line-height:1.5;color:#584C64;' }
-              = "Cześć, #{@first_name}!"
+              = t('.greeting', name: @first_name)
             %p{ style: 'margin:0 0 24px;font-size:15px;line-height:1.5;color:#584C64;' }
-              Kliknij przycisk poniżej, aby zalogować się. Hasło nie jest potrzebne.
+              = t('.body')
 
             %table{ cellpadding: 0, cellspacing: 0, border: 0 }
               %tr
                 %td{ style: 'background:#FF7A1A;border-bottom:3px solid #C45A10;', align: 'center' }
-                  %a{ href: @token_link, style: 'display:inline-block;padding:14px 28px;font:700 15px Helvetica,Arial,sans-serif;color:#221A2B;text-decoration:none;' } Zaloguj się
+                  %a{ href: @token_link, style: 'display:inline-block;padding:14px 28px;font:700 15px Helvetica,Arial,sans-serif;color:#221A2B;text-decoration:none;' }= t('.button')
 
             %p{ style: 'margin:24px 0 0;font-size:13px;line-height:1.5;color:#85798F;' }
-              = "Link jest ważny przez #{gh_minutes(@expires_in_minutes)}. Jeśli przycisk nie działa, skopiuj ten adres do przeglądarki:"
+              = t('.fallback', minutes: gh_minutes(@expires_in_minutes))
             %p{ style: 'margin:8px 0 0;font-size:13px;word-break:break-all;' }
               %a{ href: @token_link, style: 'color:#584C64;' }= @token_link
 
             %p{ style: 'margin:28px 0 0;padding-top:16px;border-top:1px solid #E4DCEA;font-size:12.5px;color:#85798F;' }
-              Jeśli to nie Ty próbowałeś się zalogować, możesz zignorować tę wiadomość.
+              = t('.ignore')

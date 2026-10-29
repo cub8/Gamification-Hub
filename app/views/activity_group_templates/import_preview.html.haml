@@ -1,8 +1,6 @@
 = turbo_frame_tag 'modal' do
-  %h2.gh-h2 Podgląd importu szablonów
-  - templates_count = @preset.templates.size
-  %p.gh-field-hint
-    = "Zostanie dodanych: #{templates_count} #{gh_plural(templates_count, 'szablon', 'szablony', 'szablonów')}."
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.templates.size)
 
   = render 'shared/templates_preview_rows', templates: @preset.templates
 
@@ -18,6 +16,6 @@
 
     .gh-dialog-button-row
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        Anuluj
+        = t('shared.actions.cancel')
       %button.gh-btn{ type: 'submit' }
-        Zatwierdź import
+        = t('shared.actions.confirm_import')

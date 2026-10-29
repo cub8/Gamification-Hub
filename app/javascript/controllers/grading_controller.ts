@@ -1,6 +1,16 @@
 import { application } from "@controllers/application"
 import { Controller, type ActionEvent } from "@hotwired/stimulus"
 import { TOAST_EVENT, type ToastDetail } from "@controllers/toast_controller"
+import { interpolate, pluralize, type PluralForms } from "@utils/i18n"
+
+interface Wording {
+  cells: PluralForms
+  students: PluralForms
+  recipients: PluralForms
+  cell_empty: string
+  cell_marked: string
+  locked: string
+}
 
 class GradingController extends Controller<HTMLElement> {
   static targets = [
@@ -11,11 +21,7 @@ class GradingController extends Controller<HTMLElement> {
   ]
 
   static values = {
-    cells: Array,
-    students: Array,
-    recipients: Array,
-    states: Array,
-    currency: String,
+    i18n: Object,
   }
 
   declare readonly searchTarget: HTMLInputElement
@@ -34,11 +40,7 @@ class GradingController extends Controller<HTMLElement> {
   declare readonly reviewRowTargets: HTMLElement[]
   declare readonly reviewChipTargets: HTMLElement[]
   declare readonly reviewConfirmSumTarget: HTMLElement
-  declare readonly cellsValue: string[]
-  declare readonly studentsValue: string[]
-  declare readonly recipientsValue: string[]
-  declare readonly statesValue: string[]
-  declare readonly currencyValue: string
+  declare readonly i18nValue: Wording
 
   connect() {
     this.clearTarget.hidden = false
@@ -90,7 +92,7 @@ class GradingController extends Controller<HTMLElement> {
 
   locked() {
     const detail: ToastDetail = {
-      message: "To pole jest już przyznane i nie można go cofnąć.",
+      message: this.i18nValue.locked,
       icon: "fa-lock",
     }
 
@@ -150,10 +152,8 @@ class GradingController extends Controller<HTMLElement> {
     const students = new Set(marked.map((cell) => this.studentOf(cell))).size
     const sum = marked.reduce((total, cell) => total + rewardOf(cell), 0)
 
-    this.barCellsTarget.textContent =
-      `Zaznaczone teraz: ${count} ${plural(count, this.cellsValue)}`
-    this.barStudentsTarget.textContent =
-      `u ${students} ${plural(students, this.studentsValue)}, razem`
+    this.barCellsTarget.textContent = pluralize(this.i18nValue.cells, count)
+    this.barStudentsTarget.textContent = pluralize(this.i18nValue.students, students)
     this.barSumTarget.textContent = `+${sum}`
   }
 
@@ -185,14 +185,14 @@ class GradingController extends Controller<HTMLElement> {
     const students = byStudent.size
 
     this.reviewSumTarget.textContent = String(sum)
-    this.reviewStudentsTarget.textContent = `${students} ${plural(students, this.recipientsValue)}`
+    this.reviewStudentsTarget.textContent = pluralize(this.i18nValue.recipients, students)
     this.reviewConfirmSumTarget.textContent = String(sum)
   }
 
   private relabel(box: HTMLInputElement) {
-    const [empty, marked] = this.statesValue
+    const template = box.checked ? this.i18nValue.cell_marked : this.i18nValue.cell_empty
 
-    box.setAttribute("aria-label", `${box.dataset.ghLabel ?? ""}: ${box.checked ? marked : empty}`)
+    box.setAttribute("aria-label", interpolate(template, { label: box.dataset.ghLabel ?? "" }))
   }
 
   private get visibleCells(): HTMLElement[] {
@@ -232,17 +232,6 @@ function fold(text: string): string {
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/ł/g, "l")
-}
-
-function plural(count: number, forms: string[]): string {
-  const [one, few, many] = forms
-  const last = count % 10
-  const teens = count % 100
-
-  if (count === 1) return one
-  if (last >= 2 && last <= 4 && (teens < 12 || teens > 14)) return few
-
-  return many
 }
 
 application.register("grading", GradingController)

@@ -79,7 +79,7 @@ module Csv
 
       match = RANK_LABEL.match(label.strip)
       unless match
-        warnings << "Nie rozpoznano formatu rangi „#{label}” dla przedmiotu „#{item_name}” - pominięto to ograniczenie."
+        warnings << I18n.t('items.csv_import.rank_format_unrecognized', label: label, item: item_name)
         return
       end
 
@@ -90,7 +90,7 @@ module Csv
       existing = story_group&.ranks&.find_by(name: name, required_currency_value: threshold)
       return existing if existing
 
-      warnings << "Nie znaleziono rangi „#{label}” dla przedmiotu „#{item_name}” - pominięto to ograniczenie."
+      warnings << I18n.t('items.csv_import.rank_not_found', label: label, item: item_name)
       nil
     end
 
@@ -105,7 +105,7 @@ module Csv
       existing = story_group && story_group.badges.kept.find_by(name: name)
       return existing if existing
 
-      warnings << "Nie znaleziono odznaki „#{name}” dla przedmiotu „#{item_name}” - pominięto to ograniczenie."
+      warnings << I18n.t('items.csv_import.badge_not_found', name: name, item: item_name)
       nil
     end
   end

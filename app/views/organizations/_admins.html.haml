@@ -1,0 +1,26 @@
+%section.gh-panel.gh-organizations-panel
+  %h2.gh-h3.gh-organizations-panel-title= t('.title')
+
+  - if admins.any?
+    - admins.each do |admin|
+      - name = admin.full_name.presence || admin.email
+      .gh-organization-member-row{ id: dom_id(admin, :admin) }
+        = render 'organizations/person', user: admin
+        %span.gh-teacher-role
+          = t('.role')
+          - if admin.first_login?
+            %small= t('.invited')
+        - if manage_admins
+          %span
+          %span.gh-organization-member-actions
+            - if admin.first_login?
+              = render 'organizations/resend_invitation_button', organization: admin.organization, user: admin,
+                                                                  name: name
+            = link_to confirm_destroy_organization_admin_path(admin.organization, admin),
+                      class:        'gh-icon-button',
+                      title:        t('.remove'),
+                      'aria-label': t('.remove_label', name: name),
+                      data:         { turbo_frame: 'modal' } do
+              %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
+  - else
+    %p.gh-explainer-note= t('.none')

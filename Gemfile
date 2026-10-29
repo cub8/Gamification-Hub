@@ -25,6 +25,7 @@ gem 'solid_queue', '~> 1.3' # Adapter ActiveJob (queues)
 
 # Others
 gem 'bootsnap', '~> 1.23', require: false # Reduces boot times through caching; required in config/boot.rb
+gem 'crass', '>= 1.0.8' # To adress 1.0.7 vulnerability
 gem 'csv', '~> 3.3' # CSV generation for story-group configuration exports/imports
 gem 'erb', '>= 6.0.4' # To address 6.0.2 vulnerability
 gem 'haml-rails', '~> 3.0' # For easier writing HTML with embedded Ruby
@@ -34,6 +35,7 @@ gem 'omniauth-oauth', '~> 1.2' # OAuth 1.0
 gem 'omniauth-rails_csrf_protection', '~> 2.0' # OAuth CSRF compatibility
 gem 'pundit', '~> 2.5.2' # For roles managements
 gem 'rack-attack', '~> 6.8.0' # For throttling incoming request in authentication
+gem 'rails-i18n', '~> 8.0' # For internationalization [https://github.com/svenfuchs/rails-i18n]
 gem 'rondo_form', '~> 1.0' # For nested forms
 gem 'rqrcode', '~> 3.0' # For generating QR codes
 gem 'tzinfo-data', '~> 1', platforms: %i[windows jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

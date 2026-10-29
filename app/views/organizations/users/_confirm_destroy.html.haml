@@ -1,0 +1,13 @@
+%h2.gh-h2= t('.title', name: user.full_name)
+%p= t('.body')
+= render 'organizations/owned_groups_notice', user: user
+
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }= t('organizations.dialog_actions.cancel')
+  - else
+    = link_to t('organizations.dialog_actions.cancel'), organization_path(@organization), class: 'gh-btn gh-btn--secondary'
+
+  = button_to t('.remove'), organization_user_path(@organization, user),
+    method: :delete, class: 'gh-btn',
+    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

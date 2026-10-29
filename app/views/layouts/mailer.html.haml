@@ -1,8 +1,9 @@
 !!!
-%html
+%html{ lang: I18n.locale }
   %head
     %meta{content: "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
     :css
-      /* Email styles need to be inline */
+    - if content_for?(:email_styles)
+      %style= yield(:email_styles)
   %body
     = yield

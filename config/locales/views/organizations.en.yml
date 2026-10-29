@@ -1,0 +1,185 @@
+en:
+  organizations:
+    flash:
+      created: "Organization created."
+      updated: "Organization updated."
+      destroyed: "Deleted organization %{name}."
+      admin_added: "Organization administrator added. An invitation has been sent by e-mail."
+      user_added: "User added to the organization. An invitation has been sent by e-mail."
+      admin_removed: "Deleted administrator: %{name}."
+      user_updated: "Changes saved: %{name}."
+      user_removed: "Deleted user: %{name}."
+      invitation_resent: "Invitation sent again: %{email}."
+      too_many_resends: "The invitation has already been sent several times. Try again in a few minutes."
+
+    # OrganizationsHelper#user_role_label — a role not listed here is humanized.
+    roles:
+      student: "Student"
+      teacher: "Teacher"
+
+    helpers:
+      capacity_accounts:
+        one: "%{count} account"
+        other: "%{count} accounts"
+      capacity_free:
+        one: "%{count} free"
+        other: "%{count} free"
+      capacity_unlimited: "%{accounts} · no seat limit"
+      capacity_limited: "%{members} of %{max} seats taken · %{free}"
+
+    index:
+      title: "Organizations"
+      lead: "Universities using the app. Accounts that sign in through USOS go to the organization %{usos}."
+      create: "Create organization"
+      organization: "Organization"
+      members: "Members"
+      admins: "Administrators"
+      empty_title: "There are no organizations yet"
+      empty_lead: "Create an organization, then add its administrator — they'll invite everyone else."
+
+    show:
+      breadcrumb: "Organizations"
+      edit: "Edit"
+      add_admin: "Add an administrator"
+      add_user: "Add a user"
+      danger_title: "Delete the organization"
+      danger_body: "All of its accounts will disappear along with the organization. This can't be undone."
+      danger_button: "Delete the organization"
+
+    admins:
+      title: "Administrators"
+      role: "Administrator"
+      invited: "Invitation sent"
+      none: "The organization has no administrator yet."
+      remove: "Delete"
+      remove_label: "Delete: %{name}"
+      confirm_destroy:
+        page_title: "Delete the administrator?"
+        title: "Delete the administrator %{name}?"
+        body: "The account will be deleted permanently and one seat in the organization will be freed."
+        pending: "The invitation that was sent will stop working."
+        remove: "Delete the account"
+
+    members:
+      search_placeholder: "Search by name or e-mail"
+      search_label: "Search for a user"
+      all_roles: "All roles"
+      filter_label: "Filter by role"
+      of: "of"
+      user: "User"
+      role: "Role"
+      index_number: "Index number"
+      actions: "Actions"
+      no_match: "No users match"
+      no_match_hint: "Clear the search, change the role or check the spelling."
+      empty_title: "There are no users yet"
+      empty_lead: "Add students and teachers — they'll get an invitation by e-mail. Accounts created by signing in through the university show up here on their own."
+
+    member_row:
+      invited: "Invitation sent"
+      index_number: "Index number"
+      role: "Role"
+      edit: "Edit"
+      edit_label: "Edit: %{name}"
+      remove: "Delete"
+      remove_label: "Delete: %{name}"
+
+    resend_invitation_button:
+      title: "Resend the invitation"
+      label: "Resend the invitation: %{name}"
+
+    owned_groups_notice:
+      lead:
+        one: "The group led by this account will be deleted too:"
+        other: "The groups led by this account will be deleted too:"
+      rest: "— along with all students, currency, badges and grade sheets."
+
+    form:
+      new_title: "New organization"
+      edit_title: "Edit the organization"
+      usos_note: "This organization is tied to USOS: everyone who signs in through USOS lands here. It has no member limit and can't be deleted."
+      name: "Name"
+      max_members: "Member limit"
+      create: "Create organization"
+      save: "Save"
+
+    new:
+      page_title: "New organization"
+
+    edit:
+      page_title: "Edit the organization — %{name}"
+
+    new_admin:
+      page_title: "Add an organization administrator"
+
+    admin_form:
+      title: "Add an administrator"
+      hint: "We'll send an invitation to the address you enter. After the first sign-in the administrator fills in their details."
+      email: "E-mail address"
+      email_placeholder: "john.smith@example.com"
+      submit: "Send the invitation"
+
+    new_user:
+      page_title: "Add an organization user"
+
+    user_form:
+      new_title: "Add a user"
+      edit_title: "Edit the user"
+      hint: "We'll send an invitation to the address you enter. The account takes up one seat in the organization."
+      email: "E-mail address"
+      email_placeholder: "john.smith@example.com"
+      full_name: "Full name"
+      role: "Role"
+      university_number: "Index number (optional)"
+      usos_id: "USOS ID (optional)"
+      submit_new: "Send the invitation"
+      submit_edit: "Save"
+
+    users:
+      edit:
+        page_title: "Edit the user — %{name}"
+      confirm_destroy:
+        page_title: "Delete the account of %{name}?"
+        title: "Delete the account of %{name}?"
+        body: "The account will be deleted permanently, together with its group memberships, currency, badges and items. One seat in the organization will be freed."
+        remove: "Delete the account"
+
+    confirm_destroy:
+      page_title: "Delete the organization %{name}"
+      title: "Delete the organization for good?"
+      accounts:
+        one: "%{count} account will be deleted"
+        other: "%{count} accounts will be deleted"
+      accounts_tail: "along with the organization, including the administrators' accounts."
+      confirm_label: "Type the organization's name to confirm:"
+      mismatch: "The name you typed doesn't match the organization's name. The organization was not deleted."
+      remove: "Delete the organization"
+
+    dialog_actions:
+      cancel: "Cancel"
+
+  account_setups:
+    flash:
+      done: "Account set up."
+    edit:
+      page_title: "Account setup"
+      title: "Fill in your details"
+      lead: "This is a one-time step. The teachers in your groups will see your full name."
+      email: "E-mail address"
+      full_name: "Full name"
+      full_name_placeholder: "John Smith"
+      submit: "Save and continue"
+      logout: "Log out"
+
+  activerecord:
+    errors:
+      models:
+        organization:
+          attributes:
+            max_members:
+              below_members: "The limit can't be lower than the current number of members (%{count})."
+          usos_undeletable: "The organization tied to USOS can't be deleted."
+        user:
+          attributes:
+            organization:
+              member_limit: "The organization has reached its member limit."

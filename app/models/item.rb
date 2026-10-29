@@ -17,21 +17,20 @@ class Item < ApplicationRecord
   has_many :discount_badges, through: :items_min_badges_for_discounts, source: :badge
 
   has_many :students_items, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   has_icon_art :icon, glyphs: Glyphs::ITEM
 
-  validates :name, presence: { message: 'Podaj nazwę przedmiotu.' },
-                   length:   { maximum: 50 }
+  validates :name, presence: true, length: { maximum: 50 }
 
-  validates :didactic_description, presence: { message: 'Napisz, co przedmiot daje studentowi.' },
-                                   length:   { maximum: 255 }
+  validates :didactic_description, presence: true, length: { maximum: 255 }
 
   validates :story_description, length: { maximum: 255 }
 
   validates :price, numericality: {
     only_integer:             true,
     greater_than_or_equal_to: 1,
-    message:                  'Cena musi wynosić co najmniej 1.',
+    message:                  :too_low,
   }
 
   scope :by_price, -> { order(:price, :name, :id) }

@@ -1,25 +1,23 @@
-- content_for :title, 'Arkusze ocen'
+- content_for :title, t('.title')
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Arkusze ocen
-    %p.gh-lead Arkusze pogrupowane według szablonów. Najnowsze są na górze.
+    %h1.gh-h1= t('.title')
+    %p.gh-lead= t('.lead')
 
   .gh-button-row
     = link_to new_story_group_activity_group_template_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      Nowy szablon
+      = t('.new_template')
     - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
     = link_to new_import_story_group_activity_group_templates_path(@story_group), import_link_options do
       %i.fa-solid.fa-file-import{ 'aria-hidden': 'true' }
-      Importuj z CSV
+      = t('shared.actions.import_csv')
 
 - if @index.any?
   - @index.templates.each do |template|
     = render 'template_panel', template: template, fresh_sheet_ids: @fresh_sheet_ids
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Nie masz jeszcze żadnego szablonu
-    %p.gh-lead
-      Szablon to zestaw kategorii, za które nagradzasz studentów. Z jednego
-      szablonu tworzysz potem kolejne arkusze — po jednym na zajęcia.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body')

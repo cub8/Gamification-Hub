@@ -1,0 +1,139 @@
+en:
+  shared:
+    # Generic buttons and labels used across screens.
+    actions:
+      add: "Add"
+      back_to_editing: "Back to editing"
+      cancel: "Cancel"
+      close: "Close"
+      confirm: "Confirm"
+      confirm_import: "Confirm import"
+      edit: "Edit"
+      fewer: "Fewer"
+      import: "Import"
+      import_csv: "Import from CSV"
+      more: "More"
+      name: "Name"
+      next: "Next"
+      ok: "OK"
+      optional: "(optional)"
+      preview: "Preview"
+      removal: "Deleting"
+      remove: "Remove"
+      save: "Save"
+      save_changes: "Save changes"
+    # shared/_sheet_form — template (new, edit) and sheet settings.
+    sheet_form:
+      template_new_title: "New sheet template"
+      template_edit_title: "Edit sheet template"
+      sheet_title: "Sheet settings"
+      breadcrumb: "Grade sheets"
+      new_template: "New template"
+      sheet_lead: "Changes only apply to this sheet."
+      template_lead: "The preview shows the grade sheet header."
+      template_changes: "Changes only apply to sheets created from now on."
+      sheets_range_unchanged: "%{first} – %{last} stay unchanged."
+      sheet_unchanged: "%{name} stays unchanged."
+      awarded:
+        one: "%{count} reward has already been awarded in this sheet."
+        other: "%{count} rewards have already been awarded in this sheet."
+      awarded_note: "Column changes only apply to future rewards. The template %{name} doesn't change."
+      sheet_name: "Sheet name"
+      template_name: "Template name"
+      sheet_name_placeholder: "e.g. Lab 5 (14.10)"
+      template_name_placeholder: "e.g. Lab"
+      name_example: "Lab"
+      template_name_hint: "New sheets get the template name with the next number, e.g. %{example} 6."
+      sheet_columns: "Grade sheet columns"
+      template_categories: "Reward categories"
+      columns_hint: "Each category is a column in the grade sheet. The order here is the column order."
+      add_column: "Add column"
+      add_category: "Add category"
+      summary: "%{count} in the grade sheet. A student can earn up to %{max} %{currency} per sheet."
+      sheet_removal_hint: "The sheet will disappear from the list, and awarded rewards stay with the students and in their history."
+      template_removal_hint: "The template will disappear from the list, and sheets created from it stay."
+      remove_sheet: "Delete sheet"
+      remove_template: "Delete template"
+      no_changes: "No changes"
+      create: "Create template"
+      discard_title: "Discard changes?"
+      discard_body: "Unsaved changes will be lost."
+      discard: "Discard changes"
+      sample_names: ["Alex Johnson", "Barbara Miller"]
+      # sheet_form_controller.ts
+      js:
+        columns:
+          one: "%{count} column"
+          other: "%{count} columns"
+        dirty: "Unsaved changes"
+        clean: "No changes"
+        name_label: "Category %{number}: for what"
+        reward_label: "Reward for category %{number}"
+        story_label: "Story description of category %{number}"
+        destroy_column: "Remove column %{number}"
+        destroy_category: "Remove category %{number}"
+
+    category_row:
+      drag: "Drag to reorder"
+      name_placeholder: "For what, e.g. Helping others"
+      add_story: "Add a story description"
+      story_placeholder: "Story description, e.g. Towing a damaged ship"
+      sheet_only: "Only in this sheet"
+      hidden_column: "Hidden in the grade sheet"
+      awarded:
+        one: "%{count} reward awarded."
+        other: "%{count} rewards awarded."
+      locked_note: "The column can't be removed, but it can be hidden."
+      reward_note: "The new value only applies to future rewards."
+      move_up: "Move up"
+      move_down: "Move down"
+      show: "Show in the grade sheet"
+      hide: "Hide in the grade sheet"
+
+    grid_preview:
+      summary: "Grade sheet preview"
+      header: "Grade sheet header"
+      student: "Student"
+      hint: "Hover over a header in the real sheet to see the story description."
+
+    # shared/_image_field — the defaults, overridden per form.
+    image_field:
+      label: "Image"
+      presets: "Ready-made images"
+      own: "Your image"
+      upload: "Or upload your own image"
+      hint: "JPG or PNG, ideally at least 400 px."
+      crop: "Crop the image"
+      cropped: "Move and resize the selection — the preview updates as you go. We save a card-shaped crop, so it fills the card completely. In lists you'll see it as a square thumbnail, also in full."
+      preset_label: "%{label}: %{name}"
+      choose_file: "Choose file"
+
+    register_prompt:
+      no_account: "Don't have an account?"
+      register: "Sign up"
+
+    csv_import:
+      select_file: "Choose a CSV file."
+      empty_file: "The file didn't contain any data."
+      malformed_file: "Couldn't read the file - check that it's a valid CSV file."
+      malformed_files: "Couldn't read one of the uploaded files - check that they're valid CSV files."
+      invalid_data: "The file contains invalid data: %{errors}"
+      imported: "Imported data from the CSV file."
+
+    csv_dropzone_field:
+      default_label: "Choose a CSV file"
+      choose_file: "Choose file"
+      remove: "Remove the selected file"
+
+    ranks_preview_rows:
+      meta: "Threshold: %{threshold}, discount: %{discount}%."
+
+    badges_preview_rows:
+      meta: "%{description} Discount: %{discount}%."
+
+    items_preview_rows:
+      requirement: "Requires: %{requirement}"
+      also_at_zero_lives: "(also at 0 lives)"
+
+    templates_preview_rows:
+      no_categories: "No categories."

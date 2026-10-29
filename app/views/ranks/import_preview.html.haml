@@ -1,7 +1,6 @@
 = turbo_frame_tag 'modal' do
-  %h2.gh-h2 Podgląd importu rang
-  - ranks_count = @preset.ranks.size
-  %p.gh-field-hint= "Zostanie dodanych: #{ranks_count} #{gh_plural(ranks_count, 'ranga', 'rangi', 'rang')}."
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.ranks.size)
 
   = render 'shared/ranks_preview_rows', ranks: @preset.ranks
 
@@ -15,6 +14,6 @@
 
     .gh-dialog-button-row
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        Anuluj
+        = t('shared.actions.cancel')
       %button.gh-btn{ type: 'submit' }
-        Zatwierdź import
+        = t('shared.actions.confirm_import')

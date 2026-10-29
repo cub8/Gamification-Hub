@@ -1,0 +1,56 @@
+en:
+  story_group_memberships:
+    flash:
+      nickname: "Your nickname in this group: %{name}."
+      left: "You left the group %{name}."
+
+    edit:
+      page_title: "Group settings - %{name}"
+      title: "Group settings"
+      lead: "These settings only apply to the group %{name}."
+      nickname: "Nickname"
+      nickname_hint: "Visible in the ranking only in this group. You can have a different one in other groups."
+      teacher_sees: "What the teacher sees"
+      teacher_sees_hint: "Other students only see your nickname, and only in the ranking."
+      full_name: "Full name"
+      email: "E-mail"
+      university_number: "Student number"
+      none: "None"
+      leave_title: "Leave the group"
+      leave_body: "You'll lose access to the group, and your currency, badges and items in it will be gone. To come back, you'll need a new code from your teacher."
+      leave: "Leave the group"
+
+    nickname:
+      page_title: "Nickname in the group %{name}"
+      title: "Nickname in the group %{name}"
+      hint: "Visible in the ranking only in this group. You can have a different one in other groups. The teacher also sees your full name."
+      save: "Save nickname"
+
+    nickname_field:
+      label: "Your nickname"
+      hint: "Up to 24 characters. Leave it empty to show your full name."
+
+    confirm_leave:
+      page_title: "Leave the group %{name}"
+      title: "Leave the group %{name}?"
+      lose: "You'll lose access to the shop, the ranking and your history in this group: %{balance} %{currency}, %{badges} and %{items}."
+      badges:
+        one: "%{count} badge"
+        other: "%{count} badges"
+      items:
+        one: "%{count} item"
+        other: "%{count} items"
+      warning: "This can't be undone. If you come back to this group with a new code from your teacher, you'll start from scratch."
+      stay: "Stay in the group"
+      leave: "Leave the group"
+
+  # StoryGroupStudent — the nickname is written both when joining and in the
+  # group settings.
+  activerecord:
+    errors:
+      models:
+        story_group_student:
+          attributes:
+            nickname:
+              length: "The nickname must be 2 to 24 characters long."
+              taken: "This nickname is already taken in this group."

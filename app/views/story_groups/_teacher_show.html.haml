@@ -12,16 +12,16 @@
         .gh-button-row
           = link_to story_group_invites_path(story_group), class: 'gh-btn' do
             %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
-            Pokaż kod dla studentów
+            = t('.show_code')
           = link_to story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--secondary' do
             %i.fa-solid.fa-table{ 'aria-hidden': 'true' }
-            Utwórz arkusz
+            = t('.create_sheet')
           - if policy(story_group).update?
             = link_to edit_story_group_path(story_group), class: 'gh-btn gh-btn--secondary' do
               %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }
-              Ustawienia grupy
+              = t('.settings')
 
-%section.gh-panel.gh-stat-row{ 'aria-label': 'Podsumowanie grupy' }
+%section.gh-panel.gh-stat-row{ 'aria-label': t('.summary') }
   %dl
     - overview.stat_tiles.each do |tile|
       .gh-stat-tile
@@ -33,7 +33,7 @@
 
 .gh-overview-grid
   %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-purchases-title' }
-    %h2#gh-purchases-title.gh-h2 Ostatnie zakupy
+    %h2#gh-purchases-title.gh-h2= t('.purchases')
 
     - if overview.purchases.any?
       %ul.gh-purchase-list
@@ -41,23 +41,21 @@
           %li.gh-purchase-row.gh-purchase-row--group-variant
             = render 'layouts/item_thumb', item: purchase.item
             %span.gh-purchase-row-main
-              %b= purchase.item&.name || 'Przedmiot usunięty z oferty'
+              %b= purchase.item&.name || t('.removed_item')
               %span= purchase.student_name
             %span.gh-price-badge
               %b= purchase.price
               = render 'layouts/currency_token', story_group: story_group, size: 16
             %span.gh-purchase-row-time= gh_when(purchase.time)
 
-      = link_to 'Wszystkie zakupy w grupie', home_path(group: story_group.id), class: 'gh-link-button'
+      = link_to t('.all_purchases'), home_path(group: story_group.id), class: 'gh-link-button'
     - else
-      %p.gh-explainer-note
-        Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same, gdy
-        studenci zaczną wydawać walutę w sklepie.
+      %p.gh-explainer-note= t('.no_purchases')
 
   .gh-overview-column
     - if overview.attention.any?
       %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-attention-title' }
-        %h2#gh-attention-title.gh-h2 Wymaga uwagi
+        %h2#gh-attention-title.gh-h2= t('.attention')
         %ul.gh-attention-list
           - overview.attention.each do |row|
             %li
@@ -71,12 +69,12 @@
 
     - if overview.recent_sheets.any?
       %section.gh-panel.gh-overview-side-panel{ 'aria-labelledby': 'gh-sheets-title' }
-        %h2#gh-sheets-title.gh-h2 Ostatnie arkusze
+        %h2#gh-sheets-title.gh-h2= t('.recent_sheets')
         - overview.recent_sheets.each do |sheet|
           .gh-sheet-summary-row
             %div
               %b= sheet.activity_group.name
-              = link_to 'Otwórz', story_group_activity_groups_path(story_group), class: 'gh-link-button'
+              = link_to t('.open'), story_group_activity_groups_path(story_group), class: 'gh-link-button'
             - if sheet.podium.any?
               %ol.gh-leaderboard-top3
                 - sheet.podium.each_with_index do |place, index|
@@ -86,11 +84,9 @@
                     %span.gh-leaderboard-score +#{place.points}
               %p.gh-small= ranking_visibility_note(story_group)
             - else
-              %p.gh-small Nikt nie ma jeszcze nagród z tego arkusza.
+              %p.gh-small= t('.no_rewards')
     - else
       %section.gh-panel.gh-overview-side-panel
-        %h2.gh-h2 Nie masz jeszcze arkuszy ocen
-        %p.gh-explainer-note
-          Arkusz to jedne zajęcia: kolumny z nagrodami i lista studentów.
-          Utwórz pierwszy, żeby zacząć przyznawać walutę.
-        = link_to 'Utwórz arkusz', story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--secondary'
+        %h2.gh-h2= t('.no_sheets_title')
+        %p.gh-explainer-note= t('.no_sheets_body')
+        = link_to t('.create_sheet'), story_group_activity_groups_path(story_group), class: 'gh-btn gh-btn--secondary'

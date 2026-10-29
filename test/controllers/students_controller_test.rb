@@ -76,4 +76,23 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_import_story_group_students_url(@story_group)
     assert_match(/nie udało się odczytać/i, flash[:alert])
   end
+
+  test 'lives notice uses Polish plural forms' do
+    @story_group_student.update!(lives: 1)
+
+    post update_lives_story_group_student_url(@story_group, @story_group_student, change: 1)
+    assert_equal "#{@story_group_student.display_name} ma teraz 2 życia.", flash[:notice]
+
+    @story_group_student.update!(lives: 4)
+    post update_lives_story_group_student_url(@story_group, @story_group_student, change: 1)
+    assert_equal "#{@story_group_student.display_name} ma teraz 5 żyć.", flash[:notice]
+  end
+
+  test 'lives notice in English' do
+    patch locale_path, params: { locale: 'en' }
+    @story_group_student.update!(lives: 0)
+
+    post update_lives_story_group_student_url(@story_group, @story_group_student, change: 1)
+    assert_equal "#{@story_group_student.display_name} now has 1 life.", flash[:notice]
+  end
 end

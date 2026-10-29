@@ -2,7 +2,7 @@
   .gh-preset-review-section
     %h3.gh-h3= template.name
     - if template.categories.empty?
-      %p.gh-field-hint Bez kategorii.
+      %p.gh-field-hint= t('.no_categories')
     - template.categories.each do |category|
       .gh-preset-row
         %i.fa-solid.fa-table-cells{ 'aria-hidden': 'true' }

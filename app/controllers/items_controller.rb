@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
 
     if @item.save
       redirect_to story_group_items_path(@story_group),
-                  notice: "Dodano przedmiot „#{@item.name}” do sklepu."
+                  notice: t('items.flash.created', name: @item.name)
     else
       set_shelf
       render :new, status: :unprocessable_content
@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
   def update
     if @item.update(item_params)
       redirect_to story_group_items_path(@story_group),
-                  notice: "Zapisano „#{@item.name}”. Zmiany dotyczą nowych zakupów."
+                  notice: t('items.flash.updated', name: @item.name)
     else
       set_shelf
       render :edit, status: :unprocessable_content
@@ -55,8 +55,7 @@ class ItemsController < ApplicationController
     @item.soft_delete!
 
     redirect_outside_turbo_frame story_group_items_path(@story_group),
-                                 notice: "Usunięto „#{name}” z oferty. " \
-                                         'Kupione egzemplarze zostają u studentów.'
+                                 notice: t('items.flash.destroyed', name: name)
   end
 
   private

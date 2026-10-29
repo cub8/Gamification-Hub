@@ -1,6 +1,7 @@
-- content_for :title, 'Importuj rangi'
+- content_for :title, t('.title')
+- columns = tag.code('nazwa, próg_waluty, zniżka, ikona')
 
-= render 'shared/csv_import_dialog', title: 'Importuj rangi z CSV',
+= render 'shared/csv_import_dialog', title: t('.dialog_title'),
                                      url:   import_story_group_ranks_path(@story_group),
-                                     hint:  'Kolumny: nazwa, próg_waluty, zniżka, ikona.',
+                                     hint:  t('.hint_html', columns: columns),
                                      error: @upload_error

@@ -3,4 +3,4 @@
 = render 'currency_transactions/ledger', ledger: sheet.ledger, kind: kind,
   path_for: path_for,
   summary: ledger_summary_sentence(sheet.ledger),
-  empty_message: 'Brak wpisów tego typu.'
+  empty_message: t('.empty')

@@ -1,0 +1,172 @@
+en:
+  items:
+    flash:
+      created: "Added “%{name}” to the shop."
+      updated: "Saved “%{name}”. Changes apply to new purchases."
+      destroyed: "Removed “%{name}” from the shop. Copies already bought stay with the students."
+
+    helpers:
+      nobody_bought: "Nobody has bought it yet"
+      bought:
+        one: "Bought %{count} time"
+        other: "Bought %{count} times"
+      name_placeholder: "Item name"
+      rules_placeholder: "What it gives the student…"
+      unlock_option_rank: "from the %{name} rank"
+      unlock_option_everyone: "any student"
+      discount_option_rank: "from %{name} (−%{discount}% and more)"
+      discount_option_none: "none"
+
+    # Sentences built by ItemsHelper and, live, by item_form_controller.ts.
+    # %{...} slots in bold are names and numbers; the rest are fragments below.
+    sentences:
+      unlock_everyone: "Any student can buy this item%{lives}"
+      unlock_restricted: "Only students%{rank}%{badges} can buy it%{lives}"
+      unlock_rank: " with the %{rank} rank or higher"
+      unlock_badges:
+        one: " who have the %{badges} badge"
+        other: " who have all the badges %{badges}"
+      lives_yes: ", even at 0 lives."
+      lives_no: " if they have at least 1 life."
+      no_discount: "No discounts. Every buyer pays %{price}."
+      example: "For example: a student%{holder} saves %{percent} and pays %{paid} instead of %{price}."
+      max: "At most: a student%{holder} gets a %{percent} discount."
+      holder_rank: " with the %{rank} rank"
+      holder_badges:
+        one: "the %{badges} badge"
+        other: "the badges %{badges}"
+      holder_all_badges: "all the badges"
+      holder_join_and: " and %{phrase}"
+      holder_join_with: " with %{phrase}"
+      warn_cap: "The discounts add up to %{raw}%, but the shop takes off at most %{cap}%. The excess is lost — consider lower discounts on ranks and badges."
+      warn_rank_everyone: "The rank discount will apply to every buyer."
+      warn_rank_gate: "Only students from the %{rank} rank can buy it, so the rank discount will apply to every buyer."
+      warn_badge_required: "The %{name} badge is required to buy it, so its discount will apply to every buyer."
+
+    # ItemCard, ItemOffer and RequirementPhrasing (shared with the shop).
+    labels:
+      discount_up_to: "Discounts up to −%{discount}%"
+      discount: "−%{discount}% %{source}"
+      source_rank_and_badges: "for rank and badges"
+      source_rank: "for rank"
+      source_badges: "for badges"
+      lock_rank: "From the %{name} rank"
+      seal_rank: "From the %{name} rank"
+      seal_badge: "For the %{name} badge"
+      seal_lives: "Unavailable at 0 lives"
+      requires_rank: "Requires the rank"
+      requires_badge: "Requires the badge"
+      requires_life: "You have 0 lives. Get a life back first."
+
+    index:
+      title: "Items"
+      lead:
+        one: "%{count} item in the shop, cheapest first."
+        other: "%{count} items in the shop, cheapest first."
+      new: "New item"
+      empty_title: "The shop is still empty"
+      empty_body: "Add items so the collected currency has something to go to. Each can have requirements and discounts, so the shop opens up gradually as students progress."
+
+    new:
+      page_title: "New item"
+
+    new_import:
+      title: "Import items"
+      dialog_title: "Import items from CSV"
+      hint: "They can reference ranks/badges already in the group, or from the same import."
+
+    import_preview:
+      title: "Item import preview"
+      count:
+        one: "%{count} item will be added."
+        other: "%{count} items will be added."
+
+    csv_import:
+      rank_format_unrecognized: "Couldn't recognize the rank format “%{label}” for the item “%{item}” - this requirement was skipped."
+      rank_not_found: "Couldn't find the rank “%{label}” for the item “%{item}” - this requirement was skipped."
+      badge_not_found: "Couldn't find the badge “%{name}” for the item “%{item}” - this requirement was skipped."
+
+    edit:
+      page_title: "Edit item - %{name}"
+
+    grid_card:
+      discount: "Discount"
+      zero_lives: "At 0 lives"
+      edit_label: "Edit item %{name}"
+
+    card:
+      zero_lives: "Works at 0 lives"
+      buy: "Buy for %{price}"
+      collect_more: "Collect"
+      progress_label: "Progress to the %{rank} rank"
+
+    preview:
+      summary: "Card preview"
+      students_view: "This is what students will see"
+      state: "Card state"
+      afford: "Available"
+      save: "Saving up"
+      sealed: "Sealed"
+      seal_hint: "Without requirements an item is never sealed."
+      thumb: "Thumbnail in notifications"
+      thumb_sample: "Student purchase, today 10:21"
+
+    form:
+      breadcrumb: "Items"
+      new_title: "New item"
+      edit_title: "Edit item"
+      new_lead: "Fill in the card, and the preview will show how students will see it."
+      edit_lead: "The preview shows the card after your changes."
+      owners:
+        one: "%{count} student has this item."
+        other: "%{count} students have this item."
+      owners_note: "Changes to the price, requirements and discounts only apply to new purchases."
+      card: "Item card"
+      card_hint: "This is how the item looks in the shop and in the student's inventory."
+      name_placeholder: "e.g. Quiz retake"
+      rules: "What it gives the student"
+      rules_placeholder: "e.g. A chance to retake a quiz"
+      rules_hint: "Didactic description: a concrete benefit, no story."
+      story: "Story description"
+      story_placeholder: "e.g. The ship's emergency return to base"
+      price_section: "Price"
+      price: "Price"
+      zero_lives: "Can be bought at 0 lives"
+      zero_lives_hint: "Useful for items that restore a life."
+      who_section: "Who can buy it"
+      who_hint: "Without requirements the item is available to everyone."
+      who: "Can be bought by"
+      who_label: "Who can buy it"
+      required_badges: "Required badges"
+      add_badge: "Add a badge…"
+      no_badges: "This group has no badges yet."
+      discounts_section: "Discounts"
+      discounts_hint: "A rank discount is the percentage assigned to the student's rank. Badge discounts add up. Meeting any one condition is enough for the discount to apply — with no conditions every buyer gets it. The amount is always worked out from the student's rank and all their badges, including those not chosen here."
+      rank_discount: "Rank discount"
+      badge_discount: "Badge discount"
+      discount_badges: "Badges with a discount"
+      add_discount_badge: "Add a badge with a discount…"
+      removal_hint: "The item will disappear from the shop and from lists. Students who bought it still have it, and it stays in their history as “Removed from the shop”."
+      remove: "Delete item"
+      create: "Add item"
+
+    confirm_destroy:
+      page_title: "Delete item %{name}"
+      title: "Remove “%{name}” from the shop?"
+      body: "The item will disappear from the shop and from lists. Students who bought it keep it, and it will be marked “Removed from the shop” in their history."
+      owners:
+        one: "%{count} student has this item and will keep it after it's removed."
+        other: "%{count} students have this item and will keep it after it's removed."
+      remove: "Remove from the shop"
+
+  activerecord:
+    errors:
+      models:
+        item:
+          attributes:
+            name:
+              blank: "Enter the item name."
+            didactic_description:
+              blank: "Describe what the item gives the student."
+            price:
+              too_low: "The price must be at least 1."

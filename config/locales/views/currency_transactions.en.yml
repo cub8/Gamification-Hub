@@ -1,0 +1,38 @@
+en:
+  currency_transactions:
+    # CurrencyLedger::KINDS — the filter chips name a set of rows.
+    filters:
+      all: "All"
+      reward: "Rewards"
+      purchase: "Purchases"
+      adjustment: "Adjustments"
+    # LedgerEntry#label — the pill on a single row.
+    kinds:
+      reward: "Reward"
+      purchase: "Purchase"
+      adjustment: "Adjustment"
+    # CurrencyLedger#title_for, when the row has no name of its own.
+    entry_titles:
+      reward: "Reward"
+      adjustment: "Currency adjustment"
+
+    helpers:
+      balance_sentence_html: "You have %{balance} to spend and %{total} collected in total."
+      summary_sentence_html: "Balance: %{balance}, collected in total: %{total}."
+
+    ledger:
+      table_label: "Currency history"
+      columns:
+        amount: "Amount"
+        kind: "Type"
+        source: "For"
+        when: "When"
+        balance_after: "Balance after"
+      withdrawn: "Removed from the shop"
+
+    index:
+      title: "Currency history"
+      go_to_shop: "Go to the shop"
+      empty_kind: "You have no entries of this type yet."
+      empty_title: "Your first entries will show up after class"
+      empty_body: "The teacher awards currency for attendance, punctuality and activity. Everything you earn and spend will be recorded here."

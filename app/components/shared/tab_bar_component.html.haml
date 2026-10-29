@@ -1,4 +1,4 @@
-%nav.gh-mobile-tabbar{ 'aria-label': 'Nawigacja' }
+%nav.gh-mobile-tabbar{ 'aria-label': t('layouts.tab_bar.label') }
   - items.each do |item|
     - on = item.current?(current_path)
     = link_to item.path, class: "gh-mobile-tab #{'gh-mobile-tab--active' if on}",
@@ -10,4 +10,4 @@
   %button.gh-mobile-tab{ type: 'button',
                   data: { action: 'menu#open', menu_id_param: 'gh-more-sheet' } }
     %i.fa-solid.fa-ellipsis
-    %span Więcej
+    %span= t('shared.actions.more')

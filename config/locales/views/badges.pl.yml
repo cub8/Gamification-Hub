@@ -1,0 +1,129 @@
+pl:
+  badges:
+    flash:
+      created: "Dodano odznakę „%{name}”."
+      updated: "Zapisano odznakę „%{name}”."
+      destroyed: "Usunięto odznakę „%{name}”. Studenci, którzy ją mają, zachowują ją w historii."
+
+    helpers:
+      nobody_holds: "Nikt jej jeszcze nie ma"
+      holders:
+        one: "Ma ją %{count} student"
+        few: "Ma ją %{count} studentów"
+        many: "Ma ją %{count} studentów"
+        other: "Ma ją %{count} studenta"
+      discount: "−%{discount}% w sklepie"
+      rule_placeholder: "Jak zdobyć…"
+      name_placeholder: "Nazwa odznaki"
+
+    index:
+      title: "Odznaki"
+
+    new:
+      page_title: "Nowa odznaka"
+
+    new_import:
+      title: "Importuj odznaki"
+      dialog_title: "Importuj odznaki z CSV"
+      hint_html: "Kolumny: %{columns}."
+
+    import_preview:
+      title: "Podgląd importu odznak"
+      count:
+        one: "Zostanie dodanych: %{count} odznaka."
+        few: "Zostanie dodanych: %{count} odznaki."
+        many: "Zostanie dodanych: %{count} odznak."
+        other: "Zostanie dodanych: %{count} odznaki."
+
+    edit:
+      page_title: "Edytuj odznakę - %{name}"
+
+    teacher_grid:
+      title: "Odznaki"
+      lead:
+        one: "%{count} odznaka. Przyznajesz je ręcznie, z tej listy albo z listy studentów."
+        few: "%{count} odznaki. Przyznajesz je ręcznie, z tej listy albo z listy studentów."
+        many: "%{count} odznak. Przyznajesz je ręcznie, z tej listy albo z listy studentów."
+        other: "%{count} odznaki. Przyznajesz je ręcznie, z tej listy albo z listy studentów."
+      new: "Nowa odznaka"
+      award: "Przyznaj"
+      edit_label: "Edytuj odznakę %{name}"
+      empty_title: "Nie ma jeszcze żadnych odznak"
+      empty_body: "Dodaj odznaki, żeby mieć czym nagradzać to, czego nie widać w punktach. Przyznajesz je ręcznie, a każda może dawać zniżkę w sklepie."
+
+    student_deck:
+      title: "Odznaki"
+      lead: "Masz %{earned} z %{total}. Odznaki przyznaje prowadzący. Na odwrocie każdej niezdobytej znajdziesz, jak ją zdobyć."
+      empty_title: "W tej grupie nie ma jeszcze odznak"
+      empty_body: "Prowadzący ich nie dodał. Kiedy się pojawią, zobaczysz tu, co trzeba zrobić, żeby je zdobyć."
+
+    flip_card:
+      label: "Odznaka %{name}"
+      label_unearned: "Odznaka %{name}, jeszcze niezdobyta"
+
+    front:
+      removed: "Usunięta z listy"
+      flip_label: "Pokaż, jak zdobyć odznakę %{name}"
+      flip: "Jak zdobyć"
+
+    back:
+      how: "Jak zdobyć"
+      flip_label: "Pokaż odznakę %{name}"
+      flip: "Pokaż odznakę"
+
+    preview:
+      summary: "Podgląd karty"
+      students_view: "Tak zobaczą to studenci"
+      side: "Strona karty"
+      earned: "Zdobyta"
+      unearned: "Jeszcze niezdobyta"
+      picker: "W oknie przyznawania"
+
+    form:
+      breadcrumb: "Odznaki"
+      new_title: "Nowa odznaka"
+      edit_title: "Edytuj odznakę"
+      lead: "Podgląd obok pokazuje obie strony karty: zdobytą i jeszcze niezdobytą."
+      holders:
+        one: "%{count} student ma tę odznakę."
+        few: "%{count} studentów ma tę odznakę."
+        many: "%{count} studentów ma tę odznakę."
+        other: "%{count} studenta ma tę odznakę."
+      holders_note: "Zmiana zniżki od razu obejmie ich kolejne zakupy."
+      card: "Karta odznaki"
+      card_hint: "Tak odznaka wygląda w talii studenta i w oknie przyznawania."
+      name_placeholder: "np. Perfekcyjny Lot"
+      rule: "Jak zdobyć"
+      rule_placeholder: "np. Co najmniej 3 wejściówki z rzędu bez błędów"
+      rule_hint: "Studenci widzą to na odwrocie odznaki, której jeszcze nie mają. Pisz konkretnie."
+      story: "Opis fabularny"
+      story_placeholder: "np. Lot bez najmniejszej rysy"
+      discount_section: "Zniżka w sklepie"
+      discount_hint: "Działa tylko na przedmioty, które ją uwzględniają. Ustawiasz to w formularzu przedmiotu."
+      discount: "Zniżka w sklepie"
+      used_by: "Uwzględniają ją"
+      unused: "Na razie żaden przedmiot jej nie uwzględnia."
+      removal_hint: "Odznaka zniknie z listy i z okna przyznawania. Studenci, którzy ją mają, zachowają ją w historii."
+      remove: "Usuń odznakę"
+      create: "Dodaj odznakę"
+
+    confirm_destroy:
+      page_title: "Usuń odznakę %{name}"
+      title: "Usunąć odznakę „%{name}”?"
+      body: "Studenci, którzy mają tę odznakę, zachowają ją w historii, ale nikt nowy jej nie dostanie."
+      unlocking:
+        one: "Przedmiot %{items} odblokowuje się tą odznaką i po usunięciu kupi go tylko ci, którzy już ją mają."
+        other: "Przedmioty %{items} odblokowują się tą odznaką i po usunięciu kupią je tylko ci, którzy już ją mają."
+      remove: "Usuń odznakę"
+
+  activerecord:
+    errors:
+      models:
+        badge:
+          attributes:
+            name:
+              blank: "Podaj nazwę odznaki."
+            didactic_description:
+              blank: "Napisz, jak zdobyć tę odznakę."
+            discount:
+              out_of_range: "Zniżka musi mieścić się między 0 a 100%."

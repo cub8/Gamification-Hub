@@ -3,7 +3,7 @@
 - withdrawn   = local_assigns.fetch(:withdrawn, false)
 - targets     = local_assigns.fetch(:targets, {})
 
-- label = earned ? "Odznaka #{badge.name}" : "Odznaka #{badge.name}, jeszcze niezdobyta"
+- label = t(earned ? 'badges.flip_card.label' : 'badges.flip_card.label_unearned', name: badge.name)
 - card_data = targets[:flip].to_h
 - card_data.merge!(controller: 'badge-flip', action: 'click->badge-flip#toggle') if interactive
 

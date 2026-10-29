@@ -5,14 +5,16 @@
 
 %section.gh-panel.gh-page-header.gh-page-header--stacked
   %p.gh-breadcrumbs
-    = link_to 'Odznaki', story_group_badges_path(@story_group)
+    = link_to t('.breadcrumb'), story_group_badges_path(@story_group)
     %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
-    %span= editing ? (badge.name_was.presence || badge.name) : 'Nowa odznaka'
-  %h1.gh-h1= editing ? 'Edytuj odznakę' : 'Nowa odznaka'
-  %p.gh-lead
-    Podgląd obok pokazuje obie strony karty: zdobytą i jeszcze niezdobytą.
+    %span= editing ? (badge.name_was.presence || badge.name) : t('.new_title')
+  %h1.gh-h1= editing ? t('.edit_title') : t('.new_title')
+  %p.gh-lead= t('.lead')
 
-- form_data = { controller: 'badge-form', action: 'gh:image-crop->badge-form#art' }
+- form_data = { controller: 'badge-form', action: 'gh:image-crop->badge-form#art',
+                badge_form_name_placeholder_value: t('badges.helpers.name_placeholder'),
+                badge_form_rule_placeholder_value: t('badges.helpers.rule_placeholder'),
+                badge_form_discount_label_value: t('badges.helpers.discount', discount: '%{discount}'), }
 
 = form_with model: [@story_group, badge], data: form_data do |f|
 
@@ -22,19 +24,18 @@
         %p.gh-info-banner
           %i.fa-solid.fa-users{ 'aria-hidden': 'true' }
           %span
-            %b
-              = "#{holders} #{gh_plural(holders, 'student ma', 'studentów ma', 'studentów ma')} tę odznakę."
-            Zmiana zniżki od razu obejmie ich kolejne zakupy.
+            %b= t('.holders', count: holders)
+            = t('.holders_note')
 
       .gh-form-section
-        %h2.gh-h3 Karta odznaki
-        %p.gh-field-hint Tak odznaka wygląda w talii studenta i w oknie przyznawania.
+        %h2.gh-h3= t('.card')
+        %p.gh-field-hint= t('.card_hint')
 
         .gh-form-field
-          = f.label :name, 'Nazwa'
+          = f.label :name, t('shared.actions.name')
           .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:name)) }
             = f.text_field :name, maxlength: 50, autocomplete: 'off',
-              placeholder: 'np. Perfekcyjny Lot',
+              placeholder: t('.name_placeholder'),
               'aria-invalid': (error.call(:name) ? 'true' : nil),
               'aria-describedby': (error.call(:name) ? 'gh-badge-name-error' : nil),
               data: { badge_form_target: 'name', action: 'badge-form#refresh' }
@@ -44,10 +45,10 @@
               %span= error.call(:name)
 
         .gh-form-field
-          = f.label :didactic_description, 'Jak zdobyć'
+          = f.label :didactic_description, t('.rule')
           .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:didactic_description)) }
             = f.text_area :didactic_description, rows: 2, maxlength: 255,
-              placeholder: 'np. Co najmniej 3 wejściówki z rzędu bez błędów',
+              placeholder: t('.rule_placeholder'),
               'aria-invalid': (error.call(:didactic_description) ? 'true' : nil),
               'aria-describedby': (error.call(:didactic_description) ? 'gh-badge-rule-error' : nil),
               data: { badge_form_target: 'rule', action: 'badge-form#refresh' }
@@ -55,17 +56,15 @@
             %p#gh-badge-rule-error.gh-field-error{ role: 'alert' }
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:didactic_description)
-          %span.gh-field-hint
-            Studenci widzą to na odwrocie odznaki, której jeszcze nie mają.
-            Pisz konkretnie.
+          %span.gh-field-hint= t('.rule_hint')
 
         .gh-form-field
           = f.label :story_description do
-            Opis fabularny
-            %small (opcjonalnie)
+            = t('.story')
+            %small= t('shared.actions.optional')
           .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:story_description)) }
             = f.text_area :story_description, rows: 2, maxlength: 255,
-              placeholder: 'np. Lot bez najmniejszej rysy',
+              placeholder: t('.story_placeholder'),
               'aria-invalid': (error.call(:story_description) ? 'true' : nil),
               'aria-describedby': (error.call(:story_description) ? 'gh-badge-story-error' : nil),
               data: { badge_form_target: 'story', action: 'badge-form#refresh' }
@@ -79,13 +78,11 @@
           refresh_action: 'badge-form#refresh'
 
       .gh-form-section
-        %h2.gh-h3 Zniżka w sklepie
-        %p.gh-field-hint
-          Działa tylko na przedmioty, które ją uwzględniają. Ustawiasz to
-          w formularzu przedmiotu.
+        %h2.gh-h3= t('.discount_section')
+        %p.gh-field-hint= t('.discount_hint')
 
         .gh-form-field
-          = f.label :discount, 'Zniżka w sklepie'
+          = f.label :discount, t('.discount')
           .gh-price-field-row
             .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if error.call(:discount)) }
               = f.number_field :discount, min: 0, max: 100, step: 1,
@@ -101,34 +98,32 @@
 
         - using = editing ? shelf.dependent_items(badge) : []
         - if using.any?
-          %p.gh-form-label.gh-label--spaced Uwzględniają ją
+          %p.gh-form-label.gh-label--spaced= t('.used_by')
           %ul.gh-badge-usage-list
             - using.each do |item|
               %li
                 = render 'layouts/item_thumb', item: item
                 = item.name
         - else
-          %p.gh-explainer-note Na razie żaden przedmiot jej nie uwzględnia.
+          %p.gh-explainer-note= t('.unused')
 
       - if editing
         .gh-form-section
-          %h2.gh-h3 Usuwanie
-          %p.gh-field-hint
-            Odznaka zniknie z listy i z okna przyznawania. Studenci, którzy ją
-            mają, zachowają ją w historii.
+          %h2.gh-h3= t('shared.actions.removal')
+          %p.gh-field-hint= t('.removal_hint')
           .gh-button-row
             = link_to confirm_destroy_story_group_badge_path(@story_group, badge),
               class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
               %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
-              Usuń odznakę
+              = t('.remove')
 
-    %aside.gh-preview-column{ 'aria-label': 'Podgląd' }
+    %aside.gh-preview-column{ 'aria-label': t('shared.actions.preview') }
       = render 'preview', badge: badge
 
   .gh-panel.gh-form-actions-bar
-    = link_to 'Anuluj', story_group_badges_path(@story_group), class: 'gh-link-button'
+    = link_to t('shared.actions.cancel'), story_group_badges_path(@story_group), class: 'gh-link-button'
     %span.gh-form-actions-spacer
     %button.gh-btn{ type: 'submit' }
       - unless editing
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      = editing ? 'Zapisz zmiany' : 'Dodaj odznakę'
+      = editing ? t('shared.actions.save_changes') : t('.create')

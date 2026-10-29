@@ -38,8 +38,7 @@ class StoryGroupInvitesController < ApplicationController
 
     flash[:fresh_invite] = @form.invite.id
     redirect_outside_turbo_frame story_group_invites_path(@story_group),
-                                 notice: "Utworzono kod #{@form.invite.code}. " \
-                                         'Kliknij „Pokaż”, żeby wyświetlić go studentom.'
+                                 notice: t('story_group_invites.flash.created', code: @form.invite.code)
   end
 
   def update
@@ -47,7 +46,7 @@ class StoryGroupInvitesController < ApplicationController
     return render :edit, status: :unprocessable_content unless @form.save
 
     redirect_outside_turbo_frame story_group_invites_path(@story_group),
-                                 notice: "Zapisano zaproszenie #{@invite.code}."
+                                 notice: t('story_group_invites.flash.updated', code: @invite.code)
   end
 
   def destroy
@@ -55,7 +54,7 @@ class StoryGroupInvitesController < ApplicationController
     @invite.destroy
 
     redirect_outside_turbo_frame story_group_invites_path(@story_group),
-                                 notice: "Usunięto zaproszenie #{code}."
+                                 notice: t('story_group_invites.flash.destroyed', code: code)
   end
 
   private
