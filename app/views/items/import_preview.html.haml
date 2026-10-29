@@ -4,24 +4,7 @@
   %p.gh-field-hint
     = "Zostanie dodanych: #{items_count} #{gh_plural(items_count, 'przedmiot', 'przedmioty', 'przedmiotów')}."
 
-  - @preset.warnings.each do |warning|
-    %p.gh-field-error{ role: 'alert' }
-      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
-      %span= warning
-
-  .gh-preset-review-section
-    - @preset.items.each do |item|
-      - requirement = csv_item_requirement(item, @preset)
-      .gh-preset-row
-        %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
-        %span.gh-preset-row-name
-          %b= item.name
-          %small= item.didactic_description
-          - if requirement.present?
-            %small= "Wymaga: #{requirement}"
-        %span.gh-preset-row-value
-          = item.price
-          = item.can_buy_at_0_lives ? '(także przy 0 życiach)' : ''
+  = render 'shared/items_preview_rows', preset: @preset
 
   = form_with url: confirm_import_story_group_items_path(@story_group), method: :post, local: true,
               data: { turbo_frame: 'modal' } do

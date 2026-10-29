@@ -252,24 +252,24 @@
               Wszystkie są opcjonalne — zaimportujemy tylko te, które wgrasz.
               Resztę dodasz później, krok po kroku.
 
-            - csv_action = 'file-dropzone#show group-wizard#refresh'
+            - csv_action = 'change->file-dropzone#show change->group-wizard#refresh change->group-wizard#csvFileChanged'
 
-            - ranks_data = { group_wizard_target: 'csvFile', resource: 'ranks', label: 'Rangi', action: csv_action }
+            - ranks_data = { group_wizard_target: 'csvFile', resource: 'ranks', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][ranks]', label: 'Rangi',
               hint: 'Kolumny: nazwa, próg_waluty, zniżka, ikona.',
               field_data: ranks_data
 
-            - badges_data = { group_wizard_target: 'csvFile', resource: 'badges', label: 'Odznaki', action: csv_action }
+            - badges_data = { group_wizard_target: 'csvFile', resource: 'badges', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][badges]', label: 'Odznaki',
               hint: 'Kolumny: nazwa, opis_dydaktyczny, opis_fabularny, zniżka, ikona.',
               field_data: badges_data
 
-            - items_data = { group_wizard_target: 'csvFile', resource: 'items', label: 'Przedmioty', action: csv_action }
+            - items_data = { group_wizard_target: 'csvFile', resource: 'items', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][items]', label: 'Przedmioty',
               hint: 'Mogą odwoływać się do rang/odznak z tego samego importu (wgraj je razem).',
               field_data: items_data
 
-            - templates_data = { group_wizard_target: 'csvFile', resource: 'templates', label: 'Szablony', action: csv_action }
+            - templates_data = { group_wizard_target: 'csvFile', resource: 'templates', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][templates]', label: 'Szablony',
               hint: 'Kolumny: nr_szablonu, szablon, pozycja, opis_dydaktyczny, opis_fabularny, nagroda.',
               field_data: templates_data
@@ -297,10 +297,6 @@
               %dd{ data: { group_wizard_target: 'sumLives' } }
               %dt Ranking
               %dd{ data: { group_wizard_target: 'sumRanking' } }
-
-          .gh-form-section{ hidden: true, data: { group_wizard_target: 'csvFilesSection' } }
-            %h2.gh-h3 Pliki do zaimportowania
-            %dl.gh-summary-list{ data: { group_wizard_target: 'csvSummary' } }
 
           = turbo_frame_tag 'starter_pack',
             data: { group_wizard_target: 'presetFrame',
@@ -349,3 +345,32 @@
                                       data: { group_wizard_target: 'nextIcon' } }
       = f.submit 'Utwórz grupę', class: 'gh-btn', hidden: true,
         data: { group_wizard_target: 'submit' }
+
+  - preview_path = csv_preset_preview_story_groups_path
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvRanksPreviewForm' } do
+    = hidden_field_tag :resource, 'ranks', id: nil
+    = file_field_tag 'setup[csv][ranks]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvRanksShadowRanksFile' }
+
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvBadgesPreviewForm' } do
+    = hidden_field_tag :resource, 'badges', id: nil
+    = file_field_tag 'setup[csv][badges]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvBadgesShadowBadgesFile' }
+
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvItemsPreviewForm' } do
+    = hidden_field_tag :resource, 'items', id: nil
+    = file_field_tag 'setup[csv][items]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvItemsShadowItemsFile' }
+    = file_field_tag 'setup[csv][ranks]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvItemsShadowRanksFile' }
+    = file_field_tag 'setup[csv][badges]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvItemsShadowBadgesFile' }
+
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvTemplatesPreviewForm' } do
+    = hidden_field_tag :resource, 'templates', id: nil
+    = file_field_tag 'setup[csv][templates]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvTemplatesShadowTemplatesFile' }

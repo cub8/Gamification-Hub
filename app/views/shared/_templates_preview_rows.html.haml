@@ -1,0 +1,13 @@
+- templates.each do |template|
+  .gh-preset-review-section
+    %h3.gh-h3= template.name
+    - if template.categories.empty?
+      %p.gh-field-hint Bez kategorii.
+    - template.categories.each do |category|
+      .gh-preset-row
+        %i.fa-solid.fa-table-cells{ 'aria-hidden': 'true' }
+        %span.gh-preset-row-name
+          %b= category.didactic_description
+          - if category.story_description.present?
+            %small= category.story_description
+        %span.gh-preset-row-value= "+#{category.reward}"

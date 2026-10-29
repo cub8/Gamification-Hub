@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
+  CSV_PREVIEW_TITLES = {
+    'ranks'     => 'Podgląd importu rang',
+    'badges'    => 'Podgląd importu odznak',
+    'items'     => 'Podgląd importu przedmiotów',
+    'templates' => 'Podgląd importu szablonów',
+  }.freeze
+
   # #show renders the same owned-item card and the same badge cards as the
   # inventory and the badge deck; under `include_all_helpers = false` their
   # helpers do not arrive on their own.
-  helper StudentsItemsHelper, BadgesHelper
+  helper StudentsItemsHelper, BadgesHelper, ItemsHelper
 
   before_action :set_presentation, only: %i[confirm_destroy destroy]
   before_action :set_story_group, only: %i[show edit update destroy confirm_destroy created]
@@ -42,6 +49,16 @@ class StoryGroupsController < ApplicationController
     @currency_name = params[:currency_name]
 
     render partial: 'preset_review', layout: false
+  end
+
+  def csv_preset_preview
+    authorize StoryGroup, :new?
+
+    resource = params[:resource].to_s
+    return head :not_found unless %w[ranks badges items templates].include?(resource)
+
+    locals = { resource: resource, title: csv_preview_title(resource), result: resource_preview(resource.to_sym) }
+    render partial: 'csv_resource_preview', layout: false, locals: locals
   end
 
   def edit
@@ -157,6 +174,57 @@ class StoryGroupsController < ApplicationController
     %i[ranks badges items templates]
       .index_with { |key| files[key] }
       .compact
+  end
+
+  def csv_preview_title(resource)
+    CSV_PREVIEW_TITLES.fetch(resource, 'Podgląd importu')
+  end
+
+  def resource_preview(resource)
+    file = csv_files[resource]
+    return unless file
+
+    files = resource == :items ? csv_files.slice(:items, :ranks, :badges) : { resource => file }
+    preview_for(resource, files)
+  end
+
+  def preview_for(resource, files)
+    preset = dry_run_csv_preset(files)
+    return preview_error('Plik nie zawierał żadnych wierszy.') if preset.public_send(resource).empty?
+
+    html = render_to_string(partial: "shared/#{resource}_preview_rows", locals: preview_locals(resource, preset),
+                            layout: false,)
+    { html: html, ok: true }
+  rescue Csv::MalformedFile
+    preview_error('Plik ma niepoprawny format - musi się zgadzać z formatem kolumn.')
+  rescue StarterPackBuilder::InvalidSelection => e
+    preview_error(e.message)
+  rescue ActiveRecord::RecordInvalid => e
+    preview_error("Dane się nie zapiszą: #{e.record.errors.full_messages.to_sentence}")
+  end
+
+  def preview_error(message)
+    html = render_to_string(partial: 'shared/csv_preview_error', locals: { message: message }, layout: false)
+    { html: html, ok: false }
+  end
+
+  def preview_locals(resource, preset)
+    return { preset: preset } if resource == :items
+
+    { resource => preset.public_send(resource) }
+  end
+
+  def dry_run_csv_preset(files)
+    preset = nil
+
+    ActiveRecord::Base.transaction do
+      dry_run_group = StoryGroup.create!(name: 'tmp', currency_name: 'tmp', owner_id: @current_user.id)
+      preset = Csv::GroupPresetParser.new(files, story_group: dry_run_group).call
+      StarterPackBuilder.new(story_group: dry_run_group, preset: preset).call
+      raise ActiveRecord::Rollback
+    end
+
+    preset
   end
 
   def starter_selection

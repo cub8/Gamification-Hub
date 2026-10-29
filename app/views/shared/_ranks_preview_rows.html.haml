@@ -1,0 +1,7 @@
+.gh-preset-review-section
+  - ranks.each do |rank|
+    .gh-preset-row
+      %i.fa-solid.fa-ranking-star{ 'aria-hidden': 'true' }
+      %span.gh-preset-row-name
+        %b= rank.name
+        %small= "Próg: #{rank.threshold}, zniżka: #{rank.discount}%."

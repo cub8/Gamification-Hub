@@ -46,6 +46,7 @@ module Csv
     end
 
     def content
+      @file.rewind
       @file.read.force_encoding(Encoding::UTF_8).delete_prefix(Csv::Utf8Bom)
     end
 

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :story_groups do
     get :confirm_destroy, on: :member
     get :preset_preview, on: :collection
+    post :csv_preset_preview, on: :collection
     get :created, on: :member
 
     resource :ranking, only: %i[show update], controller: :ranking do

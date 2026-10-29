@@ -1,0 +1,17 @@
+- cancel_action = 'csv-cancel#cancel dialog#close'
+- cancel_data = { controller: 'csv-cancel', csv_cancel_resource_value: resource, action: cancel_action }
+
+= turbo_frame_tag 'modal' do
+  - if result
+    %h2.gh-h2= title
+    = result[:html].html_safe
+
+    .gh-dialog-button-row
+      - if result[:ok]
+        %button.gh-btn.gh-btn--secondary{ type: 'button', data: cancel_data }
+          Anuluj
+        %button.gh-btn{ type: 'button', data: { action: 'dialog#close' } }
+          Zatwierdź
+      - else
+        %button.gh-btn{ type: 'button', data: cancel_data }
+          OK

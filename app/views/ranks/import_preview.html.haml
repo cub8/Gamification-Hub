@@ -3,13 +3,7 @@
   - ranks_count = @preset.ranks.size
   %p.gh-field-hint= "Zostanie dodanych: #{ranks_count} #{gh_plural(ranks_count, 'ranga', 'rangi', 'rang')}."
 
-  .gh-preset-review-section
-    - @preset.ranks.each do |rank|
-      .gh-preset-row
-        %i.fa-solid.fa-ranking-star{ 'aria-hidden': 'true' }
-        %span.gh-preset-row-name
-          %b= rank.name
-          %small= "Próg: #{rank.threshold}, zniżka: #{rank.discount}%."
+  = render 'shared/ranks_preview_rows', ranks: @preset.ranks
 
   = form_with url: confirm_import_story_group_ranks_path(@story_group), method: :post, local: true,
               data: { turbo_frame: 'modal' } do

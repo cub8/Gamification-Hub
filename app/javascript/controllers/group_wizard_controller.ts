@@ -15,7 +15,10 @@ class GroupWizardController extends Controller<HTMLElement> {
     "path", "pathError", "pack", "quickOnly",
     "classes", "classesOutput", "classesUp", "classesDown",
     "manualSummary", "summaryHint", "sumName", "sumCurrency", "sumLives", "sumRanking",
-    "csvOnly", "csvFile", "csvFilesSection", "csvSummary", "baseError",
+    "csvOnly", "csvFile", "baseError",
+    "csvRanksPreviewForm", "csvBadgesPreviewForm", "csvItemsPreviewForm", "csvTemplatesPreviewForm",
+    "csvRanksShadowRanksFile", "csvBadgesShadowBadgesFile", "csvTemplatesShadowTemplatesFile",
+    "csvItemsShadowItemsFile", "csvItemsShadowRanksFile", "csvItemsShadowBadgesFile",
     "presetFrame",
     "previewGroup", "previewCurrency",
     "artBox", "artMono", "markBox", "markLetter",
@@ -51,9 +54,17 @@ class GroupWizardController extends Controller<HTMLElement> {
   declare readonly summaryHintTarget: HTMLElement
   declare readonly csvOnlyTargets: HTMLElement[]
   declare readonly csvFileTargets: HTMLInputElement[]
-  declare readonly csvFilesSectionTarget: HTMLElement
-  declare readonly csvSummaryTarget: HTMLElement
   declare readonly hasBaseErrorTarget: boolean
+  declare readonly csvRanksPreviewFormTarget: HTMLFormElement
+  declare readonly csvBadgesPreviewFormTarget: HTMLFormElement
+  declare readonly csvItemsPreviewFormTarget: HTMLFormElement
+  declare readonly csvTemplatesPreviewFormTarget: HTMLFormElement
+  declare readonly csvRanksShadowRanksFileTarget: HTMLInputElement
+  declare readonly csvBadgesShadowBadgesFileTarget: HTMLInputElement
+  declare readonly csvTemplatesShadowTemplatesFileTarget: HTMLInputElement
+  declare readonly csvItemsShadowItemsFileTarget: HTMLInputElement
+  declare readonly csvItemsShadowRanksFileTarget: HTMLInputElement
+  declare readonly csvItemsShadowBadgesFileTarget: HTMLInputElement
   declare readonly sumNameTarget: HTMLElement
   declare readonly sumCurrencyTarget: HTMLElement
   declare readonly sumLivesTarget: HTMLElement
@@ -157,6 +168,50 @@ class GroupWizardController extends Controller<HTMLElement> {
 
   refresh() {
     this.render()
+  }
+
+  csvFileChanged(event: Event) {
+    const input = event.target as HTMLInputElement
+    const resource = input.dataset.resource
+
+    this.syncCsvShadowFiles(resource, input)
+
+    if (!input.files?.length) return
+
+    this.csvShadowFormFor(resource)?.requestSubmit()
+  }
+
+  private syncCsvShadowFiles(resource: string | undefined, input: HTMLInputElement) {
+    if (resource === "ranks") {
+      this.copyFile(input, this.csvRanksShadowRanksFileTarget)
+      this.copyFile(input, this.csvItemsShadowRanksFileTarget)
+    } else if (resource === "badges") {
+      this.copyFile(input, this.csvBadgesShadowBadgesFileTarget)
+      this.copyFile(input, this.csvItemsShadowBadgesFileTarget)
+    } else if (resource === "items") {
+      this.copyFile(input, this.csvItemsShadowItemsFileTarget)
+    } else if (resource === "templates") {
+      this.copyFile(input, this.csvTemplatesShadowTemplatesFileTarget)
+    }
+  }
+
+  private csvShadowFormFor(resource: string | undefined): HTMLFormElement | undefined {
+    switch (resource) {
+      case "ranks": return this.csvRanksPreviewFormTarget
+      case "badges": return this.csvBadgesPreviewFormTarget
+      case "items": return this.csvItemsPreviewFormTarget
+      case "templates": return this.csvTemplatesPreviewFormTarget
+      default: return undefined
+    }
+  }
+
+  private copyFile(from: HTMLInputElement | undefined, to: HTMLInputElement) {
+    if (!from?.files?.length) {
+      to.value = ""
+      return
+    }
+
+    to.files = from.files
   }
 
   art() {
@@ -287,11 +342,9 @@ class GroupWizardController extends Controller<HTMLElement> {
 
   private renderStepFour() {
     const quick = this.quick
-    const csv = this.csv
 
     this.manualSummaryTarget.hidden = quick
     this.presetFrameTarget.hidden = !quick
-    this.csvFilesSectionTarget.hidden = !csv
 
     this.presetFrameTarget
       .querySelectorAll<HTMLInputElement>("input")
@@ -303,7 +356,6 @@ class GroupWizardController extends Controller<HTMLElement> {
       this.loadPreset()
     } else {
       this.fillManualSummary()
-      if (csv) this.fillCsvSummary()
     }
   }
 
@@ -333,20 +385,6 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.sumRankingTarget.textContent = this.rankingTarget.checked ?
       this.rankingLabel :
       "Wyłączony"
-  }
-
-  private fillCsvSummary() {
-    this.csvSummaryTarget.innerHTML = ""
-
-    this.csvFileTargets.forEach((input) => {
-      const dt = document.createElement("dt")
-      dt.textContent = input.dataset.label ?? input.dataset.resource ?? ""
-
-      const dd = document.createElement("dd")
-      dd.textContent = input.files?.[0]?.name ?? "Nie wybrano"
-
-      this.csvSummaryTarget.append(dt, dd)
-    })
   }
 
   private get rankingLabel(): string {

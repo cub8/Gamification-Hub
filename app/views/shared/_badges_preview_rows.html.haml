@@ -1,0 +1,7 @@
+.gh-preset-review-section
+  - badges.each do |badge|
+    .gh-preset-row
+      %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
+      %span.gh-preset-row-name
+        %b= badge.name
+        %small= "#{badge.didactic_description} Zniżka: #{badge.discount}%."

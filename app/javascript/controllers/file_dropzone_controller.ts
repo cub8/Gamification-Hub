@@ -27,7 +27,7 @@ class FileDropzoneController extends Controller<HTMLElement> {
   clear(event: Event) {
     event.preventDefault()
     this.inputTarget.value = ""
-    this.updateState(undefined)
+    this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }))
   }
 
   dragOver(event: DragEvent) {
@@ -47,7 +47,7 @@ class FileDropzoneController extends Controller<HTMLElement> {
     if (!file) return
 
     this.inputTarget.files = event.dataTransfer!.files
-    this.updateState(file)
+    this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }))
   }
 
   private updateState(file: File | undefined) {

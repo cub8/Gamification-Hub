@@ -12,5 +12,5 @@
   %label.gh-btn.gh-btn--secondary.gh-btn--small
     Wybierz plik
     - field_data = local_assigns.fetch(:field_data, {})
-    - input_data = { file_dropzone_target: 'input', action: 'file-dropzone#show' }.merge(field_data)
+    - input_data = { file_dropzone_target: 'input', action: 'change->file-dropzone#show' }.merge(field_data)
     = file_field_tag name, class: 'sr-only', accept: 'text/csv,.csv', data: input_data
