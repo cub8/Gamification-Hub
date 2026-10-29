@@ -146,7 +146,7 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-field-error', text: /niepoprawny format/i
+    assert_select '.gh-field-error', text: /nie udało się odczytać/i
   end
 
   test 'confirm_import persists the previewed template with its categories' do

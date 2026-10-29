@@ -141,7 +141,7 @@ class StoryGroupsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :success
-    assert_select 'turbo-frame#modal .gh-field-error', text: /niepoprawny format/i
+    assert_select 'turbo-frame#modal .gh-field-error', text: /nie udało się odczytać/i
   end
 
   test 'csv_preset_preview renders an empty modal when the requested resource has no file' do

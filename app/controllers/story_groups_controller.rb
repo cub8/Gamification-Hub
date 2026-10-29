@@ -155,10 +155,10 @@ class StoryGroupsController < ApplicationController
     @story_group.errors.add(:base, e.message)
     false
   rescue Csv::MalformedFile
-    @story_group.errors.add(:base, 'Nie udało się odczytać jednego z wgranych plików CSV.')
+    @story_group.errors.add(:base, malformed_files_message)
     false
   rescue ActiveRecord::RecordInvalid => e
-    @story_group.errors.add(:base, "Import się nie powiódł: #{e.record.errors.full_messages.to_sentence}")
+    @story_group.errors.add(:base, record_invalid_message(e.record))
     false
   end
 
@@ -190,22 +190,34 @@ class StoryGroupsController < ApplicationController
 
   def preview_for(resource, files)
     preset = dry_run_csv_preset(files)
-    return preview_error('Plik nie zawierał żadnych wierszy.') if preset.public_send(resource).empty?
+    return preview_error('Plik nie zawierał żadnych danych.') if preset.public_send(resource).empty?
 
     html = render_to_string(partial: "shared/#{resource}_preview_rows", locals: preview_locals(resource, preset),
                             layout: false,)
     { html: html, ok: true }
   rescue Csv::MalformedFile
-    preview_error('Plik ma niepoprawny format - musi się zgadzać z formatem kolumn.')
+    preview_error(malformed_file_message)
   rescue StarterPackBuilder::InvalidSelection => e
     preview_error(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    preview_error("Dane się nie zapiszą: #{e.record.errors.full_messages.to_sentence}")
+    preview_error(record_invalid_message(e.record))
   end
 
   def preview_error(message)
     html = render_to_string(partial: 'shared/csv_preview_error', locals: { message: message }, layout: false)
     { html: html, ok: false }
+  end
+
+  def malformed_file_message
+    'Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV.'
+  end
+
+  def malformed_files_message
+    'Nie udało się odczytać jednego z wgranych plików - sprawdź, czy to poprawne pliki CSV.'
+  end
+
+  def record_invalid_message(record)
+    "Plik zawiera nieprawidłowe dane: #{helpers.gh_and_list(record.errors.full_messages)}"
   end
 
   def preview_locals(resource, preset)

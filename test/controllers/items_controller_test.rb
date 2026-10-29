@@ -31,7 +31,7 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-field-error', text: /niepoprawny format/i
+    assert_select '.gh-field-error', text: /nie udało się odczytać/i
   end
 
   test 'confirm_import persists the previewed item, resolving an existing rank reference' do

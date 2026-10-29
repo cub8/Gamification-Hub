@@ -29,7 +29,7 @@ class StudentsController < ApplicationController
 
     render :import
   rescue Csv::MalformedFile
-    redirect_with_alert('Nie udało się odczytać pliku CSV.')
+    redirect_with_alert('Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV.')
   end
 
   # GET /story_groups/:story_group_id/students/:id

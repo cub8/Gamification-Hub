@@ -88,7 +88,7 @@ class RanksControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_content
-    assert_select '.gh-field-error', text: /niepoprawny format/i
+    assert_select '.gh-field-error', text: /nie udało się odczytać/i
   end
 
   test 'import catches a duplicate rank threshold at preview time, before any confirm step' do

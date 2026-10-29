@@ -41,7 +41,8 @@ module Csv
       membership = @story_group.student_memberships.build(user: user, nickname: row.nickname)
       return membership if membership.save
 
-      Failure.new(row: row.index + 2, message: membership.errors.full_messages.to_sentence)
+      message = ApplicationController.helpers.gh_and_list(membership.errors.full_messages)
+      Failure.new(row: row.index + 2, message: message)
     end
 
     def no_account(row)

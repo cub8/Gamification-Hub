@@ -15,11 +15,11 @@ module CsvImportable
     dry_run_build(@preset)
     render :import_preview
   rescue Csv::MalformedFile
-    render_upload_error('Plik ma niepoprawny format - musi się zgadzać z formatem poniżej.')
+    render_upload_error(malformed_file_message)
   rescue StarterPackBuilder::InvalidSelection => e
     render_upload_error(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    render_upload_error("Plik zawiera dane, które się nie zapiszą: #{e.record.errors.full_messages.to_sentence}")
+    render_upload_error(record_invalid_message(e.record))
   end
 
   def confirm_import
@@ -31,7 +31,7 @@ module CsvImportable
   rescue StarterPackBuilder::InvalidSelection => e
     redirect_with_import_alert(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_with_import_alert("Import się nie powiódł: #{e.record.errors.full_messages.to_sentence}")
+    redirect_with_import_alert(record_invalid_message(e.record))
   end
 
   private
@@ -54,5 +54,13 @@ module CsvImportable
 
   def warning_message(warnings)
     warnings.join(' ') if warnings.any?
+  end
+
+  def malformed_file_message
+    'Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV.'
+  end
+
+  def record_invalid_message(record)
+    "Plik zawiera nieprawidłowe dane: #{helpers.gh_and_list(record.errors.full_messages)}"
   end
 end
