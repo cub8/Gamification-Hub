@@ -37,7 +37,7 @@ class OrganizationsController < ApplicationController
     authorize @organization
 
     if @organization.save
-      redirect_after_save organization_path(@organization), notice: 'Pomyślnie utworzono organizację.'
+      redirect_after_save organization_path(@organization), notice: t('organizations.flash.created')
     else
       render :new, status: :unprocessable_content
     end
@@ -51,7 +51,7 @@ class OrganizationsController < ApplicationController
     authorize @organization
 
     if @organization.update(organization_params)
-      redirect_after_save organization_path(@organization), notice: 'Pomyślnie zaktualizowano organizację.'
+      redirect_after_save organization_path(@organization), notice: t('organizations.flash.updated')
     else
       render :edit, status: :unprocessable_content
     end
@@ -70,7 +70,7 @@ class OrganizationsController < ApplicationController
     end
 
     @organization.destroy!
-    redirect_after_save organizations_path, notice: "Usunięto organizację #{@organization.name}."
+    redirect_after_save organizations_path, notice: t('organizations.flash.destroyed', name: @organization.name)
   end
 
   def new_admin
@@ -96,7 +96,7 @@ class OrganizationsController < ApplicationController
     if token
       send_invitation(@org_admin, token)
       redirect_after_save organization_path(@organization),
-                          notice: 'Pomyślnie dodano administratora organizacji. Wysłano zaproszenie na email.'
+                          notice: t('organizations.flash.admin_added')
     else
       render :new_admin, status: :unprocessable_content
     end
@@ -124,7 +124,7 @@ class OrganizationsController < ApplicationController
     if token
       send_invitation(@new_user, token)
       redirect_after_save organization_path(@organization),
-                          notice: 'Pomyślnie dodano użytkownika do organizacji. Wysłano zaproszenie na email.'
+                          notice: t('organizations.flash.user_added')
     else
       render :new_user, status: :unprocessable_content
     end

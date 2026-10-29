@@ -12,7 +12,7 @@ class AccountSetupsController < ApplicationController
     @current_user.first_login = false
 
     if @current_user.save(context: :account_setup)
-      redirect_to home_path, notice: 'Pomyślnie skonfigurowano konto.'
+      redirect_to home_path, notice: t('account_setups.flash.done')
     else
       @current_user.first_login = true
       render :edit, status: :unprocessable_content

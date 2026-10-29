@@ -1,0 +1,19 @@
+pl:
+  invitation_mailer:
+    roles:
+      admin: "administrator"
+      member: "członek"
+    invitation_email:
+      subject: "Zaproszenie do systemu GamificationHub"
+      lead: "Zostałeś dodany jako %{role} organizacji %{organization} w Gamification Hub."
+
+  # shared/_invitation_email.{html,text}
+  shared:
+    invitation_email:
+      title: "Zaproszenie"
+      text: "Kliknij przycisk poniżej, aby dokończyć zakładanie konta i uzupełnić swoje dane."
+      text_plain: "Aby dokończyć zakładanie konta i uzupełnić swoje dane, otwórz poniższy link."
+      button: "Dokończ zakładanie konta"
+      note: "Link jest ważny przez 7 dni. Jeśli przycisk nie działa, skopiuj ten adres do przeglądarki:"
+      valid_for: "Link jest ważny przez 7 dni."
+      footer: "Jeśli nie spodziewałeś się tego zaproszenia, możesz zignorować tę wiadomość."

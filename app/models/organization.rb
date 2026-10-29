@@ -34,13 +34,13 @@ class Organization < ApplicationRecord
     members_count = users.count
     return if max_members >= members_count
 
-    errors.add(:max_members, "can't be lower than the current number of members (#{members_count})")
+    errors.add(:max_members, :below_members, count: members_count)
   end
 
   def keep_usos_organization
     return unless usos?
 
-    errors.add(:base, 'Organizacji powiązanej z USOS nie można usunąć.')
+    errors.add(:base, :usos_undeletable)
     throw :abort
   end
 end

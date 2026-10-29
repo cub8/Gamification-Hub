@@ -1,5 +1,5 @@
 - if max.nil?
-  %span.gh-small= "#{members} #{gh_plural(members, 'konto', 'konta', 'kont')} · bez limitu"
+  %span.gh-small= t('home.capacity_bar.unlimited', count: members)
 - else
   .gh-capacity-bar
     .gh-progress-bar.gh-octagon-clip{ class: ('gh-progress-bar--full' if full),
@@ -7,6 +7,6 @@
                        'aria-valuemin': 0,
                        'aria-valuemax': max,
                        'aria-valuenow': members,
-                       'aria-label':    'Zajęte miejsca', }
+                       'aria-label':    t('home.capacity_bar.label'), }
       %i.gh-octagon-clip{ style: "--gh-p: #{percent}%" }
     %span.gh-small= "#{members} / #{max}"

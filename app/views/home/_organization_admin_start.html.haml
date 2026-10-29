@@ -3,9 +3,7 @@
 - if organization.nil?
   %section.gh-panel.gh-empty-state
     %h1.gh-h1= home_greeting(@current_user)
-    %p.gh-lead
-      Twoje konto administratora nie jest przypisane do żadnej organizacji.
-      Skontaktuj się z administratorem systemu.
+    %p.gh-lead= t('.no_organization')
 - else
   %section.gh-panel.gh-page-header
     .gh-page-header-text
@@ -13,27 +11,25 @@
       %h1.gh-h1= home_greeting(@current_user)
       %p.gh-lead
         - if @dashboard.full?
-          Organizacja nie ma wolnych miejsc — nowe osoby nie dołączą, dopóki
-          ktoś nie zostanie usunięty albo limit nie wzrośnie.
+          = t('.full_lead')
         - elsif @dashboard.pending_users.any?
-          - pending = @dashboard.pending_users.size
-          = "#{pending} #{gh_plural(pending, 'osoba jeszcze nie przyjęła', 'osoby jeszcze nie przyjęły', 'osób jeszcze nie przyjęło')} zaproszenia."
+          = t('.pending_lead', count: @dashboard.pending_users.size)
         - else
           = organization_capacity_lead(organization, @dashboard.member_count)
 
     .gh-button-row
       = link_to organization_path(organization), class: 'gh-btn gh-btn--secondary' do
         %i.fa-solid.fa-users{ 'aria-hidden': 'true' }
-        Użytkownicy
+        = t('.users')
       = link_to new_user_organization_path(organization), class: 'gh-btn', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-user-plus{ 'aria-hidden': 'true' }
-        Dodaj użytkownika
+        = t('.add_user')
 
-  = render 'stat_tiles', tiles: @dashboard.stat_tiles, label: 'Podsumowanie organizacji'
+  = render 'stat_tiles', tiles: @dashboard.stat_tiles, label: t('.stats_label')
 
   .gh-dashboard-layout
     %section.gh-panel.gh-recent-purchases-panel{ 'aria-labelledby': 'gh-recent-users-title' }
-      %h2#gh-recent-users-title.gh-h2 Ostatnio dodani
+      %h2#gh-recent-users-title.gh-h2= t('.recent')
       - if @dashboard.recent_users.any?
         .gh-start-org-list
           - @dashboard.recent_users.each do |user|
@@ -41,31 +37,27 @@
               = render 'organizations/person', user: user
               %span.gh-teacher-role
                 = user_role_label(user.role)
-                %small= user.first_login? ? 'Zaproszenie wysłane' : "Dodano #{user.created_at.strftime('%d.%m.%Y')}"
-        = link_to 'Wszyscy użytkownicy', organization_path(organization), class: 'gh-btn gh-btn--secondary gh-start-more'
+                %small= user.first_login? ? t('.invited') : t('.added', when: gh_when(user.created_at))
+        = link_to t('.all_users'), organization_path(organization), class: 'gh-btn gh-btn--secondary gh-start-more'
       - else
-        %p.gh-small
-          Nikogo tu jeszcze nie ma. Dodaj studentów i nauczycieli albo poczekaj,
-          aż zalogują się przez uczelnię.
+        %p.gh-small= t('.nobody')
 
     .gh-dashboard-side-column
       %section.gh-panel.gh-my-groups-panel
-        %h2.gh-h2 Miejsca
+        %h2.gh-h2= t('.seats')
         = render 'capacity_bar', members: @dashboard.member_count, max: organization.max_members,
                                  percent: @dashboard.fill_percent, full: @dashboard.full?
         %p.gh-small
           - if organization.unlimited?
-            Ta organizacja nie ma limitu miejsc. Każdy, kto zaloguje się przez
-            USOS, trafia tutaj automatycznie.
+            = t('.unlimited_note')
           - else
-            Limit ustala administrator systemu. Każde konto, także administratora,
-            zajmuje jedno miejsce.
+            = t('.limited_note')
 
       - if @dashboard.pending_users.any?
         %section.gh-card.gh-todo-card
           .gh-card-frame
             .gh-card-inset
-              %p.gh-page-kicker Czeka na przyjęcie zaproszenia
+              %p.gh-page-kicker= t('.pending_title')
               %ul.gh-start-attention-list
                 - @dashboard.pending_users.first(Dashboard::OrganizationAdmin::RECENT_LIMIT).each do |user|
                   %li

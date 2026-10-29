@@ -13,14 +13,14 @@ class Organizations::InvitationsController < ApplicationController
     send_invitation(user, create_invitation_token(user))
 
     redirect_to organization_path(organization), status: :see_other,
-                                                 notice: "Wysłano ponownie zaproszenie: #{user.email}."
+                                                 notice: t('organizations.flash.invitation_resent', email: user.email)
   end
 
   private
 
   def too_many_resends
     redirect_to organization_path(params[:organization_id]),
-                alert:  'Zaproszenie zostało już wysłane kilka razy. Spróbuj ponownie za kilka minut.',
+                alert:  t('organizations.flash.too_many_resends'),
                 status: :see_other
   end
 end

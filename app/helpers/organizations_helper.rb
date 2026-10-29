@@ -1,23 +1,22 @@
 # frozen_string_literal: true
 
 module OrganizationsHelper
-  USER_ROLE_LABELS = {
-    'student' => 'Student',
-    'teacher' => 'Nauczyciel',
-  }.freeze
-
   def user_role_label(role)
     str_role = role.to_s
-    USER_ROLE_LABELS.fetch(str_role, str_role.humanize)
+    t("organizations.roles.#{str_role}", default: str_role.humanize)
   end
 
   def organization_capacity_lead(organization, members)
-    return "#{members} #{gh_plural(members, 'konto', 'konta', 'kont')} · bez limitu miejsc" if organization.unlimited?
+    if organization.unlimited?
+      return t('organizations.helpers.capacity_unlimited',
+               accounts: t('organizations.helpers.capacity_accounts', count: members),)
+    end
 
     free = [organization.max_members - members, 0].max
-    free_text = gh_plural(free, 'wolne', 'wolne', 'wolnych')
 
-    "#{members} z #{organization.max_members} miejsc zajętych · #{free} #{free_text}"
+    t('organizations.helpers.capacity_limited', members: members,
+                                                max:     organization.max_members,
+                                                free:    t('organizations.helpers.capacity_free', count: free),)
   end
 
   def user_role_options

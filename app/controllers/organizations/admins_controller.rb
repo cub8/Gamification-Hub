@@ -10,7 +10,7 @@ class Organizations::AdminsController < ApplicationController
   def destroy
     @admin.destroy!
 
-    redirect_after_destroy notice: "Usunięto administratora: #{display_name}."
+    redirect_after_destroy notice: t('organizations.flash.admin_removed', name: display_name)
   end
 
   private

@@ -272,6 +272,103 @@ class TranslationsTest < ActionDispatch::IntegrationTest
       get story_group_path(id: 0)
       assert_flash_shown(locale)
     end
+
+    test "global admin screens render in #{locale}" do
+      choose(locale)
+      sign_in create(:user, :global_admin)
+      org, org_admin, = organization_with_people
+
+      visit_all(locale, [
+                  home_path,
+                  organizations_path,
+                  organization_path(org),
+                  new_organization_path,
+                  edit_organization_path(org),
+                  confirm_destroy_organization_path(org),
+                  new_admin_organization_path(org),
+                  confirm_destroy_organization_admin_path(org, org_admin),
+                ],)
+    end
+
+    test "organization admin screens render in #{locale}" do
+      choose(locale)
+      org, org_admin, member = organization_with_people
+      org_admin.update!(first_login: false) # an invited admin is sent to account setup first
+      sign_in org_admin
+
+      visit_all(locale, [
+                  home_path,
+                  organization_path(org),
+                  new_user_organization_path(org),
+                  edit_organization_user_path(org, member),
+                  confirm_destroy_organization_user_path(org, member),
+                ],)
+    end
+
+    test "organization forms answer in #{locale}" do
+      choose(locale)
+      sign_in create(:user, :global_admin)
+      org, org_admin, member = organization_with_people
+
+      post organizations_path, params: { organization: { name: org.name, max_members: 5 } } # names are unique
+      assert_form_rejected(locale)
+      post organizations_path, params: { organization: { name: 'Polytechnic', max_members: 5 } }
+      assert_flash_shown(locale)
+      patch organization_path(org), params: { organization: { max_members: 1 } } # below the 3 accounts
+      assert_form_rejected(locale)
+      patch organization_path(org), params: { organization: { max_members: 10 } }
+      assert_flash_shown(locale)
+
+      post add_admin_organization_path(org), params: { user: { email: 'new.admin@example.com' } }
+      assert_flash_shown(locale)
+      post add_admin_organization_path(org), params: { user: { email: '' } }
+      assert_form_rejected(locale)
+      delete organization_admin_path(org, org_admin)
+      assert_flash_shown(locale)
+
+      sign_in create(:user, :organization_admin, organization: org.reload)
+      post add_user_organization_path(org), params: {
+        user: {
+          email:     'new.user@example.com',
+          full_name: 'Eve Black',
+          role:      'student',
+        },
+      }
+      assert_flash_shown(locale)
+      post add_user_organization_path(org), params: { user: { email: '', full_name: '', role: 'student' } }
+      assert_form_rejected(locale)
+      patch organization_user_path(org, member), params: { user: { full_name: 'Fred Gray' } }
+      assert_flash_shown(locale)
+      delete organization_user_path(org, member)
+      assert_flash_shown(locale)
+
+      sign_in create(:user, :global_admin)
+      delete organization_path(org), params: { confirm: 'wrong' }
+      assert_form_rejected(locale)
+      delete organization_path(org), params: { confirm: org.name }
+      assert_flash_shown(locale)
+    end
+
+    test "account setup answers in #{locale}" do
+      choose(locale)
+      sign_in create(:user, :organization_admin, first_login: true, full_name: nil, organization: create(:organization))
+
+      visit_all(locale, [edit_account_setup_path])
+      patch account_setup_path, params: { user: { full_name: '' } }
+      assert_form_rejected(locale)
+      patch account_setup_path, params: { user: { full_name: 'Grace Hall' } }
+      assert_flash_shown(locale)
+    end
+
+    test "the invitation e-mail is written in #{locale}" do
+      mail = I18n.with_locale(locale) do
+        InvitationMailer.with(token_link: 'https://example.com/t', email: 'a@example.com',
+                              organization_name: 'Polytechnic', role: :admin,).invitation_email.message
+      end
+
+      assert_equal I18n.t('invitation_mailer.invitation_email.subject', locale: locale), mail.subject
+      mail.parts.each { |part| assert_no_polish(part.body.decoded, 'invitation e-mail') } if locale == 'en'
+    end
   end
 
   test 'a quick-start group is created in the teacher’s language' do
@@ -328,6 +425,17 @@ class TranslationsTest < ActionDispatch::IntegrationTest
   def assert_translated(locale, html, where)
     assert_no_match(/translation missing/i, html, "missing translation in #{where}")
     assert_no_polish(html, where) if locale == 'en'
+  end
+
+  # An organization with an invited administrator and a student, so the
+  # lists, the "invitation sent" markers and the capacity text all render.
+  def organization_with_people
+    org      = create(:organization, max_members: 3)
+    admin    = create(:user, :organization_admin, organization: org, first_login: true)
+    member   = create(:user, :student, organization: org, first_login: true)
+    create(:story_group, owner: create(:user, :teacher, organization: org))
+
+    [org, admin, member]
   end
 
   def rank_params(**attrs)

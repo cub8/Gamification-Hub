@@ -13,7 +13,7 @@ class Organizations::UsersController < ApplicationController
     @user.assign_attributes(user_params)
 
     if @user.save(context: :user_invitation)
-      redirect_after_save notice: "Zapisano zmiany: #{@user.full_name}."
+      redirect_after_save notice: t('organizations.flash.user_updated', name: @user.full_name)
     else
       render :edit, status: :unprocessable_content
     end
@@ -25,7 +25,7 @@ class Organizations::UsersController < ApplicationController
     name = @user.full_name
     @user.destroy!
 
-    redirect_after_save notice: "Usunięto użytkownika: #{name}."
+    redirect_after_save notice: t('organizations.flash.user_removed', name: name)
   end
 
   private

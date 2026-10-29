@@ -27,19 +27,24 @@ class Dashboard::OrganizationAdmin
 
   def stat_tiles
     [
-      Dashboard::Tile.new(label: 'Studenci', value: @counts.fetch('student', 0), note: nil),
-      Dashboard::Tile.new(label: 'Nauczyciele', value: @counts.fetch('teacher', 0), note: nil),
+      Dashboard::Tile.new(label: tile_text(:students), value: @counts.fetch('student', 0), note: nil),
+      Dashboard::Tile.new(label: tile_text(:teachers), value: @counts.fetch('teacher', 0), note: nil),
       free_tile,
-      Dashboard::Tile.new(label: 'Oczekujące zaproszenia', value: pending_users.size, note: nil),
+      Dashboard::Tile.new(label: tile_text(:pending), value: pending_users.size, note: nil),
     ]
   end
 
   private
 
   def free_tile
-    return Dashboard::Tile.new(label: 'Wolne miejsca', value: 'Bez limitu', note: nil) if unlimited?
+    return Dashboard::Tile.new(label: tile_text(:free), value: tile_text(:no_limit), note: nil) if unlimited?
 
-    Dashboard::Tile.new(label: 'Wolne miejsca', value: free, note: "z #{organization.max_members}")
+    Dashboard::Tile.new(label: tile_text(:free), value: free,
+                        note:  tile_text(:of_max, max: organization.max_members),)
+  end
+
+  def tile_text(key, **)
+    I18n.t("home.organization_admin_start.tiles.#{key}", **)
   end
 
   def invitable

@@ -1,37 +1,33 @@
-- content_for :title, 'Organizacje'
+- content_for :title, t('.title')
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Organizacje
-    %p.gh-lead
-      Uczelnie korzystające z aplikacji. Konta logujące się przez USOS trafiają
-      do organizacji #{Organization::USOS_NAME}.
+    %h1.gh-h1= t('.title')
+    %p.gh-lead= t('.lead', usos: Organization::USOS_NAME)
 
   - if policy(:organization).create?
     = link_to new_organization_path, class: 'gh-btn', data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      Utwórz organizację
+      = t('.create')
 
 - if @organizations.any?
   %section.gh-panel.gh-organizations-panel
     .gh-organization-row.gh-organization-row--header{ 'aria-hidden': 'true' }
-      %span Organizacja
-      %span Członkowie
-      %span Administratorzy
+      %span= t('.organization')
+      %span= t('.members')
+      %span= t('.admins')
 
     - @organizations.each do |organization|
       - members = @member_counts.fetch(organization.id, 0)
       = link_to organization_path(organization), class: 'gh-organization-row gh-organization-row--link' do
         %b.gh-organization-name= organization.name
         %span
-          %span.gh-mobile-field-label Członkowie
+          %span.gh-mobile-field-label= t('.members')
           %span.gh-numeric-cell= "#{members} / #{organization.max_members || '-'}"
         %span
-          %span.gh-mobile-field-label Administratorzy
+          %span.gh-mobile-field-label= t('.admins')
           %span.gh-numeric-cell= @admin_counts.fetch(organization.id, 0)
 - else
   %section.gh-panel.gh-empty-state
-    %h2.gh-h2 Nie ma jeszcze żadnej organizacji
-    %p.gh-lead
-      Utwórz organizację, a potem dodaj jej administratora —
-      on zaprosi resztę osób.
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_lead')
