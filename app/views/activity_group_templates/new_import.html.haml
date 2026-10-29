@@ -3,4 +3,5 @@
 
 = render 'shared/csv_import_dialog', title: 'Importuj szablony kategorii zajęć z CSV',
                                      url:   import_story_group_activity_group_templates_path(@story_group),
-                                     hint:  import_hint
+                                     hint:  import_hint,
+                                     error: @upload_error

@@ -3,4 +3,5 @@
 
 = render 'shared/csv_import_dialog', title: 'Importuj przedmioty z CSV',
                                      url:   import_story_group_items_path(@story_group),
-                                     hint:  import_hint
+                                     hint:  import_hint,
+                                     error: @upload_error

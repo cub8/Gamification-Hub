@@ -2,23 +2,32 @@ import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
 
 const ACTIVE_CLASS = "gh-file-dropzone--active"
+const FILLED_CLASS = "gh-file-dropzone--filled"
 
 class FileDropzoneController extends Controller<HTMLElement> {
-  static targets = ["input", "hint"]
+  static targets = ["input", "icon", "title", "remove"]
 
   declare readonly inputTarget: HTMLInputElement
-  declare readonly hintTarget: HTMLElement
-  declare readonly hasHintTarget: boolean
+  declare readonly iconTarget: HTMLElement
+  declare readonly titleTarget: HTMLElement
+  declare readonly hasTitleTarget: boolean
+  declare readonly removeTarget: HTMLElement
 
-  private defaultHint = ""
+  private defaultTitle = ""
 
   connect() {
-    if (this.hasHintTarget) this.defaultHint = this.hintTarget.textContent ?? ""
+    if (this.hasTitleTarget) this.defaultTitle = this.titleTarget.textContent ?? ""
   }
 
   show(event: Event) {
     const input = event.target as HTMLInputElement
-    this.updateHint(input.files?.[0])
+    this.updateState(input.files?.[0])
+  }
+
+  clear(event: Event) {
+    event.preventDefault()
+    this.inputTarget.value = ""
+    this.updateState(undefined)
   }
 
   dragOver(event: DragEvent) {
@@ -38,13 +47,16 @@ class FileDropzoneController extends Controller<HTMLElement> {
     if (!file) return
 
     this.inputTarget.files = event.dataTransfer!.files
-    this.updateHint(file)
+    this.updateState(file)
   }
 
-  private updateHint(file: File | undefined) {
-    if (!this.hasHintTarget) return
+  private updateState(file: File | undefined) {
+    if (this.hasTitleTarget) this.titleTarget.textContent = file ? file.name : this.defaultTitle
 
-    this.hintTarget.textContent = file ? `Wybrano: ${file.name}` : this.defaultHint
+    this.iconTarget.classList.toggle("fa-upload", !file)
+    this.iconTarget.classList.toggle("fa-file-circle-check", Boolean(file))
+    this.removeTarget.hidden = !file
+    this.element.classList.toggle(FILLED_CLASS, Boolean(file))
   }
 }
 

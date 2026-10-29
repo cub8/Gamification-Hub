@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       collection do
         get :new_import
         post :import
+        post :confirm_import
       end
     end
 
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
       collection do
         get :new_import
         post :import
+        post :confirm_import
       end
     end
     resources :activity_groups, except: :show do
@@ -47,6 +49,7 @@ Rails.application.routes.draw do
       collection do
         get :new_import
         post :import
+        post :confirm_import
       end
     end
     resources :badges, except: :show do
@@ -55,6 +58,7 @@ Rails.application.routes.draw do
       collection do
         get :new_import
         post :import
+        post :confirm_import
       end
     end
     resources :teachers, only: %i[new index create destroy] do

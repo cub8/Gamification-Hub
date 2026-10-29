@@ -1,0 +1,27 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2 Podgląd importu odznak
+  - badges_count = @preset.badges.size
+  %p.gh-field-hint= "Zostanie dodanych: #{badges_count} #{gh_plural(badges_count, 'odznaka', 'odznaki', 'odznak')}."
+
+  .gh-preset-review-section
+    - @preset.badges.each do |badge|
+      .gh-preset-row
+        %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
+        %span.gh-preset-row-name
+          %b= badge.name
+          %small= "#{badge.didactic_description} Zniżka: #{badge.discount}%."
+
+  = form_with url: confirm_import_story_group_badges_path(@story_group), method: :post, local: true,
+              data: { turbo_frame: 'modal' } do
+    - @preset.badges.each do |badge|
+      = hidden_field_tag "setup[badges][#{badge.index}][name]", badge.name, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][didactic_description]", badge.didactic_description, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][story_description]", badge.story_description, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][discount]", badge.discount, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][icon_glyph]", badge.icon_glyph, id: nil
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
+        Anuluj
+      %button.gh-btn{ type: 'submit' }
+        Zatwierdź import

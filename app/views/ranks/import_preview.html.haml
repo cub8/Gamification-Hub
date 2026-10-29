@@ -1,0 +1,26 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2 Podgląd importu rang
+  - ranks_count = @preset.ranks.size
+  %p.gh-field-hint= "Zostanie dodanych: #{ranks_count} #{gh_plural(ranks_count, 'ranga', 'rangi', 'rang')}."
+
+  .gh-preset-review-section
+    - @preset.ranks.each do |rank|
+      .gh-preset-row
+        %i.fa-solid.fa-ranking-star{ 'aria-hidden': 'true' }
+        %span.gh-preset-row-name
+          %b= rank.name
+          %small= "Próg: #{rank.threshold}, zniżka: #{rank.discount}%."
+
+  = form_with url: confirm_import_story_group_ranks_path(@story_group), method: :post, local: true,
+              data: { turbo_frame: 'modal' } do
+    - @preset.ranks.each do |rank|
+      = hidden_field_tag "setup[ranks][#{rank.index}][name]", rank.name, id: nil
+      = hidden_field_tag "setup[ranks][#{rank.index}][threshold]", rank.threshold, id: nil
+      = hidden_field_tag "setup[ranks][#{rank.index}][discount]", rank.discount, id: nil
+      = hidden_field_tag "setup[ranks][#{rank.index}][icon_glyph]", rank.icon_glyph, id: nil
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
+        Anuluj
+      %button.gh-btn{ type: 'submit' }
+        Zatwierdź import

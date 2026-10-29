@@ -1,0 +1,35 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2 Podgląd importu szablonów
+  - templates_count = @preset.templates.size
+  %p.gh-field-hint
+    = "Zostanie dodanych: #{templates_count} #{gh_plural(templates_count, 'szablon', 'szablony', 'szablonów')}."
+
+  - @preset.templates.each do |template|
+    .gh-preset-review-section
+      %h3.gh-h3= template.name
+      - if template.categories.empty?
+        %p.gh-field-hint Bez kategorii.
+      - template.categories.each do |category|
+        .gh-preset-row
+          %i.fa-solid.fa-table-cells{ 'aria-hidden': 'true' }
+          %span.gh-preset-row-name
+            %b= category.didactic_description
+            - if category.story_description.present?
+              %small= category.story_description
+          %span.gh-preset-row-value= "+#{category.reward}"
+
+  = form_with url: confirm_import_story_group_activity_group_templates_path(@story_group), method: :post,
+              local: true, data: { turbo_frame: 'modal' } do
+    - @preset.templates.each do |template|
+      = hidden_field_tag "setup[templates][#{template.index}][name]", template.name, id: nil
+      - template.categories.each do |category|
+        - cat_key = "setup[templates][#{template.index}][categories][#{category.index}]"
+        = hidden_field_tag "#{cat_key}[didactic_description]", category.didactic_description, id: nil
+        = hidden_field_tag "#{cat_key}[story_description]", category.story_description, id: nil
+        = hidden_field_tag "#{cat_key}[reward]", category.reward, id: nil
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
+        Anuluj
+      %button.gh-btn{ type: 'submit' }
+        Zatwierdź import

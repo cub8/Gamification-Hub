@@ -457,6 +457,12 @@
     background: var(--gh-card-2);
   }
 
+  .gh-file-dropzone--filled {
+    border-style: solid;
+    border-color: var(--gh-earn);
+    background: var(--gh-card-2);
+  }
+
   .gh-file-dropzone-icon {
     --gh-c: 8px;
     flex: 0 0 auto;

@@ -129,23 +129,45 @@ class ActivityGroupTemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'import creates a template with its categories from a valid file' do
-    assert_difference('ActivityGroupTemplate.count', 1) do
+  test 'import shows a preview of the parsed file without persisting anything' do
+    assert_no_difference('ActivityGroupTemplate.count') do
       post import_story_group_activity_group_templates_url(@story_group),
            params: { file: fixture_file_upload('templates_import.csv', 'text/csv') }
     end
 
-    assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
-    assert_equal 2, ActivityGroupTemplate.order(:id).last.categories.count
+    assert_response :success
+    assert_select 'input[name="setup[templates][0][name]"][value="Laboratoria"]'
   end
 
-  test 'import redirects back with an alert for an unparseable file' do
+  test 'import shows an inline error for an unparseable file instead of redirecting' do
     assert_no_difference('ActivityGroupTemplate.count') do
       post import_story_group_activity_group_templates_url(@story_group),
            params: { file: fixture_file_upload('malformed_import.csv', 'text/csv') }
     end
 
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', text: /niepoprawny format/i
+  end
+
+  test 'confirm_import persists the previewed template with its categories' do
+    assert_difference('ActivityGroupTemplate.count', 1) do
+      post confirm_import_story_group_activity_group_templates_url(@story_group),
+           params: {
+             setup: {
+               templates: {
+                 '0' => {
+                   name:       'Laboratoria',
+                   categories: {
+                     '0' => { didactic_description: 'Obecność', reward: '5' },
+                     '1' => { didactic_description: 'Zadanie', reward: '10' },
+                   },
+                 },
+               },
+             },
+           }
+    end
+
     assert_turbo_redirected_to story_group_activity_groups_url(@story_group)
-    assert_match(/nie udało się odczytać/i, flash[:alert])
+    assert_equal 2, ActivityGroupTemplate.order(:id).last.categories.count
   end
 end

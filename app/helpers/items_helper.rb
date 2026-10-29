@@ -1,6 +1,33 @@
 # frozen_string_literal: true
 
 module ItemsHelper
+  def csv_ref_param(ref)
+    case ref
+    when nil     then ''
+    when Integer then "batch:#{ref}"
+    else              "existing:#{ref.id}"
+    end
+  end
+
+  def csv_ref_label(ref, batch)
+    return if ref.nil?
+    return ref.name unless ref.is_a?(Integer)
+
+    found = batch.find { |row| row.index == ref }
+    found&.name
+  end
+
+  def csv_ref_labels(refs, batch)
+    Array(refs).filter_map { |ref| csv_ref_label(ref, batch) }
+  end
+
+  def csv_item_requirement(item, preset)
+    rank_label = csv_ref_label(item.unlock_rank, preset.ranks)
+    badges_label = csv_ref_labels(item.unlock_badges, preset.badges).join(', ')
+
+    [rank_label, badges_label.presence].compact.join(', ')
+  end
+
   def item_bought_line(count)
     return 'Jeszcze nikt nie kupił' if count.zero?
 

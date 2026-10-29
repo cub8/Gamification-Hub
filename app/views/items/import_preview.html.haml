@@ -1,0 +1,49 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2 Podgląd importu przedmiotów
+  - items_count = @preset.items.size
+  %p.gh-field-hint
+    = "Zostanie dodanych: #{items_count} #{gh_plural(items_count, 'przedmiot', 'przedmioty', 'przedmiotów')}."
+
+  - @preset.warnings.each do |warning|
+    %p.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= warning
+
+  .gh-preset-review-section
+    - @preset.items.each do |item|
+      - requirement = csv_item_requirement(item, @preset)
+      .gh-preset-row
+        %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
+        %span.gh-preset-row-name
+          %b= item.name
+          %small= item.didactic_description
+          - if requirement.present?
+            %small= "Wymaga: #{requirement}"
+        %span.gh-preset-row-value
+          = item.price
+          = item.can_buy_at_0_lives ? '(także przy 0 życiach)' : ''
+
+  = form_with url: confirm_import_story_group_items_path(@story_group), method: :post, local: true,
+              data: { turbo_frame: 'modal' } do
+    - @preset.warnings.each do |warning|
+      = hidden_field_tag 'setup[warnings][]', warning, id: nil
+    - @preset.items.each do |item|
+      - key = "setup[items][#{item.index}]"
+      = hidden_field_tag "#{key}[name]", item.name, id: nil
+      = hidden_field_tag "#{key}[price]", item.price, id: nil
+      = hidden_field_tag "#{key}[didactic_description]", item.didactic_description, id: nil
+      = hidden_field_tag "#{key}[story_description]", item.story_description, id: nil
+      = hidden_field_tag "#{key}[icon_glyph]", item.icon_glyph, id: nil
+      = hidden_field_tag "#{key}[can_buy_at_0_lives]", (item.can_buy_at_0_lives ? '1' : '0'), id: nil
+      = hidden_field_tag "#{key}[unlock_rank]", csv_ref_param(item.unlock_rank), id: nil
+      = hidden_field_tag "#{key}[min_rank_for_discount]", csv_ref_param(item.min_rank_for_discount), id: nil
+      - item.unlock_badges.each do |ref|
+        = hidden_field_tag "#{key}[unlock_badges][]", csv_ref_param(ref), id: nil
+      - item.discount_badges.each do |ref|
+        = hidden_field_tag "#{key}[discount_badges][]", csv_ref_param(ref), id: nil
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
+        Anuluj
+      %button.gh-btn{ type: 'submit' }
+        Zatwierdź import

@@ -38,6 +38,7 @@ class CsvExportController extends Controller<HTMLFormElement> {
 
     link.href = `${this.baseUrlValue}?resource=${encodeURIComponent(resource)}`
     link.rel = "noopener"
+    link.dataset.turbo = "false"
     document.body.appendChild(link)
     link.click()
     link.remove()
