@@ -25,7 +25,7 @@ module Csv
       if template.categories.empty?
         csv << [number, template.base_name, nil, nil, nil, nil]
       else
-        template.categories.each { |category| csv << row_for(template, number, category) }
+        template.categories.sort_by(&:position).each { |category| csv << row_for(template, number, category) }
       end
     end
 

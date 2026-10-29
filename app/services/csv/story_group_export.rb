@@ -15,7 +15,7 @@ module Csv
       'ranks'     => 'Rangi',
       'badges'    => 'Odznaki',
       'items'     => 'Przedmioty',
-      'templates' => 'Arkusze ocen',
+      'templates' => 'Szablony kategorii zajęć',
     }.freeze
 
     class << self

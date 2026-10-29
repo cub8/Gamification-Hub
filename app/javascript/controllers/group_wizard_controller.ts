@@ -53,7 +53,6 @@ class GroupWizardController extends Controller<HTMLElement> {
   declare readonly manualSummaryTarget: HTMLElement
   declare readonly summaryHintTarget: HTMLElement
   declare readonly csvOnlyTargets: HTMLElement[]
-  declare readonly csvFileTargets: HTMLInputElement[]
   declare readonly hasBaseErrorTarget: boolean
   declare readonly csvRanksPreviewFormTarget: HTMLFormElement
   declare readonly csvBadgesPreviewFormTarget: HTMLFormElement
