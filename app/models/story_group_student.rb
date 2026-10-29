@@ -23,11 +23,10 @@ class StoryGroupStudent < ApplicationRecord
 
 
   validates :nickname,
-            length:      { in: 2..24, message: 'Pseudonim musi mieć od 2 do 24 znaków.' },
+            length:      { in: 2..24, message: :length },
             uniqueness:  {
               scope:          :story_group_id,
               case_sensitive: false,
-              message:        'Ten pseudonim jest już zajęty w tej grupie.',
             },
             allow_blank: true
 

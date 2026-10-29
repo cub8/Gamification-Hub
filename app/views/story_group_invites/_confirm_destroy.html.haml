@@ -1,18 +1,17 @@
 - joined = invite.uses.to_i
 
-%h2#gh-del-title.gh-h2= "Usunąć zaproszenie #{invite.code}?"
+%h2#gh-del-title.gh-h2= t('.title', code: invite.code)
 %p
-  Kod przestanie działać od razu.
+  = t('.body')
   - if joined.positive?
-    = "#{joined} #{gh_plural(joined, 'osoba, która dołączyła', 'osoby, które dołączyły', 'osób, które dołączyły')}"
-    = 'z tym kodem, zostaje w grupie.'
+    = t('.joined', count: joined)
 
 .gh-dialog-button-row
   - if @in_modal
-    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Anuluj
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }= t('shared.actions.cancel')
   - else
-    = link_to 'Anuluj', story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary'
+    = link_to t('shared.actions.cancel'), story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary'
 
-  = button_to 'Usuń zaproszenie', story_group_invite_path(@story_group, invite),
+  = button_to t('.remove'), story_group_invite_path(@story_group, invite),
     method: :delete, class: 'gh-btn',
     form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

@@ -1,4 +1,4 @@
-- content_for :title, "Przyznaj odznakę - #{@student.display_name}"
+- content_for :title, t('.page_title', name: @student.display_name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

@@ -1,0 +1,134 @@
+pl:
+  story_group_invites:
+    flash:
+      created: "Utworzono kod %{code}. Kliknij „Pokaż”, żeby wyświetlić go studentom."
+      updated: "Zapisano zaproszenie %{code}."
+      destroyed: "Usunięto zaproszenie %{code}."
+
+    # StoryGroupInvite#status_label
+    statuses:
+      active: "Aktywne"
+      expired: "Wygasło"
+      exhausted: "Wyczerpane"
+
+    helpers:
+      uses_unlimited: "%{uses}, bez limitu"
+      uses_limited: "%{uses} z %{max}"
+      no_expiry: "Bez daty ważności"
+      expires: "Wygasa %{date}"
+      expired: "Wygasło %{date}"
+      stat_sentence: "Użycia: %{uses}. %{expiry}."
+      code_label: "Kod: %{code}"
+      option: "%{code} – %{uses}, %{validity}"
+      option_unlimited: "bez limitu"
+      option_no_expiry: "bezterminowo"
+      option_valid_until: "ważne do %{date}"
+
+    # InviteForm and invite_form_controller.ts.
+    summary:
+      sentence: "Kod będzie działał %{limit} %{expiry}."
+      limit:
+        one: "dla %{count} osoby"
+        few: "dla %{count} osób"
+        many: "dla %{count} osób"
+        other: "dla %{count} osoby"
+      no_limit: "bez limitu osób"
+      expiry: "do %{date}"
+      no_expiry: "i bez daty ważności"
+      unit:
+        one: "osoba"
+        few: "osoby"
+        many: "osób"
+        other: "osoby"
+      # %{day} %{month} two digits, %{dayNumber} without padding, %{monthName} short.
+      stamp: "%{day}.%{month}, %{time}"
+
+    index:
+      title: "Zaproszenia"
+      lead: "Kod ma 6 znaków bez mylących liter (bez O, 0, I, 1 i L). Studenci wpisują go w „Dołącz do grupy” albo skanują kod QR."
+      new: "Nowe zaproszenie"
+      code: "Kod"
+      status: "Status"
+      uses: "Użycia"
+      validity: "Ważność"
+      empty: "Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć."
+      inactive: "Nieaktywne (%{count}): wygasłe i wyczerpane"
+
+    invite_row:
+      uses: "Użycia: %{uses}"
+      usage_label: "Wykorzystanie kodu %{code}"
+      show: "Pokaż"
+      edit_label: "Edytuj zaproszenie %{code}"
+      remove: "Usuń"
+      remove_label: "Usuń zaproszenie %{code}"
+
+    copy_button:
+      title: "Kopiuj kod %{code}"
+      done: "Skopiowano"
+      message: "Skopiowano kod %{code}."
+      label: "Kopiuj kod"
+
+
+    code:
+      title: "Dołącz do grupy %{name}"
+      hint: "Wpisz kod w aplikacji („Dołącz do grupy”) albo zeskanuj kod QR."
+
+    quick:
+      page_title: "Kod dla studentów"
+      title: "Dołącz do grupy %{name}"
+      hint: "Wpisz kod w aplikacji („Dołącz do grupy”) albo zeskanuj kod QR."
+      picker: "Zaproszenie (aktywne: %{count}, najnowsze na górze)"
+      hidden_note: "Wygasłe i wyczerpane zaproszenia są ukryte. Wszystkie znajdziesz w zakładce Zaproszenia."
+      empty: "Brak aktywnych zaproszeń. Utwórz nowe, żeby studenci mogli dołączyć."
+      new: "Nowe zaproszenie"
+      manage: "Zarządzaj zaproszeniami"
+
+    show:
+      page_title: "Zaproszenie %{code}"
+
+    new:
+      page_title: "Nowe zaproszenie"
+
+    edit:
+      page_title: "Edytuj zaproszenie %{code}"
+
+    form:
+      edit_title: "Edytuj zaproszenie %{code}"
+      new_title: "Nowe zaproszenie"
+      edit_hint: "Kod zostaje ten sam. Zmieniasz tylko ograniczenia."
+      new_hint: "Oba ograniczenia są opcjonalne."
+      today: "Na dzisiejsze zajęcia"
+      no_limits: "Bez ograniczeń"
+      limit: "Limit użyć"
+      limit_hint: "Kod przestanie działać, gdy dołączy tyle osób."
+      expiry: "Data ważności"
+      expiry_hint: "Po tej chwili kod przestanie działać."
+      date: "Data"
+      time: "Godzina"
+      create: "Utwórz zaproszenie"
+
+    confirm_destroy:
+      page_title: "Usunąć zaproszenie %{code}?"
+      title: "Usunąć zaproszenie %{code}?"
+      body: "Kod przestanie działać od razu."
+      joined:
+        one: "%{count} osoba, która dołączyła z tym kodem, zostaje w grupie."
+        few: "%{count} osoby, które dołączyły z tym kodem, zostają w grupie."
+        many: "%{count} osób, które dołączyły z tym kodem, zostaje w grupie."
+        other: "%{count} osoby, które dołączyły z tym kodem, zostają w grupie."
+      remove: "Usuń zaproszenie"
+
+  activerecord:
+    errors:
+      models:
+        story_group_invite:
+          attributes:
+            max_uses:
+              too_low: "Limit musi wynosić co najmniej 1."
+              below_uses:
+                one: "Z tego kodu skorzystała już %{count} osoba. Limit nie może być mniejszy."
+                few: "Z tego kodu skorzystały już %{count} osoby. Limit nie może być mniejszy."
+                many: "Z tego kodu skorzystało już %{count} osób. Limit nie może być mniejszy."
+                other: "Z tego kodu skorzystało już %{count} osoby. Limit nie może być mniejszy."
+            expires_at:
+              past: "Ta data już minęła. Wybierz późniejszą."

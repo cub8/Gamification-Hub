@@ -1,0 +1,89 @@
+en:
+  layouts:
+    # Navigation (app/values/navigation.rb) — sidebar, deck, tab bar.
+    navigation:
+      start: "Home"
+      groups: "Groups"
+      notifications: "Notifications"
+      overview: "Overview"
+      students: "Students"
+      sheets: "Grade sheets"
+      items: "Items"
+      ranks: "Ranks"
+      badges: "Badges"
+      ranking: "Ranking"
+      invites: "Invites"
+      teachers: "Teachers"
+      settings: "Group settings"
+      shop: "Shop"
+      my_items: "My items"
+      history: "Currency history"
+      membership: "Group settings"
+      organizations: "Organizations"
+      short:
+        organization: "Organization"
+        sheets: "Sheets"
+        my_items: "Items"
+
+    # GroupChrome#role_label
+    chrome_roles:
+      own: "You lead this group"
+      sup: "You assist this group"
+      lrn: "You're a participant"
+      adm: "You oversee this group"
+
+    theme:
+      light: "Light theme"
+      dark: "Dark theme"
+      toggle: "Toggle theme"
+
+    header:
+      home: "Gamification Hub, home"
+      switch_group: "Group %{name}, switch group"
+      balance_title: "%{balance} to spend, %{total} collected in total"
+      balance_label: "You have %{balance} to spend, show currency history"
+      to_spend: "to spend"
+      join: "Join a group"
+      notifications: "Notifications"
+      notifications_unread:
+        one: "Notifications, %{count} new"
+        other: "Notifications, %{count} new"
+      account: "Account: %{name}"
+
+    sidebar:
+      main: "Main"
+      your_groups: "Your groups"
+      expand: "Expand"
+      collapse: "Collapse panel"
+
+    tab_bar:
+      label: "Navigation"
+
+    deck:
+      group: "Group %{name}"
+      switch: "Switch group"
+      sections: "Group sections"
+
+    group_switcher:
+      title: "Switch group"
+      here: "You're here"
+      join: "Join a group"
+
+    more_sheet:
+      create_group: "Create a group"
+      account: "Account"
+      account_settings: "Account settings"
+      logout: "Log out"
+
+    account_menu:
+      label: "Account"
+      account_settings: "Account settings"
+      logout: "Log out"
+
+    theme_toggle:
+      help: "Help:"
+      contact: "contact"
+
+    locale_switcher:
+      switch_to: "Polski"
+      label: "Switch language to Polish"

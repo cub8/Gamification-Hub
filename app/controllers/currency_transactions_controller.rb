@@ -31,7 +31,7 @@ class CurrencyTransactionsController < ApplicationController
   end
 
   def ledger_kind
-    kinds = CurrencyLedger::KINDS.map(&:first).compact
+    kinds = CurrencyLedger::KINDS.compact
     kinds.include?(params[:kind]) ? params[:kind] : nil
   end
 end

@@ -5,8 +5,8 @@ class SidebarController extends Controller {
   static targets = ["sidebar", "label", "icon"]
   static values = {
     cookie: { type: String, default: "sidebar_collapsed" },
-    expandLabel: { type: String, default: "Rozwiń" },
-    collapseLabel: { type: String, default: "Zwiń panel" },
+    expandLabel: String,
+    collapseLabel: String,
   }
 
   declare readonly sidebarTarget: HTMLElement

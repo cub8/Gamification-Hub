@@ -4,6 +4,9 @@ require 'test_helper'
 
 class Dashboard::TeacherTest < ActiveSupport::TestCase
   setup do
+    # Purchases are bucketed by calendar day, so "1.hour.ago" must not cross
+    # midnight — pin the clock to midday. travel_back runs after each test.
+    travel_to Time.current.noon
     @teacher = FactoryBot.create(:user, role: :teacher)
   end
 
@@ -30,9 +33,9 @@ class Dashboard::TeacherTest < ActiveSupport::TestCase
 
     dashboard = Dashboard::Teacher.new(user: @teacher).load
 
-    assert_equal 1, dashboard.purchases_on('Dziś').size
-    assert_equal 1, dashboard.purchases_on('Wczoraj').size
-    assert_equal 1, dashboard.purchases_on('Wcześniej').size
+    assert_equal 1, dashboard.purchases_on(:today).size
+    assert_equal 1, dashboard.purchases_on(:yesterday).size
+    assert_equal 1, dashboard.purchases_on(:earlier).size
     assert_equal 2, dashboard.recent_purchases.size
     assert_equal 1, dashboard.recent_group_count
   end

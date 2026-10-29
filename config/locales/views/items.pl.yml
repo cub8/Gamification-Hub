@@ -1,0 +1,164 @@
+pl:
+  items:
+    flash:
+      created: "Dodano przedmiot „%{name}” do sklepu."
+      updated: "Zapisano „%{name}”. Zmiany dotyczą nowych zakupów."
+      destroyed: "Usunięto „%{name}” z oferty. Kupione egzemplarze zostają u studentów."
+
+    helpers:
+      nobody_bought: "Jeszcze nikt nie kupił"
+      bought:
+        one: "Kupiono %{count} raz"
+        few: "Kupiono %{count} razy"
+        many: "Kupiono %{count} razy"
+        other: "Kupiono %{count} razy"
+      name_placeholder: "Nazwa przedmiotu"
+      rules_placeholder: "Co daje studentowi…"
+      unlock_option_rank: "od rangi %{name}"
+      unlock_option_everyone: "każdy student"
+      discount_option_rank: "od %{name} (−%{discount}% i więcej)"
+      discount_option_none: "brak"
+
+    # Sentences built by ItemsHelper and, live, by item_form_controller.ts.
+    # %{...} slots in bold are names and numbers; the rest are fragments below.
+    sentences:
+      unlock_everyone: "Każdy student może kupić ten przedmiot%{lives}"
+      unlock_restricted: "Kupią tylko studenci%{rank}%{badges}%{lives}"
+      unlock_rank: " z rangą %{rank} lub wyższą"
+      unlock_badges:
+        one: ", którzy mają odznakę %{badges}"
+        other: ", którzy mają wszystkie odznaki %{badges}"
+      lives_yes: ". Także przy 0 życiach."
+      lives_no: ", jeśli mają co najmniej 1 życie."
+      no_discount: "Bez zniżek. Każdy kupujący zapłaci %{price}."
+      example: "Przykładowo: student%{holder} zaoszczędzi %{percent} i zapłaci %{paid} zamiast %{price}."
+      max: "Maksymalnie: student%{holder} uzyska zniżkę %{percent}."
+      holder_rank: " z rangą %{rank}"
+      holder_badges:
+        one: "odznaką %{badges}"
+        other: "odznakami %{badges}"
+      holder_all_badges: "wszystkimi odznakami"
+      holder_join_and: " oraz %{phrase}"
+      holder_join_with: " z %{phrase}"
+      warn_cap: "Zniżki sumują się do %{raw}%, a sklep odejmie najwyżej %{cap}%. Nadwyżka przepada — rozważ niższe zniżki przy rangach i odznakach."
+      warn_rank_everyone: "Zniżka dla rang obejmie każdego kupującego."
+      warn_rank_gate: "Kupić mogą tylko studenci od rangi %{rank}, więc zniżka dla rang obejmie każdego kupującego."
+      warn_badge_required: "Odznaka %{name} jest wymagana do zakupu, więc jej zniżka obejmie każdego kupującego."
+
+    # ItemCard, ItemOffer and RequirementPhrasing (shared with the shop).
+    labels:
+      discount_up_to: "Zniżki do −%{discount}%"
+      discount: "−%{discount}% %{source}"
+      source_rank_and_badges: "za rangę i odznaki"
+      source_rank: "za rangę"
+      source_badges: "za odznaki"
+      lock_rank: "Od rangi %{name}"
+      seal_rank: "Od rangi %{name}"
+      seal_badge: "Za odznakę %{name}"
+      seal_lives: "Niedostępne przy 0 życiach"
+      requires_rank: "Wymaga rangi"
+      requires_badge: "Wymaga odznaki"
+      requires_life: "Masz 0 żyć. Najpierw odzyskaj życie."
+
+    index:
+      title: "Przedmioty"
+      lead:
+        one: "%{count} przedmiot w sklepie, od najtańszego."
+        few: "%{count} przedmioty w sklepie, od najtańszego."
+        many: "%{count} przedmiotów w sklepie, od najtańszego."
+        other: "%{count} przedmiotu w sklepie, od najtańszego."
+      new: "Nowy przedmiot"
+      empty_title: "Sklep jest jeszcze pusty"
+      empty_body: "Dodaj przedmioty, żeby zebrana waluta miała na co iść. Każdy może mieć wymagania i zniżki, więc sklep otwiera się stopniowo wraz z postępami."
+
+    new:
+      page_title: "Nowy przedmiot"
+
+    edit:
+      page_title: "Edytuj przedmiot - %{name}"
+
+    grid_card:
+      discount: "Zniżka"
+      zero_lives: "Przy 0 życiach"
+      edit_label: "Edytuj przedmiot %{name}"
+
+    card:
+      zero_lives: "Działa przy 0 życiach"
+      buy: "Kup za %{price}"
+      collect_more: "Zbierz jeszcze"
+      progress_label: "Postęp do rangi %{rank}"
+
+    preview:
+      summary: "Podgląd karty"
+      students_view: "Tak zobaczą to studenci"
+      state: "Stan karty"
+      afford: "Dostępny"
+      save: "Zbierasz"
+      sealed: "Zapieczętowany"
+      seal_hint: "Bez wymagań przedmiot nigdy nie będzie zapieczętowany."
+      thumb: "Miniatura w powiadomieniach"
+      thumb_sample: "Zakup studenta, dziś 10:21"
+
+    form:
+      breadcrumb: "Przedmioty"
+      new_title: "Nowy przedmiot"
+      edit_title: "Edytuj przedmiot"
+      new_lead: "Wypełnij kartę, a podgląd obok pokaże, jak zobaczą ją studenci."
+      edit_lead: "Podgląd obok pokazuje kartę po zmianach."
+      owners:
+        one: "%{count} student ma ten przedmiot."
+        few: "%{count} studentów ma ten przedmiot."
+        many: "%{count} studentów ma ten przedmiot."
+        other: "%{count} studenta ma ten przedmiot."
+      owners_note: "Zmiany ceny, wymagań i zniżek dotyczą tylko nowych zakupów."
+      card: "Karta przedmiotu"
+      card_hint: "Tak przedmiot wygląda w sklepie i w ekwipunku studenta."
+      name_placeholder: "np. Poprawa wejściówki"
+      rules: "Co daje studentowi"
+      rules_placeholder: "np. Możliwość ponownego napisania wejściówki"
+      rules_hint: "Opis dydaktyczny: konkretna korzyść, bez fabuły."
+      story: "Opis fabularny"
+      story_placeholder: "np. Awaryjny powrót statku do bazy"
+      price_section: "Cena"
+      price: "Cena"
+      zero_lives: "Można kupić przy 0 życiach"
+      zero_lives_hint: "Przydaje się dla przedmiotów, które przywracają życie."
+      who_section: "Kto może kupić"
+      who_hint: "Bez wymagań przedmiot jest dostępny dla wszystkich."
+      who: "Kupić może"
+      who_label: "Kto może kupić"
+      required_badges: "Wymagane odznaki"
+      add_badge: "Dodaj odznakę…"
+      no_badges: "W tej grupie nie ma jeszcze odznak."
+      discounts_section: "Zniżki"
+      discounts_hint: "Zniżka z rangi to procent przypisany do rangi studenta. Zniżki z odznak się sumują. Wystarczy spełnić jeden z warunków, żeby zniżka zadziałała — bez warunków dostaje ją każdy kupujący. Wysokość liczy się zawsze z rangi i wszystkich odznak studenta, także tych niewybranych tutaj."
+      rank_discount: "Zniżka dla rang"
+      badge_discount: "Zniżka za odznaki"
+      discount_badges: "Odznaki ze zniżką"
+      add_discount_badge: "Dodaj odznakę ze zniżką…"
+      removal_hint: "Przedmiot zniknie ze sklepu i z list. Studenci, którzy go kupili, nadal go mają, a w ich historii zostanie jako „Usunięty z oferty”."
+      remove: "Usuń przedmiot"
+      create: "Dodaj przedmiot"
+
+    confirm_destroy:
+      page_title: "Usuń przedmiot %{name}"
+      title: "Usunąć „%{name}” ze sklepu?"
+      body: "Przedmiot zniknie ze sklepu i z list. Studenci, którzy go kupili, zachowają go, a w historii zostanie oznaczony jako „Usunięty z oferty”."
+      owners:
+        one: "%{count} student ma ten przedmiot i zachowa go po usunięciu."
+        few: "%{count} studentów ma ten przedmiot i zachowa go po usunięciu."
+        many: "%{count} studentów ma ten przedmiot i zachowa go po usunięciu."
+        other: "%{count} studenta ma ten przedmiot i zachowa go po usunięciu."
+      remove: "Usuń z oferty"
+
+  activerecord:
+    errors:
+      models:
+        item:
+          attributes:
+            name:
+              blank: "Podaj nazwę przedmiotu."
+            didactic_description:
+              blank: "Napisz, co przedmiot daje studentowi."
+            price:
+              too_low: "Cena musi wynosić co najmniej 1."

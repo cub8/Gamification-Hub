@@ -10,18 +10,16 @@ class Badge < ApplicationRecord
 
   has_icon_art :icon, glyphs: Glyphs::BADGE
 
-  validates :name, presence: { message: 'Podaj nazwę odznaki.' },
-                   length:   { maximum: 50 }
+  validates :name, presence: true, length: { maximum: 50 }
 
-  validates :didactic_description, presence: { message: 'Napisz, jak zdobyć tę odznakę.' },
-                                   length:   { maximum: 255 }
+  validates :didactic_description, presence: true, length: { maximum: 255 }
 
   validates :story_description, length: { maximum: 255 }
 
   validates :discount, numericality: {
     greater_than_or_equal_to: 0,
     less_than_or_equal_to:    100,
-    message:                  'Zniżka musi mieścić się między 0 a 100%.',
+    message:                  :out_of_range,
   }
 
   scope :by_name, -> { order(:name, :id) }

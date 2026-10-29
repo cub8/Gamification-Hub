@@ -11,7 +11,9 @@ class ActivityGroupTemplatesController < ApplicationController
   def new
     @activity_group_template = @story_group.activity_group_templates.build
 
-    @activity_group_template.categories.build(didactic_description: 'Obecność', reward: 2, position: 0)
+    @activity_group_template.categories.build(didactic_description: t('activity_group_templates.default_category'),
+                                              reward:               2,
+                                              position:             0,)
     @activity_group_template.categories.build(reward: 1, position: 1)
   end
 
@@ -28,7 +30,8 @@ class ActivityGroupTemplatesController < ApplicationController
 
     if @activity_group_template.save(context: :settings)
       redirect_to story_group_activity_groups_path(@story_group),
-                  notice: "Utworzono szablon „#{@activity_group_template.base_name}”.", status: :see_other
+                  notice: t('activity_group_templates.flash.created', name: @activity_group_template.base_name),
+                  status: :see_other
     else
       render :new, status: :unprocessable_content
     end
@@ -39,7 +42,7 @@ class ActivityGroupTemplatesController < ApplicationController
 
     if @activity_group_template.save(context: :settings)
       redirect_to story_group_activity_groups_path(@story_group),
-                  notice: 'Zapisano szablon. Nowe arkusze dostaną te kategorie.', status: :see_other
+                  notice: t('activity_group_templates.flash.updated'), status: :see_other
     else
       @sheet_names = sheet_names_for(@activity_group_template)
       render :edit, status: :unprocessable_content
@@ -51,7 +54,7 @@ class ActivityGroupTemplatesController < ApplicationController
     @activity_group_template.soft_delete!
 
     redirect_outside_turbo_frame story_group_activity_groups_path(@story_group),
-                                 notice: "Usunięto szablon „#{name}”. Utworzone z niego arkusze zostają."
+                                 notice: t('activity_group_templates.flash.destroyed', name: name)
   end
 
   private

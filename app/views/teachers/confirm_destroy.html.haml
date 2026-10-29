@@ -1,4 +1,4 @@
-- content_for :title, "Usunąć #{@teacher.full_name} z grupy?"
+- content_for :title, t('.page_title', name: @teacher.full_name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

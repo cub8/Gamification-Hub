@@ -3,15 +3,15 @@
 
 %section.gh-panel.gh-page-header.gh-page-header--stacked
   %p.gh-breadcrumbs
-    = link_to 'Rangi', story_group_ranks_path(@story_group)
+    = link_to t('.breadcrumb'), story_group_ranks_path(@story_group)
     %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
-    %span= editing ? (rank.name_was.presence || rank.name) : 'Nowa ranga'
-  %h1.gh-h1= editing ? 'Edytuj rangę' : 'Nowa ranga'
-  %p.gh-lead
-    Podgląd obok pokazuje, gdzie ranga trafi na drabince i ilu studentów obejmie.
+    %span= editing ? (rank.name_was.presence || rank.name) : t('.new_title')
+  %h1.gh-h1= editing ? t('.edit_title') : t('.new_title')
+  %p.gh-lead= t('.lead')
 
 - rungs_json = ladder.rungs.map { |rung| { id: rung.rank.id, name: rung.rank.name, min: rung.rank.required_currency_value.to_i, disc: rung.rank.discount.to_i } }.to_json
-- form_data = { controller: 'rank-form', action: 'gh:image-crop->rank-form#art', rank_form_rungs_value: rungs_json, rank_form_totals_value: ladder.student_totals.to_json, rank_form_editing_id_value: rank.id.to_i }
+- i18n_json  = t('ranks.helpers').slice(:required, :gives_discount, :discount, :starting, :no_discount, :name_placeholder, :new_rank, :from_short).merge(t('.js')).to_json
+- form_data = { controller: 'rank-form', action: 'gh:image-crop->rank-form#art', rank_form_rungs_value: rungs_json, rank_form_totals_value: ladder.student_totals.to_json, rank_form_editing_id_value: rank.id.to_i, rank_form_i18n_value: i18n_json }
 
 = form_with model: [@story_group, rank], data: form_data do |f|
 
@@ -22,19 +22,18 @@
         %p.gh-info-banner
           %i.fa-solid.fa-users{ 'aria-hidden': 'true' }
           %span
-            %b
-              = "#{holders} #{gh_plural(holders, 'student ma', 'studentów ma', 'studentów ma')} tę rangę."
-            Zmiana progu może przesunąć studentów w górę lub w dół. Podgląd obok pokazuje skutki.
+            %b= t('.holders', count: holders)
+            = t('.holders_note')
 
       .gh-form-section
-        %h2.gh-h3 Karta rangi
-        %p.gh-field-hint Tak ranga wygląda na stronie grupy i w rankingu.
+        %h2.gh-h3= t('.card')
+        %p.gh-field-hint= t('.card_hint')
 
         .gh-form-field
-          = f.label :name, 'Nazwa'
+          = f.label :name, t('shared.actions.name')
           .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:name)) }
             = f.text_field :name, maxlength: 40, autocomplete: 'off',
-              placeholder: 'np. Admirał Floty',
+              placeholder: t('.name_placeholder'),
               'aria-invalid': (error.call(:name) ? 'true' : nil),
               'aria-describedby': (error.call(:name) ? 'gh-rank-name-error' : nil),
               data: { rank_form_target: 'name', action: 'rank-form#refresh' }
@@ -48,13 +47,12 @@
           refresh_action: 'rank-form#refresh'
 
       .gh-form-section
-        %h2.gh-h3 Próg i nagroda
-        %p.gh-field-hint
-          Ranga zależy od łącznie zebranej waluty, więc wydawanie jej nie obniża rangi.
+        %h2.gh-h3= t('.threshold_section')
+        %p.gh-field-hint= t('.threshold_hint')
 
         .gh-form-row-2col
           .gh-form-field
-            = f.label :required_currency_value, 'Wymagane zebrane'
+            = f.label :required_currency_value, t('.threshold')
             .gh-price-field-row
               .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if error.call(:required_currency_value)) }
                 = f.number_field :required_currency_value, min: 0, step: 1,
@@ -64,7 +62,7 @@
               = render 'layouts/currency_token', story_group: @story_group, size: 32
 
           .gh-form-field
-            = f.label :discount, 'Zniżka w sklepie'
+            = f.label :discount, t('.discount')
             .gh-price-field-row
               .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if error.call(:discount)) }
                 = f.number_field :discount, min: 0, max: 100, step: 1,
@@ -87,23 +85,21 @@
 
       - if editing
         .gh-form-section
-          %h2.gh-h3 Usuwanie
-          %p.gh-field-hint
-            Studenci z tą rangą spadną do rangi niżej. Przedmioty, które jej wymagają,
-            trzeba będzie najpierw przypisać do innej rangi.
+          %h2.gh-h3= t('shared.actions.removal')
+          %p.gh-field-hint= t('.removal_hint')
           .gh-button-row
             = link_to confirm_destroy_story_group_rank_path(@story_group, rank),
               class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
               %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
-              Usuń rangę
+              = t('.remove')
 
-    %aside.gh-preview-column{ 'aria-label': 'Podgląd' }
+    %aside.gh-preview-column{ 'aria-label': t('shared.actions.preview') }
       = render 'preview', rank: rank, ladder: ladder, editing: editing
 
   .gh-panel.gh-form-actions-bar
-    = link_to 'Anuluj', story_group_ranks_path(@story_group), class: 'gh-link-button'
+    = link_to t('shared.actions.cancel'), story_group_ranks_path(@story_group), class: 'gh-link-button'
     %span.gh-form-actions-spacer
     %button.gh-btn{ type: 'submit' }
       - unless editing
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      = editing ? 'Zapisz zmiany' : 'Dodaj rangę'
+      = editing ? t('shared.actions.save_changes') : t('.create')

@@ -9,20 +9,17 @@
           %td.gh-invitation-email-body
             %p.gh-invitation-email-brand Gamification Hub
 
-            %h1.gh-invitation-email-title Zaproszenie
+            %h1.gh-invitation-email-title= t('.title')
             %p.gh-invitation-email-lead= lead
-            %p.gh-invitation-email-text
-              Kliknij przycisk poniżej, aby dokończyć zakładanie konta i uzupełnić swoje dane.
+            %p.gh-invitation-email-text= t('.text')
 
             %table{ cellpadding: 0, cellspacing: 0, border: 0 }
               %tr
                 %td.gh-invitation-email-button{ align: 'center' }
-                  %a.gh-invitation-email-button-link{ href: token_link } Dokończ zakładanie konta
+                  %a.gh-invitation-email-button-link{ href: token_link }= t('.button')
 
-            %p.gh-invitation-email-note
-              Link jest ważny przez 7 dni. Jeśli przycisk nie działa, skopiuj ten adres do przeglądarki:
+            %p.gh-invitation-email-note= t('.note')
             %p.gh-invitation-email-url
               %a{ href: token_link }= token_link
 
-            %p.gh-invitation-email-footer
-              Jeśli nie spodziewałeś się tego zaproszenia, możesz zignorować tę wiadomość.
+            %p.gh-invitation-email-footer= t('.footer')

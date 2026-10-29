@@ -3,24 +3,23 @@
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Dzień dobry, #{@current_user.full_name.to_s.split(' ').first}
+    %h1.gh-h1= t('.greeting', name: @current_user.full_name.to_s.split(' ').first)
     %p.gh-lead
       - if recent.any?
-        - group_count = @dashboard.recent_group_count
-        = "Od wczoraj studenci kupili #{recent.size} #{gh_plural(recent.size, 'przedmiot', 'przedmioty', 'przedmiotów')}"
-        = "w #{group_count} #{gh_plural(group_count, 'grupie', 'grupach', 'grupach')}."
+        = t('.recent_lead', items:  t('.recent_items', count: recent.size),
+                            groups: t('.recent_groups', count: @dashboard.recent_group_count))
       - elsif groups.any?
-        Od wczoraj nikt nic nie kupił. Zajrzyj do swoich grup poniżej.
+        = t('.quiet_lead')
       - else
-        Nie prowadzisz jeszcze żadnej grupy. Utwórz pierwszą, żeby zacząć.
+        = t('.no_groups_lead')
 
 .gh-dashboard-layout
   %section.gh-panel.gh-recent-purchases-panel{ 'aria-labelledby': 'gh-purch-title' }
-    %h2#gh-purch-title.gh-h2 Ostatnie zakupy
+    %h2#gh-purch-title.gh-h2= t('.purchases')
 
     - if groups.size > 1
-      .gh-purchase-filter-bar{ role: 'group', 'aria-label': 'Pokaż zakupy z grupy' }
-        = link_to 'Wszystkie grupy', home_path, class: 'gh-purchase-filter-chip',
+      .gh-purchase-filter-bar{ role: 'group', 'aria-label': t('.filter') }
+        = link_to t('.all_groups'), home_path, class: 'gh-purchase-filter-chip',
           'aria-current': @dashboard.filter.nil?.to_s
         - groups.each do |group|
           = link_to home_path(group: group.story_group.id), class: 'gh-purchase-filter-chip',
@@ -32,13 +31,13 @@
       - Dashboard::Teacher::DAYS.each do |day|
         - rows = @dashboard.purchases_on(day)
         - next if rows.empty?
-        %h3.gh-purchase-day-label= day
+        %h3.gh-purchase-day-label= t("home.days.#{day}")
         %ul.gh-purchase-list
           - rows.each do |purchase|
             %li.gh-purchase-row
               = render 'layouts/item_thumb', item: purchase.item
               %span.gh-purchase-row-main
-                %b= purchase.item&.name || 'Przedmiot usunięty z oferty'
+                %b= purchase.item&.name || t('.removed_item')
                 %span= purchase.student_name
                 %span.gh-purchase-row-group--mobile
                   = render 'layouts/group_chip', story_group: purchase.story_group
@@ -49,11 +48,7 @@
                 = render 'layouts/currency_token', story_group: purchase.story_group, size: 16
               %span.gh-purchase-row-time= purchase.time
     - else
-      %p.gh-small.mt-4
-        - if @dashboard.filter
-          W tej grupie nie ma jeszcze żadnych zakupów.
-        - else
-          Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same.
+      %p.gh-small.mt-4= @dashboard.filter ? t('.no_group_purchases') : t('.no_purchases')
 
   .gh-dashboard-side-column
     - if @dashboard.pending
@@ -61,18 +56,18 @@
       %section.gh-card.gh-todo-card
         .gh-card-frame
           .gh-card-inset
-            %p.gh-page-kicker Czeka na ocenę
+            %p.gh-page-kicker= t('.pending')
             %h2.gh-todo-card-title= pending.activity_group.name
             = render 'layouts/group_chip', story_group: pending.story_group
             %p.gh-small
-              = "Zostało #{pending.categories_count} #{gh_plural(pending.categories_count, 'kategoria', 'kategorie', 'kategorii')}"
-              = "dla #{pending.students_count} #{gh_plural(pending.students_count, 'studenta', 'studentów', 'studentów')}."
-            = link_to 'Oceń',
+              = t('.pending_left', categories: t('.pending_categories', count: pending.categories_count),
+                                   students:   t('.pending_students', count: pending.students_count))
+            = link_to t('.grade'),
               edit_story_group_activity_group_students_activity_group_categories_path(pending.story_group, pending.activity_group),
               class: 'gh-btn'
 
     %section.gh-panel.gh-my-groups-panel
-      %h2.gh-h2 Twoje grupy
+      %h2.gh-h2= t('.your_groups')
       - if groups.any?
         %ul.gh-my-groups-list
           - groups.each do |group|
@@ -81,14 +76,13 @@
                 = render 'layouts/group_thumb', story_group: group.story_group, size: :lg
                 %span
                   %b= group.story_group.name
-                  %small
-                    = "#{group.role}, #{group.students_count} #{gh_plural(group.students_count, 'student', 'studentów', 'studentów')}"
+                  %small= t('.group_meta', role: group.role, students: t('.students', count: group.students_count))
                 - if group.new_purchases.positive?
                   %span.gh-my-groups-list-item-alert
-                    = "#{group.new_purchases} #{gh_plural(group.new_purchases, 'nowy zakup', 'nowe zakupy', 'nowych zakupów')}"
+                    = t('.new_purchases', count: group.new_purchases)
       - else
-        %p.gh-small Nie prowadzisz jeszcze żadnej grupy.
+        %p.gh-small= t('.no_groups')
 
       = link_to new_story_group_path, class: 'gh-btn gh-btn--secondary' do
         %i.fa-solid.fa-plus
-        Utwórz grupę
+        = t('.create_group')

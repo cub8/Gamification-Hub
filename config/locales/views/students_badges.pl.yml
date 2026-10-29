@@ -1,0 +1,36 @@
+pl:
+  students_badges:
+    flash:
+      awarded: "Przyznano odznakę „%{name}”."
+      revoked: "Odebrano odznakę „%{name}”."
+
+    helpers:
+      # The form follows the total: "z 1 odznaki", "z 3 odznak".
+      assign_lead:
+        one: "%{name} ma %{held} z %{count} odznaki."
+        few: "%{name} ma %{held} z %{count} odznak."
+        many: "%{name} ma %{held} z %{count} odznak."
+        other: "%{name} ma %{held} z %{count} odznaki."
+      owned: "Ma już"
+      effect_html: "Po przyznaniu: %{discount} na przedmioty, które uwzględniają tę odznakę%{discounting}.%{unlocks} Zobaczy ją w swojej talii."
+      effect_discounting: " (%{items})"
+      effect_unlocks_html: " Odblokuje zakup: %{items}."
+      revoke_html: "%{name} straci zniżkę %{discount}%{unlocking}. Kupione wcześniej przedmioty zostają."
+      revoke_unlocking: " i możliwość zakupu: %{items}"
+
+    new:
+      page_title: "Przyznaj odznakę - %{name}"
+
+    form:
+      pick: "Przyznaj"
+      blank: "Wybierz odznakę"
+      title: "Przyznaj odznakę"
+      search: "Szukaj odznaki"
+      no_match: "Brak odznak o tej nazwie."
+      empty: "W tej grupie nie ma jeszcze odznak. Dodaj je w zakładce Odznaki, a potem wróć tutaj."
+      submit: "Wybierz odznakę"
+
+    confirm_destroy:
+      page_title: "Odbierz odznakę %{name}"
+      title: "Odebrać odznakę „%{name}”?"
+      revoke: "Odbierz odznakę"

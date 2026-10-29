@@ -1,0 +1,126 @@
+en:
+  story_group_invites:
+    flash:
+      created: "Created the code %{code}. Click “Show” to display it to students."
+      updated: "Saved the invite %{code}."
+      destroyed: "Deleted the invite %{code}."
+
+    # StoryGroupInvite#status_label
+    statuses:
+      active: "Active"
+      expired: "Expired"
+      exhausted: "Used up"
+
+    helpers:
+      uses_unlimited: "%{uses}, no limit"
+      uses_limited: "%{uses} of %{max}"
+      no_expiry: "No expiry date"
+      expires: "Expires %{date}"
+      expired: "Expired %{date}"
+      stat_sentence: "Uses: %{uses}. %{expiry}."
+      code_label: "Code: %{code}"
+      option: "%{code} – %{uses}, %{validity}"
+      option_unlimited: "no limit"
+      option_no_expiry: "no expiry"
+      option_valid_until: "valid until %{date}"
+
+    # InviteForm and invite_form_controller.ts.
+    summary:
+      sentence: "The code will work %{limit} %{expiry}."
+      limit:
+        one: "for %{count} person"
+        other: "for %{count} people"
+      no_limit: "with no limit of people"
+      expiry: "until %{date}"
+      no_expiry: "and with no expiry date"
+      unit:
+        one: "person"
+        other: "people"
+      # %{day} %{month} two digits, %{dayNumber} without padding, %{monthName} short.
+      stamp: "%{monthName} %{dayNumber}, %{time}"
+
+    index:
+      title: "Invites"
+      lead: "The code has 6 characters with no confusable letters (no O, 0, I, 1 or L). Students type it into “Join a group” or scan the QR code."
+      new: "New invite"
+      code: "Code"
+      status: "Status"
+      uses: "Uses"
+      validity: "Validity"
+      empty: "No active invites. Create a new one so students can join."
+      inactive: "Inactive (%{count}): expired and used up"
+
+    invite_row:
+      uses: "Uses: %{uses}"
+      usage_label: "Usage of code %{code}"
+      show: "Show"
+      edit_label: "Edit invite %{code}"
+      remove: "Delete"
+      remove_label: "Delete invite %{code}"
+
+    copy_button:
+      title: "Copy code %{code}"
+      done: "Copied"
+      message: "Copied the code %{code}."
+      label: "Copy code"
+
+
+    code:
+      title: "Join the group %{name}"
+      hint: "Type the code into the app (“Join a group”) or scan the QR code."
+
+    quick:
+      page_title: "Code for students"
+      title: "Join the group %{name}"
+      hint: "Type the code into the app (“Join a group”) or scan the QR code."
+      picker: "Invite (active: %{count}, newest first)"
+      hidden_note: "Expired and used-up invites are hidden. You'll find all of them in the Invites tab."
+      empty: "No active invites. Create a new one so students can join."
+      new: "New invite"
+      manage: "Manage invites"
+
+    show:
+      page_title: "Invite %{code}"
+
+    new:
+      page_title: "New invite"
+
+    edit:
+      page_title: "Edit invite %{code}"
+
+    form:
+      edit_title: "Edit invite %{code}"
+      new_title: "New invite"
+      edit_hint: "The code stays the same. You only change the limits."
+      new_hint: "Both limits are optional."
+      today: "For today's class"
+      no_limits: "No limits"
+      limit: "Use limit"
+      limit_hint: "The code stops working once this many people have joined."
+      expiry: "Expiry date"
+      expiry_hint: "After this moment the code stops working."
+      date: "Date"
+      time: "Time"
+      create: "Create invite"
+
+    confirm_destroy:
+      page_title: "Delete invite %{code}?"
+      title: "Delete invite %{code}?"
+      body: "The code will stop working right away."
+      joined:
+        one: "%{count} person who joined with this code stays in the group."
+        other: "%{count} people who joined with this code stay in the group."
+      remove: "Delete invite"
+
+  activerecord:
+    errors:
+      models:
+        story_group_invite:
+          attributes:
+            max_uses:
+              too_low: "The limit must be at least 1."
+              below_uses:
+                one: "%{count} person has already used this code. The limit can't be lower."
+                other: "%{count} people have already used this code. The limit can't be lower."
+            expires_at:
+              past: "That date has already passed. Choose a later one."

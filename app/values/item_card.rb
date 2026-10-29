@@ -69,11 +69,13 @@ class ItemCard
   def discount_label
     return if max_discount.zero?
 
-    "Zniżki do −#{max_discount}%"
+    I18n.t('items.labels.discount_up_to', discount: max_discount)
   end
 
   def lock_labels
-    requirements.map { |requirement| requirement.rank? ? "Od rangi #{requirement.name}" : requirement.name }
+    requirements.map do |requirement|
+      requirement.rank? ? I18n.t('items.labels.lock_rank', name: requirement.name) : requirement.name
+    end
   end
 
   def discounts? = max_discount.positive?

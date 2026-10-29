@@ -22,10 +22,10 @@ class Dashboard::GlobalAdmin
 
   def stat_tiles
     [
-      Dashboard::Tile.new(label: 'Organizacje', value: organizations.size, note: nil),
-      Dashboard::Tile.new(label: 'Konta w organizacjach', value: organizations.sum(&:member_count), note: nil),
-      Dashboard::Tile.new(label: 'Wolne miejsca', value: organizations.sum { |org| org.free.to_i }, note: nil),
-      Dashboard::Tile.new(label: 'Niezaakceptowane zaproszenia', value: organizations.sum(&:pending_admins), note: nil),
+      Dashboard::Tile.new(label: tile_label(:organizations), value: organizations.size, note: nil),
+      Dashboard::Tile.new(label: tile_label(:accounts), value: organizations.sum(&:member_count), note: nil),
+      Dashboard::Tile.new(label: tile_label(:free), value: organizations.sum { |org| org.free.to_i }, note: nil),
+      Dashboard::Tile.new(label: tile_label(:pending), value: organizations.sum(&:pending_admins), note: nil),
     ]
   end
 
@@ -34,6 +34,10 @@ class Dashboard::GlobalAdmin
   def attention? = without_admin.any? || nearly_full.any?
 
   private
+
+  def tile_label(key)
+    I18n.t("home.global_admin_start.tiles.#{key}")
+  end
 
   def build_organizations
     organizations = Organization.order(:name).to_a

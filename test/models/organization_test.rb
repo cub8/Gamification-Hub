@@ -30,7 +30,7 @@ class OrganizationTest < ActiveSupport::TestCase
 
     organization.max_members = 1
     assert_not organization.valid?
-    assert_includes organization.errors[:max_members], "can't be lower than the current number of members (2)"
+    assert organization.errors.added?(:max_members, :below_members, count: 2)
   end
 
   test 'requires unique name' do

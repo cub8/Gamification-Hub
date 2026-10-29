@@ -7,13 +7,13 @@
     %span.gh-pill.gh-octagon-clip{ class: invite.active? ? 'gh-pill--earn' : 'gh-pill--corr' }= invite.status_label
 
   %span.gh-invite-usage
-    = "Użycia: #{invite_uses_label(invite)}"
+    = t('.uses', uses: invite_uses_label(invite))
     - if invite.max_uses
       .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                'aria-valuemin': 0,
                'aria-valuemax': invite.max_uses,
                'aria-valuenow': invite.uses,
-               'aria-label': "Wykorzystanie kodu #{invite.code}" }
+               'aria-label': t('.usage_label', code: invite.code) }
         %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(invite.uses, invite.max_uses)}%" }
 
   %span.gh-invite-expiry= invite_expiry_label(invite)
@@ -23,16 +23,16 @@
       = link_to story_group_invite_path(@story_group, invite), class: 'gh-btn gh-btn--small',
         data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-qrcode
-        Pokaż
+        = t('.show')
 
     = render 'copy_button', invite: invite, labelled: false
 
     = link_to edit_story_group_invite_path(@story_group, invite), class: 'gh-icon-button',
-      title: 'Edytuj', 'aria-label': "Edytuj zaproszenie #{invite.code}",
+      title: t('shared.actions.edit'), 'aria-label': t('.edit_label', code: invite.code),
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-pen
 
     = link_to confirm_destroy_story_group_invite_path(@story_group, invite), class: 'gh-icon-button',
-      title: 'Usuń', 'aria-label': "Usuń zaproszenie #{invite.code}",
+      title: t('.remove'), 'aria-label': t('.remove_label', code: invite.code),
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-trash

@@ -1,4 +1,4 @@
 - if @in_modal
-  %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+  %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
 - else
-  = link_to 'Anuluj', home_path, class: 'gh-btn gh-btn--secondary'
+  = link_to t('shared.actions.cancel'), home_path, class: 'gh-btn gh-btn--secondary'

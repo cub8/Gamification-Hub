@@ -10,7 +10,7 @@ module Auth::SignIn
     reset_session
     session[:user_id] = user.id
 
-    redirect_to after_login_path(return_to), notice: 'Zalogowano pomyślnie.'
+    redirect_to after_login_path(return_to), notice: t('auth.flash.signed_in')
   end
 
   def after_login_path(path)

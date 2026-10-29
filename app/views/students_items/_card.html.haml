@@ -16,7 +16,7 @@
 
       - if item.deleted?
         .gh-card-tags
-          %span.gh-tag.gh-tag--removed Usunięty z oferty
+          %span.gh-tag.gh-tag--removed= t('.removed')
 
       %p.gh-rule-text= item.didactic_description
       - if item.story_description.present?

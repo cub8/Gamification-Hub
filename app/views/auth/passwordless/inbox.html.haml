@@ -1,16 +1,16 @@
-- content_for :title, 'Sprawdź skrzynkę'
-- waiting_label = 'Wyślij ponownie za %{time}'
-- idle_label    = 'Wyślij link ponownie'
+- content_for :title, t('.title')
+- waiting_label = t('.waiting', time: '%{time}')
+- idle_label    = t('.resend')
 
 .text-center
   .gh-icon-circle-lg.gh-octagon-clip.mx-auto
     %i.fa-solid.fa-envelope
-  %h1.gh-h1 Sprawdź skrzynkę
-  %p.gh-lead.mx-auto Wysłaliśmy link na adres
+  %h1.gh-h1= t('.title')
+  %p.gh-lead.mx-auto= t('.sent_to')
   %p.gh-email-display= @email
   %p.gh-small.mt-4
-    = "Link działa przez #{gh_minutes(LoginToken::EXPIRES_IN.in_minutes.to_i)}."
-    Jeśli go nie widzisz, zajrzyj do folderu Spam.
+    = t('.valid_for', minutes: gh_minutes(LoginToken::EXPIRES_IN.in_minutes.to_i))
+    = t('.spam')
 
   .gh-button-stack
     = button_to auth_passwordless_path,
@@ -27,4 +27,4 @@
       - else
         = idle_label
 
-    = link_to 'Zmień adres e-mail', new_auth_passwordless_path, class: 'gh-link-button'
+    = link_to t('.change_email'), new_auth_passwordless_path, class: 'gh-link-button'

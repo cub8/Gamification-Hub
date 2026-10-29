@@ -1,0 +1,43 @@
+pl:
+  join:
+    # InviteLookup::Result#error
+    errors:
+      missing: "Podaj kod zaproszenia."
+      not_found: "Nie znaleźliśmy takiego kodu. Sprawdź go z prowadzącym."
+      expired: "Ten kod wygasł. Poproś prowadzącego o nowy."
+      exhausted: "Z tego kodu skorzystała już maksymalna liczba osób. Poproś prowadzącego o nowy."
+
+    new:
+      page_title: "Dołącz do grupy"
+
+    show:
+      page_title: "Dołącz do grupy"
+
+    create:
+      page_title: "Dołączono do grupy"
+
+    step_code:
+      step: "Krok 1 z 2"
+      title: "Dołącz do grupy"
+      hint: "Wpisz 6-znakowy kod, który podał prowadzący."
+      code_label: "Kod zaproszenia"
+      slot_label: "Znak %{index} z %{total}"
+      member: "Już należysz do tej grupy."
+      open_group: "Otwórz grupę"
+      qr_hint: "Masz kod QR? Zeskanuj go aparatem telefonu, a kod wpisze się sam."
+
+    step_nickname:
+      step: "Krok 2 z 2"
+      title: "Dołączasz do grupy %{name}"
+      hint: "W tej grupie inni zobaczą Cię pod pseudonimem — także w rankingu. Możesz go później zmienić w ustawieniach w grupie."
+      nickname: "Pseudonim w tej grupie"
+      nickname_hint: "Zostaw puste, jeśli chcesz używać imienia i nazwiska. Pseudonim możesz ustawić później."
+      join: "Dołącz do grupy"
+
+    step_done:
+      title: "Dołączono do grupy %{name}"
+      led_by: "Prowadzi %{name}."
+      you_are_html: "Jesteś tam jako %{name}."
+      currency: "Walutą w tej grupie są %{currency}."
+      done: "Gotowe"
+

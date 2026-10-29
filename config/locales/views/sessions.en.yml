@@ -1,0 +1,10 @@
+en:
+  sessions:
+    new:
+      title: "Log in"
+      lead: "Choose the way you use at your university or school."
+      usos: "Log in with USOS"
+      usos_hint: "University students and teachers"
+      or: "or"
+      email: "Log in with e-mail"
+      email_hint: "School pupils and people added by an administrator"

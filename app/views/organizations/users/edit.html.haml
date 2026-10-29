@@ -1,4 +1,4 @@
-- content_for :title, "Edytuj użytkownika — #{@user.full_name}"
+- content_for :title, t('.page_title', name: @user.full_name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

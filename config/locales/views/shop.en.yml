@@ -1,0 +1,45 @@
+en:
+  shop:
+    flash:
+      unavailable: "You can't buy “%{name}” right now."
+      bought: "Bought: “%{name}”. You have %{balance} left."
+
+    # Shop::ZONES
+    zones:
+      afford: "You can afford now"
+      save: "Saving up for"
+      sealed: "Sealed"
+
+    # PurchaseEligibilityService and ItemPurchaseService.
+    errors:
+      no_lives: "You need at least one life."
+      rank_required: "Required rank: %{rank}."
+      badges_missing: "Missing badges: %{badges}."
+      not_enough: "You don't have enough currency to buy this item."
+      failed: "Something went wrong with the purchase: %{message}"
+
+    helpers:
+      balance_html: "You have %{balance} to spend."
+      discount_badges_html:
+        one: "Your %{badges} badge lowers the price of some items."
+        other: "Your badges %{badges} lower the price of some items."
+
+    index:
+      title: "Shop"
+      to_spend: "to spend"
+      collected: "collected in total"
+      empty_title: "The shop is still empty"
+      empty_body: "The teacher hasn't added any items yet. Keep collecting currency — it will come in handy once the shop opens."
+
+    buy_button:
+      label: "Buy %{name} for %{price}"
+      buy: "Buy for %{price}"
+
+    confirm_buy:
+      page_title: "Buy %{name}"
+      title: "Buy “%{name}”?"
+      price: "Price"
+      left: "You'll have left"
+      discount: "Discount %{label}."
+      notice: "The teacher will be notified about the purchase."
+      buy: "Buy for %{price}"

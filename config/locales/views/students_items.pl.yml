@@ -1,0 +1,34 @@
+pl:
+  students_items:
+    helpers:
+      inventory_lead:
+        one: "%{count} przedmiot. Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach."
+        few: "%{count} przedmioty. Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach."
+        many: "%{count} przedmiotów. Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach."
+        other: "%{count} przedmiotu. Wykorzystanie przedmiotu zgłaszasz prowadzącemu na zajęciach."
+      purchase_line: "Kupione %{when}, za %{price}"
+      purchase_teacher_line: "Kupione %{when}"
+      purchase_teacher_discount: "Kupione %{when}, ze zniżką z %{list}"
+      shop_line:
+        one: "Stać cię teraz na %{count} przedmiot w sklepie."
+        few: "Stać cię teraz na %{count} przedmioty w sklepie."
+        many: "Stać cię teraz na %{count} przedmiotów w sklepie."
+        other: "Stać cię teraz na %{count} przedmiotu w sklepie."
+
+    index:
+      own_title: "Moje przedmioty"
+      title: "Przedmioty — %{name}"
+      teacher_lead:
+        one: "%{count} przedmiot. Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach."
+        few: "%{count} przedmioty. Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach."
+        many: "%{count} przedmiotów. Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach."
+        other: "%{count} przedmiotu. Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach."
+      go_to_shop: "Przejdź do sklepu"
+      see_shop: "Zobacz sklep"
+      own_empty_title: "Nie masz jeszcze żadnego przedmiotu"
+      own_empty_body: "Zbieraj walutę na zajęciach i wydaj ją w sklepie — kupione przedmioty zostaną tutaj razem z datą zakupu."
+      empty_title: "Student nic jeszcze nie kupił"
+      empty_body: "Przedmioty pojawią się tu razem z ceną, jaką zapłacił, i datą zakupu."
+
+    card:
+      removed: "Usunięty z oferty"

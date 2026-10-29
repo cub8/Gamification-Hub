@@ -70,7 +70,7 @@ class StarterPackBuilder
   end
 
   def create_template
-    template = story_group.activity_group_templates.new(base_name: StarterPack::TEMPLATE_NAME)
+    template = story_group.activity_group_templates.new(base_name: StarterPack.template_name)
 
     kept(:cats, preset.categories).each_with_index do |category, position|
       template.categories.new(didactic_description: category.didactic_description,
@@ -101,7 +101,7 @@ class StarterPackBuilder
   def guard_threshold!(seen, value, name)
     if seen.key?(value)
       raise InvalidSelection,
-            "Dwie rangi nie mogą mieć tego samego progu: #{seen[value]} i #{name} mają #{value}."
+            I18n.t('story_groups.flash.duplicate_threshold', first: seen[value], second: name, value: value)
     end
 
     seen[value] = name

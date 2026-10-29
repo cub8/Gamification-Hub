@@ -1,19 +1,17 @@
 - editing = organization.persisted?
 
 = form_with model: organization, data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |form|
-  %h2.gh-h2= editing ? 'Edytuj organizację' : 'Nowa organizacja'
+  %h2.gh-h2= editing ? t('.edit_title') : t('.new_title')
   - if organization.usos?
-    %p
-      To organizacja powiązana z USOS: trafia do niej każdy, kto zaloguje się
-      przez USOS. Nie ma limitu członków i nie można jej usunąć.
+    %p= t('.usos_note')
 
-  = render 'organizations/field', form: form, record: organization, attribute: :name, label: 'Nazwa',
+  = render 'organizations/field', form: form, record: organization, attribute: :name, label: t('.name'),
                                   options: { maxlength: 100, autofocus: true }
   - unless organization.usos?
     = render 'organizations/field', form: form, record: organization, attribute: :max_members,
-                                    label: 'Limit członków', input: :number_field,
+                                    label: t('.max_members'), input: :number_field,
                                     options: { min: 1, step: 1 }
 
   = render 'organizations/dialog_actions',
     cancel_path: (editing ? organization_path(organization) : organizations_path),
-    submit_label: (editing ? 'Zapisz' : 'Utwórz organizację')
+    submit_label: (editing ? t('.save') : t('.create'))

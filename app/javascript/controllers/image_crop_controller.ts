@@ -14,6 +14,7 @@ class ImageCropController extends Controller<HTMLElement> {
   static values = {
     aspect: { type: Number, default: 1.6 },
     width: { type: Number, default: 1024 },
+    alt: String,
   }
 
   declare readonly inputTarget: HTMLInputElement
@@ -25,6 +26,7 @@ class ImageCropController extends Controller<HTMLElement> {
   declare readonly hasOwnPreviewTarget: boolean
   declare readonly aspectValue: number
   declare readonly widthValue: number
+  declare readonly altValue: string
 
   private cropper: Cropper | null = null
   private objectUrl: string | null = null
@@ -64,7 +66,7 @@ class ImageCropController extends Controller<HTMLElement> {
 
     const image = document.createElement("img")
     image.src = this.objectUrl
-    image.alt = "Wgrana grafika"
+    image.alt = this.altValue
     this.boxTarget.replaceChildren(image)
 
     this.cropper = new Cropper(image, { template: this.template })

@@ -1,7 +1,30 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { interpolate, pluralize, type PluralForms } from "@utils/i18n"
 
 interface Rung { id: number | string; name: string; min: number; disc: number }
+
+interface Wording {
+  required: string
+  gives_discount: string
+  discount: string
+  starting: string
+  no_discount: string
+  name_placeholder: string
+  new_rank: string
+  from_short: string
+  impact_got_lead: string
+  impact_got: PluralForms
+  impact_got_tail: string
+  impact_nobody: string
+  impact_unchanged: string
+  impact_changed_lead: string
+  impact_changed: PluralForms
+  impact_up: string
+  impact_down: string
+  warn_below: string
+  warn_above: string
+}
 
 class RankFormController extends Controller<HTMLFormElement> {
   static targets = [
@@ -15,6 +38,7 @@ class RankFormController extends Controller<HTMLFormElement> {
     rungs: Array,
     totals: Array,
     editingId: Number,
+    i18n: Object,
   }
 
   declare readonly nameTarget: HTMLInputElement
@@ -33,6 +57,7 @@ class RankFormController extends Controller<HTMLFormElement> {
   declare readonly rungsValue: Rung[]
   declare readonly totalsValue: number[]
   declare readonly editingIdValue: number
+  declare readonly i18nValue: Wording
 
   connect() {
     this.refresh()
@@ -69,9 +94,9 @@ class RankFormController extends Controller<HTMLFormElement> {
   }
 
   private renderCard(draft: Rung) {
-    this.cardNameTarget.textContent = draft.name || "Nazwa rangi"
+    this.cardNameTarget.textContent = draft.name || this.i18nValue.name_placeholder
     this.cardNameTarget.classList.toggle("gh-placeholder-text", draft.name === "")
-    this.cardRulesTarget.textContent = rewardLine(draft)
+    this.cardRulesTarget.textContent = this.rewardLine(draft)
     this.renderArt()
   }
 
@@ -96,9 +121,9 @@ class RankFormController extends Controller<HTMLFormElement> {
   }
 
   private renderDraftRow(draft: Rung) {
-    this.draftNameTarget.textContent = draft.name || "Nowa ranga"
-    this.draftTermsTarget.textContent = ladderTerms(draft)
-    this.draftValueTarget.textContent = `od ${draft.min}`
+    this.draftNameTarget.textContent = draft.name || this.i18nValue.new_rank
+    this.draftTermsTarget.textContent = this.ladderTerms(draft)
+    this.draftValueTarget.textContent = interpolate(this.i18nValue.from_short, { min: draft.min })
     this.draftRow?.setAttribute("data-min", String(draft.min))
   }
 
@@ -127,18 +152,17 @@ class RankFormController extends Controller<HTMLFormElement> {
 
   private renderImpact(draft: Rung) {
     const { up, down, got } = this.impact(draft)
+    const t = this.i18nValue
 
     if (!this.editing) {
       if (got > 0) {
         this.impactTarget.replaceChildren(
-          text("Od razu dostanie ją "),
-          bold(`${got} ${plural(got, "student", "studentów", "studentów")}`),
-          text(". Pozostali zobaczą ją jako kolejny cel."),
+          text(t.impact_got_lead),
+          bold(pluralize(t.impact_got, got)),
+          text(t.impact_got_tail),
         )
       } else {
-        this.impactTarget.replaceChildren(
-          text("Na razie nikt nie ma tylu zebranych. Studenci zobaczą ją jako kolejny cel."),
-        )
+        this.impactTarget.replaceChildren(text(t.impact_nobody))
       }
 
       return
@@ -146,15 +170,18 @@ class RankFormController extends Controller<HTMLFormElement> {
 
     const moved = up + down
     if (moved === 0) {
-      this.impactTarget.replaceChildren(text("Żaden student nie zmieni rangi."))
+      this.impactTarget.replaceChildren(text(t.impact_unchanged))
       return
     }
 
-    const changes = [up && `${up} awansuje`, down && `${down} spadnie`].filter(Boolean)
+    const changes = [
+      up && interpolate(t.impact_up, { count: up }),
+      down && interpolate(t.impact_down, { count: down }),
+    ].filter(Boolean)
 
     this.impactTarget.replaceChildren(
-      text("Po zapisaniu "),
-      bold(`${moved} ${plural(moved, "student zmieni", "studentów zmieni", "studentów zmieni")} rangę`),
+      text(t.impact_changed_lead),
+      bold(pluralize(t.impact_changed, moved)),
       text(`: ${changes.join(", ")}.`),
     )
   }
@@ -187,19 +214,26 @@ class RankFormController extends Controller<HTMLFormElement> {
     const messages: string[] = []
 
     if (below && draft.disc < below.disc) {
-      messages.push(
-        `Ranga niżej (${below.name}) daje −${below.disc}%, a ta tylko −${draft.disc}%. ` +
-        "Awans obniżyłby zniżkę.",
-      )
+      messages.push(interpolate(this.i18nValue.warn_below, { name: below.name, other: below.disc, discount: draft.disc }))
     }
 
     if (above && draft.disc > above.disc) {
-      messages.push(
-        `Ranga wyżej (${above.name}) daje tylko −${above.disc}%. Awans na nią obniżyłby zniżkę.`,
-      )
+      messages.push(interpolate(this.i18nValue.warn_above, { name: above.name, other: above.disc }))
     }
 
     this.warningsTarget.replaceChildren(...messages.map(warning))
+  }
+
+  private rewardLine(rung: Rung): string {
+    const line = interpolate(this.i18nValue.required, { min: rung.min })
+
+    return rung.disc > 0 ? `${line} ${interpolate(this.i18nValue.gives_discount, { discount: rung.disc })}` : line
+  }
+
+  private ladderTerms(rung: Rung): string {
+    if (rung.disc > 0) return interpolate(this.i18nValue.discount, { discount: rung.disc })
+
+    return rung.min === 0 ? this.i18nValue.starting : this.i18nValue.no_discount
   }
 }
 
@@ -216,29 +250,6 @@ function held(total: number, ladder: Rung[]): Rung | null {
     (found, rung) => (total >= rung.min ? rung : found),
     null,
   )
-}
-
-function rewardLine(rung: Rung): string {
-  const line = `Wymagane: ${rung.min} zebranych.`
-
-  return rung.disc > 0 ? `${line} Daje −${rung.disc}% w sklepie.` : line
-}
-
-function ladderTerms(rung: Rung): string {
-  if (rung.disc > 0) return `−${rung.disc}% w sklepie`
-
-  return rung.min === 0 ? "Ranga startowa" : "Bez zniżki"
-}
-
-function plural(count: number, one: string, few: string, many: string): string {
-  const n = Math.abs(count)
-  const lastTwo = n % 100
-  const lastOne = n % 10
-
-  if (n === 1) return one
-  if (lastOne >= 2 && lastOne <= 4 && (lastTwo < 12 || lastTwo > 14)) return few
-
-  return many
 }
 
 function text(value: string): Text {

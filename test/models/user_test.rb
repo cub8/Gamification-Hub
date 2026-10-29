@@ -16,7 +16,7 @@ class UserTest < ActiveSupport::TestCase
 
     user = FactoryBot.build(:user, organization: organization)
     assert_not user.valid?
-    assert_includes user.errors[:organization], 'has reached its member limit'
+    assert user.errors.added?(:organization, :member_limit)
   end
 
   test 'existing member can be updated in a full organization' do

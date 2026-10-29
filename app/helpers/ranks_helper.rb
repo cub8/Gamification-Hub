@@ -2,33 +2,37 @@
 
 module RanksHelper
   def rank_summary(rank)
-    opening = rank.starting? ? 'Ranga startowa' : "Od #{rank.required_currency_value} zebranych"
+    opening = rank.starting? ? t('ranks.helpers.starting') : t('ranks.helpers.from', min: rank.required_currency_value)
 
-    return "#{opening}, bez zniżki" if rank.discount.to_i.zero?
+    return t('ranks.helpers.summary_no_discount', opening: opening) if rank.discount.to_i.zero?
 
-    "#{opening}, −#{rank.discount}% w sklepie"
+    t('ranks.helpers.summary_discount', opening: opening, discount: rank.discount)
   end
 
   def rank_summary_sentences(rank)
-    opening = rank.starting? ? 'Ranga startowa.' : "Od #{rank.required_currency_value} zebranych."
+    opening = if rank.starting?
+                t('ranks.helpers.starting_sentence')
+              else
+                t('ranks.helpers.from_sentence', min: rank.required_currency_value)
+              end
 
     return opening if rank.discount.to_i.zero?
 
-    "#{opening} Daje −#{rank.discount}% w sklepie."
+    "#{opening} #{t('ranks.helpers.gives_discount', discount: rank.discount)}"
   end
 
   def rank_ladder_terms(rank)
-    return "−#{rank.discount}% w sklepie" if rank.discount.to_i.positive?
-    return 'Ranga startowa' if rank.starting?
+    return t('ranks.helpers.discount', discount: rank.discount) if rank.discount.to_i.positive?
+    return t('ranks.helpers.starting') if rank.starting?
 
-    'Bez zniżki'
+    t('ranks.helpers.no_discount')
   end
 
   def rank_reward_line(rank)
-    line = "Wymagane: #{rank.required_currency_value.to_i} zebranych."
+    line = t('ranks.helpers.required', min: rank.required_currency_value.to_i)
 
     return line if rank.discount.to_i.zero?
 
-    "#{line} Daje −#{rank.discount}% w sklepie."
+    "#{line} #{t('ranks.helpers.gives_discount', discount: rank.discount)}"
   end
 end

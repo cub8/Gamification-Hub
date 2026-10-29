@@ -65,6 +65,6 @@ class User < ApplicationRecord
   private
 
   def organization_has_free_slot
-    errors.add(:organization, 'has reached its member limit') if organization&.full?
+    errors.add(:organization, :member_limit) if organization&.full?
   end
 end

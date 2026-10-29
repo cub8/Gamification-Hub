@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class StoryGroupStudentTest < ActiveSupport::TestCase
-
   setup do
     @owner = ::FactoryBot.create(:user)
     @student_user = ::FactoryBot.create(:user)
@@ -60,16 +59,14 @@ class StoryGroupStudentTest < ActiveSupport::TestCase
     assert_nil student.next_rank
   end
 
-  test 'removing a student who bought something clears their purchase notifications' do
-    story_group = FactoryBot.create(:story_group)
-    student = FactoryBot.create(:story_group_student, story_group: story_group,
-                                                      user:        FactoryBot.create(:user, :student),)
-    item = FactoryBot.create(:item, story_group: story_group)
-    FactoryBot.create(:notification, user: story_group.owner, story_group: story_group,
-                                     story_group_student: student, item: item,)
+  test 'a student who bought something can still be removed, with the purchase notifications' do
+    group        = StoryGroup.create!(name: 'Shop Group', currency_name: 'Gold', owner: @owner)
+    student      = StoryGroupStudent.create!(user: @student_user, story_group: group)
+    notification = ::FactoryBot.create(:notification, user: @owner, story_group: group, story_group_student: student,
+                                                      item: ::FactoryBot.create(:item, story_group: group),)
 
-    assert_difference 'Notification.count', -1 do
-      student.destroy!
-    end
+    student.destroy!
+
+    assert_not Notification.exists?(notification.id)
   end
 end

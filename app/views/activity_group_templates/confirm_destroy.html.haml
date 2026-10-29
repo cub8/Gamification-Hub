@@ -1,4 +1,4 @@
-- content_for :title, "Usuń szablon #{@activity_group_template.base_name}"
+- content_for :title, t('.page_title', name: @activity_group_template.base_name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

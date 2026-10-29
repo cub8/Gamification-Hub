@@ -1,18 +1,18 @@
 - name = admin.full_name.presence || admin.email
 
-%h2.gh-h2= "Usunąć administratora #{name}?"
+%h2.gh-h2= t('.title', name: name)
 %p
-  Konto zostanie usunięte na stałe i zwolni się jedno miejsce w organizacji.
+  = t('.body')
   - if admin.first_login?
-    Wysłane zaproszenie przestanie działać.
+    = t('.pending')
 = render 'organizations/owned_groups_notice', user: admin
 
 .gh-dialog-button-row
   - if @in_modal
-    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true } Anuluj
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }= t('organizations.dialog_actions.cancel')
   - else
-    = link_to 'Anuluj', organization_path(@organization), class: 'gh-btn gh-btn--secondary'
+    = link_to t('organizations.dialog_actions.cancel'), organization_path(@organization), class: 'gh-btn gh-btn--secondary'
 
-  = button_to 'Usuń konto', organization_admin_path(@organization, admin),
+  = button_to t('.remove'), organization_admin_path(@organization, admin),
               method: :delete, class: 'gh-btn',
               form:   { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }

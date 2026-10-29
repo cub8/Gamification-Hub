@@ -1,0 +1,159 @@
+en:
+  home:
+    index:
+      title: "Home"
+
+    # HomeHelper#home_greeting — the admin dashboards.
+    admin_greeting: "Good morning, %{name}"
+    admin_greeting_anonymous: "Good morning"
+
+    capacity_bar:
+      unlimited:
+        one: "%{count} account · no limit"
+        other: "%{count} accounts · no limit"
+      label: "Seats taken"
+
+    # Dashboard::GlobalAdmin and home/_global_admin_start.
+    global_admin_start:
+      tiles:
+        organizations: "Organizations"
+        accounts: "Accounts in organizations"
+        free: "Free seats"
+        pending: "Invitations not accepted"
+      stats_label: "Organizations summary"
+      no_organizations_lead: "There are no organizations yet. Create the first one so new accounts have somewhere to go."
+      attention_lead:
+        one: "%{count} organization — some of them need your attention."
+        other: "%{count} organizations — some of them need your attention."
+      fine_lead:
+        one: "%{count} organization. All of them have an administrator and free seats."
+        other: "%{count} organizations. All of them have an administrator and free seats."
+      create: "Create an organization"
+      organizations: "Organizations"
+      admins:
+        one: "%{count} administrator"
+        other: "%{count} administrators"
+      pending_admins:
+        one: "%{count} invitation pending"
+        other: "%{count} invitations pending"
+      all_organizations: "All organizations"
+      attention: "Needs attention"
+      no_admin: "No administrator"
+      add: "Add"
+      no_free_seats: "No free seats"
+      free_seats:
+        one: "%{count} seat left"
+        other: "%{count} seats left"
+      limit: "Limit"
+      fine_title: "Everything is fine"
+      fine_body: "Every organization has an administrator and free seats."
+      how_title: "How it works"
+      how_body: "Everyone who signs in through USOS lands in the organization %{usos}. It has no seat limit and can't be deleted. Accounts in the other organizations are added by their administrators."
+      empty_title: "Start with the first organization"
+      empty_lead: "Set an account limit and add an administrator — they'll invite everyone else."
+
+    # Dashboard::OrganizationAdmin and home/_organization_admin_start.
+    organization_admin_start:
+      tiles:
+        students: "Students"
+        teachers: "Teachers"
+        free: "Free seats"
+        no_limit: "No limit"
+        of_max: "of %{max}"
+        pending: "Pending invitations"
+      stats_label: "Organization summary"
+      no_organization: "Your administrator account isn't assigned to any organization. Contact the system administrator."
+      full_lead: "The organization has no free seats — new people won't be able to join until someone is removed or the limit is raised."
+      pending_lead:
+        one: "%{count} person hasn't accepted the invitation yet."
+        other: "%{count} people haven't accepted the invitation yet."
+      users: "Users"
+      add_user: "Add a user"
+      recent: "Recently added"
+      invited: "Invitation sent"
+      added: "Added %{when}"
+      all_users: "All users"
+      nobody: "Nobody is here yet. Add students and teachers or wait until they sign in through the university."
+      seats: "Seats"
+      unlimited_note: "This organization has no seat limit. Everyone who signs in through USOS lands here automatically."
+      limited_note: "The limit is set by the system administrator. Every account, the administrator's included, takes one seat."
+      pending_title: "Waiting for the invitation to be accepted"
+
+    # TeacherStartDashboard::DAYS
+    days:
+      today: "Today"
+      yesterday: "Yesterday"
+      earlier: "Earlier"
+
+    teacher_start:
+      greeting: "Good morning, %{name}"
+      recent_lead: "Since yesterday students have bought %{items} %{groups}."
+      recent_items:
+        one: "%{count} item"
+        other: "%{count} items"
+      recent_groups:
+        one: "in %{count} group"
+        other: "in %{count} groups"
+      quiet_lead: "Nobody has bought anything since yesterday. Look into your groups below."
+      no_groups_lead: "You don't lead any groups yet. Create your first one to get started."
+      purchases: "Recent purchases"
+      filter: "Show purchases from group"
+      all_groups: "All groups"
+      removed_item: "Item removed from the shop"
+      no_group_purchases: "There are no purchases in this group yet."
+      no_purchases: "Nobody has bought anything yet. Purchases will show up here on their own."
+      pending: "Waiting to be graded"
+      pending_left: "%{categories} left for %{students}."
+      pending_categories:
+        one: "%{count} category"
+        other: "%{count} categories"
+      pending_students:
+        one: "%{count} student"
+        other: "%{count} students"
+      grade: "Grade"
+      your_groups: "Your groups"
+      group_meta: "%{role}, %{students}"
+      students:
+        one: "%{count} student"
+        other: "%{count} students"
+      new_purchases:
+        one: "%{count} new purchase"
+        other: "%{count} new purchases"
+      no_groups: "You don't lead any groups yet."
+      create_group: "Create a group"
+
+    student_start:
+      greeting: "Hi, %{name}"
+      groups_lead:
+        one: "You're in %{count} group. Currency, ranks and badges are separate in each one."
+        other: "You're in %{count} groups. Currency, ranks and badges are separate in each one."
+      no_groups_lead: "You're not in any group yet. Ask your teacher for a code and join below."
+      fresh: "You're just starting out. You'll earn your first %{currency} in class."
+      to_spend: "To spend"
+      lives: "Lives"
+      rank: "Rank:"
+      no_rank: "none"
+      to_next: "%{total} of %{needed} to the %{rank} rank"
+      top: "%{total} collected. This is the highest rank."
+      progress_label: "Progress to the next rank in the group %{name}"
+      badges: "Badges"
+      badges_of: "of %{total}"
+      open_group: "Open the group"
+      shop: "Shop"
+      have_code: "Got a code from your teacher?"
+      code_hint: "The code has 6 characters. You can also scan the QR code with your phone's camera."
+      join: "Join a group"
+      feed: "Recently across all groups"
+      feed_meta: "%{group}, %{when}"
+
+  notifications:
+    panel:
+      title: "Notifications"
+      mark_all: "Mark all as read"
+      new: "New"
+      earlier: "Earlier"
+      empty: "No notifications."
+    notification:
+      purchase: "Purchase: %{name}"
+      meta: "%{group}, %{when}"
+      unread: "new"

@@ -6,12 +6,12 @@ module RewardCategory
   included do
     default_scope { order(position: :asc) }
 
-    validates :didactic_description, presence: { message: 'Podaj, za co jest nagroda.' }
+    validates :didactic_description, presence: true
     validates :reward,
               numericality: {
                 only_integer:             true,
                 greater_than_or_equal_to: 1,
-                message:                  'Nagroda musi wynosić co najmniej 1.',
+                message:                  :too_low,
               }
   end
 end

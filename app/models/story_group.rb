@@ -5,10 +5,9 @@ class StoryGroup < ApplicationRecord
 
   enum :ranking_mode, { podium_and_own: 0, full: 1 }, prefix: :ranking
 
-  RANKING_MODE_LABELS = {
-    'podium_and_own' => 'Podium i własne miejsce',
-    'full'           => 'Pełny ranking',
-  }.freeze
+  class << self
+    def ranking_mode_label(mode) = I18n.t("story_groups.ranking_modes.#{mode}")
+  end
 
   belongs_to :owner, class_name: 'User', foreign_key: 'owner_id'
   has_many :notifications, dependent: :destroy
@@ -24,20 +23,18 @@ class StoryGroup < ApplicationRecord
   has_many :invites, class_name: 'StoryGroupInvite', foreign_key: 'story_group_id', dependent: :destroy
 
   has_icon_art :icon, glyphs: GroupArt::KEYS, required: false
-  has_icon_art :currency_icon, glyphs: CurrencyIcons::KEYS, glyph_message: 'Nieznana ikona.', required: false
+  has_icon_art :currency_icon, glyphs: CurrencyIcons::KEYS, glyph_message: :unknown_icon, required: false
 
-  validates :name, presence: { message: 'Podaj nazwę grupy.' },
-                   length:   { maximum: 40 }
-  validates :currency_name, presence: { message: 'Podaj nazwę waluty.' },
-                            length:   { maximum: 40 }
+  validates :name, presence: true, length: { maximum: 40 }
+  validates :currency_name, presence: true, length: { maximum: 40 }
   validates :description, length: { maximum: 1024 }
   validates :default_lives, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   delegate :organization, to: :owner
 
   def ranking_summary
-    return 'Wyłączony' unless ranking_enabled?
+    return I18n.t('story_groups.ranking_off') unless ranking_enabled?
 
-    RANKING_MODE_LABELS.fetch(ranking_mode, ranking_mode)
+    self.class.ranking_mode_label(ranking_mode)
   end
 end

@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 class GroupChrome
-  ROLE_LABELS = {
-    own: 'Prowadzisz tę grupę',
-    sup: 'Wspierasz tę grupę',
-    lrn: 'Jesteś uczestnikiem',
-    adm: 'Nadzorujesz tę grupę',
-  }.freeze
-
   attr_reader :user, :story_group, :student_membership
 
   class << self
@@ -33,7 +26,9 @@ class GroupChrome
 
   def name = story_group.name
 
-  def role_label = ROLE_LABELS[role]
+  def role_label
+    I18n.t("layouts.chrome_roles.#{role}")
+  end
 
   def role
     return :lrn if student?

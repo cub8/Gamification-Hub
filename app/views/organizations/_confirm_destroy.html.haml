@@ -1,9 +1,9 @@
 - members = organization.users.count
 
-%h2.gh-h2 Usunąć organizację na zawsze?
+%h2.gh-h2= t('.title')
 %p
-  = "#{members} #{gh_plural(members, 'konto zostanie usunięte', 'konta zostaną usunięte', 'kont zostanie usuniętych')}"
-  razem z organizacją, w tym konta administratorów.
+  = t('.accounts', count: members)
+  = t('.accounts_tail')
 
 = form_with url: organization_path(organization), method: :delete,
   data: { controller: 'confirm-name',
@@ -12,7 +12,7 @@
 
   .gh-form-field
     = label_tag :confirm do
-      Wpisz nazwę organizacji, żeby potwierdzić:
+      = t('.confirm_label')
       %b= organization.name
     .gh-text-input{ class: ('gh-text-input--invalid' if @confirm_failed) }
       = text_field_tag :confirm, nil, autocomplete: 'off', autofocus: true,
@@ -22,14 +22,14 @@
     - if @confirm_failed
       %p#gh-del-organization-error.gh-field-error{ role: 'alert' }
         %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
-        %span Wpisana nazwa nie zgadza się z nazwą organizacji. Organizacja nie została usunięta.
+        %span= t('.mismatch')
 
   .gh-dialog-button-row
     - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('organizations.dialog_actions.cancel')
     - else
-      = link_to 'Anuluj', organization_path(organization), class: 'gh-btn gh-btn--secondary'
+      = link_to t('organizations.dialog_actions.cancel'), organization_path(organization), class: 'gh-btn gh-btn--secondary'
 
     %button.gh-btn{ type: 'submit', disabled: true,
                     data: { confirm_name_target: 'submit' } }
-      Usuń organizację
+      = t('.remove')

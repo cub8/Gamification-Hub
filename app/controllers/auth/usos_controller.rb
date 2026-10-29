@@ -16,9 +16,9 @@ class Auth::UsosController < ApplicationController
 
     sign_in_and_redirect(user)
   rescue InvalidProviderError
-    redirect_to root_path, alert: 'Nieprawidłowy dostawca logowania.'
+    redirect_to root_path, alert: t('auth.flash.invalid_provider')
   rescue Providers::InvalidAuthError
-    redirect_to root_path, alert: 'Nieprawidłowa próba autoryzacji.'
+    redirect_to root_path, alert: t('auth.flash.invalid_auth')
   end
 
   private

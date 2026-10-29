@@ -1,11 +1,40 @@
 import { application } from "@controllers/application"
 import { Controller } from "@hotwired/stimulus"
+import { andList, interpolate, locale, pluralTemplate, type PluralForms } from "@utils/i18n"
 
 const DISCOUNT_CAP = 50
 
 const EXAMPLE_BADGES = 2
 
 type Part = string | { b: string }
+
+// ItemsHelper#item_form_wording — the same templates the server fills.
+interface Wording {
+  unlock_everyone: string
+  unlock_restricted: string
+  unlock_rank: string
+  unlock_badges: PluralForms
+  lives_yes: string
+  lives_no: string
+  no_discount: string
+  example: string
+  max: string
+  holder_rank: string
+  holder_badges: PluralForms
+  holder_all_badges: string
+  holder_join_and: string
+  holder_join_with: string
+  warn_cap: string
+  warn_rank_everyone: string
+  warn_rank_gate: string
+  warn_badge_required: string
+  discount_up_to: string
+  seal_rank: string
+  seal_badge: string
+  name_placeholder: string
+  rules_placeholder: string
+  buy: string
+}
 
 class ItemFormController extends Controller<HTMLFormElement> {
   static targets = [
@@ -27,6 +56,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
     badgeNames: Array,
     exampleRankOrder: Array,
     exampleBadgeOrder: Array,
+    i18n: Object,
   }
 
   declare readonly ladderDiscountValue: number
@@ -35,6 +65,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
   declare readonly badgeNamesValue: string[]
   declare readonly exampleRankOrderValue: string[]
   declare readonly exampleBadgeOrderValue: string[]
+  declare readonly i18nValue: Wording
 
   declare readonly nameTarget: HTMLInputElement
   declare readonly rulesTarget: HTMLTextAreaElement
@@ -98,27 +129,31 @@ class ItemFormController extends Controller<HTMLFormElement> {
     this.applyState()
   }
 
+  private get t(): Wording {
+    return this.i18nValue
+  }
+
   private renderCard() {
     const name = this.nameTarget.value.trim()
     const rules = this.rulesTarget.value.trim()
     const story = this.storyTarget.value.trim()
 
-    this.placeholder(this.frontNameTarget, name, "Nazwa przedmiotu")
-    this.placeholder(this.frontRulesTarget, rules, "Co daje studentowi…")
+    this.placeholder(this.frontNameTarget, name, this.t.name_placeholder)
+    this.placeholder(this.frontRulesTarget, rules, this.t.rules_placeholder)
 
     this.frontFlavorTarget.textContent = story
     this.frontFlavorTarget.hidden = story === ""
 
     this.frontCostTarget.textContent = String(this.price)
-    this.buyLabelTarget.textContent = `Kup za ${this.price}`
+    this.buyLabelTarget.textContent = interpolate(this.t.buy, { price: this.price })
     this.needTarget.textContent = String(Math.max(1, Math.ceil(this.price * 0.4)))
 
     const discount = this.maxDiscount
-    this.tagDiscTarget.textContent = `Zniżki do −${discount}%`
+    this.tagDiscTarget.textContent = interpolate(this.t.discount_up_to, { discount })
     this.tagDiscTarget.hidden = discount === 0
     this.tagLifeTarget.hidden = !this.zeroTarget.checked
 
-    this.thumbNameTarget.textContent = name || "Nazwa przedmiotu"
+    this.thumbNameTarget.textContent = name || this.t.name_placeholder
   }
 
   private renderRequirements() {
@@ -134,11 +169,8 @@ class ItemFormController extends Controller<HTMLFormElement> {
     this.reqListTarget.replaceChildren(...lines)
 
     const first = requirements[0]
-    this.sealLabelTarget.textContent = first
-      ? first.kind === "rank"
-        ? `Od rangi ${first.name}`
-        : `Za odznakę ${first.name}`
-      : ""
+    const seal = first?.kind === "rank" ? this.t.seal_rank : this.t.seal_badge
+    this.sealLabelTarget.textContent = first ? interpolate(seal, { name: first.name }) : ""
   }
 
   private renderSentences() {
@@ -222,28 +254,19 @@ class ItemFormController extends Controller<HTMLFormElement> {
     const gateIndex = this.unlockRankTarget.selectedIndex
 
     if (gate && floorIndex > 0 && gateIndex >= floorIndex) {
-      notes.push(
-        gates
-          ? `Kupić mogą tylko studenci od rangi ${gate}, więc zniżka dla rang obejmie każdego kupującego.`
-          : "Zniżka dla rang obejmie każdego kupującego.",
-      )
+      notes.push(gates ? interpolate(this.t.warn_rank_gate, { rank: gate }) : this.t.warn_rank_everyone)
     }
 
     const raw = this.rankDiscountReach.discount + this.badgeDiscountValue
     if (raw > DISCOUNT_CAP) {
-      notes.push(
-        `Zniżki sumują się do ${raw}%, a sklep odejmie najwyżej ${DISCOUNT_CAP}%. ` +
-          "Nadwyżka przepada — rozważ niższe zniżki przy rangach i odznakach.",
-      )
+      notes.push(interpolate(this.t.warn_cap, { raw, cap: DISCOUNT_CAP }))
     }
 
     const required = new Set(this.chosen(this.unlockBadgeTargets).map(({ name }) => name))
     this.chosen(this.discountBadgeTargets)
       .filter(({ name }) => required.has(name))
       .forEach(({ name }) => {
-        notes.push(
-          `Odznaka ${name} jest wymagana do zakupu, więc jej zniżka obejmie każdego kupującego.`,
-        )
+        notes.push(interpolate(this.t.warn_badge_required, { name }))
       })
 
     return notes
@@ -252,29 +275,29 @@ class ItemFormController extends Controller<HTMLFormElement> {
   private unlockParts(): Part[] {
     const rank = this.requirements.find(({ kind }) => kind === "rank")?.name ?? ""
     const badges = this.chosen(this.unlockBadgeTargets).map(({ name }) => name)
-    const tail = this.zeroTarget.checked
-      ? ". Także przy 0 życiach."
-      : ", jeśli mają co najmniej 1 życie."
+    const lives = this.zeroTarget.checked ? this.t.lives_yes : this.t.lives_no
 
     if (!rank && badges.length === 0) {
-      return ["Każdy student może kupić ten przedmiot", tail]
+      return fill(this.t.unlock_everyone, { lives })
     }
 
-    const parts: Part[] = ["Kupią tylko studenci"]
-    if (rank) parts.push(" z rangą ", { b: rank }, " lub wyższą")
-    if (badges.length > 0) {
-      parts.push(
-        `, którzy mają ${badges.length > 1 ? "wszystkie odznaki" : "odznakę"} `,
-        { b: andList(badges) },
-      )
-    }
-    parts.push(tail)
-    return parts
+    return fill(this.t.unlock_restricted, {
+      rank: rank ? fill(this.t.unlock_rank, { rank: { b: rank } }) : [],
+      badges: this.badgePhrase(this.t.unlock_badges, badges) ?? [],
+      lives,
+    })
+  }
+
+  // "odznaką X" / "odznakami X i Y" — a plural template filled with the names.
+  private badgePhrase(forms: PluralForms, names: string[]): Part[] | null {
+    if (names.length === 0) return null
+
+    return fill(pluralTemplate(forms, names.length), { badges: { b: andList(names) } })
   }
 
   private discountParts(): Part[] {
     if (this.maxDiscount === 0) {
-      return ["Bez zniżek. Każdy kupujący zapłaci ", { b: String(this.price) }, "."]
+      return fill(this.t.no_discount, { price: { b: String(this.price) } })
     }
 
     const { rank, badges, percent } = this.example
@@ -282,18 +305,14 @@ class ItemFormController extends Controller<HTMLFormElement> {
 
     const paid = Math.ceil((this.price * (100 - percent)) / 100)
 
-    const names = badges.map((badge) => badge.name)
-    const phrase: Part[] | null =
-      names.length === 0 ? null : [names.length > 1 ? "odznakami " : "odznaką ", { b: andList(names) }]
-    const parts: Part[] = ["Przykładowo: student", ...holderClause(rank, phrase)]
-    parts.push(
-      " zaoszczędzi ",
-      { b: `${percent}%` },
-      " i zapłaci ",
-      { b: String(paid) },
-      ` zamiast ${this.price}.`,
-    )
-    return parts
+    const phrase = this.badgePhrase(this.t.holder_badges, badges.map((badge) => badge.name))
+
+    return fill(this.t.example, {
+      holder: this.holderClause(rank, phrase),
+      percent: { b: `${percent}%` },
+      paid: { b: String(paid) },
+      price: String(this.price),
+    })
   }
 
   private maxParts(): Part[] {
@@ -302,11 +321,20 @@ class ItemFormController extends Controller<HTMLFormElement> {
 
     const reach = this.rankDiscountReach
     const badges = this.badgeNamesValue
-    const phrase: Part[] | null =
-      badges.length === 0 ? null : badges.length === 1 ? ["odznaką ", { b: badges[0] }] : ["wszystkimi odznakami"]
-    const clause = holderClause(reach.discount > 0 ? reach.name : "", phrase)
+    const phrase = badges.length > 1 ? [this.t.holder_all_badges] : this.badgePhrase(this.t.holder_badges, badges)
 
-    return ["Maksymalnie: student", ...clause, " uzyska zniżkę ", { b: `${percent}%` }, "."]
+    return fill(this.t.max, {
+      holder: this.holderClause(reach.discount > 0 ? reach.name : "", phrase),
+      percent: { b: `${percent}%` },
+    })
+  }
+
+  private holderClause(rankName: string, badgePhrase: Part[] | null): Part[] {
+    const rank = rankName ? fill(this.t.holder_rank, { rank: { b: rankName } }) : []
+    if (badgePhrase === null) return rank
+
+    const join = rankName ? this.t.holder_join_and : this.t.holder_join_with
+    return [...rank, ...fill(join, { phrase: badgePhrase })]
   }
 
   private get example(): { rank: string; badges: { name: string; discount: number }[]; percent: number } {
@@ -354,7 +382,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
     }
 
     return picked
-      .sort((a, b) => a.localeCompare(b, "pl"))
+      .sort((a, b) => a.localeCompare(b, locale()))
       .map((name) => ({ name, discount: all.get(name) ?? 0 }))
   }
 
@@ -384,7 +412,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
         name: chip.dataset.ghName ?? "",
         discount: parseInt(chip.dataset.ghDiscount ?? "0", 10) || 0,
       }))
-      .sort((a, b) => a.name.localeCompare(b.name, "pl"))
+      .sort((a, b) => a.name.localeCompare(b.name, locale()))
   }
 
   private selectedOption(select: HTMLSelectElement): HTMLOptionElement | undefined {
@@ -413,18 +441,18 @@ class ItemFormController extends Controller<HTMLFormElement> {
   }
 }
 
-function holderClause(rankName: string, badgePhrase: Part[] | null): Part[] {
-  const clause: Part[] = []
-  if (rankName) clause.push(" z rangą ", { b: rankName })
-  if (badgePhrase === null) return clause
+// The client twin of ApplicationHelper#gh_fill: splits a template on its
+// %{slots} and drops in plain text, bold names or already-built fragments.
+function fill(template: string, vars: Record<string, Part | Part[]>): Part[] {
+  return template.split(/(%\{\w+\})/).flatMap((piece): Part[] => {
+    const key = /^%\{(\w+)\}$/.exec(piece)?.[1]
+    if (key === undefined) return piece === "" ? [] : [piece]
 
-  return [...clause, rankName ? " oraz " : " z ", ...badgePhrase]
-}
+    const value = vars[key]
+    if (value === undefined) return [piece]
 
-function andList(names: string[]): string {
-  if (names.length < 2) return names[0] ?? ""
-
-  return `${names.slice(0, -1).join(", ")} i ${names[names.length - 1]}`
+    return Array.isArray(value) ? value : [value]
+  })
 }
 
 application.register("item-form", ItemFormController)

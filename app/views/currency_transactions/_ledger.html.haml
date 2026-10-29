@@ -7,13 +7,13 @@
     %span.gh-ledger-header-spacer
     %span.gh-small= summary
 
-%div{ role: 'table', 'aria-label': 'Historia waluty' }
+%div{ role: 'table', 'aria-label': t('.table_label') }
   .gh-ledger-row.gh-ledger-row--header{ role: 'row' }
-    %span{ role: 'columnheader' } Kwota
-    %span{ role: 'columnheader' } Typ
-    %span{ role: 'columnheader' } Za co
-    %span{ role: 'columnheader' } Kiedy
-    %span.gh-ledger-cell--right{ role: 'columnheader' } Saldo po
+    %span{ role: 'columnheader' }= t('.columns.amount')
+    %span{ role: 'columnheader' }= t('.columns.kind')
+    %span{ role: 'columnheader' }= t('.columns.source')
+    %span{ role: 'columnheader' }= t('.columns.when')
+    %span.gh-ledger-cell--right{ role: 'columnheader' }= t('.columns.balance_after')
 
   - entries.each do |entry|
     .gh-ledger-row{ role: 'row' }
@@ -22,7 +22,7 @@
       %span.gh-ledger-source{ role: 'cell' }
         = entry.title
         - if entry.withdrawn?
-          %span.gh-tag.gh-tag--removed Usunięty z oferty
+          %span.gh-tag.gh-tag--removed= t('.withdrawn')
         - if entry.context.present?
           %small= entry.context
       %span.gh-small.gh-ledger-date{ role: 'cell' }= ledger_when(entry)

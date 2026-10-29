@@ -2,7 +2,7 @@
 
 class Dashboard::Teacher
   PURCHASE_LIMIT = 30
-  DAYS = %w[Dziś Wczoraj Wcześniej].freeze
+  DAYS = %i[today yesterday earlier].freeze
   RECENT_DAYS = DAYS.first(2).freeze
 
   Purchase = Data.define(:transaction, :student, :story_group, :item, :day) do
@@ -69,7 +69,7 @@ class Dashboard::Teacher
     summaries = story_groups.map do |story_group|
       Group.new(
         story_group:    story_group,
-        role:           story_group.owner_id == @user.id ? 'Prowadzisz' : 'Wspierasz',
+        role:           I18n.t("story_groups.listing.roles.#{story_group.owner_id == @user.id ? 'own' : 'sup'}"),
         students_count: counts.fetch(story_group.id, 0),
         new_purchases:  fresh.fetch(story_group.id, []).size,
       )

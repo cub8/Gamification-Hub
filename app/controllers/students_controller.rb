@@ -58,7 +58,7 @@ class StudentsController < ApplicationController
       redirect_to story_group_students_path(@story_group), notice: lives_notice
     else
       redirect_to story_group_students_path(@story_group),
-                  alert: 'Nie można odebrać życia — student ma już 0.'
+                  alert: t('students.flash.cannot_take_life')
     end
   end
 
@@ -71,7 +71,7 @@ class StudentsController < ApplicationController
     # "Usunięto Anna Kowalska" would be the wrong case and there is no way to
     # decline a name here.
     redirect_outside_turbo_frame story_group_students_path(@story_group),
-                                 notice: "#{name} nie należy już do grupy."
+                                 notice: t('students.flash.removed', name: name)
   end
 
   private
@@ -97,7 +97,7 @@ class StudentsController < ApplicationController
 
   # The ledger tab's filter, as a kind or nil for "Wszystkie".
   def ledger_kind
-    kinds = CurrencyLedger::KINDS.map(&:first).compact
+    kinds = CurrencyLedger::KINDS.compact
     kinds.include?(params[:kind]) ? params[:kind] : nil
   end
 
@@ -105,9 +105,7 @@ class StudentsController < ApplicationController
   # this form and this stepper can do, so the toast says the result rather than
   # "zapisano".
   def lives_notice
-    lives = @student.lives.to_i
-
-    "#{@student.display_name} ma teraz #{lives} #{helpers.gh_plural(lives, 'życie', 'życia', 'żyć')}."
+    t('students.flash.lives_notice', name: @student.display_name, count: @student.lives.to_i)
   end
 
   def update_student_params

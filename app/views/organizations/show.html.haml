@@ -6,7 +6,7 @@
   .gh-page-header-text
     - if @current_user.global_admin?
       %p.gh-breadcrumbs
-        = link_to 'Organizacje', organizations_path
+        = link_to t('.breadcrumb'), organizations_path
         %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
         %span= @organization.name
     %h1.gh-h1= @organization.name
@@ -17,15 +17,15 @@
       = link_to edit_organization_path(@organization), class: 'gh-btn gh-btn--secondary',
                                                        data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
-        Edytuj
+        = t('.edit')
     - if policy(@organization).new_admin?
       = link_to new_admin_organization_path(@organization), class: 'gh-btn', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-user-shield{ 'aria-hidden': 'true' }
-        Dodaj administratora
+        = t('.add_admin')
     - if manage_users
       = link_to new_user_organization_path(@organization), class: 'gh-btn', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-user-plus{ 'aria-hidden': 'true' }
-        Dodaj użytkownika
+        = t('.add_user')
 
 = render 'admins', admins: @admins, manage_admins: policy(@organization).manage_admins?
 
@@ -34,10 +34,10 @@
 
 - if policy(@organization).destroy?
   %section.gh-panel.gh-danger-zone
-    %h2.gh-h3 Usuń organizację
-    %p.gh-small Razem z organizacją znikną wszystkie jej konta. Tej operacji nie można cofnąć.
+    %h2.gh-h3= t('.danger_title')
+    %p.gh-small= t('.danger_body')
     .gh-button-row
       = link_to confirm_destroy_organization_path(@organization),
         class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
-        Usuń organizację
+        = t('.danger_button')

@@ -1,23 +1,23 @@
-- content_for :title, 'Nauczyciele'
+- content_for :title, t('.title')
 
 - manage = policy(@story_group).manage_teachers?
 
 %section.gh-panel.gh-page-header
   .gh-page-header-text
-    %h1.gh-h1 Nauczyciele
+    %h1.gh-h1= t('.title')
     %p.gh-lead= teacher_list_lead(manage: manage)
 
   - if manage
     = link_to new_story_group_teacher_path(@story_group), class: 'gh-btn',
       data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      Dodaj nauczyciela
+      = t('.add')
 
 %section.gh-panel.gh-teachers-panel
   .gh-teacher-row.gh-teacher-row--header{ 'aria-hidden': 'true' }
-    %span Nauczyciel
-    %span Rola
-    %span Dodano
+    %span= t('.teacher')
+    %span= t('.role')
+    %span= t('.added')
     %span
 
   = render partial: 'row', collection: @list.rows, as: :row, locals: { manage: manage }

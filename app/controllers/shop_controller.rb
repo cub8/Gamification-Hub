@@ -35,7 +35,7 @@ class ShopController < ApplicationController
     return if shop.state_for(@item) == :afford
 
     redirect_to story_group_shop_index_path(@story_group),
-                alert: "Nie możesz teraz kupić „#{@item.name}”."
+                alert: t('shop.flash.unavailable', name: @item.name)
   end
 
   # POST /story_groups/:story_group_id/shop/:id/buy
@@ -44,7 +44,7 @@ class ShopController < ApplicationController
 
     if result.success?
       redirect_to story_group_shop_index_path(@story_group),
-                  notice: "Kupione: „#{@item.name}”. Zostało Ci #{@student.current_currency}."
+                  notice: t('shop.flash.bought', name: @item.name, balance: @student.current_currency)
     else
       redirect_to story_group_shop_index_path(@story_group), alert: result.errors.join(', ')
     end

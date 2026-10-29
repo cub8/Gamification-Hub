@@ -59,11 +59,11 @@ class CurrencyAdjustmentForm
     errors.clear
 
     if value.nil?
-      errors.add(:amount, 'Podaj kwotę.')
+      errors.add(:amount, :missing)
     elsif value.zero?
-      errors.add(:amount, 'Podaj kwotę większą od zera.')
+      errors.add(:amount, :not_positive)
     elsif new_balance.negative?
-      errors.add(:amount, "Student ma tylko #{balance} do wydania.")
+      errors.add(:amount, :overdrawn, balance: balance)
     end
 
     errors.empty?

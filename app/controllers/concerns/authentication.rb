@@ -21,7 +21,7 @@ module ::Authentication
     return if @current_user
 
     store_return_path
-    redirect_to login_path, alert: 'Zaloguj się, aby kontynuować.'
+    redirect_to login_path, alert: t('application.flash.log_in_first')
   end
 
   def store_return_path

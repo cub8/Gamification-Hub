@@ -21,35 +21,49 @@ module StoryGroupInvitesHelper
   end
 
   def invite_uses_label(invite)
-    return "#{invite.uses}, bez limitu" if invite.max_uses.nil?
+    return t('story_group_invites.helpers.uses_unlimited', uses: invite.uses) if invite.max_uses.nil?
 
-    "#{invite.uses} z #{invite.max_uses}"
+    t('story_group_invites.helpers.uses_limited', uses: invite.uses, max: invite.max_uses)
   end
 
   def invite_expiry_label(invite)
-    return 'Bez daty ważności' if invite.expires_at.nil?
+    return t('story_group_invites.helpers.no_expiry') if invite.expires_at.nil?
 
-    "#{invite.expire_time_condition ? 'Wygasa' : 'Wygasło'} #{gh_stamp(invite.expires_at)}"
+    key = invite.expire_time_condition ? 'expires' : 'expired'
+    t("story_group_invites.helpers.#{key}", date: gh_stamp(invite.expires_at))
   end
 
   def invite_stat_sentence(invite)
     expiry = if invite.expires_at.nil?
-               'Bez daty ważności.'
+               t('story_group_invites.helpers.no_expiry')
              else
-               "Wygasa #{gh_stamp(invite.expires_at)}."
+               t('story_group_invites.helpers.expires', date: gh_stamp(invite.expires_at))
              end
 
-    "Użycia: #{invite_uses_label(invite)}. #{expiry}"
+    t('story_group_invites.helpers.stat_sentence', uses: invite_uses_label(invite), expiry: expiry)
   end
 
   def invite_code_aria_label(invite)
-    "Kod: #{invite.code.chars.join(' ')}"
+    t('story_group_invites.helpers.code_label', code: invite.code.chars.join(' '))
   end
 
   def invite_option_label(invite)
-    uses     = invite.max_uses.nil? ? 'bez limitu' : "#{invite.uses} z #{invite.max_uses}"
-    validity = invite.expires_at.nil? ? 'bezterminowo' : "ważne do #{gh_stamp(invite.expires_at)}"
+    uses = if invite.max_uses.nil?
+             t('story_group_invites.helpers.option_unlimited')
+           else
+             t('story_group_invites.helpers.uses_limited', uses: invite.uses, max: invite.max_uses)
+           end
+    validity = if invite.expires_at.nil?
+                 t('story_group_invites.helpers.option_no_expiry')
+               else
+                 t('story_group_invites.helpers.option_valid_until', date: gh_stamp(invite.expires_at))
+               end
 
-    "#{invite.code} – #{uses}, #{validity}"
+    t('story_group_invites.helpers.option', code: invite.code, uses: uses, validity: validity)
+  end
+
+  # What invite_form_controller.ts needs to rebuild the form's summary line.
+  def invite_form_wording
+    t('story_group_invites.summary').merge(month_names: t('date.abbr_month_names'))
   end
 end

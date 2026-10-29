@@ -8,15 +8,21 @@ module ApplicationHelper
     student_name = transaction.student.full_name
     case transaction.kind
     when 'purchase'
-      item_name = transaction.transactionable&.name || 'przedmiot'
-      "#{student_name} zakupił #{item_name} za #{transaction.amount.abs} #{story_group.currency_name}"
+      item_name = transaction.transactionable&.name || t('application.helpers.transaction.item_fallback')
+      t('application.helpers.transaction.purchase', student:  student_name,
+                                                    item:     item_name,
+                                                    amount:   transaction.amount.abs,
+                                                    currency: story_group.currency_name,)
     when 'reward'
-      category_name = transaction.transactionable&.didactic_description || 'aktywność'
-      "#{student_name} zdobył nagrodę za: #{category_name}"
+      category_name = transaction.transactionable&.didactic_description ||
+                      t('application.helpers.transaction.category_fallback')
+      t('application.helpers.transaction.reward', student: student_name, category: category_name)
     when 'adjustment'
       sign = transaction.amount >= 0 ? '+' : ''
-      adjuster = transaction.granted_by_user&.full_name || 'nauczyciel'
-      "#{adjuster} skorygował walutę #{student_name} (#{sign}#{transaction.amount})"
+      adjuster = transaction.granted_by_user&.full_name || t('application.helpers.transaction.adjuster_fallback')
+      t('application.helpers.transaction.adjustment', adjuster: adjuster,
+                                                      student:  student_name,
+                                                      amount:   "#{sign}#{transaction.amount}",)
     end
   end
 
@@ -36,12 +42,8 @@ module ApplicationHelper
     @gh_group_chrome = GroupChrome.for(user: @current_user, story_group: @story_group)
   end
 
-  def gh_plural(count, one, few, many)
-    Plural.pick(count, one, few, many)
-  end
-
   def gh_minutes(count)
-    "#{count} #{gh_plural(count, 'minuta', 'minuty', 'minut')}"
+    t('application.helpers.minutes', count: count)
   end
 
   def gh_initials(name)
@@ -64,14 +66,15 @@ module ApplicationHelper
 
   def gh_when(time)
     case time.to_date
-    when Date.current   then "dziś #{time.strftime('%H:%M')}"
-    when Date.yesterday then "wczoraj #{time.strftime('%H:%M')}"
-    else                     time.strftime('%d.%m, %H:%M')
+    when Date.current   then t('application.helpers.today', time: l(time, format: :gh_time))
+    when Date.yesterday then t('application.helpers.yesterday', time: l(time, format: :gh_time))
+    else                     l(time, format: :gh_day_time)
     end
   end
 
+  # I18n.l rather than l: InviteForm calls this outside a view.
   def gh_stamp(time)
-    time.strftime('%d.%m, %H:%M')
+    I18n.l(time, format: :gh_day_time)
   end
 
   def gh_feed_title(transaction)
@@ -79,11 +82,16 @@ module ApplicationHelper
 
     case transaction.kind.to_sym
     when :purchase
-      subject ? "Zakup: #{subject.name}" : 'Zakup'
+      if subject
+        t('application.helpers.feed.purchase', name: subject.name)
+      else
+        t('application.helpers.feed.purchase_fallback')
+      end
     when :reward
-      subject&.story_description.presence || subject&.didactic_description.presence || 'Nagroda za aktywność'
+      subject&.story_description.presence || subject&.didactic_description.presence ||
+        t('application.helpers.feed.reward_fallback')
     else
-      'Korekta waluty'
+      t('application.helpers.feed.adjustment')
     end
   end
 
@@ -93,11 +101,22 @@ module ApplicationHelper
     ((value.to_f / max) * 100).round.clamp(0, 100)
   end
 
-  def gh_and_list(items)
-    list = Array(items)
-    return list.first.to_s if list.size < 2
+  # Fills a translated template whose slots hold markup rather than text:
+  #   gh_fill(t('items.sentences.max'), holder: ..., percent: tag.b('20%'))
+  # Text around the slots is escaped; html_safe values (tag.b, safe_join) pass
+  # through. item_form_controller.ts fills the same templates on the client.
+  def gh_fill(template, **vars)
+    parts = template.to_s.split(/(%\{\w+\})/).map do |part|
+      key = part[/\A%\{(\w+)\}\z/, 1]
+      key ? vars[key.to_sym] : part
+    end
 
-    "#{list[0..-2].join(', ')} i #{list.last}"
+    safe_join(parts)
+  end
+
+  # "a, b i c" in Polish, "a, b and c" in English (connectors from rails-i18n).
+  def gh_and_list(items)
+    Array(items).map(&:to_s).to_sentence
   end
 
   def gh_glyph(key, css_class: 'gh-card-art-glyph')

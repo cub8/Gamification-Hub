@@ -4,18 +4,18 @@
   %span.gh-sheet-row-name
     %b= record.name
     - if sheet.columns_modified?
-      %span.gh-tag.gh-tag--modified Zmienione kolumny
+      %span.gh-tag.gh-tag--modified= t('.modified')
 
   %span.gh-sheet-row-stats
     - if sheet.graded?
-      = "Przyznano #{sheet.awards_count} #{gh_plural(sheet.awards_count, 'nagrodę', 'nagrody', 'nagród')}"
+      = t('.awarded', count: sheet.awards_count)
     - else
-      Jeszcze nic nie przyznano
+      = t('.nothing')
 
   %span.gh-sheet-row-actions
-    = link_to 'Oceń',
+    = link_to t('.grade'),
       edit_story_group_activity_group_students_activity_group_categories_path(@story_group, record),
       class: "gh-btn gh-btn--small#{' gh-btn--secondary' unless primary}"
     = link_to edit_story_group_activity_group_path(@story_group, record),
-      class: 'gh-icon-button', title: 'Ustawienia arkusza', 'aria-label': "Ustawienia: #{record.name}" do
+      class: 'gh-icon-button', title: t('.settings'), 'aria-label': t('.settings_label', name: record.name) do
       %i.fa-solid.fa-gear{ 'aria-hidden': 'true' }

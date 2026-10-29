@@ -1,4 +1,4 @@
-- content_for :title, "Edytuj szablon #{@activity_group_template.base_name}"
+- content_for :title, t('.page_title', name: @activity_group_template.base_name)
 
 = render 'shared/sheet_form', record: @activity_group_template, variant: :template_edit,
   sheet_names: @sheet_names

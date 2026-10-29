@@ -20,8 +20,8 @@ class Shared::HeaderComponent < ViewComponent::Base
   end
 
   def bell_label
-    return 'Powiadomienia' if unread_count.zero?
+    return t('layouts.header.notifications') if unread_count.zero?
 
-    "Powiadomienia, #{unread_count} #{helpers.gh_plural(unread_count, 'nowe', 'nowe', 'nowych')}"
+    t('layouts.header.notifications_unread', count: unread_count)
   end
 end

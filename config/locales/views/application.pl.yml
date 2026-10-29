@@ -1,0 +1,81 @@
+pl:
+  # ApplicationHelper and ApplicationController concerns — wording shared by many screens.
+  application:
+    flash:
+      log_in_first: "Zaloguj się, aby kontynuować."
+      already_signed_in: "Jesteś już zalogowany."
+      not_found: "Nie znaleziono."
+    helpers:
+      today: "dziś %{time}"
+      yesterday: "wczoraj %{time}"
+      minutes:
+        one: "%{count} minuta"
+        few: "%{count} minuty"
+        many: "%{count} minut"
+        other: "%{count} minuty"
+      feed:
+        purchase: "Zakup: %{name}"
+        purchase_fallback: "Zakup"
+        reward_fallback: "Nagroda za aktywność"
+        adjustment: "Korekta waluty"
+      transaction:
+        purchase: "%{student} zakupił %{item} za %{amount} %{currency}"
+        item_fallback: "przedmiot"
+        reward: "%{student} zdobył nagrodę za: %{category}"
+        category_fallback: "aktywność"
+        adjustment: "%{adjuster} skorygował walutę %{student} (%{amount})"
+        adjuster_fallback: "nauczyciel"
+    # PresetSet.label_for — names of the ready-made images, read out by screen readers.
+    presets:
+      glyphs:
+        bolt: "Błyskawica"
+        carrot: "Marchewka"
+        carrotStar: "Marchewka z gwiazdą"
+        chat: "Rozmowa"
+        chev1: "Belka"
+        chev2: "Podwójna belka"
+        clock: "Zegar"
+        compass: "Kompas"
+        crew: "Załoga"
+        crown: "Korona"
+        flask: "Kolba"
+        heartPlus: "Serce z plusem"
+        hourglass: "Klepsydra"
+        note: "Koperta"
+        paperCheck: "Kartka z ptaszkiem"
+        papers3: "Trzy kartki"
+        papers3shield: "Trzy kartki z tarczą"
+        percent: "Procent"
+        rabbit: "Królik"
+        retake: "Kartka ze strzałką"
+        rocket: "Rakieta"
+        shield: "Tarcza"
+        starPlus: "Gwiazda z gwiazdką"
+        starTrail: "Gwiazda ze smugą"
+        wrench: "Klucz"
+      art:
+        brackets: "Kod"
+        castle: "Zamek"
+        flow: "Algorytm"
+        tables: "Tabele"
+        waves: "Morze"
+      currency:
+        bit: "Bit"
+        carrot: "Marchewka"
+        coin: "Moneta"
+        gem: "Klejnot"
+        pearl: "Perła"
+
+  # Iconable — shared by every model with a picture.
+  activerecord:
+    errors:
+      messages:
+        unknown_art: "Nieznana grafika."
+        unknown_icon: "Nieznana ikona."
+        art_type: "Grafika musi być plikiem GIF, JPG lub PNG."
+        art_missing: "Wybierz gotową grafikę albo wgraj własną."
+
+  time:
+    formats:
+      gh_time: "%H:%M"
+      gh_day_time: "%d.%m, %H:%M"

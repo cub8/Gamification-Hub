@@ -1,4 +1,4 @@
-- content_for :title, "Usunąć zaproszenie #{@invite.code}?"
+- content_for :title, t('.page_title', code: @invite.code)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

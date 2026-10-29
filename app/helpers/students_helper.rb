@@ -3,19 +3,18 @@
 # Screen-specific labels live in the screen's own helper, not in ApplicationHelper.
 module StudentsHelper
   def student_list_lead(list)
-    lead = ['Życie odbierasz za nieusprawiedliwioną nieobecność.']
+    lead = [t('students.helpers.list_lead')]
     return safe_join(lead) if list.zero_lives.zero?
 
-    zero = list.zero_lives
-
     safe_join(lead + [' ',
-                      tag.b("#{zero} #{gh_plural(zero, 'student ma', 'studentów ma', 'studentów ma')} 0 żyć"),
-                      ' i kupi tylko przedmioty dostępne przy 0 życiach.',])
+                      tag.b(t('students.helpers.zero_lives', count: list.zero_lives)),
+                      ' ',
+                      t('students.helpers.zero_lives_tail'),])
   end
 
   def student_list_subtitle(student)
     parts = []
-    parts << "„#{student.nickname}”" if student.nickname.present?
+    parts << t('students.helpers.nickname_quoted', nickname: student.nickname) if student.nickname.present?
     parts << student.email
 
     parts.join(' · ')
@@ -27,9 +26,11 @@ module StudentsHelper
   # student who joined without an index number simply does not get that half.
   def student_sheet_subtitle(student)
     parts = []
-    parts << "Pseudonim: #{student.nickname}" if student.nickname.present?
+    parts << t('students.helpers.nickname', nickname: student.nickname) if student.nickname.present?
     parts << student.email
-    parts << "indeks #{student.university_number}" if student.university_number.present?
+    if student.university_number.present?
+      parts << t('students.helpers.university_number', number: student.university_number)
+    end
 
     parts.join(', ')
   end
@@ -39,7 +40,9 @@ module StudentsHelper
   def student_rank_progress_line(sheet)
     return if sheet.next_rank.nil?
 
-    "#{sheet.total} z #{sheet.next_rank.required_currency_value} do rangi #{sheet.next_rank.name}"
+    t('students.helpers.rank_progress', total:    sheet.total,
+                                        required: sheet.next_rank.required_currency_value,
+                                        rank:     sheet.next_rank.name,)
   end
 
   # What "Usuń z grupy" costs, spelled out in numbers. Nothing is soft-deleted
@@ -48,18 +51,11 @@ module StudentsHelper
   def student_removal_losses(sheet)
     losses = []
 
-    if sheet.badges.any?
-      count = sheet.badges.size
-      losses << "#{count} #{gh_plural(count, 'odznakę', 'odznaki', 'odznak')}"
-    end
-
-    if sheet.purchases.any?
-      count = sheet.purchases.size
-      losses << "#{count} #{gh_plural(count, 'przedmiot', 'przedmioty', 'przedmiotów')}"
-    end
+    losses << t('students.helpers.losses.badges', count: sheet.badges.size) if sheet.badges.any?
+    losses << t('students.helpers.losses.items', count: sheet.purchases.size) if sheet.purchases.any?
 
     entries = sheet.ledger.size
-    losses << "całą historię waluty (#{entries} #{gh_plural(entries, 'wpis', 'wpisy', 'wpisów')})" if entries.positive?
+    losses << t('students.helpers.losses.ledger', count: entries) if entries.positive?
 
     losses
   end

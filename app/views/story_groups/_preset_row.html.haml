@@ -1,6 +1,8 @@
 - row_id = "gh-preset-#{zone}-#{index}"
 
-.gh-preset-row{ data: { controller: 'preset-row' } }
+.gh-preset-row{ data: { controller: 'preset-row', preset_row_name_value: name,
+                          preset_row_remove_value: t('.remove', name: '%{name}'),
+                          preset_row_restore_value: t('.restore', name: '%{name}') } }
   %i.fa-solid{ class: icon, 'aria-hidden': 'true' }
 
   %span.gh-preset-row-name
@@ -15,5 +17,5 @@
   %label.gh-preset-row-remove{ for: row_id }
     = check_box_tag "setup[#{zone}][#{index}][keep]", '1', true, id: row_id,
       class: 'sr-only', data: { preset_row_target: 'keep', action: 'preset-row#toggle' }
-    %span.sr-only{ data: { preset_row_target: 'label' } }= "Usuń: #{name}"
+    %span.sr-only{ data: { preset_row_target: 'label' } }= t('.remove', name: name)
     %i.fa-solid.fa-xmark{ 'aria-hidden': 'true', data: { preset_row_target: 'icon' } }

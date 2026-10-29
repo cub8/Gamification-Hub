@@ -2,7 +2,7 @@
 -# back to `cancel_path`.
 .gh-dialog-button-row
   - if @in_modal
-    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } } Anuluj
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('.cancel')
   - else
-    = link_to 'Anuluj', cancel_path, class: 'gh-btn gh-btn--secondary'
+    = link_to t('.cancel'), cancel_path, class: 'gh-btn gh-btn--secondary'
   %button.gh-btn{ type: 'submit' }= submit_label

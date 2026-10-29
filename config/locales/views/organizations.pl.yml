@@ -1,0 +1,193 @@
+pl:
+  organizations:
+    flash:
+      created: "Pomyślnie utworzono organizację."
+      updated: "Pomyślnie zaktualizowano organizację."
+      destroyed: "Usunięto organizację %{name}."
+      admin_added: "Pomyślnie dodano administratora organizacji. Wysłano zaproszenie na email."
+      user_added: "Pomyślnie dodano użytkownika do organizacji. Wysłano zaproszenie na email."
+      admin_removed: "Usunięto administratora: %{name}."
+      user_updated: "Zapisano zmiany: %{name}."
+      user_removed: "Usunięto użytkownika: %{name}."
+      invitation_resent: "Wysłano ponownie zaproszenie: %{email}."
+      too_many_resends: "Zaproszenie zostało już wysłane kilka razy. Spróbuj ponownie za kilka minut."
+
+    # OrganizationsHelper#user_role_label — a role not listed here is humanized.
+    roles:
+      student: "Student"
+      teacher: "Nauczyciel"
+
+    helpers:
+      capacity_accounts:
+        one: "%{count} konto"
+        few: "%{count} konta"
+        many: "%{count} kont"
+        other: "%{count} konta"
+      capacity_free:
+        one: "%{count} wolne"
+        few: "%{count} wolne"
+        many: "%{count} wolnych"
+        other: "%{count} wolnego"
+      capacity_unlimited: "%{accounts} · bez limitu miejsc"
+      capacity_limited: "%{members} z %{max} miejsc zajętych · %{free}"
+
+    index:
+      title: "Organizacje"
+      lead: "Uczelnie korzystające z aplikacji. Konta logujące się przez USOS trafiają do organizacji %{usos}."
+      create: "Utwórz organizację"
+      organization: "Organizacja"
+      members: "Członkowie"
+      admins: "Administratorzy"
+      empty_title: "Nie ma jeszcze żadnej organizacji"
+      empty_lead: "Utwórz organizację, a potem dodaj jej administratora — on zaprosi resztę osób."
+
+    show:
+      breadcrumb: "Organizacje"
+      edit: "Edytuj"
+      add_admin: "Dodaj administratora"
+      add_user: "Dodaj użytkownika"
+      danger_title: "Usuń organizację"
+      danger_body: "Razem z organizacją znikną wszystkie jej konta. Tej operacji nie można cofnąć."
+      danger_button: "Usuń organizację"
+
+    admins:
+      title: "Administratorzy"
+      role: "Administrator"
+      invited: "Zaproszenie wysłane"
+      none: "Organizacja nie ma jeszcze administratora."
+      remove: "Usuń"
+      remove_label: "Usuń: %{name}"
+      confirm_destroy:
+        page_title: "Usunąć administratora?"
+        title: "Usunąć administratora %{name}?"
+        body: "Konto zostanie usunięte na stałe i zwolni się jedno miejsce w organizacji."
+        pending: "Wysłane zaproszenie przestanie działać."
+        remove: "Usuń konto"
+
+    members:
+      search_placeholder: "Szukaj po nazwisku lub e-mailu"
+      search_label: "Szukaj użytkownika"
+      all_roles: "Wszystkie role"
+      filter_label: "Filtruj po roli"
+      of: "z"
+      user: "Użytkownik"
+      role: "Rola"
+      index_number: "Numer indeksu"
+      actions: "Akcje"
+      no_match: "Brak użytkowników pasujących do"
+      no_match_hint: "Wyczyść wyszukiwanie, zmień rolę albo sprawdź pisownię."
+      empty_title: "Nie ma jeszcze użytkowników"
+      empty_lead: "Dodaj studentów i nauczycieli — dostaną zaproszenie e-mailem. Konta zakładane przez logowanie z uczelni pojawią się tu same."
+
+    member_row:
+      invited: "Zaproszenie wysłane"
+      index_number: "Numer indeksu"
+      role: "Rola"
+      edit: "Edytuj"
+      edit_label: "Edytuj: %{name}"
+      remove: "Usuń"
+      remove_label: "Usuń: %{name}"
+
+    resend_invitation_button:
+      title: "Wyślij zaproszenie ponownie"
+      label: "Wyślij zaproszenie ponownie: %{name}"
+
+    owned_groups_notice:
+      lead:
+        one: "Usunięta zostanie też grupa prowadzona przez to konto:"
+        few: "Usunięte zostaną też grupy prowadzone przez to konto:"
+        many: "Usunięte zostaną też grupy prowadzone przez to konto:"
+        other: "Usunięte zostaną też grupy prowadzone przez to konto:"
+      rest: "— ze wszystkimi studentami, walutą, odznakami i arkuszami ocen."
+
+    form:
+      new_title: "Nowa organizacja"
+      edit_title: "Edytuj organizację"
+      usos_note: "To organizacja powiązana z USOS: trafia do niej każdy, kto zaloguje się przez USOS. Nie ma limitu członków i nie można jej usunąć."
+      name: "Nazwa"
+      max_members: "Limit członków"
+      create: "Utwórz organizację"
+      save: "Zapisz"
+
+    new:
+      page_title: "Nowa organizacja"
+
+    edit:
+      page_title: "Edytuj organizację — %{name}"
+
+    new_admin:
+      page_title: "Dodaj administratora organizacji"
+
+    admin_form:
+      title: "Dodaj administratora"
+      hint: "Wyślemy zaproszenie na podany adres. Po pierwszym logowaniu administrator uzupełni swoje dane."
+      email: "Adres e-mail"
+      email_placeholder: "jan.nowak@example.com"
+      submit: "Wyślij zaproszenie"
+
+    new_user:
+      page_title: "Dodaj użytkownika organizacji"
+
+    user_form:
+      new_title: "Dodaj użytkownika"
+      edit_title: "Edytuj użytkownika"
+      hint: "Wyślemy zaproszenie na podany adres. Konto zajmie jedno miejsce w organizacji."
+      email: "Adres e-mail"
+      email_placeholder: "jan.nowak@example.com"
+      full_name: "Imię i nazwisko"
+      role: "Rola"
+      university_number: "Numer indeksu (opcjonalnie)"
+      usos_id: "ID USOS (opcjonalnie)"
+      submit_new: "Wyślij zaproszenie"
+      submit_edit: "Zapisz"
+
+    users:
+      edit:
+        page_title: "Edytuj użytkownika — %{name}"
+      confirm_destroy:
+        page_title: "Usunąć konto %{name}?"
+        title: "Usunąć konto %{name}?"
+        body: "Konto zostanie usunięte na stałe, razem z członkostwem w grupach, walutą, odznakami i przedmiotami. Zwolni się jedno miejsce w organizacji."
+        remove: "Usuń konto"
+
+    confirm_destroy:
+      page_title: "Usuń organizację %{name}"
+      title: "Usunąć organizację na zawsze?"
+      accounts:
+        one: "%{count} konto zostanie usunięte"
+        few: "%{count} konta zostaną usunięte"
+        many: "%{count} kont zostanie usuniętych"
+        other: "%{count} konta zostanie usuniętych"
+      accounts_tail: "razem z organizacją, w tym konta administratorów."
+      confirm_label: "Wpisz nazwę organizacji, żeby potwierdzić:"
+      mismatch: "Wpisana nazwa nie zgadza się z nazwą organizacji. Organizacja nie została usunięta."
+      remove: "Usuń organizację"
+
+    dialog_actions:
+      cancel: "Anuluj"
+
+  account_setups:
+    flash:
+      done: "Pomyślnie skonfigurowano konto."
+    edit:
+      page_title: "Konfiguracja konta"
+      title: "Uzupełnij swoje dane"
+      lead: "To jednorazowy krok. Imię i nazwisko zobaczą prowadzący w Twoich grupach."
+      email: "Adres e-mail"
+      full_name: "Imię i nazwisko"
+      full_name_placeholder: "Jan Nowak"
+      submit: "Zapisz i przejdź dalej"
+      logout: "Wyloguj"
+
+  activerecord:
+    errors:
+      models:
+        organization:
+          attributes:
+            max_members:
+              below_members: "Limit nie może być mniejszy niż obecna liczba członków (%{count})."
+          usos_undeletable: "Organizacji powiązanej z USOS nie można usunąć."
+        user:
+          attributes:
+            organization:
+              member_limit: "Organizacja osiągnęła limit członków."

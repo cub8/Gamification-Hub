@@ -30,5 +30,9 @@ module GamificationHub
     config.generators.system_tests = nil
 
     config.action_controller.include_all_helpers = false
+
+    config.i18n.available_locales = %i[pl en]
+    config.i18n.default_locale = :pl
+    config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml')]
   end
 end

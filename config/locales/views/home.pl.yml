@@ -1,0 +1,187 @@
+pl:
+  home:
+    index:
+      title: "Start"
+
+    # HomeHelper#home_greeting — the admin dashboards.
+    admin_greeting: "Dzień dobry, %{name}"
+    admin_greeting_anonymous: "Dzień dobry"
+
+    capacity_bar:
+      unlimited:
+        one: "%{count} konto · bez limitu"
+        few: "%{count} konta · bez limitu"
+        many: "%{count} kont · bez limitu"
+        other: "%{count} konta · bez limitu"
+      label: "Zajęte miejsca"
+
+    # Dashboard::GlobalAdmin and home/_global_admin_start.
+    global_admin_start:
+      tiles:
+        organizations: "Organizacje"
+        accounts: "Konta w organizacjach"
+        free: "Wolne miejsca"
+        pending: "Niezaakceptowane zaproszenia"
+      stats_label: "Podsumowanie organizacji"
+      no_organizations_lead: "Nie ma jeszcze żadnej organizacji. Utwórz pierwszą, żeby nowe konta miały gdzie trafić."
+      attention_lead:
+        one: "%{count} organizacja — część z nich potrzebuje Twojej uwagi."
+        few: "%{count} organizacje — część z nich potrzebuje Twojej uwagi."
+        many: "%{count} organizacji — część z nich potrzebuje Twojej uwagi."
+        other: "%{count} organizacji — część z nich potrzebuje Twojej uwagi."
+      fine_lead:
+        one: "%{count} organizacja. Wszystkie mają administratora i wolne miejsca."
+        few: "%{count} organizacje. Wszystkie mają administratora i wolne miejsca."
+        many: "%{count} organizacji. Wszystkie mają administratora i wolne miejsca."
+        other: "%{count} organizacji. Wszystkie mają administratora i wolne miejsca."
+      create: "Utwórz organizację"
+      organizations: "Organizacje"
+      admins:
+        one: "%{count} administrator"
+        few: "%{count} administratorów"
+        many: "%{count} administratorów"
+        other: "%{count} administratorów"
+      pending_admins:
+        one: "%{count} zaproszenie czeka"
+        few: "%{count} zaproszenia czekają"
+        many: "%{count} zaproszeń czeka"
+        other: "%{count} zaproszeń czeka"
+      all_organizations: "Wszystkie organizacje"
+      attention: "Wymaga uwagi"
+      no_admin: "Brak administratora"
+      add: "Dodaj"
+      no_free_seats: "Brak wolnych miejsc"
+      free_seats:
+        one: "Zostało %{count} miejsce"
+        few: "Zostały %{count} miejsca"
+        many: "Zostało %{count} miejsc"
+        other: "Zostało %{count} miejsca"
+      limit: "Limit"
+      fine_title: "Wszystko w porządku"
+      fine_body: "Każda organizacja ma administratora i wolne miejsca."
+      how_title: "Jak to działa"
+      how_body: "Każdy, kto zaloguje się przez USOS, trafia do organizacji %{usos}. Nie ma ona limitu miejsc i nie można jej usunąć. Do pozostałych organizacji konta dodają ich administratorzy."
+      empty_title: "Zacznij od pierwszej organizacji"
+      empty_lead: "Ustaw limit kont i dodaj administratora — on zaprosi resztę osób."
+
+    # Dashboard::OrganizationAdmin and home/_organization_admin_start.
+    organization_admin_start:
+      tiles:
+        students: "Studenci"
+        teachers: "Nauczyciele"
+        free: "Wolne miejsca"
+        no_limit: "Bez limitu"
+        of_max: "z %{max}"
+        pending: "Oczekujące zaproszenia"
+      stats_label: "Podsumowanie organizacji"
+      no_organization: "Twoje konto administratora nie jest przypisane do żadnej organizacji. Skontaktuj się z administratorem systemu."
+      full_lead: "Organizacja nie ma wolnych miejsc — nowe osoby nie dołączą, dopóki ktoś nie zostanie usunięty albo limit nie wzrośnie."
+      pending_lead:
+        one: "%{count} osoba jeszcze nie przyjęła zaproszenia."
+        few: "%{count} osoby jeszcze nie przyjęły zaproszenia."
+        many: "%{count} osób jeszcze nie przyjęło zaproszenia."
+        other: "%{count} osoby jeszcze nie przyjęły zaproszenia."
+      users: "Użytkownicy"
+      add_user: "Dodaj użytkownika"
+      recent: "Ostatnio dodani"
+      invited: "Zaproszenie wysłane"
+      added: "Dodano %{when}"
+      all_users: "Wszyscy użytkownicy"
+      nobody: "Nikogo tu jeszcze nie ma. Dodaj studentów i nauczycieli albo poczekaj, aż zalogują się przez uczelnię."
+      seats: "Miejsca"
+      unlimited_note: "Ta organizacja nie ma limitu miejsc. Każdy, kto zaloguje się przez USOS, trafia tutaj automatycznie."
+      limited_note: "Limit ustala administrator systemu. Każde konto, także administratora, zajmuje jedno miejsce."
+      pending_title: "Czeka na przyjęcie zaproszenia"
+
+    # TeacherStartDashboard::DAYS
+    days:
+      today: "Dziś"
+      yesterday: "Wczoraj"
+      earlier: "Wcześniej"
+
+    teacher_start:
+      greeting: "Dzień dobry, %{name}"
+      recent_lead: "Od wczoraj studenci kupili %{items} %{groups}."
+      recent_items:
+        one: "%{count} przedmiot"
+        few: "%{count} przedmioty"
+        many: "%{count} przedmiotów"
+        other: "%{count} przedmiotu"
+      recent_groups:
+        one: "w %{count} grupie"
+        few: "w %{count} grupach"
+        many: "w %{count} grupach"
+        other: "w %{count} grupy"
+      quiet_lead: "Od wczoraj nikt nic nie kupił. Zajrzyj do swoich grup poniżej."
+      no_groups_lead: "Nie prowadzisz jeszcze żadnej grupy. Utwórz pierwszą, żeby zacząć."
+      purchases: "Ostatnie zakupy"
+      filter: "Pokaż zakupy z grupy"
+      all_groups: "Wszystkie grupy"
+      removed_item: "Przedmiot usunięty z oferty"
+      no_group_purchases: "W tej grupie nie ma jeszcze żadnych zakupów."
+      no_purchases: "Nikt jeszcze niczego nie kupił. Zakupy pojawią się tutaj same."
+      pending: "Czeka na ocenę"
+      pending_left: "Zostało %{categories} dla %{students}."
+      pending_categories:
+        one: "%{count} kategoria"
+        few: "%{count} kategorie"
+        many: "%{count} kategorii"
+        other: "%{count} kategorii"
+      pending_students:
+        one: "%{count} studenta"
+        few: "%{count} studentów"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+      grade: "Oceń"
+      your_groups: "Twoje grupy"
+      group_meta: "%{role}, %{students}"
+      students:
+        one: "%{count} student"
+        few: "%{count} studentów"
+        many: "%{count} studentów"
+        other: "%{count} studenta"
+      new_purchases:
+        one: "%{count} nowy zakup"
+        few: "%{count} nowe zakupy"
+        many: "%{count} nowych zakupów"
+        other: "%{count} nowego zakupu"
+      no_groups: "Nie prowadzisz jeszcze żadnej grupy."
+      create_group: "Utwórz grupę"
+
+    student_start:
+      greeting: "Cześć, %{name}"
+      groups_lead:
+        one: "Należysz do %{count} grupy. Waluta, rangi i odznaki są osobne w każdej z nich."
+        few: "Należysz do %{count} grup. Waluta, rangi i odznaki są osobne w każdej z nich."
+        many: "Należysz do %{count} grup. Waluta, rangi i odznaki są osobne w każdej z nich."
+        other: "Należysz do %{count} grupy. Waluta, rangi i odznaki są osobne w każdej z nich."
+      no_groups_lead: "Nie należysz jeszcze do żadnej grupy. Poproś prowadzącego o kod i dołącz poniżej."
+      fresh: "Dopiero zaczynasz. Pierwsze %{currency} zdobędziesz na zajęciach."
+      to_spend: "Do wydania"
+      lives: "Życia"
+      rank: "Ranga:"
+      no_rank: "brak"
+      to_next: "%{total} z %{needed} do rangi %{rank}"
+      top: "%{total} zebranych. To najwyższa ranga."
+      progress_label: "Postęp do następnej rangi w grupie %{name}"
+      badges: "Odznaki"
+      badges_of: "z %{total}"
+      open_group: "Otwórz grupę"
+      shop: "Sklep"
+      have_code: "Masz kod od prowadzącego?"
+      code_hint: "Kod ma 6 znaków. Możesz też zeskanować kod QR aparatem telefonu."
+      join: "Dołącz do grupy"
+      feed: "Ostatnio we wszystkich grupach"
+      feed_meta: "%{group}, %{when}"
+
+  notifications:
+    panel:
+      title: "Powiadomienia"
+      mark_all: "Oznacz wszystkie"
+      new: "Nowe"
+      earlier: "Wcześniej"
+      empty: "Brak powiadomień."
+    notification:
+      purchase: "Zakup: %{name}"
+      meta: "%{group}, %{when}"
+      unread: "nowe"

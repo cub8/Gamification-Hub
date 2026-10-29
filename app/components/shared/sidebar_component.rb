@@ -25,7 +25,7 @@ class Shared::SidebarComponent < ViewComponent::Base
   end
 
   def role_label(story_group)
-    StoryGroupsListing::ROLE_LABELS[role_for(story_group)]
+    t("story_groups.listing.roles.#{role_for(story_group)}")
   end
 
   def role_for(story_group)
@@ -44,7 +44,7 @@ class Shared::SidebarComponent < ViewComponent::Base
   end
 
   def toggle_label
-    collapsed ? 'Rozwiń' : 'Zwiń panel'
+    collapsed ? t('layouts.sidebar.expand') : t('layouts.sidebar.collapse')
   end
 
   def toggle_icon

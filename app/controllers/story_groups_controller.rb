@@ -80,7 +80,7 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     if @story_group.update(story_group_params)
-      redirect_to edit_story_group_path(@story_group), notice: 'Zapisano ustawienia grupy.'
+      redirect_to edit_story_group_path(@story_group), notice: t('story_groups.flash.updated')
     else
       render :edit, status: :unprocessable_content
     end
@@ -100,7 +100,7 @@ class StoryGroupsController < ApplicationController
 
     name = @story_group.name
     @story_group.destroy!
-    notice = "Usunięto grupę #{name}."
+    notice = t('story_groups.flash.destroyed', name: name)
 
     return redirect_outside_turbo_frame(story_groups_path, notice: notice) if @in_modal
 

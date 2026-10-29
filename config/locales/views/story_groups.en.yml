@@ -1,0 +1,425 @@
+en:
+  story_groups:
+    flash:
+      updated: "Saved the group settings."
+      destroyed: "Deleted the group %{name}."
+      duplicate_threshold: "Two ranks can't share a threshold: %{first} and %{second} both have %{value}."
+
+    # StoryGroup.ranking_mode_label / #ranking_summary
+    ranking_modes:
+      podium_and_own: "Podium and own place"
+      full: "Full ranking"
+    ranking_off: "Off"
+
+    # StoryGroupsListing
+    listing:
+      roles:
+        own: "You lead"
+        sup: "You assist"
+        lrn: "You learn"
+      tabs:
+        all: "All"
+        mine: "Mine"
+        teacher: "Teaching"
+        student: "Learning"
+      owner: "Owner: %{name}"
+      no_purchases: "No new purchases"
+      purchases:
+        one: "%{count} new purchase"
+        other: "%{count} new purchases"
+      balance: "You have %{balance} %{currency}"
+
+    # TeacherOverview
+    overview:
+      stats:
+        students: "Students"
+        purchases: "Purchases this week"
+        purchases_note: "for %{amount}"
+        rewards: "Rewards this week"
+        ranking: "Ranking"
+      zero_lives_title: "%{name} has 0 lives"
+      zero_lives_detail: "Can only buy items available at 0 lives."
+      open: "Open"
+      sheet_in_progress: "%{name} in progress"
+      sheet_awarded:
+        one: "Awarded %{count} reward"
+        other: "Awarded %{count} rewards"
+      sheet_pending:
+        one: "%{count} column not graded."
+        other: "%{count} columns not graded."
+      grade: "Grade"
+
+    helpers:
+      teacher_lead:
+        one: "%{count} student in this group. Add a description in the settings to welcome newcomers."
+        other: "%{count} students in this group. Add a description in the settings to welcome newcomers."
+      next_rank: "%{missing} more to the %{rank} rank."
+      next_rank_discount: "That rank gives −%{discount}% in the shop."
+      ranking_off: "The ranking is off — students don't see this podium."
+      ranking_full: "Students see the full ranking, under nicknames."
+      ranking_podium: "Students see the podium and their own place, under nicknames."
+      place: "#%{place} in the group ranking"
+      hand:
+        one: "Grab something in the shop. You can afford %{count} item right now."
+        other: "Grab something in the shop. You can afford %{count} items right now."
+
+    index:
+      title: "Groups"
+      student_lead: "Groups you learn in."
+      teacher_lead: "Groups you lead, assist or learn in."
+      join: "Join a group"
+      create: "Create a group"
+      filter: "Group filter"
+      search: "Search for a group"
+      no_match: "No groups named"
+      no_match_hint: "Clear the search or check the spelling."
+      empty_tab_title: "No groups in this tab"
+      empty_student_title: "You're not in any group yet"
+      empty_title: "You don't have any groups yet"
+      empty_tab_body: "Switch tabs to see the other groups."
+      empty_body: "Got a code from your teacher? Join the group as a participant."
+
+    group_card:
+      students:
+        one: "%{count} student"
+        other: "%{count} students"
+
+    teacher_show:
+      show_code: "Show code to students"
+      create_sheet: "Create a sheet"
+      settings: "Group settings"
+      summary: "Group summary"
+      purchases: "Recent purchases"
+      removed_item: "Item removed from the shop"
+      all_purchases: "All purchases in the group"
+      no_purchases: "Nobody has bought anything yet. Purchases will show up here on their own once students start spending currency in the shop."
+      attention: "Needs attention"
+      recent_sheets: "Recent sheets"
+      open: "Open"
+      no_rewards: "Nobody has rewards from this sheet yet."
+      no_sheets_title: "You don't have any grade sheets yet"
+      no_sheets_body: "A sheet is one class: reward columns and the list of students. Create the first one to start awarding currency."
+
+    student_show:
+      led_by: "Led by %{name}"
+      balance_label: "Your %{currency}"
+      to_spend: "To spend"
+      collected: "Collected in total"
+      lives: "Lives"
+      open_shop: "Open the shop"
+      your_rank: "Your rank"
+      no_rank: "No rank"
+      progress: "%{total} of %{needed}"
+      progress_label: "Progress to the next rank"
+      top_rank: "%{total} collected. This is the highest rank in this group."
+      no_ranks: "The teacher hasn't added ranks yet. The currency you collect still counts — ranks will be assigned on their own once they appear."
+      badges: "Badges"
+      badges_count: "%{earned} of %{total}"
+      items: "Your items"
+      go_to_shop: "Go to the shop"
+      recent: "Recent changes"
+      entry_meta: "%{label}, %{when}"
+      full_history: "Show the full history"
+      no_entries: "Your first entries will show up after class. The teacher awards currency for attendance, punctuality and activity."
+
+    new:
+      page_title: "New group"
+
+    edit:
+      page_title: "Group settings - %{name}"
+
+    created:
+      page_title: "The group %{name} is ready"
+      title: "The group “%{name}” is ready"
+      ranks:
+        one: "%{count} rank"
+        other: "%{count} ranks"
+      badges:
+        one: "%{count} badge"
+        other: "%{count} badges"
+      items:
+        one: "%{count} item"
+        other: "%{count} items"
+      categories:
+        one: "%{count} category in the sheet template"
+        other: "%{count} categories in the sheet template"
+      quick_lead: "Created %{list}."
+      empty_lead: "The group is empty. You'll find the next steps below."
+      invites_note_html: "You'll create a join code in the %{tab} tab when you need it. You can have several codes at once, with a limit of people or an expiry date."
+      invites_tab: "Invites"
+      next: "What's next"
+      quick_steps:
+        - "Invite students: show them the code or the QR code."
+        - "After the first class, create a grade sheet and grade the students."
+        - "Look through the shop and fit the item descriptions to your story."
+      empty_steps:
+        - "Add ranks so students can see what they are working towards."
+        - "Add items to the shop."
+        - "Add badges for special achievements."
+        - "Create a grade sheet template."
+        - "Invite students: show them the code or the QR code."
+      go_to_group: "Go to the group"
+      create_invite: "Create an invite"
+
+    confirm_destroy:
+      page_title: "Delete group %{name}"
+      title: "Delete the group for good?"
+      students:
+        one: "%{count} student"
+        other: "%{count} students"
+      teachers:
+        one: "%{count} teacher"
+        other: "%{count} teachers"
+      lose_access:
+        one: "%{students} and %{teachers} will lose access."
+        other: "%{students} and %{teachers} will lose access."
+      gone: "The history, items and ranking will be gone."
+      confirm: "Type the group name to confirm:"
+      mismatch: "The name you typed doesn't match the group name. The group was not deleted."
+      remove: "Delete group"
+
+    settings:
+      title: "Group settings"
+      lead: "All teachers of this group can change these. Only the owner can delete the group. You set up the ranking in the Ranking tab."
+      group_section: "Group and story"
+      name: "Group name"
+      name_placeholder: "e.g. Space Rabbits"
+      story: "Story"
+      story_hint: "Everyone in the group sees it on the group's home page."
+      art_label: "Group image"
+      art_hint: "JPG or PNG, ideally at least 1200 px wide."
+      currency_section: "Currency"
+      currency_hint: "The new name will show up everywhere, including students' history."
+      currency_name: "Currency name"
+      currency_placeholder: "e.g. Carrots"
+      currency_name_hint: "Use the form that fits after a number — e.g. “Carrots”."
+      lives_section: "Lives"
+      lives: "Starting lives"
+      lives_hint: "Only applies to students who join from now on. You change current students' lives in the student list."
+      back: "Back to the group"
+      delete_title: "Delete group"
+      delete_body: "Deleting takes away everyone's access to the group, its shop, ranking and history. This can't be undone."
+      delete: "Delete group"
+
+    # Shared by the wizard and the settings form (shared/_image_field).
+    currency_icon:
+      label: "Currency icon"
+      presets: "Ready-made icons"
+      own: "Your icon"
+      upload: "Or upload your own icon"
+      hint: "Ideally a PNG with a transparent background, at least 128 px."
+      crop: "Crop the icon"
+      cropped: "Move and resize the selection. We save a square crop, because the icon sits on a round token."
+
+    wizard:
+      steps:
+        - "Group and story"
+        - "Currency and rules"
+        - "How you start"
+        - "Summary"
+      breadcrumb: "Groups"
+      title: "New group"
+      lead: "It takes a few minutes. You can change everything later in the group settings."
+      steps_label: "Steps"
+      name_section: "Name and story"
+      name_hint: "Students will see them in the group list and on the group page."
+      name: "Group name"
+      name_placeholder: "e.g. Order of Algorithms"
+      name_missing: "Enter the group name."
+      story: "Story"
+      story_placeholder: "Once upon a time…"
+      story_hint: "A short story intro. You can change it any time."
+      art_section: "Group image"
+      art_hint: "Shows on the group card, in the side panel and as the group background."
+      currency_section: "Currency name"
+      currency_hint: "It's read after every number, so use the plural form — e.g. “Gold Coins”."
+      currency_name: "Currency name"
+      currency_placeholder: "e.g. Gold Coins"
+      currency_missing: "Enter the currency name."
+      lives_section: "Lives"
+      lives: "Starting lives"
+      fewer_lives: "Fewer lives"
+      more_lives: "More lives"
+      lives_hint: "At 0 lives a student can only buy items marked as available at 0 lives."
+      ranking_section: "Ranking"
+      ranking: "Show the ranking to students"
+      ranking_hint: "Off by default. You can turn it on any time in the Ranking tab."
+      ranking_mode: "What students see"
+      ranking_mode_hint: "“Podium and own place” shows only the top three and the student's own place. “Full ranking” shows the whole list."
+      start_section: "How do you want to start?"
+      start_hint: "Both ways give you a complete group. You can change everything later."
+      start_label: "How to start"
+      recommended: "Recommended for your first group"
+      quick: "Quick start"
+      quick_body: "Ready-made ranks, badges, items and class categories. You'll review and adjust them before the group is created."
+      manual: "From scratch"
+      manual_body: "An empty group. You'll add ranks, badges and items later, step by step."
+      path_missing: "Choose how you want to start."
+      pack_section: "Set theme"
+      pack_hint: "Only changes the names of ranks and badges. The rules are the same everywhere."
+      pack_label: "Theme"
+      classes_section: "How many classes are you planning?"
+      classes_hint: "We'll fit the rank thresholds and prices so the highest rank is reachable within the semester."
+      classes_label: "Number of classes"
+      fewer_classes: "Fewer classes"
+      more_classes: "More classes"
+      summary: "Summary"
+      summary_hint: "The group will be created empty. After creating it you'll see a list of steps to complete."
+      summary_currency: "Currency"
+      summary_lives: "Starting lives"
+      summary_ranking: "Ranking"
+      card_preview: "Card in the group list"
+      you_lead: "You lead this group"
+      background_hint: "The background behind the form shows how the image looks as the group background."
+      currency_preview: "This is how students will see the currency"
+      back: "Back"
+      step_counter: "Step %{step} of %{total}"
+      submit: "Create group"
+      # group_wizard_controller.ts
+      js:
+        review_step: "Set review"
+        summary_step: "Summary"
+        counter: "Step %{step} of %{total}"
+        next: "Next"
+        create_short: "Create group"
+        create_quick: "Create group with the set"
+        create_empty: "Create an empty group"
+        name_placeholder: "Group name"
+        currency_placeholder: "Carrots"
+        ranking_off: "Off"
+        ranking_on: "Visible to students"
+
+    currency_mini:
+      to_spend: "to spend"
+
+    preset_review:
+      title: "The “%{pack}” set for %{classes} classes"
+      hint: "Remove what you don't need and adjust the numbers. You'll change names and descriptions after the group is created."
+      ranks: "Ranks"
+      starting_rank: "Starting rank"
+      shop_discount: "−%{discount}% in the shop"
+      from: "from"
+      from_zero: "from 0"
+      threshold_label: "%{name}: threshold"
+      badges: "Badges"
+      items: "Items in the shop"
+      price_label: "%{name}: price in %{currency}"
+      currency_fallback: "currency"
+      categories: "Class categories"
+      template: "(the “%{name}” template)"
+      reward_label: "%{name}: reward in %{currency}"
+
+    preset_row:
+      remove: "Remove: %{name}"
+      restore: "Restore: %{name}"
+
+    # StarterPack — written to the database in the teacher's language when the
+    # group is created. Numbers and icons stay in app/values/starter_pack.rb;
+    # every list here must keep its length and order.
+    starter_pack:
+      template_name: "Classes"
+      categories:
+        - "Attendance"
+        - "Punctuality"
+        - "Quiz passed"
+        - "Quiz ≥ group average"
+        - "Volunteered for a task"
+        - "Task done correctly"
+        - "Helping others"
+        - "Insightful remark"
+      badge_rules:
+        - "First quiz without mistakes"
+        - "Attended every class in a month"
+        - "Helped others at least 3 times"
+        - "At least 3 insightful remarks"
+        - "3 quizzes in a row ≥ group average"
+        - "Explained a hard task to the whole group"
+      items:
+        - name: "+5 minutes on a quiz"
+          didactic: "Adds 5 minutes to the time for the next quiz."
+        - name: "Consultation"
+          didactic: "A quarter-hour consultation with the teacher outside class."
+        - name: "Quiz retake"
+          didactic: "Lets you write one quiz again."
+        - name: "Safe retake"
+          didactic: "A risk-free quiz retake — the better of the two results counts."
+        - name: "Excuse note"
+          didactic: "Excuses one absence, without losing a life."
+        - name: "1up: get a life back"
+          didactic: "Restores one lost life."
+        - name: "+0.5 on the final grade"
+          didactic: "Raises the final grade by half a step."
+      packs:
+        neutral:
+          label: "Neutral"
+          description: "No story theme. Fits any subject."
+          ranks: ["Novice", "Learner", "Adept", "Expert", "Master"]
+          badges: ["Flawless", "Steady attendance", "Helping hand", "Spark of curiosity", "Winning streak", "Voice of the group"]
+        fantasy:
+          label: "Fantasy"
+          description: "Castles, orders and knightly titles."
+          ranks: ["Squire", "Knight", "Castellan", "Hetman", "King"]
+          badges: ["Clean blade", "Loyal guard", "Shield of the party", "Book of wisdom", "String of victories", "Bard of the party"]
+          badge_stories:
+            - "Steel without a scratch — the first duel won without a graze."
+            - "You stood guard every night this month."
+            - "Three times you shielded a companion with your own shield."
+            - "Three times you added something the books didn't have yet."
+            - "Three skirmishes in a row settled in your favour."
+            - "You explained to the whole party what nobody else could put into words."
+          item_stories:
+            - "The hourglass runs slower than it should."
+            - "An audience with the master of the order."
+            - "A second go at the duel."
+            - "A duel with blunt blades — losing costs nothing."
+            - "A safe-conduct letter explaining your absence."
+            - "A potion that restores a life."
+            - "The king's seal on your certificate."
+          category_stories:
+            - "You showed up at the muster."
+            - "In place before the horn sounded."
+            - "Trial of skill passed."
+            - "A score above the party average."
+            - "You volunteered."
+            - "Task done without fault."
+            - "You gave a companion a hand."
+            - "You shed light on something nobody had noticed."
+        scifi:
+          label: "Sci-fi"
+          description: "Ships, crews and space missions."
+          ranks: ["Cadet", "Pilot", "Navigator", "Commander", "Admiral"]
+          badges: ["Clean flight", "Always on board", "Crew mechanic", "Signal from space", "Mission streak", "Voice of the fleet"]
+          badge_stories:
+            - "The first flight without a single reading in the red."
+            - "Not a single shift missed this cycle."
+            - "Three times you got someone else's gear back on its feet."
+            - "Three times you caught a signal others missed."
+            - "Three missions in a row above the fleet standard."
+            - "Your explanation went out on the whole channel and everyone understood."
+          item_stories:
+            - "A brief slowdown of the ship's clock."
+            - "A call with the commander outside duty hours."
+            - "A second go at the simulation."
+            - "A training flight — a crash costs nothing."
+            - "A log entry excusing your absence."
+            - "Regeneration in the medical pod."
+            - "A promotion entered into the fleet records."
+          category_stories:
+            - "You reported on board."
+            - "At your station before the countdown."
+            - "Qualification test passed."
+            - "A score above the crew average."
+            - "You volunteered for a task."
+            - "Task done by the book."
+            - "You backed up another crew member."
+            - "You spotted something the sensors missed."
+
+  activerecord:
+    errors:
+      models:
+        story_group:
+          attributes:
+            name:
+              blank: "Enter the group name."
+            currency_name:
+              blank: "Enter the currency name."

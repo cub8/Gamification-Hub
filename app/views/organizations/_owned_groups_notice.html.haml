@@ -2,9 +2,6 @@
 
 - if owned.any?
   %p.gh-explainer-note
-    - if owned.one?
-      Usunięta zostanie też grupa prowadzona przez to konto:
-    - else
-      Usunięte zostaną też grupy prowadzone przez to konto:
-    %b= owned.to_sentence(words_connector: ', ', two_words_connector: ' i ', last_word_connector: ' i ')
-    — ze wszystkimi studentami, walutą, odznakami i arkuszami ocen.
+    = t('.lead', count: owned.size)
+    %b= owned.to_sentence
+    = t('.rest')

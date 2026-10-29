@@ -1,4 +1,4 @@
-- title = @own_items ? 'Moje przedmioty' : "Przedmioty — #{@student.display_name}"
+- title = @own_items ? t('.own_title') : t('.title', name: @student.display_name)
 - content_for :title, title
 - count = @purchases.size
 
@@ -9,14 +9,13 @@
       - if @own_items
         = inventory_lead(count)
       - else
-        = "#{count} #{gh_plural(count, 'przedmiot', 'przedmioty', 'przedmiotów')}."
-        Wykorzystanie przedmiotu student rozlicza z Tobą na zajęciach.
+        = t('.teacher_lead', count: count)
 
   - if @own_items
     .gh-button-row
       = link_to story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary' do
         %i.fa-solid.fa-bag-shopping{ 'aria-hidden': 'true' }
-        Przejdź do sklepu
+        = t('.go_to_shop')
 
 - if @purchases.any?
   .gh-inventory-grid
@@ -27,17 +26,14 @@
     - if @shop
       .gh-panel.gh-empty-slot-panel
         %p= inventory_shop_line(@shop.affordable)
-        = link_to 'Zobacz sklep', story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary'
+        = link_to t('.see_shop'), story_group_shop_index_path(@story_group), class: 'gh-btn gh-btn--secondary'
 - else
   %section.gh-panel.gh-empty-state
     - if @own_items
-      %h2.gh-h2 Nie masz jeszcze żadnego przedmiotu
-      %p.gh-lead
-        Zbieraj walutę na zajęciach i wydaj ją w sklepie — kupione przedmioty
-        zostaną tutaj razem z datą zakupu.
+      %h2.gh-h2= t('.own_empty_title')
+      %p.gh-lead= t('.own_empty_body')
       .gh-button-row
-        = link_to 'Przejdź do sklepu', story_group_shop_index_path(@story_group), class: 'gh-btn'
+        = link_to t('.go_to_shop'), story_group_shop_index_path(@story_group), class: 'gh-btn'
     - else
-      %h2.gh-h2 Student nic jeszcze nie kupił
-      %p.gh-lead
-        Przedmioty pojawią się tu razem z ceną, jaką zapłacił, i datą zakupu.
+      %h2.gh-h2= t('.empty_title')
+      %p.gh-lead= t('.empty_body')

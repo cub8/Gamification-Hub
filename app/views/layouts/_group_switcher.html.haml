@@ -6,7 +6,7 @@
   .gh-dialog-body.gh-octagon-clip
     %span.gh-sheet-drag-handle{ 'aria-hidden': 'true' }
     .gh-popover-header
-      %h2#gh-switch-title.gh-h3 Zmień grupę
+      %h2#gh-switch-title.gh-h3= t('.title')
 
     %ul.gh-menu-list
       - groups.each do |story_group|
@@ -16,10 +16,10 @@
             = render 'layouts/group_thumb', story_group: story_group, size: nil
             %span= story_group.name
             - if here
-              %span.gh-current-badge Tu jesteś
+              %span.gh-current-badge= t('.here')
 
     .gh-popover-footer
       = link_to new_join_path, class: 'gh-btn gh-btn--secondary',
         data: { turbo_frame: 'modal' } do
         %i.fa-solid.fa-plus
-        Dołącz do grupy
+        = t('.join')

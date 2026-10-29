@@ -1,4 +1,4 @@
-- content_for :title, "Usuń organizację #{@organization.name}"
+- content_for :title, t('.page_title', name: @organization.name)
 
 - if @in_modal
   = turbo_frame_tag 'modal' do

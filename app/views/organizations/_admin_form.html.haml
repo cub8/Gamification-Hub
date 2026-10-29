@@ -1,17 +1,15 @@
 = form_with model: user, url: add_admin_organization_path(@organization),
   data: { turbo_frame: (@in_modal ? 'modal' : nil) } do |form|
-  %h2.gh-h2 Dodaj administratora
-  %p
-    Wyślemy zaproszenie na podany adres. Po pierwszym logowaniu administrator
-    uzupełni swoje dane.
+  %h2.gh-h2= t('.title')
+  %p= t('.hint')
 
-  = render 'organizations/field', form: form, record: user, attribute: :email, label: 'Adres e-mail',
+  = render 'organizations/field', form: form, record: user, attribute: :email, label: t('.email'),
                                   input: :email_field,
-                                  options: { placeholder: 'jan.nowak@example.com', autofocus: true }
+                                  options: { placeholder: t('.email_placeholder'), autofocus: true }
   - if (error = user.errors[:organization].first)
     %p.gh-field-error{ role: 'alert' }
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= error
 
   = render 'organizations/dialog_actions', cancel_path: organization_path(@organization),
-                                           submit_label: 'Wyślij zaproszenie'
+                                           submit_label: t('.submit')

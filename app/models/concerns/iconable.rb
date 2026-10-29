@@ -6,7 +6,7 @@ module Iconable
   ACCEPTABLE_ICON_TYPES = ['image/gif', 'image/jpeg', 'image/png'].freeze
 
   class_methods do
-    def has_icon_art(attribute, glyphs:, glyph_message: 'Nieznana grafika.', required: true)
+    def has_icon_art(attribute, glyphs:, glyph_message: :unknown_art, required: true)
       has_one_attached attribute
 
       glyph_attribute      = :"#{attribute}_glyph"
@@ -41,7 +41,7 @@ module Iconable
         next unless attachment.attached?
         next if Iconable::ACCEPTABLE_ICON_TYPES.include?(attachment.content_type)
 
-        errors.add(attribute, 'Grafika musi być plikiem GIF, JPG lub PNG.')
+        errors.add(attribute, :art_type)
       end
     end
 
@@ -49,7 +49,7 @@ module Iconable
       define_method(validator_name) do
         next if public_send(glyph_attribute).present? || public_send(attribute).attached?
 
-        errors.add(glyph_attribute, 'Wybierz gotową grafikę albo wgraj własną.')
+        errors.add(glyph_attribute, :art_missing)
       end
     end
 
