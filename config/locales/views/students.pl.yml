@@ -1,5 +1,9 @@
 pl:
   students:
+    csv_columns:
+      email: "email"
+      nickname: "pseudonim"
+
     flash:
       lives_notice:
         one: "%{name} ma teraz %{count} życie."
@@ -61,7 +65,7 @@ pl:
     new_import:
       title: "Importuj studentów"
       dialog_title: "Importuj studentów z CSV"
-      hint: "Dopasowuje po emailu do kont, które już istnieją. Kolumny: email, pseudonim (opcjonalnie)."
+      hint_html: "Dopasowuje po emailu do kont, które już istnieją. Kolumny: %{columns} (drugi jest opcjonalny)."
 
     import:
       title: "Wyniki importu studentów"

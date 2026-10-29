@@ -1,5 +1,20 @@
 pl:
   items:
+    csv_columns:
+      name: "nazwa"
+      didactic_description: "opis_dydaktyczny"
+      story_description: "opis_fabularny"
+      price: "cena"
+      can_buy_at_0_lives: "można_kupić_przy_0_życiach"
+      icon: "ikona"
+      unlock_rank: "ranga_odblokowująca"
+      min_rank_for_discount: "ranga_minimalna_dla_zniżki"
+      unlock_badges: "odznaki_odblokowujące"
+      discount_badges: "odznaki_dla_zniżki"
+    csv_values:
+      "yes": "tak"
+      "no": "nie"
+
     flash:
       created: "Dodano przedmiot „%{name}” do sklepu."
       updated: "Zapisano „%{name}”. Zmiany dotyczą nowych zakupów."

@@ -6,19 +6,6 @@ module Csv
                       :unlock_rank, :min_rank_for_discount, :unlock_badges, :discount_badges,
                       :can_buy_at_0_lives,)
 
-    HEADERS = %w[
-      nazwa
-      opis_dydaktyczny
-      opis_fabularny
-      cena
-      można_kupić_przy_0_życiach
-      ikona
-      ranga_odblokowująca
-      ranga_minimalna_dla_zniżki
-      odznaki_odblokowujące
-      odznaki_dla_zniżki
-    ].freeze
-
     RANK_LABEL = /\A(.+) \((-?\d+)\)\z/
 
     attr_reader :warnings
@@ -51,22 +38,30 @@ module Csv
     end
 
     def row_for(row, index)
+      name = column(row, :name)
+
       Row.new(
         index:                 index,
-        name:                  row['nazwa'],
-        price:                 row['cena'],
-        didactic_description:  row['opis_dydaktyczny'],
-        story_description:     row['opis_fabularny'].presence,
-        icon_glyph:            icon_glyph(row['ikona']),
-        can_buy_at_0_lives:    boolean(row['można_kupić_przy_0_życiach']),
-        unlock_rank:           resolve_rank(row['ranga_odblokowująca'], row['nazwa']),
-        min_rank_for_discount: resolve_rank(row['ranga_minimalna_dla_zniżki'], row['nazwa']),
-        unlock_badges:         resolve_badges(row['odznaki_odblokowujące'], row['nazwa']),
-        discount_badges:       resolve_badges(row['odznaki_dla_zniżki'], row['nazwa']),
+        name:                  name,
+        price:                 column(row, :price),
+        didactic_description:  column(row, :didactic_description),
+        story_description:     column(row, :story_description).presence,
+        icon_glyph:            icon_glyph(column(row, :icon)),
+        can_buy_at_0_lives:    boolean(column(row, :can_buy_at_0_lives)),
+        unlock_rank:           resolve_rank(column(row, :unlock_rank), name),
+        min_rank_for_discount: resolve_rank(column(row, :min_rank_for_discount), name),
+        unlock_badges:         resolve_badges(column(row, :unlock_badges), name),
+        discount_badges:       resolve_badges(column(row, :discount_badges), name),
       )
     end
 
-    def boolean(value) = value.to_s.strip.downcase == 'tak'
+    def column(row, key)
+      Localized.column(row, "items.csv_columns.#{key}")
+    end
+
+    def boolean(value)
+      Localized.aliases('items.csv_values.yes').map(&:downcase).include?(value.to_s.strip.downcase)
+    end
 
     def icon_glyph(value)
       return value if Glyphs::ITEM.include?(value)

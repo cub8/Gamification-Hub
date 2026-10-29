@@ -119,6 +119,11 @@ module ApplicationHelper
     Array(items).map(&:to_s).to_sentence
   end
 
+  def gh_csv_columns(scope, keys)
+    names = keys.map { |key| Csv::Localized.current("#{scope}.csv_columns.#{key}") }
+    tag.code(names.join(', '))
+  end
+
   def gh_glyph(key, css_class: 'gh-card-art-glyph')
     markup = Glyphs.markup(key)
     return if markup.nil?

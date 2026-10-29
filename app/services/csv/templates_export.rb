@@ -2,7 +2,7 @@
 
 module Csv
   class TemplatesExport
-    HEADERS = %w[nr_szablonu szablon pozycja opis_dydaktyczny opis_fabularny nagroda].freeze
+    COLUMN_KEYS = %i[number name position didactic_description story_description reward].freeze
 
     def initialize(story_group:)
       @story_group = story_group
@@ -10,7 +10,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << HEADERS
+        csv << COLUMN_KEYS.map { |key| Localized.current("activity_group_templates.csv_columns.#{key}") }
         templates.each_with_index { |template, index| append_template(csv, template, index + 1) }
       end
     end

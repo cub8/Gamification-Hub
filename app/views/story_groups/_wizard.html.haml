@@ -230,13 +230,13 @@
 
             - csv_action = 'change->file-dropzone#show change->group-wizard#refresh change->group-wizard#csvFileChanged'
 
-            - ranks_columns = tag.code('nazwa, próg_waluty, zniżka, ikona')
+            - ranks_columns = gh_csv_columns('ranks', Csv::RanksExport::COLUMN_KEYS)
             - ranks_data = { group_wizard_target: 'csvFile', resource: 'ranks', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][ranks]', label: t('.csv_ranks_label'),
               hint: t('.csv_ranks_hint_html', columns: ranks_columns),
               field_data: ranks_data
 
-            - badges_columns = tag.code('nazwa, opis_dydaktyczny, opis_fabularny, zniżka, ikona')
+            - badges_columns = gh_csv_columns('badges', Csv::BadgesExport::COLUMN_KEYS)
             - badges_data = { group_wizard_target: 'csvFile', resource: 'badges', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][badges]', label: t('.csv_badges_label'),
               hint: t('.csv_badges_hint_html', columns: badges_columns),
@@ -247,7 +247,7 @@
               hint: t('.csv_items_hint'),
               field_data: items_data
 
-            - templates_columns = tag.code('nr_szablonu, szablon, pozycja, opis_dydaktyczny, opis_fabularny, nagroda')
+            - templates_columns = gh_csv_columns('activity_group_templates', Csv::TemplatesExport::COLUMN_KEYS)
             - templates_data = { group_wizard_target: 'csvFile', resource: 'templates', action: csv_action }
             = render 'shared/csv_dropzone_field', name: 'setup[csv][templates]', label: t('.csv_templates_label'),
               hint: t('.csv_templates_hint_html', columns: templates_columns),

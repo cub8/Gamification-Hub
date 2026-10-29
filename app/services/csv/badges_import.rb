@@ -4,8 +4,6 @@ module Csv
   class BadgesImport
     Row = Data.define(:index, :name, :didactic_description, :story_description, :discount, :icon_glyph)
 
-    HEADERS = %w[nazwa opis_dydaktyczny opis_fabularny zniżka ikona].freeze
-
     def initialize(file:)
       @file = file
     end
@@ -30,12 +28,16 @@ module Csv
     def row_for(row, index)
       Row.new(
         index:                index,
-        name:                 row['nazwa'],
-        didactic_description: row['opis_dydaktyczny'],
-        story_description:    row['opis_fabularny'].presence,
-        discount:             row['zniżka'],
-        icon_glyph:           icon_glyph(row['ikona']),
+        name:                 column(row, :name),
+        didactic_description: column(row, :didactic_description),
+        story_description:    column(row, :story_description).presence,
+        discount:             column(row, :discount),
+        icon_glyph:           icon_glyph(column(row, :icon)),
       )
+    end
+
+    def column(row, key)
+      Localized.column(row, "badges.csv_columns.#{key}")
     end
 
     def icon_glyph(value)

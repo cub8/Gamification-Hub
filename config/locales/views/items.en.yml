@@ -1,5 +1,20 @@
 en:
   items:
+    csv_columns:
+      name: "name"
+      didactic_description: "didactic_description"
+      story_description: "story_description"
+      price: "price"
+      can_buy_at_0_lives: "can_buy_at_0_lives"
+      icon: "icon"
+      unlock_rank: "unlock_rank"
+      min_rank_for_discount: "min_rank_for_discount"
+      unlock_badges: "unlock_badges"
+      discount_badges: "discount_badges"
+    csv_values:
+      "yes": "yes"
+      "no": "no"
+
     flash:
       created: "Added “%{name}” to the shop."
       updated: "Saved “%{name}”. Changes apply to new purchases."

@@ -1,5 +1,12 @@
 en:
   badges:
+    csv_columns:
+      name: "name"
+      didactic_description: "didactic_description"
+      story_description: "story_description"
+      discount: "discount"
+      icon: "icon"
+
     flash:
       created: "Added the “%{name}” badge."
       updated: "Saved the “%{name}” badge."

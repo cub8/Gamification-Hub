@@ -2,7 +2,7 @@
 
 module Csv
   class BadgesExport
-    HEADERS = %w[nazwa opis_dydaktyczny opis_fabularny zniżka ikona].freeze
+    COLUMN_KEYS = %i[name didactic_description story_description discount icon].freeze
 
     def initialize(story_group:)
       @story_group = story_group
@@ -10,7 +10,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << HEADERS
+        csv << COLUMN_KEYS.map { |key| Localized.current("badges.csv_columns.#{key}") }
         @story_group.badges.kept.by_name.each { |badge| csv << row_for(badge) }
       end
     end

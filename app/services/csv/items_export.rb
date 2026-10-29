@@ -2,17 +2,17 @@
 
 module Csv
   class ItemsExport
-    HEADERS = %w[
-      nazwa
-      opis_dydaktyczny
-      opis_fabularny
-      cena
-      można_kupić_przy_0_życiach
-      ikona
-      ranga_odblokowująca
-      ranga_minimalna_dla_zniżki
-      odznaki_odblokowujące
-      odznaki_dla_zniżki
+    COLUMN_KEYS = %i[
+      name
+      didactic_description
+      story_description
+      price
+      can_buy_at_0_lives
+      icon
+      unlock_rank
+      min_rank_for_discount
+      unlock_badges
+      discount_badges
     ].freeze
 
     def initialize(story_group:)
@@ -21,7 +21,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << HEADERS
+        csv << COLUMN_KEYS.map { |key| Localized.current("items.csv_columns.#{key}") }
         items.each { |item| csv << row_for(item) }
       end
     end
@@ -48,7 +48,7 @@ module Csv
       ]
     end
 
-    def boolean_label(value) = value ? 'tak' : 'nie'
+    def boolean_label(value) = Localized.current("items.csv_values.#{value ? 'yes' : 'no'}")
 
     def rank_label(rank) = rank && "#{rank.name} (#{rank.required_currency_value})"
 

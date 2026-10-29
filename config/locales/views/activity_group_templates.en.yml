@@ -1,5 +1,13 @@
 en:
   activity_group_templates:
+    csv_columns:
+      number: "template_number"
+      name: "template"
+      position: "position"
+      didactic_description: "didactic_description"
+      story_description: "story_description"
+      reward: "reward"
+
     flash:
       created: "Created the template “%{name}”."
       updated: "Saved the template. New sheets will get these categories."

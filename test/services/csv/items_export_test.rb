@@ -43,6 +43,27 @@ module Csv
       assert_equal 'Zuch;Asceta', row['odznaki_dla_zniżki']
     end
 
+    test 'exports English headers and "yes" for the boolean when the current locale is English' do
+      item = FactoryBot.create(:item, story_group: @story_group, can_buy_at_0_lives: true)
+
+      rows = I18n.with_locale(:en) { CSV.parse(ItemsExport.new(story_group: @story_group).call, headers: true) }
+
+      assert_equal %w[
+        name
+        didactic_description
+        story_description
+        price
+        can_buy_at_0_lives
+        icon
+        unlock_rank
+        min_rank_for_discount
+        unlock_badges
+        discount_badges
+      ], rows.headers
+      assert_equal 'yes', rows.first['can_buy_at_0_lives']
+      assert_equal item.name, rows.first['name']
+    end
+
     test 'blank rank/badge columns when none are set, nie for false boolean' do
       FactoryBot.create(:item, story_group: @story_group, can_buy_at_0_lives: false)
 

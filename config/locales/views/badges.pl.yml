@@ -1,5 +1,12 @@
 pl:
   badges:
+    csv_columns:
+      name: "nazwa"
+      didactic_description: "opis_dydaktyczny"
+      story_description: "opis_fabularny"
+      discount: "zniżka"
+      icon: "ikona"
+
     flash:
       created: "Dodano odznakę „%{name}”."
       updated: "Zapisano odznakę „%{name}”."

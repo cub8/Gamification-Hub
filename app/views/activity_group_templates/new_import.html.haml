@@ -1,5 +1,5 @@
 - content_for :title, t('.title')
-- columns = tag.code('nr_szablonu, szablon, pozycja, opis_dydaktyczny, opis_fabularny, nagroda')
+- columns = gh_csv_columns('activity_group_templates', Csv::TemplatesExport::COLUMN_KEYS)
 
 = render 'shared/csv_import_dialog', title: t('.dialog_title'),
                                      url:   import_story_group_activity_group_templates_path(@story_group),

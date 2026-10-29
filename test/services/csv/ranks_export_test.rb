@@ -26,5 +26,11 @@ module Csv
 
       assert_empty rows
     end
+
+    test 'exports English headers when the current locale is English' do
+      rows = I18n.with_locale(:en) { CSV.parse(RanksExport.new(story_group: @story_group).call, headers: true) }
+
+      assert_equal %w[name threshold discount icon], rows.headers
+    end
   end
 end

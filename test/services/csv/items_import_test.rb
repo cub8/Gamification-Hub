@@ -31,6 +31,20 @@ module Csv
       assert_equal [0, 1], row.discount_badges
     end
 
+    test 'also accepts English column headers and the "yes" boolean, regardless of the current locale' do
+      file = StringIO.new(<<~CSV)
+        name,didactic_description,story_description,price,can_buy_at_0_lives,icon,unlock_rank,min_rank_for_discount,unlock_badges,discount_badges
+        Shield,Desc,,42,yes,shield,Złoto (500),Złoto (500),Zuch,Zuch;Asceta
+      CSV
+
+      row = ItemsImport.new(file: file, ranks: @ranks, badges: @badges).call.first
+
+      assert_equal 'Shield', row.name
+      assert_equal '42', row.price
+      assert_equal true, row.can_buy_at_0_lives
+      assert_equal 0, row.unlock_rank
+    end
+
     test 'blank rank/badge columns and "nie" boolean parse to empty/false' do
       file = StringIO.new(<<~CSV)
         nazwa,opis_dydaktyczny,opis_fabularny,cena,można_kupić_przy_0_życiach,ikona,ranga_odblokowująca,ranga_minimalna_dla_zniżki,odznaki_odblokowujące,odznaki_dla_zniżki

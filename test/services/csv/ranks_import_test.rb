@@ -20,6 +20,18 @@ module Csv
                                         icon_glyph: 'chev2',), rows[1]
     end
 
+    test 'also accepts English column headers, regardless of the current locale' do
+      file = StringIO.new(<<~CSV)
+        name,threshold,discount,icon
+        Silver,200,5,chev1
+      CSV
+
+      row = RanksImport.new(file: file).call.first
+
+      assert_equal 'Silver', row.name
+      assert_equal '200', row.threshold
+    end
+
     test 'falls back to a default glyph for a blank icon cell, so the row never fails validation for it' do
       file = StringIO.new(<<~CSV)
         nazwa,próg_waluty,zniżka,ikona
@@ -51,7 +63,6 @@ module Csv
 
       row = RanksImport.new(file: file).call.first
 
-      assert_equal 'nazwa', RanksImport::HEADERS.first
       assert_equal 'Srebro', row.name
     end
 

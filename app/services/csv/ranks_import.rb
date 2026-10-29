@@ -4,8 +4,6 @@ module Csv
   class RanksImport
     Row = Data.define(:index, :name, :threshold, :discount, :icon_glyph)
 
-    HEADERS = %w[nazwa próg_waluty zniżka ikona].freeze
-
     def initialize(file:)
       @file = file
     end
@@ -30,11 +28,15 @@ module Csv
     def row_for(row, index)
       Row.new(
         index:      index,
-        name:       row['nazwa'],
-        threshold:  row['próg_waluty'],
-        discount:   row['zniżka'],
-        icon_glyph: icon_glyph(row['ikona']),
+        name:       column(row, :name),
+        threshold:  column(row, :threshold),
+        discount:   column(row, :discount),
+        icon_glyph: icon_glyph(column(row, :icon)),
       )
+    end
+
+    def column(row, key)
+      Localized.column(row, "ranks.csv_columns.#{key}")
     end
 
     def icon_glyph(value)

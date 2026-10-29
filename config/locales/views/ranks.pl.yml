@@ -1,5 +1,11 @@
 pl:
   ranks:
+    csv_columns:
+      name: "nazwa"
+      threshold: "próg_waluty"
+      discount: "zniżka"
+      icon: "ikona"
+
     flash:
       created: "Dodano rangę „%{name}”."
       updated: "Zapisano rangę „%{name}”."

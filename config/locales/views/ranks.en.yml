@@ -1,5 +1,11 @@
 en:
   ranks:
+    csv_columns:
+      name: "name"
+      threshold: "threshold"
+      discount: "discount"
+      icon: "icon"
+
     flash:
       created: "Added the “%{name}” rank."
       updated: "Saved the “%{name}” rank."

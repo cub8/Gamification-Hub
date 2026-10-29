@@ -2,7 +2,7 @@
 
 module Csv
   class RanksExport
-    HEADERS = %w[nazwa próg_waluty zniżka ikona].freeze
+    COLUMN_KEYS = %i[name threshold discount icon].freeze
 
     def initialize(story_group:)
       @story_group = story_group
@@ -10,7 +10,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << HEADERS
+        csv << COLUMN_KEYS.map { |key| Localized.current("ranks.csv_columns.#{key}") }
         @story_group.ranks.by_threshold.each { |rank| csv << row_for(rank) }
       end
     end

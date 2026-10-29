@@ -1,5 +1,13 @@
 pl:
   activity_group_templates:
+    csv_columns:
+      number: "nr_szablonu"
+      name: "szablon"
+      position: "pozycja"
+      didactic_description: "opis_dydaktyczny"
+      story_description: "opis_fabularny"
+      reward: "nagroda"
+
     flash:
       created: "Utworzono szablon „%{name}”."
       updated: "Zapisano szablon. Nowe arkusze dostaną te kategorie."

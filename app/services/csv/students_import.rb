@@ -4,8 +4,6 @@ module Csv
   class StudentsImport
     Row = Data.define(:index, :email, :nickname)
 
-    HEADERS = %w[email pseudonim].freeze
-
     def initialize(file:)
       @file = file
     end
@@ -28,7 +26,11 @@ module Csv
     end
 
     def row_for(row, index)
-      Row.new(index: index, email: row['email'], nickname: row['pseudonim'].presence)
+      Row.new(index: index, email: column(row, :email), nickname: column(row, :nickname).presence)
+    end
+
+    def column(row, key)
+      Localized.column(row, "students.csv_columns.#{key}")
     end
   end
 end
