@@ -14,8 +14,4 @@
         = hidden_field_tag "#{cat_key}[story_description]", category.story_description, id: nil
         = hidden_field_tag "#{cat_key}[reward]", category.reward, id: nil
 
-    .gh-dialog-button-row
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        = t('shared.actions.cancel')
-      %button.gh-btn{ type: 'submit' }
-        = t('shared.actions.confirm_import')
+    = render 'shared/csv_confirm_buttons'

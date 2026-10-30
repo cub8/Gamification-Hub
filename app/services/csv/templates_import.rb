@@ -2,6 +2,10 @@
 
 module Csv
   class TemplatesImport
+    include ParsesRows
+
+    CSV_SCOPE = 'activity_group_templates'
+
     Template = Data.define(:index, :name, :categories)
     Category = Data.define(:index, :didactic_description, :story_description, :reward)
 
@@ -16,15 +20,6 @@ module Csv
     end
 
     private
-
-    def rows
-      CSV.parse(content, headers: true)
-    end
-
-    def content
-      @file.rewind
-      @file.read.force_encoding(Encoding::UTF_8).delete_prefix(Csv::Utf8Bom)
-    end
 
     def grouped
       rows.group_by { |row| column(row, :number).to_i }
@@ -52,10 +47,6 @@ module Csv
         story_description:    column(row, :story_description).presence,
         reward:               reward,
       )
-    end
-
-    def column(row, key)
-      Localized.column(row, "activity_group_templates.csv_columns.#{key}")
     end
   end
 end

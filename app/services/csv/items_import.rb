@@ -2,6 +2,10 @@
 
 module Csv
   class ItemsImport
+    include ParsesRows
+
+    CSV_SCOPE = 'items'
+
     Row = Data.define(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
                       :unlock_rank, :min_rank_for_discount, :unlock_badges, :discount_badges,
                       :can_buy_at_0_lives,)
@@ -28,15 +32,6 @@ module Csv
 
     attr_reader :ranks, :badges, :story_group
 
-    def rows
-      CSV.parse(content, headers: true)
-    end
-
-    def content
-      @file.rewind
-      @file.read.force_encoding(Encoding::UTF_8).delete_prefix(Csv::Utf8Bom)
-    end
-
     def row_for(row, index)
       name = column(row, :name)
 
@@ -53,10 +48,6 @@ module Csv
         unlock_badges:         resolve_badges(column(row, :unlock_badges), name),
         discount_badges:       resolve_badges(column(row, :discount_badges), name),
       )
-    end
-
-    def column(row, key)
-      Localized.column(row, "items.csv_columns.#{key}")
     end
 
     def boolean(value)

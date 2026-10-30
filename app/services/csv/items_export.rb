@@ -21,7 +21,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << COLUMN_KEYS.map { |key| Localized.current("items.csv_columns.#{key}") }
+        csv << Localized.column_names('items', COLUMN_KEYS)
         items.each { |item| csv << row_for(item) }
       end
     end

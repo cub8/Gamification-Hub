@@ -120,8 +120,7 @@ module ApplicationHelper
   end
 
   def gh_csv_columns(scope, keys)
-    names = keys.map { |key| Csv::Localized.current("#{scope}.csv_columns.#{key}") }
-    tag.code(names.join(', '))
+    tag.code(Csv::Localized.column_names(scope, keys).join(', '))
   end
 
   def gh_glyph(key, css_class: 'gh-card-art-glyph')

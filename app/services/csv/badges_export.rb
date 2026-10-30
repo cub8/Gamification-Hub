@@ -10,7 +10,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << COLUMN_KEYS.map { |key| Localized.current("badges.csv_columns.#{key}") }
+        csv << Localized.column_names('badges', COLUMN_KEYS)
         @story_group.badges.kept.by_name.each { |badge| csv << row_for(badge) }
       end
     end

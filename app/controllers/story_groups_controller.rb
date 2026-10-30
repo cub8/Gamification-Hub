@@ -153,7 +153,7 @@ class StoryGroupsController < ApplicationController
     @story_group.errors.add(:base, t('shared.csv_import.malformed_files'))
     false
   rescue ActiveRecord::RecordInvalid => e
-    @story_group.errors.add(:base, record_invalid_message(e.record))
+    @story_group.errors.add(:base, Csv::Localized.record_invalid_message(e.record))
     false
   end
 
@@ -196,16 +196,12 @@ class StoryGroupsController < ApplicationController
   rescue StarterPackBuilder::InvalidSelection => e
     preview_error(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    preview_error(record_invalid_message(e.record))
+    preview_error(Csv::Localized.record_invalid_message(e.record))
   end
 
   def preview_error(message)
     html = render_to_string(partial: 'shared/csv_preview_error', locals: { message: message }, layout: false)
     { html: html, ok: false }
-  end
-
-  def record_invalid_message(record)
-    t('shared.csv_import.invalid_data', errors: helpers.gh_and_list(record.errors.full_messages))
   end
 
   def preview_locals(resource, preset)

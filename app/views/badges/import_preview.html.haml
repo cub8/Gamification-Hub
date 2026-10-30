@@ -13,8 +13,4 @@
       = hidden_field_tag "setup[badges][#{badge.index}][discount]", badge.discount, id: nil
       = hidden_field_tag "setup[badges][#{badge.index}][icon_glyph]", badge.icon_glyph, id: nil
 
-    .gh-dialog-button-row
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        = t('shared.actions.cancel')
-      %button.gh-btn{ type: 'submit' }
-        = t('shared.actions.confirm_import')
+    = render 'shared/csv_confirm_buttons'

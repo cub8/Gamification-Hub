@@ -10,7 +10,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << COLUMN_KEYS.map { |key| Localized.current("activity_group_templates.csv_columns.#{key}") }
+        csv << Localized.column_names('activity_group_templates', COLUMN_KEYS)
         templates.each_with_index { |template, index| append_template(csv, template, index + 1) }
       end
     end

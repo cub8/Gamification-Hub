@@ -19,7 +19,7 @@ module CsvImportable
   rescue StarterPackBuilder::InvalidSelection => e
     render_upload_error(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    render_upload_error(record_invalid_message(e.record))
+    render_upload_error(Csv::Localized.record_invalid_message(e.record))
   end
 
   def confirm_import
@@ -31,7 +31,7 @@ module CsvImportable
   rescue StarterPackBuilder::InvalidSelection => e
     redirect_with_import_alert(e.message)
   rescue ActiveRecord::RecordInvalid => e
-    redirect_with_import_alert(record_invalid_message(e.record))
+    redirect_with_import_alert(Csv::Localized.record_invalid_message(e.record))
   end
 
   private
@@ -54,9 +54,5 @@ module CsvImportable
 
   def warning_message(warnings)
     warnings.join(' ') if warnings.any?
-  end
-
-  def record_invalid_message(record)
-    t('shared.csv_import.invalid_data', errors: helpers.gh_and_list(record.errors.full_messages))
   end
 end

@@ -10,7 +10,7 @@ module Csv
 
     def call
       CSV.generate do |csv|
-        csv << COLUMN_KEYS.map { |key| Localized.current("ranks.csv_columns.#{key}") }
+        csv << Localized.column_names('ranks', COLUMN_KEYS)
         @story_group.ranks.by_threshold.each { |rank| csv << row_for(rank) }
       end
     end

@@ -23,8 +23,4 @@
       - item.discount_badges.each do |ref|
         = hidden_field_tag "#{key}[discount_badges][]", csv_ref_param(ref), id: nil
 
-    .gh-dialog-button-row
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
-        = t('shared.actions.cancel')
-      %button.gh-btn{ type: 'submit' }
-        = t('shared.actions.confirm_import')
+    = render 'shared/csv_confirm_buttons'
