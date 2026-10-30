@@ -1,5 +1,12 @@
 en:
   badges:
+    csv_columns:
+      name: "name"
+      didactic_description: "didactic_description"
+      story_description: "story_description"
+      discount: "discount"
+      icon: "icon"
+
     flash:
       created: "Added the “%{name}” badge."
       updated: "Saved the “%{name}” badge."
@@ -19,6 +26,17 @@ en:
 
     new:
       page_title: "New badge"
+
+    new_import:
+      title: "Import badges"
+      dialog_title: "Import badges from CSV"
+      hint_html: "Columns: %{columns}."
+
+    import_preview:
+      title: "Badge import preview"
+      count:
+        one: "%{count} badge will be added."
+        other: "%{count} badges will be added."
 
     edit:
       page_title: "Edit badge - %{name}"

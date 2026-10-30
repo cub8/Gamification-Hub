@@ -67,6 +67,7 @@ class Navigation
       ranking_item(chrome),
       section(:invites,  story_group_invites_path(group),         'fa-qrcode'),
       section(:teachers, story_group_teachers_path(group),        'fa-briefcase'),
+      section(:export,   story_group_export_path(group),          'fa-file-export'),
       section(:settings, edit_story_group_path(group),            'fa-gear'),
     ]
   end

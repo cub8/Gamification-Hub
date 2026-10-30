@@ -1,0 +1,7 @@
+- content_for :title, t('.title')
+- columns = gh_csv_columns('ranks', Csv::RanksExport::COLUMN_KEYS)
+
+= render 'shared/csv_import_dialog', title: t('.dialog_title'),
+                                     url:   import_story_group_ranks_path(@story_group),
+                                     hint:  t('.hint_html', columns: columns),
+                                     error: @upload_error

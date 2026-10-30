@@ -1,5 +1,13 @@
 pl:
   activity_group_templates:
+    csv_columns:
+      number: "nr_szablonu"
+      name: "szablon"
+      position: "pozycja"
+      didactic_description: "opis_dydaktyczny"
+      story_description: "opis_fabularny"
+      reward: "nagroda"
+
     flash:
       created: "Utworzono szablon „%{name}”."
       updated: "Zapisano szablon. Nowe arkusze dostaną te kategorie."
@@ -9,6 +17,19 @@ pl:
 
     new:
       page_title: "Nowy szablon arkusza"
+
+    new_import:
+      title: "Importuj szablony"
+      dialog_title: "Importuj szablony kategorii zajęć z CSV"
+      hint_html: "Kolumny: %{columns}."
+
+    import_preview:
+      title: "Podgląd importu szablonów"
+      count:
+        one: "Zostanie dodanych: %{count} szablon."
+        few: "Zostanie dodanych: %{count} szablony."
+        many: "Zostanie dodanych: %{count} szablonów."
+        other: "Zostanie dodanych: %{count} szablonu."
 
     edit:
       page_title: "Edytuj szablon %{name}"

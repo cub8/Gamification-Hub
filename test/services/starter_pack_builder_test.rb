@@ -119,4 +119,44 @@ class StarterPackBuilderTest < ActiveSupport::TestCase
       end
     end
   end
+
+  test 'accepts an externally-built preset instead of pack/classes' do
+    preset = Struct.new(:ranks, :badges, :items, :templates).new(
+      [StarterPack::Rank.new(index: 0, name: 'Importowana', threshold: 100, discount: 5, icon_glyph: 'chev1')],
+      [],
+      [],
+      [],
+    )
+
+    result = StarterPackBuilder.new(story_group: @story_group, preset: preset).call
+
+    assert_equal 1, @story_group.ranks.count
+    assert_equal 'Importowana', @story_group.ranks.first.name
+    assert_equal 1, result.ranks.size
+  end
+
+  test 'creates zero templates when the preset has none' do
+    preset = Struct.new(:ranks, :badges, :items, :templates).new([], [], [], [])
+
+    StarterPackBuilder.new(story_group: @story_group, preset: preset).call
+
+    assert_equal 0, @story_group.activity_group_templates.count
+  end
+
+  test 'creates multiple templates when the preset has more than one' do
+    category = StarterPack::Category.new(index: 0, didactic_description: 'Quiz', story_description: nil, reward: 3)
+    preset = Struct.new(:ranks, :badges, :items, :templates).new(
+      [], [], [],
+      [
+        StarterPack::TemplateGroup.new(index: 0, name: 'Laboratoria', categories: [category]),
+        StarterPack::TemplateGroup.new(index: 1, name: 'Wykłady', categories: [category]),
+      ],
+    )
+
+    result = StarterPackBuilder.new(story_group: @story_group, preset: preset).call
+
+    assert_equal 2, @story_group.activity_group_templates.count
+    assert_equal %w[Laboratoria Wykłady], @story_group.activity_group_templates.order(:id).map(&:base_name)
+    assert_equal 2, result.categories.size
+  end
 end

@@ -7,6 +7,10 @@
     = link_to new_story_group_rank_path(@story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       = t('.new')
+    - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
+    = link_to new_import_story_group_ranks_path(@story_group), import_link_options do
+      %i.fa-solid.fa-file-import
+      = t('shared.actions.import_csv')
 
 - if ladder.any?
   %section.gh-panel.gh-list-panel

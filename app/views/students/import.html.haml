@@ -1,0 +1,17 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2= t('.title')
+  %p.gh-lead
+    = t('.added', count: @result.added.size)
+    - if @result.failures.any?
+      = t('.skipped', count: @result.failures.size)
+
+  - if @result.failures.any?
+    %ul
+      - @result.failures.each do |failure|
+        %li.gh-field-error{ role: 'alert' }
+          %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+          %span= t('.row_failure', row: failure.row, message: failure.message)
+
+  .gh-dialog-button-row
+    %button.gh-btn{ type: 'button', data: { action: 'dialog#close' } }
+      = t('shared.actions.close')

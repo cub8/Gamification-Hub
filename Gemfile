@@ -26,6 +26,7 @@ gem 'solid_queue', '~> 1.3' # Adapter ActiveJob (queues)
 # Others
 gem 'bootsnap', '~> 1.23', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'crass', '>= 1.0.8' # To adress 1.0.7 vulnerability
+gem 'csv', '~> 3.3' # CSV generation for story-group configuration exports/imports
 gem 'erb', '>= 6.0.4' # To address 6.0.2 vulnerability
 gem 'haml-rails', '~> 3.0' # For easier writing HTML with embedded Ruby
 gem 'image_processing', '~> 1.2' # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

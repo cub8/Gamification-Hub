@@ -1,0 +1,17 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.templates.size)
+
+  = render 'shared/templates_preview_rows', templates: @preset.templates
+
+  = form_with url: confirm_import_story_group_activity_group_templates_path(@story_group), method: :post,
+              local: true, data: { turbo_frame: 'modal' } do
+    - @preset.templates.each do |template|
+      = hidden_field_tag "setup[templates][#{template.index}][name]", template.name, id: nil
+      - template.categories.each do |category|
+        - cat_key = "setup[templates][#{template.index}][categories][#{category.index}]"
+        = hidden_field_tag "#{cat_key}[didactic_description]", category.didactic_description, id: nil
+        = hidden_field_tag "#{cat_key}[story_description]", category.story_description, id: nil
+        = hidden_field_tag "#{cat_key}[reward]", category.reward, id: nil
+
+    = render 'shared/csv_confirm_buttons'

@@ -13,6 +13,10 @@
                                                             data:  { turbo_frame: 'modal' } do
       %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
       = t('.show_code')
+    - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
+    = link_to new_import_story_group_students_path(@story_group), import_link_options do
+      %i.fa-solid.fa-file-import{ 'aria-hidden': 'true' }
+      = t('shared.actions.import_csv')
 
 - if @list.any?
   %div{data: { controller:              'list-search',

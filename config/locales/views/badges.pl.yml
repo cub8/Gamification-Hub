@@ -1,5 +1,12 @@
 pl:
   badges:
+    csv_columns:
+      name: "nazwa"
+      didactic_description: "opis_dydaktyczny"
+      story_description: "opis_fabularny"
+      discount: "zniżka"
+      icon: "ikona"
+
     flash:
       created: "Dodano odznakę „%{name}”."
       updated: "Zapisano odznakę „%{name}”."
@@ -21,6 +28,19 @@ pl:
 
     new:
       page_title: "Nowa odznaka"
+
+    new_import:
+      title: "Importuj odznaki"
+      dialog_title: "Importuj odznaki z CSV"
+      hint_html: "Kolumny: %{columns}."
+
+    import_preview:
+      title: "Podgląd importu odznak"
+      count:
+        one: "Zostanie dodanych: %{count} odznaka."
+        few: "Zostanie dodanych: %{count} odznaki."
+        many: "Zostanie dodanych: %{count} odznak."
+        other: "Zostanie dodanych: %{count} odznaki."
 
     edit:
       page_title: "Edytuj odznakę - %{name}"

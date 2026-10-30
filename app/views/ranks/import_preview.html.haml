@@ -1,0 +1,15 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.ranks.size)
+
+  = render 'shared/ranks_preview_rows', ranks: @preset.ranks
+
+  = form_with url: confirm_import_story_group_ranks_path(@story_group), method: :post, local: true,
+              data: { turbo_frame: 'modal' } do
+    - @preset.ranks.each do |rank|
+      = hidden_field_tag "setup[ranks][#{rank.index}][name]", rank.name, id: nil
+      = hidden_field_tag "setup[ranks][#{rank.index}][threshold]", rank.threshold, id: nil
+      = hidden_field_tag "setup[ranks][#{rank.index}][discount]", rank.discount, id: nil
+      = hidden_field_tag "setup[ranks][#{rank.index}][icon_glyph]", rank.icon_glyph, id: nil
+
+    = render 'shared/csv_confirm_buttons'

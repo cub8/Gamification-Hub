@@ -1,0 +1,17 @@
+- error = local_assigns[:error]
+
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2= title
+  - if error.present?
+    %p.gh-field-error{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      %span= error
+
+  = form_with url: url, method: :post, multipart: true, local: true, data: { turbo_frame: 'modal' } do
+    = render 'shared/csv_dropzone_field', name: :file, hint: hint
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }
+        = t('shared.actions.cancel')
+      %button.gh-btn{ type: 'submit' }
+        = t('shared.actions.import')

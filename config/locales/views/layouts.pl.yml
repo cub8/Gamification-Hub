@@ -14,6 +14,7 @@ pl:
       ranking: "Ranking"
       invites: "Zaproszenia"
       teachers: "Nauczyciele"
+      export: "Eksport"
       settings: "Ustawienia grupy"
       shop: "Sklep"
       my_items: "Moje przedmioty"

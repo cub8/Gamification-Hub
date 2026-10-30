@@ -1,0 +1,16 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.badges.size)
+
+  = render 'shared/badges_preview_rows', badges: @preset.badges
+
+  = form_with url: confirm_import_story_group_badges_path(@story_group), method: :post, local: true,
+              data: { turbo_frame: 'modal' } do
+    - @preset.badges.each do |badge|
+      = hidden_field_tag "setup[badges][#{badge.index}][name]", badge.name, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][didactic_description]", badge.didactic_description, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][story_description]", badge.story_description, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][discount]", badge.discount, id: nil
+      = hidden_field_tag "setup[badges][#{badge.index}][icon_glyph]", badge.icon_glyph, id: nil
+
+    = render 'shared/csv_confirm_buttons'

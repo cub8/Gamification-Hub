@@ -6,11 +6,16 @@ pl:
       back_to_editing: "Wróć do edycji"
       cancel: "Anuluj"
       close: "Zamknij"
+      confirm: "Zatwierdź"
+      confirm_import: "Zatwierdź import"
       edit: "Edytuj"
       fewer: "Mniej"
+      import: "Importuj"
+      import_csv: "Importuj z CSV"
       more: "Więcej"
       name: "Nazwa"
       next: "Dalej"
+      ok: "OK"
       optional: "(opcjonalnie)"
       preview: "Podgląd"
       removal: "Usuwanie"
@@ -112,3 +117,29 @@ pl:
     register_prompt:
       no_account: "Nie masz konta?"
       register: "Zarejestruj się"
+
+    csv_import:
+      select_file: "Wybierz plik CSV."
+      empty_file: "Plik nie zawierał żadnych danych."
+      malformed_file: "Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV."
+      malformed_files: "Nie udało się odczytać jednego z wgranych plików - sprawdź, czy to poprawne pliki CSV."
+      invalid_data: "Plik zawiera nieprawidłowe dane: %{errors}"
+      imported: "Zaimportowano dane z pliku CSV."
+
+    csv_dropzone_field:
+      default_label: "Wybierz plik CSV"
+      choose_file: "Wybierz plik"
+      remove: "Usuń wybrany plik"
+
+    ranks_preview_rows:
+      meta: "Próg: %{threshold}, zniżka: %{discount}%."
+
+    badges_preview_rows:
+      meta: "%{description} Zniżka: %{discount}%."
+
+    items_preview_rows:
+      requirement: "Wymaga: %{requirement}"
+      also_at_zero_lives: "(także przy 0 życiach)"
+
+    templates_preview_rows:
+      no_categories: "Bez kategorii."

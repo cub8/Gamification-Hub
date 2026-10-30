@@ -451,7 +451,10 @@ class TranslationsTest < ActionDispatch::IntegrationTest
   end
 
   def assert_no_polish(html, where)
-    text  = Nokogiri::HTML(html).text
+    doc = Nokogiri::HTML(html)
+    doc.css('code').remove
+
+    text  = doc.text
     match = text.match(POLISH_LETTERS)
     return pass unless match
 

@@ -1,0 +1,18 @@
+- preset.warnings.each do |warning|
+  %p.gh-field-error{ role: 'alert' }
+    %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+    %span= warning
+
+.gh-preset-review-section
+  - preset.items.each do |item|
+    - requirement = csv_item_requirement(item, preset)
+    .gh-preset-row
+      %i.fa-solid.fa-flask{ 'aria-hidden': 'true' }
+      %span.gh-preset-row-name
+        %b= item.name
+        %small= item.didactic_description
+        - if requirement.present?
+          %small= t('.requirement', requirement: requirement)
+      %span.gh-preset-row-value
+        = item.price
+        = t('.also_at_zero_lives') if item.can_buy_at_0_lives
