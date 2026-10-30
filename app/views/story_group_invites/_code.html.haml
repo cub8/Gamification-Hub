@@ -1,10 +1,16 @@
-%h2#gh-code-title.gh-h2= t('.title', name: @story_group.name)
+%h2.gh-h2#gh-code-title= t('.title', name: story_group.name)
 %p= t('.hint')
 
 = render 'qr_stat', invite: invite
 
-.gh-dialog-button-row
-  - if @in_modal
-    %button.gh-btn{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }= t('shared.actions.close')
-  - else
-    = link_to t('shared.actions.close'), story_group_invites_path(@story_group), class: 'gh-btn'
+.contents{ data: { controller: 'print', print_title_value: t('story_group_invites.print_button.document_title', name: story_group.name) } }
+  .gh-print-sheet{ 'aria-hidden': 'true', data: { print_target: 'sheet' } }
+    = invite_qr_svg(invite)
+    .gh-print-code= invite.code
+
+  .gh-dialog-button-row
+    = render 'print_button', invite: invite, story_group: story_group
+    - if in_modal
+      %button.gh-btn{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }= t('shared.actions.close')
+    - else
+      = link_to t('shared.actions.close'), story_group_invites_path(story_group), class: 'gh-btn'

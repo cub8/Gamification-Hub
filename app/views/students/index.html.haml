@@ -9,8 +9,9 @@
     = link_to story_group_invites_path(@story_group), class: 'gh-btn gh-btn--secondary' do
       %i.fa-solid.fa-qrcode{ 'aria-hidden': 'true' }
       = t('.invites')
-    = link_to quick_story_group_invites_path(@story_group), class: 'gh-btn',
-                                                            data:  { turbo_frame: 'modal' } do
+    = link_to quick_story_group_invites_path(@story_group),
+              class: 'gh-btn',
+              data:  { turbo_frame: 'modal' } do
       %i.fa-solid.fa-eye{ 'aria-hidden': 'true' }
       = t('.show_code')
 

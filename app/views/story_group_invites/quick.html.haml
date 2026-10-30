@@ -2,7 +2,13 @@
 
 - if @in_modal
   = turbo_frame_tag 'modal' do
-    = render 'quick', active: @active
+    = render 'quick',
+             active:      @active,
+             story_group: @story_group,
+             in_modal:    @in_modal
 - else
   %section.gh-panel.gh-dialog-page-panel
-    = render 'quick', active: @active
+    = render 'quick',
+             active:      @active,
+             story_group: @story_group,
+             in_modal:    @in_modal
