@@ -64,6 +64,11 @@ en:
       message: "Copied the code %{code}."
       label: "Copy code"
 
+    print_button:
+      title: "Print code %{code}"
+      label: "Print"
+      document_title: "%{name} qrcode"
+
 
     code:
       title: "Join the group %{name}"

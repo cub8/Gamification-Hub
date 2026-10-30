@@ -20,6 +20,15 @@ module StoryGroupInvitesHelper
     )
   end
 
+  def invite_qr_svg(invite)
+    RQRCode::QRCode.new(join_url(code: invite.code)).as_svg(
+      viewbox:         true,
+      module_size:     1,
+      shape_rendering: 'crispEdges',
+      svg_attributes:  { class: 'gh-print-qr', 'aria-hidden': 'true' },
+    ).html_safe
+  end
+
   def invite_uses_label(invite)
     return t('story_group_invites.helpers.uses_unlimited', uses: invite.uses) if invite.max_uses.nil?
 

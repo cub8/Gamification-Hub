@@ -1,0 +1,10 @@
+- title = t('.title', code: invite.code)
+
+%button.gh-btn.gh-btn--secondary{
+  type:         'button',
+  title:        title,
+  'aria-label': title,
+  data:         { action: 'print#print' },
+}
+  %i.fa-solid.fa-print{ 'aria-hidden': 'true' }
+  %span= t('.label')
