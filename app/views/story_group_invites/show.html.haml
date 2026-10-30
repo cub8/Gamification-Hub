@@ -2,7 +2,13 @@
 
 - if @in_modal
   = turbo_frame_tag 'modal' do
-    = render 'code', invite: @invite
+    = render 'code',
+             invite:      @invite,
+             story_group: @story_group,
+             in_modal:    @in_modal
 - else
   %section.gh-panel.gh-dialog-page-panel
-    = render 'code', invite: @invite
+    = render 'code',
+             invite:      @invite,
+             story_group: @story_group,
+             in_modal:    @in_modal
