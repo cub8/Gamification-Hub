@@ -158,4 +158,8 @@ module ApplicationHelper
 
     tag.svg(markup.html_safe, class: css_class, viewBox: '0 0 24 24', 'aria-hidden': 'true')
   end
+
+  def modal_turbo_frame(in_modal, frame_name = 'modal')
+    frame_name if in_modal
+  end
 end

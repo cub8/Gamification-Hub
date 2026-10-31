@@ -1,3 +1,4 @@
+-# haml-lint:disable InlineStyles
 - content_for :title, @student.full_name
 - name = @student.full_name
 
@@ -13,16 +14,19 @@
       %p.gh-student-page-subtitle= student_sheet_subtitle(@student)
 
     .gh-button-row
-      = link_to new_story_group_student_badge_path(@story_group, @student), class: 'gh-btn',
-        data: { turbo_frame: 'modal' } do
+      = link_to new_story_group_student_badge_path(@story_group, @student),
+                class: 'gh-btn',
+                data:  { turbo_frame: 'modal' } do
         %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
         = t('.award_badge')
       = link_to new_story_group_student_currency_adjustment_path(@story_group, @student),
-        class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+                class: 'gh-btn gh-btn--secondary',
+                data:  { turbo_frame: 'modal' } do
         %i.fa-solid.fa-coins{ 'aria-hidden': 'true' }
         = t('.adjust_currency')
       = link_to edit_story_group_student_path(@story_group, @student),
-        class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+                class: 'gh-btn gh-btn--secondary',
+                data:  { turbo_frame: 'modal' } do
         %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
         = t('shared.actions.edit')
 
@@ -34,9 +38,13 @@
         - if (line = student_rank_progress_line(@sheet))
           %small= line
       - if (progress = @sheet.rank_progress)
-        .gh-progress-bar.gh-octagon-clip{ role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': 100,
-                 'aria-valuenow': progress,
-                 'aria-label': t('.rank_progress_label', rank: @sheet.next_rank.name) }
+        .gh-progress-bar.gh-octagon-clip{
+          role:            'progressbar',
+          'aria-valuemin': 0,
+          'aria-valuemax': 100,
+          'aria-valuenow': progress,
+          'aria-label':    t('.rank_progress_label', rank: @sheet.next_rank.name),
+        }
           %i.gh-octagon-clip{ style: "--gh-p: #{progress}%" }
 
     .gh-student-stat
@@ -54,8 +62,9 @@
 
 %nav.gh-group-tabs{ 'aria-label': t('.sections') }
   - StudentSheet::TABS.each do |key|
-    = link_to story_group_student_path(@story_group, @student, tab: key), class: 'gh-group-tab',
-      'aria-current': (@tab == key).to_s do
+    = link_to story_group_student_path(@story_group, @student, tab: key),
+              class:          'gh-group-tab',
+              'aria-current': (@tab == key).to_s do
       = t(".tabs.#{key}")
       %span.gh-count-label= @sheet.count_for(key)
 
@@ -64,6 +73,6 @@
   - when 'items'
     = render 'students/tab_items', sheet: @sheet
   - when 'hist'
-    = render 'students/tab_history', sheet: @sheet, kind: @kind
+    = render 'students/tab_history', sheet: @sheet, kind: @kind, story_group: @story_group
   - else
-    = render 'students/tab_badges', sheet: @sheet
+    = render 'students/tab_badges', sheet: @sheet, story_group: @story_group

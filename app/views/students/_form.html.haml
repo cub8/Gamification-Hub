@@ -1,29 +1,31 @@
-- lives = student.lives.to_i
-- error = student.errors[:lives].first
+:ruby
+  lives = student.lives.to_i
+  error = student.errors[:lives].first
 
-= form_with model: student, url: story_group_student_path(@story_group, student),
-  method: :patch,
-  data: { controller: 'lives-stepper',
-          turbo_frame: (@in_modal ? 'modal' : nil),
-          lives_stepper_start_value: lives } do |f|
+= form_with model:  student,
+            url:    story_group_student_path(story_group, student),
+            method: :patch,
+            data:   { controller:                'lives-stepper',
+                      turbo_frame:               modal_turbo_frame(in_modal),
+                      lives_stepper_start_value: lives, } do |f|
 
-  %h2#gh-student-title.gh-h2= t('.title')
+  %h2.gh-h2#gh-student-title= t('.title')
   %p
     = "#{student.display_name}."
     = t('.account_note')
 
   .gh-form-field
-    %p#gh-lives-label.gh-form-label= t('.lives')
+    %p.gh-form-label#gh-lives-label= t('.lives')
     .gh-number-stepper{ role: 'group', 'aria-labelledby': 'gh-lives-label' }
-      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('.take_life'),
-                          disabled: lives.zero?,
-                          data: { lives_stepper_target: 'down',
-                                  action: 'lives-stepper#down' } }
+      %button.gh-number-stepper-button.gh-octagon-clip{type: 'button', 'aria-label': t('.take_life'),
+                                                       disabled: lives.zero?,
+                                                       data: { lives_stepper_target: 'down',
+                                                               action:               'lives-stepper#down', },}
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
       %output{ 'aria-live': 'polite', data: { lives_stepper_target: 'output' } }= lives
-      %button.gh-number-stepper-button.gh-octagon-clip{ type: 'button', 'aria-label': t('.add_life'),
-                          data: { lives_stepper_target: 'up',
-                                  action: 'lives-stepper#up' } }
+      %button.gh-number-stepper-button.gh-octagon-clip{type: 'button', 'aria-label': t('.add_life'),
+                                                       data: { lives_stepper_target: 'up',
+                                                               action:               'lives-stepper#up', },}
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
 
     = f.hidden_field :lives, value: lives, data: { lives_stepper_target: 'field' }
@@ -38,15 +40,20 @@
   .gh-form-section.gh-form-section--divider
     %p.gh-form-label= t('.remove_label')
     %p.gh-small= t('.remove_hint')
-    = link_to confirm_destroy_story_group_student_path(@story_group, student),
-      class: 'gh-btn gh-btn--secondary gh-btn--small gh-remove-student-btn',
-      data: { turbo_frame: 'modal2' } do
+    = link_to confirm_destroy_story_group_student_path(story_group, student),
+              class: 'gh-btn gh-btn--secondary gh-btn--small gh-remove-student-btn',
+              data:  { turbo_frame: 'modal2' } do
       %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
       = t('.remove')
 
   .gh-dialog-button-row
-    - if @in_modal
+    - if in_modal
       %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.cancel')
     - else
-      = link_to t('shared.actions.cancel'), story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
-    %button.gh-btn{ type: 'submit', data: { lives_stepper_target: 'submit' } }= t('shared.actions.save')
+      = link_to t('shared.actions.cancel'),
+                story_group_student_path(story_group, student),
+                class: 'gh-btn gh-btn--secondary'
+    %button.gh-btn{
+      type: 'submit',
+      data: { lives_stepper_target: 'submit' },
+    }= t('shared.actions.save')

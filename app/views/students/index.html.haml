@@ -39,7 +39,10 @@
           %span= t('.columns.badges')
           %span.gh-ledger-cell--right= t('.columns.actions')
 
-        = render partial: 'students/row', collection: @list.rows, as: :row
+        = render partial: 'students/row',
+                 collection: @list.rows,
+                 as: :row, locals: { story_group: @story_group }
+
 
     %section.gh-panel.gh-empty-state{ hidden: true, data: { list_search_target: 'empty' } }
       %h2.gh-h2

@@ -1,6 +1,6 @@
 - losses = student_removal_losses(sheet)
 
-%h2#gh-kick-title.gh-h2= t('.title')
+%h2.gh-h2#gh-kick-title= t('.title')
 %p= t('.access_lost', name: student.display_name)
 
 - if losses.any?
@@ -15,12 +15,14 @@
 %p.gh-small= t('.rejoin_note')
 
 .gh-dialog-button-row
-  - if @in_modal
+  - if in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       = t('shared.actions.cancel')
   - else
-    = link_to t('shared.actions.cancel'), story_group_student_path(@story_group, student), class: 'gh-btn gh-btn--secondary'
+    = link_to t('shared.actions.cancel'),
+              story_group_student_path(story_group, student),
+              class: 'gh-btn gh-btn--secondary'
 
-  = button_to t('.remove'), story_group_student_path(@story_group, student),
-    method: :delete, class: 'gh-btn',
-    form: { data: { turbo_frame: (@in_modal ? 'modal2' : nil) } }
+  = button_to t('.remove'), story_group_student_path(story_group, student),
+              method: :delete, class: 'gh-btn',
+              form: { data: { turbo_frame: modal_turbo_frame(in_modal, 'modal2') } }

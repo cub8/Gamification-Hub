@@ -24,9 +24,9 @@
             .gh-card-footer
               %span.gh-card-meta= t('.awarded', when: gh_when(students_badge.created_at))
               = link_to t('.revoke'),
-                confirm_destroy_story_group_student_badge_path(@story_group, sheet.student, students_badge),
-                class: 'gh-link-button',
-                'aria-label': t('.revoke_label', name: badge.name),
-                data: { turbo_frame: 'modal' }
+                        confirm_destroy_story_group_student_badge_path(story_group, sheet.student, students_badge),
+                        class:        'gh-link-button',
+                        'aria-label': t('.revoke_label', name: badge.name),
+                        data:         { turbo_frame: 'modal' }
 - else
   %p.gh-explainer-note= t('.empty')
