@@ -3,4 +3,6 @@
 - if @shelf.membership
   = render 'student_deck', shelf: @shelf
 - else
-  = render 'teacher_grid', shelf: @shelf
+  = render 'teacher_grid',
+           shelf:       @shelf,
+           story_group: @story_group

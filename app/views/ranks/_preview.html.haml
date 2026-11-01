@@ -1,6 +1,7 @@
-- saved   = ladder.rungs.map(&:rank).reject { |other| other == rank }
-- entries = (saved.map { |other| [other, false] } << [rank, true])
-- entries = entries.sort_by { |entry, draft| [entry.required_currency_value.to_i, draft ? 1 : 0] }
+:ruby
+  saved   = ladder.rungs.map(&:rank).reject { |other| other == rank }
+  entries = (saved.map { |other| [other, false] } << [rank, true])
+  entries = entries.sort_by { |entry, draft| [entry.required_currency_value.to_i, draft ? 1 : 0] }
 
 %details.gh-preview-details{ open: true }
   %summary
@@ -14,8 +15,8 @@
         .gh-card-frame
           .gh-card-inset
             .gh-card-header
-              %h4.gh-card-name{ class: ('gh-placeholder-text' if rank.name.blank?),
-                                data: { rank_form_target: 'cardName' } }
+              %h4.gh-card-name{class: ('gh-placeholder-text' if rank.name.blank?),
+                               data:  { rank_form_target: 'cardName' },}
                 = rank.name.presence || t('ranks.helpers.name_placeholder')
             .gh-card-art{ data: { rank_form_target: 'cardArt' } }
               - if rank.upload?
@@ -28,11 +29,11 @@
     %h3= t('.ladder')
     %ol.gh-rank-form-ladder{ data: { rank_form_target: 'ladder' } }
       - entries.each do |entry, draft|
-        %li.gh-rank-form-rung{ class: ('gh-rank-form-rung--draft' if draft),
-                    data: { rank_id: (draft ? 'draft' : entry.id),
-                            min: entry.required_currency_value.to_i } }
-          = render 'rank_thumb', rank: entry,
-            inner_data: (draft ? { rank_form_target: 'draftArt' } : nil)
+        %li.gh-rank-form-rung{class: ('gh-rank-form-rung--draft' if draft),
+                              data:  { rank_id: (draft ? 'draft' : entry.id),
+                                       min:     entry.required_currency_value.to_i, },}
+          = render 'rank_thumb', rank:       entry,
+                                 inner_data: (draft ? { rank_form_target: 'draftArt' } : nil)
           %span
             %b
               %span{ data: (draft ? { rank_form_target: 'draftName' } : {}) }

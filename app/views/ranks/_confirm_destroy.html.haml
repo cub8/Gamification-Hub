@@ -1,4 +1,4 @@
-%h2#gh-del-title.gh-h2= t('.title', name: rank.name)
+%h2.gh-h2#gh-del-title= t('.title', name: rank.name)
 %p= t('.body')
 
 - if dependent_items.any?
@@ -7,15 +7,18 @@
     %span= t('.blocked', count: dependent_items.size, items: gh_and_list(dependent_items.map(&:name)))
 
 .gh-dialog-button-row
-  - if @in_modal
+  - if in_modal
     %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
       = t('shared.actions.cancel')
   - else
-    = link_to t('shared.actions.cancel'), edit_story_group_rank_path(@story_group, rank), class: 'gh-btn gh-btn--secondary'
+    = link_to t('shared.actions.cancel'),
+              edit_story_group_rank_path(story_group, rank),
+              class: 'gh-btn gh-btn--secondary'
 
   - if dependent_items.any?
     %button.gh-btn{ type: 'button', disabled: true }= t('.remove')
   - else
-    = button_to t('.remove'), story_group_rank_path(@story_group, rank),
-      method: :delete, class: 'gh-btn',
-      form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }
+    = button_to t('.remove'),
+                story_group_rank_path(story_group, rank),
+                method: :delete, class: 'gh-btn',
+                form: { data: { turbo_frame: modal_turbo_frame(in_modal) } }

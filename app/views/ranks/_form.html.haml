@@ -1,23 +1,51 @@
-- editing = rank.persisted?
-- error   = ->(attribute) { rank.errors[attribute].first }
+:ruby
+  editing = rank.persisted?
+  error   = ->(attribute) { rank.errors[attribute].first }
+  rungs = ladder.rungs.map do |rung|
+    {
+      id:   rung.rank.id,
+      name: rung.rank.name,
+      min:  rung.rank.required_currency_value.to_i,
+      disc: rung.rank.discount.to_i,
+    }
+  end
+
+  rungs_json = rungs.to_json
+
+  i18n_json  = t('ranks.helpers').slice(
+    :required,
+    :gives_discount,
+    :discount, :starting,
+    :no_discount,
+    :name_placeholder,
+    :new_rank,
+    :from_short,
+  ).merge(t('.js')).to_json
+
+  form_data = {
+    controller:                 'rank-form',
+    action:                     'gh:image-crop->rank-form#art',
+    rank_form_rungs_value:      rungs_json,
+    rank_form_totals_value:     ladder.student_totals.to_json,
+    rank_form_editing_id_value: rank.id.to_i,
+    rank_form_i18n_value:       i18n_json,
+  }
+
+  rung = ladder.rungs.find { |r| r.rank == rank } if editing
+  holders = rung&.holders.to_i
 
 %section.gh-panel.gh-page-header.gh-page-header--stacked
   %p.gh-breadcrumbs
-    = link_to t('.breadcrumb'), story_group_ranks_path(@story_group)
+    = link_to t('.breadcrumb'), story_group_ranks_path(story_group)
     %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
     %span= editing ? (rank.name_was.presence || rank.name) : t('.new_title')
   %h1.gh-h1= editing ? t('.edit_title') : t('.new_title')
   %p.gh-lead= t('.lead')
 
-- rungs_json = ladder.rungs.map { |rung| { id: rung.rank.id, name: rung.rank.name, min: rung.rank.required_currency_value.to_i, disc: rung.rank.discount.to_i } }.to_json
-- i18n_json  = t('ranks.helpers').slice(:required, :gives_discount, :discount, :starting, :no_discount, :name_placeholder, :new_rank, :from_short).merge(t('.js')).to_json
-- form_data = { controller: 'rank-form', action: 'gh:image-crop->rank-form#art', rank_form_rungs_value: rungs_json, rank_form_totals_value: ladder.student_totals.to_json, rank_form_editing_id_value: rank.id.to_i, rank_form_i18n_value: i18n_json }
-
-= form_with model: [@story_group, rank], data: form_data do |f|
+= form_with model: [story_group, rank], data: form_data do |f|
 
   .gh-form-shell
     %section.gh-panel.gh-form-column
-      - holders = editing ? ladder.rungs.find { |rung| rung.rank == rank }&.holders.to_i : 0
       - if holders.positive?
         %p.gh-info-banner
           %i.fa-solid.fa-users{ 'aria-hidden': 'true' }
@@ -38,7 +66,7 @@
               'aria-describedby': (error.call(:name) ? 'gh-rank-name-error' : nil),
               data: { rank_form_target: 'name', action: 'rank-form#refresh' }
           - if error.call(:name)
-            %p#gh-rank-name-error.gh-field-error{ role: 'alert' }
+            %p.gh-field-error#gh-rank-name-error{ role: 'alert' }
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:name)
 
@@ -54,12 +82,16 @@
           .gh-form-field
             = f.label :required_currency_value, t('.threshold')
             .gh-price-field-row
-              .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if error.call(:required_currency_value)) }
+              .gh-text-input.gh-text-input--numeric{
+                class: ('gh-text-input--invalid' if error.call(:required_currency_value)),
+              }
                 = f.number_field :required_currency_value, min: 0, step: 1,
                   'aria-invalid': (error.call(:required_currency_value) ? 'true' : nil),
                   'aria-describedby': (error.call(:required_currency_value) ? 'gh-rank-min-error' : nil),
                   data: { rank_form_target: 'threshold', action: 'rank-form#refresh' }
-              = render 'layouts/currency_token', story_group: @story_group, size: 32
+              = render 'layouts/currency_token',
+                       story_group: story_group,
+                       size:        32
 
           .gh-form-field
             = f.label :discount, t('.discount')
@@ -72,11 +104,11 @@
               %span.gh-price-unit-label %
 
         - if error.call(:required_currency_value)
-          %p#gh-rank-min-error.gh-field-error{ role: 'alert' }
+          %p.gh-field-error#gh-rank-min-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:required_currency_value)
         - if error.call(:discount)
-          %p#gh-rank-disc-error.gh-field-error{ role: 'alert' }
+          %p.gh-field-error#gh-rank-disc-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:discount)
 
@@ -88,8 +120,8 @@
           %h2.gh-h3= t('shared.actions.removal')
           %p.gh-field-hint= t('.removal_hint')
           .gh-button-row
-            = link_to confirm_destroy_story_group_rank_path(@story_group, rank),
-              class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+            = link_to confirm_destroy_story_group_rank_path(story_group, rank),
+                      class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
               %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
               = t('.remove')
 
@@ -97,7 +129,7 @@
       = render 'preview', rank: rank, ladder: ladder, editing: editing
 
   .gh-panel.gh-form-actions-bar
-    = link_to t('shared.actions.cancel'), story_group_ranks_path(@story_group), class: 'gh-link-button'
+    = link_to t('shared.actions.cancel'), story_group_ranks_path(story_group), class: 'gh-link-button'
     %span.gh-form-actions-spacer
     %button.gh-btn{ type: 'submit' }
       - unless editing

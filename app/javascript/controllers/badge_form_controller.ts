@@ -55,7 +55,7 @@ class BadgeFormController extends Controller<HTMLFormElement> {
     this.frontFlavorTarget.textContent = story
     this.frontFlavorTarget.hidden = story === ""
 
-    this.frontTagTarget.textContent = this.discountLabelValue.replace("%{discount}", String(discount))
+    this.frontTagTarget.textContent = this.discountLabelValue.replace("{discount}", String(discount))
     this.frontTagTarget.hidden = discount === 0
 
     this.thumbNameTarget.textContent = name || this.namePlaceholderValue

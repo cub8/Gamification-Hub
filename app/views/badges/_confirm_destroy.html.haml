@@ -1,4 +1,4 @@
-%h2#gh-del-title.gh-h2= t('.title', name: badge.name)
+%h2.gh-h2#gh-del-title= t('.title', name: badge.name)
 %p= t('.body')
 
 - if unlocking_items.any?
@@ -7,12 +7,19 @@
     %span= t('.unlocking', count: unlocking_items.size, items: gh_and_list(unlocking_items.map(&:name)))
 
 .gh-dialog-button-row
-  - if @in_modal
-    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' }, autofocus: true }
+  - if in_modal
+    %button.gh-btn.gh-btn--secondary{
+      type:      'button',
+      data:      { action: 'dialog#close' },
+      autofocus: true,
+    }
       = t('shared.actions.cancel')
   - else
-    = link_to t('shared.actions.cancel'), edit_story_group_badge_path(@story_group, badge), class: 'gh-btn gh-btn--secondary'
+    = link_to t('shared.actions.cancel'),
+              edit_story_group_badge_path(story_group, badge),
+              class: 'gh-btn gh-btn--secondary'
 
-  = button_to t('.remove'), story_group_badge_path(@story_group, badge),
-    method: :delete, class: 'gh-btn',
-    form: { data: { turbo_frame: (@in_modal ? 'modal' : nil) } }
+  = button_to t('.remove'),
+              story_group_badge_path(story_group, badge),
+              method: :delete, class: 'gh-btn',
+              form: { data: { turbo_frame: modal_turbo_frame(in_modal) } }
