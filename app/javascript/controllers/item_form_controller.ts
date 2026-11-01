@@ -8,7 +8,6 @@ const EXAMPLE_BADGES = 2
 
 type Part = string | { b: string }
 
-// ItemsHelper#item_form_wording — the same templates the server fills.
 interface Wording {
   unlock_everyone: string
   unlock_restricted: string
@@ -353,8 +352,7 @@ class ItemFormController extends Controller<HTMLFormElement> {
     const earning = new Map(
       pool
         .map(
-          (option) =>
-            [option.dataset.ghOwnName ?? "", parseInt(option.dataset.ghOwn ?? "0", 10) || 0] as const,
+          (option) => [option.dataset.ghOwnName ?? "", parseInt(option.dataset.ghOwn ?? "0", 10) || 0] as const,
         )
         .filter(([, own]) => own > 0),
     )

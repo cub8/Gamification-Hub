@@ -1,0 +1,55 @@
+- list_id = "students_filter_#{key}_list"
+
+%fieldset.gh-filter-group{
+  data: {
+    controller:         'filter-picker',
+    list_search_target: 'filter',
+    list_search_key:    key,
+    action:             'change->filter-picker#sync focusout->filter-picker#leave',
+  },
+}
+  %legend.gh-filter-legend= t(".#{key}.title")
+
+  .gh-filter-field
+    %label.gh-search-input.gh-filter-search
+      %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
+      %input{
+        type:                'search',
+        role:                'combobox',
+        autocomplete:        'off',
+        placeholder:         t(".#{key}.placeholder"),
+        'aria-label':        t(".#{key}.title"),
+        'aria-controls':     list_id,
+        'aria-expanded':     'false',
+        'aria-autocomplete': 'list',
+        data:                {
+          filter_picker_target: 'input',
+          action:               'focus->filter-picker#open click->filter-picker#open ' \
+                                'input->filter-picker#search keydown->filter-picker#key',
+        },
+      }
+
+    .gh-filter-list{
+      id:                     list_id,
+      role:                   'listbox',
+      'aria-multiselectable': 'true',
+      hidden:                 true,
+      data:                   {
+        filter_picker_target: 'list',
+        action:               'mousedown->filter-picker#keep',
+      },
+    }
+      - options.each do |label, value|
+        %label.gh-filter-option{id: "#{list_id}_#{value}", role: 'option', 'aria-selected': 'false',
+                                data: { filter_picker_target: 'option' },}
+          = check_box_tag "#{key}[]", value, selected.include?(value.to_s),
+                          id: "students_filter_#{key}_#{value}", class: 'sr-only',
+                          data: { action:             'change->list-search#filter change->filter-pane#update',
+                                  filter_pane_target: 'box',
+                                  label:              label,
+                                  group:              t(".#{key}.chip"), }
+          %span= label
+          %i.fa-solid.fa-xmark{ 'aria-hidden': 'true' }
+      %p.gh-filter-empty{ hidden: true, data: { filter_picker_target: 'empty' } }= t('.no_results')
+
+  .gh-filter-chips{ data: { filter_picker_target: 'chips' } }

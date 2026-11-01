@@ -6,15 +6,15 @@
   = hidden_field_tag "#{f.object_name}[#{field}][]", '', id: nil
 
   - badges.each do |badge|
-    %label.gh-choice-chip.gh-octagon-clip{ data: { chip_picker_target: 'chip',
-                            item_form_target:   form_target,
-                            gh_name:            badge.name,
-                            gh_discount:        badge.discount.to_i } }
-      = f.check_box field, { multiple:  true,
-                             class:     'sr-only',
-                             data:      { chip_picker_target: 'box',
-                                          action: 'change->chip-picker#sync change->item-form#refresh' } },
-        badge.id, nil
+    %label.gh-choice-chip.gh-octagon-clip{data: { chip_picker_target: 'chip',
+                                                  item_form_target:   form_target,
+                                                  gh_name:            badge.name,
+                                                  gh_discount:        badge.discount.to_i, }}
+      = f.check_box field, { multiple: true,
+                             class:    'sr-only',
+                             data:     { chip_picker_target: 'box',
+                                         action:             'change->chip-picker#sync change->item-form#refresh', }, },
+                    badge.id, nil
       %span= badge.name
       - if show_discount
         %small= "−#{badge.discount.to_i}%"

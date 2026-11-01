@@ -28,8 +28,13 @@
                 = t('.required_by', items: required_by.map(&:name).join(', '))
 
           .gh-rank-row-stats
-            %b= rung.holders
-            = t('.holders', count: rung.holders)
+            - if rung.holders.positive?
+              = link_to story_group_students_path(@story_group, rank: [rung.rank.id]), class: 'gh-text-link' do
+                %b= rung.holders
+                = t('.holders', count: rung.holders)
+            - else
+              %b= rung.holders
+              = t('.holders', count: rung.holders)
             - if ladder.total_students.positive?
               .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
                        'aria-valuemin': 0,

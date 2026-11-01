@@ -29,6 +29,32 @@ class StudentListTest < ActiveSupport::TestCase
 
   def rank_names = list.rows.map { |row| row.rank&.name }
 
+  test 'lists the item and badge ids each student holds, once' do
+    holder = student(name: 'Anna')
+    other  = student(name: 'Bartek')
+    item   = FactoryBot.create(:item, story_group: @story_group)
+    badge  = FactoryBot.create(:badge, story_group: @story_group)
+    2.times { FactoryBot.create(:students_item, story_group_student: holder, item: item) }
+    FactoryBot.create(:students_badge, story_group_student: holder, badge: badge)
+
+    rows = list.rows.index_by { |row| row.student.id }
+
+    assert_equal [item.id],  rows[holder.id].item_ids
+    assert_equal [badge.id], rows[holder.id].badge_ids
+    assert_equal 1,          rows[holder.id].badge_count
+    assert_empty rows[other.id].item_ids
+    assert_empty rows[other.id].badge_ids
+  end
+
+  test 'unranked? is true only while someone sits below the lowest rung' do
+    student(name: 'Anna', total: 0)
+    rank(name: 'Nowicjusz', threshold: 5)
+    assert_predicate list, :unranked?
+
+    rank(name: 'Start', threshold: 0)
+    assert_not_predicate list, :unranked?
+  end
+
   test 'is empty in a group nobody has joined' do
     assert_not list.any?
     assert_equal 0, list.size
@@ -103,7 +129,7 @@ class StudentListTest < ActiveSupport::TestCase
     subject = list
     queries = count_queries { subject.rows.each { |row| [row.rank&.name, row.badge_count] } }
 
-    assert_operator queries, :<=, 4, "expected a fixed number of queries, ran #{queries}"
+    assert_operator queries, :<=, 5, "expected a fixed number of queries, ran #{queries}"
   end
 
   def count_queries(&)

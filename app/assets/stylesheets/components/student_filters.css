@@ -1,0 +1,153 @@
+@layer components {
+
+  .gh-filter-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--gh-item);
+    color: var(--gh-on-item);
+    font: 700 12px var(--gh-f-ui);
+  }
+
+  .gh-filter-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-top: 12px;
+  }
+
+  .gh-filter-summary-chips {
+    display: contents;
+  }
+
+  .gh-filter-summary .gh-choice-chip {
+    border: 0;
+  }
+
+  .gh-student-filters {
+    z-index: 5;
+    margin-top: 12px;
+    padding: 16px 18px;
+  }
+
+  .gh-student-filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .gh-student-filters-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  .gh-filter-group {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .gh-filter-legend {
+    padding: 0;
+    margin-bottom: 6px;
+    font: 700 13px var(--gh-f-ui);
+    color: var(--gh-ink-2);
+  }
+
+  .gh-filter-field {
+    position: relative;
+  }
+
+  .gh-filter-search {
+    width: 100%;
+  }
+
+  .gh-filter-list {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 232px;
+    overflow-y: auto;
+    padding: 4px;
+    border: 2px solid var(--gh-line-2);
+    border-radius: 8px;
+    background: var(--gh-card);
+    box-shadow: 0 10px 24px var(--gh-shadow);
+  }
+
+  .gh-filter-option {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font: 560 14px var(--gh-f-ui);
+    color: var(--gh-ink);
+    cursor: pointer;
+  }
+
+  .gh-filter-option>i {
+    display: none;
+  }
+
+  .gh-filter-option:hover,
+  .gh-filter-option.is-active {
+    background: var(--gh-card-3);
+  }
+
+  .gh-filter-empty {
+    margin: 0;
+    padding: 8px 10px;
+    font: 500 13.5px var(--gh-f-ui);
+    color: var(--gh-ink-3);
+  }
+
+  .gh-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 124px;
+    margin-top: 10px;
+    overflow-y: auto;
+  }
+
+  .gh-filter-chips:empty {
+    display: none;
+  }
+
+  .gh-filter-chips .gh-filter-option {
+    padding: 6px 10px;
+    border-radius: 0;
+    gap: 6px;
+    font-size: 13.5px;
+    background: color-mix(in srgb, var(--gh-badge) 18%, var(--gh-card));
+  }
+
+  .gh-filter-chips .gh-filter-option:hover {
+    background: color-mix(in srgb, var(--gh-badge) 28%, var(--gh-card));
+  }
+
+  .gh-filter-chips .gh-filter-option>i {
+    display: inline;
+    font-size: 11px;
+    color: var(--gh-ink-2);
+  }
+
+  .gh-filter-chips .gh-filter-option:has(input:focus-visible) {
+    outline: 2px solid var(--gh-focus);
+    outline-offset: 2px;
+  }
+
+  @media (width <=theme(--breakpoint-tablet)) {
+    .gh-student-filters-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

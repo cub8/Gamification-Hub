@@ -16,6 +16,41 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'index offers a filter for each of rank, item and badge' do
+    rank  = FactoryBot.create(:rank, story_group: @story_group, name: 'Nawigator', required_currency_value: 0)
+    item  = FactoryBot.create(:item, story_group: @story_group, name: 'Kawa')
+    badge = FactoryBot.create(:badge, story_group: @story_group, name: 'Zdobywca')
+
+    get story_group_students_url(@story_group)
+
+    assert_select "fieldset[data-list-search-key=\"rank\"] input[value=\"#{rank.id}\"]"
+    assert_select "fieldset[data-list-search-key=\"item\"] input[value=\"#{item.id}\"]"
+    assert_select "fieldset[data-list-search-key=\"badge\"] input[value=\"#{badge.id}\"]"
+    assert_select 'fieldset input[checked]', 0
+  end
+
+  test 'index ticks the chips named in the URL and ignores the rest' do
+    item = FactoryBot.create(:item, story_group: @story_group)
+    FactoryBot.create(:item, story_group: @story_group)
+
+    get story_group_students_url(@story_group, item: [item.id, '999999'])
+
+    assert_select 'fieldset[data-list-search-key="item"] input[checked]', 1
+    assert_select "fieldset[data-list-search-key=\"item\"] input[checked][value=\"#{item.id}\"]"
+  end
+
+  test 'index puts what each student holds on the row' do
+    item  = FactoryBot.create(:item, story_group: @story_group)
+    badge = FactoryBot.create(:badge, story_group: @story_group)
+    FactoryBot.create(:students_item, story_group_student: @story_group_student, item: item)
+    FactoryBot.create(:students_badge, story_group_student: @story_group_student, badge: badge)
+
+    get story_group_students_url(@story_group)
+
+    assert_select 'li[data-list-search-rank="none"]' \
+                  "[data-list-search-item=\"#{item.id}\"][data-list-search-badge=\"#{badge.id}\"]"
+  end
+
   test 'should get edit' do
     get edit_story_group_student_url(@story_group, @story_group_student)
     assert_response :success

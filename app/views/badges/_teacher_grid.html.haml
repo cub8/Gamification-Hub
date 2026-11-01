@@ -30,7 +30,12 @@
               %p.gh-card-flavor= badge.story_description
 
             .gh-card-footer
-              %span.gh-card-meta= badge_holders_line(slot.holders)
+              %span.gh-card-meta
+                - if slot.holders.positive?
+                  = link_to badge_holders_line(slot.holders),
+                    story_group_students_path(@story_group, badge: [badge.id]), class: 'gh-text-link'
+                - else
+                  = badge_holders_line(slot.holders)
               .gh-card-actions
                 = link_to t('.award'), story_group_students_path(@story_group),
                   class: 'gh-btn gh-btn--small'

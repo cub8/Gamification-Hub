@@ -1,14 +1,15 @@
-- offer    = local_assigns.fetch(:offer, nil) || ItemOffer.preview(card)
-- state    = local_assigns.fetch(:state, :afford)
-- price    = local_assigns.fetch(:price, nil) || offer.price
-- need     = local_assigns.fetch(:need, 0).to_i
-- progress = local_assigns.fetch(:progress, 0).to_f
-- targets  = local_assigns.fetch(:targets, {})
-- all_feet = local_assigns.fetch(:all_feet, false)
-- hide     = ->(foot) { all_feet && state != foot }
-
-- modifier = 'gh-card--sealed' if state == :sealed
-- modifier = 'gh-card--affordable' if state == :afford && local_assigns[:buy]
+-# haml-lint:disable InlineStyles
+:ruby
+  offer    = local_assigns.fetch(:offer, nil) || ItemOffer.preview(card)
+  state    = local_assigns.fetch(:state, :afford)
+  price    = local_assigns.fetch(:price, nil) || offer.price
+  need     = local_assigns.fetch(:need, 0).to_i
+  progress = local_assigns.fetch(:progress, 0).to_f
+  targets  = local_assigns.fetch(:targets, {})
+  all_feet = local_assigns.fetch(:all_feet, false)
+  hide     = ->(foot) { all_feet && state != foot }
+  modifier = 'gh-card--sealed' if state == :sealed
+  modifier = 'gh-card--affordable' if state == :afford && local_assigns[:buy]
 
 %article.gh-card{ class: modifier, data: targets[:card] }
   .gh-card-frame
@@ -44,7 +45,11 @@
 
       .gh-card-footer
         - if all_feet || state == :afford
-          %span.gh-item-foot.flex.items-center{ class: 'gap-3.5', hidden: hide.call(:afford), data: targets[:foot_afford] }
+          %span.gh-item-foot.flex.items-center{
+            class:  'gap-3.5',
+            hidden: hide.call(:afford),
+            data:   targets[:foot_afford],
+          }
             - if local_assigns[:buy]
               = buy
             - else
@@ -57,7 +62,10 @@
               = t('.collect_more')
               %b{ data: targets[:need] }= need
             .gh-progress-bar.gh-octagon-clip
-              %i.gh-octagon-clip{ style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%", data: targets[:bar] }
+              %i.gh-octagon-clip{
+                style: "--gh-p: #{(progress.clamp(0, 1) * 100).round}%",
+                data:  targets[:bar],
+              }
 
         - if all_feet || state == :sealed
           .gh-requirement-list{ hidden: hide.call(:sealed), data: targets[:foot_sealed] }
@@ -69,9 +77,11 @@
                     %b= name
 
             - if (rp = offer.rank_progress)
-              .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
-                       'aria-valuemin': 0,
-                       'aria-valuemax': rp.target,
-                       'aria-valuenow': rp.collected,
-                       'aria-label': t('.progress_label', rank: rp.rank_name) }
+              .gh-progress-bar.gh-octagon-clip{
+                role:            'progressbar',
+                'aria-valuemin': 0,
+                'aria-valuemax': rp.target,
+                'aria-valuenow': rp.collected,
+                'aria-label':    t('.progress_label', rank: rp.rank_name),
+              }
                 %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(rp.collected, rp.target)}%" }

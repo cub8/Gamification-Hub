@@ -10,6 +10,7 @@ pl:
       removed: "%{name} nie należy już do grupy."
 
     helpers:
+      no_rank: "Bez rangi"
       list_lead: "Życie odbierasz za nieusprawiedliwioną nieobecność."
       zero_lives:
         one: "%{count} student ma 0 żyć"
@@ -43,6 +44,11 @@ pl:
       invites: "Kody i zaproszenia"
       show_code: "Pokaż kod dla studentów"
       search: "Szukaj studenta"
+      filters:
+        button: "Filtry"
+        clear: "Wyczyść"
+        clear_all: "Wyczyść filtry"
+        remove: "Usuń filtr"
       of: "z"
       count: "%{shown} z %{total}"
       columns:
@@ -53,10 +59,25 @@ pl:
         total: "Zebrane"
         badges: "Odznaki"
         actions: "Akcje"
-      no_match: "Brak studentów o nazwie"
-      no_match_hint: "Wyczyść wyszukiwanie albo sprawdź pisownię."
+      no_match: "Brak pasujących studentów"
+      no_match_hint: "Wyczyść wyszukiwanie lub filtry albo sprawdź pisownię."
       empty_title: "Nie ma jeszcze nikogo w grupie"
       empty_body: "Wyślij studentom kod albo zaproszenie — kiedy dołączą, pojawią się tutaj razem z rangą, walutą i życiami."
+
+    filter_chips:
+      no_results: "Brak wyników"
+      rank:
+        title: "Ranga"
+        chip: "Ranga"
+        placeholder: "Szukaj rangi"
+      item:
+        title: "Kupione przedmioty"
+        chip: "Przedmiot"
+        placeholder: "Szukaj przedmiotu"
+      badge:
+        title: "Odznaki"
+        chip: "Odznaka"
+        placeholder: "Szukaj odznaki"
 
     row:
       rank: "Ranga"

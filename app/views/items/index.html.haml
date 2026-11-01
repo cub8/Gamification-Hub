@@ -13,7 +13,11 @@
 - if @shelf.any?
   .gh-badge-grid--teacher
     - @shelf.slots.each do |slot|
-      = render 'grid_card', item: slot.item, card: @shelf.card_for(slot.item), bought: slot.bought
+      = render 'grid_card',
+               item:        slot.item,
+               card:        @shelf.card_for(slot.item),
+               bought:      slot.bought,
+               story_group: @story_group
 - else
   %section.gh-panel.gh-empty-state
     %h2.gh-h2= t('.empty_title')

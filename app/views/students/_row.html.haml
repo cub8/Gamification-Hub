@@ -5,7 +5,10 @@
 
 %li.gh-student-row{class: ('gh-student-row--no-lives' if row.zero_lives?),
                    data:  { list_search_target: 'row',
-                            list_search_name:   name.downcase, },}
+                            list_search_name:   name.downcase,
+                            list_search_rank:   student_rank_token(row),
+                            list_search_item:   row.item_ids.join(' '),
+                            list_search_badge:  row.badge_ids.join(' '), },}
   %span.gh-student-name-cell
     %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
       = gh_initials(name)

@@ -101,6 +101,16 @@
     color: var(--gh-ink);
   }
 
+  .gh-text-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .gh-text-link:hover {
+    color: var(--gh-ink);
+  }
+
   .gh-close {
     flex: 0 0 auto;
     display: inline-grid;
