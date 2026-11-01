@@ -68,6 +68,11 @@ pl:
       message: "Skopiowano kod %{code}."
       label: "Kopiuj kod"
 
+    print_button:
+      title: "Drukuj kod %{code}"
+      label: "Drukuj"
+      document_title: "%{name} qrcode"
+
 
     code:
       title: "Dołącz do grupy %{name}"
