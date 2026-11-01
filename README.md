@@ -4,13 +4,13 @@
 
 ### Development dependencies
 
-#### Ruby 3.4.8 <img src="docs/ruby.png" height="15">
+#### Ruby 3.4.12 <img src="docs/ruby.png" height="15">
 
 Sugeruję zainstalowanie Ruby przez `rbenv` - Ruby Version Manager.
 
 ```sh
-$ rbenv install 3.4.8
-$ rbenv local 3.4.8
+$ rbenv install 3.4.12
+$ rbenv local 3.4.12
 ```
 
 Polecam przeczytać:
