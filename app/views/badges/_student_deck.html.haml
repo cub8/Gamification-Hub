@@ -6,10 +6,11 @@
 - if shelf.any?
   .gh-card-grid.gh-card-grid--compact
     - shelf.slots.each do |slot|
-      = render 'flip_card', badge: slot.badge,
-        earned: slot.earned?,
-        interactive: slot.earned?,
-        withdrawn: slot.withdrawn?
+      = render 'flip_card',
+               badge:       slot.badge,
+               earned:      slot.earned?,
+               interactive: slot.earned?,
+               withdrawn:   slot.withdrawn?
 - else
   %section.gh-panel.gh-empty-state
     %h2.gh-h2= t('.empty_title')

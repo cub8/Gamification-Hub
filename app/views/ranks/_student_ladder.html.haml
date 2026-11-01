@@ -1,3 +1,4 @@
+-# haml-lint:disable InlineStyles
 %section.gh-panel.gh-page-header
   .gh-page-header-text
     %h1.gh-h1= t('.title')
@@ -27,12 +28,16 @@
                 = t('.to_first', collected: collected, needed: needed)
               - else
                 = t('.to_next', collected: ladder.collected, needed: rung.next_threshold)
-            .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
-                     'aria-valuemin': 0,
-                     'aria-valuemax': needed,
-                     'aria-valuenow': collected,
-                     'aria-label': t('.progress_label', name: rung.rank.name) }
-              %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(collected, needed)}%" }
+            .gh-progress-bar.gh-octagon-clip{
+              role:            'progressbar',
+              'aria-valuemin': 0,
+              'aria-valuemax': needed,
+              'aria-valuenow': collected,
+              'aria-label':    t('.progress_label', name: rung.rank.name),
+            }
+              %i.gh-octagon-clip{
+                style: "--gh-p: #{gh_percent(collected, needed)}%",
+              }
           - elsif rung.current?
             %span.gh-rank-status.gh-rank-status--achieved= t('.top')
           - else

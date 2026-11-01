@@ -1,20 +1,23 @@
-- targets = { card:        { item_form_target: 'card' },
-              name:        { item_form_target: 'frontName' },
-              cost:        { item_form_target: 'frontCost' },
-              art:         { item_form_target: 'frontArt' },
-              seal:        { item_form_target: 'seal' },
-              seal_label:  { item_form_target: 'sealLabel' },
-              tag_disc:    { item_form_target: 'tagDisc' },
-              tag_life:    { item_form_target: 'tagLife' },
-              rules:       { item_form_target: 'frontRules' },
-              flavor:      { item_form_target: 'frontFlavor' },
-              foot_afford: { item_form_target: 'footAfford' },
-              foot_save:   { item_form_target: 'footSave' },
-              foot_sealed: { item_form_target: 'footSealed' },
-              buy_label:   { item_form_target: 'buyLabel' },
-              need:        { item_form_target: 'need' },
-              bar:         { item_form_target: 'bar' },
-              req_list:    { item_form_target: 'reqList' }, }
+:ruby
+  targets = {
+    card:        { item_form_target: 'card' },
+    name:        { item_form_target: 'frontName' },
+    cost:        { item_form_target: 'frontCost' },
+    art:         { item_form_target: 'frontArt' },
+    seal:        { item_form_target: 'seal' },
+    seal_label:  { item_form_target: 'sealLabel' },
+    tag_disc:    { item_form_target: 'tagDisc' },
+    tag_life:    { item_form_target: 'tagLife' },
+    rules:       { item_form_target: 'frontRules' },
+    flavor:      { item_form_target: 'frontFlavor' },
+    foot_afford: { item_form_target: 'footAfford' },
+    foot_save:   { item_form_target: 'footSave' },
+    foot_sealed: { item_form_target: 'footSealed' },
+    buy_label:   { item_form_target: 'buyLabel' },
+    need:        { item_form_target: 'need' },
+    bar:         { item_form_target: 'bar' },
+    req_list:    { item_form_target: 'reqList' },
+  }
 
 - price = item.price.to_i
 - need  = [(price * 0.4).ceil, 1].max
@@ -28,15 +31,15 @@
     %h3= t('.students_view')
 
     .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': t('.state') }
-      %button{ type: 'button', 'aria-pressed': 'true', value: 'afford',
-               data: { action: 'item-form#state', item_form_target: 'state' } }
+      %button{type: 'button', 'aria-pressed': 'true', value: 'afford',
+              data: { action: 'item-form#state', item_form_target: 'state' },}
         = t('.afford')
-      %button{ type: 'button', 'aria-pressed': 'false', value: 'save',
-               data: { action: 'item-form#state', item_form_target: 'state' } }
+      %button{type: 'button', 'aria-pressed': 'false', value: 'save',
+              data: { action: 'item-form#state', item_form_target: 'state' },}
         = t('.save')
-      %button{ type: 'button', 'aria-pressed': 'false', value: 'sealed',
-               disabled: !card.requires?,
-               data: { action: 'item-form#state', item_form_target: 'state' } }
+      %button{type: 'button', 'aria-pressed': 'false', value: 'sealed',
+              disabled: !card.requires?,
+              data: { action: 'item-form#state', item_form_target: 'state' },}
         = t('.sealed')
 
     %span.gh-field-hint{ hidden: card.requires?, data: { item_form_target: 'sealHint' } }
@@ -49,8 +52,8 @@
   %section.gh-panel.gh-preview-panel
     %h3= t('.thumb')
     .gh-preview-thumb-row
-      = render 'layouts/item_thumb', item: item,
-        inner_data: { item_form_target: 'thumbArt' }
+      = render 'layouts/item_thumb', item:       item,
+                                     inner_data: { item_form_target: 'thumbArt' }
       %span
         %b{ data: { item_form_target: 'thumbName' } }= item_name(item)
         %span.gh-small= t('.thumb_sample')

@@ -2,7 +2,13 @@
 
 - if @in_modal
   = turbo_frame_tag 'modal' do
-    = render 'form', student: @student
+    = render 'form',
+             student:     @student,
+             story_group: @story_group,
+             in_modal:    @in_modal
 - else
   %section.gh-panel.gh-dialog-page-panel
-    = render 'form', student: @student
+    = render 'form',
+             student:     @student,
+             story_group: @story_group,
+             in_modal:    @in_modal

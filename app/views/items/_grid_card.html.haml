@@ -27,8 +27,15 @@
         %p.gh-card-flavor= item.story_description
 
       .gh-card-footer
-        %span.gh-card-meta= item_bought_line(bought)
+        %span.gh-card-meta
+          - if bought.positive?
+            = link_to item_bought_line(bought),
+                      story_group_students_path(story_group, item: [item.id]),
+                      class: 'gh-text-link'
+          - else
+            = item_bought_line(bought)
         .gh-card-actions
-          = link_to edit_story_group_item_path(@story_group, item),
-            class: 'gh-icon-button', 'aria-label': t('.edit_label', name: item.name) do
+          = link_to edit_story_group_item_path(story_group, item),
+                    class:        'gh-icon-button',
+                    'aria-label': t('.edit_label', name: item.name) do
             %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }

@@ -12,6 +12,16 @@ module StudentsHelper
                       t('students.helpers.zero_lives_tail'),])
   end
 
+  NO_RANK = 'none'
+
+  def student_filter_groups(list)
+    [
+      [:rank,  student_rank_options(list)],
+      [:item,  list.items.map { |item| [item.name, item.id] }],
+      [:badge, list.badges.map { |badge| [badge.name, badge.id] }],
+    ].reject { |_key, options| options.empty? }
+  end
+
   def student_list_subtitle(student)
     parts = []
     parts << t('students.helpers.nickname_quoted', nickname: student.nickname) if student.nickname.present?
@@ -20,10 +30,8 @@ module StudentsHelper
     parts.join(' · ')
   end
 
-  # "Pseudonim: Nova, s.alejandro@example.com, indeks s123456" — the detail
-  # page's sub-line. The nickname is labelled rather than bare because here it is
-  # a fact about the person, not the name they are going by on this screen. A
-  # student who joined without an index number simply does not get that half.
+  def student_rank_token(row) = (row.rank&.id || NO_RANK).to_s
+
   def student_sheet_subtitle(student)
     parts = []
     parts << t('students.helpers.nickname', nickname: student.nickname) if student.nickname.present?
@@ -58,5 +66,13 @@ module StudentsHelper
     losses << t('students.helpers.losses.ledger', count: entries) if entries.positive?
 
     losses
+  end
+
+  private
+
+  def student_rank_options(list)
+    options = list.ranks.map { |rank| [rank.name, rank.id] }
+    options << [t('students.helpers.no_rank'), NO_RANK] if list.unranked?
+    options
   end
 end

@@ -1,10 +1,13 @@
-- targets = local_assigns.fetch(:targets, {})
-- discount = badge_discount_label(badge)
-- flipper  = local_assigns.fetch(:flipper, false)
+:ruby
+  targets = local_assigns.fetch(:targets, {})
+  discount = badge_discount_label(badge)
+  flipper  = local_assigns.fetch(:flipper, false)
 
 .gh-card-header
-  %h3.gh-card-name{ class: ('gh-placeholder-text' if badge.name.blank?),
-                    data: targets[:name] }
+  %h3.gh-card-name{
+    class: ('gh-placeholder-text' if badge.name.blank?),
+    data:  targets[:name],
+  }
     = badge_name(badge)
 
 .gh-card-art{ data: targets[:art] }
@@ -14,7 +17,9 @@
   .gh-card-tags
     %span.gh-tag.gh-tag--removed= t('.removed')
 
-%p.gh-rule-text{ class: ('gh-placeholder-text' if badge.didactic_description.blank?), data: targets[:rules] }
+%p.gh-rule-text{
+  class: ('gh-placeholder-text' if badge.didactic_description.blank?), data: targets[:rules],
+}
   = badge_rule(badge)
 
 %p.gh-card-flavor{ hidden: badge.story_description.blank?, data: targets[:flavor] }
@@ -23,7 +28,7 @@
 .gh-card-footer
   %span.gh-tag.gh-tag--discount{ hidden: discount.nil?, data: targets[:tag] }= discount
   - if flipper
-    %button.gh-card-flip-btn{ type: 'button',
-                        'aria-label': t('.flip_label', name: badge.name) }
+    %button.gh-card-flip-btn{type:         'button',
+                             'aria-label': t('.flip_label', name: badge.name),}
       %i.fa-solid.fa-arrows-rotate{ 'aria-hidden': 'true' }
       = t('.flip')

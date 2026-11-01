@@ -5,3 +5,5 @@ linters:
     enabled: false
   SpaceInsideHashAttributes:
     enabled: false
+  ViewLength:
+    max: 250

@@ -12,6 +12,7 @@ en:
       removed: "%{name} is no longer in the group."
 
     helpers:
+      no_rank: "No rank"
       list_lead: "You take a life for an unexcused absence."
       zero_lives:
         one: "%{count} student has 0 lives"
@@ -37,6 +38,11 @@ en:
       invites: "Codes and invites"
       show_code: "Show code to students"
       search: "Search for a student"
+      filters:
+        button: "Filters"
+        clear: "Clear"
+        clear_all: "Clear filters"
+        remove: "Remove filter"
       of: "of"
       count: "%{shown} of %{total}"
       columns:
@@ -47,11 +53,25 @@ en:
         total: "Collected"
         badges: "Badges"
         actions: "Actions"
-      no_match: "No students named"
-      no_match_hint: "Clear the search or check the spelling."
+      no_match: "No matching students"
+      no_match_hint: "Clear the search or the filters, or check the spelling."
       empty_title: "Nobody has joined the group yet"
       empty_body: "Send students a code or an invite — once they join, they will show up here with their rank, currency and lives."
 
+    filter_chips:
+      no_results: "No results"
+      rank:
+        title: "Rank"
+        chip: "Rank"
+        placeholder: "Search ranks"
+      item:
+        title: "Bought items"
+        chip: "Item"
+        placeholder: "Search items"
+      badge:
+        title: "Badges"
+        chip: "Badge"
+        placeholder: "Search badges"
     new_import:
       title: "Import students"
       dialog_title: "Import students from CSV"

@@ -1,23 +1,27 @@
-- editing = badge.persisted?
-- error   = ->(attribute) { badge.errors[attribute].first }
-- slot    = editing ? shelf.slots.find { |candidate| candidate.badge == badge } : nil
-- holders = slot&.holders.to_i
+:ruby
+  editing = badge.persisted?
+  error   = ->(attribute) { badge.errors[attribute].first }
+  slot    = editing ? shelf.slots.find { |candidate| candidate.badge == badge } : nil
+  holders = slot&.holders.to_i
+  form_data = {
+    controller:                        'badge-form',
+    action:                            'gh:image-crop->badge-form#art',
+    badge_form_name_placeholder_value: t('badges.helpers.name_placeholder'),
+    badge_form_rule_placeholder_value: t('badges.helpers.rule_placeholder'),
+    badge_form_discount_label_value:   t('badges.helpers.discount', discount: '{discount}'),
+  }
 
 %section.gh-panel.gh-page-header.gh-page-header--stacked
   %p.gh-breadcrumbs
-    = link_to t('.breadcrumb'), story_group_badges_path(@story_group)
+    = link_to t('.breadcrumb'),
+              story_group_badges_path(story_group)
     %i.fa-solid.fa-chevron-right{ 'aria-hidden': 'true' }
     %span= editing ? (badge.name_was.presence || badge.name) : t('.new_title')
   %h1.gh-h1= editing ? t('.edit_title') : t('.new_title')
   %p.gh-lead= t('.lead')
 
-- form_data = { controller: 'badge-form', action: 'gh:image-crop->badge-form#art',
-                badge_form_name_placeholder_value: t('badges.helpers.name_placeholder'),
-                badge_form_rule_placeholder_value: t('badges.helpers.rule_placeholder'),
-                badge_form_discount_label_value: t('badges.helpers.discount', discount: '%{discount}'), }
 
-= form_with model: [@story_group, badge], data: form_data do |f|
-
+= form_with model: [story_group, badge], data: form_data do |f|
   .gh-form-shell
     %section.gh-panel.gh-form-column
       - if holders.positive?
@@ -43,7 +47,7 @@
           %p.gh-field-hint{ role: 'status', hidden: true, data: { forbidden_chars_target: 'hint' } }
             = t('.name_no_semicolon')
           - if error.call(:name)
-            %p#gh-badge-name-error.gh-field-error{ role: 'alert' }
+            %p.gh-field-error#gh-badge-name-error{ role: 'alert' }
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:name)
 
@@ -56,7 +60,7 @@
               'aria-describedby': (error.call(:didactic_description) ? 'gh-badge-rule-error' : nil),
               data: { badge_form_target: 'rule', action: 'badge-form#refresh' }
           - if error.call(:didactic_description)
-            %p#gh-badge-rule-error.gh-field-error{ role: 'alert' }
+            %p.gh-field-error#gh-badge-rule-error{ role: 'alert' }
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:didactic_description)
           %span.gh-field-hint= t('.rule_hint')
@@ -72,7 +76,7 @@
               'aria-describedby': (error.call(:story_description) ? 'gh-badge-story-error' : nil),
               data: { badge_form_target: 'story', action: 'badge-form#refresh' }
           - if error.call(:story_description)
-            %p#gh-badge-story-error.gh-field-error{ role: 'alert' }
+            %p.gh-field-error#gh-badge-story-error{ role: 'alert' }
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
               %span= error.call(:story_description)
 
@@ -95,7 +99,7 @@
             %span.gh-price-unit-label %
 
         - if error.call(:discount)
-          %p#gh-badge-disc-error.gh-field-error{ role: 'alert' }
+          %p.gh-field-error#gh-badge-disc-error{ role: 'alert' }
             %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
             %span= error.call(:discount)
 
@@ -115,8 +119,8 @@
           %h2.gh-h3= t('shared.actions.removal')
           %p.gh-field-hint= t('.removal_hint')
           .gh-button-row
-            = link_to confirm_destroy_story_group_badge_path(@story_group, badge),
-              class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
+            = link_to confirm_destroy_story_group_badge_path(story_group, badge),
+                      class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } do
               %i.fa-solid.fa-trash{ 'aria-hidden': 'true' }
               = t('.remove')
 
@@ -124,7 +128,7 @@
       = render 'preview', badge: badge
 
   .gh-panel.gh-form-actions-bar
-    = link_to t('shared.actions.cancel'), story_group_badges_path(@story_group), class: 'gh-link-button'
+    = link_to t('shared.actions.cancel'), story_group_badges_path(story_group), class: 'gh-link-button'
     %span.gh-form-actions-spacer
     %button.gh-btn{ type: 'submit' }
       - unless editing

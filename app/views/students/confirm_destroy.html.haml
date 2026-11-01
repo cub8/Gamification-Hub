@@ -2,7 +2,15 @@
 
 - if @in_modal
   = turbo_frame_tag 'modal2' do
-    = render 'confirm_destroy', student: @student, sheet: @sheet
+    = render 'confirm_destroy',
+             student:     @student,
+             sheet:       @sheet,
+             in_modal:    @in_modal,
+             story_group: @story_group
 - else
   %section.gh-panel.gh-dialog-page-panel
-    = render 'confirm_destroy', student: @student, sheet: @sheet
+    = render 'confirm_destroy',
+             student:     @student,
+             sheet:       @sheet,
+             in_modal:    @in_modal,
+             story_group: @story_group

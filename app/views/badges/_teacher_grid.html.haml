@@ -4,7 +4,7 @@
     %p.gh-lead= t('.lead', count: shelf.size)
 
   .gh-button-row
-    = link_to new_story_group_badge_path(@story_group), class: 'gh-btn' do
+    = link_to new_story_group_badge_path(story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       = t('.new')
     - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
@@ -34,12 +34,17 @@
               %p.gh-card-flavor= badge.story_description
 
             .gh-card-footer
-              %span.gh-card-meta= badge_holders_line(slot.holders)
+              %span.gh-card-meta
+                - if slot.holders.positive?
+                  = link_to badge_holders_line(slot.holders),
+                            story_group_students_path(story_group, badge: [badge.id]), class: 'gh-text-link'
+                - else
+                  = badge_holders_line(slot.holders)
               .gh-card-actions
-                = link_to t('.award'), story_group_students_path(@story_group),
-                  class: 'gh-btn gh-btn--small'
-                = link_to edit_story_group_badge_path(@story_group, badge),
-                  class: 'gh-icon-button', 'aria-label': t('.edit_label', name: badge.name) do
+                = link_to t('.award'), story_group_students_path(story_group),
+                          class: 'gh-btn gh-btn--small'
+                = link_to edit_story_group_badge_path(story_group, badge),
+                          class: 'gh-icon-button', 'aria-label': t('.edit_label', name: badge.name) do
                   %i.fa-solid.fa-pen{ 'aria-hidden': 'true' }
 - else
   %section.gh-panel.gh-empty-state

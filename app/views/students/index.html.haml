@@ -20,9 +20,10 @@
       = t('shared.actions.import_csv')
 
 - if @list.any?
-  %div{data: { controller:              'list-search',
-               list_search_total_value: @list.size,
-               list_search_of_value:    t('.of'),  }}
+  %div{data: { controller:                    'list-search filter-pane',
+               list_search_total_value:       @list.size,
+               list_search_of_value:          t('.of'),
+               filter_pane_remove_label_value: t('.filters.remove'), }}
     .gh-student-list-toolbar
       %label.gh-search-input
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
@@ -30,8 +31,29 @@
                placeholder:  t('.search'),
                'aria-label': t('.search'),
                data:         { list_search_target: 'input', action: 'input->list-search#filter' },}
+      - filter_groups = student_filter_groups(@list)
+      - if filter_groups.any?
+        %button.gh-btn.gh-btn--secondary.gh-btn--small{ type: 'button', 'aria-expanded': 'false',
+                                                        'aria-controls': 'student-filters',
+                                                        data: { filter_pane_target: 'toggle',
+                                                                action:             'filter-pane#toggle', } }
+          %i.fa-solid.fa-sliders{ 'aria-hidden': 'true' }
+          = t('.filters.button')
+          %span.gh-filter-count{ hidden: true, data: { filter_pane_target: 'count' } }
       %span.gh-card-meta{ data: { list_search_target: 'count' } }
         = t('.count', shown: @list.size, total: @list.size)
+
+    - if filter_groups.any?
+      .gh-filter-summary{ hidden: true, data: { filter_pane_target: 'summary' } }
+        %span.gh-filter-summary-chips{ data: { filter_pane_target: 'chips' } }
+        %button.gh-link-button{ type: 'button', data: { action: 'filter-pane#clear' } }= t('.filters.clear')
+
+      %section#student-filters.gh-panel.gh-student-filters{ hidden: true, data: { filter_pane_target: 'pane' } }
+        .gh-student-filters-grid
+          - filter_groups.each do |key, options|
+            = render 'filter_chips', key: key, options: options, selected: @selected[key]
+        .gh-student-filters-footer
+          %button.gh-link-button{ type: 'button', data: { action: 'filter-pane#clear' } }= t('.filters.clear_all')
 
     %section.gh-panel.gh-student-list-panel
       %ul.gh-student-rows{ role: 'list' }
@@ -44,7 +66,10 @@
           %span= t('.columns.badges')
           %span.gh-ledger-cell--right= t('.columns.actions')
 
-        = render partial: 'students/row', collection: @list.rows, as: :row
+        = render partial: 'students/row',
+                 collection: @list.rows,
+                 as: :row, locals: { story_group: @story_group }
+
 
     %section.gh-panel.gh-empty-state{ hidden: true, data: { list_search_target: 'empty' } }
       %h2.gh-h2

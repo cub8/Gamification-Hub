@@ -1,3 +1,4 @@
+-# haml-lint:disable InlineStyles
 !!!
 %html{ lang: I18n.locale, data: { gh_theme: gh_theme } }
   %head
@@ -45,9 +46,10 @@
           .gh-content-well
             - group_art = gh_group_cover_url(gh_group_chrome&.story_group)
             - if group_art || @group_art_layer
-              .gh-group-cover-bg{'aria-hidden': 'true', hidden: group_art.nil?,
-                                 style: (group_art ? "background-image:url(#{group_art})" : nil),
-                                 data: { group_art_layer: '' },}
+              .gh-group-cover-bg{'aria-hidden': 'true',
+                                 hidden:        group_art.nil?,
+                                 style:         ("background-image:url(#{group_art})" if group_art),
+                                 data:          { group_art_layer: '' },}
               .gh-group-cover-tint{ 'aria-hidden': 'true' }
             - else
               .gh-cover-pattern.gh-cover-pattern--inset{ 'aria-hidden': 'true' }
@@ -69,7 +71,8 @@
                                              chrome: gh_group_chrome
 
         %dialog.gh-dialog.gh-dialog--anchored{data: { controller: 'dialog',
-                                                      action:     'close->dialog#onClose click->dialog#closeOnBackdrop', }}
+                                                      action:     'close->dialog#onClose
+                                                                   click->dialog#closeOnBackdrop', }}
           .gh-dialog-body.gh-octagon-clip
             = turbo_frame_tag 'panel', data: { dialog_target: 'frame',
                                                action:        'turbo:frame-load->dialog#open', }

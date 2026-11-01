@@ -1,3 +1,6 @@
 - content_for :title, t('.page_title')
 
-= render 'form', item: @item, shelf: @shelf
+= render 'form',
+         item:        @item,
+         shelf:       @shelf,
+         story_group: @story_group

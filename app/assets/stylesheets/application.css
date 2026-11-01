@@ -42,6 +42,7 @@
 @import "./components/shop.css";
 @import "./components/ledger.css";
 @import "./components/student_list.css";
+@import "./components/student_filters.css";
 @import "./components/student.css";
 @import "./components/inventory.css";
 @import "./components/settings.css";

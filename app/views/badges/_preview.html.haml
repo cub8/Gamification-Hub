@@ -1,11 +1,14 @@
-- targets = { flip:      { badge_form_target: 'flip' },
-              name:      { badge_form_target: 'frontName' },
-              art:       { badge_form_target: 'frontArt' },
-              rules:     { badge_form_target: 'frontRules' },
-              flavor:    { badge_form_target: 'frontFlavor' },
-              tag:       { badge_form_target: 'frontTag' },
-              back_name: { badge_form_target: 'backName' },
-              how:       { badge_form_target: 'backHow' }, }
+:ruby
+  targets = {
+    flip:      { badge_form_target: 'flip' },
+    name:      { badge_form_target: 'frontName' },
+    art:       { badge_form_target: 'frontArt' },
+    rules:     { badge_form_target: 'frontRules' },
+    flavor:    { badge_form_target: 'frontFlavor' },
+    tag:       { badge_form_target: 'frontTag' },
+    back_name: { badge_form_target: 'backName' },
+    how:       { badge_form_target: 'backHow' },
+  }
 
 %details.gh-preview-details{ open: true }
   %summary
@@ -16,11 +19,11 @@
     %h3= t('.students_view')
 
     .gh-segmented-toggle-2.gh-octagon-clip{ role: 'group', 'aria-label': t('.side') }
-      %button{ type: 'button', 'aria-pressed': 'true', value: 'won',
-               data: { action: 'badge-form#side', badge_form_target: 'side' } }
+      %button{type: 'button', 'aria-pressed': 'true', value: 'won',
+              data: { action: 'badge-form#side', badge_form_target: 'side' },}
         = t('.earned')
-      %button{ type: 'button', 'aria-pressed': 'false', value: 'lost',
-               data: { action: 'badge-form#side', badge_form_target: 'side' } }
+      %button{type: 'button', 'aria-pressed': 'false', value: 'lost',
+              data: { action: 'badge-form#side', badge_form_target: 'side' },}
         = t('.unearned')
 
     .gh-preview-flip-card
@@ -30,9 +33,11 @@
   %section.gh-panel.gh-preview-panel
     %h3= t('.picker')
     .gh-preview-thumb-row
-      = render 'badge_thumb', badge: badge,
-        inner_data: { badge_form_target: 'thumbArt' }
+      = render 'badge_thumb',
+               badge:      badge,
+               inner_data: { badge_form_target: 'thumbArt' }
       %span
-        %b{ data: { badge_form_target: 'thumbName' } }= badge_name(badge)
+        %b{ data: { badge_form_target: 'thumbName' } }
+          = badge_name(badge)
         %span.gh-small{ data: { badge_form_target: 'thumbSub' } }
           = badge_thumb_subtitle(badge)

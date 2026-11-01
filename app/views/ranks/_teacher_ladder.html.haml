@@ -1,10 +1,11 @@
+-# haml-lint:disable InlineStyles
 %section.gh-panel.gh-page-header
   .gh-page-header-text
     %h1.gh-h1= t('.title')
     %p.gh-lead= t('.lead', count: ladder.size)
 
   .gh-button-row
-    = link_to new_story_group_rank_path(@story_group), class: 'gh-btn' do
+    = link_to new_story_group_rank_path(story_group), class: 'gh-btn' do
       %i.fa-solid.fa-plus
       = t('.new')
     - import_link_options = { class: 'gh-btn gh-btn--secondary', data: { turbo_frame: 'modal' } }
@@ -32,18 +33,27 @@
                 = t('.required_by', items: required_by.map(&:name).join(', '))
 
           .gh-rank-row-stats
-            %b= rung.holders
-            = t('.holders', count: rung.holders)
+            - if rung.holders.positive?
+              = link_to story_group_students_path(story_group, rank: [rung.rank.id]), class: 'gh-text-link' do
+                %b= rung.holders
+                = t('.holders', count: rung.holders)
+            - else
+              %b= rung.holders
+              = t('.holders', count: rung.holders)
             - if ladder.total_students.positive?
-              .gh-progress-bar.gh-octagon-clip{ role: 'progressbar',
-                       'aria-valuemin': 0,
-                       'aria-valuemax': ladder.total_students,
-                       'aria-valuenow': rung.holders,
-                       'aria-label': t('.progress_label', name: rung.rank.name) }
-                %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(rung.holders, ladder.total_students)}%" }
+              .gh-progress-bar.gh-octagon-clip{
+                role:            'progressbar',
+                'aria-valuemin': 0,
+                'aria-valuemax': ladder.total_students,
+                'aria-valuenow': rung.holders,
+                'aria-label':    t('.progress_label', name: rung.rank.name),
+              }
+                %i.gh-octagon-clip{
+                  style: "--gh-p: #{gh_percent(rung.holders, ladder.total_students)}%",
+                }
 
-          = link_to edit_story_group_rank_path(@story_group, rung.rank),
-            class: 'gh-btn gh-btn--secondary gh-btn--small' do
+          = link_to edit_story_group_rank_path(story_group, rung.rank),
+                    class: 'gh-btn gh-btn--secondary gh-btn--small' do
             %i.fa-solid.fa-pen
             = t('shared.actions.edit')
 - else

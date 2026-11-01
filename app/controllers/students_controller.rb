@@ -3,8 +3,6 @@
 class StudentsController < ApplicationController
   include StoryGroupAuthorization
 
-  # The sheet renders the item, badge and ledger partials, and with
-  # `include_all_helpers = false` none of those helpers arrive on their own.
   helper ItemsHelper, BadgesHelper, CurrencyTransactionsHelper, StudentsItemsHelper
 
   before_action :set_story_group
@@ -16,7 +14,8 @@ class StudentsController < ApplicationController
 
   # GET /story_groups/:story_group_id/students
   def index
-    @list = StudentList.new(story_group: @story_group)
+    @list     = StudentList.new(story_group: @story_group)
+    @selected = { rank: filter_param(:rank), item: filter_param(:item), badge: filter_param(:badge) }
   end
 
   def new_import; end
@@ -43,9 +42,6 @@ class StudentsController < ApplicationController
   def edit; end
 
   # GET /story_groups/:story_group_id/students/:id/confirm_destroy
-  #
-  # Removing a membership is a hard delete and cascades through the badges, the
-  # purchases and the whole ledger, so the dialog needs those counts.
   def confirm_destroy
     @sheet = sheet
   end
@@ -61,9 +57,6 @@ class StudentsController < ApplicationController
   end
 
   # POST /story_groups/:story_group_id/students/:id/update_lives
-  #
-  # The stepper on the list. The buttons stop at zero, so a failure here means
-  # a hand-built request rather than a slip.
   def update_lives
     change = params[:change].to_i
 
@@ -80,9 +73,6 @@ class StudentsController < ApplicationController
     name = @student.display_name
     @student.destroy
 
-    # Nominative, for the same reason the dialog's heading has no name in it:
-    # "Usunięto Anna Kowalska" would be the wrong case and there is no way to
-    # decline a name here.
     redirect_outside_turbo_frame story_group_students_path(@story_group),
                                  notice: t('students.flash.removed', name: name)
   end
@@ -97,9 +87,6 @@ class StudentsController < ApplicationController
     @student = @story_group.student_memberships.with_user.find(params.expect(:id))
   end
 
-  # Two frames reach this controller: `modal` for the edit dialog and `modal2`
-  # for the removal confirmation it raises over itself. Each view names its own
-  # frame; all this decides is dialog-or-page.
   def set_presentation
     @in_modal = %w[modal modal2].include?(turbo_frame_request_id)
   end
@@ -108,15 +95,15 @@ class StudentsController < ApplicationController
     @sheet ||= StudentSheet.new(student: @student)
   end
 
-  # The ledger tab's filter, as a kind or nil for "Wszystkie".
+  def filter_param(key)
+    Array(params[key]).grep(String).compact_blank
+  end
+
   def ledger_kind
     kinds = CurrencyLedger::KINDS.compact
     kinds.include?(params[:kind]) ? params[:kind] : nil
   end
 
-  # "Sebastian Alejandro ma teraz 2 życia." — the lives change is the only thing
-  # this form and this stepper can do, so the toast says the result rather than
-  # "zapisano".
   def lives_notice
     t('students.flash.lives_notice', name: @student.display_name, count: @student.lives.to_i)
   end

@@ -1,6 +1,10 @@
 - content_for :title, t('.title')
 
 - if @ladder.membership
-  = render 'student_ladder', ladder: @ladder
+  = render 'student_ladder',
+           ladder:      @ladder,
+           story_group: @story_group
 - else
-  = render 'teacher_ladder', ladder: @ladder
+  = render 'teacher_ladder',
+           ladder:      @ladder,
+           story_group: @story_group

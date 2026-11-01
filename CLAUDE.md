@@ -4,7 +4,7 @@ Story Groups (class cohorts) where teachers award in-app currency, ranks and
 badges; students spend currency in a per-group shop.
 
 ## Stack
-Rails 8.1, Ruby 3.4.8, Turbo + Stimulus, jsbundling + cssbundling.
+Rails 8.1, Ruby 3.4, Turbo + Stimulus, jsbundling + cssbundling.
 Tailwind 4. One layout, "application" — no Bootstrap.
 
 ## Commands

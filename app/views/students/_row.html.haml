@@ -1,14 +1,18 @@
-- student = row.student
-- name    = student.full_name
-- lives   = student.lives.to_i
+:ruby
+  student = row.student
+  name    = student.full_name
+  lives   = student.lives.to_i
 
-%li.gh-student-row{ class: ('gh-student-row--no-lives' if row.zero_lives?),
-             data: { list_search_target: 'row',
-                     list_search_name: name.downcase } }
+%li.gh-student-row{class: ('gh-student-row--no-lives' if row.zero_lives?),
+                   data:  { list_search_target: 'row',
+                            list_search_name:   name.downcase,
+                            list_search_rank:   student_rank_token(row),
+                            list_search_item:   row.item_ids.join(' '),
+                            list_search_badge:  row.badge_ids.join(' '), },}
   %span.gh-student-name-cell
     %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
       = gh_initials(name)
-    = link_to story_group_student_path(@story_group, student), class: 'gh-student-link' do
+    = link_to story_group_student_path(story_group, student), class: 'gh-student-link' do
       %b= name
       %small= student_list_subtitle(student)
 
@@ -19,21 +23,21 @@
   %span
     %span.gh-mobile-field-label= t('.lives')
     .gh-lives-control
-      = button_to update_lives_story_group_student_path(@story_group, student, change: -1),
-        method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
-        disabled: lives.zero?,
-        form: { 'aria-label': t('.take_life', name: name) },
-        'aria-label': t('.take_life', name: name) do
+      = button_to update_lives_story_group_student_path(story_group, student, change: -1),
+                  method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
+                  disabled: lives.zero?,
+                  form: { 'aria-label': t('.take_life', name: name) },
+                  'aria-label': t('.take_life', name: name) do
         %i.fa-solid.fa-minus{ 'aria-hidden': 'true' }
 
       %span.gh-lives-badge{ class: ('gh-lives-badge--zero' if lives.zero?) }
         %i.fa-solid.fa-heart{ 'aria-hidden': 'true' }
         %b= lives
 
-      = button_to update_lives_story_group_student_path(@story_group, student, change: 1),
-        method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
-        form: { 'aria-label': t('.add_life', name: name) },
-        'aria-label': t('.add_life', name: name) do
+      = button_to update_lives_story_group_student_path(story_group, student, change: 1),
+                  method: :post, class: 'gh-number-stepper-button gh-number-stepper-button--sm gh-octagon-clip',
+                  form: { 'aria-label': t('.add_life', name: name) },
+                  'aria-label': t('.add_life', name: name) do
         %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
 
   %span
@@ -47,19 +51,19 @@
     %span.gh-numeric-cell= row.badge_count
 
   .gh-student-actions-cell
-    = link_to new_story_group_student_badge_path(@story_group, student),
-      class: 'gh-icon-button', title: t('.award_badge'),
-      'aria-label': t('.award_badge_for', name: name),
-      data: { turbo_frame: 'modal' } do
+    = link_to new_story_group_student_badge_path(story_group, student),
+              class: 'gh-icon-button', title: t('.award_badge'),
+              'aria-label': t('.award_badge_for', name: name),
+              data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-award{ 'aria-hidden': 'true' }
 
-    = link_to new_story_group_student_currency_adjustment_path(@story_group, student),
-      class: 'gh-icon-button', title: t('.adjust_currency'),
-      'aria-label': t('.adjust_currency_for', name: name),
-      data: { turbo_frame: 'modal' } do
+    = link_to new_story_group_student_currency_adjustment_path(story_group, student),
+              class: 'gh-icon-button', title: t('.adjust_currency'),
+              'aria-label': t('.adjust_currency_for', name: name),
+              data: { turbo_frame: 'modal' } do
       %i.fa-solid.fa-coins{ 'aria-hidden': 'true' }
 
-    = link_to story_group_student_path(@story_group, student, tab: 'hist'),
-      class: 'gh-icon-button', title: t('.history'),
-      'aria-label': t('.history_for', name: name) do
+    = link_to story_group_student_path(story_group, student, tab: 'hist'),
+              class: 'gh-icon-button', title: t('.history'),
+              'aria-label': t('.history_for', name: name) do
       %i.fa-solid.fa-clock-rotate-left{ 'aria-hidden': 'true' }
