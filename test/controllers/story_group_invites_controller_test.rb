@@ -55,11 +55,21 @@ class StoryGroupInvitesControllerTest < ActionDispatch::IntegrationTest
   test 'should get show' do
     get story_group_invite_url(@story_group, @invite)
     assert_response :success
+    assert_select "[data-controller='print'] [data-print-target='sheet']"
+    assert_select '.gh-print-sheet svg.gh-print-qr'
+    assert_select '.gh-print-sheet .gh-print-code', text: @invite.code
+    assert_select "button[data-action='print#print']"
   end
 
   test 'should get quick' do
     get quick_story_group_invites_url(@story_group)
     assert_response :success
+  end
+
+  test 'quick does not offer the PDF export' do
+    get quick_story_group_invites_url(@story_group)
+    assert_select '.gh-print-sheet', count: 0
+    assert_select "button[data-action='print#print']", count: 0
   end
 
   test 'should get the delete confirmation' do

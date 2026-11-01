@@ -1,0 +1,50 @@
+.gh-print-sheet,
+.gh-print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html.gh-printing,
+  html.gh-printing body {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    overflow: visible;
+    background: #fff;
+  }
+
+  html.gh-printing body> :not(.gh-print-root),
+  html.gh-printing dialog {
+    display: none !important;
+  }
+
+  html.gh-printing .gh-print-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10mm;
+    width: 210mm;
+    height: 296mm;
+    overflow: hidden;
+    background: #fff;
+    color: #000;
+    print-color-adjust: exact;
+  }
+
+  .gh-print-root .gh-print-qr {
+    display: block;
+    width: 170mm;
+    height: 170mm;
+  }
+
+  .gh-print-root .gh-print-code {
+    font: 700 24mm / 1 var(--gh-f-mono, monospace);
+    letter-spacing: 0.08em;
+  }
+}

@@ -1,0 +1,6 @@
+- content_for :title, t('.title')
+- columns = gh_csv_columns('students', %i[email nickname])
+
+= render 'shared/csv_import_dialog', title: t('.dialog_title'),
+                                     url:   import_story_group_students_path(@story_group),
+                                     hint:  t('.hint_html', columns: columns)

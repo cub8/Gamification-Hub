@@ -1,5 +1,9 @@
 en:
   students:
+    csv_columns:
+      email: "email"
+      nickname: "nickname"
+
     flash:
       lives_notice:
         one: "%{name} now has %{count} life."
@@ -68,6 +72,23 @@ en:
         title: "Badges"
         chip: "Badge"
         placeholder: "Search badges"
+    new_import:
+      title: "Import students"
+      dialog_title: "Import students from CSV"
+      hint_html: "Matches existing accounts by email. Columns: %{columns} (the second one is optional)."
+
+    import:
+      title: "Student import results"
+      added:
+        one: "Added %{count} student."
+        other: "Added %{count} students."
+      skipped:
+        one: "Skipped %{count} row."
+        other: "Skipped %{count} rows."
+      row_failure: "Row %{row}: %{message}"
+
+    csv_import:
+      no_account: "No account found for “%{email}”."
 
     row:
       rank: "Rank"

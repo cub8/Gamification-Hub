@@ -1,0 +1,17 @@
+pl:
+  story_group_exports:
+    flash:
+      unknown_resource: "Nieznany typ eksportu."
+
+    show:
+      title: "Eksport konfiguracji – %{name}"
+      heading: "Eksport konfiguracji grupy"
+      lead: "Pobierz rangi, odznaki, przedmioty i szablony kategorii zajęć jako pliki CSV - przydadzą się przy tworzeniu kolejnej grupy albo do przekazania innemu nauczycielowi."
+      resources_label: "Elementy do eksportu:"
+      submit: "Eksportuj"
+
+    resources:
+      ranks: "Rangi"
+      badges: "Odznaki"
+      items: "Przedmioty"
+      templates: "Szablony kategorii zajęć"

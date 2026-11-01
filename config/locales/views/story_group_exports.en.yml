@@ -1,0 +1,17 @@
+en:
+  story_group_exports:
+    flash:
+      unknown_resource: "Unknown export type."
+
+    show:
+      title: "Configuration export – %{name}"
+      heading: "Export group configuration"
+      lead: "Download ranks, badges, items and grade category templates as CSV files - useful when setting up another group, or to share with another teacher."
+      resources_label: "Items to export:"
+      submit: "Export"
+
+    resources:
+      ranks: "Ranks"
+      badges: "Badges"
+      items: "Items"
+      templates: "Grade category templates"

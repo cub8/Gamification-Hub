@@ -10,6 +10,9 @@ interface Wording {
   create_short: string
   create_quick: string
   create_empty: string
+  create_csv: string
+  summary_hint_empty: string
+  summary_hint_csv: string
   name_placeholder: string
   currency_placeholder: string
   ranking_off: string
@@ -29,7 +32,11 @@ class GroupWizardController extends Controller<HTMLElement> {
     "ranking", "rankingMode",
     "path", "pathError", "pack", "quickOnly",
     "classes", "classesOutput", "classesUp", "classesDown",
-    "manualSummary", "sumName", "sumCurrency", "sumLives", "sumRanking",
+    "manualSummary", "summaryHint", "sumName", "sumCurrency", "sumLives", "sumRanking",
+    "csvOnly", "csvFile", "baseError",
+    "csvRanksPreviewForm", "csvBadgesPreviewForm", "csvItemsPreviewForm", "csvTemplatesPreviewForm",
+    "csvRanksShadowRanksFile", "csvBadgesShadowBadgesFile", "csvTemplatesShadowTemplatesFile",
+    "csvItemsShadowItemsFile", "csvItemsShadowRanksFile", "csvItemsShadowBadgesFile",
     "presetFrame",
     "previewGroup", "previewCurrency",
     "artBox", "artMono", "markBox", "markLetter",
@@ -62,6 +69,19 @@ class GroupWizardController extends Controller<HTMLElement> {
   declare readonly classesUpTarget: HTMLButtonElement
   declare readonly classesDownTarget: HTMLButtonElement
   declare readonly manualSummaryTarget: HTMLElement
+  declare readonly summaryHintTarget: HTMLElement
+  declare readonly csvOnlyTargets: HTMLElement[]
+  declare readonly hasBaseErrorTarget: boolean
+  declare readonly csvRanksPreviewFormTarget: HTMLFormElement
+  declare readonly csvBadgesPreviewFormTarget: HTMLFormElement
+  declare readonly csvItemsPreviewFormTarget: HTMLFormElement
+  declare readonly csvTemplatesPreviewFormTarget: HTMLFormElement
+  declare readonly csvRanksShadowRanksFileTarget: HTMLInputElement
+  declare readonly csvBadgesShadowBadgesFileTarget: HTMLInputElement
+  declare readonly csvTemplatesShadowTemplatesFileTarget: HTMLInputElement
+  declare readonly csvItemsShadowItemsFileTarget: HTMLInputElement
+  declare readonly csvItemsShadowRanksFileTarget: HTMLInputElement
+  declare readonly csvItemsShadowBadgesFileTarget: HTMLInputElement
   declare readonly sumNameTarget: HTMLElement
   declare readonly sumCurrencyTarget: HTMLElement
   declare readonly sumLivesTarget: HTMLElement
@@ -168,6 +188,50 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.render()
   }
 
+  csvFileChanged(event: Event) {
+    const input = event.target as HTMLInputElement
+    const resource = input.dataset.resource
+
+    this.syncCsvShadowFiles(resource, input)
+
+    if (!input.files?.length) return
+
+    this.csvShadowFormFor(resource)?.requestSubmit()
+  }
+
+  private syncCsvShadowFiles(resource: string | undefined, input: HTMLInputElement) {
+    if (resource === "ranks") {
+      this.copyFile(input, this.csvRanksShadowRanksFileTarget)
+      this.copyFile(input, this.csvItemsShadowRanksFileTarget)
+    } else if (resource === "badges") {
+      this.copyFile(input, this.csvBadgesShadowBadgesFileTarget)
+      this.copyFile(input, this.csvItemsShadowBadgesFileTarget)
+    } else if (resource === "items") {
+      this.copyFile(input, this.csvItemsShadowItemsFileTarget)
+    } else if (resource === "templates") {
+      this.copyFile(input, this.csvTemplatesShadowTemplatesFileTarget)
+    }
+  }
+
+  private csvShadowFormFor(resource: string | undefined): HTMLFormElement | undefined {
+    switch (resource) {
+      case "ranks": return this.csvRanksPreviewFormTarget
+      case "badges": return this.csvBadgesPreviewFormTarget
+      case "items": return this.csvItemsPreviewFormTarget
+      case "templates": return this.csvTemplatesPreviewFormTarget
+      default: return undefined
+    }
+  }
+
+  private copyFile(from: HTMLInputElement | undefined, to: HTMLInputElement) {
+    if (!from?.files?.length) {
+      to.value = ""
+      return
+    }
+
+    to.files = from.files
+  }
+
   art() {
     this.renderArt()
   }
@@ -225,7 +289,10 @@ class GroupWizardController extends Controller<HTMLElement> {
   }
 
   private get createLabel(): string {
-    return this.quick ? this.i18nValue.create_quick : this.i18nValue.create_empty
+    if (this.quick) return this.i18nValue.create_quick
+    if (this.csv) return this.i18nValue.create_csv
+
+    return this.i18nValue.create_empty
   }
 
   private renderArt() {
@@ -282,6 +349,9 @@ class GroupWizardController extends Controller<HTMLElement> {
     this.quickOnlyTargets.forEach((section) => {
       section.hidden = !this.quick
     })
+    this.csvOnlyTargets.forEach((section) => {
+      section.hidden = !this.csv
+    })
 
     this.classesOutputTarget.textContent = String(this.classCount)
     this.classesDownTarget.disabled = this.classCount <= CLASSES_MIN
@@ -300,8 +370,11 @@ class GroupWizardController extends Controller<HTMLElement> {
         input.disabled = !quick
       })
 
-    if (quick) this.loadPreset()
-    else this.fillManualSummary()
+    if (quick) {
+      this.loadPreset()
+    } else {
+      this.fillManualSummary()
+    }
   }
 
   private loadPreset() {
@@ -320,6 +393,10 @@ class GroupWizardController extends Controller<HTMLElement> {
   }
 
   private fillManualSummary() {
+    this.summaryHintTarget.textContent = this.csv ?
+      this.i18nValue.summary_hint_csv :
+      this.i18nValue.summary_hint_empty
+
     this.sumNameTarget.textContent = this.nameTarget.value.trim()
     this.sumCurrencyTarget.textContent = this.currencyTarget.value.trim()
     this.sumLivesTarget.textContent = this.livesField?.value ?? ""
@@ -366,12 +443,17 @@ class GroupWizardController extends Controller<HTMLElement> {
   private get erroredStep(): number {
     if (this.nameTarget.getAttribute("aria-invalid") === "true") return 0
     if (this.currencyTarget.getAttribute("aria-invalid") === "true") return 1
+    if (this.hasBaseErrorTarget) return LAST_STEP
 
     return 0
   }
 
   private get quick(): boolean {
     return this.checked(this.pathTargets) === "quick"
+  }
+
+  private get csv(): boolean {
+    return this.checked(this.pathTargets) === "csv"
   }
 
   private checked(radios: HTMLInputElement[]): string | null {

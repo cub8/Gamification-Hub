@@ -18,8 +18,14 @@ class StarterPack
   Badge    = Data.define(:index, :name, :didactic_description, :story_description, :discount,
                          :icon_glyph,)
   Item     = Data.define(:index, :name, :price, :didactic_description, :story_description, :icon_glyph,
-                         :unlock_rank, :min_rank_for_discount, :discount_badges, :can_buy_at_0_lives,)
+                         :unlock_rank, :min_rank_for_discount, :unlock_badges, :discount_badges,
+                         :can_buy_at_0_lives,) do
+    def initialize(unlock_badges: [], **rest)
+      super
+    end
+  end
   Category = Data.define(:index, :didactic_description, :story_description, :reward)
+  TemplateGroup = Data.define(:index, :name, :categories)
 
   # Reward per category, in the order of starter_pack.categories.
   CATEGORY_REWARDS = [1, 1, 1, 2, 2, 1, 2, 1].freeze
@@ -149,6 +155,10 @@ class StarterPack
                      story_description: stories[index], reward: CATEGORY_REWARDS[index],)
       end
     end
+  end
+
+  def templates
+    @templates ||= [TemplateGroup.new(index: 0, name: self.class.template_name, categories: categories)]
   end
 
   private
