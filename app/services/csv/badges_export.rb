@@ -18,7 +18,9 @@ module Csv
     private
 
     def row_for(badge)
-      [badge.name, badge.didactic_description, badge.story_description, badge.discount, badge.icon_glyph]
+      FormulaGuard.row(
+        [badge.name, badge.didactic_description, badge.story_description, badge.discount, badge.icon_glyph],
+      )
     end
   end
 end

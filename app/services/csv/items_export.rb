@@ -34,6 +34,10 @@ module Csv
     end
 
     def row_for(item)
+      FormulaGuard.row(raw_row_for(item))
+    end
+
+    def raw_row_for(item)
       [
         item.name,
         item.didactic_description,

@@ -119,6 +119,11 @@ en:
       malformed_files: "Couldn't read one of the uploaded files - check that they're valid CSV files."
       invalid_data: "The file contains invalid data: %{errors}"
       imported: "Imported data from the CSV file."
+      duplicate_rank: "A rank named “%{name}” already exists in this group - importing will add another one."
+      duplicate_badge: "A badge named “%{name}” already exists in this group - importing will add another one."
+      duplicate_item: "An item named “%{name}” already exists in this group - importing will add another one."
+      duplicate_template: "A template named “%{name}” already exists in this group - importing will add another one."
+      template_without_categories: "The template “%{name}” has no categories - it was skipped."
 
     csv_dropzone_field:
       default_label: "Choose a CSV file"

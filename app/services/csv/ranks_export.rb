@@ -17,6 +17,8 @@ module Csv
 
     private
 
-    def row_for(rank) = [rank.name, rank.required_currency_value, rank.discount, rank.icon_glyph]
+    def row_for(rank)
+      FormulaGuard.row([rank.name, rank.required_currency_value, rank.discount, rank.icon_glyph])
+    end
   end
 end

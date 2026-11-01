@@ -74,5 +74,53 @@ module Csv
       assert_equal 1, item.unlock_badges.size
       assert_kind_of Badge, item.unlock_badges.first
     end
+
+    test 'warns when a ranks, badges or items name already exists in the group, ignoring case' do
+      story_group = FactoryBot.create(:story_group)
+      FactoryBot.create(:rank, story_group: story_group, name: 'złoto')
+      FactoryBot.create(:badge, story_group: story_group, name: 'ZUCH')
+      FactoryBot.create(:item, story_group: story_group, name: 'Tarcza')
+
+      preset = GroupPresetParser.new({ ranks: ranks_file, badges: badges_file, items: items_file },
+                                     story_group: story_group,).call
+
+      assert_equal 3, preset.warnings.size
+      assert_equal 1, preset.ranks.size
+    end
+
+    test 'does not warn about duplicates when nothing with that name exists yet' do
+      story_group = FactoryBot.create(:story_group)
+
+      preset = GroupPresetParser.new({ ranks: ranks_file }, story_group: story_group).call
+
+      assert_empty preset.warnings
+    end
+
+    test 'warns about an existing template name' do
+      story_group = FactoryBot.create(:story_group)
+      FactoryBot.create(:activity_group_template, story_group: story_group, base_name: 'Lab')
+      file = StringIO.new(<<~CSV)
+        nr_szablonu,szablon,pozycja,opis_dydaktyczny,opis_fabularny,nagroda
+        1,Lab,1,Quiz,,3
+      CSV
+
+      preset = GroupPresetParser.new({ templates: file }, story_group: story_group).call
+
+      assert_equal 1, preset.templates.size
+      assert_equal 1, preset.warnings.size
+    end
+
+    test 'skips a template without categories and warns about it' do
+      file = StringIO.new(<<~CSV)
+        nr_szablonu,szablon,pozycja,opis_dydaktyczny,opis_fabularny,nagroda
+        1,Pusty,,,,
+        2,Pełny,1,Quiz,,3
+      CSV
+
+      preset = GroupPresetParser.new({ templates: file }).call
+
+      assert_equal ['Pełny'], preset.templates.map(&:name)
+      assert_equal 1, preset.warnings.size
+    end
   end
 end

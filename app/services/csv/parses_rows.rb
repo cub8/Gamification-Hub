@@ -14,7 +14,7 @@ module Csv
     end
 
     def column(row, key)
-      Localized.column(row, "#{self.class::CSV_SCOPE}.csv_columns.#{key}")
+      FormulaGuard.unescape(Localized.column(row, "#{self.class::CSV_SCOPE}.csv_columns.#{key}"))
     end
   end
 end

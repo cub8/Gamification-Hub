@@ -23,21 +23,23 @@ module Csv
 
     def append_template(csv, template, number)
       if template.categories.empty?
-        csv << [number, template.base_name, nil, nil, nil, nil]
+        csv << FormulaGuard.row([number, template.base_name, nil, nil, nil, nil])
       else
         template.categories.sort_by(&:position).each { |category| csv << row_for(template, number, category) }
       end
     end
 
     def row_for(template, number, category)
-      [
-        number,
-        template.base_name,
-        category.position,
-        category.didactic_description,
-        category.story_description,
-        category.reward,
-      ]
+      FormulaGuard.row(
+        [
+          number,
+          template.base_name,
+          category.position,
+          category.didactic_description,
+          category.story_description,
+          category.reward,
+        ],
+      )
     end
   end
 end

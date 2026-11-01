@@ -2,10 +2,13 @@
   %h2.gh-h2= t('.title')
   %p.gh-field-hint= t('.count', count: @preset.templates.size)
 
+  = render 'shared/csv_warnings', warnings: @preset.warnings
   = render 'shared/templates_preview_rows', templates: @preset.templates
 
   = form_with url: confirm_import_story_group_activity_group_templates_path(@story_group), method: :post,
               local: true, data: { turbo_frame: 'modal' } do
+    - @preset.warnings.each do |warning|
+      = hidden_field_tag 'setup[warnings][]', warning, id: nil
     - @preset.templates.each do |template|
       = hidden_field_tag "setup[templates][#{template.index}][name]", template.name, id: nil
       - template.categories.each do |category|
