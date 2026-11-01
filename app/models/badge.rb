@@ -11,6 +11,7 @@ class Badge < ApplicationRecord
   has_icon_art :icon, glyphs: Glyphs::BADGE
 
   validates :name, presence: true, length: { maximum: 50 }
+  validates :name, format: { without: /;/, message: :no_semicolon }
 
   validates :didactic_description, presence: true, length: { maximum: 255 }
 

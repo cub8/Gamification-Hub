@@ -1,0 +1,26 @@
+= turbo_frame_tag 'modal' do
+  %h2.gh-h2= t('.title')
+  %p.gh-field-hint= t('.count', count: @preset.items.size)
+
+  = render 'shared/items_preview_rows', preset: @preset
+
+  = form_with url: confirm_import_story_group_items_path(@story_group), method: :post, local: true,
+              data: { turbo_frame: 'modal' } do
+    - @preset.warnings.each do |warning|
+      = hidden_field_tag 'setup[warnings][]', warning, id: nil
+    - @preset.items.each do |item|
+      - key = "setup[items][#{item.index}]"
+      = hidden_field_tag "#{key}[name]", item.name, id: nil
+      = hidden_field_tag "#{key}[price]", item.price, id: nil
+      = hidden_field_tag "#{key}[didactic_description]", item.didactic_description, id: nil
+      = hidden_field_tag "#{key}[story_description]", item.story_description, id: nil
+      = hidden_field_tag "#{key}[icon_glyph]", item.icon_glyph, id: nil
+      = hidden_field_tag "#{key}[can_buy_at_0_lives]", (item.can_buy_at_0_lives ? '1' : '0'), id: nil
+      = hidden_field_tag "#{key}[unlock_rank]", csv_ref_param(item.unlock_rank), id: nil
+      = hidden_field_tag "#{key}[min_rank_for_discount]", csv_ref_param(item.min_rank_for_discount), id: nil
+      - item.unlock_badges.each do |ref|
+        = hidden_field_tag "#{key}[unlock_badges][]", csv_ref_param(ref), id: nil
+      - item.discount_badges.each do |ref|
+        = hidden_field_tag "#{key}[discount_badges][]", csv_ref_param(ref), id: nil
+
+    = render 'shared/csv_confirm_buttons'

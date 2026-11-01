@@ -1,5 +1,9 @@
 pl:
   students:
+    csv_columns:
+      email: "email"
+      nickname: "pseudonim"
+
     flash:
       lives_notice:
         one: "%{name} ma teraz %{count} życie."
@@ -57,6 +61,28 @@ pl:
       no_match_hint: "Wyczyść wyszukiwanie albo sprawdź pisownię."
       empty_title: "Nie ma jeszcze nikogo w grupie"
       empty_body: "Wyślij studentom kod albo zaproszenie — kiedy dołączą, pojawią się tutaj razem z rangą, walutą i życiami."
+
+    new_import:
+      title: "Importuj studentów"
+      dialog_title: "Importuj studentów z CSV"
+      hint_html: "Dopasowuje po emailu do kont, które już istnieją. Kolumny: %{columns} (drugi jest opcjonalny)."
+
+    import:
+      title: "Wyniki importu studentów"
+      added:
+        one: "Dodano %{count} studenta."
+        few: "Dodano %{count} studentów."
+        many: "Dodano %{count} studentów."
+        other: "Dodano %{count} studentów."
+      skipped:
+        one: "Pominięto %{count} wiersz."
+        few: "Pominięto %{count} wiersze."
+        many: "Pominięto %{count} wierszy."
+        other: "Pominięto %{count} wiersze."
+      row_failure: "Wiersz %{row}: %{message}"
+
+    csv_import:
+      no_account: "Nie znaleziono konta dla „%{email}”."
 
     row:
       rank: "Ranga"

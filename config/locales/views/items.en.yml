@@ -1,5 +1,20 @@
 en:
   items:
+    csv_columns:
+      name: "name"
+      didactic_description: "didactic_description"
+      story_description: "story_description"
+      price: "price"
+      can_buy_at_0_lives: "can_buy_at_0_lives"
+      icon: "icon"
+      unlock_rank: "unlock_rank"
+      min_rank_for_discount: "min_rank_for_discount"
+      unlock_badges: "unlock_badges"
+      discount_badges: "discount_badges"
+    csv_values:
+      "yes": "yes"
+      "no": "no"
+
     flash:
       created: "Added “%{name}” to the shop."
       updated: "Saved “%{name}”. Changes apply to new purchases."
@@ -69,6 +84,22 @@ en:
 
     new:
       page_title: "New item"
+
+    new_import:
+      title: "Import items"
+      dialog_title: "Import items from CSV"
+      hint: "They can reference ranks/badges already in the group, or from the same import."
+
+    import_preview:
+      title: "Item import preview"
+      count:
+        one: "%{count} item will be added."
+        other: "%{count} items will be added."
+
+    csv_import:
+      rank_format_unrecognized: "Couldn't recognize the rank format “%{label}” for the item “%{item}” - this requirement was skipped."
+      rank_not_found: "Couldn't find the rank “%{label}” for the item “%{item}” - this requirement was skipped."
+      badge_not_found: "Couldn't find the badge “%{name}” for the item “%{item}” - this requirement was skipped."
 
     edit:
       page_title: "Edit item - %{name}"

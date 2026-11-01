@@ -126,6 +126,44 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal [unlocks], badge.unlocking_items.to_a
   end
 
+  test 'badge name rejects a semicolon anywhere in it' do
+    ['Zuch;Asceta', ';Zuch', 'Zuch;', ';', 'Zuch ; Asceta'].each do |name|
+      badge = FactoryBot.build(:badge, story_group: @story_group, name: name)
+
+      assert_not badge.valid?, "expected #{name.inspect} to be rejected"
+      assert_includes badge.errors[:name], 'Nazwa odznaki nie może zawierać średnika (;).'
+    end
+  end
+
+  test 'badge name keeps accepting other punctuation, including characters that merely look like a semicolon' do
+    ['Zuch, Wielki', 'Asceta "Pro"', "Rycerz's", 'Poziom: 2', 'Zuch；Asceta', 'Zuch:Asceta', 'A/B', 'Q&A'].each do |name|
+      badge = FactoryBot.build(:badge, story_group: @story_group, name: name)
+
+      assert_predicate badge, :valid?, "expected #{name.inspect} to be accepted: #{badge.errors.full_messages}"
+    end
+  end
+
+  test 'renaming a badge to include a semicolon is rejected, and renaming it away fixes it' do
+    badge = FactoryBot.create(:badge, story_group: @story_group, name: 'Zuch')
+
+    assert_not badge.update(name: 'Zuch;Asceta')
+    assert_equal 'Zuch', badge.reload.name
+
+    assert badge.update(name: 'Zuch i Asceta')
+  end
+
+  test 'a legacy badge that already has a semicolon is blocked from editing until renamed, but can still be deleted' do
+    badge = FactoryBot.create(:badge, story_group: @story_group, name: 'Zuch')
+    badge.update_column(:name, 'Stare;Dane')
+
+    assert_not badge.update(discount: 20)
+    assert badge.update(name: 'Stare Dane', discount: 20)
+
+    badge.update_column(:name, 'Stare;Dane')
+    assert_nothing_raised { badge.soft_delete! }
+    assert_predicate badge.reload, :deleted?
+  end
+
   test 'badge saves with valid attributes' do
     badge = Badge.new(
       story_group:          @story_group,

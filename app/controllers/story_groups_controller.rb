@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 class StoryGroupsController < ApplicationController
+  CSV_PREVIEW_RESOURCES = %w[ranks badges items templates].freeze
+
   # #show renders the same owned-item card and the same badge cards as the
   # inventory and the badge deck; under `include_all_helpers = false` their
   # helpers do not arrive on their own.
-  helper StudentsItemsHelper, BadgesHelper
+  helper StudentsItemsHelper, BadgesHelper, ItemsHelper
 
   before_action :set_presentation, only: %i[confirm_destroy destroy]
   before_action :set_story_group, only: %i[show edit update destroy confirm_destroy created]
@@ -44,6 +46,16 @@ class StoryGroupsController < ApplicationController
     render partial: 'preset_review', layout: false
   end
 
+  def csv_preset_preview
+    authorize StoryGroup, :new?
+
+    resource = params[:resource].to_s
+    return head :not_found unless CSV_PREVIEW_RESOURCES.include?(resource)
+
+    locals = { resource: resource, title: csv_preview_title(resource), result: resource_preview(resource.to_sym) }
+    render partial: 'csv_resource_preview', layout: false, locals: locals
+  end
+
   def edit
     authorize @story_group
   end
@@ -57,8 +69,10 @@ class StoryGroupsController < ApplicationController
     authorize @story_group
 
     if save_with_starter_pack
-      redirect_to created_story_group_path(@story_group)
+      options = @csv_warnings.present? ? { alert: @csv_warnings.join(' ') } : {}
+      redirect_to created_story_group_path(@story_group), **options
     else
+      @setup_path = params.dig(:setup, :path)
       render :new, status: :unprocessable_content
     end
   end
@@ -113,21 +127,100 @@ class StoryGroupsController < ApplicationController
     params.dig(:setup, :path) == 'quick'
   end
 
+  def csv_start?
+    params.dig(:setup, :path) == 'csv'
+  end
+
   def save_with_starter_pack
     ActiveRecord::Base.transaction do
       raise ActiveRecord::Rollback unless @story_group.save
 
-      next true unless quick_start?
+      if quick_start?
+        StarterPackBuilder.new(story_group: @story_group,
+                               pack:        params.dig(:setup, :pack),
+                               classes:     params.dig(:setup, :classes),
+                               selection:   starter_selection,).call
+      elsif csv_start?
+        build_from_csv
+      end
 
-      StarterPackBuilder.new(story_group: @story_group,
-                             pack:        params.dig(:setup, :pack),
-                             classes:     params.dig(:setup, :classes),
-                             selection:   starter_selection,).call
       true
     end
   rescue StarterPackBuilder::InvalidSelection => e
     @story_group.errors.add(:base, e.message)
     false
+  rescue Csv::MalformedFile
+    @story_group.errors.add(:base, t('shared.csv_import.malformed_files'))
+    false
+  rescue ActiveRecord::RecordInvalid => e
+    @story_group.errors.add(:base, Csv::Localized.record_invalid_message(e.record))
+    false
+  end
+
+  def build_from_csv
+    preset = Csv::GroupPresetParser.new(csv_files, story_group: @story_group).call
+    StarterPackBuilder.new(story_group: @story_group, preset: preset).call
+    @csv_warnings = preset.warnings
+  end
+
+  def csv_files
+    files = params.dig(:setup, :csv) || {}
+
+    %i[ranks badges items templates]
+      .index_with { |key| files[key] }
+      .compact
+  end
+
+  def csv_preview_title(resource)
+    default = t('story_groups.wizard.csv_preview_titles.default')
+    t("story_groups.wizard.csv_preview_titles.#{resource}", default: default)
+  end
+
+  def resource_preview(resource)
+    file = csv_files[resource]
+    return unless file
+
+    files = resource == :items ? csv_files.slice(:items, :ranks, :badges) : { resource => file }
+    preview_for(resource, files)
+  end
+
+  def preview_for(resource, files)
+    preset = dry_run_csv_preset(files)
+    return preview_error(t('shared.csv_import.empty_file')) if preset.public_send(resource).empty?
+
+    html = render_to_string(partial: "shared/#{resource}_preview_rows", locals: preview_locals(resource, preset),
+                            layout: false,)
+    { html: html, ok: true }
+  rescue Csv::MalformedFile
+    preview_error(t('shared.csv_import.malformed_file'))
+  rescue StarterPackBuilder::InvalidSelection => e
+    preview_error(e.message)
+  rescue ActiveRecord::RecordInvalid => e
+    preview_error(Csv::Localized.record_invalid_message(e.record))
+  end
+
+  def preview_error(message)
+    html = render_to_string(partial: 'shared/csv_preview_error', locals: { message: message }, layout: false)
+    { html: html, ok: false }
+  end
+
+  def preview_locals(resource, preset)
+    return { preset: preset } if resource == :items
+
+    { resource => preset.public_send(resource) }
+  end
+
+  def dry_run_csv_preset(files)
+    preset = nil
+
+    ActiveRecord::Base.transaction do
+      dry_run_group = StoryGroup.create!(name: 'tmp', currency_name: 'tmp', owner_id: @current_user.id)
+      preset = Csv::GroupPresetParser.new(files, story_group: dry_run_group).call
+      StarterPackBuilder.new(story_group: dry_run_group, preset: preset).call
+      raise ActiveRecord::Rollback
+    end
+
+    preset
   end
 
   def starter_selection

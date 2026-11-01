@@ -45,6 +45,38 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_turbo_redirected_to story_group_students_url(@story_group)
   end
 
+  test 'should get new_import' do
+    get new_import_story_group_students_url(@story_group)
+    assert_response :success
+  end
+
+  test 'import adds a student found by email and shows the results page' do
+    other_student = FactoryBot.create(:user, role: :student, email: 'jan@example.com')
+
+    assert_difference('StoryGroupStudent.count', 1) do
+      post import_story_group_students_url(@story_group),
+           params: { file: fixture_file_upload('students_import.csv', 'text/csv') }
+    end
+
+    assert_response :success
+    assert_equal other_student, @story_group.student_memberships.last.user
+  end
+
+  test 'import redirects back with an alert when no file was selected' do
+    post import_story_group_students_url(@story_group)
+
+    assert_redirected_to new_import_story_group_students_url(@story_group)
+    assert_equal 'Wybierz plik CSV.', flash[:alert]
+  end
+
+  test 'import redirects back with an alert for an unparseable file' do
+    post import_story_group_students_url(@story_group),
+         params: { file: fixture_file_upload('malformed_import.csv', 'text/csv') }
+
+    assert_redirected_to new_import_story_group_students_url(@story_group)
+    assert_match(/nie udało się odczytać/i, flash[:alert])
+  end
+
   test 'lives notice uses Polish plural forms' do
     @story_group_student.update!(lives: 1)
 

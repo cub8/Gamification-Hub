@@ -69,4 +69,103 @@ class BadgesControllerTest < ActionDispatch::IntegrationTest
            }
     end
   end
+
+  test 'should get new_import' do
+    get new_import_story_group_badges_url(@story_group)
+    assert_response :success
+  end
+
+  test 'import shows a preview of the parsed file without persisting anything' do
+    assert_no_difference('Badge.count') do
+      post import_story_group_badges_url(@story_group),
+           params: { file: fixture_file_upload('badges_import.csv', 'text/csv') }
+    end
+
+    assert_response :success
+    assert_select 'input[name="setup[badges][0][name]"][value="Zuch"]'
+  end
+
+  test 'import shows an inline error for an unparseable file instead of redirecting' do
+    assert_no_difference('Badge.count') do
+      post import_story_group_badges_url(@story_group),
+           params: { file: fixture_file_upload('malformed_import.csv', 'text/csv') }
+    end
+
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', text: /nie udało się odczytać/i
+  end
+
+  test 'import catches a blank required field at preview time, before any confirm step' do
+    assert_no_difference('Badge.count') do
+      post import_story_group_badges_url(@story_group),
+           params: { file: fixture_file_upload('blank_name_badges_import.csv', 'text/csv') }
+    end
+
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', text: /podaj nazwę odznaki/i
+  end
+
+  test 'should not create a badge whose name contains a semicolon' do
+    assert_no_difference('Badge.count') do
+      post story_group_badges_url(@story_group),
+           params: { badge: { name: 'Zuch;Asceta', didactic_description: 'Opis', discount: 10, icon_glyph: 'rabbit' } }
+    end
+
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', text: /nie może zawierać średnika/i
+  end
+
+  test 'should not rename a badge to include a semicolon' do
+    badge = FactoryBot.create(:badge, story_group: @story_group, name: 'Zuch')
+
+    patch story_group_badge_url(@story_group, badge), params: { badge: { name: 'Zuch;Asceta' } }
+
+    assert_response :unprocessable_content
+    assert_equal 'Zuch', badge.reload.name
+  end
+
+  test 'the badge form wires up the semicolon filter on the name field' do
+    get new_story_group_badge_url(@story_group)
+
+    assert_select '[data-controller="forbidden-chars"][data-forbidden-chars-chars-value=";"]' do
+      assert_select 'input[name="badge[name]"][data-forbidden-chars-target="input"]'
+      assert_select '[data-forbidden-chars-target="hint"][hidden]'
+    end
+  end
+
+  test 'import rejects a semicolon in a badge name at preview time' do
+    assert_no_difference('Badge.count') do
+      post import_story_group_badges_url(@story_group),
+           params: { file: fixture_file_upload('semicolon_name_badges_import.csv', 'text/csv') }
+    end
+
+    assert_response :unprocessable_content
+    assert_select '.gh-field-error', text: /nie może zawierać średnika/i
+  end
+
+  test 'confirm_import refuses a hand-edited form that smuggles a semicolon past the preview' do
+    tampered = { name: 'Zuch;Asceta', didactic_description: 'Opis', discount: '5', icon_glyph: 'rabbit' }
+
+    assert_no_difference('Badge.count') do
+      post confirm_import_story_group_badges_url(@story_group), params: { setup: { badges: { '0' => tampered } } }
+    end
+
+    assert_match(/średnika/, flash[:alert])
+  end
+
+  test 'confirm_import persists the previewed badges' do
+    assert_difference('Badge.count', 2) do
+      post confirm_import_story_group_badges_url(@story_group),
+           params: {
+             setup: {
+               badges: {
+                 '0' => { name: 'Zuch', didactic_description: 'Opis dydaktyczny', discount: '5', icon_glyph: 'rabbit' },
+                 '1' => { name: 'Asceta', didactic_description: 'Inny opis', discount: '10', icon_glyph: 'shield' },
+               },
+             },
+           }
+    end
+
+    assert_turbo_redirected_to story_group_badges_url(@story_group)
+  end
 end

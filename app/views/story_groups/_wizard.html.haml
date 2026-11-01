@@ -1,5 +1,6 @@
 - error  = ->(attribute) { story_group.errors[attribute].first }
 - packs  = StarterPack
+- setup_path = local_assigns[:setup_path]
 
 - steps = t('.steps')
 
@@ -32,11 +33,6 @@
 
   = form_with model: story_group, data: { group_wizard_target: 'form',
                                           action: 'keydown->group-wizard#keydown' } do |f|
-
-    - if story_group.errors[:base].any?
-      %p.gh-field-error{ role: 'alert' }
-        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
-        %span= story_group.errors[:base].first
 
     .gh-form-shell{ data: { group_wizard_target: 'grid' } }
       %section.gh-panel.gh-form-column
@@ -170,18 +166,24 @@
 
             .gh-choice-grid{ role: 'radiogroup', 'aria-label': t('.start_label') }
               %label.gh-choice-card
-                = radio_button_tag 'setup[path]', 'quick', false, class: 'sr-only',
+                = radio_button_tag 'setup[path]', 'quick', setup_path == 'quick', class: 'sr-only',
                   id: 'gh-wiz-path-quick',
                   data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
                 %span.gh-tag.gh-tag--discount= t('.recommended')
                 %b= t('.quick')
                 %span= t('.quick_body')
               %label.gh-choice-card
-                = radio_button_tag 'setup[path]', 'manual', false, class: 'sr-only',
+                = radio_button_tag 'setup[path]', 'manual', setup_path == 'manual', class: 'sr-only',
                   id: 'gh-wiz-path-manual',
                   data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
                 %b= t('.manual')
                 %span= t('.manual_body')
+              %label.gh-choice-card
+                = radio_button_tag 'setup[path]', 'csv', setup_path == 'csv', class: 'sr-only',
+                  id: 'gh-wiz-path-csv',
+                  data: { group_wizard_target: 'path', action: 'group-wizard#refresh' }
+                %b= t('.csv')
+                %span= t('.csv_body')
 
             %p.gh-field-error{ role: 'alert', hidden: true,
                        data: { group_wizard_target: 'pathError' } }
@@ -222,12 +224,46 @@
               = hidden_field_tag 'setup[classes]', packs::DEFAULT_CLASSES, id: 'gh-wiz-classes',
                 data: { group_wizard_target: 'classes' }
 
+          .gh-form-section{ hidden: true, data: { group_wizard_target: 'csvOnly' } }
+            %h2.gh-h3= t('.csv_title')
+            %p.gh-field-hint= t('.csv_hint')
+
+            - csv_action = 'change->file-dropzone#show change->group-wizard#refresh change->group-wizard#csvFileChanged'
+
+            - ranks_columns = gh_csv_columns('ranks', Csv::RanksExport::COLUMN_KEYS)
+            - ranks_data = { group_wizard_target: 'csvFile', resource: 'ranks', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][ranks]', label: t('.csv_ranks_label'),
+              hint: t('.csv_ranks_hint_html', columns: ranks_columns),
+              field_data: ranks_data
+
+            - badges_columns = gh_csv_columns('badges', Csv::BadgesExport::COLUMN_KEYS)
+            - badges_data = { group_wizard_target: 'csvFile', resource: 'badges', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][badges]', label: t('.csv_badges_label'),
+              hint: t('.csv_badges_hint_html', columns: badges_columns),
+              field_data: badges_data
+
+            - items_data = { group_wizard_target: 'csvFile', resource: 'items', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][items]', label: t('.csv_items_label'),
+              hint: t('.csv_items_hint'),
+              field_data: items_data
+
+            - templates_columns = gh_csv_columns('activity_group_templates', Csv::TemplatesExport::COLUMN_KEYS)
+            - templates_data = { group_wizard_target: 'csvFile', resource: 'templates', action: csv_action }
+            = render 'shared/csv_dropzone_field', name: 'setup[csv][templates]', label: t('.csv_templates_label'),
+              hint: t('.csv_templates_hint_html', columns: templates_columns),
+              field_data: templates_data
+
         %section{ data: { group_wizard_target: 'panel' }, hidden: true }
           %h2.sr-only= steps[3]
 
+          - if story_group.errors[:base].any?
+            %p.gh-field-error{ role: 'alert', data: { group_wizard_target: 'baseError' } }
+              %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+              %span= story_group.errors[:base].first
+
           .gh-form-section.gh-form-section--first{ hidden: true, data: { group_wizard_target: 'manualSummary' } }
             %h2.gh-h3= t('.summary')
-            %p.gh-field-hint= t('.summary_hint')
+            %p.gh-field-hint{ data: { group_wizard_target: 'summaryHint' } }= t('.summary_hint')
 
             %dl.gh-summary-list
               %dt= t('shared.actions.name')
@@ -285,3 +321,32 @@
                                       data: { group_wizard_target: 'nextIcon' } }
       = f.submit t('.submit'), class: 'gh-btn', hidden: true,
         data: { group_wizard_target: 'submit' }
+
+  - preview_path = csv_preset_preview_story_groups_path
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvRanksPreviewForm' } do
+    = hidden_field_tag :resource, 'ranks', id: nil
+    = file_field_tag 'setup[csv][ranks]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvRanksShadowRanksFile' }
+
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvBadgesPreviewForm' } do
+    = hidden_field_tag :resource, 'badges', id: nil
+    = file_field_tag 'setup[csv][badges]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvBadgesShadowBadgesFile' }
+
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvItemsPreviewForm' } do
+    = hidden_field_tag :resource, 'items', id: nil
+    = file_field_tag 'setup[csv][items]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvItemsShadowItemsFile' }
+    = file_field_tag 'setup[csv][ranks]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvItemsShadowRanksFile' }
+    = file_field_tag 'setup[csv][badges]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvItemsShadowBadgesFile' }
+
+  = form_with url: preview_path, method: :post, multipart: true, local: true,
+    data: { turbo_frame: 'modal', group_wizard_target: 'csvTemplatesPreviewForm' } do
+    = hidden_field_tag :resource, 'templates', id: nil
+    = file_field_tag 'setup[csv][templates]', class: 'sr-only', tabindex: -1, id: nil,
+      data: { group_wizard_target: 'csvTemplatesShadowTemplatesFile' }

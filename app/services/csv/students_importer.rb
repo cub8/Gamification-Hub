@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+module Csv
+  class StudentsImporter
+    Result = Data.define(:added, :failures) do
+      def initialize(added: [], failures: [])
+        super
+      end
+    end
+
+    Failure = Data.define(:row, :message)
+
+    def initialize(story_group:, file:)
+      @story_group = story_group
+      @file = file
+    end
+
+    def call
+      added = []
+      failures = []
+
+      StudentsImport.new(file: @file).call.each do |row|
+        outcome = add(row)
+
+        if outcome.is_a?(Failure)
+          failures << outcome
+        else
+          added << outcome
+        end
+      end
+
+      Result.new(added: added, failures: failures)
+    end
+
+    private
+
+    def add(row)
+      user = User.find_by(email: row.email)
+      return no_account(row) unless user
+
+      membership = @story_group.student_memberships.build(user: user, nickname: row.nickname)
+      return membership if membership.save
+
+      message = ApplicationController.helpers.gh_and_list(membership.errors.full_messages)
+      Failure.new(row: row.index + 2, message: message)
+    end
+
+    def no_account(row)
+      Failure.new(row: row.index + 2, message: I18n.t('students.csv_import.no_account', email: row.email))
+    end
+  end
+end

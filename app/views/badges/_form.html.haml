@@ -31,14 +31,17 @@
         %h2.gh-h3= t('.card')
         %p.gh-field-hint= t('.card_hint')
 
-        .gh-form-field
+        .gh-form-field{ data: { controller: 'forbidden-chars', forbidden_chars_chars_value: ';' } }
           = f.label :name, t('shared.actions.name')
           .gh-text-input{ class: ('gh-text-input--invalid' if error.call(:name)) }
             = f.text_field :name, maxlength: 50, autocomplete: 'off',
               placeholder: t('.name_placeholder'),
               'aria-invalid': (error.call(:name) ? 'true' : nil),
               'aria-describedby': (error.call(:name) ? 'gh-badge-name-error' : nil),
-              data: { badge_form_target: 'name', action: 'badge-form#refresh' }
+              data: { badge_form_target: 'name', forbidden_chars_target: 'input',
+                      action: 'input->forbidden-chars#strip input->badge-form#refresh', }
+          %p.gh-field-hint{ role: 'status', hidden: true, data: { forbidden_chars_target: 'hint' } }
+            = t('.name_no_semicolon')
           - if error.call(:name)
             %p#gh-badge-name-error.gh-field-error{ role: 'alert' }
               %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
