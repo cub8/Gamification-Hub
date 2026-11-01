@@ -100,6 +100,7 @@ pl:
       card: "Karta odznaki"
       card_hint: "Tak odznaka wygląda w talii studenta i w oknie przyznawania."
       name_placeholder: "np. Perfekcyjny Lot"
+      name_no_semicolon: "W nazwie odznaki nie można użyć średnika (;)."
       rule: "Jak zdobyć"
       rule_placeholder: "np. Co najmniej 3 wejściówki z rzędu bez błędów"
       rule_hint: "Studenci widzą to na odwrocie odznaki, której jeszcze nie mają. Pisz konkretnie."
@@ -130,6 +131,7 @@ pl:
           attributes:
             name:
               blank: "Podaj nazwę odznaki."
+              no_semicolon: "Nazwa odznaki nie może zawierać średnika (;)."
             didactic_description:
               blank: "Napisz, jak zdobyć tę odznakę."
             discount:

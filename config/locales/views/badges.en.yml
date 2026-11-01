@@ -92,6 +92,7 @@ en:
       card: "Badge card"
       card_hint: "This is how the badge looks in the student's deck and in the award dialog."
       name_placeholder: "e.g. Flawless Flight"
+      name_no_semicolon: "A semicolon (;) can't be used in a badge name."
       rule: "How to earn it"
       rule_placeholder: "e.g. At least 3 quizzes in a row without mistakes"
       rule_hint: "Students see this on the back of a badge they don't have yet. Be specific."
@@ -122,6 +123,7 @@ en:
           attributes:
             name:
               blank: "Enter the badge name."
+              no_semicolon: "The badge name can't contain a semicolon (;)."
             didactic_description:
               blank: "Describe how to earn this badge."
             discount:
