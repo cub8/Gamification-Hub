@@ -1,11 +1,14 @@
+:ruby
+  copy = local_assigns[:copy] && "teacher_invitation_mailer.copy.#{local_assigns[:copy]}"
+  txt  = ->(key) { copy ? t("#{copy}.#{key}", default: t(".#{key}")) : t(".#{key}") }
 Gamification Hub
 
 = lead
 
-= t('.text_plain')
+= txt.call(:text_plain)
 
 = token_link
 
-= t('.valid_for')
+= txt.call(:valid_for)
 
-= t('.footer')
+= txt.call(:footer)

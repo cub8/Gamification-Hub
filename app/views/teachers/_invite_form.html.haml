@@ -1,0 +1,26 @@
+- error = @invite_error
+
+= form_with url:    invite_story_group_teachers_path(@story_group),
+            method: :post,
+            scope:  :teacher_invitation,
+            class:  'gh-teacher-invite-form',
+            data:   { turbo_frame: (@in_modal ? 'modal' : nil) } do |f|
+  %h3.gh-h3= t('teachers.invite.title')
+  %p.gh-field-hint= t('teachers.invite.hint')
+
+  .gh-form-field
+    = f.label :email, t('teachers.invite.email')
+    .gh-teacher-invite-row
+      .gh-text-input{ class: ('gh-text-input--invalid' if error) }
+        = f.email_field :email, value: @invite_email, required: true, autocomplete: 'off',
+          placeholder: t('teachers.invite.placeholder'),
+          'aria-invalid': (error ? 'true' : nil),
+          'aria-describedby': (error ? 'gh-teacher-invite-error' : nil)
+      %button.gh-btn{ type: 'submit' }
+        %i.fa-solid.fa-paper-plane{ 'aria-hidden': 'true' }
+        = t('teachers.invite.submit')
+
+    - if error
+      %p.gh-field-error#gh-teacher-invite-error{ role: 'alert' }
+        %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+        %span= error

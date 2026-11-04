@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# What a student sees of the group's grade sheets: every live sheet with its
-# visible categories, what each is worth, and which ones they already earned.
-# Hidden categories and other students' awards never leave this object.
 class StudentSheetList
   Category = Data.define(:record, :earned) do
     def description = record.didactic_description
@@ -26,8 +23,6 @@ class StudentSheetList
     @membership  = membership
   end
 
-  # Newest sheet first, like the teacher's list; sheets with nothing visible
-  # are skipped.
   def sheets
     @sheets ||= sheet_records.filter_map do |record|
       categories = record.activity_group_categories.reject(&:hidden?).map do |category|

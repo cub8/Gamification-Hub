@@ -1,6 +1,6 @@
 Gamification Hub
 
-= t('.greeting', name: @first_name)
+= @first_name.present? ? t('.greeting', name: @first_name) : t('.greeting_anonymous')
 
 = t('.text_body')
 

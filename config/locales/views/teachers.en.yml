@@ -55,9 +55,38 @@ en:
       body: "They'll lose access to the group. Rewards they awarded stay with the students."
       remove: "Remove from group"
 
+    invite:
+      title: "Invite by e-mail"
+      hint: "Not on the list? Send an invitation. They'll join the group as a teacher on their first login."
+      email: "E-mail address"
+      placeholder: "john.smith@example.com"
+      submit: "Send invitation"
+      flash:
+        added: "%{email} already has a teacher account — added to the group and notified."
+        invited: "Invitation sent to %{email}."
+        resent: "Invitation sent again to %{email}."
+        cancelled: "Invitation for %{email} cancelled."
+      errors:
+        in_group: "This person is already in the group."
+        student_account: "This is a student account. You can only invite a teacher or a new e-mail address."
+
+    invitations:
+      title: "Pending invitations"
+      hint: "These people will join the group as teachers on their first login."
+      pending: "Waiting for first login"
+      role: "Invited teacher"
+      sent: "Sent"
+      cancel: "Cancel"
+      cancel_label: "Cancel the invitation for %{email}"
+
   activerecord:
     errors:
       models:
+        teacher_invitation:
+          attributes:
+            email:
+              blank: "Enter an e-mail address."
+              invalid: "That doesn't look like an e-mail address."
         story_group_teacher:
           attributes:
             user_id:

@@ -1,5 +1,4 @@
 @layer components {
-
   .gh-teachers-panel {
     margin-top: 22px;
     padding: 6px 8px;
@@ -86,7 +85,44 @@
     color: inherit;
   }
 
+  .gh-teacher-invite-form {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-teacher-invite-form .gh-field-hint {
+    margin-top: 4px;
+  }
+
+  .gh-teacher-invite-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .gh-teacher-invite-row .gh-text-input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .gh-teacher-invitations > .gh-h3,
+  .gh-teacher-invitations > .gh-field-hint {
+    padding: 0 12px;
+  }
+
+  .gh-teacher-invitations > .gh-h3 {
+    padding-top: 12px;
+  }
+
+  .gh-teacher-invitations > .gh-field-hint {
+    margin: 4px 0 10px;
+  }
+
   @media (width <= theme(--breakpoint-mobile)) {
+    .gh-teacher-invite-row {
+      flex-direction: column;
+    }
+
     .gh-teacher-row {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 6px 12px;
@@ -96,11 +132,11 @@
       display: none;
     }
 
-    .gh-teacher-row> :not(:last-child) {
+    .gh-teacher-row > :not(:last-child) {
       grid-column: 1;
     }
 
-    .gh-teacher-row> :last-child {
+    .gh-teacher-row > :last-child {
       grid-column: 2;
       grid-row: 1 / 4;
       align-self: center;

@@ -66,8 +66,6 @@ class ActivityGroupsController < ApplicationController
 
   private
 
-  # A student in this group gets the read-only sheet view, even if they could
-  # also manage it — the same rule the rank ladder uses.
   def student_membership
     GroupChrome.for(user: @current_user, story_group: @story_group)&.student_membership
   end

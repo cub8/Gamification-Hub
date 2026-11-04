@@ -21,3 +21,6 @@
     %span
 
   = render partial: 'row', collection: @list.rows, as: :row, locals: { manage: manage }
+
+- if @invitations.present?
+  = render 'invitations', invitations: @invitations

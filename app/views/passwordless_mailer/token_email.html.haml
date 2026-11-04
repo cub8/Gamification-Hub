@@ -8,7 +8,7 @@
 
             %h1{ style: 'margin:0 0 16px;font-size:22px;color:#221A2B;' }= t('.title')
             %p{ style: 'margin:0 0 12px;font-size:15px;line-height:1.5;color:#584C64;' }
-              = t('.greeting', name: @first_name)
+              = @first_name.present? ? t('.greeting', name: @first_name) : t('.greeting_anonymous')
             %p{ style: 'margin:0 0 24px;font-size:15px;line-height:1.5;color:#584C64;' }
               = t('.body')
 

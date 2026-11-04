@@ -20,6 +20,8 @@ class User < ApplicationRecord
   has_many :granted_currency_transactions, class_name: 'CurrencyTransaction', foreign_key: 'granted_by_user_id',
                                            dependent: :nullify, inverse_of: :granted_by_user
   has_one :login_token, dependent: :destroy
+  has_many :sent_teacher_invitations, class_name: 'TeacherInvitation', foreign_key: 'invited_by_id',
+                                      dependent: :destroy, inverse_of: :invited_by
 
   belongs_to :organization, optional: true
 
@@ -50,7 +52,7 @@ class User < ApplicationRecord
   end
 
   def needs_account_setup?
-    organization_admin? && first_login?
+    first_login? && (organization_admin? || full_name.blank?)
   end
 
   def create_login_token!(expires_in: LoginToken::EXPIRES_IN)
