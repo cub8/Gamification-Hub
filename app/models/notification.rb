@@ -14,7 +14,7 @@ class Notification < ApplicationRecord
       user,
       :notifications,
       target:  'gh-notification-dot',
-      partial: 'layouts/notification_dot',
+      partial: 'layouts/notification_count',
       locals:  { count: user.notifications.unread.count },
     )
   }

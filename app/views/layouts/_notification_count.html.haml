@@ -1,0 +1,5 @@
+-# The badge inside `#gh-notification-dot`. Broadcasts send only this:
+-# Turbo keeps turbo-permanent elements when a stream renders, so sending the
+-# permanent wrapper too would drop the new count in favour of the old one.
+- if count.positive?
+  %span.gh-notification-count.gh-octagon-clip{ 'aria-hidden': 'true' }= count

@@ -7,6 +7,7 @@ en:
       resent: "We've sent a new link. The previous one no longer works."
       invalid_provider: "Invalid login provider."
       invalid_auth: "Invalid authorization attempt."
+      usos_failure: "Couldn't log in with USOS. Please try again."
 
     passwordless:
       new:

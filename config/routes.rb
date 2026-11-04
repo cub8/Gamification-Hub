@@ -136,6 +136,7 @@ Rails.application.routes.draw do
 
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback
+    get 'failure', to: 'usos#failure', as: :failure
     resource :passwordless, only: %i[new create], controller: 'passwordless'
     get 'passwordless/verify', to: 'passwordless#verify', as: :passwordless_verify
     get 'passwordless/inbox', to: 'passwordless#inbox', as: :passwordless_inbox

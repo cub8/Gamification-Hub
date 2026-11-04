@@ -7,6 +7,7 @@ pl:
       resent: "Wysłaliśmy nowy link. Poprzedni już nie działa."
       invalid_provider: "Nieprawidłowy dostawca logowania."
       invalid_auth: "Nieprawidłowa próba autoryzacji."
+      usos_failure: "Nie udało się zalogować przez USOS. Spróbuj ponownie."
 
     passwordless:
       new:
