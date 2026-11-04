@@ -48,5 +48,6 @@
 @import "./components/settings.css";
 @import "./components/grading.css";
 @import "./components/sheets.css";
+@import "./components/student_sheets.css";
 
 @import "./components/wizard.css";

@@ -82,6 +82,7 @@ class Navigation
       section(:my_items,
               story_group_student_students_items_path(group, membership),
               'fa-flask', short: true,),
+      section(:sheets, story_group_activity_groups_path(group), 'fa-table'),
       *shared_items(group),
       section(:history,
               story_group_student_currency_transactions_path(group, membership),

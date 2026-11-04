@@ -13,6 +13,16 @@ pl:
       empty_title: "Nie masz jeszcze żadnego szablonu"
       empty_body: "Szablon to zestaw kategorii, za które nagradzasz studentów. Z jednego szablonu tworzysz potem kolejne arkusze — po jednym na zajęcia."
 
+    student_index:
+      title: "Arkusze ocen"
+      lead: "Za co możesz zdobyć %{currency} w tej grupie. Najnowsze arkusze są na górze."
+      earned: "Zdobyto %{earned} z %{max} %{currency}"
+      complete: "Wszystko zdobyte"
+      earned_category: "Zdobyte"
+      progress_label: "Postęp w arkuszu %{name}"
+      empty_title: "Brak arkuszy"
+      empty_body: "Prowadzący nie dodał jeszcze arkuszy ocen. Gdy to zrobi, zobaczysz tu, za co możesz zdobyć %{currency}."
+
     template_panel:
       meta:
         one: "Szablon: %{count} kategoria, do %{max} %{currency} na studenta za arkusz."

@@ -179,6 +179,36 @@ class ActivityGroupsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
+  test 'a student sees visible categories, their rewards and what they earned' do
+    student_user = FactoryBot.create(:user)
+    student = FactoryBot.create(:story_group_student, story_group: @story_group, user: student_user)
+    @category.update!(didactic_description: 'Report', reward: 7)
+    FactoryBot.create(:activity_group_category, activity_group: @activity_group, position: 1,
+                                                didactic_description: 'Secret', hidden: true,)
+    FactoryBot.create(:students_activity_group_category, student: student, activity_group_category: @category)
+    sign_out
+    sign_in student_user
+
+    get story_group_activity_groups_url(@story_group)
+
+    assert_response :success
+    assert_select '.gh-student-sheet h2', 'Lab 1'
+    assert_select '.gh-student-sheet-category--earned b', 'Report'
+    assert_select '.gh-student-sheet-reward', /\+7/
+    assert_select 'b', text: 'Secret', count: 0
+    assert_select '.gh-template-panel', false
+  end
+
+  test 'a student can not open sheet management' do
+    student_user = FactoryBot.create(:user)
+    FactoryBot.create(:story_group_student, story_group: @story_group, user: student_user)
+    sign_out
+    sign_in student_user
+
+    get edit_story_group_activity_group_url(@story_group, @activity_group)
+    assert_redirected_to root_url
+  end
+
   test 'should not access groups for story group not managed by teacher' do
     other_story_group = FactoryBot.create(:story_group)
     get story_group_activity_groups_url(other_story_group)
