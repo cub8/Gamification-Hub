@@ -107,6 +107,7 @@ en:
 
     show:
       breadcrumb: "Students"
+      back: "Back to students"
       award_badge: "Award a badge"
       adjust_currency: "Adjust currency"
       rank: "Rank"

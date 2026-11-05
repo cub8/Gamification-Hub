@@ -1,0 +1,23 @@
+pl:
+  teacher_invitation_mailer:
+    invitation_email:
+      subject: "Zaproszenie do prowadzenia grupy %{group}"
+      lead: "%{inviter} zaprasza Cię do prowadzenia grupy %{group} w Gamification Hub jako nauczyciel."
+    added_email:
+      subject: "Dodano Cię do grupy %{group}"
+      lead: "%{inviter} dodał(a) Cię jako nauczyciela do grupy %{group} w Gamification Hub."
+
+    copy:
+      invitation_email:
+        title: "Zaproszenie do grupy"
+        text: "Kliknij przycisk poniżej, aby się zalogować. Grupa pojawi się na Twojej liście od razu."
+        text_plain: "Aby się zalogować i dołączyć do grupy, otwórz poniższy link."
+        button: "Przyjmij zaproszenie"
+      added_email:
+        title: "Nowa grupa"
+        text: "Grupa jest już na Twojej liście. Kliknij przycisk, aby ją otworzyć."
+        text_plain: "Grupa jest już na Twojej liście. Otwórz ją pod adresem:"
+        button: "Otwórz grupę"
+        note: "Jeśli przycisk nie działa, skopiuj ten adres do przeglądarki:"
+        valid_for: ""
+        footer: "Jeśli to pomyłka, napisz do osoby, która Cię dodała."

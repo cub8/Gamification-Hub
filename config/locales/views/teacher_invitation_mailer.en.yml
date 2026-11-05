@@ -1,0 +1,23 @@
+en:
+  teacher_invitation_mailer:
+    invitation_email:
+      subject: "Invitation to teach %{group}"
+      lead: "%{inviter} invites you to run the group %{group} in Gamification Hub as a teacher."
+    added_email:
+      subject: "You were added to %{group}"
+      lead: "%{inviter} added you as a teacher of the group %{group} in Gamification Hub."
+
+    copy:
+      invitation_email:
+        title: "Group invitation"
+        text: "Click the button below to log in. The group will be on your list straight away."
+        text_plain: "To log in and join the group, open the link below."
+        button: "Accept invitation"
+      added_email:
+        title: "New group"
+        text: "The group is already on your list. Click the button to open it."
+        text_plain: "The group is already on your list. Open it at:"
+        button: "Open the group"
+        note: "If the button doesn't work, copy this address into your browser:"
+        valid_for: ""
+        footer: "If this is a mistake, contact the person who added you."

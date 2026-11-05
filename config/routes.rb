@@ -66,7 +66,9 @@ Rails.application.routes.draw do
     end
     resources :teachers, only: %i[new index create destroy] do
       get :confirm_destroy, on: :member
+      post :invite, on: :collection
     end
+    resources :teacher_invitations, only: :destroy
     resources :students, except: %i[new create] do
       member do
         post :update_lives
@@ -136,9 +138,11 @@ Rails.application.routes.draw do
 
   namespace 'auth' do
     get '/:provider/callback', to: 'usos#create', as: :callback
+    get 'failure', to: 'usos#failure', as: :failure
     resource :passwordless, only: %i[new create], controller: 'passwordless'
     get 'passwordless/verify', to: 'passwordless#verify', as: :passwordless_verify
     get 'passwordless/inbox', to: 'passwordless#inbox', as: :passwordless_inbox
+    get 'teacher_invitations/:token', to: 'teacher_invitations#show', as: :teacher_invitation
   end
 
   get '/login', to: 'sessions#new', as: :login

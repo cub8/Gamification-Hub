@@ -1,0 +1,26 @@
+%section.gh-panel.gh-teachers-panel.gh-teacher-invitations
+  %h2.gh-h3= t('teachers.invitations.title')
+  %p.gh-field-hint= t('teachers.invitations.hint')
+
+  - invitations.each do |invitation|
+    .gh-teacher-row
+      %span.gh-student-name-cell
+        %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'aria-hidden': 'true' }
+          %i.fa-solid.fa-envelope
+        %span.gh-name-cell
+          %b= invitation.email
+          %small= t('teachers.invitations.pending')
+
+      %span.gh-teacher-role= t('teachers.invitations.role')
+
+      %span
+        %span.gh-mobile-field-label= t('teachers.invitations.sent')
+        %span.gh-small= teacher_added_on(invitation.updated_at)
+
+      %span.gh-teacher-row-actions
+        = button_to story_group_teacher_invitation_path(@story_group, invitation),
+                    method:       :delete,
+                    class:        'gh-btn gh-btn--secondary gh-btn--small',
+                    'aria-label': t('teachers.invitations.cancel_label', email: invitation.email) do
+          %i.fa-solid.fa-xmark{ 'aria-hidden': 'true' }
+          = t('teachers.invitations.cancel')

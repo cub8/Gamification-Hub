@@ -3,6 +3,10 @@
 - name = @student.full_name
 
 %section.gh-panel.gh-student-page
+  = link_to story_group_students_path(@story_group), class: 'gh-link-button gh-back-link' do
+    %i.fa-solid.fa-chevron-left{ 'aria-hidden': 'true' }
+    %span= t('.back')
+
   .gh-student-page-header
     %span.gh-avatar.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }= gh_initials(name)
     %div

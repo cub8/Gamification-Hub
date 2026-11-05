@@ -13,6 +13,16 @@ en:
       empty_title: "You don't have any templates yet"
       empty_body: "A template is a set of categories you reward students for. From one template you then create sheets — one per class."
 
+    student_index:
+      title: "Grade sheets"
+      lead: "What you can earn %{currency} for in this group. The newest sheets are at the top."
+      earned: "Earned %{earned} of %{max} %{currency}"
+      complete: "All earned"
+      earned_category: "Earned"
+      progress_label: "Progress in %{name}"
+      empty_title: "No sheets yet"
+      empty_body: "Your teacher hasn't added any grade sheets yet. Once they do, you'll see here what you can earn %{currency} for."
+
     template_panel:
       meta:
         one: "Template: %{count} category, up to %{max} %{currency} per student per sheet."

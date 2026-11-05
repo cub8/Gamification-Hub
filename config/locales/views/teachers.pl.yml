@@ -59,9 +59,38 @@ pl:
       body: "Straci dostęp do grupy. Nagrody, które przyznał, zostają u studentów."
       remove: "Usuń z grupy"
 
+    invite:
+      title: "Zaproś e-mailem"
+      hint: "Nie ma tej osoby na liście? Wyślij zaproszenie. Po pierwszym logowaniu trafi do grupy jako nauczyciel."
+      email: "Adres e-mail"
+      placeholder: "jan.nowak@example.com"
+      submit: "Wyślij zaproszenie"
+      flash:
+        added: "%{email} ma już konto nauczyciela — dodano do grupy i wysłano powiadomienie."
+        invited: "Wysłano zaproszenie na adres %{email}."
+        resent: "Wysłano ponownie zaproszenie na adres %{email}."
+        cancelled: "Anulowano zaproszenie dla %{email}."
+      errors:
+        in_group: "Ta osoba jest już w grupie."
+        student_account: "To konto studenta. Zaprosić można tylko nauczyciela albo nowy adres e-mail."
+
+    invitations:
+      title: "Oczekujące zaproszenia"
+      hint: "Te osoby trafią do grupy jako nauczyciele przy pierwszym logowaniu."
+      pending: "Czeka na pierwsze logowanie"
+      role: "Zaproszony nauczyciel"
+      sent: "Wysłano"
+      cancel: "Anuluj"
+      cancel_label: "Anuluj zaproszenie dla %{email}"
+
   activerecord:
     errors:
       models:
+        teacher_invitation:
+          attributes:
+            email:
+              blank: "Podaj adres e-mail."
+              invalid: "To nie wygląda na adres e-mail."
         story_group_teacher:
           attributes:
             user_id:

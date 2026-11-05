@@ -1,5 +1,10 @@
--# Same frame as passwordless_mailer/token_email, for organization invitations.
-- content_for :email_styles, Rails.root.join('app/assets/stylesheets/components/invitation_email.css').read.html_safe
+:ruby
+  # Same frame as passwordless_mailer/token_email, for organization and
+  # teacher invitations. `copy` picks alternate wording from
+  # teacher_invitation_mailer.copy.<copy>; missing keys fall back to ours.
+  copy = local_assigns[:copy] && "teacher_invitation_mailer.copy.#{local_assigns[:copy]}"
+  txt  = ->(key) { copy ? t("#{copy}.#{key}", default: t(".#{key}")) : t(".#{key}") }
+  content_for :email_styles, Rails.root.join('app/assets/stylesheets/components/invitation_email.css').read.html_safe
 
 %table.gh-invitation-email{ cellpadding: 0, cellspacing: 0, border: 0, width: '100%' }
   %tr
@@ -9,17 +14,17 @@
           %td.gh-invitation-email-body
             %p.gh-invitation-email-brand Gamification Hub
 
-            %h1.gh-invitation-email-title= t('.title')
+            %h1.gh-invitation-email-title= txt.call(:title)
             %p.gh-invitation-email-lead= lead
-            %p.gh-invitation-email-text= t('.text')
+            %p.gh-invitation-email-text= txt.call(:text)
 
             %table{ cellpadding: 0, cellspacing: 0, border: 0 }
               %tr
                 %td.gh-invitation-email-button{ align: 'center' }
-                  %a.gh-invitation-email-button-link{ href: token_link }= t('.button')
+                  %a.gh-invitation-email-button-link{ href: token_link }= txt.call(:button)
 
-            %p.gh-invitation-email-note= t('.note')
+            %p.gh-invitation-email-note= txt.call(:note)
             %p.gh-invitation-email-url
               %a{ href: token_link }= token_link
 
-            %p.gh-invitation-email-footer= t('.footer')
+            %p.gh-invitation-email-footer= txt.call(:footer)

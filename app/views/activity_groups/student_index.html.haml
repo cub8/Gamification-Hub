@@ -1,0 +1,49 @@
+-# haml-lint:disable InlineStyles
+- content_for :title, t('.title')
+- currency = @story_group.currency_name
+
+%section.gh-panel.gh-page-header
+  .gh-page-header-text
+    %h1.gh-h1= t('.title')
+    %p.gh-lead= t('.lead', currency: currency)
+
+- if @student_sheets.any?
+  - @student_sheets.sheets.each_with_index do |sheet, index|
+    %details.gh-panel.gh-student-sheet{ open: index.zero? }
+      %summary.gh-student-sheet-summary
+        %span.gh-student-sheet-heading
+          %h2.gh-h3= sheet.name
+          %span.gh-small
+            = t('.earned', earned: sheet.earned, max: sheet.max_reward, currency: currency)
+        - if sheet.complete?
+          %span.gh-rank-status.gh-rank-status--achieved
+            %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
+            = t('.complete')
+        %i.fa-solid.fa-chevron-down.gh-student-sheet-chevron{ 'aria-hidden': 'true' }
+
+      .gh-progress-bar.gh-octagon-clip{
+        role:            'progressbar',
+        'aria-valuemin': 0,
+        'aria-valuemax': sheet.max_reward,
+        'aria-valuenow': sheet.earned,
+        'aria-label':    t('.progress_label', name: sheet.name),
+      }
+        %i.gh-octagon-clip{ style: "--gh-p: #{gh_percent(sheet.earned, sheet.max_reward)}%" }
+
+      %ul.gh-student-sheet-categories
+        - sheet.categories.each do |category|
+          %li.gh-student-sheet-category{ class: ('gh-student-sheet-category--earned' if category.earned?) }
+            %div
+              %b= category.description
+              - if category.story
+                %small.gh-small= category.story
+            %span.gh-student-sheet-reward
+              - if category.earned?
+                %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
+                %span.sr-only= t('.earned_category')
+              %span= "+#{category.reward}"
+              = render 'layouts/currency_token', story_group: @story_group, size: 20
+- else
+  %section.gh-panel.gh-empty-state
+    %h2.gh-h2= t('.empty_title')
+    %p.gh-lead= t('.empty_body', currency: currency)

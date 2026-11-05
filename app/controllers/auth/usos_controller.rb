@@ -21,6 +21,11 @@ class Auth::UsosController < ApplicationController
     redirect_to root_path, alert: t('auth.flash.invalid_auth')
   end
 
+  def failure
+    Rails.logger.info("USOS login failed: #{params[:message]} (strategy: #{params[:strategy]})")
+    redirect_to login_path, alert: t('auth.flash.usos_failure')
+  end
+
   private
 
   def find_provider

@@ -16,7 +16,7 @@ class CurrencyAdjustmentsController < ApplicationController
     @form = CurrencyAdjustmentForm.from_params(@student, params)
 
     if @form.save(granted_by_user: @current_user)
-      redirect_outside_turbo_frame story_group_student_path(@story_group, @student, tab: 'hist'),
+      redirect_outside_turbo_frame story_group_students_path(@story_group),
                                    notice: notice_for(@form)
     else
       render :new, status: :unprocessable_content

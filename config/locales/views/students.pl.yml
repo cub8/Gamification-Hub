@@ -121,6 +121,7 @@ pl:
 
     show:
       breadcrumb: "Studenci"
+      back: "Wróć do listy studentów"
       award_badge: "Przyznaj odznakę"
       adjust_currency: "Koryguj walutę"
       rank: "Ranga"

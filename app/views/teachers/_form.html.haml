@@ -59,8 +59,10 @@
       %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
       %span= error
 
-  .gh-dialog-button-row
-    - if @in_modal
-      %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.close')
-    - else
-      = link_to t('shared.actions.close'), story_group_teachers_path(@story_group), class: 'gh-btn gh-btn--secondary'
+= render 'invite_form'
+
+.gh-dialog-button-row
+  - if @in_modal
+    %button.gh-btn.gh-btn--secondary{ type: 'button', data: { action: 'dialog#close' } }= t('shared.actions.close')
+  - else
+    = link_to t('shared.actions.close'), story_group_teachers_path(@story_group), class: 'gh-btn gh-btn--secondary'

@@ -1,5 +1,4 @@
 @layer components {
-
   .gh-app-shell {
     height: 100vh;
     height: 100dvh;
@@ -88,14 +87,16 @@
     z-index: -1;
     inset: 0;
     background: var(--gh-card-2);
-    clip-path: polygon(var(--gh-c) 0,
-        calc(100% - var(--gh-c)) 0,
-        100% var(--gh-c),
-        100% calc(100% - var(--gh-c)),
-        calc(100% - var(--gh-c)) 100%,
-        var(--gh-c) 100%,
-        0 calc(100% - var(--gh-c)),
-        0 var(--gh-c));
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
   }
 
   .gh-balance-button:hover::before {
@@ -477,12 +478,12 @@
     width: 82px;
   }
 
-  .gh-sidebar--collapsed .gh-sidebar-link>span,
-  .gh-sidebar--collapsed .gh-sidebar-collapse-toggle>span,
+  .gh-sidebar--collapsed .gh-sidebar-link > span,
+  .gh-sidebar--collapsed .gh-sidebar-collapse-toggle > span,
   .gh-sidebar--collapsed .gh-sidebar-section-label,
   .gh-sidebar--collapsed .gh-sidebar-group-list-item-text,
   .gh-sidebar--collapsed .gh-current-group-card-header,
-  .gh-sidebar--collapsed .gh-current-group-card-switch-trigger>span {
+  .gh-sidebar--collapsed .gh-current-group-card-switch-trigger > span {
     display: none;
   }
 
@@ -547,7 +548,10 @@
       display: flex;
     }
 
-    .gh-topbar:has(.gh-group-switcher) .gh-topbar-logo,
+    .gh-topbar:has(.gh-group-switcher) .gh-topbar-logo {
+      flex: 0 0 auto;
+    }
+
     .gh-topbar:has(.gh-group-switcher) .gh-topbar-spacer {
       display: none;
     }

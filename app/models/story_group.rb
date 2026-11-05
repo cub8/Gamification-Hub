@@ -18,6 +18,7 @@ class StoryGroup < ApplicationRecord
   has_many :teacher_memberships, class_name: 'StoryGroupTeacher', foreign_key: 'story_group_id', dependent: :destroy
   has_many :students, through: :student_memberships, source: :user
   has_many :teachers, through: :teacher_memberships, source: :user
+  has_many :teacher_invitations, dependent: :destroy
   has_many :activity_group_templates, dependent: :destroy
   has_many :activity_groups, dependent: :destroy
   has_many :invites, class_name: 'StoryGroupInvite', foreign_key: 'story_group_id', dependent: :destroy

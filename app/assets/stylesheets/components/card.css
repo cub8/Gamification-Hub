@@ -1,5 +1,4 @@
 @layer components {
-
   .gh-card {
     --gh-cc: 12px;
     --gh-frame: var(--gh-item);
@@ -35,14 +34,16 @@
     height: 100%;
     padding: 5px;
     background: var(--gh-frame);
-    clip-path: polygon(var(--gh-c) 0,
-        calc(100% - var(--gh-c)) 0,
-        100% var(--gh-c),
-        100% calc(100% - var(--gh-c)),
-        calc(100% - var(--gh-c)) 100%,
-        var(--gh-c) 100%,
-        0 calc(100% - var(--gh-c)),
-        0 var(--gh-c));
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
   }
 
   .gh-card-inset {
@@ -51,14 +52,16 @@
     flex-direction: column;
     height: 100%;
     background: var(--gh-card);
-    clip-path: polygon(var(--gh-c) 0,
-        calc(100% - var(--gh-c)) 0,
-        100% var(--gh-c),
-        100% calc(100% - var(--gh-c)),
-        calc(100% - var(--gh-c)) 100%,
-        var(--gh-c) 100%,
-        0 calc(100% - var(--gh-c)),
-        0 var(--gh-c));
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
   }
 
   .gh-mini-thumb {
@@ -102,6 +105,18 @@
     font-stretch: 80%;
     text-wrap: balance;
     hyphens: auto;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .gh-card .gh-rule-text,
+  .gh-card .gh-card-flavor,
+  .gh-card .gh-badge-rule-text {
+    overflow-wrap: anywhere;
   }
 
   .gh-card-footer {
@@ -126,19 +141,23 @@
     place-items: center;
     overflow: hidden;
     background:
-      repeating-linear-gradient(135deg,
+      repeating-linear-gradient(
+        135deg,
         color-mix(in srgb, var(--gh-frame) 12%, transparent) 0 6px,
-        transparent 6px 12px),
+        transparent 6px 12px
+      ),
       color-mix(in srgb, var(--gh-frame) 15%, var(--gh-card));
     color: color-mix(in srgb, var(--gh-frame) 58%, var(--gh-ink));
-    clip-path: polygon(var(--gh-c) 0,
-        calc(100% - var(--gh-c)) 0,
-        100% var(--gh-c),
-        100% calc(100% - var(--gh-c)),
-        calc(100% - var(--gh-c)) 100%,
-        var(--gh-c) 100%,
-        0 calc(100% - var(--gh-c)),
-        0 var(--gh-c));
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
   }
 
   @media (prefers-color-scheme: dark) {
@@ -202,7 +221,7 @@
     overflow: hidden;
   }
 
-  .gh-progress-bar>i {
+  .gh-progress-bar > i {
     --gh-c: 4px;
     position: absolute;
     left: 0;
@@ -223,7 +242,7 @@
     vertical-align: middle;
   }
 
-  .gh-currency-token>span {
+  .gh-currency-token > span {
     --gh-c: 29%;
     display: grid;
     place-items: center;
@@ -276,15 +295,21 @@
     position: absolute;
     z-index: -1;
     inset: 0;
-    background: linear-gradient(to top, var(--gh-rank-edge) 0 2px, var(--gh-rank) 2px);
-    clip-path: polygon(var(--gh-c) 0,
-        calc(100% - var(--gh-c)) 0,
-        100% var(--gh-c),
-        100% calc(100% - var(--gh-c)),
-        calc(100% - var(--gh-c)) 100%,
-        var(--gh-c) 100%,
-        0 calc(100% - var(--gh-c)),
-        0 var(--gh-c));
+    background: linear-gradient(
+      to top,
+      var(--gh-rank-edge) 0 2px,
+      var(--gh-rank) 2px
+    );
+    clip-path: polygon(
+      var(--gh-c) 0,
+      calc(100% - var(--gh-c)) 0,
+      100% var(--gh-c),
+      100% calc(100% - var(--gh-c)),
+      calc(100% - var(--gh-c)) 100%,
+      var(--gh-c) 100%,
+      0 calc(100% - var(--gh-c)),
+      0 var(--gh-c)
+    );
   }
 
   .gh-price-badge b {
@@ -341,6 +366,29 @@
   .gh-preview-flip-card {
     max-width: 230px;
     margin: 16px auto 0;
+  }
+
+  .gh-item-preview-card
+    :is(.gh-rule-text, .gh-card-flavor, .gh-badge-rule-text),
+  .gh-preview-flip-card
+    :is(.gh-rule-text, .gh-card-flavor, .gh-badge-rule-text) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+  }
+
+  .gh-item-preview-card .gh-rule-text,
+  .gh-preview-flip-card .gh-rule-text {
+    padding-bottom: 0;
+    margin-bottom: 12px;
+  }
+
+  .gh-item-preview-card .gh-card-flavor,
+  .gh-preview-flip-card .gh-card-flavor {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 
   .gh-preview-flip-card .gh-card-art {

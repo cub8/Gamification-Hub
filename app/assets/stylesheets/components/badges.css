@@ -236,9 +236,20 @@
     margin-top: 12px;
   }
 
+  .gh-preview-thumb-row>span {
+    min-width: 0;
+  }
+
   .gh-preview-thumb-row b {
     display: block;
     font: 680 15px/1.25 var(--gh-f-ui);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .gh-preview-thumb-row .gh-small {
+    overflow-wrap: anywhere;
   }
 
   @media (width <= theme(--breakpoint-mobile)) {

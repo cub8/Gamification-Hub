@@ -7,6 +7,10 @@ pl:
       resent: "Wysłaliśmy nowy link. Poprzedni już nie działa."
       invalid_provider: "Nieprawidłowy dostawca logowania."
       invalid_auth: "Nieprawidłowa próba autoryzacji."
+      usos_failure: "Nie udało się zalogować przez USOS. Spróbuj ponownie."
+      joined_as_teacher: "Zalogowano. Dołączono jako nauczyciel do: %{groups}."
+      invalid_invitation: "Link z zaproszeniem wygasł albo zaproszenie zostało już przyjęte. Zaloguj się albo poproś o nowe zaproszenie."
+      invitation_failed: "Nie udało się przyjąć zaproszenia. Skontaktuj się z administratorem uczelni."
 
     passwordless:
       new:

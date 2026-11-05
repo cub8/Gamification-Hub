@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -277,6 +277,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
     t.index ["story_group_student_id"], name: "index_students_items_on_story_group_student_id"
   end
 
+  create_table "teacher_invitations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.bigint "invited_by_id", null: false
+    t.bigint "story_group_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_teacher_invitations_on_email"
+    t.index ["invited_by_id"], name: "index_teacher_invitations_on_invited_by_id"
+    t.index ["story_group_id", "email"], name: "index_teacher_invitations_on_story_group_id_and_email", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -324,5 +335,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_120000) do
   add_foreign_key "students_badges", "story_group_students"
   add_foreign_key "students_items", "items"
   add_foreign_key "students_items", "story_group_students"
+  add_foreign_key "teacher_invitations", "story_groups"
+  add_foreign_key "teacher_invitations", "users", column: "invited_by_id"
   add_foreign_key "users", "organizations"
 end

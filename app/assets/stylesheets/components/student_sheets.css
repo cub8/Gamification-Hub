@@ -1,0 +1,84 @@
+@layer components {
+  .gh-student-sheet {
+    margin-top: 16px;
+    padding: 16px 20px 18px;
+  }
+
+  .gh-student-sheet-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .gh-student-sheet-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .gh-student-sheet-heading {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .gh-student-sheet-heading .gh-h3 {
+    overflow-wrap: anywhere;
+  }
+
+  .gh-student-sheet-chevron {
+    font-size: 13px;
+    color: var(--gh-ink-2);
+    transition: transform 0.15s;
+  }
+
+  .gh-student-sheet[open] .gh-student-sheet-chevron {
+    transform: rotate(180deg);
+  }
+
+  .gh-student-sheet .gh-progress-bar {
+    margin-top: 10px;
+  }
+
+  .gh-student-sheet-categories {
+    margin-top: 12px;
+  }
+
+  .gh-student-sheet-category {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid var(--gh-line);
+  }
+
+  .gh-student-sheet-category b {
+    display: block;
+    font: 640 15px/1.3 var(--gh-f-ui);
+    overflow-wrap: anywhere;
+  }
+
+  .gh-student-sheet-category small {
+    display: block;
+    margin-top: 2px;
+    font-style: italic;
+    color: var(--gh-ink-2);
+    overflow-wrap: anywhere;
+  }
+
+  .gh-student-sheet-reward {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 760 15px var(--gh-f-ui);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .gh-student-sheet-category--earned .gh-student-sheet-reward {
+    color: var(--gh-earn);
+  }
+}

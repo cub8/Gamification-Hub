@@ -6,11 +6,18 @@ class ActivityGroupsController < ApplicationController
   BULK_RANGE = (2..20)
 
   before_action :set_story_group
-  before_action :authorize_story_group_manage!
+  before_action :authorize_story_group_read!,   only: :index
+  before_action :authorize_story_group_manage!, except: :index
   before_action :set_presentation, only: %i[new confirm_destroy]
   before_action :set_activity_group, only: %i[edit update destroy confirm_destroy]
 
   def index
+    if (membership = student_membership)
+      @student_sheets = StudentSheetList.new(story_group: @story_group, membership: membership)
+      return render :student_index
+    end
+
+    authorize_story_group_manage!
     @index = SheetIndex.new(@story_group)
     @fresh_sheet_ids = Array(flash[:fresh_sheet_ids]).to_set(&:to_i)
   end
@@ -58,6 +65,10 @@ class ActivityGroupsController < ApplicationController
   end
 
   private
+
+  def student_membership
+    GroupChrome.for(user: @current_user, story_group: @story_group)&.student_membership
+  end
 
   def set_story_group
     @story_group = StoryGroup.find(params.expect(:story_group_id))

@@ -40,7 +40,7 @@ class Auth::PasswordlessController < ApplicationController
 
   def create
     email = params.expect(:email)
-    user = User.find_by(email: email)
+    user = User.find_by(email: email) || invited_teacher(email)
     service = BypassLoginService.new(email: email)
 
     resend = session[:pending_login_email].present?
@@ -66,6 +66,12 @@ class Auth::PasswordlessController < ApplicationController
   end
 
   private
+
+  def invited_teacher(email)
+    TeacherInvitation.find_by(email: TeacherInvitation.normalize_value_for(:email, email.to_s))&.create_invitee!
+  rescue ActiveRecord::RecordInvalid
+    nil
+  end
 
   def clear_pending_login
     session.delete(:pending_login_email)

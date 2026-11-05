@@ -1,0 +1,4 @@
+= render 'shared/invitation_email',
+  lead:       t('.lead', inviter: @inviter_name, group: @group_name),
+  token_link: @link,
+  copy:       'invitation_email'

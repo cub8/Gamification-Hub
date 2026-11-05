@@ -2,16 +2,18 @@
 
 class TeachersController < ApplicationController
   include StoryGroupAuthorization
+  include TeacherInvitationDelivery
 
   before_action :set_story_group
   before_action :authorize_story_group_manage!
-  before_action :authorize_story_group_teachers!, only: %i[new create destroy confirm_destroy]
+  before_action :authorize_story_group_teachers!, only: %i[new create invite destroy confirm_destroy]
   before_action :set_presentation
   before_action :set_teacher, only: %i[destroy confirm_destroy]
 
   def index
     @list = TeacherList.new(story_group: @story_group,
                             memberships: policy_scope(@story_group.teacher_memberships),)
+    @invitations = @story_group.teacher_invitations.newest_first.to_a if policy(@story_group).manage_teachers?
   end
 
   def new
@@ -28,6 +30,23 @@ class TeachersController < ApplicationController
       redirect_outside_turbo_frame story_group_teachers_path(@story_group),
                                    notice: t('teachers.flash.added', name: @teacher.full_name)
     else
+      set_pool
+      render :new, status: :unprocessable_content
+    end
+  end
+
+  def invite
+    email  = params.dig(:teacher_invitation, :email)
+    result = TeacherInviter.new(story_group: @story_group, inviter: @current_user, email: email).call
+
+    if result.ok?
+      deliver_teacher_invitation(result)
+      redirect_outside_turbo_frame story_group_teachers_path(@story_group),
+                                   notice: t("teachers.invite.flash.#{result.status}", email: result.email)
+    else
+      @teacher = @story_group.teacher_memberships.build
+      @invite_email = result.email
+      @invite_error = result.error
       set_pool
       render :new, status: :unprocessable_content
     end

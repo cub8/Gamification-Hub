@@ -7,6 +7,10 @@ en:
       resent: "We've sent a new link. The previous one no longer works."
       invalid_provider: "Invalid login provider."
       invalid_auth: "Invalid authorization attempt."
+      usos_failure: "Couldn't log in with USOS. Please try again."
+      joined_as_teacher: "Logged in. You joined as a teacher: %{groups}."
+      invalid_invitation: "The invitation link has expired or was already used. Log in or ask for a new invitation."
+      invitation_failed: "We couldn't accept the invitation. Please contact your university's administrator."
 
     passwordless:
       new:
