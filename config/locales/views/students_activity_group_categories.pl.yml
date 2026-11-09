@@ -10,6 +10,7 @@ pl:
         other: "Przyznano %{total} %{currency} %{count} studenta."
 
     edit:
+      back: "Wróć do arkuszy"
       lead:
         one: "%{categories}, %{count} student. Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz."
         few: "%{categories}, %{count} studentów. Zaznacz, kto zdobył nagrody, a przed przyznaniem przejrzysz wszystko jeszcze raz."

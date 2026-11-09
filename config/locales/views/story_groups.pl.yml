@@ -258,7 +258,7 @@ pl:
       art_section: "Grafika grupy"
       art_hint: "Pojawia się na karcie grupy, w panelu bocznym i jako tło grupy."
       currency_section: "Nazwa waluty"
-      currency_hint: "Czytamy ją po każdej liczbie, więc podaj formę, która pasuje do liczby mnogiej — np. „Marchewek”."
+      currency_hint: "Nazwa pojawia się zawsze razem z liczbą, więc podaj formę, która pasuje do liczby mnogiej - np. „Marchewek”."
       currency_name: "Nazwa waluty"
       currency_placeholder: "np. Złotych Monet"
       currency_missing: "Podaj nazwę waluty."
@@ -273,7 +273,7 @@ pl:
       ranking_mode: "Co widzą studenci"
       ranking_mode_hint: "„Podium i własne miejsce” pokazuje tylko najlepszą trójkę i miejsce studenta. „Pełny ranking” pokazuje całą listę."
       start_section: "Jak chcesz zacząć?"
-      start_hint: "Obie drogi dają pełną grupę. Wszystko zmienisz później."
+      start_hint: "Każda z tych dróg daje pełną grupę. Wszystko zmienisz później."
       start_label: "Sposób startu"
       recommended: "Polecane na pierwszą grupę"
       quick: "Szybki start"
@@ -341,7 +341,7 @@ pl:
 
     preset_review:
       title: "Zestaw „%{pack}” dla %{classes} zajęć"
-      hint: "Usuń, czego nie potrzebujesz, i popraw liczby. Nazwy i opisy zmienisz po utworzeniu grupy."
+      hint: "Usuń, czego nie potrzebujesz, i popraw liczby. Nazwy i opisy zmienisz, a nowe rangi, odznaki, przedmioty i kategorie dodasz po utworzeniu grupy."
       ranks: "Rangi"
       starting_rank: "Ranga startowa"
       shop_discount: "−%{discount}% w sklepie"

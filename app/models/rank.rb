@@ -11,7 +11,7 @@ class Rank < ApplicationRecord
 
   validates :discount, numericality: {
     greater_than_or_equal_to: 0,
-    less_than_or_equal_to:    100,
+    less_than_or_equal_to:    50,
     message:                  :out_of_range,
   }
 

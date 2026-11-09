@@ -8,6 +8,7 @@ en:
         other: "Awarded %{total} %{currency} to %{count} students."
 
     edit:
+      back: "Back to sheets"
       lead:
         one: "%{categories}, %{count} student. Mark who earned rewards — you'll review everything once more before awarding."
         other: "%{categories}, %{count} students. Mark who earned rewards — you'll review everything once more before awarding."

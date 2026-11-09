@@ -148,7 +148,7 @@ pl:
             name:
               blank: "Podaj nazwę rangi."
             discount:
-              out_of_range: "Zniżka musi mieścić się między 0 a 100%."
+              out_of_range: "Zniżka musi mieścić się między 0 a 50%."
             required_currency_value:
               negative: "Próg nie może być ujemny."
               threshold_taken: "Ranga %{rank} ma już próg %{threshold}. Wybierz inny."

@@ -6,6 +6,10 @@
 - grid_data = { controller: 'grading', grading_i18n_value: t('.js').to_json }
 
 .gh-grading-screen{ data: grid_data }
+  = link_to story_group_activity_groups_path(@story_group), class: 'gh-link-button gh-back-link' do
+    %i.fa-solid.fa-chevron-left{ 'aria-hidden': 'true' }
+    %span= t('.back')
+
   %section.gh-panel.gh-page-header.gh-grading-head
     .gh-page-header-text
       %p.gh-breadcrumbs
