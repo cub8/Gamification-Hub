@@ -40,6 +40,20 @@ class BadgeTest < ActiveSupport::TestCase
     assert_equal true, badge.errors[:didactic_description].any?
   end
 
+  test 'badge discount cannot exceed 50%' do
+    badge = Badge.new(story_group: @story_group, name: 'Valid', didactic_description: 'Desc', discount: 51)
+
+    assert_predicate badge, :invalid?
+    assert_equal true, badge.errors[:discount].any?
+  end
+
+  test 'badge discount of exactly 50% is valid' do
+    badge = Badge.new(story_group: @story_group, name: 'Valid', didactic_description: 'Desc', discount: 50,
+                      icon_glyph: Glyphs::BADGE.first,)
+
+    assert_predicate badge, :valid?
+  end
+
   test 'badge discount validation' do
     badge = Badge.new(
       name:                 'Valid',

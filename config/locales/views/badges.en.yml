@@ -127,4 +127,4 @@ en:
             didactic_description:
               blank: "Describe how to earn this badge."
             discount:
-              out_of_range: "The discount must be between 0 and 100%."
+              out_of_range: "The discount must be between 0 and 50%."

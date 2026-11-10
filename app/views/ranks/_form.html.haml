@@ -97,7 +97,7 @@
             = f.label :discount, t('.discount')
             .gh-price-field-row
               .gh-text-input.gh-text-input--numeric{ class: ('gh-text-input--invalid' if error.call(:discount)) }
-                = f.number_field :discount, min: 0, max: 50, step: 1,
+                = f.number_field :discount, min: 0, max: Discount::CAP_VALUE, step: 1,
                   'aria-invalid': (error.call(:discount) ? 'true' : nil),
                   'aria-describedby': (error.call(:discount) ? 'gh-rank-disc-error' : nil),
                   data: { rank_form_target: 'discount', action: 'rank-form#refresh' }

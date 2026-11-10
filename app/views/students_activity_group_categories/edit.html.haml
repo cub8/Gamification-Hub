@@ -1,9 +1,11 @@
-- content_for :title, @activity_group.name
-- categories = @sheet.categories
-- students   = @sheet.students
-- template   = @activity_group.activity_group_template
-
-- grid_data = { controller: 'grading', grading_i18n_value: t('.js').to_json }
+:ruby
+  content_for :title, @activity_group.name
+  categories = @sheet.categories
+  students   = @sheet.students
+  template   = @activity_group.activity_group_template
+  grid_data = {
+    controller: 'grading leave-guard', grading_i18n_value: t('.js').to_json,
+  }
 
 .gh-grading-screen{ data: grid_data }
   = link_to story_group_activity_groups_path(@story_group), class: 'gh-link-button gh-back-link' do
@@ -22,9 +24,12 @@
     .gh-grading-head-actions
       %label.gh-search-input
         %i.fa-solid.fa-magnifying-glass{ 'aria-hidden': 'true' }
-        = search_field_tag :student_search, nil, placeholder: t('.search'),
-          'aria-label': t('.search'),
-          data: { grading_target: 'search', action: 'input->grading#filter' }
+        = search_field_tag :student_search,
+                           nil,
+                           placeholder:  t('.search'),
+                           'aria-label': t('.search'),
+                           data:         { grading_target: 'search',
+                                           action:         'input->grading#filter', }
 
       %ul.gh-cell-legend{ 'aria-label': t('.legend') }
         %li
@@ -40,7 +45,13 @@
           = t('.awarded_locked')
 
   - if @sheet.gradeable?
-    = form_with url: story_group_activity_group_students_activity_group_categories_path(@story_group, @activity_group), method: :patch, id: 'gh-grade-form', class: 'gh-grading-form' do
+    = form_with url:    story_group_activity_group_students_activity_group_categories_path(@story_group,
+                                                                                           @activity_group,),
+                method: :patch,
+                id:     'gh-grade-form',
+                class:  'gh-grading-form',
+                data:   { leave_guard_target: 'form',
+                          action:             'submit->leave-guard#submitting', } do
       %section.gh-panel.gh-grading-board
         .gh-grading-board-scroll
           %table.gh-grading-table
@@ -55,21 +66,25 @@
                       %span.gh-price-badge
                         %b= "+#{category.reward.to_i}"
                         = render 'layouts/currency_token', story_group: @story_group, size: 16
-                      %button.gh-grading-column-select-all{ type: 'button', title: t('.select_column'),
-                                         data: { action: 'grading#toggleColumn',
-                                                 grading_column_param: category.id } }
+                      %button.gh-grading-column-select-all{type: 'button', title: t('.select_column'),
+                                                           data: { action:               'grading#toggleColumn',
+                                                                   grading_column_param: category.id, },}
                         %i.fa-solid.fa-check-double{ 'aria-hidden': 'true' }
                         = t('.everyone')
                 %th.gh-grading-th-total{ scope: 'col' }= t('.total')
 
             %tbody
               - students.each do |student|
-                - name = student.full_name
-                - awarded_total = @sheet.awarded_total(student)
+                :ruby
+                  name = student.full_name
+                  awarded_total = @sheet.awarded_total(student)
                 %tr{ data: { grading_target: 'row', gh_name: name.to_s.downcase, gh_student: student.id } }
                   %th.gh-grading-td-student{ scope: 'row' }
                     %span
-                      %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{ 'data-gh-h': gh_avatar_hue(name), 'aria-hidden': 'true' }
+                      %span.gh-avatar.gh-avatar--sm.gh-octagon-clip{
+                        'data-gh-h':   gh_avatar_hue(name),
+                        'aria-hidden': 'true',
+                      }
                         = gh_initials(name)
                       = name
 
@@ -78,22 +93,24 @@
                     %td
                       - if @sheet.awarded?(student, category)
                         - fresh = @awarded_pairs.include?([category.id, student.id])
-                        %span.gh-grading-cell.gh-grading-cell--awarded{ class: ('gh-grading-cell--stamp' if fresh),
-                                                        title: t('.locked_title'),
-                                                        role: 'img',
-                                                        'aria-label': t('.cell_awarded', label: label),
-                                                        data: { action: 'click->grading#locked' } }
+                        %span.gh-grading-cell.gh-grading-cell--awarded{
+                          class:        ('gh-grading-cell--stamp' if fresh),
+                          title:        t('.locked_title'),
+                          role:         'img',
+                          'aria-label': t('.cell_awarded', label: label),
+                          data:         { action: 'click->grading#locked' },
+                        }
                           %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
                           %i.fa-solid.fa-lock.gh-grading-cell-lock-icon{ 'aria-hidden': 'true' }
                       - else
-                        %label.gh-grading-cell{ data: { grading_target: 'cell',
-                                                grading_reward: category.reward.to_i,
-                                                grading_column: category.id } }
+                        %label.gh-grading-cell{data: { grading_target: 'cell',
+                                                       grading_reward: category.reward.to_i,
+                                                       grading_column: category.id, }}
                           = check_box_tag "completions[#{student.id}][#{category.id}]", '1', false,
-                            id: nil,
-                            'aria-label': t('.cell_empty', label: label),
-                            data: { action: 'grading#toggle',
-                                    gh_label: label }
+                                          id:           nil,
+                                          'aria-label': t('.cell_empty', label: label),
+                                          data:         { action:   'grading#toggle',
+                                                          gh_label: label, }
                           %i.fa-solid.fa-check{ 'aria-hidden': 'true' }
 
                   %td.gh-grading-td-total
@@ -111,14 +128,19 @@
               = render 'layouts/currency_token', story_group: @story_group, size: 16
 
         .gh-action-bar-buttons
-          %button.gh-btn.gh-btn--secondary{ type: 'button', hidden: true,
-                                      data: { grading_target: 'clear', action: 'grading#clear' } }
+          %button.gh-btn.gh-btn--secondary{type: 'button', hidden: true,
+                                           data: { grading_target: 'clear', action: 'grading#clear' },}
             = t('.clear')
-          %button.gh-btn{ type: 'submit',
-                          data: { grading_target: 'submit', action: 'grading#review' } }
+          %button.gh-btn{type: 'submit',
+                         data: { grading_target: 'submit', action: 'grading#review' },}
             = t('.review')
 
-    = render 'review_dialog', categories: categories, students: students
+    = render 'review_dialog',
+             categories:  categories,
+             students:    students,
+             story_group: @story_group,
+             sheet:       @sheet
+    = render 'leave_dialog'
 
   - elsif categories.empty?
     %section.gh-panel.gh-empty-state
@@ -126,7 +148,7 @@
       %p.gh-lead= t('.no_columns_body')
       .gh-button-row
         = link_to t('.sheet_settings'), edit_story_group_activity_group_path(@story_group, @activity_group),
-          class: 'gh-btn'
+                  class: 'gh-btn'
   - else
     %section.gh-panel.gh-empty-state
       %h2.gh-h2= t('.no_students_title')
@@ -140,6 +162,6 @@
       %i.fa-solid.fa-desktop{ 'aria-hidden': 'true' }
     %h1.gh-h2= @activity_group.name
     %p.gh-lead= t('.mobile_body', categories: t('.mobile_categories', count: categories.size),
-                                  students:   t('.mobile_students', count: students.size))
+                                  students:   t('.mobile_students', count: students.size),)
     %p.gh-small= t('.mobile_hint')
     = link_to t('.back_home'), root_path, class: 'gh-btn gh-btn--secondary'

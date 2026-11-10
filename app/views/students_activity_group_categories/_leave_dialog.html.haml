@@ -1,0 +1,20 @@
+%dialog.gh-dialog{
+  'aria-labelledby': 'gh-leave-title',
+  data:              {
+    leave_guard_target: 'dialog',
+    action:             'close->leave-guard#stay click->leave-guard#closeOnBackdrop',
+  },
+}
+  .gh-dialog-body.gh-octagon-clip
+    %h2.gh-h2#gh-leave-title= t('.title')
+
+    %p.gh-warning-note{ role: 'alert' }
+      %i.fa-solid.fa-triangle-exclamation{ 'aria-hidden': 'true' }
+      = t('.body')
+
+    .gh-dialog-button-row
+      %button.gh-btn.gh-btn--secondary{type: 'button', autofocus: true,
+                                       data: { action: 'leave-guard#stay' },}
+        = t('.stay')
+      %button.gh-btn{ type: 'button', data: { action: 'leave-guard#leave' } }
+        = t('.leave')

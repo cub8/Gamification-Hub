@@ -9,6 +9,12 @@ pl:
         many: "Przyznano %{total} %{currency} %{count} studentom."
         other: "Przyznano %{total} %{currency} %{count} studenta."
 
+    leave_dialog:
+      title: "Opuścić ocenianie?"
+      body: "Masz zaznaczone pola, które nie zostały jeszcze przyznane. Jeśli teraz wyjdziesz, zaznaczenia przepadną."
+      stay: "Zostań i dokończ"
+      leave: "Wyjdź bez przyznawania"
+
     edit:
       back: "Wróć do arkuszy"
       lead:
