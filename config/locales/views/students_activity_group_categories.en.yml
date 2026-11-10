@@ -7,7 +7,14 @@ en:
         one: "Awarded %{total} %{currency} to %{count} student."
         other: "Awarded %{total} %{currency} to %{count} students."
 
+    leave_dialog:
+      title: "Leave grading?"
+      body: "You have marked cells that haven't been awarded yet. If you leave now, your selections will be lost."
+      stay: "Stay and finish"
+      leave: "Leave without awarding"
+
     edit:
+      back: "Back to sheets"
       lead:
         one: "%{categories}, %{count} student. Mark who earned rewards — you'll review everything once more before awarding."
         other: "%{categories}, %{count} students. Mark who earned rewards — you'll review everything once more before awarding."

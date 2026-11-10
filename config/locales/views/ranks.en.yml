@@ -136,7 +136,7 @@ en:
             name:
               blank: "Enter the rank name."
             discount:
-              out_of_range: "The discount must be between 0 and 100%."
+              out_of_range: "The discount must be between 0 and 50%."
             required_currency_value:
               negative: "The threshold can't be negative."
               threshold_taken: "The %{rank} rank already has the threshold %{threshold}. Choose another one."

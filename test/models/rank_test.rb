@@ -28,6 +28,27 @@ class RankTest < ActiveSupport::TestCase
     assert_equal true, rank.errors[:discount].any?
   end
 
+  test 'rank discount cannot exceed 50%' do
+    rank = Rank.new(
+      name:                    'Valid',
+      discount:                51,
+      required_currency_value: 100,
+    )
+    assert_equal true, rank.invalid?
+    assert_equal true, rank.errors[:discount].any?
+  end
+
+  test 'rank discount of exactly 50% is valid' do
+    rank = Rank.new(
+      story_group:             @story_group,
+      name:                    'Valid',
+      discount:                50,
+      required_currency_value: 100,
+      icon_glyph:              'chev1',
+    )
+    assert_predicate rank, :valid?
+  end
+
   test 'rank required currency value validation' do
     rank = Rank.new(
       name:                    'Valid',

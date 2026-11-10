@@ -135,4 +135,4 @@ pl:
             didactic_description:
               blank: "Napisz, jak zdobyć tę odznakę."
             discount:
-              out_of_range: "Zniżka musi mieścić się między 0 a 100%."
+              out_of_range: "Zniżka musi mieścić się między 0 a 50%."

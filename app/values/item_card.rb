@@ -52,7 +52,7 @@ class ItemCard
   end
 
   def ladder_discount
-    discounts = ranks.filter_map { |rank| rank.discount&.clamp(0, 100) }
+    discounts = ranks.filter_map { |rank| rank.discount&.clamp(0, Discount::CAP_VALUE) }
     discounts.max.to_i
   end
 
@@ -97,7 +97,7 @@ class ItemCard
   end
 
   def rank_discount
-    discounts = eligible_ranks.filter_map { |rank| rank.discount&.clamp(0, 100) }
+    discounts = eligible_ranks.filter_map { |rank| rank.discount&.clamp(0, Discount::CAP_VALUE) }
     discounts.max.to_i
   end
 
