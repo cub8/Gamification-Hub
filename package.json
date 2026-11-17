@@ -5,7 +5,8 @@
     "build:dev": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --alias:@controllers=app/javascript/controllers --alias:@utils=app/javascript/utils --alias:stimulus=@hotwired/stimulus",
     "build": "esbuild app/javascript/*.* --bundle --format=esm --outdir=app/assets/builds --public-path=/assets --alias:@controllers=app/javascript/controllers --alias:@utils=app/javascript/utils --alias:stimulus=@hotwired/stimulus",
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css --minify",
-    "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css --watch"
+    "watch:css": "tailwindcss -i ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css --watch",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
@@ -17,9 +18,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@tailwindcss/cli": "^4",
     "@types/hotwired__turbo-rails": "^8.0.0",
+    "@types/node": "^24.19.2",
     "esbuild": "^0.27.4",
     "eslint": "^10.0.3",
     "globals": "^17.5.0",

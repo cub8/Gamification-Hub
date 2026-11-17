@@ -107,6 +107,8 @@ GEM
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
     csv (3.3.6)
+    cypress-on-rails (1.20.1)
+      rack
     date (3.5.1)
     debug (1.11.1)
       irb (~> 1.10)
@@ -463,6 +465,7 @@ DEPENDENCIES
   crass (>= 1.0.8)
   cssbundling-rails (~> 1.4)
   csv (~> 3.3)
+  cypress-on-rails (~> 1.20)
   debug (~> 1.11)
   erb (>= 6.0.4)
   factory_bot_rails (~> 6.5)
@@ -532,6 +535,7 @@ CHECKSUMS
   crass (1.0.8) sha256=7a0145c7a2c59f8e7923b3a69ce819c444823a00a5127d805298fea13be24efe
   cssbundling-rails (1.4.3) sha256=53aecd5a7d24ac9c8fcd92975acd0e830fead4ee4583d3d3d49bb64651946e41
   csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
+  cypress-on-rails (1.20.1) sha256=a5c64285630505117352b4d4af0edd59411d4327fa20008f230cdaa9bdafb9cc
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   debug (1.11.1) sha256=2e0b0ac6119f2207a6f8ac7d4a73ca8eb4e440f64da0a3136c30343146e952b6
   debug_inspector (1.2.0) sha256=9bdfa02eebc3da163833e6a89b154084232f5766087e59573b70521c77ea68a2

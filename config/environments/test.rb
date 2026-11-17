@@ -41,6 +41,9 @@ Rails.application.configure do
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: 'example.com' }
 
+  # The Playwright server (CYPRESS=1, see e2e/) must really run jobs, e.g. to send the sign-in e-mail.
+  config.active_job.queue_adapter = :inline if ENV['CYPRESS'].present?
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 

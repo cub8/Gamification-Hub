@@ -16,6 +16,9 @@
       ],
       "@utils/*": [
         "app/javascript/utils/*"
+      ],
+      "@e2e/*": [
+        "e2e/*"
       ]
     }
   },
