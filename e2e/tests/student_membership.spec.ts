@@ -1,4 +1,3 @@
-import { type Page } from "@playwright/test"
 import { expect, type Record, test } from "@e2e/support/on-rails"
 
 let scenario: { [name: string]: Record }
@@ -37,33 +36,16 @@ test("a nickname must be unique within the group", async({ page }) => {
   await expect(page.getByLabel("Twój pseudonim")).toHaveValue("Kometa")
 })
 
-async function leaveGroup(page: Page) {
+test("a student leaves the group", async({ page }) => {
   await page.goto(`/story_groups/${scenario.group.id}/membership/edit`)
   await page.getByRole("link", { name: "Opuść grupę" }).click()
   const dialog = page.getByRole("dialog")
   await expect(dialog.getByRole("heading", { name: "Opuścić grupę Klasa 3B?" })).toBeVisible()
-  // The page does not change after leaving (see the known bug below), so wait for the server instead.
-  const left = page.waitForResponse((response) => response.url().endsWith("/membership"))
   await dialog.getByRole("button", { name: /Opuść/ }).click()
-  await left
-}
-
-test("leaving the group removes the student from it", async({ page }) => {
-  await leaveGroup(page)
-
-  await page.goto("/story_groups")
-  await expect(page.getByRole("main").getByRole("article")).toHaveCount(0)
-})
-
-// Known bug: the leave button submits into the "modal" frame, but StoryGroupMembershipsController#destroy
-// answers with a plain redirect instead of redirect_outside_turbo_frame, so the student stays on the stale
-// settings page and never sees the message.
-test("after leaving, the student lands on the group list with a message", async({ page }) => {
-  test.fail()
-  await leaveGroup(page)
 
   await expect(page).toHaveURL("/story_groups")
   await expect(page.getByText("Opuszczono grupę Klasa 3B.")).toBeVisible()
+  await expect(page.getByRole("main").getByRole("article")).toHaveCount(0)
 })
 
 test("a student sees their badges and the rank ladder", async({ page, rails }) => {
