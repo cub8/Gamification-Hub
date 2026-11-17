@@ -78,10 +78,7 @@ test.describe("templates", () => {
     await expect(templateRegion(page, "Ćwiczenia")).toContainText("do 15 Złote monety")
   })
 
-  // Known bug: the flash promises the sheets stay, but the teacher's sheet list only shows sheets under
-  // templates that still exist (SheetIndex#template_records), so they disappear from the teacher's view.
   test("deletes a template but keeps its sheets", async({ page }) => {
-    test.fail()
     await createSheet(page)
     await expect(sheetRow(page, "Zajęcia 1")).toBeVisible()
 
@@ -92,8 +89,13 @@ test.describe("templates", () => {
     await dialog.getByRole("button", { name: "Usuń szablon" }).click()
 
     await expect(page.getByText("Usunięto szablon „Zajęcia”. Utworzone z niego arkusze zostają.")).toBeVisible()
-    await expect(page.getByRole("link", { name: "Utwórz arkusz" })).toHaveCount(0)
-    await expect(sheetRow(page, "Zajęcia 1")).toBeVisible()
+    const deleted = templateRegion(page, "Zajęcia")
+    await expect(deleted).toContainText("Szablon usunięty.")
+    await expect(deleted.getByRole("link", { name: "Utwórz arkusz" })).toHaveCount(0)
+    await expect(deleted.getByRole("link", { name: "Edytuj szablon" })).toHaveCount(0)
+
+    await sheetRow(page, "Zajęcia 1").getByRole("link", { name: "Oceń" }).click()
+    await expect(page.getByRole("heading", { name: "Zajęcia 1", level: 1 })).toBeVisible()
   })
 
   test("imports a template from CSV", async({ page }) => {

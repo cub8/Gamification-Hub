@@ -29,6 +29,7 @@ pl:
         few: "Szablon: %{count} kategorie, do %{max} %{currency} na studenta za arkusz."
         many: "Szablon: %{count} kategorii, do %{max} %{currency} na studenta za arkusz."
         other: "Szablon: %{count} kategorii, do %{max} %{currency} na studenta za arkusz."
+      deleted: "Szablon usunięty. Utworzone z niego arkusze zostają, ale nowych już nie utworzysz."
       edit: "Edytuj szablon"
       create_sheet: "Utwórz arkusz"
       no_sheets: "Z tego szablonu nie utworzono jeszcze arkuszy."

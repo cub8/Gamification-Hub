@@ -7,6 +7,7 @@ class SheetIndex
     # The ceiling in "do N marchewek na studenta za arkusz".
     def max_reward     = categories.sum { |category| category.reward.to_i }
     def any_sheets?    = sheets.any?
+    def deleted?       = record.deleted?
   end
 
   Sheet = Data.define(:record, :awards_count) do
@@ -32,8 +33,14 @@ class SheetIndex
 
   private
 
+  # A deleted template stays listed while it still has sheets, so those sheets can still be graded.
   def template_records
-    @template_records ||= story_group.activity_group_templates.kept.newest_first.to_a
+    @template_records ||= begin
+      templates = story_group.activity_group_templates
+      with_sheets = templates.where(id: story_group.activity_groups.kept.select(:activity_group_template_id))
+
+      templates.kept.or(with_sheets).newest_first.to_a
+    end
   end
 
   def build_template(record)
