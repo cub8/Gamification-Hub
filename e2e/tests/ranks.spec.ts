@@ -104,7 +104,8 @@ test("rejects a CSV whose rank takes a threshold that is already used", async({ 
   await dialog.locator("input[type=file]").setInputFiles("e2e/fixtures/ranks.csv")
   await dialog.getByRole("button", { name: "Importuj" }).click()
 
-  await expect(dialog.getByRole("alert")).toContainText("Ranga Nowicjusz ma już próg 0. Wybierz inny.")
+  await expect(dialog.getByRole("alert"))
+    .toHaveText("Plik zawiera nieprawidłowe dane: Ranga Nowicjusz ma już próg 0. Wybierz inny.")
   await dialog.getByRole("button", { name: "Anuluj" }).click()
   await expect(page.getByText("5 rang.")).toBeVisible()
 })
