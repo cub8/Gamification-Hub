@@ -33,6 +33,13 @@ class OrganizationTest < ActiveSupport::TestCase
     assert organization.errors.added?(:max_members, :below_members, count: 2)
   end
 
+  test 'requires a name' do
+    organization = FactoryBot.build(:organization, name: ' ')
+
+    assert_not organization.valid?
+    assert organization.errors[:name].any?
+  end
+
   test 'requires unique name' do
     FactoryBot.create(:organization, name: 'Example university')
     organization = FactoryBot.build(:organization, name: 'Example university')

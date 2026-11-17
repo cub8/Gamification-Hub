@@ -32,15 +32,16 @@ test.describe("as the global admin", () => {
     await expect(page.getByText("0 z 40 miejsc zajętych")).toBeVisible()
   })
 
-  // Known bug: Organization validates the name's length and uniqueness but not its presence, so an
-  // organization with an empty name is created.
   test("does not create an organization without a name", async({ page }) => {
-    test.fail()
     await page.goto("/organizations/new")
     await page.getByLabel("Limit członków").fill("40")
     await page.getByRole("button", { name: "Utwórz organizację" }).click()
 
     await expect(page.getByRole("alert").first()).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Nowa organizacja" })).toBeVisible()
+    await page.goto("/organizations")
+    // A nameless organization would be listed by its seats alone.
+    await expect(page.getByRole("main").getByRole("link", { name: /^0 \/ 40/ })).toHaveCount(0)
   })
 
   test("edits an organization's member limit", async({ page }) => {

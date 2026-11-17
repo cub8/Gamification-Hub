@@ -5,7 +5,7 @@ class Organization < ApplicationRecord
 
   has_many :users, dependent: :destroy
 
-  validates :name, length: { maximum: 100 }, uniqueness: true
+  validates :name, presence: true, length: { maximum: 100 }, uniqueness: true
   validates :max_members, presence: true, numericality: { only_integer: true, greater_than: 0 }, unless: :usos?
   validates :max_members, absence: true, if: :usos?
   validate :max_members_not_below_members_count
