@@ -24,9 +24,10 @@ export default defineConfig({
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
   ],
   webServer: {
-    // CYPRESS=1 mounts the cypress-on-rails endpoint (see config/initializers/cypress_on_rails.rb).
-    command: `bin/rails server -e test -b 127.0.0.1 -p ${port} -P tmp/pids/e2e.pid`,
-    env: { CYPRESS: "1" },
+    // CYPRESS=1 mounts the cypress-on-rails endpoint (config/initializers/cypress_on_rails.rb) and switches
+    // to the e2e database (config/database.yml), which db:prepare creates or migrates first.
+    command: `bin/rails db:prepare && bin/rails server -b 127.0.0.1 -p ${port} -P tmp/pids/e2e.pid`,
+    env: { CYPRESS: "1", RAILS_ENV: "test" },
     url: `http://127.0.0.1:${port}/up`,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
