@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :story_group_student do
-    user_id { 1 }
-    story_group_id { 1 }
+    association :user, :student
+    association :story_group
     lives { 1 }
     current_currency { 1 }
     total_currency { 1 }
