@@ -1,12 +1,11 @@
 import { defineConfig, devices } from "@playwright/test"
 
-const port = Number(process.env.E2E_PORT ?? 5017)
+const port = 5017
 
 export default defineConfig({
   testDir: "e2e/tests",
   outputDir: "tmp/playwright/results",
   // Tests share one database and every test truncates it first, so they must not run at the same time.
-  fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
@@ -30,6 +29,5 @@ export default defineConfig({
     env: { CYPRESS: "1", RAILS_ENV: "test" },
     url: `http://127.0.0.1:${port}/up`,
     reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
   },
 })

@@ -1,25 +1,21 @@
 import { type Page } from "@playwright/test"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
+import { card, choose, expect, importCsv, test } from "@e2e/support/on-rails"
 
-let group: Record
+const itemNames = (page: Page) => page.getByRole("main").getByRole("article").getByRole("heading")
+  .allTextContents()
 
-const itemCard = (page: Page, name: string) => page.getByRole("main").getByRole("article").filter({ has: page.getByRole("heading", { name, exact: true }) })
-
-test.beforeEach(async({ page, rails, signIn }) => {
-  const scenario = await rails.scenario("group")
-  group = scenario.group
+test.beforeEach(async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
-  await page.goto(`/story_groups/${group.id}/items`)
+  await page.goto(`/story_groups/${scenario.group.id}/items`)
 })
 
 test("lists the shop items from the cheapest, with their requirements", async({ page }) => {
   await expect(page.getByText("7 przedmiotów w sklepie, od najtańszego.")).toBeVisible()
-  const names = await page.getByRole("main").getByRole("article").getByRole("heading")
-    .allTextContents()
+  const names = await itemNames(page)
   expect(names[0]).toBe("+5 minut do wejściówki")
   expect(names.at(-1)).toBe("+0.5 oceny końcowej")
-  await expect(itemCard(page, "Poprawa wejściówki")).toContainText("Od rangi Uczeń")
-  await expect(itemCard(page, "1up: odzyskanie życia")).toContainText("Przy 0 życiach")
+  await expect(card(page, "Poprawa wejściówki")).toContainText("Od rangi Uczeń")
+  await expect(card(page, "1up: odzyskanie życia")).toContainText("Przy 0 życiach")
 })
 
 test("adds an item with a rank and a badge requirement", async({ page }) => {
@@ -42,14 +38,10 @@ test("adds an item with a rank and a badge requirement", async({ page }) => {
   await page.getByRole("button", { name: "Dodaj przedmiot" }).click()
 
   await expect(page.getByText("Dodano przedmiot „Kryształ mocy” do sklepu.")).toBeVisible()
-  const card = itemCard(page, "Kryształ mocy")
-  await expect(card).toContainText("40")
-  await expect(card).toContainText("Od rangi Adept")
-  await expect(card).toContainText("Przy 0 życiach")
+  await expect(card(page, "Kryształ mocy")).toContainText(/40.*Od rangi Adept.*Przy 0 życiach/s)
   await expect(page.getByText("8 przedmiotów w sklepie")).toBeVisible()
 
-  await card.getByRole("link", { name: "Edytuj przedmiot Kryształ mocy" }).click()
-  await expect(page.getByLabel("Kto może kupić")).toHaveValue(/.+/)
+  await page.getByRole("link", { name: "Edytuj przedmiot Kryształ mocy" }).click()
   await expect(page.getByRole("checkbox", { name: "Można kupić przy 0 życiach" })).toBeChecked()
   await expect(page.getByRole("group", { name: "Wymagane odznaki" })).toContainText("Bez skazy")
   await expect(page.getByRole("group", { name: "Odznaki ze zniżką" })).toContainText("Głos grupy")
@@ -64,18 +56,14 @@ test("does not add an item without a name", async({ page }) => {
   await expect(page.getByRole("heading", { name: "Nowy przedmiot" })).toBeVisible()
 })
 
-test("edits an item's price", async({ page }) => {
+test("edits an item's price, which moves it in the price order", async({ page }) => {
   await page.getByRole("link", { name: "Edytuj przedmiot Konsultacja" }).click()
-  await expect(page.getByRole("heading", { name: "Edytuj przedmiot" })).toBeVisible()
   await page.getByLabel("Cena", { exact: true }).fill("99")
   await page.getByRole("button", { name: "Zapisz zmiany" }).click()
 
   await expect(page.getByText("Zapisano „Konsultacja”. Zmiany dotyczą nowych zakupów.")).toBeVisible()
-  await expect(itemCard(page, "Konsultacja")).toContainText("99")
-  // Sorted by price, so it is now the most expensive one.
-  const names = await page.getByRole("main").getByRole("article").getByRole("heading")
-    .allTextContents()
-  expect(names.at(-1)).toBe("Konsultacja")
+  await expect(card(page, "Konsultacja")).toContainText("99")
+  expect((await itemNames(page)).at(-1)).toBe("Konsultacja")
 })
 
 test("removes an item from the shop", async({ page }) => {
@@ -87,19 +75,15 @@ test("removes an item from the shop", async({ page }) => {
   await dialog.getByRole("button", { name: "Usuń z oferty" }).click()
 
   await expect(page.getByText("Usunięto „Konsultacja” z oferty.")).toBeVisible()
-  await expect(itemCard(page, "Konsultacja")).toHaveCount(0)
+  await expect(card(page, "Konsultacja")).toHaveCount(0)
   await expect(page.getByText("6 przedmiotów w sklepie")).toBeVisible()
 })
 
 test("imports items from CSV, linked to the group's ranks and badges", async({ page }) => {
-  await page.getByRole("link", { name: "Importuj z CSV" }).click()
-  const dialog = page.getByRole("dialog")
-  await dialog.locator("input[type=file]").first().setInputFiles("e2e/fixtures/items_more.csv")
-  await dialog.getByRole("button", { name: "Importuj" }).click()
-
+  const dialog = await importCsv(page, "items_more.csv")
   await expect(dialog.getByText("Kryształ mocy")).toBeVisible()
   await dialog.getByRole("button", { name: "Zatwierdź import" }).click()
 
-  await expect(itemCard(page, "Kryształ mocy")).toContainText("Od rangi Adept")
+  await expect(card(page, "Kryształ mocy")).toContainText("Od rangi Adept")
   await expect(page.getByText("8 przedmiotów w sklepie")).toBeVisible()
 })

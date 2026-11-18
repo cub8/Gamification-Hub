@@ -1,19 +1,13 @@
-import { expect, type Record, test } from "@e2e/support/on-rails"
+import { expect, test } from "@e2e/support/on-rails"
 
-let scenario: { [name: string]: Record }
-
-test.beforeEach(async({ rails }) => {
-  scenario = await rails.scenario("group")
-})
-
-test("a teacher's home lists their groups", async({ page, signIn }) => {
+test("a teacher's home lists their groups", async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
   await expect(page.getByRole("heading", { name: "Dzień dobry, Anna" })).toBeVisible()
   await page.getByRole("link", { name: "Klasa 3B Prowadzisz, 3 studentów" }).click()
   await expect(page.getByRole("heading", { name: "Klasa 3B", level: 1 })).toBeVisible()
 })
 
-test("a student's home shows their standing in each group", async({ page, signIn }) => {
+test("a student's home shows their standing in each group", async({ page, scenario, signIn }) => {
   await signIn(scenario.student)
   await expect(page.getByRole("heading", { name: "Cześć, Jan" })).toBeVisible()
   const card = page.getByRole("main").getByRole("article").filter({ hasText: "Klasa 3B" })
@@ -22,7 +16,7 @@ test("a student's home shows their standing in each group", async({ page, signIn
   await expect(page.getByRole("heading", { name: "Sklep", level: 1 })).toBeVisible()
 })
 
-test("the group list can be searched", async({ page, rails, signIn }) => {
+test("the group list can be searched", async({ page, rails, scenario, signIn }) => {
   await rails.create("story_group", { "owner_id": scenario.teacher.id, name: "Programowanie obiektowe" })
   await signIn(scenario.teacher)
   await page.goto("/story_groups")
@@ -34,7 +28,7 @@ test("the group list can be searched", async({ page, rails, signIn }) => {
   await expect(cards.filter({ visible: true })).toContainText("Programowanie obiektowe")
 })
 
-test("the group switcher jumps between groups", async({ page, rails, signIn }) => {
+test("the group switcher jumps between groups", async({ page, rails, scenario, signIn }) => {
   await rails.create("story_group", { "owner_id": scenario.teacher.id, name: "Programowanie obiektowe" })
   await signIn(scenario.teacher)
   await page.goto(`/story_groups/${scenario.group.id}`)
@@ -44,7 +38,7 @@ test("the group switcher jumps between groups", async({ page, rails, signIn }) =
   await expect(page.getByRole("heading", { name: "Programowanie obiektowe", level: 1 })).toBeVisible()
 })
 
-test("switches the interface to English and back", async({ page, signIn }) => {
+test("switches the interface to English and back", async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
   await page.getByRole("button", { name: "Konto: Anna Kowalska" }).click()
   await page.getByRole("button", { name: "Zmień język na angielski" }).click()
@@ -58,7 +52,7 @@ test("switches the interface to English and back", async({ page, signIn }) => {
   await expect(page.getByRole("heading", { name: "Przedmioty", level: 1 })).toBeVisible()
 })
 
-test("switches to the dark theme and remembers it", async({ page, signIn }) => {
+test("switches to the dark theme and remembers it", async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
   await page.getByRole("button", { name: "Przełącz motyw" }).click()
   await expect(page.locator("html")).toHaveAttribute("data-gh-theme", "dark")
@@ -67,7 +61,7 @@ test("switches to the dark theme and remembers it", async({ page, signIn }) => {
   await expect(page.locator("html")).toHaveAttribute("data-gh-theme", "dark")
 })
 
-test("a student is told about a badge they were awarded", async({ page, signIn }) => {
+test("a student is told about a badge they were awarded", async({ page, scenario, signIn }) => {
   const { teacher, student, group, membership } = scenario
   await signIn(teacher)
   await page.goto(`/story_groups/${group.id}/students/${membership.id}/badges/new`)
@@ -81,8 +75,8 @@ test("a student is told about a badge they were awarded", async({ page, signIn }
   await expect(page.getByRole("article", { name: /Odznaka Bez skazy(?!, jeszcze niezdobyta)/ })).toBeVisible()
 })
 
-test("a teacher reads and clears purchase notifications", async({ page, rails, signIn }) => {
-  await rails.command("scenarios/purchase", { "membership_id": scenario.membership.id, item: "Konsultacja" })
+test("a teacher reads and clears purchase notifications", async({ page, rails, scenario, signIn }) => {
+  await rails.scenario("purchase", { "membership_id": scenario.membership.id, item: "Konsultacja" })
   await signIn(scenario.teacher)
 
   await expect(page.getByRole("region", { name: "Ostatnie zakupy" }).getByRole("list")).toMatchAriaSnapshot(`

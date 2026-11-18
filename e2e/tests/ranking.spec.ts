@@ -1,7 +1,5 @@
 import { type Page } from "@playwright/test"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
-
-let scenario: { [name: string]: Record }
+import { choose, expect, test } from "@e2e/support/on-rails"
 
 async function showRanking(page: Page, mode: "Podium i własne miejsce" | "Pełny ranking") {
   await page.getByRole("switch", { name: "Widoczny dla studentów" }).click()
@@ -11,11 +9,7 @@ async function showRanking(page: Page, mode: "Podium i własne miejsce" | "Pełn
   await dialog.getByRole("button", { name: "Pokaż ranking" }).click()
 }
 
-test.beforeEach(async({ rails }) => {
-  scenario = await rails.scenario("group")
-})
-
-test("the teacher sees everyone, ordered by collected currency", async({ page, signIn }) => {
+test("the teacher sees everyone, ordered by collected currency", async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
   await page.goto(`/story_groups/${scenario.group.id}/ranking`)
 
@@ -25,7 +19,7 @@ test("the teacher sees everyone, ordered by collected currency", async({ page, s
   await expect(rows.nth(3)).toHaveAccessibleName("Miejsce 3 Piotr Wiśniewski Bez pseudonimu Nowicjusz 0")
 })
 
-test("students see the podium only after the teacher shows the ranking", async({ page, signIn }) => {
+test("students see the podium only after the teacher shows the ranking", async({ page, scenario, signIn }) => {
   const { group, teacher, student } = scenario
   await signIn(student)
   await page.goto(`/story_groups/${group.id}/ranking`)
@@ -46,7 +40,7 @@ test("students see the podium only after the teacher shows the ranking", async({
   await expect(page.getByRole("main")).not.toContainText("Ola Zielińska")
 })
 
-test("the teacher shows the full ranking and hides it again", async({ page, signIn }) => {
+test("the teacher shows the full ranking and hides it again", async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
   await page.goto(`/story_groups/${scenario.group.id}/ranking`)
   await showRanking(page, "Pełny ranking")

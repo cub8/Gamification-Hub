@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# The latest e-mail sent to the given address, or nil if none was sent.
-email = command_options['to']
-mail = ActionMailer::Base.deliveries.reverse.find { it.to.include?(email) }
+# The text of the latest e-mail sent to the given address, or nil if none was sent.
+mail = ActionMailer::Base.deliveries.reverse.find { it.to.include?(command_options['to']) }
 
-mail && { subject: mail.subject, text: (mail.text_part || mail).decoded }
+mail && (mail.text_part || mail).decoded

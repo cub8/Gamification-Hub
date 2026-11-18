@@ -1,7 +1,5 @@
 import { type Page } from "@playwright/test"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
-
-let group: Record
+import { choose, expect, importCsv, test } from "@e2e/support/on-rails"
 
 const templateRegion = (page: Page, name: string) => page.getByRole("region", { name, exact: true })
 const sheetRow = (page: Page, name: string) => page.getByRole("main").getByRole("listitem").filter({ hasText: name })
@@ -12,11 +10,9 @@ async function createSheet(page: Page, template = "Zajęcia") {
   await page.getByRole("dialog").getByRole("button", { name: "Utwórz arkusz" }).click()
 }
 
-test.beforeEach(async({ page, rails, signIn }) => {
-  const scenario = await rails.scenario("group")
-  group = scenario.group
+test.beforeEach(async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
-  await page.goto(`/story_groups/${group.id}/activity_groups`)
+  await page.goto(`/story_groups/${scenario.group.id}/activity_groups`)
 })
 
 test.describe("templates", () => {
@@ -99,11 +95,7 @@ test.describe("templates", () => {
   })
 
   test("imports a template from CSV", async({ page }) => {
-    await page.getByRole("link", { name: "Importuj z CSV" }).click()
-    const dialog = page.getByRole("dialog")
-    await dialog.locator("input[type=file]").setInputFiles("e2e/fixtures/templates.csv")
-    await dialog.getByRole("button", { name: "Importuj" }).click()
-
+    const dialog = await importCsv(page, "templates.csv")
     await expect(dialog.getByText("Zadanie domowe")).toBeVisible()
     await dialog.getByRole("button", { name: "Zatwierdź import" }).click()
 

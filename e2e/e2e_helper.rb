@@ -1,10 +1,4 @@
 # frozen_string_literal: true
 
-# Loaded once, before the first app command runs.
-require 'cypress_on_rails/smart_factory_wrapper'
-
-CypressOnRails::SmartFactoryWrapper.configure(
-  always_reload: false,
-  factory:       FactoryBot,
-  files:         Rails.root.glob('test/factories/**/*.rb'),
-)
+# cypress-on-rails loads this before running app commands and warns when it is missing. Nothing to set up:
+# factory_bot_rails already loads test/factories in the test environment.

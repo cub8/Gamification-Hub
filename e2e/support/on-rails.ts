@@ -1,9 +1,17 @@
-import { test as base, expect, type APIRequestContext, type Locator } from "@playwright/test"
+import { test as base, expect, type APIRequestContext, type Locator, type Page } from "@playwright/test"
 
 export { expect }
 
 export type Record = { id: number; [attribute: string]: unknown }
-type FactoryCall = [method: "create" | "create_list" | "build", factory: string, ...args: unknown[]]
+
+// What e2e/app_commands/scenarios/group.rb builds.
+export type GroupScenario = {
+  teacher: Record
+  group: Record
+  student: Record
+  membership: Record
+  others: Record[]
+}
 
 // Talks to the test server through cypress-on-rails: e2e/app_commands/<name>.rb.
 export class Rails {
@@ -17,24 +25,28 @@ export class Rails {
     return result
   }
 
-  // Each call maps to FactoryBot, e.g. ["create", "user", "teacher", { email: "a@b.pl" }].
-  factories<T = Record>(calls: FactoryCall[]) {
-    return this.command<T[]>("factory_bot", calls)
+  // create("user", "teacher", { email: "a@b.pl" }) is FactoryBot.create(:user, :teacher, email: "a@b.pl").
+  create(factory: string, ...traitsAndAttributes: unknown[]) {
+    return this.command<Record>("create", [factory, ...traitsAndAttributes])
   }
 
-  async create<T = Record>(factory: string, ...traitsAndAttributes: unknown[]) {
-    const [record] = await this.factories<T>([["create", factory, ...traitsAndAttributes]])
-    return record
-  }
-
-  // Runs a scenario from e2e/app_commands/scenarios and returns what it builds.
   scenario<T = { [name: string]: Record }>(name: string, options: unknown = {}) {
     return this.command<T>(`scenarios/${name}`, options)
+  }
+
+  // The text of the latest e-mail sent to the address, or null.
+  lastMail(to: string) {
+    return this.command<string | null>("last_mail", { to })
+  }
+
+  async signInLink(to: string) {
+    return (await this.lastMail(to))?.match(/https?:\/\/\S+\/auth\/passwordless\/verify\?token=\S+/)?.[0]
   }
 }
 
 type Fixtures = {
   rails: Rails
+  scenario: GroupScenario
   signIn: (user: Record) => Promise<void>
 }
 
@@ -43,6 +55,10 @@ export const test = base.extend<Fixtures>({
     const rails = new Rails(request)
     await rails.command("clean")
     await use(rails)
+  },
+
+  scenario: async({ rails }, use) => {
+    await use(await rails.scenario<GroupScenario>("group"))
   },
 
   // Signs out whoever is signed in, so one test can switch between a teacher and a student. Leaving the page
@@ -61,4 +77,23 @@ export const test = base.extend<Fixtures>({
 // Playwright sees the tile as covering the input. Checking the input directly is what a click on the tile does.
 export async function choose(input: Locator, checked = true) {
   await input.setChecked(checked, { force: true })
+}
+
+// A badge, item or shop offer card, found by its heading.
+export function card(page: Page, name: string) {
+  return page.getByRole("main").getByRole("article").filter({ has: page.getByRole("heading", { name, exact: true }) })
+}
+
+// Uploads a file through a list's "Importuj z CSV" dialog and returns the dialog with the preview or the error.
+export async function importCsv(page: Page, file: string) {
+  await page.getByRole("link", { name: "Importuj z CSV" }).click()
+  const dialog = page.getByRole("dialog")
+  await dialog.locator("input[type=file]").setInputFiles(`e2e/fixtures/${file}`)
+  await dialog.getByRole("button", { name: "Importuj" }).click()
+  return dialog
+}
+
+// The group wizard's own file field, not the hidden copies that feed its preview forms.
+export function wizardCsvInput(page: Page, resource: string) {
+  return page.locator(`input[type=file][name="setup[csv][${resource}]"][data-resource]`)
 }

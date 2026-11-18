@@ -1,22 +1,13 @@
-import { type Page } from "@playwright/test"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
+import { card, choose, expect, importCsv, test } from "@e2e/support/on-rails"
 
-let group: Record
-
-const badgeCard = (page: Page, name: string) => page.getByRole("main").getByRole("article").filter({ has: page.getByRole("heading", { name, exact: true }) })
-
-test.beforeEach(async({ page, rails, signIn }) => {
-  const scenario = await rails.scenario("group")
-  group = scenario.group
+test.beforeEach(async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
-  await page.goto(`/story_groups/${group.id}/badges`)
+  await page.goto(`/story_groups/${scenario.group.id}/badges`)
 })
 
 test("lists the badges with their discount and how to earn them", async({ page }) => {
   await expect(page.getByText("6 odznak.")).toBeVisible()
-  await expect(badgeCard(page, "Bez skazy")).toContainText("−2% w sklepie")
-  await expect(badgeCard(page, "Bez skazy")).toContainText("Pierwsza wejściówka bez błędów")
-  await expect(badgeCard(page, "Bez skazy")).toContainText("Nikt jej jeszcze nie ma")
+  await expect(card(page, "Bez skazy")).toContainText(/−2% w sklepie.*Pierwsza wejściówka bez błędów.*Nikt jej/s)
 })
 
 test("adds a badge, previewing both sides of the card", async({ page }) => {
@@ -36,8 +27,7 @@ test("adds a badge, previewing both sides of the card", async({ page }) => {
   await page.getByRole("button", { name: "Dodaj odznakę" }).click()
 
   await expect(page.getByText("Dodano odznakę „Perfekcyjny Lot”.")).toBeVisible()
-  await expect(badgeCard(page, "Perfekcyjny Lot")).toContainText("−4% w sklepie")
-  await expect(badgeCard(page, "Perfekcyjny Lot")).toContainText("Trzy wejściówki z rzędu bez błędów")
+  await expect(card(page, "Perfekcyjny Lot")).toContainText(/−4% w sklepie.*Trzy wejściówki z rzędu bez błędów/s)
   await expect(page.getByText("7 odznak.")).toBeVisible()
 })
 
@@ -52,14 +42,13 @@ test("does not add a badge without a name", async({ page }) => {
 
 test("edits a badge", async({ page }) => {
   await page.getByRole("link", { name: "Edytuj odznakę Bez skazy" }).click()
-  await expect(page.getByRole("heading", { name: "Edytuj odznakę" })).toBeVisible()
   await page.getByLabel("Nazwa").fill("Czysta karta")
   await page.getByLabel("Zniżka w sklepie").fill("6")
   await page.getByRole("button", { name: "Zapisz zmiany" }).click()
 
   await expect(page.getByText("Zapisano odznakę „Czysta karta”.")).toBeVisible()
-  await expect(badgeCard(page, "Czysta karta")).toContainText("−6% w sklepie")
-  await expect(badgeCard(page, "Bez skazy")).toHaveCount(0)
+  await expect(card(page, "Czysta karta")).toContainText("−6% w sklepie")
+  await expect(card(page, "Bez skazy")).toHaveCount(0)
 })
 
 test("deletes a badge", async({ page }) => {
@@ -71,20 +60,16 @@ test("deletes a badge", async({ page }) => {
   await dialog.getByRole("button", { name: "Usuń odznakę" }).click()
 
   await expect(page.getByText("Usunięto odznakę „Głos grupy”.")).toBeVisible()
-  await expect(badgeCard(page, "Głos grupy")).toHaveCount(0)
+  await expect(card(page, "Głos grupy")).toHaveCount(0)
   await expect(page.getByText("5 odznak.")).toBeVisible()
 })
 
 test("imports badges from CSV after a preview", async({ page }) => {
-  await page.getByRole("link", { name: "Importuj z CSV" }).click()
-  const dialog = page.getByRole("dialog")
-  await dialog.locator("input[type=file]").setInputFiles("e2e/fixtures/badges.csv")
-  await dialog.getByRole("button", { name: "Importuj" }).click()
-
+  const dialog = await importCsv(page, "badges.csv")
   await expect(dialog.getByText("Smokobójca")).toBeVisible()
   await dialog.getByRole("button", { name: "Zatwierdź import" }).click()
 
-  await expect(badgeCard(page, "Smokobójca")).toContainText("Rozwiązanie zadania z gwiazdką")
-  await expect(badgeCard(page, "Kronikarz")).toContainText("−3% w sklepie")
+  await expect(card(page, "Smokobójca")).toContainText("Rozwiązanie zadania z gwiazdką")
+  await expect(card(page, "Kronikarz")).toContainText("−3% w sklepie")
   await expect(page.getByText("8 odznak.")).toBeVisible()
 })

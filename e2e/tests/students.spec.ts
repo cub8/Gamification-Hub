@@ -1,15 +1,11 @@
 import { type Page } from "@playwright/test"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
-
-let group: Record
+import { choose, expect, importCsv, test } from "@e2e/support/on-rails"
 
 const studentRow = (page: Page, name: string) => page.getByRole("main").getByRole("listitem").filter({ has: page.getByRole("link", { name: new RegExp(`^${name}`) }) })
 
-test.beforeEach(async({ page, rails, signIn }) => {
-  const scenario = await rails.scenario("group")
-  group = scenario.group
+test.beforeEach(async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
-  await page.goto(`/story_groups/${group.id}/students`)
+  await page.goto(`/story_groups/${scenario.group.id}/students`)
 })
 
 test("lists students with their rank, lives and currency", async({ page }) => {
@@ -122,18 +118,14 @@ test("removes a student from the group", async({ page }) => {
   await expect(studentRow(page, "Ola Zielińska")).toHaveCount(0)
 })
 
-test("imports students from CSV by e-mail, skipping unknown accounts", async({ page, rails }) => {
+test("imports students from CSV by e-mail, skipping unknown accounts", async({ page, rails, scenario }) => {
   await rails.create("user", "student", { email: "marek.lis@example.com", "full_name": "Marek Lis" })
 
-  await page.getByRole("link", { name: "Importuj z CSV" }).click()
-  const dialog = page.getByRole("dialog")
-  await dialog.locator("input[type=file]").setInputFiles("e2e/fixtures/students.csv")
-  await dialog.getByRole("button", { name: "Importuj" }).click()
-
+  await importCsv(page, "students.csv")
   await expect(page.getByText("Dodano 1 studenta.")).toBeVisible()
   await expect(page.getByText("Pominięto 1 wiersz.")).toBeVisible()
   await expect(page.getByText("Nie znaleziono konta dla „nieznany@example.com”.")).toBeVisible()
 
-  await page.goto(`/story_groups/${group.id}/students`)
+  await page.goto(`/story_groups/${scenario.group.id}/students`)
   await expect(studentRow(page, "Marek Lis")).toContainText("„Lis”")
 })

@@ -7,4 +7,3 @@ tables = (connection.tables - kept).map { connection.quote_table_name(it) }
 connection.execute("TRUNCATE #{tables.join(', ')} RESTART IDENTITY CASCADE")
 
 ActionMailer::Base.deliveries.clear
-CypressOnRails::SmartFactoryWrapper.reload

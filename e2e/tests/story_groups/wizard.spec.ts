@@ -1,5 +1,5 @@
 import { type Page } from "@playwright/test"
-import { choose, expect, test } from "@e2e/support/on-rails"
+import { choose, expect, test, wizardCsvInput } from "@e2e/support/on-rails"
 
 const next = (page: Page) => page.getByRole("button", { name: "Dalej" }).click()
 
@@ -14,8 +14,6 @@ async function fillBasics(page: Page, { name = "Zakon Algorytmów", currency = "
   await choose(page.getByRole("radio", { name: "Ikona waluty: Moneta" }))
 }
 
-// The visible file field of the wizard, not the hidden copies that feed the preview forms.
-const csvInput = (page: Page, resource: string) => page.locator(`input[type=file][name="setup[csv][${resource}]"][data-resource]`)
 
 async function choosePath(page: Page, path: "Szybki start" | "Od zera" | "Z plików CSV") {
   await choose(page.getByRole("radio", { name: new RegExp(path) }))
@@ -85,7 +83,7 @@ test.describe("creating a group", () => {
       ["templates", "Podgląd importu szablonów", ["Obecność", "Zadanie domowe", "Aktywność"]],
     ]
     for (const [resource, title, rows] of previews) {
-      await csvInput(page, resource).setInputFiles(`e2e/fixtures/${resource}.csv`)
+      await wizardCsvInput(page, resource).setInputFiles(`e2e/fixtures/${resource}.csv`)
       const dialog = page.getByRole("dialog")
       await expect(dialog.getByRole("heading", { name: title })).toBeVisible()
       for (const row of rows) await expect(dialog.getByText(row).first()).toBeVisible()
@@ -105,7 +103,7 @@ test.describe("creating a group", () => {
     await next(page)
     await choosePath(page, "Z plików CSV")
 
-    await csvInput(page, "ranks").setInputFiles("e2e/fixtures/malformed.csv")
+    await wizardCsvInput(page, "ranks").setInputFiles("e2e/fixtures/malformed.csv")
     const dialog = page.getByRole("dialog")
     await expect(dialog.getByText("Nie udało się odczytać pliku - sprawdź, czy to poprawny plik CSV.")).toBeVisible()
     await dialog.getByRole("button", { name: "OK" }).click()

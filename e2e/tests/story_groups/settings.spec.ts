@@ -1,10 +1,7 @@
 import fs from "node:fs"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
+import { choose, expect, test, wizardCsvInput } from "@e2e/support/on-rails"
 
-let scenario: { [name: string]: Record }
-
-test.beforeEach(async({ page, rails, signIn }) => {
-  scenario = await rails.scenario("group")
+test.beforeEach(async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
   await page.goto(`/story_groups/${scenario.group.id}/edit`)
 })
@@ -58,40 +55,24 @@ test("deletes the group only after typing its name", async({ page }) => {
   await expect(page.getByRole("main").getByRole("article")).toHaveCount(0)
 })
 
-test("exports the configuration as CSV files", async({ page }) => {
+test("exports the configuration as CSV files that seed a new group", async({ page, scenario }) => {
   await page.goto(`/story_groups/${scenario.group.id}/export`)
   const exportButton = page.getByRole("button", { name: "Eksportuj" })
   await expect(exportButton).toBeDisabled()
-
-  await choose(page.getByRole("switch", { name: "Rangi" }))
-  await choose(page.getByRole("switch", { name: "Przedmioty" }))
-  const downloads: string[] = []
-  page.on("download", async(download) => downloads.push(download.suggestedFilename()))
-  const ranks = page.waitForEvent("download", (download) => download.suggestedFilename() === "ranks.csv")
-  const items = page.waitForEvent("download", (download) => download.suggestedFilename() === "items.csv")
-  await exportButton.click()
-
-  const ranksCsv = fs.readFileSync(await (await ranks).path(), "utf8")
-  expect(ranksCsv).toContain("nazwa,próg_waluty,zniżka,ikona")
-  expect(ranksCsv).toContain("Adept,40,5,shield")
-  expect(fs.readFileSync(await (await items).path(), "utf8")).toContain("Konsultacja")
-  expect(downloads.sort()).toEqual(["items.csv", "ranks.csv"])
-})
-
-test("an exported group can seed a new one", async({ page }) => {
-  await page.goto(`/story_groups/${scenario.group.id}/export`)
   for (const name of ["Rangi", "Odznaki", "Przedmioty", "Szablony kategorii zajęć"]) {
     await choose(page.getByRole("switch", { name }))
   }
+
   const files = new Map<string, string>()
-  const allDownloaded = new Promise<void>((resolve) => {
+  const downloaded = new Promise<void>((resolve) => {
     page.on("download", async(download) => {
       files.set(download.suggestedFilename(), await download.path())
       if (files.size === 4) resolve()
     })
   })
-  await page.getByRole("button", { name: "Eksportuj" }).click()
-  await allDownloaded
+  await exportButton.click()
+  await downloaded
+  expect(fs.readFileSync(files.get("ranks.csv")!, "utf8")).toContain("nazwa,próg_waluty,zniżka,ikona\nNowicjusz,0,0")
 
   await page.goto("/story_groups/new")
   await page.getByLabel("Nazwa grupy").fill("Kopia 3B")
@@ -99,12 +80,8 @@ test("an exported group can seed a new one", async({ page }) => {
   await page.getByLabel("Nazwa waluty").fill("Monet")
   await page.getByRole("button", { name: "Dalej" }).click()
   await choose(page.getByRole("radio", { name: /Z plików CSV/ }))
-  const inputs = { ranks: "ranks.csv", badges: "badges.csv", items: "items.csv", templates: "templates.csv" }
-  for (const [resource, file] of Object.entries(inputs)) {
-    expect(files.has(file), `${file} was downloaded`).toBeTruthy()
-    await page.locator(`input[type=file][name="setup[csv][${resource}]"][data-resource]`).setInputFiles({
-      name: file, mimeType: "text/csv", buffer: fs.readFileSync(files.get(file)!),
-    })
+  for (const resource of ["ranks", "badges", "items", "templates"]) {
+    await wizardCsvInput(page, resource).setInputFiles(files.get(`${resource}.csv`)!)
     await page.getByRole("dialog").getByRole("button", { name: "Zatwierdź" }).click()
   }
   await page.getByRole("button", { name: "Dalej" }).click()

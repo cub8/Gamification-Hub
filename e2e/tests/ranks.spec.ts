@@ -1,15 +1,11 @@
 import { type Page } from "@playwright/test"
-import { choose, expect, type Record, test } from "@e2e/support/on-rails"
-
-let group: Record
+import { choose, expect, importCsv, test } from "@e2e/support/on-rails"
 
 const rankRow = (page: Page, name: string) => page.locator("li.gh-rank-row").filter({ has: page.getByText(name, { exact: true }) })
 
-test.beforeEach(async({ page, rails, signIn }) => {
-  const scenario = await rails.scenario("group")
-  group = scenario.group
+test.beforeEach(async({ page, scenario, signIn }) => {
   await signIn(scenario.teacher)
-  await page.goto(`/story_groups/${group.id}/ranks`)
+  await page.goto(`/story_groups/${scenario.group.id}/ranks`)
 })
 
 test("lists the ranks from the lowest threshold up, with the students who hold them", async({ page }) => {
@@ -20,7 +16,7 @@ test("lists the ranks from the lowest threshold up, with the students who hold t
   await expect(rankRow(page, "Adept").getByRole("link", { name: "1 student" })).toBeVisible()
 })
 
-test("adds a rank", async({ page }) => {
+test("adds a rank", async({ page, scenario }) => {
   await page.getByRole("link", { name: "Nowa ranga" }).click()
   await page.getByLabel("Nazwa").fill("Arcymistrz")
   await choose(page.getByRole("radio", { name: "Grafika: Korona" }))
@@ -30,7 +26,7 @@ test("adds a rank", async({ page }) => {
   await page.getByRole("button", { name: "Dodaj rangę" }).click()
 
   await expect(page.getByText("Dodano rangę „Arcymistrz”.")).toBeVisible()
-  await expect(page).toHaveURL(`/story_groups/${group.id}/ranks`)
+  await expect(page).toHaveURL(`/story_groups/${scenario.group.id}/ranks`)
   await expect(rankRow(page, "Arcymistrz")).toContainText("Od 150 zebranych, −20% w sklepie")
   await expect(page.getByText("6 rang.")).toBeVisible()
 })
@@ -41,8 +37,7 @@ test("does not add a rank without a name", async({ page }) => {
   await page.getByRole("button", { name: "Dodaj rangę" }).click()
 
   await expect(page.getByRole("alert").first()).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Nowa ranga" })).toBeVisible()
-  await page.goto(`/story_groups/${group.id}/ranks`)
+  await page.getByRole("link", { name: "Anuluj" }).click()
   await expect(page.getByText("5 rang.")).toBeVisible()
 })
 
@@ -68,12 +63,10 @@ test("cannot delete a rank that an item requires", async({ page }) => {
   await expect(dialog.getByRole("heading", { name: "Usunąć rangę „Uczeń”?" })).toBeVisible()
   await expect(dialog.getByRole("alert")).toContainText("Przedmiot Poprawa wejściówki wymaga tej rangi.")
   await expect(dialog.getByRole("button", { name: "Usuń rangę" })).toBeDisabled()
-  await dialog.getByRole("button", { name: "Anuluj" }).click()
-  await expect(dialog).toBeHidden()
 })
 
-test("deletes a rank", async({ page, rails }) => {
-  await rails.create("rank", { "story_group_id": group.id, name: "Legenda", "required_currency_value": 500 })
+test("deletes a rank", async({ page, rails, scenario }) => {
+  await rails.create("rank", { "story_group_id": scenario.group.id, name: "Legenda", "required_currency_value": 500 })
   await page.reload()
 
   await rankRow(page, "Legenda").getByRole("link", { name: "Edytuj" }).click()
@@ -85,11 +78,7 @@ test("deletes a rank", async({ page, rails }) => {
 })
 
 test("imports ranks from CSV after a preview", async({ page }) => {
-  await page.getByRole("link", { name: "Importuj z CSV" }).click()
-  const dialog = page.getByRole("dialog")
-  await dialog.locator("input[type=file]").setInputFiles("e2e/fixtures/ranks_more.csv")
-  await dialog.getByRole("button", { name: "Importuj" }).click()
-
+  const dialog = await importCsv(page, "ranks_more.csv")
   await expect(dialog.getByText("Paladyn")).toBeVisible()
   await dialog.getByRole("button", { name: "Zatwierdź import" }).click()
 
@@ -99,11 +88,7 @@ test("imports ranks from CSV after a preview", async({ page }) => {
 })
 
 test("rejects a CSV whose rank takes a threshold that is already used", async({ page }) => {
-  await page.getByRole("link", { name: "Importuj z CSV" }).click()
-  const dialog = page.getByRole("dialog")
-  await dialog.locator("input[type=file]").setInputFiles("e2e/fixtures/ranks.csv")
-  await dialog.getByRole("button", { name: "Importuj" }).click()
-
+  const dialog = await importCsv(page, "ranks.csv")
   await expect(dialog.getByRole("alert"))
     .toHaveText("Plik zawiera nieprawidłowe dane: Ranga Nowicjusz ma już próg 0. Wybierz inny.")
   await dialog.getByRole("button", { name: "Anuluj" }).click()

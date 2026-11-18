@@ -1,7 +1,5 @@
 import { expect, test } from "@e2e/support/on-rails"
 
-type Mail = { subject: string; text: string } | null
-
 test("a teacher signs in with an e-mail link", async({ page, rails }) => {
   const email = "anna.kowalska@example.com"
   await rails.create("user", "teacher", { email, "full_name": "Anna Kowalska" })
@@ -14,10 +12,7 @@ test("a teacher signs in with an e-mail link", async({ page, rails }) => {
   await expect(page.getByRole("heading", { name: "Sprawdź skrzynkę" })).toBeVisible()
   await expect(page.getByText(email)).toBeVisible()
 
-  const mail = await rails.command<Mail>("last_mail", { to: email })
-  const link = mail?.text.match(/https?:\/\/\S+\/auth\/passwordless\/verify\?token=\S+/)?.[0]
-  expect(link).toBeTruthy()
-  await page.goto(link!)
+  await page.goto((await rails.signInLink(email))!)
 
   await expect(page).toHaveURL("/home")
   await expect(page.getByText("Zalogowano pomyślnie.")).toBeVisible()
@@ -30,7 +25,7 @@ test("an unknown address gets the same answer but no e-mail", async({ page, rail
   await page.getByRole("button", { name: "Wyślij link" }).click()
 
   await expect(page.getByRole("heading", { name: "Sprawdź skrzynkę" })).toBeVisible()
-  expect(await rails.command<Mail>("last_mail", { to: "nikt@example.com" })).toBeNull()
+  expect(await rails.lastMail("nikt@example.com")).toBeNull()
 })
 
 test("a used sign-in link does not work twice", async({ page, rails }) => {

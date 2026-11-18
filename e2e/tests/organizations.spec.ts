@@ -1,6 +1,5 @@
 import { expect, type Record, test } from "@e2e/support/on-rails"
 
-type Mail = { subject: string; text: string } | null
 let organization: Record
 let orgAdmin: Record
 
@@ -64,11 +63,10 @@ test.describe("as the global admin", () => {
       .toBeVisible()
     await expect(page.getByRole("main")).toContainText("nowy.admin@example.com")
 
-    const mail = await rails.command<Mail>("last_mail", { to: "nowy.admin@example.com" })
     // The invitation carries a sign-in link, so the first click signs the new admin in.
-    const link = mail!.text.match(/https?:\/\/\S+\/auth\/passwordless\/verify\?token=\S+/)![0]
+    const link = await rails.signInLink("nowy.admin@example.com")
     await page.context().clearCookies()
-    await page.goto(link)
+    await page.goto(link!)
 
     await expect(page.getByRole("heading", { name: "Uzupełnij swoje dane" })).toBeVisible()
     await expect(page.getByLabel("Adres e-mail")).toHaveValue("nowy.admin@example.com")
@@ -121,7 +119,7 @@ test.describe("as an organization admin", () => {
 
     await expect(page.getByText("Pomyślnie dodano użytkownika do organizacji. Wysłano zaproszenie na email."))
       .toBeVisible()
-    expect(await rails.command<Mail>("last_mail", { to: "tomasz.wojcik@example.com" })).not.toBeNull()
+    expect(await rails.lastMail("tomasz.wojcik@example.com")).not.toBeNull()
 
     await page.goto(`/organizations/${organization.id}`)
     const main = page.getByRole("main")
@@ -149,7 +147,7 @@ test.describe("as an organization admin", () => {
     await page.getByRole("button", { name: "Wyślij zaproszenie" }).click()
 
     await expect(page.getByRole("alert").first()).toBeVisible()
-    expect(await rails.command<Mail>("last_mail", { to: "za.duzo@example.com" })).toBeNull()
+    expect(await rails.lastMail("za.duzo@example.com")).toBeNull()
   })
 
   test("cannot manage other organizations", async({ page }) => {
