@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   factory :story_group do
-    association :owner, factory: :user
-    name { 'MyString' }
-    description { 'MyText' }
+    association :owner, :teacher, factory: :user
+    sequence(:name) { |n| "Group #{n}" }
+    description { 'A story group for tests' }
     icon { nil }
-    currency_name { 'MyString' }
+    currency_name { 'Coins' }
     currency_icon { nil }
     default_lives { 3 }
   end

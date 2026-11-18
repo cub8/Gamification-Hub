@@ -5,15 +5,19 @@
     %div
       %h2.gh-h2{ id: "gh-tpl-#{record.id}" }= record.base_name
       %p.gh-template-panel-meta
-        = t('.meta', count: template.category_count, max: template.max_reward, currency: @story_group.currency_name)
+        - if template.deleted?
+          = t('.deleted')
+        - else
+          = t('.meta', count: template.category_count, max: template.max_reward, currency: @story_group.currency_name)
     %span.gh-template-panel-spacer
 
-    = link_to t('.edit'), edit_story_group_activity_group_template_path(@story_group, record),
-      class: 'gh-btn gh-btn--secondary gh-btn--small'
-    = link_to new_story_group_activity_group_path(@story_group, template_id: record.id),
-      class: 'gh-btn gh-btn--small', data: { turbo_frame: 'modal' } do
-      %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
-      = t('.create_sheet')
+    - unless template.deleted?
+      = link_to t('.edit'), edit_story_group_activity_group_template_path(@story_group, record),
+                class: 'gh-btn gh-btn--secondary gh-btn--small'
+      = link_to new_story_group_activity_group_path(@story_group, template_id: record.id),
+                class: 'gh-btn gh-btn--small', data: { turbo_frame: 'modal' } do
+        %i.fa-solid.fa-plus{ 'aria-hidden': 'true' }
+        = t('.create_sheet')
 
   - if template.any_sheets?
     %ul.gh-sheet-list

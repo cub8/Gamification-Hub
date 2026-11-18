@@ -8,21 +8,21 @@ FactoryBot.define do
     sequence(:university_number) { |n| (n + 123456).to_s }
     university_name { 'Example university' }
     first_login { false }
-  end
 
-  trait :student do
-    role { 'student' }
-  end
+    trait :student do
+      role { 'student' }
+    end
 
-  trait :teacher do
-    role { 'teacher' }
-  end
+    trait :teacher do
+      role { 'teacher' }
+    end
 
-  trait :organization_admin do
-    role { 'organization_admin' }
-  end
+    trait :organization_admin do
+      role { 'organization_admin' }
+    end
 
-  trait :global_admin do
-    role { 'global_admin' }
+    trait :global_admin do
+      role { 'global_admin' }
+    end
   end
 end

@@ -38,8 +38,11 @@ class StoryGroupMembershipsController < ApplicationController
 
     name = @story_group.name
     @membership.destroy!
+    notice = t('story_group_memberships.flash.left', name: name)
 
-    redirect_to story_groups_path, notice: t('story_group_memberships.flash.left', name: name), status: :see_other
+    return redirect_outside_turbo_frame(story_groups_path, notice: notice) if @in_modal
+
+    redirect_to story_groups_path, notice: notice, status: :see_other
   end
 
   private

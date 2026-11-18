@@ -27,6 +27,7 @@ en:
       meta:
         one: "Template: %{count} category, up to %{max} %{currency} per student per sheet."
         other: "Template: %{count} categories, up to %{max} %{currency} per student per sheet."
+      deleted: "Template deleted. Its sheets stay, but you cannot create new ones from it."
       edit: "Edit template"
       create_sheet: "Create a sheet"
       no_sheets: "No sheets have been created from this template yet."

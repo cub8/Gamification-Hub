@@ -44,6 +44,7 @@ gem 'view_component', '~> 4.15' # Reusable, testable & encapsulated view compone
 group :development, :test do
   gem 'brakeman', '~> 8.1', require: false # Static analysis for security vulnerabilities
   gem 'bundler-audit', '~> 0.9', require: false # Audits gems for known security defects
+  gem 'cypress-on-rails', '~> 1.20' # Rails integration for Playwright E2E tests [https://github.com/shakacode/cypress-playwright-on-rails]
   gem 'debug', '~> 1.11', platforms: %i[mri windows] # Debugger
   gem 'factory_bot_rails', '~> 6.5' # For factories [https://github.com/thoughtbot/factory_bot_rails]
   gem 'haml_lint', '~> 0.78.0' # Linter for haml

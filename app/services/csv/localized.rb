@@ -19,8 +19,10 @@ module Csv
         keys.map { |key| current("#{scope}.csv_columns.#{key}") }
       end
 
+      # The models' messages are whole sentences ("Podaj nazwę rangi."), as the forms show them, so the
+      # attribute name that full_messages would prepend is left out.
       def record_invalid_message(record)
-        errors = ApplicationController.helpers.gh_and_list(record.errors.full_messages)
+        errors = ApplicationController.helpers.gh_and_list(record.errors.map(&:message))
         I18n.t('shared.csv_import.invalid_data', errors: errors)
       end
     end
